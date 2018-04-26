@@ -7,8 +7,12 @@
   "plugins": [
     "prettier"
   ],
+  "globals": {
+    "window": true,
+    "__webpack_require__": true
+  },
   "env": {
-    "jest": true
+    "mocha": true
   },
   "rules": {
     "no-underscore-dangle": 0,
