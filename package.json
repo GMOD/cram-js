@@ -13,8 +13,7 @@
   "engines": {
     "node": ">=6"
   },
-  "bin": {
-  },
+  "bin": {},
   "directories": {
     "lib": "dist"
   },
@@ -51,7 +50,10 @@
   ],
   "dependencies": {
     "babel-runtime": "^6.26.0",
+    "binary-parser": "^1.3.2",
+    "cross-fetch": "^2.1.0",
     "es6-promisify": "^6.0.0",
+    "fs.promises": "^0.1.1",
     "tmp-promise": "^1.0.4",
     "typical": "^2.6.1"
   },

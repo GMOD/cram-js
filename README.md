@@ -18,7 +18,17 @@ Read CRAM files with pure JavaScript.
 ```js
 const cram = require('@gmod/cram').default
 // or in ES6 (recommended)
-import cram from '@gmod/cram'
+import {CramFile,IndexedCramFile} from '@gmod/cram'
+
+const bareFile = new CramFile('http://example.com/my.cram')
+
+const indexedFile = new IndexedCramFile('http://example.com/my.cram')
+// above will assume the index is at http://example.com/my.cram.crai
+
+const indexedFile2 = new IndexedCramFile(
+  'http://example.com/my.cram',
+  'http://example.com/my.cram.crai',
+  )
 
 ```
 
