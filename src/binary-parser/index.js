@@ -4,6 +4,7 @@
 var vm = require("vm");
 
 var Context = require("./context").Context;
+var Long = require('long');
 
 if (typeof window !== 'undefined')
   window.Buffer = Buffer
@@ -33,6 +34,8 @@ var SPECIAL_TYPES = {
   Choice: null,
   Nest: null,
   Bit: null,
+  Itf8: null,
+  Ltf8: null,
 };
 
 var aliasRegistry = {};
@@ -69,7 +72,7 @@ var Parser = function() {
   this.next = null;
   this.head = null;
   this.compiled = null;
-  this.endian = "be";
+  this.endian = "le";
   this.constructorFn = null;
   this.alias = null;
 };
@@ -267,9 +270,9 @@ Parser.prototype.getCode = function() {
   }
 
   if (this.alias) {
-    ctx.pushCode("return {0}(0).result;", FUNCTION_PREFIX + this.alias);
+    ctx.pushCode("return {0}(0)", FUNCTION_PREFIX + this.alias);
   } else {
-    ctx.pushCode("return vars;");
+    ctx.pushCode("return { offset: offset, result: vars };");
   }
 
   return ctx.code;
@@ -288,7 +291,7 @@ Parser.prototype.addRawCode = function(ctx) {
 
   this.resolveReferences(ctx);
 
-  ctx.pushCode("return vars;");
+  ctx.pushCode("return { offset: offset, result: vars };");
 };
 
 Parser.prototype.addAliasedCode = function(ctx) {
@@ -321,7 +324,7 @@ Parser.prototype.resolveReferences = function(ctx) {
 };
 
 Parser.prototype.compile = function() {
-  var src = "(function(buffer, constructorFn) { " + this.getCode() + " })";
+  var src = "(function(buffer, constructorFn, Long) { " + this.getCode() + " })";
   this.compiled = vm.runInThisContext(src);
 };
 
@@ -379,7 +382,7 @@ Parser.prototype.parse = function(buffer) {
     this.compile();
   }
 
-  return this.compiled(buffer, this.constructorFn);
+  return this.compiled(buffer, this.constructorFn, Long);
 };
 
 //----------------------------------------------------------------------------------------
@@ -745,6 +748,89 @@ Parser.prototype.isInteger = function() {
   return !!this.type.match(/U?Int[8|16|32][BE|LE]?|Bit\d+/);
 };
 
+///////////////////// CRAM-specific types //////////////////////////
+Parser.prototype.itf8 = function(varName) {
+  return this.setNextParser('itf8', varName, {});
+};
+
+Parser.prototype.generateItf8 = function(ctx) {
+  const name = ctx.generateVariable(this.varName)
+  const countFlags = ctx.generateTmpVariable()
+  ctx.pushCode(`
+    var ${countFlags} = buffer[offset];
+    if (${countFlags} < 0x80) {
+      ${name} = ${countFlags};
+      offset += 1;
+    } else if (${countFlags} < 0xc0) {
+      ${name} = ((${countFlags}<<8) | buffer[offset+1]) & 0x3fff;
+      offset += 2;
+    } else if (${countFlags} < 0xe0) {
+      ${name} = ((${countFlags}<<16) | (buffer[offset+1]<< 8) |  buffer[offset+2]) & 0x1fffff;
+      ${name} = (((${countFlags} & 63) << 16) | buffer.readUInt16LE(offset + 1));
+      offset += 3;
+    } else if (${countFlags} < 0xf0) {
+      ${name} = ((${countFlags}<<24) | (buffer[offset+1]<<16) | (buffer[offset+2]<<8) | buffer[offset+3]) & 0x0fffffff;
+      offset += 4
+    } else {
+      ${name} = ((${countFlags} & 0x0f)<<28) | (buffer[offset+1]<<20) | (buffer[offset+2]<<12) | (buffer[offset+3]<<4) | (buffer[offset+4] & 0x0f);
+      // x=((0xff & 0x0f)<<28) | (0xff<<20) | (0xff<<12) | (0xff<<4) | (0x0f & 0x0f);
+      // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
+      offset += 5
+    }
+  `)
+};
+
+Parser.prototype.ltf8 = function(varName) {
+  return this.setNextParser('ltf8', varName, {});
+};
+
+Parser.prototype.generateLtf8 = function(ctx) {
+  const name = ctx.generateVariable(this.varName)
+  const countFlags = ctx.generateTmpVariable()
+  const dangerBits = ctx.generateTmpVariable()
+  ctx.pushCode(`
+  var ${countFlags} = buffer[offset];
+  if (${countFlags} < 0x80) {
+    ${name} = ${countFlags};
+    offset += 1;
+  } else if (${countFlags} < 0xc0) {
+    ${name} = ((buffer[offset]<<8) | buffer[offset+1]) & 0x3fff;
+    offset += 2;
+  } else if (${countFlags} < 0xe0) {
+    ${name} = ((buffer[offset]<<16) | (buffer[offset+1]<<8) | buffer[offset+2]) & 0x1fffff;
+    ${name} = (((${countFlags} & 63) << 16) | buffer.readUInt16LE(offset + 1));
+    offset += 3;
+  } else if (${countFlags} < 0xf0) {
+    ${name} = ((buffer[offset]<<24) | (buffer[offset+1]<<16) | (buffer[offset+2]<<8) | buffer[offset+3]) & 0x0fffffff;
+    offset += 4;
+  } else if (${countFlags} < 0xf8) {
+    ${name} = (((buffer[offset] & 15) * 2**32)) +
+      (buffer[offset+1]<<24) | (buffer[offset+2]<<16 | buffer[offset+3]<<8 | buffer[offset+4])
+    // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
+    offset += 5;
+  } else if (${countFlags} < 0xfc) {
+    ${name} = ((((buffer[offset] & 7) << 8) | buffer[offset+1] )) * 2**32 +
+      (buffer[offset+2]<<24) | (buffer[offset+3]<<16 | buffer[offset+4]<<8 | buffer[offset+5])
+    offset += 6;
+  } else if (${countFlags} < 0xfe) {
+    ${name} = ((((buffer[offset] & 3) << 16) | buffer[offset+1]<<8 | buffer[offset+2])) * 2**32 +
+      (buffer[offset+3]<<24) | (buffer[offset+4]<<16 | buffer[offset+5]<<8 | buffer[offset+6])
+    offset += 7;
+  } else if (${countFlags} < 0xff) {
+    ${name} = Long.fromBytesBE(buffer.slice(offset+1,offset+8));
+    if (${name}.greaterThan(Number.MAX_SAFE_INTEGER) || ${name}.lessThan(Number.MIN_SAFE_INTEGER))
+      throw new Error('integer overflow')
+    ${name} = ${name}.toNumber()
+    offset += 8;
+  } else {
+    ${name} = Long.fromBytesBE(buffer.slice(offset+1,offset+9));
+    if (${name}.greaterThan(Number.MAX_SAFE_INTEGER) || ${name}.lessThan(Number.MIN_SAFE_INTEGER))
+      throw new Error('integer overflow')
+    ${name} = ${name}.toNumber()
+    offset += 9;
+  }
+  `)
+}
 
 //========================================================================================
 // Exports

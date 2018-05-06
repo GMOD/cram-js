@@ -1,13 +1,13 @@
-import { promisify } from 'es6-promisify'
-import fetch from 'cross-fetch'
+const { promisify } = require('util')
+const fetch = require('cross-fetch')
 
 // don't load fs native module if running in webpacked code
-const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null
+const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
 
 const fsOpen = fs && promisify(fs.open)
 const fsRead = fs && promisify(fs.read)
 
-export class RemoteFile {
+class RemoteFile {
   constructor(source) {
     this.position = 0
     this.url = source
@@ -38,7 +38,7 @@ export class RemoteFile {
   }
 }
 
-export class LocalFile {
+class LocalFile {
   constructor(source) {
     this.position = 0
     this.filename = source
@@ -54,3 +54,5 @@ export class LocalFile {
     return fsRead(await this.fd, buffer, offset, length, position)
   }
 }
+
+module.exports = { LocalFile, RemoteFile }
