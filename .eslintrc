@@ -17,6 +17,7 @@
   "rules": {
     "no-underscore-dangle": 0,
     "no-bitwise": 0,
+    "no-await-in-loop": "warn",
     "prettier/prettier": [
       "error",
       {

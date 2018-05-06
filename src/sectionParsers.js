@@ -18,19 +18,20 @@ const cramContainerHeader1 = {
     .itf8('numRecords') // number of records in the container
     .ltf8('recordCounter') // 1-based sequential index of records in the file/stream.
     .ltf8('numBases') // number of read bases
-    .itf8('numBlocks'), // the number of blocks
-  maxLength: 4 + 5 * 4 + 9 * 2 + 5,
+    .itf8('numBlocks') // the number of blocks
+    .itf8('numLandmarks'), // the number of landmarks
+  maxLength: 4 + 5 * 4 + 9 * 2 + 5 + 5,
 }
 
 const cramContainerHeader2 = {
   parser: new Parser()
-    .itf8('numBlocks') // the number of blocks
+    .itf8('numLandmarks') // the number of blocks
     // Each integer value of this array is a byte offset
     // into the blocks byte array. Landmarks are used for
     // random access indexing.
     .array('landmarks', {
       type: new Parser().itf8(),
-      length: 'numBlocks',
+      length: 'numLandmarks',
     })
     .uint32('crc32'),
   maxLength: numBlocks => 5 + numBlocks * 5 + 4,

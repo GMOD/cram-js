@@ -6,6 +6,7 @@ const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // e
 
 const fsOpen = fs && promisify(fs.open)
 const fsRead = fs && promisify(fs.read)
+const fsFStat = fs && promisify(fs.fstat)
 
 class RemoteFile {
   constructor(source) {
@@ -36,6 +37,11 @@ class RemoteFile {
       throw new Error(`HTTP ${response.status} fetching ${this.url}`)
     }
   }
+
+  async size() {
+    this.size = 0
+    throw new Error('not implemented')
+  }
 }
 
 class LocalFile {
@@ -52,6 +58,14 @@ class LocalFile {
       this.position += length
     }
     return fsRead(await this.fd, buffer, offset, length, position)
+  }
+
+  async size() {
+    if (!this.fileSize) {
+      const { size } = await fsFStat(await this.fd)
+      this.fileSize = size
+    }
+    return this.fileSize
   }
 }
 
