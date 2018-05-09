@@ -66,6 +66,44 @@ const cramBlockHeader = {
   maxLength: 17,
 }
 
+const ENCODING_NAMES = [
+  'NULL', // 0
+  'EXTERNAL', // 1
+  'GOLOMB', // 2
+  'HUFFMAN_INT', // 3
+  'BYTE_ARRAY_LEN', // 4
+  'BYTE_ARRAY_STOP', // 5
+  'BETA', // 6
+  'SUBEXP', // 7
+  'GOLOMB_RICE', // 8
+  'GAMMA', // 9
+]
+
+const cramEncoding = {
+  parser: new Parser()
+    .namely('cramEncoding')
+    .itf8('codecId')
+    .itf8('size')
+    .choice('parameters', {
+      tag: 'codecId',
+      choices: {
+        0: new Parser(), // NULL
+        1: new Parser().itf8('blockContentId'), // EXTERNAL
+        2: new Parser().itf8('offset').itf8('M'), // GOLOMB,
+        3: Parser.start().buffer('data', { length: '$parent.size' }), // TODO // HUFFMAN_INT
+        4: Parser.start() // BYTE_ARRAY_LEN
+          .nest('lengthsEncoding', { type: 'cramEncoding' })
+          .nest('valuesEncoding', { type: 'cramEncoding' }),
+        5: new Parser().uint8('stopByte').itf8('blockContentId'), // BYTE_ARRAY_STOP
+        6: new Parser().itf8('offset').itf8('length'), // BETA
+        7: new Parser().itf8('offset').itf8('K'),
+        8: new Parser().itf8('offset').itf8('log2m'), // GOLOMB_RICE
+        9: new Parser().itf8('offset'), // GAMMA
+      },
+    }),
+  maxLength: undefined,
+}
+
 const newMap = () => new Parser().itf8('mapSize') // note that the mapSize includes the bytes of the mapCount
 // .itf8('mapCount')
 const cramPreservationMap = newMap().buffer('data', {
@@ -74,11 +112,15 @@ const cramPreservationMap = newMap().buffer('data', {
   // TODO: parse preservation map
 })
 
-const cramDataSeriesEncodingMap = newMap().buffer('data', {
-  length: 'mapSize',
-  // type: new Parser().string('key', { length: 2 }),
-  // TODO: parse data series encoding map
-})
+const cramDataSeriesEncodingMap = newMap()
+  .itf8('mapCount')
+  .array('entries', {
+    length: 'mapCount',
+    type: new Parser()
+      .string('key', { length: 2, stripNull: false })
+      .nest('value', { type: cramEncoding.parser }),
+  })
+
 const cramTagEncodingMap = newMap().buffer('data', {
   length: 'mapSize',
   // type: new Parser().string('key', { length: 2 }),
@@ -104,4 +146,5 @@ module.exports = {
   cramContainerHeader2,
   cramBlockHeader,
   cramCompressionHeader,
+  cramEncoding,
 }

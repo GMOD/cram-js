@@ -23,6 +23,13 @@ Context.prototype.generateVariable = function(name) {
   var arr = [];
 
   Array.prototype.push.apply(arr, this.scopes[this.scopes.length - 1]);
+
+  // $parent. prefixes allow sub-parsers to access values of their parent parsers
+  while (/^\$parent\./.test(name)) {
+    arr.pop()
+    name = name.replace(/^\$parent\./, '')
+  }
+
   if (name) {
     arr.push(name);
   }

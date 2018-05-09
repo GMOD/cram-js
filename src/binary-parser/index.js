@@ -749,8 +749,8 @@ Parser.prototype.isInteger = function() {
 };
 
 ///////////////////// CRAM-specific types //////////////////////////
-Parser.prototype.itf8 = function(varName) {
-  return this.setNextParser('itf8', varName, {});
+Parser.prototype.itf8 = function(varName,options) {
+  return this.setNextParser('itf8', varName,options);
 };
 
 Parser.prototype.generateItf8 = function(ctx) {
@@ -780,8 +780,8 @@ Parser.prototype.generateItf8 = function(ctx) {
   `)
 };
 
-Parser.prototype.ltf8 = function(varName) {
-  return this.setNextParser('ltf8', varName, {});
+Parser.prototype.ltf8 = function(varName,options) {
+  return this.setNextParser('ltf8', varName,options);
 };
 
 Parser.prototype.generateLtf8 = function(ctx) {

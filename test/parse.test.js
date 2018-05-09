@@ -196,5 +196,7 @@ describe('CRAM reader', () => {
     expect(compressionHeader.preservation.mapSize).to.equal(61)
     expect(compressionHeader.tagEncoding.mapSize).to.equal(156)
     expect(compressionHeader.dataSeriesEncoding.mapSize).to.equal(150)
+    expect(compressionHeader.dataSeriesEncoding.entries).length(21)
+    // expect(compressionHeader.dataSeriesEncoding).to.deep.equal({})
   })
 })
