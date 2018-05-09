@@ -32,7 +32,8 @@ describe('CRAM reader', () => {
       numLandmarks: 2,
       numRecords: 0,
       recordCounter: 0,
-      headerBytes: 19,
+      _size: 19,
+      _endOffset: 45,
       seqId: 0,
       start: 0,
     })
@@ -51,7 +52,8 @@ describe('CRAM reader', () => {
     expect(await file.containerHeader(0)).to.deep.equal({
       alignmentSpan: 0,
       crc32: 2977905791,
-      headerBytes: 19,
+      _endOffset: 45,
+      _size: 19,
       landmarks: [0, 3927],
       length: 5901,
       numBases: 0,
@@ -76,7 +78,8 @@ describe('CRAM reader', () => {
     expect(await file.containerHeader(1)).to.deep.equal({
       alignmentSpan: 529350,
       crc32: 2139737710,
-      headerBytes: 24,
+      _size: 24,
+      _endOffset: 1178,
       landmarks: [990],
       length: 84878,
       numBases: 651833,
@@ -95,7 +98,8 @@ describe('CRAM reader', () => {
     expect(header).to.deep.equal({
       alignmentSpan: 20,
       crc32: 3362745060,
-      headerBytes: 18,
+      _size: 18,
+      _endOffset: 313,
       landmarks: [1042],
       length: 3031,
       numBases: 20,
@@ -150,5 +154,47 @@ describe('CRAM reader', () => {
       const count = await file.containerCount()
       expect(count).to.equal(containerCount)
     })
+  })
+
+  it('can read the compression headers from the 23rd container of ce#1000.tmp.cram', async () => {
+    const file = new CramFile(testDataUrl('ce#1000.tmp.cram'))
+    const containerHeader = await file.containerHeader(23)
+    expect(containerHeader).to.deep.equal({
+      _endOffset: 108275,
+      _size: 32,
+      alignmentSpan: 0,
+      crc32: 1355940116,
+      landmarks: [383, 1351, 2299, 3242, 4208],
+      length: 5156,
+      numBases: 3500,
+      numBlocks: 94,
+      numLandmarks: 5,
+      numRecords: 35,
+      recordCounter: 770,
+      seqId: -2,
+      start: 0,
+    })
+    const blockHeader = await file.readBlockHeader(containerHeader._endOffset)
+    expect(blockHeader).to.deep.equal({
+      _size: 7,
+      _endOffset: 108282,
+      compressedSize: 372,
+      contentId: 0,
+      contentType: 'COMPRESSION_HEADER',
+      method: 'raw',
+      uncompressedSize: 372,
+    })
+    const compressionHeader = await file.readCompressionHeader(
+      blockHeader._endOffset,
+      blockHeader.compressedSize,
+    )
+    expect(compressionHeader).to.haveOwnProperty('tagEncoding')
+    expect(compressionHeader).to.haveOwnProperty('preservation')
+    expect(compressionHeader).to.haveOwnProperty('dataSeriesEncoding')
+    expect(compressionHeader).to.haveOwnProperty('_size')
+    expect(compressionHeader).to.haveOwnProperty('_endOffset')
+    expect(compressionHeader.preservation.mapSize).to.equal(61)
+    expect(compressionHeader.tagEncoding.mapSize).to.equal(156)
+    expect(compressionHeader.dataSeriesEncoding.mapSize).to.equal(150)
   })
 })

@@ -37,8 +37,71 @@ const cramContainerHeader2 = {
   maxLength: numBlocks => 5 + numBlocks * 5 + 4,
 }
 
+const cramBlockHeader = {
+  parser: new Parser()
+    .uint8('method', {
+      formatter: b => {
+        const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans'][b]
+        if (!method) throw new Error(`invalid compression method number ${b}`)
+        return method
+      },
+    })
+    .uint8('contentType', {
+      formatter: b => {
+        const method = [
+          'FILE_HEADER',
+          'COMPRESSION_HEADER',
+          'MAPPED_SLICE_HEADER',
+          'reserved',
+          'EXTERNAL_DATA',
+          'CORE_DATA',
+        ][b]
+        if (!method) throw new Error(`invalid block content type id ${b}`)
+        return method
+      },
+    })
+    .itf8('contentId')
+    .itf8('compressedSize')
+    .itf8('uncompressedSize'),
+  maxLength: 17,
+}
+
+const newMap = () => new Parser().itf8('mapSize') // note that the mapSize includes the bytes of the mapCount
+// .itf8('mapCount')
+const cramPreservationMap = newMap().buffer('data', {
+  length: 'mapSize',
+  // type: new Parser().string('key', { length: 2 }),
+  // TODO: parse preservation map
+})
+
+const cramDataSeriesEncodingMap = newMap().buffer('data', {
+  length: 'mapSize',
+  // type: new Parser().string('key', { length: 2 }),
+  // TODO: parse data series encoding map
+})
+const cramTagEncodingMap = newMap().buffer('data', {
+  length: 'mapSize',
+  // type: new Parser().string('key', { length: 2 }),
+  // TODO: parse tag encodings map
+})
+
+const cramCompressionHeader = {
+  parser: new Parser()
+    .nest('preservation', {
+      type: cramPreservationMap,
+    })
+    .nest('dataSeriesEncoding', {
+      type: cramDataSeriesEncodingMap,
+    })
+    .nest('tagEncoding', {
+      type: cramTagEncodingMap,
+    }),
+}
+
 module.exports = {
   cramFileDefinition,
   cramContainerHeader1,
   cramContainerHeader2,
+  cramBlockHeader,
+  cramCompressionHeader,
 }
