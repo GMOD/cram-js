@@ -194,10 +194,12 @@ describe('CRAM reader', () => {
     expect(compressionHeader).to.haveOwnProperty('_size')
     expect(compressionHeader).to.haveOwnProperty('_endOffset')
     expect(compressionHeader.preservation.mapSize).to.equal(61)
-    expect(compressionHeader.tagEncoding.mapSize).to.equal(156)
+    expect(compressionHeader.tagEncoding.mapCount).to.equal(9)
+    expect(compressionHeader.tagEncoding.entries.length).to.equal(9)
     expect(compressionHeader.dataSeriesEncoding.mapSize).to.equal(150)
+    expect(compressionHeader.dataSeriesEncoding.mapCount).to.equal(21)
     expect(compressionHeader.dataSeriesEncoding.entries).length(21)
-    //expect(compressionHeader.dataSeriesEncoding).to.deep.equal({})
+    // expect(compressionHeader.dataSeriesEncoding).to.deep.equal({})
     expect(compressionHeader.preservation).to.deep.equal({
       mapSize: 61,
       mapCount: 4,

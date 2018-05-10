@@ -1,5 +1,7 @@
 const { Parser } = require('./binary-parser')
 
+const singleItf8 = new Parser().itf8()
+
 const cramFileDefinition = {
   parser: new Parser()
     .string('magic', { length: 4 })
@@ -90,7 +92,12 @@ const cramEncoding = {
         0: new Parser(), // NULL
         1: new Parser().itf8('blockContentId'), // EXTERNAL
         2: new Parser().itf8('offset').itf8('M'), // GOLOMB,
-        3: Parser.start().buffer('data', { length: '$parent.size' }), // TODO // HUFFMAN_INT
+        // HUFFMAN_INT
+        3: Parser.start()
+          .itf8('numCodes')
+          .array('symbols', { length: 'numCodes', type: singleItf8 })
+          .itf8('numLengths')
+          .array('bitLengths', { length: 'numLengths', type: singleItf8 }),
         4: Parser.start() // BYTE_ARRAY_LEN
           .nest('lengthsEncoding', { type: 'cramEncoding' })
           .nest('valuesEncoding', { type: 'cramEncoding' }),
@@ -163,11 +170,19 @@ const cramDataSeriesEncodingMap = newMap()
       .nest('value', { type: cramEncoding.parser }),
   })
 
-const cramTagEncodingMap = newMap().buffer('data', {
-  length: 'mapSize',
-  // type: new Parser().string('key', { length: 2 }),
-  // TODO: parse tag encodings map
-})
+const cramTagEncodingMap = newMap()
+  .itf8('mapCount')
+  .array('entries', {
+    length: 'mapCount',
+    type: new Parser()
+      .itf8('key', {
+        formatter: integerRepresentation =>
+          String.fromCharCode((integerRepresentation >> 16) & 0xff) +
+          String.fromCharCode((integerRepresentation >> 8) & 0xff) +
+          String.fromCharCode(integerRepresentation & 0xff),
+      })
+      .nest('value', { type: cramEncoding.parser }),
+  })
 
 const cramCompressionHeader = {
   parser: new Parser()
