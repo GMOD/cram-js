@@ -66,18 +66,18 @@ const cramBlockHeader = {
   maxLength: 17,
 }
 
-const ENCODING_NAMES = [
-  'NULL', // 0
-  'EXTERNAL', // 1
-  'GOLOMB', // 2
-  'HUFFMAN_INT', // 3
-  'BYTE_ARRAY_LEN', // 4
-  'BYTE_ARRAY_STOP', // 5
-  'BETA', // 6
-  'SUBEXP', // 7
-  'GOLOMB_RICE', // 8
-  'GAMMA', // 9
-]
+// const ENCODING_NAMES = [
+//   'NULL', // 0
+//   'EXTERNAL', // 1
+//   'GOLOMB', // 2
+//   'HUFFMAN_INT', // 3
+//   'BYTE_ARRAY_LEN', // 4
+//   'BYTE_ARRAY_STOP', // 5
+//   'BETA', // 6
+//   'SUBEXP', // 7
+//   'GOLOMB_RICE', // 8
+//   'GAMMA', // 9
+// ]
 
 const cramEncoding = {
   parser: new Parser()
@@ -106,11 +106,53 @@ const cramEncoding = {
 
 const newMap = () => new Parser().itf8('mapSize') // note that the mapSize includes the bytes of the mapCount
 // .itf8('mapCount')
-const cramPreservationMap = newMap().buffer('data', {
-  length: 'mapSize',
-  // type: new Parser().string('key', { length: 2 }),
-  // TODO: parse preservation map
+
+const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
+  length: 'size',
+  formatter: buffer => {
+    /* eslint-disable */
+    var strings = []
+    var stringStart = 0
+    var i
+    /* eslint-enable */
+    for (i = 0; i < buffer.length; i += 1) {
+      if (!buffer[i]) {
+        strings.push(buffer.toString('ascii', stringStart, i))
+        stringStart = i + 1
+      }
+    }
+    if (i > stringStart) strings.push(buffer.toString('ascii', stringStart, i))
+    return strings
+  },
 })
+
+// const cramPreservationMapKeys = 'XX RN AP RR SM TD'.split(' ')
+const parseByteAsBool = new Parser().uint8(null, { formatter: val => !!val })
+
+const cramPreservationMap = newMap()
+  .itf8('mapCount')
+  .array('entries', {
+    length: 'mapCount',
+    type: new Parser()
+      .string('key', {
+        length: 2,
+        stripNull: false,
+        // formatter: val => cramPreservationMapKeys[val] || 0,
+      })
+      .choice('value', {
+        tag: 'key',
+        choices: {
+          MI: parseByteAsBool,
+          UI: parseByteAsBool,
+          PI: parseByteAsBool,
+          RN: parseByteAsBool,
+          AP: parseByteAsBool,
+          RR: parseByteAsBool,
+          SM: new Parser().array(null, { type: 'uint8', length: 5 }),
+          TD: cramTagDictionary,
+        },
+      }),
+  })
 
 const cramDataSeriesEncodingMap = newMap()
   .itf8('mapCount')
@@ -146,5 +188,4 @@ module.exports = {
   cramContainerHeader2,
   cramBlockHeader,
   cramCompressionHeader,
-  cramEncoding,
 }

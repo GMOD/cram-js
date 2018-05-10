@@ -197,6 +197,22 @@ describe('CRAM reader', () => {
     expect(compressionHeader.tagEncoding.mapSize).to.equal(156)
     expect(compressionHeader.dataSeriesEncoding.mapSize).to.equal(150)
     expect(compressionHeader.dataSeriesEncoding.entries).length(21)
-    // expect(compressionHeader.dataSeriesEncoding).to.deep.equal({})
+    //expect(compressionHeader.dataSeriesEncoding).to.deep.equal({})
+    expect(compressionHeader.preservation).to.deep.equal({
+      mapSize: 61,
+      mapCount: 4,
+      entries: [
+        {
+          key: 'TD',
+          value: {
+            size: 44,
+            entries: ['ASCXSCXNCXMCXOCXGCYTZ', 'AScXScXNCXMCXOCXGCYTZ'],
+          },
+        },
+        { key: 'SM', value: [27, 27, 27, 27, 27] },
+        { key: 'RN', value: true },
+        { key: 'AP', value: false },
+      ],
+    })
   })
 })

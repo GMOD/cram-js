@@ -185,9 +185,9 @@ Parser.prototype.choice = function(varName, options) {
   }
 
   Object.keys(options.choices).forEach(function(key) {
-    if (isNaN(parseInt(key, 10))) {
-      throw new Error("Key of choices must be a number.");
-    }
+    // if (isNaN(parseInt(key, 10))) {
+    //   throw new Error("Key of choices must be a number.");
+    // }
     if (!options.choices[key]) {
       throw new Error(
         "Choice Case " + key + " of " + varName + " is not valid."
@@ -702,8 +702,12 @@ Parser.prototype.generateChoice = function(ctx) {
   ctx.pushCode("switch({0}) {", tag);
   Object.keys(this.options.choices).forEach(function(tag) {
     var type = this.options.choices[tag];
-
-    ctx.pushCode("case {0}:", tag);
+    if (isNaN(parseInt(tag, 10))) {
+      ctx.pushCode("case '{0}':", tag);
+    }
+    else {
+      ctx.pushCode("case {0}:", tag);
+    }
     this.generateChoiceCase(ctx, this.varName, type);
     ctx.pushCode("break;");
   }, this);
