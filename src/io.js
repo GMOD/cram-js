@@ -32,6 +32,11 @@ class RemoteFile {
       response.status === 206
     ) {
       const nodeBuffer = Buffer.from(await response.arrayBuffer())
+
+      // try to parse out the size of the remote file
+      const sizeMatch = /\/(\d+)$/.exec(response.headers.map['content-range'])
+      if (sizeMatch[1]) this._size = parseInt(sizeMatch[1], 10)
+
       buffer.fill(nodeBuffer, offset)
     } else {
       throw new Error(`HTTP ${response.status} fetching ${this.url}`)
@@ -39,8 +44,13 @@ class RemoteFile {
   }
 
   async size() {
-    this.size = 0
-    throw new Error('not implemented')
+    if (!this._size) {
+      const buf = Buffer.allocUnsafe(10)
+      await this.read(buf, 0, 10, 0)
+      if (!this._size)
+        throw new Error(`unable to determine size of file at ${this.url}`)
+    }
+    return this._size
   }
 }
 
