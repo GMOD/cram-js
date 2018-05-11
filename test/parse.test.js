@@ -1,11 +1,7 @@
 const { expect } = require('chai')
 const { CramFile } = require('../src')
 
-function testDataUrl(filename) {
-  return typeof window === 'undefined'
-    ? `file://${require.resolve(`./data/${filename}`).replace('#', '%23')}`
-    : `http://localhost:9876/base/test/data/${filename.replace('#', '%23')}`
-}
+const { testDataUrl } = require('./util')
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {

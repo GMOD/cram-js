@@ -192,9 +192,7 @@ class CramFile {
       )
     return data
   }
-
 }
-
 class IndexedCramFile {
   //  constructor({ cram, crai, fasta, fai }) {}
 }

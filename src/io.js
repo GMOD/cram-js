@@ -7,6 +7,7 @@ const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // e
 const fsOpen = fs && promisify(fs.open)
 const fsRead = fs && promisify(fs.read)
 const fsFStat = fs && promisify(fs.fstat)
+const fsReadFile = fs && promisify(fs.readFile)
 
 class RemoteFile {
   constructor(source) {
@@ -14,16 +15,21 @@ class RemoteFile {
     this.url = source
   }
 
-  async read(buffer, offset = 0, length, position) {
+  async read(buffer, offset = 0, length = Infinity, position = 0) {
     let readPosition = position
     if (readPosition === null) {
       readPosition = this.position
       this.position += length
     }
-
+    const headers = {}
+    if (length < Infinity) {
+      headers.range = `bytes=${position}-${position + length}`
+    } else if (length === Infinity && position !== 0) {
+      headers.range = `bytes=${position}-`
+    }
     const response = await fetch(this.url, {
       method: 'GET',
-      headers: { range: `bytes=${position}-${position + length}` },
+      headers,
       redirect: 'follow',
       mode: 'cors',
     })
@@ -41,6 +47,15 @@ class RemoteFile {
     } else {
       throw new Error(`HTTP ${response.status} fetching ${this.url}`)
     }
+  }
+
+  async readFile() {
+    const response = await fetch(this.url, {
+      method: 'GET',
+      redirect: 'follow',
+      mode: 'cors',
+    })
+    return Buffer.from(await response.arrayBuffer())
   }
 
   async size() {
@@ -68,6 +83,10 @@ class LocalFile {
       this.position += length
     }
     return fsRead(await this.fd, buffer, offset, length, position)
+  }
+
+  async readFile() {
+    return fsReadFile(await this.fd)
   }
 
   async size() {
