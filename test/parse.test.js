@@ -39,7 +39,7 @@ describe('CRAM reader', () => {
     })
   })
 
-  it('can read a bigger cram file', async () => {
+  xit('can read a bigger cram file', async () => {
     const file = new CramFile(
       'file:///Users/rbuels/dev/sample_data/insilico_21.cram',
     )
@@ -65,7 +65,7 @@ describe('CRAM reader', () => {
       start: 0,
     })
   })
-  it('can read an even bigger cram file', async () => {
+  xit('can read an even bigger cram file', async () => {
     const file = new CramFile(
       'file:///Users/rbuels/dev/sample_data/SGN/RNAseq_mapping_def.cram',
     )
