@@ -24,6 +24,11 @@ class CramFile {
   //   return parser.parse(bytes)
   // }
 
+  // can just read like a filehandle
+  read(buffer, offset, length, position) {
+    return this.file.read(buffer, offset, length, position)
+  }
+
   async definition() {
     const { cramFileDefinition } = sectionParsers
     const headbytes = Buffer.allocUnsafe(cramFileDefinition.maxLength)
@@ -158,12 +163,36 @@ class CramFile {
     )
     if (data._size !== size)
       throw new Error(
-        `unknown compression header parse error: requested size ${size} does not equal returned size ${
+        `compression header read error: requested size ${size} does not equal parsed size ${
           data._size
         }`,
       )
     return data
   }
+
+  async readSliceHeader(offset, size) {
+    const { cramSliceHeader } = sectionParsers
+    const fileSize = await this.file.size()
+
+    if (offset + size >= fileSize) return undefined
+
+    const buffer = Buffer.allocUnsafe(size)
+    await this.file.read(buffer, 0, size, offset)
+    const data = this.constructor._parse(
+      buffer,
+      cramSliceHeader.parser,
+      0,
+      offset,
+    )
+    if (data._size !== size)
+      throw new Error(
+        `compression header read error: requested size ${size} does not equal parsed size ${
+          data._size
+        }`,
+      )
+    return data
+  }
+
 }
 
 class IndexedCramFile {

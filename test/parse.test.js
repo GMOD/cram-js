@@ -156,7 +156,7 @@ describe('CRAM reader', () => {
     })
   })
 
-  it('can read the compression headers from the 23rd container of ce#1000.tmp.cram', async () => {
+  it('can read the compression header block and first slice header block from the 23rd container of ce#1000.tmp.cram', async () => {
     const file = new CramFile(testDataUrl('ce#1000.tmp.cram'))
     const containerHeader = await file.containerHeader(23)
     expect(containerHeader).to.deep.equal({
@@ -174,33 +174,35 @@ describe('CRAM reader', () => {
       seqId: -2,
       start: 0,
     })
-    const blockHeader = await file.readBlockHeader(containerHeader._endOffset)
-    expect(blockHeader).to.deep.equal({
+    const compressionBlockHeader = await file.readBlockHeader(
+      containerHeader._endOffset,
+    )
+    expect(compressionBlockHeader).to.deep.equal({
       _size: 7,
       _endOffset: 108282,
       compressedSize: 372,
       contentId: 0,
       contentType: 'COMPRESSION_HEADER',
-      method: 'raw',
+      compressionMethod: 'raw',
       uncompressedSize: 372,
     })
-    const compressionHeader = await file.readCompressionHeader(
-      blockHeader._endOffset,
-      blockHeader.compressedSize,
+    const compressionBlockData = await file.readCompressionHeader(
+      compressionBlockHeader._endOffset,
+      compressionBlockHeader.compressedSize,
     )
-    expect(compressionHeader).to.haveOwnProperty('tagEncoding')
-    expect(compressionHeader).to.haveOwnProperty('preservation')
-    expect(compressionHeader).to.haveOwnProperty('dataSeriesEncoding')
-    expect(compressionHeader).to.haveOwnProperty('_size')
-    expect(compressionHeader).to.haveOwnProperty('_endOffset')
-    expect(compressionHeader.preservation.mapSize).to.equal(61)
-    expect(compressionHeader.tagEncoding.mapCount).to.equal(9)
-    expect(compressionHeader.tagEncoding.entries.length).to.equal(9)
-    expect(compressionHeader.dataSeriesEncoding.mapSize).to.equal(150)
-    expect(compressionHeader.dataSeriesEncoding.mapCount).to.equal(21)
-    expect(compressionHeader.dataSeriesEncoding.entries).length(21)
-    // expect(compressionHeader.dataSeriesEncoding).to.deep.equal({})
-    expect(compressionHeader.preservation).to.deep.equal({
+    expect(compressionBlockData).to.haveOwnProperty('tagEncoding')
+    expect(compressionBlockData).to.haveOwnProperty('preservation')
+    expect(compressionBlockData).to.haveOwnProperty('dataSeriesEncoding')
+    expect(compressionBlockData).to.haveOwnProperty('_size')
+    expect(compressionBlockData).to.haveOwnProperty('_endOffset')
+    expect(compressionBlockData.preservation.mapSize).to.equal(61)
+    expect(compressionBlockData.tagEncoding.mapCount).to.equal(9)
+    expect(compressionBlockData.tagEncoding.entries.length).to.equal(9)
+    expect(compressionBlockData.dataSeriesEncoding.mapSize).to.equal(150)
+    expect(compressionBlockData.dataSeriesEncoding.mapCount).to.equal(21)
+    expect(compressionBlockData.dataSeriesEncoding.entries).length(21)
+    // expect(compressionBlockData.dataSeriesEncoding).to.deep.equal({})
+    expect(compressionBlockData.preservation).to.deep.equal({
       mapSize: 61,
       mapCount: 4,
       entries: [

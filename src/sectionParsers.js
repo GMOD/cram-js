@@ -41,7 +41,7 @@ const cramContainerHeader2 = {
 
 const cramBlockHeader = {
   parser: new Parser()
-    .uint8('method', {
+    .uint8('compressionMethod', {
       formatter: b => {
         const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans'][b]
         if (!method) throw new Error(`invalid compression method number ${b}`)
@@ -50,16 +50,16 @@ const cramBlockHeader = {
     })
     .uint8('contentType', {
       formatter: b => {
-        const method = [
+        const type = [
           'FILE_HEADER',
           'COMPRESSION_HEADER',
           'MAPPED_SLICE_HEADER',
-          'reserved',
+          'UNMAPPED_SLICE_HEADER', // < only used in cram v1
           'EXTERNAL_DATA',
           'CORE_DATA',
         ][b]
-        if (!method) throw new Error(`invalid block content type id ${b}`)
-        return method
+        if (!type) throw new Error(`invalid block content type id ${b}`)
+        return type
       },
     })
     .itf8('contentId')
@@ -195,6 +195,36 @@ const cramCompressionHeader = {
     .nest('tagEncoding', {
       type: cramTagEncodingMap,
     }),
+}
+
+const cramMappedSliceHeader = {
+  parser: new Parser()
+    .itf8('refSeqId')
+    .itf8('refStart')
+    .itf8('refSpan')
+    .itf8('numRecords')
+    .ltf8('recordCounter') // TODO: this is itf8 in a CRAM v2 file, absent in CRAM v1
+    .itf8('numBlocks')
+    .itf8('numContentIds')
+    .array('contentIds', {
+      type: singleItf8,
+      length: 'numContentIds',
+    })
+    .itf8('refBaseID')
+    .string('md5', { length: 16 }), // TODO: this is missing in CRAM v1
+}
+
+const cramUnmappedSliceHeader = {
+  parser: new Parser()
+    .itf8('numRecords')
+    .ltf8('recordCounter') // TODO: this is itf8 in a CRAM v2 file, absent in CRAM v1
+    .itf8('numBlocks')
+    .itf8('numContentIds')
+    .array('contentIds', {
+      type: singleItf8,
+      length: 'numContentIds',
+    })
+    .string('md5', { length: 16 }), // TODO: this is missing in CRAM v1
 }
 
 module.exports = {
