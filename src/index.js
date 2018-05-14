@@ -28,7 +28,7 @@ class CramFile {
 
   async containerHeader(containerNumber) {
     let offset = sectionParsers.cramFileDefinition.maxLength
-    const fileSize = await this.file.size()
+    const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
 
     // skip with a series of reads to the proper container
@@ -48,7 +48,7 @@ class CramFile {
 
   async readContainerHeader(offset) {
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
-    const fileSize = await this.file.size()
+    const { size: fileSize } = await this.file.stat()
 
     if (offset >= fileSize) return undefined
 
@@ -110,7 +110,7 @@ class CramFile {
    */
   async containerCount() {
     let offset = sectionParsers.cramFileDefinition.maxLength
-    const fileSize = await this.file.size()
+    const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
 
     let i
@@ -128,7 +128,7 @@ class CramFile {
 
   async readBlockHeader(offset) {
     const { cramBlockHeader } = sectionParsers
-    const fileSize = await this.file.size()
+    const { size: fileSize } = await this.file.stat()
 
     if (offset >= fileSize) return undefined
 
@@ -139,7 +139,7 @@ class CramFile {
 
   async readCompressionHeader(offset, size) {
     const { cramCompressionHeader } = sectionParsers
-    const fileSize = await this.file.size()
+    const { size: fileSize } = await this.file.stat()
 
     if (offset + size >= fileSize) return undefined
 
@@ -162,7 +162,7 @@ class CramFile {
 
   async readSliceHeader(offset, size) {
     const { cramSliceHeader } = sectionParsers
-    const fileSize = await this.file.size()
+    const { size: fileSize } = await this.file.stat()
 
     if (offset + size >= fileSize) return undefined
 
