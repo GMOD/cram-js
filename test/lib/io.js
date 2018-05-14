@@ -1,3 +1,4 @@
+const url = require('url')
 const { promisify } = require('util')
 const fetch = require('cross-fetch')
 
@@ -98,4 +99,15 @@ class LocalFile {
   }
 }
 
-module.exports = { LocalFile, RemoteFile }
+module.exports = {
+  LocalFile,
+  RemoteFile,
+
+  fromUrl(source) {
+    const { protocol, pathname } = url.parse(source)
+    if (protocol === 'file:') {
+      return new LocalFile(unescape(pathname))
+    }
+    return new RemoteFile(source)
+  },
+}

@@ -1,11 +1,12 @@
 const { expect } = require('chai')
 const { CramFile } = require('../src')
 
-const { testDataUrl } = require('./util')
+const { fromUrl } = require('./lib/io')
+const { testDataFile } = require('./lib/util')
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {
-    const file = new CramFile(testDataUrl('auxf#values.tmp.cram'))
+    const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
     const header = await file.definition()
     expect(header).to.deep.equal({
       magic: 'CRAM',
@@ -16,7 +17,7 @@ describe('CRAM reader', () => {
   })
 
   it('can read the first container header of a cram file', async () => {
-    const file = new CramFile(testDataUrl('auxf#values.tmp.cram'))
+    const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
     const header = await file.containerHeader(0)
     expect(header).to.deep.equal({
       alignmentSpan: 0,
@@ -37,7 +38,7 @@ describe('CRAM reader', () => {
 
   xit('can read a bigger cram file', async () => {
     const file = new CramFile(
-      'file:///Users/rbuels/dev/sample_data/insilico_21.cram',
+      fromUrl('file:///Users/rbuels/dev/sample_data/insilico_21.cram'),
     )
     expect(await file.definition()).to.deep.equal({
       fileId: '21_1mil.cram',
@@ -63,7 +64,9 @@ describe('CRAM reader', () => {
   })
   xit('can read an even bigger cram file', async () => {
     const file = new CramFile(
-      'file:///Users/rbuels/dev/sample_data/SGN/RNAseq_mapping_def.cram',
+      fromUrl(
+        'file:///Users/rbuels/dev/sample_data/SGN/RNAseq_mapping_def.cram',
+      ),
     )
     expect(await file.definition()).to.deep.equal({
       fileId: '-',
@@ -89,7 +92,7 @@ describe('CRAM reader', () => {
   })
 
   it('can read the second container header of a cram file', async () => {
-    const file = new CramFile(testDataUrl('auxf#values.tmp.cram'))
+    const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
     const header = await file.containerHeader(1)
     expect(header).to.deep.equal({
       alignmentSpan: 20,
@@ -146,14 +149,14 @@ describe('CRAM reader', () => {
     'xx#unsorted.tmp.cram': 5,
   }).forEach(([filename, containerCount]) => {
     it(`can count ${containerCount} containers in ${filename}`, async () => {
-      const file = new CramFile(testDataUrl(filename))
+      const file = new CramFile(testDataFile(filename))
       const count = await file.containerCount()
       expect(count).to.equal(containerCount)
     })
   })
 
   it('can read the compression header block and first slice header block from the 23rd container of ce#1000.tmp.cram', async () => {
-    const file = new CramFile(testDataUrl('ce#1000.tmp.cram'))
+    const file = new CramFile(testDataFile('ce#1000.tmp.cram'))
     const containerHeader = await file.containerHeader(23)
     expect(containerHeader).to.deep.equal({
       _endOffset: 108275,

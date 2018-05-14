@@ -4,16 +4,15 @@ const zlib = require('zlib')
 const gunzip = promisify(zlib.gunzip)
 
 class CramIndex {
-  // A CRAM index is a gzipped tab delimited file containing the following columns:
+  // A CRAM index (.crai) is a gzipped tab delimited file containing the following columns:
   // 1. Sequence id
   // 2. Alignment start
   // 3. Alignment span
   // 4. Container start byte offset in the file
   // 5. Slice start byte offset in the container data (‘blocks’) 6. Slice bytes
   // Each line represents a slice in the CRAM file. Please note that all slices must be listed in index file.
-  constructor(readFile) {
-    // read the whole thing, then un-gzip it
-    this.readFile = readFile
+  constructor(filehandle) {
+    this.readFile = filehandle.readFile.bind(filehandle)
     this.index = this.parseIndex()
   }
 

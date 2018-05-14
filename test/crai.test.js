@@ -1,13 +1,13 @@
 const { expect } = require('chai')
 
-const { testDataFile } = require('./util')
+const { testDataFile } = require('./lib/util')
 
 const CramIndex = require('../src/cramIndex')
 
 describe('.crai reader', () => {
   it('can read xx#unsorted.tmp.cram.crai', async () => {
     const file = testDataFile('xx#unsorted.tmp.cram.crai')
-    const index = new CramIndex(file.readFile.bind(file))
+    const index = new CramIndex(file)
     let data = await index.getIndex()
     expect(data).to.deep.equal([
       [

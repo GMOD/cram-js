@@ -1,30 +1,20 @@
-const url = require('url')
 const crc32 = require('buffer-crc32')
 
-const { LocalFile, RemoteFile } = require('./io')
 const sectionParsers = require('./sectionParsers')
 
 const { itf8Size } = require('./cramTypes')
 
 class CramFile {
-  constructor(source) {
-    const { protocol, pathname } = url.parse(source)
-    if (protocol === 'file:') {
-      this.file = new LocalFile(unescape(pathname))
-    } else {
-      this.file = new RemoteFile(source)
-    }
-
+  /**
+   * @param {object} filehandle - a filehandle that implements the stat() and
+   * read() methods of the Node filehandle API https://nodejs.org/api/fs.html#fs_class_filehandle
+   */
+  constructor(filehandle) {
+    this.file = filehandle
     this.validateChecksums = true
   }
 
-  // async _readSection(offset, parser, maxLength) {
-  //   const bytes = Buffer.allocUnsafe(maxLength)
-  //   await this.file.read(bytes, 0, maxLength, offset)
-  //   return parser.parse(bytes)
-  // }
-
-  // can just read like a filehandle
+  // can just read this object like a filehandle
   read(buffer, offset, length, position) {
     return this.file.read(buffer, offset, length, position)
   }
