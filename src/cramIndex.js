@@ -19,7 +19,10 @@ class CramIndex {
   parseIndex() {
     const index = []
     return this.readFile()
-      .then(data => gunzip(data))
+      .then(data => {
+        if (data[0] === 31 && data[1] === 139) return gunzip(data)
+        return data
+      })
       .then(uncompressedBuffer => {
         uncompressedBuffer
           .toString('utf8')
