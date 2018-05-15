@@ -138,53 +138,206 @@ class CramFile {
   }
 
   async readCompressionHeader(offset, size) {
-    const { cramCompressionHeader } = sectionParsers
+    return this._parseSection(
+      sectionParsers.cramCompressionHeader,
+      offset,
+      size,
+    )
+  }
+
+  async _parseSection(
+    section,
+    offset,
+    size = section.maxLength,
+    preReadBuffer,
+  ) {
     const { size: fileSize } = await this.file.stat()
 
     if (offset + size >= fileSize) return undefined
 
-    const buffer = Buffer.allocUnsafe(size)
-    await this.file.read(buffer, 0, size, offset)
-    const data = this.constructor._parse(
-      buffer,
-      cramCompressionHeader.parser,
-      0,
-      offset,
-    )
+    let buffer
+    if (preReadBuffer) {
+      buffer = preReadBuffer
+    } else {
+      buffer = Buffer.allocUnsafe(size)
+      await this.file.read(buffer, 0, size, offset)
+    }
+    const data = this.constructor._parse(buffer, section.parser, 0, offset)
     if (data._size !== size)
       throw new Error(
-        `compression header read error: requested size ${size} does not equal parsed size ${
+        `section read error: requested size ${size} does not equal parsed size ${
           data._size
         }`,
       )
     return data
   }
+  // async readSliceHeader(offset, size) {
+  //   const { cramMappedSliceHeader, cramUnmappedSliceHeader } = sectionParsers
+  //   const { size: fileSize } = await this.file.stat()
 
-  async readSliceHeader(offset, size) {
-    const { cramSliceHeader } = sectionParsers
-    const { size: fileSize } = await this.file.stat()
+  //   if (offset + size >= fileSize) return undefined
 
-    if (offset + size >= fileSize) return undefined
+  //   const buffer = Buffer.allocUnsafe(size)
+  //   await this.file.read(buffer, 0, size, offset)
+  //   const data = this.constructor._parse(
+  //     buffer,
+  //     cramSliceHeader.parser,
+  //     0,
+  //     offset,
+  //   )
+  //   if (data._size !== size)
+  //     throw new Error(
+  //       `compression header read error: requested size ${size} does not equal parsed size ${
+  //         data._size
+  //       }`,
+  //     )
+  //   return data
+  // }
 
-    const buffer = Buffer.allocUnsafe(size)
-    await this.file.read(buffer, 0, size, offset)
-    const data = this.constructor._parse(
-      buffer,
-      cramSliceHeader.parser,
-      0,
-      offset,
-    )
-    if (data._size !== size)
-      throw new Error(
-        `compression header read error: requested size ${size} does not equal parsed size ${
-          data._size
-        }`,
+  async readBlock(offset) {
+    const block = await this.readBlockHeader(offset)
+    const blockContentOffset = block._endOffset
+
+    if (block.contentType === 'FILE_HEADER') {
+      throw new Error('FILE_HEADER not yet implemented')
+    } else if (block.contentType === 'COMPRESSION_HEADER') {
+      if (block.compressionMethod !== 'raw')
+        block.content = await this._parseSection(
+          sectionParsers.cramCompressionHeader,
+          blockContentOffset,
+          block.compressedSize,
+        )
+    } else if (block.contentType === 'MAPPED_SLICE_HEADER') {
+      block.content = await this._parseSection(
+        sectionParsers.cramMappedSliceHeader,
+        blockContentOffset,
+        block.compressedSize,
       )
-    return data
+    } else if (block.contentType === 'UNMAPPED_SLICE_HEADER') {
+      block.content = await this._parseSection(
+        sectionParsers.cramUnmappedSliceHeader,
+        blockContentOffset,
+        block.compressedSize,
+      )
+    } else if (block.contentType === 'EXTERNAL_DATA') {
+      throw new Error('EXTERNAL_DATA not yet implemented')
+    } else if (block.contentType === 'CORE_DATA') {
+      const uncompressedData = Buffer.allocUnsafe(block.uncompressedSize)
+
+      if (block.compressionMethod !== 'raw') {
+        const compressedData = Buffer.allocUnsafe(block.compressedSize)
+        await this.read(
+          compressedData,
+          0,
+          block.compressedSize,
+          blockContentOffset,
+        )
+        // TODO: uncompress the data
+        throw new Error(
+          `${block.compressionMethod} decoding not yet implemented`,
+        )
+      } else {
+        await this.read(
+          uncompressedData,
+          0,
+          block.uncompressedSize,
+          blockContentOffset,
+        )
+      }
+
+      // now we have the block data
+      throw new Error('CORE_DATA not yet implemented')
+    }
+
+    // parse the crc32
+    const crc = await this._parseSection(
+      sectionParsers.cramBlockCrc32,
+      blockContentOffset + block.compressedSize,
+    )
+    block.crc32 = crc.crc32
+
+    // check the block data crc32
+    if (this.validateChecksums) {
+      await this._checkCrc32(
+        offset,
+        block._size + block.compressedSize,
+        block.crc32,
+        'block data',
+      )
+    }
+
+    // make the endoffset and size we return reflect the whole block
+    block._endOffset = crc._endOffset
+    block._size = block.compressedSize + sectionParsers.cramBlockCrc32.maxLength
+
+    return block
+  }
+
+  async getFeaturesFromSlice(containerStart, sliceStart, sliceBytes) {
+    // read the container and compression headers
+    const containerHeader = await this.readContainerHeader(containerStart)
+    const compressionBlock = await this.readBlock(containerHeader._endOffset)
+
+    // now read the slice
+    const sliceHeader = await this.readBlock(
+      containerHeader._endOffset + sliceStart,
+      sliceBytes,
+    )
+
+    console.log(JSON.stringify(sliceHeader, null, '  '))
+
+    // read all the blocks in the slice
+    const blocks = new Array(sliceHeader.content.numBlocks)
+    let blockOffset = sliceHeader._endOffset
+    for (let i = 0; i < sliceHeader.content.numBlocks; i += 1) {
+      blocks[i] = await this.readBlock(blockOffset)
+      blockOffset = blocks[i]._endOffset
+    }
+
+    console.log(JSON.stringify(blocks, null, '  '))
+    //
+
+    return []
   }
 }
 class IndexedCramFile {
-  //  constructor({ cram, crai, fasta, fai }) {}
+  constructor({ cram, index /* fasta, fastaIndex */ }) {
+    if (!(cram instanceof CramFile)) this.cram = new CramFile(cram)
+    else this.cram = cram
+
+    this.index = index
+  }
+
+  async getFeaturesForRange(seq, start, end) {
+    if (typeof seq === 'string')
+      // TODO: support string reference sequence names somehow
+      throw new Error('string sequence names not yet supported')
+    const seqId = seq
+    const blocks = await this.index.getEntriesForRange(seqId, start, end)
+
+    // TODO: do we need to merge or de-duplicate the blocks?
+
+    // fetch all the blocks and parse the feature data
+    const features = []
+    const blockResults = await Promise.all(
+      blocks.map(block => this.getFeaturesInBlock(block)),
+    )
+    for (let i = 0; i < blockResults.length; i += 1) {
+      const blockFeatures = blockResults[i]
+      blockFeatures.forEach(feature => {
+        if (feature.start < end && feature.end > start) features.push(feature)
+      })
+    }
+    return features
+  }
+
+  getFeaturesInBlock({ containerStart, sliceStart, sliceBytes }) {
+    return this.cram.getFeaturesFromSlice(
+      containerStart,
+      sliceStart,
+      sliceBytes,
+    )
+  }
 }
 
 module.exports = { CramFile, IndexedCramFile }

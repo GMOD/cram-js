@@ -68,6 +68,11 @@ const cramBlockHeader = {
   maxLength: 17,
 }
 
+const cramBlockCrc32 = {
+  parser: new Parser().uint32('crc32'),
+  maxLength: 4,
+}
+
 // const ENCODING_NAMES = [
 //   'NULL', // 0
 //   'EXTERNAL', // 1
@@ -211,7 +216,9 @@ const cramMappedSliceHeader = {
       length: 'numContentIds',
     })
     .itf8('refBaseID')
-    .string('md5', { length: 16 }), // TODO: this is missing in CRAM v1
+    .array('md5', { type: 'uint8', length: 16 }), // TODO: this is missing in CRAM v1
+
+  maxLength: numContentIds => 5 * 3 + 9 + 5 * 2 + 5 * numContentIds + 9 + 16,
 }
 
 const cramUnmappedSliceHeader = {
@@ -224,7 +231,13 @@ const cramUnmappedSliceHeader = {
       type: singleItf8,
       length: 'numContentIds',
     })
-    .string('md5', { length: 16 }), // TODO: this is missing in CRAM v1
+    .array('md5', { type: 'uint8', length: 16 }), // TODO: this is missing in CRAM v1
+
+  maxLength: numContentIds => 5 + 9 + 5 * 2 + 5 * numContentIds + 16,
+}
+
+const cramRecord = {
+  parser: new Parser()
 }
 
 module.exports = {
@@ -232,5 +245,8 @@ module.exports = {
   cramContainerHeader1,
   cramContainerHeader2,
   cramBlockHeader,
+  cramBlockCrc32,
   cramCompressionHeader,
+  cramMappedSliceHeader,
+  cramUnmappedSliceHeader,
 }
