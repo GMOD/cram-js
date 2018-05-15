@@ -1,4 +1,4 @@
-const { Parser } = require('./binary-parser')
+const { Parser } = require('../binary-parser')
 
 const singleItf8 = new Parser().itf8()
 
@@ -234,10 +234,6 @@ const cramUnmappedSliceHeader = {
     .array('md5', { type: 'uint8', length: 16 }), // TODO: this is missing in CRAM v1
 
   maxLength: numContentIds => 5 + 9 + 5 * 2 + 5 * numContentIds + 16,
-}
-
-const cramRecord = {
-  parser: new Parser()
 }
 
 module.exports = {

@@ -7,7 +7,7 @@ const { testDataFile } = require('./lib/util')
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {
     const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
-    const header = await file.definition()
+    const header = await file.getDefinition()
     expect(header).to.deep.equal({
       magic: 'CRAM',
       majorVersion: 3,
@@ -18,7 +18,7 @@ describe('CRAM reader', () => {
 
   it('can read the first container header of a cram file', async () => {
     const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
-    const header = await file.containerHeader(0)
+    const header = await (await file.getContainerByID(0)).getHeader()
     expect(header).to.deep.equal({
       alignmentSpan: 0,
       crc32: 2996618296,
@@ -40,13 +40,13 @@ describe('CRAM reader', () => {
     const file = new CramFile(
       fromUrl('file:///Users/rbuels/dev/sample_data/insilico_21.cram'),
     )
-    expect(await file.definition()).to.deep.equal({
+    expect(await file.getDefinition()).to.deep.equal({
       fileId: '21_1mil.cram',
       magic: 'CRAM',
       majorVersion: 3,
       minorVersion: 0,
     })
-    expect(await file.containerHeader(0)).to.deep.equal({
+    expect(await (await file.getContainerByID(0)).getHeader()).to.deep.equal({
       alignmentSpan: 0,
       crc32: 2977905791,
       _endOffset: 45,
@@ -68,13 +68,13 @@ describe('CRAM reader', () => {
         'file:///Users/rbuels/dev/sample_data/SGN/RNAseq_mapping_def.cram',
       ),
     )
-    expect(await file.definition()).to.deep.equal({
+    expect(await file.getDefinition()).to.deep.equal({
       fileId: '-',
       magic: 'CRAM',
       majorVersion: 3,
       minorVersion: 0,
     })
-    expect(await file.containerHeader(1)).to.deep.equal({
+    expect(await (await file.getContainerByID(1)).getHeader()).to.deep.equal({
       alignmentSpan: 529350,
       crc32: 2139737710,
       _size: 24,
@@ -93,7 +93,8 @@ describe('CRAM reader', () => {
 
   it('can read the second container header of a cram file', async () => {
     const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
-    const header = await file.containerHeader(1)
+    const container = await file.getContainerByID(1)
+    const header = await container.getHeader()
     expect(header).to.deep.equal({
       alignmentSpan: 20,
       crc32: 3362745060,
@@ -157,7 +158,8 @@ describe('CRAM reader', () => {
 
   it('can read the compression header block and first slice header block from the 23rd container of ce#1000.tmp.cram', async () => {
     const file = new CramFile(testDataFile('ce#1000.tmp.cram'))
-    const containerHeader = await file.containerHeader(23)
+    const container = await file.getContainerByID(23)
+    const containerHeader = await container.getHeader()
     expect(containerHeader).to.deep.equal({
       _endOffset: 108275,
       _size: 32,
@@ -173,22 +175,20 @@ describe('CRAM reader', () => {
       seqId: -2,
       start: 0,
     })
-    const compressionBlockHeader = await file.readBlockHeader(
-      containerHeader._endOffset,
-    )
-    expect(compressionBlockHeader).to.deep.equal({
-      _size: 7,
-      _endOffset: 108282,
+    const {
+      content: compressionBlockData,
+      ...compressionBlock
+    } = await container.getCompressionBlock()
+    expect(compressionBlock).to.deep.equal({
+      _size: 376,
+      _endOffset: 108658,
       compressedSize: 372,
       contentId: 0,
       contentType: 'COMPRESSION_HEADER',
       compressionMethod: 'raw',
       uncompressedSize: 372,
+      crc32: 1246026486,
     })
-    const compressionBlockData = await file.readCompressionHeader(
-      compressionBlockHeader._endOffset,
-      compressionBlockHeader.compressedSize,
-    )
     expect(compressionBlockData).to.haveOwnProperty('tagEncoding')
     expect(compressionBlockData).to.haveOwnProperty('preservation')
     expect(compressionBlockData).to.haveOwnProperty('dataSeriesEncoding')
