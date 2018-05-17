@@ -19,6 +19,7 @@
     "no-bitwise": 0,
     "no-await-in-loop": "warn",
     "no-param-reassign": "warn",
+    "prefer-arrow-callback": "warn",
     "prettier/prettier": [
       "error",
       {

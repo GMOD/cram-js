@@ -195,28 +195,16 @@ describe('CRAM reader', () => {
     expect(compressionBlockData).to.haveOwnProperty('dataSeriesEncoding')
     expect(compressionBlockData).to.haveOwnProperty('_size')
     expect(compressionBlockData).to.haveOwnProperty('_endPosition')
-    expect(compressionBlockData.preservation.mapSize).to.equal(61)
-    expect(compressionBlockData.tagEncoding.mapCount).to.equal(9)
-    expect(compressionBlockData.tagEncoding.entries.length).to.equal(9)
-    expect(compressionBlockData.dataSeriesEncoding.mapSize).to.equal(150)
-    expect(compressionBlockData.dataSeriesEncoding.mapCount).to.equal(21)
-    expect(compressionBlockData.dataSeriesEncoding.entries).length(21)
-    // expect(compressionBlockData.dataSeriesEncoding).to.deep.equal({})
+    // console.log(JSON.stringify(compressionBlockData.preservation, null, '  '))
     expect(compressionBlockData.preservation).to.deep.equal({
-      mapSize: 61,
-      mapCount: 4,
-      entries: [
-        {
-          key: 'TD',
-          value: {
-            size: 44,
-            entries: ['ASCXSCXNCXMCXOCXGCYTZ', 'AScXScXNCXMCXOCXGCYTZ'],
-          },
-        },
-        { key: 'SM', value: [27, 27, 27, 27, 27] },
-        { key: 'RN', value: true },
-        { key: 'AP', value: false },
-      ],
+      TD: ['ASCXSCXNCXMCXOCXGCYTZ', 'AScXScXNCXMCXOCXGCYTZ'],
+      SM: [27, 27, 27, 27, 27],
+      RN: true,
+      AP: false,
     })
+    expect(Object.keys(compressionBlockData.tagEncoding).length).to.equal(9)
+    expect(
+      Object.keys(compressionBlockData.dataSeriesEncoding).length,
+    ).to.equal(21)
   })
 })

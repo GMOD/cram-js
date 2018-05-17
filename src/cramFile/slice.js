@@ -83,49 +83,45 @@ class CramSlice {
     const refId = sliceHeader.refSeqId
     const embeddedRefBaseID = sliceHeader.refBaseID
 
-    //   if (refId >= 0) {
-    //     if (embeddedRefBaseID >= 0) {
-    //         const refBlock = this.getBlockByContentId(embeddedRefBaseID)
-    //         if (!refBlock) throw new Error('embedded reference specified, but reference block does not exist')
-    //         // if (cram_uncompress_block(b) != 0)
-    //         //     return -1;
-    //         this.refSeq = refBlock.data.toString('ascii')
-    //         s->ref = (char *)BLOCK_DATA(b);
-    //         s->ref_start = sliceHeader.ref_seq_start;
-    //         s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
-    //         if (s->ref_end - s->ref_start > b->uncomp_size) {
-    //             hts_log_error("Embedded reference is too small");
-    //             return -1;
-    //         }
-    //     } else if (!c->comp_hdr->no_ref) {
-    //         //// Avoid Java cramtools bug by loading entire reference seq
-    //         //s->ref = cram_get_ref(fd, sliceHeader.ref_seq_id, 1, 0);
-    //         //s->ref_start = 1;
+    if (refId >= 0) {
+      if (embeddedRefBaseID >= 0) {
+        const refBlock = this.getBlockByContentId(embeddedRefBaseID)
+        if (!refBlock)
+          throw new Error(
+            'embedded reference specified, but reference block does not exist',
+          )
+        this.reference = {
+          seq: refBlock.data.toString('ascii'),
+          start: sliceHeader.refStart,
+          end: sliceHeader.refStart + sliceHeader.refSpan - 1,
+        }
 
-    //         if (fd->required_fields & SAM_SEQ)
-    //             s->ref =
-    //             cram_get_ref(fd, sliceHeader.ref_seq_id,
-    //                          sliceHeader.ref_seq_start,
-    //                          sliceHeader.ref_seq_start + sliceHeader.ref_seq_span -1);
-    //         s->ref_start = sliceHeader.ref_seq_start;
-    //         s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
-
-    //         /* Sanity check */
-    //         if (s->ref_start < 0) {
-    //             hts_log_warning("Slice starts before base 1");
-    //             s->ref_start = 0;
-    //         }
-    //         pthread_mutex_lock(&fd->ref_lock);
-    //         pthread_mutex_lock(&fd->refs->lock);
-    //         if ((fd->required_fields & SAM_SEQ) &&
-    //             ref_id < fd->refs->nref &&
-    //             s->ref_end > fd->refs->ref_id[ref_id]->length) {
-    //             s->ref_end = fd->refs->ref_id[ref_id]->length;
-    //         }
-    //         pthread_mutex_unlock(&fd->refs->lock);
-    //         pthread_mutex_unlock(&fd->ref_lock);
-    //     }
-    // }
+        if (sliceHeader.span > refBlock.uncompressedSize) {
+          throw new Error('Embedded reference is too small')
+        }
+      } else if (compressionBlock.content.hasReference) {
+        // //// Avoid Java cramtools bug by loading entire reference seq
+        // //s->ref = cram_get_ref(fd, sliceHeader.ref_seq_id, 1, 0);
+        // //s->ref_start = 1;
+        // if (fd->required_fields & SAM_SEQ)
+        //     s->ref =
+        //     cram_get_ref(fd, sliceHeader.ref_seq_id,
+        //                  sliceHeader.ref_seq_start,
+        //                  sliceHeader.ref_seq_start + sliceHeader.ref_seq_span -1);
+        // s->ref_start = sliceHeader.ref_seq_start;
+        // s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
+        // /* Sanity check */
+        // if (s->ref_start < 0) {
+        //     hts_log_warning("Slice starts before base 1");
+        //     s->ref_start = 0;
+        // }
+        // if ((fd->required_fields & SAM_SEQ) &&
+        //     ref_id < fd->refs->nref &&
+        //     s->ref_end > fd->refs->ref_id[ref_id]->length) {
+        //     s->ref_end = fd->refs->ref_id[ref_id]->length;
+        // }
+      }
+    }
 
     //   if ((fd->required_fields & SAM_SEQ) &&
     //   s->ref == NULL && s->hdr->ref_seq_id >= 0 && !c->comp_hdr->no_ref) {

@@ -116,9 +116,6 @@ const cramEncoding = {
   maxLength: undefined,
 }
 
-const newMap = () => new Parser().itf8('mapSize') // note that the mapSize includes the bytes of the mapCount
-// .itf8('mapCount')
-
 const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
   length: 'size',
   formatter: buffer => {
@@ -141,7 +138,8 @@ const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
 // const cramPreservationMapKeys = 'XX RN AP RR SM TD'.split(' ')
 const parseByteAsBool = new Parser().uint8(null, { formatter: val => !!val })
 
-const cramPreservationMap = newMap()
+const cramPreservationMap = new Parser()
+  .itf8('mapSize')
   .itf8('mapCount')
   .array('entries', {
     length: 'mapCount',
@@ -161,12 +159,25 @@ const cramPreservationMap = newMap()
           AP: parseByteAsBool,
           RR: parseByteAsBool,
           SM: new Parser().array(null, { type: 'uint8', length: 5 }),
-          TD: cramTagDictionary,
+          TD: new Parser().nest(null, {
+            type: cramTagDictionary,
+            formatter: data => data.entries,
+          }),
         },
       }),
   })
 
-const cramDataSeriesEncodingMap = newMap()
+function formatMap(data) {
+  const map = {}
+  data.entries.forEach(({ key, value }) => {
+    if (map[key]) console.warn(`duplicate key ${key} in map`)
+    map[key] = value
+  })
+  return map
+}
+
+const cramDataSeriesEncodingMap = new Parser()
+  .itf8('mapSize')
   .itf8('mapCount')
   .array('entries', {
     length: 'mapCount',
@@ -175,7 +186,8 @@ const cramDataSeriesEncodingMap = newMap()
       .nest('value', { type: cramEncoding.parser }),
   })
 
-const cramTagEncodingMap = newMap()
+const cramTagEncodingMap = new Parser()
+  .itf8('mapSize')
   .itf8('mapCount')
   .array('entries', {
     length: 'mapCount',
@@ -193,12 +205,15 @@ const cramCompressionHeader = {
   parser: new Parser()
     .nest('preservation', {
       type: cramPreservationMap,
+      formatter: formatMap,
     })
     .nest('dataSeriesEncoding', {
       type: cramDataSeriesEncodingMap,
+      formatter: formatMap,
     })
     .nest('tagEncoding', {
       type: cramTagEncodingMap,
+      formatter: formatMap,
     }),
 }
 
