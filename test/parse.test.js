@@ -30,7 +30,7 @@ describe('CRAM reader', () => {
       numRecords: 0,
       recordCounter: 0,
       _size: 19,
-      _endOffset: 45,
+      _endPosition: 45,
       seqId: 0,
       start: 0,
     })
@@ -49,7 +49,7 @@ describe('CRAM reader', () => {
     expect(await (await file.getContainerByID(0)).getHeader()).to.deep.equal({
       alignmentSpan: 0,
       crc32: 2977905791,
-      _endOffset: 45,
+      _endPosition: 45,
       _size: 19,
       landmarks: [0, 3927],
       length: 5901,
@@ -78,7 +78,7 @@ describe('CRAM reader', () => {
       alignmentSpan: 529350,
       crc32: 2139737710,
       _size: 24,
-      _endOffset: 1178,
+      _endPosition: 1178,
       landmarks: [990],
       length: 84878,
       numBases: 651833,
@@ -99,7 +99,7 @@ describe('CRAM reader', () => {
       alignmentSpan: 20,
       crc32: 3362745060,
       _size: 18,
-      _endOffset: 313,
+      _endPosition: 313,
       landmarks: [1042],
       length: 3031,
       numBases: 20,
@@ -161,7 +161,7 @@ describe('CRAM reader', () => {
     const container = await file.getContainerByID(23)
     const containerHeader = await container.getHeader()
     expect(containerHeader).to.deep.equal({
-      _endOffset: 108275,
+      _endPosition: 108275,
       _size: 32,
       alignmentSpan: 0,
       crc32: 1355940116,
@@ -178,10 +178,11 @@ describe('CRAM reader', () => {
     const {
       content: compressionBlockData,
       ...compressionBlock
-    } = await container.getCompressionBlock()
+    } = await container.getCompressionHeaderBlock()
     expect(compressionBlock).to.deep.equal({
       _size: 376,
-      _endOffset: 108658,
+      _endPosition: 108658,
+      contentPosition: 108282,
       compressedSize: 372,
       contentId: 0,
       contentType: 'COMPRESSION_HEADER',
@@ -193,7 +194,7 @@ describe('CRAM reader', () => {
     expect(compressionBlockData).to.haveOwnProperty('preservation')
     expect(compressionBlockData).to.haveOwnProperty('dataSeriesEncoding')
     expect(compressionBlockData).to.haveOwnProperty('_size')
-    expect(compressionBlockData).to.haveOwnProperty('_endOffset')
+    expect(compressionBlockData).to.haveOwnProperty('_endPosition')
     expect(compressionBlockData.preservation.mapSize).to.equal(61)
     expect(compressionBlockData.tagEncoding.mapCount).to.equal(9)
     expect(compressionBlockData.tagEncoding.entries.length).to.equal(9)

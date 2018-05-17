@@ -7,10 +7,10 @@ module.exports = {
     return 5
   },
 
-  parseItem(buffer, parser, startBufferOffset = 0, startFileOffset = 0) {
+  parseItem(buffer, parser, startBufferPosition = 0, startFilePosition = 0) {
     const { offset, result } = parser.parse(buffer)
-    result._endOffset = offset + startFileOffset
-    result._size = offset - startBufferOffset
+    result._endPosition = offset + startFilePosition
+    result._size = offset - startBufferPosition
     return result
   },
 }

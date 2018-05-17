@@ -1,102 +1,131 @@
+const sectionParsers = require('./sectionParsers')
+const { parseItem } = require('./util')
+
 class CramSlice {
-  constructor(container, offset, length) {
+  constructor(container, position, length) {
     this.container = container
     this.file = container.file
-    this.containerOffset = offset
+    this.containerPosition = position
     this.size = length
+    this.initialized = this.init()
+  }
+
+  /**
+   * fetches and parses the slice header, and fetches and stores all the block data in the slice
+   */
+  async init() {
+    // fetch and parse the slice header
+    const containerHeader = await this.container.getHeader()
+    this._header = await this.file.readBlock(
+      containerHeader._endPosition + this.containerPosition,
+      this.size,
+    )
+    if (this._header.contentType === 'MAPPED_SLICE_HEADER') {
+      this._header.content = parseItem(
+        this._header.content,
+        sectionParsers.cramMappedSliceHeader.parser,
+        containerHeader._endPosition,
+      )
+    } else if (this._header.contentType === 'UNMAPPED_SLICE_HEADER') {
+      this._header.content = parseItem(
+        this._header.content,
+        sectionParsers.cramUnmappedSliceHeader.parser,
+        containerHeader._endPosition,
+      )
+    } else {
+      throw new Error(
+        `error reading slice header block, invalid content type ${
+          this._header._contentType
+        }`,
+      )
+    }
+
+    // read all the blocks into memory and store them
+    let blockPosition = this._header._endPosition
+    this.blocksByContentId = {}
+    this.blocks = new Array(this._header.numBlocks).map(() => {
+      const block = this.file.readBlock(blockPosition)
+      blockPosition = block._endPosition
+
+      // also store external blocks for lookup by content id
+      if (block.contentType === 'EXTERNAL_DATA') {
+        this.blocksByContentId[block.contentId] = block
+      }
+      return block
+    })
   }
 
   async getHeader() {
-    if (!this._header) {
-      const containerHeader = await this.container.getHeader()
-      this._header = await this.file.readBlock(
-        containerHeader._endOffset + this.containerOffset,
-        this.size,
-      )
-    }
+    await this.initialized
     return this._header
   }
 
-  // async getBlock(id) {
-  //   if (this.blocks && id >= 0 && id < 256) {
-  //     return this.blocks[id];
-  //   } else {
-  //       int v = 256 + (id > 0 ? id % 251 : (-id) % 251);
-  //       if (this.blocks &&
-  //           this.blocks[v] &&
-  //           this.blocks[v]->content_id == id)
-  //           return this.blocks[v];
-
-  //       // Otherwise a linear search in case of collision
-  //       int i;
-  //       for (i = 0; i < this.hdr->num_blocks; i++) {
-  //           cram_block *b = this.block[i];
-  //           if (b && b->content_type == EXTERNAL && b->content_id == id)
-  //               return b;
-  //       }
-  //   }
-  // }
+  async getBlockByContentId(id) {
+    await this.initialized
+    return this.blocksByContentId[id]
+  }
 
   async getAllFeatures() {
     // read the container and compression headers
     const containerHeader = await this.container.getHeader()
-    const compressionBlock = await this.container.getCompressionBlock()
+    const compressionBlock = await this.container.getCompressionHeaderBlock()
 
-    console.log(JSON.stringify(compressionBlock, null, '  '))
+    // console.log(JSON.stringify(compressionBlock, null, '  '))
 
     // read the slice header
     const sliceHeader = await this.file.readBlock(
-      containerHeader._endOffset + this.containerOffset,
+      containerHeader._endPosition + this.containerPosition,
       this.size,
     )
 
-    console.log(JSON.stringify(sliceHeader, null, '  '))
+    // console.log(JSON.stringify(sliceHeader, null, '  '))
 
     const refId = sliceHeader.refSeqId
     const embeddedRefBaseID = sliceHeader.refBaseID
 
-    //     if (refId >= 0) {
-    //       if (embeddedRefBaseID >= 0) {
-    //           const refBlock = cram_get_block_by_id(s, embeddedRefBaseID);
-    //           if (!refBlock) throw new Error('embedded reference specified, but reference block does not exist')
-    //           if (cram_uncompress_block(b) != 0)
-    //               return -1;
-    //           s->ref = (char *)BLOCK_DATA(b);
-    //           s->ref_start = sliceHeader.ref_seq_start;
-    //           s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
-    //           if (s->ref_end - s->ref_start > b->uncomp_size) {
-    //               hts_log_error("Embedded reference is too small");
-    //               return -1;
-    //           }
-    //       } else if (!c->comp_hdr->no_ref) {
-    //           //// Avoid Java cramtools bug by loading entire reference seq
-    //           //s->ref = cram_get_ref(fd, sliceHeader.ref_seq_id, 1, 0);
-    //           //s->ref_start = 1;
+    //   if (refId >= 0) {
+    //     if (embeddedRefBaseID >= 0) {
+    //         const refBlock = this.getBlockByContentId(embeddedRefBaseID)
+    //         if (!refBlock) throw new Error('embedded reference specified, but reference block does not exist')
+    //         // if (cram_uncompress_block(b) != 0)
+    //         //     return -1;
+    //         this.refSeq = refBlock.data.toString('ascii')
+    //         s->ref = (char *)BLOCK_DATA(b);
+    //         s->ref_start = sliceHeader.ref_seq_start;
+    //         s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
+    //         if (s->ref_end - s->ref_start > b->uncomp_size) {
+    //             hts_log_error("Embedded reference is too small");
+    //             return -1;
+    //         }
+    //     } else if (!c->comp_hdr->no_ref) {
+    //         //// Avoid Java cramtools bug by loading entire reference seq
+    //         //s->ref = cram_get_ref(fd, sliceHeader.ref_seq_id, 1, 0);
+    //         //s->ref_start = 1;
 
-    //           if (fd->required_fields & SAM_SEQ)
-    //               s->ref =
-    //               cram_get_ref(fd, sliceHeader.ref_seq_id,
-    //                            sliceHeader.ref_seq_start,
-    //                            sliceHeader.ref_seq_start + sliceHeader.ref_seq_span -1);
-    //           s->ref_start = sliceHeader.ref_seq_start;
-    //           s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
+    //         if (fd->required_fields & SAM_SEQ)
+    //             s->ref =
+    //             cram_get_ref(fd, sliceHeader.ref_seq_id,
+    //                          sliceHeader.ref_seq_start,
+    //                          sliceHeader.ref_seq_start + sliceHeader.ref_seq_span -1);
+    //         s->ref_start = sliceHeader.ref_seq_start;
+    //         s->ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
 
-    //           /* Sanity check */
-    //           if (s->ref_start < 0) {
-    //               hts_log_warning("Slice starts before base 1");
-    //               s->ref_start = 0;
-    //           }
-    //           pthread_mutex_lock(&fd->ref_lock);
-    //           pthread_mutex_lock(&fd->refs->lock);
-    //           if ((fd->required_fields & SAM_SEQ) &&
-    //               ref_id < fd->refs->nref &&
-    //               s->ref_end > fd->refs->ref_id[ref_id]->length) {
-    //               s->ref_end = fd->refs->ref_id[ref_id]->length;
-    //           }
-    //           pthread_mutex_unlock(&fd->refs->lock);
-    //           pthread_mutex_unlock(&fd->ref_lock);
-    //       }
-    //   }
+    //         /* Sanity check */
+    //         if (s->ref_start < 0) {
+    //             hts_log_warning("Slice starts before base 1");
+    //             s->ref_start = 0;
+    //         }
+    //         pthread_mutex_lock(&fd->ref_lock);
+    //         pthread_mutex_lock(&fd->refs->lock);
+    //         if ((fd->required_fields & SAM_SEQ) &&
+    //             ref_id < fd->refs->nref &&
+    //             s->ref_end > fd->refs->ref_id[ref_id]->length) {
+    //             s->ref_end = fd->refs->ref_id[ref_id]->length;
+    //         }
+    //         pthread_mutex_unlock(&fd->refs->lock);
+    //         pthread_mutex_unlock(&fd->ref_lock);
+    //     }
+    // }
 
     //   if ((fd->required_fields & SAM_SEQ) &&
     //   s->ref == NULL && s->hdr->ref_seq_id >= 0 && !c->comp_hdr->no_ref) {
@@ -546,10 +575,10 @@ class CramSlice {
 
     // // read all the blocks in the slice
     // const blocks = new Array(sliceHeader.content.numBlocks)
-    // let blockOffset = sliceHeader._endOffset
+    // let blockPosition = sliceHeader._endPosition
     // for (let i = 0; i < sliceHeader.content.numBlocks; i += 1) {
-    //   blocks[i] = await this.file.readBlock(blockOffset)
-    //   blockOffset = blocks[i]._endOffset
+    //   blocks[i] = await this.file.readBlock(blockPosition)
+    //   blockPosition = blocks[i]._endPosition
     // }
 
     // console.log(JSON.stringify(blocks, null, '  '))

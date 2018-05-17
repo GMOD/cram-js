@@ -32,7 +32,7 @@ class IndexedCramFile {
   }
 
   getFeaturesInSlice({ containerStart, sliceStart, sliceBytes }) {
-    const container = this.cram.getContainerAtOffset(containerStart)
+    const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
     return slice.getAllFeatures()
   }
