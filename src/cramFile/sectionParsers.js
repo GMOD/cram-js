@@ -14,8 +14,8 @@ const cramFileDefinition = {
 const cramContainerHeader1 = {
   parser: new Parser()
     .uint32('length') // byte size of the container data (blocks)
-    .itf8('seqId') // reference sequence identifier, -1 for unmapped reads, -2 for multiple reference sequences
-    .itf8('start') // the alignment start position or 0 for unmapped reads
+    .itf8('refSeqId') // reference sequence identifier, -1 for unmapped reads, -2 for multiple reference sequences
+    .itf8('refSeqStart') // the alignment start position or 0 for unmapped reads
     .itf8('alignmentSpan') // the length of the alignment or 0 for unmapped reads
     .itf8('numRecords') // number of records in the container
     .ltf8('recordCounter') // 1-based sequential index of records in the file/stream.
@@ -90,7 +90,7 @@ const cramEncoding = {
   parser: new Parser()
     .namely('cramEncoding')
     .itf8('codecId')
-    .itf8('size')
+    .itf8('parametersBytes')
     .choice('parameters', {
       tag: 'codecId',
       choices: {

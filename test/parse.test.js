@@ -31,8 +31,8 @@ describe('CRAM reader', () => {
       recordCounter: 0,
       _size: 19,
       _endPosition: 45,
-      seqId: 0,
-      start: 0,
+      refSeqId: 0,
+      refSeqStart: 0,
     })
   })
 
@@ -58,8 +58,8 @@ describe('CRAM reader', () => {
       numLandmarks: 2,
       numRecords: 0,
       recordCounter: 0,
-      seqId: 0,
-      start: 0,
+      refSeqId: 0,
+      refSeqStart: 0,
     })
   })
   xit('can read an even bigger cram file', async () => {
@@ -86,8 +86,8 @@ describe('CRAM reader', () => {
       numLandmarks: 1,
       numRecords: 10000,
       recordCounter: 0,
-      seqId: 0,
-      start: 300,
+      refSeqId: 0,
+      refSeqStart: 300,
     })
   })
 
@@ -107,8 +107,8 @@ describe('CRAM reader', () => {
       numLandmarks: 1,
       numRecords: 2,
       recordCounter: 0,
-      seqId: 0,
-      start: 1,
+      refSeqId: 0,
+      refSeqStart: 1,
     })
   })
 
@@ -172,8 +172,8 @@ describe('CRAM reader', () => {
       numLandmarks: 5,
       numRecords: 35,
       recordCounter: 770,
-      seqId: -2,
-      start: 0,
+      refSeqId: -2,
+      refSeqStart: 0,
     })
     const {
       content: compressionBlockData,
@@ -203,8 +203,14 @@ describe('CRAM reader', () => {
       AP: false,
     })
     expect(Object.keys(compressionBlockData.tagEncoding).length).to.equal(9)
+    // console.log(JSON.stringify(compressionBlockData.tagEncoding, null, '  '))
+
     expect(
       Object.keys(compressionBlockData.dataSeriesEncoding).length,
     ).to.equal(21)
+
+    // console.log(
+    //   JSON.stringify(compressionBlockData.dataSeriesEncoding, null, '  '),
+    // )
   })
 })

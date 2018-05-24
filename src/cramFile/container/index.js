@@ -1,6 +1,7 @@
-const sectionParsers = require('./sectionParsers')
-const { itf8Size, parseItem } = require('./util')
-const CramSlice = require('./slice')
+const sectionParsers = require('../sectionParsers')
+const { itf8Size, parseItem } = require('../util')
+const CramSlice = require('../slice')
+const CramContainerCompressionScheme = require('./compressionScheme')
 
 class CramContainer {
   constructor(cramFile, position) {
@@ -28,14 +29,22 @@ class CramContainer {
             this._compressionBlock.contentType
           } in what is supposed to be the compression header block`,
         )
-      this._compressionBlock.content = parseItem(
+      const content = parseItem(
         this._compressionBlock.content,
         sectionParsers.cramCompressionHeader.parser,
         0,
         this._compressionBlock.contentPosition,
       )
+      this._compressionBlock.content = content
     }
     return this._compressionBlock
+  }
+
+  // parses the compression header data into a CramContainerCompressionScheme object
+  // memoize
+  async getCompressionScheme() {
+    const header = await this.getCompressionHeaderBlock()
+    return new CramContainerCompressionScheme(header.content)
   }
 
   getSlice(slicePosition, sliceSize) {

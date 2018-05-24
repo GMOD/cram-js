@@ -770,7 +770,6 @@ Parser.prototype.generateItf8 = function(ctx) {
       offset += 2;
     } else if (${countFlags} < 0xe0) {
       ${name} = ((${countFlags}<<16) | (buffer[offset+1]<< 8) |  buffer[offset+2]) & 0x1fffff;
-      ${name} = (((${countFlags} & 63) << 16) | buffer.readUInt16LE(offset + 1));
       offset += 3;
     } else if (${countFlags} < 0xf0) {
       ${name} = ((${countFlags}<<24) | (buffer[offset+1]<<16) | (buffer[offset+2]<<8) | buffer[offset+3]) & 0x0fffffff;
