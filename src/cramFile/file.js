@@ -1,3 +1,4 @@
+const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
 
 const sectionParsers = require('./sectionParsers')
@@ -128,6 +129,15 @@ class CramFile {
     return data
   }
 
+  _uncompress(compressionMethod, inputBuffer, outputBuffer) {
+    if (compressionMethod === 'gzip') {
+      const result = zlib.gunzipSync(inputBuffer)
+      result.copy(outputBuffer)
+    } else {
+      throw new Error(`${compressionMethod} decompression not yet implemented`)
+    }
+  }
+
   async readBlock(position) {
     const block = await this.readBlockHeader(position)
     const blockContentPosition = block._endPosition
@@ -143,9 +153,11 @@ class CramFile {
         block.compressedSize,
         blockContentPosition,
       )
-      // TODO: uncompress the data
-      throw new Error(
-        `${block.compressionMethod} decompression not yet implemented`,
+
+      this._uncompress(
+        block.compressionMethod,
+        compressedData,
+        uncompressedData,
       )
     } else {
       await this.read(
