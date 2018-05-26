@@ -1,0 +1,105 @@
+const Constants = require('./constants')
+const Decoding = require('./decoding')
+
+function assert(result) {
+  if (!result) throw new Error('assertion failed')
+}
+
+function readStatsO0(
+  /* ByteBuffer */ cp,
+  /* Decoding.AriDecoder */ decoder,
+  /* Decoding.RansDecSymbol[] */ syms,
+) {
+  // Pre-compute reverse lookup of frequency.
+  let rle = 0
+  let x = 0
+  let j = cp.get() & 0xff
+  do {
+    if (decoder.fc[j] == null) decoder.fc[j] = new Decoding.FC()
+    decoder.fc[j].F = cp.get() & 0xff
+    if (decoder.fc[j].F >= 128) {
+      decoder.fc[j].F &= ~128
+      decoder.fc[j].F = ((decoder.fc[j].F & 127) << 8) | (cp.get() & 0xff)
+    }
+    decoder.fc[j].C = x
+
+    Decoding.symbolInit(syms[j], decoder.fc[j].C, decoder.fc[j].F)
+
+    /* Build reverse lookup table */
+    if (decoder.R == null) decoder.R = new Array(Constants.TOTFREQ)
+    decoder.R.fill(j, x, x + decoder.fc[j].F)
+
+    x += decoder.fc[j].F
+
+    if (rle === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
+      j = cp.get() & 0xff
+      rle = cp.get() & 0xff
+    } else if (rle !== 0) {
+      rle -= 1
+      j += 1
+    } else {
+      j = cp.get() & 0xff
+    }
+  } while (j !== 0)
+
+  assert(x < Constants.TOTFREQ)
+}
+
+function readStatsO1(
+  /* ByteBuffer */ cp,
+  /*  Decoding.AriDecoder[] */ D,
+  /* Decoding.RansDecSymbol[][] */ syms,
+) {
+  let rlei = 0
+  let i = 0xff & cp.get()
+  do {
+    let rlej = 0
+    let x = 0
+    let j = 0xff & cp.get()
+    if (D[i] == null) D[i] = new Decoding.AriDecoder()
+    do {
+      if (D[i].fc[j] == null) D[i].fc[j] = new Decoding.FC()
+      D[i].fc[j].F = 0xff & cp.get()
+      if (D[i].fc[j].F >= 128) {
+        D[i].fc[j].F &= ~128
+        D[i].fc[j].F = ((D[i].fc[j].F & 127) << 8) | (0xff & cp.get())
+      }
+      D[i].fc[j].C = x
+
+      if (D[i].fc[j].F === 0) D[i].fc[j].F = Constants.TOTFREQ
+
+      if (syms[i][j] == null) syms[i][j] = new Decoding.RansDecSymbol()
+
+      Decoding.symbolInit(syms[i][j], D[i].fc[j].C, D[i].fc[j].F)
+
+      /* Build reverse lookup table */
+      if (D[i].R == null) D[i].R = new Array(Constants.TOTFREQ)
+      D[i].R.fill(j, x, x + D[i].fc[j].F)
+
+      x += D[i].fc[j].F
+      if (!(x <= Constants.TOTFREQ)) throw new Error('assertion failed')
+
+      if (rlej === 0 && j + 1 === (0xff & cp.get(cp.position()))) {
+        j = 0xff & cp.get()
+        rlej = 0xff & cp.get()
+      } else if (rlej !== 0) {
+        rlej -= 1
+        j += 1
+      } else {
+        j = 0xff & cp.get()
+      }
+    } while (j !== 0)
+
+    if (rlei === 0 && i + 1 === (0xff & cp.get(cp.position()))) {
+      i = 0xff & cp.get()
+      rlei = 0xff & cp.get()
+    } else if (rlei !== 0) {
+      rlei -= 1
+      i += 1
+    } else {
+      i = 0xff & cp.get()
+    }
+  } while (i !== 0)
+}
+
+module.exports = { readStatsO0, readStatsO1 }

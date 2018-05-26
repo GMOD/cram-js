@@ -1,6 +1,7 @@
 const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
 
+const rans = require('../rans')
 const sectionParsers = require('./sectionParsers')
 
 const CramContainer = require('./container')
@@ -133,6 +134,8 @@ class CramFile {
     if (compressionMethod === 'gzip') {
       const result = zlib.gunzipSync(inputBuffer)
       result.copy(outputBuffer)
+    } else if (compressionMethod === 'rans') {
+      rans.uncompress(inputBuffer, outputBuffer)
     } else {
       throw new Error(`${compressionMethod} decompression not yet implemented`)
     }
