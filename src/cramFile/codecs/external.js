@@ -12,13 +12,15 @@ class ExternalCodec extends CramCodec {
       )
     }
   }
-  decode(slice, coreDataBlock, blocksByContentId, cursors) {
+  decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
+    if (numItems !== 1) throw new Error('decoding multiple items not supported')
+
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
+    if (!contentBlock)
+      throw new Error(`no block found with content ID ${blockContentId}`)
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return this._decodeData(contentBlock, cursor)
-    // TODO: how do we manage the out_sz and out_size params
-    // return data, and number of bytes read
   }
   _decodeInt(contentBlock, cursor) {
     const [result, bytesRead] = parseItf8(

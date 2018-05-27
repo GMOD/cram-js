@@ -197,7 +197,10 @@ describe('CRAM reader', () => {
     expect(compressionBlockData).to.haveOwnProperty('_endPosition')
     // console.log(JSON.stringify(compressionBlockData.preservation, null, '  '))
     expect(compressionBlockData.preservation).to.deep.equal({
-      TD: ['ASCXSCXNCXMCXOCXGCYTZ', 'AScXScXNCXMCXOCXGCYTZ'],
+      TD: [
+        ['ASC', 'XSC', 'XNC', 'XMC', 'XOC', 'XGC', 'YTZ'],
+        ['ASc', 'XSc', 'XNC', 'XMC', 'XOC', 'XGC', 'YTZ'],
+      ],
       SM: [27, 27, 27, 27, 27],
       RN: true,
       AP: false,

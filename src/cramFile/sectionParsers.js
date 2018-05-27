@@ -119,19 +119,27 @@ const cramEncoding = {
 const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
   length: 'size',
   formatter: buffer => {
+    function makeTagSet(stringStart, stringEnd) {
+      const str = buffer.toString('ascii', stringStart, stringEnd)
+      const tags = []
+      for (let i = 0; i < str.length; i += 3) {
+        tags.push(str.substr(i, 3))
+      }
+      return tags
+    }
     /* eslint-disable */
-    var strings = []
+    var tagSets = []
     var stringStart = 0
     var i
     /* eslint-enable */
     for (i = 0; i < buffer.length; i += 1) {
       if (!buffer[i]) {
-        strings.push(buffer.toString('ascii', stringStart, i))
+        tagSets.push(makeTagSet(stringStart, i))
         stringStart = i + 1
       }
     }
-    if (i > stringStart) strings.push(buffer.toString('ascii', stringStart, i))
-    return strings
+    if (i > stringStart) tagSets.push(makeTagSet(stringStart, i))
+    return tagSets
   },
 })
 
@@ -220,8 +228,8 @@ const cramCompressionHeader = {
 const cramMappedSliceHeader = {
   parser: new Parser()
     .itf8('refSeqId')
-    .itf8('refStart')
-    .itf8('refSpan')
+    .itf8('refSeqStart')
+    .itf8('refSeqSpan')
     .itf8('numRecords')
     .ltf8('recordCounter') // TODO: this is itf8 in a CRAM v2 file, absent in CRAM v1
     .itf8('numBlocks')

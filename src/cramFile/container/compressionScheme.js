@@ -20,18 +20,18 @@ const dataSeriesTypes = {
   FC: 'byte',
   FP: 'int',
   BS: 'byte',
-  IN: 'byte_array',
-  SC: 'byte_array',
+  IN: 'byteArray',
+  SC: 'byteArray',
   DL: 'int',
   BA: 'byte',
-  BB: 'byte_array',
+  BB: 'byteArray',
   RS: 'int',
   PD: 'int',
   HC: 'int',
   MQ: 'int',
-  RN: 'byte_array_block',
+  RN: 'byteArray',
   QS: 'byte',
-  QQ: 'byte_array',
+  QQ: 'byteArray',
   TL: 'int',
   TM: 'ignore',
   TV: 'ignore',
@@ -75,11 +75,12 @@ class CramContainerCompressionScheme {
     // interpret some of the preservation map tags for convenient use
     this.readNamesIncluded = content.preservation.RN
     this.APdelta = content.preservation.AP
-    this.referenceRequired = content.preservation.RR
+    this.referenceRequired = !!content.preservation.RR
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
 
-    this.codecCache = {}
+    this.dataSeriesCodecCache = {}
+    this.tagCodecCache = {}
   }
 
   /**
@@ -87,8 +88,16 @@ class CramContainerCompressionScheme {
    * @param {string} tagName three-character tag name
    */
   getCodecForTag(tagName) {
-    // NOT SURE THIS IS RIGHT
-    return this.content.tagEncoding[tagName]
+    if (!this.tagCodecCache[tagName]) {
+      const encodingData = this.tagEncoding[tagName]
+      if (encodingData) {
+        this.tagCodecCache[tagName] = this._instantiateCodec(
+          encodingData,
+          'byteArray', // all tags are byte array data
+        )
+      }
+    }
+    return this.tagCodecCache[tagName]
   }
 
   /**
@@ -100,25 +109,29 @@ class CramContainerCompressionScheme {
   }
 
   getCodecForDataSeries(dataSeriesName) {
-    if (!this.codecCache[dataSeriesName]) {
+    if (!this.dataSeriesCodecCache[dataSeriesName]) {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
       if (encodingData) {
         const dataType = dataSeriesTypes[dataSeriesName]
         if (!dataType)
           throw new Error(`unknown data series name ${dataSeriesName}`)
-
-        const CodecClass = getCodecClassWithId(
-          dataType === 'ignore' ? 0 : encodingData.codecId,
-        )
-        if (!CodecClass) throw new Error(`no codec defined for codec ID ${encodingData.codecId}`)
-
-        this.codecCache[dataSeriesName] = new CodecClass(
-          encodingData.parameters,
+        this.dataSeriesCodecCache[dataSeriesName] = this._instantiateCodec(
+          encodingData,
           dataType,
         )
       }
     }
-    return this.codecCache[dataSeriesName]
+    return this.dataSeriesCodecCache[dataSeriesName]
+  }
+
+  _instantiateCodec(encodingData, dataType) {
+    const CodecClass = getCodecClassWithId(
+      dataType === 'ignore' ? 0 : encodingData.codecId,
+    )
+    if (!CodecClass)
+      throw new Error(`no codec defined for codec ID ${encodingData.codecId}`)
+
+    return new CodecClass(encodingData.parameters, dataType)
   }
 }
 

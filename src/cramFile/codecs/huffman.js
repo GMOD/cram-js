@@ -107,10 +107,10 @@ class HuffmanIntCodec extends CramCodec {
     for (let dlen = numBits; dlen; dlen -= 1) {
       // get the next `dlen` bits in the input, put them in val
       val <<= 1
-      val |= (data[cursor.byte] >> cursor.bit) & 1
-      cursor.bit -= 1
-      if (cursor.bit < 0) cursor.byte += 1
-      cursor.bit &= 7
+      val |= (data[cursor.bytePosition] >> cursor.bitPosition) & 1
+      cursor.bitPosition -= 1
+      if (cursor.bitPosition < 0) cursor.bytePosition += 1
+      cursor.bitPosition &= 7
     }
     return val
   }

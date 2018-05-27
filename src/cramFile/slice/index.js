@@ -170,6 +170,7 @@ class CramSlice {
   async getAllFeatures() {
     // read the container and compression headers
     const cramMajorVersion = (await this.file.getDefinition()).majorVersion
+    if (cramMajorVersion !== 3) throw new Error('only CRAM v3 files supported')
     // const containerHeader = await this.container.getHeader()
     // const compressionBlock = await this.container.getCompressionHeaderBlock()
 
@@ -258,7 +259,7 @@ class CramSlice {
         },
       },
     }
-    let lastAPos = 0 // < used for delta-encoded `apos` in records
+    let lastAPos = sliceHeader.content.refSeqStart // < used for delta-encoded `apos` in records
     const decodeDataSeries = dataSeriesName => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec)
@@ -348,7 +349,7 @@ class CramSlice {
       // AP = in-seq positions (0-based alignment start delta from previous record)
       if (needDataSeries('AP')) {
         cr.apos = decodeDataSeries('AP')
-        if (compressionScheme.AP_delta) {
+        if (compressionScheme.APdelta) {
           cr.apos += lastAPos
           lastAPos = cr.apos
         }
@@ -365,8 +366,9 @@ class CramSlice {
       }
 
       if (compressionScheme.readNamesIncluded && needDataSeries('RN')) {
-        // Read directly into name cram_block
         cr.name = decodeDataSeries('RN')
+        // convert read name to string
+        cr.name = cr.name.toString('ascii')
       }
 
       cr.mate = { pos: 0, line: -1, refSeqId: -1 }
@@ -454,15 +456,18 @@ class CramSlice {
             if (tagName[0] === 'M' && tagName[1] === 'D') hasMD = true
             if (tagName[0] === 'N' && tagName[1] === 'M') hasNM = true
 
-            const tagCodec = compressionScheme.getTagCodec(tagName)
+            const tagCodec = compressionScheme.getCodecForTag(tagName)
             if (!tagCodec)
               throw new Error(`no codec defined for auxiliary tag ${tagName}`)
-            cr.aux[tagName] = tagCodec.decode(this, coreDataBlock, cursors)
+            cr.aux[tagName] = tagCodec.decode(
+              this,
+              coreDataBlock,
+              blocksByContentId,
+              cursors,
+            )
           }
         }
       }
-
-      console.log(cr)
 
       if (!(cr.flags & BAM_FUNMAP)) {
         // AP = in-seq positions (0-based alignment start delta from previous record)

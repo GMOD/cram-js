@@ -1,6 +1,9 @@
 const validDataTypes = {
   int: true,
   byte: true,
+  long: true,
+  byteArray: true,
+  byteArrayBlock: true,
 }
 
 /** codec base class */
