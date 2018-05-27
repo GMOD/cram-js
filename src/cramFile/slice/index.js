@@ -80,7 +80,6 @@ class CramSlice {
     const header = await this.getHeader()
     // read all the blocks into memory and store them
     let blockPosition = header._endPosition
-    this.blocksByContentId = {}
     const blocks = new Array(header.content.numBlocks)
     for (let i = 0; i < blocks.length; i += 1) {
       blocks[i] = await this.file.readBlock(blockPosition)
@@ -103,7 +102,7 @@ class CramSlice {
     const blocksByContentId = {}
     blocks.forEach(block => {
       if (block.contentType === 'EXTERNAL_DATA') {
-        this.blocksByContentId[block.contentId] = block
+        blocksByContentId[block.contentId] = block
       }
     })
     return blocksByContentId

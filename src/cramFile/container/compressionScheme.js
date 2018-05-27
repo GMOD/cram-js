@@ -110,6 +110,7 @@ class CramContainerCompressionScheme {
         const CodecClass = getCodecClassWithId(
           dataType === 'ignore' ? 0 : encodingData.codecId,
         )
+        if (!CodecClass) throw new Error(`no codec defined for codec ID ${encodingData.codecId}`)
 
         this.codecCache[dataSeriesName] = new CodecClass(
           encodingData.parameters,
