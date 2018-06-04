@@ -3,37 +3,7 @@ const { parseItem } = require('../util')
 
 const decodeSeqAndQual = require('./decodeSeqAndQual')
 const decodeSliceXref = require('./decodeSliceXref')
-
-const CRAM_FLAG_PRESERVE_QUAL_SCORES = 1 << 0
-const CRAM_FLAG_DETACHED = 1 << 1
-const CRAM_FLAG_MATE_DOWNSTREAM = 1 << 2
-// const CRAM_FLAG_NO_SEQ = 1 << 3
-// const CRAM_FLAG_MASK = (1 << 4) - 1
-
-/*! @abstract the read is paired in sequencing, no matter whether it is mapped in a pair */
-// const BAM_FPAIRED = 1
-// /*! @abstract the read is mapped in a proper pair */
-// const BAM_FPROPER_PAIR = 2
-/*! @abstract the read itself is unmapped; conflictive with BAM_FPROPER_PAIR */
-const BAM_FUNMAP = 4
-/*! @abstract the mate is unmapped */
-// const BAM_FMUNMAP = 8
-// /*! @abstract the read is mapped to the reverse strand */
-// const BAM_FREVERSE = 16
-// /*! @abstract the mate is mapped to the reverse strand */
-// const BAM_FMREVERSE = 32
-// /*! @abstract this is read1 */
-// const BAM_FREAD1 = 64
-// /*! @abstract this is read2 */
-// const BAM_FREAD2 = 128
-// /*! @abstract not primary alignment */
-// const BAM_FSECONDARY = 256
-// /*! @abstract QC failure */
-// const BAM_FQCFAIL = 512
-// /*! @abstract optical or PCR duplicate */
-// const BAM_FDUP = 1024
-// /*! @abstract supplementary alignment */
-// const BAM_FSUPPLEMENTARY = 2048
+const Constants = require('../constants')
 
 const unknownRG = -1
 
@@ -373,7 +343,7 @@ class CramSlice {
 
       cr.mate = { pos: 0, line: -1, refSeqId: -1 }
       // CF = compression bit flags
-      if (needDataSeries('CF') && cr.cramFlags & CRAM_FLAG_DETACHED) {
+      if (needDataSeries('CF') && cr.cramFlags & Constants.CRAM_FLAG_DETACHED) {
         // MF = next mate bit flags
         if (needDataSeries('MF')) {
           cr.mateFlags = decodeDataSeries('MF')
@@ -410,7 +380,7 @@ class CramSlice {
         }
       } else if (
         needDataSeries('CF') &&
-        cr.cramFlags & CRAM_FLAG_MATE_DOWNSTREAM
+        cr.cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM
       ) {
         // NF = distance to next fragment
         if (needDataSeries('NF')) {
@@ -469,7 +439,7 @@ class CramSlice {
         }
       }
 
-      if (!(cr.flags & BAM_FUNMAP)) {
+      if (!(cr.flags & Constants.BAM_FUNMAP)) {
         // AP = in-seq positions (0-based alignment start delta from previous record)
         if (needDataSeries('AP') && cr.apos <= 0) {
           throw new Error(
@@ -503,7 +473,7 @@ class CramSlice {
         // CF = compression bit flags
         if (
           needDataSeries('CF') &&
-          cr.cram_flags & CRAM_FLAG_PRESERVE_QUAL_SCORES
+          cr.cram_flags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES
         ) {
           // QS = quality scores
           if (needDataSeries('QS') && cr.length >= 0) {
