@@ -64,6 +64,50 @@ function parseTagData(tagType, buffer) {
   throw new Error(`Unrecognized tag type ${tagType}`)
 }
 
+function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
+  let prevPos = 0
+  const readFeatures = new Array(readFeatureCount)
+  for (let i = 0; i < readFeatureCount; i += 1) {
+    const operator = String.fromCharCode(decodeDataSeries('FC'))
+
+    const position = prevPos + decodeDataSeries('FP')
+    prevPos = position
+
+    const readFeature = { operator, position }
+    // map of operator name -> data series name
+    const data1DataSeriesName = {
+      B: 'BA',
+      S: 'SC', // TODO: 'IN' if cram v1
+      X: 'BS',
+      D: 'DL',
+      I: 'IN',
+      i: 'BA',
+      b: 'BB',
+      q: 'QQ',
+      Q: 'QS',
+      H: 'HC',
+      P: 'PD',
+      N: 'RS',
+    }[operator]
+
+    if (!data1DataSeriesName)
+      throw new Error(`invalid read feature operator "${operator}"`)
+
+    readFeature.data = decodeDataSeries(data1DataSeriesName)
+
+    // if this is a tag with two data items, make the data an array and add the second item
+    const data2DataSeriesName = { B: 'QS' }[operator]
+    if (data2DataSeriesName)
+      readFeature.data = [
+        readFeature.data,
+        decodeDataSeries(data2DataSeriesName),
+      ]
+
+    readFeatures[i] = readFeature
+  }
+  return readFeatures
+}
+
 function decodeRecord(
   slice,
   decodeDataSeries,
@@ -84,7 +128,7 @@ function decodeRecord(
   cramRecord.readLength = decodeDataSeries('RL')
   // if APDelta, will calculate the true start in a second pass
   cramRecord.alignmentStart = decodeDataSeries('AP')
-  cramRecord.readGroupID = decodeDataSeries('RG')
+  cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded)
     cramRecord.readName = decodeDataSeries('RN').toString('ascii') // new String(readNameCodec.readData(), charset)
@@ -117,9 +161,6 @@ function decodeRecord(
     const tagName = tagId.substr(0, 2)
     const tagType = tagId.substr(2, 1)
 
-    // if (tagName[0] === 'M' && tagName[1] === 'D') hasMD = true
-    // if (tagName[0] === 'N' && tagName[1] === 'M') hasNM = true
-
     const tagCodec = compressionScheme.getCodecForTag(tagId)
     if (!tagCodec)
       throw new Error(`no codec defined for auxiliary tag ${tagId}`)
@@ -131,76 +172,21 @@ function decodeRecord(
     )
     cramRecord.tags[tagName] = parseTagData(tagType, tagData)
   }
-  // const /* Integer */ tagIdList = tagIdListCodec.readData()
-  // const /* byte[][] */ ids = tagIdDictionary[tagIdList]
-  // if (ids.length > 0) {
-  //   const /* int */ tagCount = ids.length
-  //   cramRecord.tags = new ReadTag[tagCount]()
-  //   for (let i = 0; i < ids.length; i++) {
-  //     const /* int */ id = ReadTag.name3BytesToInt(ids[i])
-  //     const /* DataReader<byte[]> */ dataReader = tagValueCodecs.get(id)
-  //     const /* ReadTag */ tag = new ReadTag(
-  //       id,
-  //       dataReader.readData(),
-  //       validationStringency,
-  //     )
-  //     cramRecord.tags[i] = tag
-  //   }
-  // }
 
   if (!cramRecord.isSegmentUnmapped()) {
-    // reading read features:
-    const /* int */ size = decodeDataSeries('FN')
-    let /* int */ prevPos = 0
-    const /* java.util.List<ReadFeature> */ readFeatures = new Array(
-      size,
-    ) /* new LinkedList<ReadFeature>(); */
-    cramRecord.readFeatures = readFeatures
-    for (let i = 0; i < size; i += 1) {
-      const /* Byte */ operator = String.fromCharCode(decodeDataSeries('FC'))
-
-      const /* int */ position = prevPos + decodeDataSeries('FP')
-      prevPos = position
-
-      const readFeature = { operator, position }
-      // map of operator name -> data series name
-      const data1DataSeriesName = {
-        B: 'BA',
-        S: 'SC', // TODO: 'IN' if cram v1
-        X: 'BS',
-        D: 'DL',
-        I: 'IN',
-        i: 'BA',
-        b: 'BB',
-        q: 'QQ',
-        Q: 'QS',
-        H: 'HC',
-        P: 'PD',
-        N: 'RS',
-      }[operator]
-
-      if (!data1DataSeriesName)
-        throw new Error(`invalid read feature operator "${operator}"`)
-
-      readFeature.data1 = decodeDataSeries(data1DataSeriesName)
-
-      // map of operator name -> data
-      const data2DataSeriesName = { B: 'QS' }[operator]
-      if (data2DataSeriesName)
-        readFeature.data2 = decodeDataSeries(data2DataSeriesName)
-
-      readFeatures[i] = readFeature
+    // reading read features
+    const /* int */ readFeatureCount = decodeDataSeries('FN')
+    if (readFeatureCount) {
+      cramRecord.readFeatures = decodeReadFeatures(
+        readFeatureCount,
+        decodeDataSeries,
+      )
     }
 
     // mapping quality:
     cramRecord.mappingQuality = decodeDataSeries('MQ')
     if (cramRecord.isPreservingQualityScores()) {
-      cramRecord.qualityScores = new Array(cramRecord.readLength).map(() =>
-        decodeDataSeries('QS'),
-      )
-      // qualityScoresCodec.readDataArray(
-      //   cramRecord.readLength,
-      // )
+      cramRecord.qualityScores = decodeDataSeries('QS')
     }
   } else if (cramRecord.isUnknownBases()) {
     cramRecord.readBases = null
@@ -213,9 +199,7 @@ function decodeRecord(
     cramRecord.readBases = bases
 
     if (cramRecord.isPreservingQualityScores()) {
-      cramRecord.qualityScores = new Array(cramRecord.readLength).map(() =>
-        decodeDataSeries('QS'),
-      )
+      cramRecord.qualityScores = decodeDataSeries('QS')
     }
   }
 
