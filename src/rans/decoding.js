@@ -15,7 +15,7 @@ class AriDecoder {
   constructor() {
     this.fc = new Array(256)
     for (let i = 0; i < this.fc.length; i += 1) this.fc[i] = new FC()
-    this.R = []
+    this.R = null
   }
 }
 

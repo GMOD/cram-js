@@ -26,7 +26,7 @@ function readStatsO0(
     Decoding.symbolInit(syms[j], decoder.fc[j].C, decoder.fc[j].F)
 
     /* Build reverse lookup table */
-    if (decoder.R == null) decoder.R = new Array(Constants.TOTFREQ)
+    if (!decoder.R) decoder.R = new Array(Constants.TOTFREQ)
     decoder.R.fill(j, x, x + decoder.fc[j].F)
 
     x += decoder.fc[j].F

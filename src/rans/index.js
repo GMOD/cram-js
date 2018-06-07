@@ -146,6 +146,7 @@ class ByteBuffer {
   constructor(nodeBuffer, initialInputPosition = 0) {
     this._buffer = nodeBuffer
     this._position = initialInputPosition
+    this.length = nodeBuffer.length
   }
 
   get() {

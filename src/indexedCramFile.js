@@ -25,7 +25,11 @@ class IndexedCramFile {
     for (let i = 0; i < sliceResults.length; i += 1) {
       const blockFeatures = sliceResults[i]
       blockFeatures.forEach(feature => {
-        if (feature.start < end && feature.end > start) features.push(feature)
+        if (
+          feature.alignmentStart < end &&
+          feature.alignmentStart + feature.readLength > start
+        )
+          features.push(feature)
       })
     }
     return features

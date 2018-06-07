@@ -1,11 +1,33 @@
+const Long = require('long')
 const sectionParsers = require('../sectionParsers')
 const { parseItem } = require('../util')
 
-const decodeSeqAndQual = require('./decodeSeqAndQual')
+// const decodeSeqAndQual = require('./decodeSeqAndQual')
 const decodeSliceXref = require('./decodeSliceXref')
 const Constants = require('../constants')
 
-const unknownRG = -1
+// const unknownRG = -1
+
+class CramRecord {
+  constructor() {
+    this.tags = {}
+  }
+  isDetached() {
+    return !!(this.cramFlags & Constants.CRAM_FLAG_DETACHED)
+  }
+
+  hasMateDownStream() {
+    return !!(this.cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM)
+  }
+
+  isSegmentUnmapped() {
+    return !!(this.flags & Constants.BAM_FUNMAP)
+  }
+
+  isPreservingQualityScores() {
+    return !!(this.cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES)
+  }
+}
 
 class CramSlice {
   constructor(container, position, length) {
@@ -141,18 +163,15 @@ class CramSlice {
     // read the container and compression headers
     const cramMajorVersion = (await this.file.getDefinition()).majorVersion
     if (cramMajorVersion !== 3) throw new Error('only CRAM v3 files supported')
-    // const containerHeader = await this.container.getHeader()
-    // const compressionBlock = await this.container.getCompressionHeaderBlock()
 
-    const containerHeader = await this.container.getHeader()
+    // const containerHeader = await this.container.getHeader()
     const compressionScheme = await this.container.getCompressionScheme()
 
-    // read the slice header
     const sliceHeader = await this.getHeader()
 
     const blocksByContentId = await this._getBlocksContentIdIndex()
 
-    // TODO: calculate dataset dependencies? currently just decoding all
+    // TODO: calculate dataset dependencies like htslib? currently just decoding all
     const needDataSeries = (/* dataSeriesName */) => true
 
     // TODO: check MD5 of reference
@@ -229,7 +248,7 @@ class CramSlice {
         },
       },
     }
-    let lastAPos = sliceHeader.content.refSeqStart // < used for delta-encoded `apos` in records
+    // const lastAPos = sliceHeader.content.refSeqStart // < used for delta-encoded `apos` in records
     const decodeDataSeries = dataSeriesName => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec)
@@ -238,260 +257,295 @@ class CramSlice {
     }
     const records = new Array(sliceHeader.content.numRecords)
     for (let rec = 0; rec < sliceHeader.content.numRecords; rec += 1) {
-      // const lastRefId = -9 // Arbitrary -ve marker for not-yet-set
-      const cr = {}
-      records[rec] = cr
-
-      // fprintf(stderr, "Decode seq %d, %d/%d\n", rec, blk.byte, blk.bit);
-
-      // cr.slice = this
-
-      // BF = bit flags (see separate section)
-      if (needDataSeries('BF')) {
-        cr.flags = decodeDataSeries('BF')
-        // TODO: do we need to worry about bam_flag_swap? seems like this was here for CRAM v1 backcompat
-        // if (r || bf < 0 ||
-        //     bf >= sizeof(fd.bam_flag_swap)/sizeof(*fd.bam_flag_swap))
-        //     return -1;
-        // bf = fd.bam_flag_swap[bf];
-      } else {
-        cr.flags = 0x4
-      }
-
-      // CF = compression bit flags (see section)
-      if (needDataSeries('CF')) {
-        cr.cramFlags = decodeDataSeries('CF')
-      } else {
-        cr.cramFlags = 0
-      }
-
-      if (cramMajorVersion !== 1 && sliceHeader.refSeqId === -2) {
-        // RI  = reference ID (record reference id from the BAM file header)
-        if (needDataSeries('RI')) {
-          cr.refSeqId = decodeDataSeries('RI')
-          // if ((fd.required_fields(SAM_SEQ|SAM_TLEN))
-          //     && cr.refSeqId >= 0
-          //     && cr.refSeqId !== lastRefId) {
-          //     if (compressionScheme.referenceRequired) {
-          //         // Range(fd):  seq >= 0, unmapped -1, unspecified   -2
-          //         // Slice(s):   seq >= 0, unmapped -1, multiple refs -2
-          //         // Record(cr): seq >= 0, unmapped -1
-          //         const need_ref = (fd.range.refid == -2 || cr.refSeqId == fd.range.refid);
-          //         if  (need_ref) {
-          //             if (!refs[cr.refSeqId])
-          //                 refs[cr.refSeqId] = cram_get_ref(fd, cr.refSeqId, 1, 0);
-          //             if (!(s.ref = refs[cr.refSeqId]))
-          //                 return -1;
-          //         } else {
-          //             // For multi-ref containers, we don't need to fetch all
-          //             // refs if we're only querying one.
-          //             s.ref = NULL;
-          //         }
-
-          //         int discard_last_ref = (!fd.unsorted &&
-          //                                 last_ref_id >= 0 &&
-          //                                 refs[last_ref_id] &&
-          //                                 (fd.range.refid == -2 ||
-          //                                  last_ref_id == fd.range.refid));
-          //         if  (discard_last_ref) {
-          //             cram_ref_decr(fd.refs, last_ref_id);
-          //             refs[last_ref_id] = NULL;
-          //         }
-          //     }
-          //     s.ref_start = 1;
-          //     s.ref_end = fd.refs.refSeqId[cr.refSeqId].length;
-
-          //     last_ref_id = cr.refSeqId;
-          // }
-        } else {
-          cr.refSeqId = -1
-        }
-      } else {
-        cr.refSeqId = sliceHeader.refSeqId // Forced constant in CRAM 1.0
-      }
-
-      // RL = read lengths
-      if (needDataSeries('RL')) {
-        cr.length = decodeDataSeries('RL')
-        if (cr.length < 0) throw new Error('read has negative length')
-      }
-
-      // AP = in-seq positions (0-based alignment start delta from previous record)
-      if (needDataSeries('AP')) {
-        cr.apos = decodeDataSeries('AP')
-        if (compressionScheme.APdelta) {
-          cr.apos += lastAPos
-          lastAPos = cr.apos
-        }
-      } else {
-        cr.apos = containerHeader.refSeqStart
-      }
-
-      // RG = read groups (read groups. Special value ‘-1’ stands for no group.)
-      if (needDataSeries('RG')) {
-        cr.rg = decodeDataSeries('RG')
-        if (cr.rg === unknownRG) cr.rg = -1
-      } else {
-        cr.rg = -1
-      }
-
-      if (compressionScheme.readNamesIncluded && needDataSeries('RN')) {
-        cr.name = decodeDataSeries('RN')
-        // convert read name to string
-        cr.name = cr.name.toString('ascii')
-      }
-
-      cr.mate = { pos: 0, line: -1, refSeqId: -1 }
-      // CF = compression bit flags
-      if (needDataSeries('CF') && cr.cramFlags & Constants.CRAM_FLAG_DETACHED) {
-        // MF = next mate bit flags
-        if (needDataSeries('MF')) {
-          cr.mateFlags = decodeDataSeries('MF')
-        } else {
-          cr.mateFlags = 0
-        }
-
-        if (!compressionScheme.readNamesIncluded) {
-          // RN = read names
-          if (needDataSeries('RN')) cr.mate.name = decodeDataSeries('RN')
-        }
-
-        // NS = next fragment reference sequence id
-        if (needDataSeries('NS')) {
-          cr.mate.refSeqId = decodeDataSeries('NS')
-        }
-
-        // Skip as mate_ref of "*" is legit. It doesn't mean unmapped, just unknown.
-        // if (cr.mate_ref_id == -1 && cr.flags & 0x01) {
-        //     /* Paired, but unmapped */
-        //     cr.flags |= BAM_FMUNMAP;
-        // }
-
-        // NP = next mate alignment start (alignment positions for the next fragment)
-        if (needDataSeries('NP')) {
-          cr.mate.pos = decodeDataSeries('NP')
-        }
-
-        // TS = template sizes
-        if (needDataSeries('TS')) {
-          cr.templateLength = decodeDataSeries('TS')
-        } else {
-          cr.templateLength = -Infinity
-        }
-      } else if (
-        needDataSeries('CF') &&
-        cr.cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM
-      ) {
-        // NF = distance to next fragment
-        if (needDataSeries('NF')) {
-          cr.mate.line = decodeDataSeries('NF')
-
-          cr.mate.refSeqId = -1
-          cr.templateLength = -Infinity
-          cr.mate.pos = 0
-        } else {
-          cr.mateFlags = 0
-          cr.templateLength = -Infinity
-        }
-      } else {
-        cr.mateFlags = 0
-        cr.templateLength = -Infinity
-      }
-
-      /* Auxiliary tags */
-      let hasMD = false
-      let hasNM = false
-      // TODO: factor out aux tag decoding like in htslib if we want to support CRAM v1
-      // if (cramMajorVersion == 1)
-      //     r |= cram_decode_aux_1_0(c, s, blk, cr);
-      // else
-
-      cr.aux = {}
-      if (needDataSeries('TL') || needDataSeries('aux')) {
-        const TLindex = decodeDataSeries('TL')
-        if (
-          TLindex <
-          0 /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */
-        )
-          throw new Error('invalid TL index')
-
-        if (needDataSeries('aux')) {
-          // TN = tag names
-          const TN = compressionScheme.getTagNames(TLindex)
-          const ntags = TN.length
-
-          for (let i = 0; i < ntags; i += 1) {
-            const tagName = TN[i]
-
-            if (tagName[0] === 'M' && tagName[1] === 'D') hasMD = true
-            if (tagName[0] === 'N' && tagName[1] === 'M') hasNM = true
-
-            const tagCodec = compressionScheme.getCodecForTag(tagName)
-            if (!tagCodec)
-              throw new Error(`no codec defined for auxiliary tag ${tagName}`)
-            cr.aux[tagName] = tagCodec.decode(
-              this,
-              coreDataBlock,
-              blocksByContentId,
-              cursors,
-            )
-          }
-        }
-      }
-
-      if (!(cr.flags & Constants.BAM_FUNMAP)) {
-        // AP = in-seq positions (0-based alignment start delta from previous record)
-        if (needDataSeries('AP') && cr.apos <= 0) {
-          throw new Error(
-            `Read has alignment position ${cr.apos} but no unmapped flag`,
-          )
-        }
-        /* Decode sequence and generate CIGAR */
-        // MQ = mapping qualities (mapping quality scores)
-        if (needDataSeries('SEQ') || needDataSeries('MQ')) {
-          // TODO
-          // cram_decode_seq(fd, c, s, blk, cr, bfd, cf, seq, qual, hasMD, hasNM)
-          ;[cr.seq, cr.qual] = decodeSeqAndQual(this, cr, hasMD, hasNM)
-        } else {
-          cr.cigar = 0
-          cr.ncigar = 0
-          cr.aend = cr.apos
-          cr.mqual = 0
-        }
-      } else {
-        // console.log("Unmapped");
-        cr.cigar = 0
-        cr.ncigar = 0
-        cr.aend = cr.apos
-        cr.mqual = 0
-
-        // BA = bases
-        if (needDataSeries('BA') && cr.length) {
-          cr.seq = decodeDataSeries('BA')
-        }
-
-        // CF = compression bit flags
-        if (
-          needDataSeries('CF') &&
-          cr.cram_flags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES
-        ) {
-          // QS = quality scores
-          if (needDataSeries('QS') && cr.length >= 0) {
-            cr.qual = decodeDataSeries('QS')
-          }
-        } else if (needDataSeries('RL'))
-          // RL = read lengths
-          cr.qual = new Array(cr.length)
-            .map(() => String.fromCharCode(255))
-            .join('')
-      }
+      records[rec] = this.readFeature(
+        decodeDataSeries,
+        compressionScheme,
+        sliceHeader,
+        coreDataBlock,
+        blocksByContentId,
+        cursors,
+      )
     }
 
-    /* Resolve mate pair cross-references between recs within this slice */
-    // cram_decode_slice_xref(s, fd.required_fields)
+    // if the starts are delta from the previous, go through and calculate the true starts
+    if (compressionScheme.APdelta) {
+      let lastStart = sliceHeader.refSeqStart || 0
+      records.forEach(rec => {
+        rec.alignmentStart += lastStart
+        lastStart = rec.alignmentStart
+      })
+    }
+
+    // Resolve mate pair cross-references between records in this slice
     decodeSliceXref(this, needDataSeries)
 
     return records
+  }
+
+  readFeature(
+    decodeDataSeries,
+    compressionScheme,
+    sliceHeader,
+    coreDataBlock,
+    blocksByContentId,
+    cursors,
+  ) {
+    const cramRecord = new CramRecord()
+
+    cramRecord.flags = decodeDataSeries('BF')
+    cramRecord.compressionFlags = decodeDataSeries('CF')
+    if (sliceHeader.content.refSeqId === -2)
+      cramRecord.sequenceId = decodeDataSeries('RI')
+    else cramRecord.sequenceId = sliceHeader.content.refSeqId
+
+    cramRecord.readLength = decodeDataSeries('RL')
+    // if APDelta, will calculate the true start in a second pass
+    cramRecord.alignmentStart = decodeDataSeries('AP')
+    cramRecord.readGroupID = decodeDataSeries('RG')
+
+    if (compressionScheme.readNamesIncluded)
+      cramRecord.readName = decodeDataSeries('RN').toString('ascii') // new String(readNameCodec.readData(), charset)
+
+    // mate record
+    if (cramRecord.isDetached()) {
+      cramRecord.mateFlags = decodeDataSeries('MF')
+      cramRecord.mate = {}
+      if (!compressionScheme.readNamesIncluded)
+        cramRecord.mate.readName = decodeDataSeries('RN') // new String(readNameCodec.readData(), charset)
+      cramRecord.mate.sequenceID = decodeDataSeries('NS')
+      cramRecord.mate.alignmentStart = decodeDataSeries('NP')
+      cramRecord.templateSize = decodeDataSeries('TS')
+      // detachedCount++
+    } else if (cramRecord.hasMateDownStream()) {
+      cramRecord.recordsToNextFragment = decodeDataSeries('NF')
+    }
+
+    const TLindex = decodeDataSeries('TL')
+    if (TLindex < 0)
+      /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */
+      throw new Error('invalid TL index')
+
+    // TN = tag names
+    const TN = compressionScheme.getTagNames(TLindex)
+    const ntags = TN.length
+
+    for (let i = 0; i < ntags; i += 1) {
+      const tagId = TN[i]
+      const tagName = tagId.substr(0, 2)
+      const tagType = tagId.substr(2, 1)
+
+      // if (tagName[0] === 'M' && tagName[1] === 'D') hasMD = true
+      // if (tagName[0] === 'N' && tagName[1] === 'M') hasNM = true
+
+      const tagCodec = compressionScheme.getCodecForTag(tagId)
+      if (!tagCodec)
+        throw new Error(`no codec defined for auxiliary tag ${tagId}`)
+      const tagData = tagCodec.decode(
+        this,
+        coreDataBlock,
+        blocksByContentId,
+        cursors,
+      )
+      cramRecord.tags[tagName] = this.parseTagData(tagType, tagData)
+    }
+    // const /* Integer */ tagIdList = tagIdListCodec.readData()
+    // const /* byte[][] */ ids = tagIdDictionary[tagIdList]
+    // if (ids.length > 0) {
+    //   const /* int */ tagCount = ids.length
+    //   cramRecord.tags = new ReadTag[tagCount]()
+    //   for (let i = 0; i < ids.length; i++) {
+    //     const /* int */ id = ReadTag.name3BytesToInt(ids[i])
+    //     const /* DataReader<byte[]> */ dataReader = tagValueCodecs.get(id)
+    //     const /* ReadTag */ tag = new ReadTag(
+    //       id,
+    //       dataReader.readData(),
+    //       validationStringency,
+    //     )
+    //     cramRecord.tags[i] = tag
+    //   }
+    // }
+
+    if (!cramRecord.isSegmentUnmapped()) {
+      // reading read features:
+      const /* int */ size = decodeDataSeries('FN')
+      let /* int */ prevPos = 0
+      const /* java.util.List<ReadFeature> */ readFeatures = new Array(
+        size,
+      ) /* new LinkedList<ReadFeature>(); */
+      cramRecord.readFeatures = readFeatures
+      for (let i = 0; i < size; i += 1) {
+        const /* Byte */ operator = String.fromCharCode(decodeDataSeries('FC'))
+
+        const /* int */ position = prevPos + decodeDataSeries('FP')
+        prevPos = position
+
+        const readFeature = { operator, position }
+        // map of operator name -> data series name
+        const data1DataSeriesName = {
+          B: 'BA',
+          S: 'SC', // TODO: 'IN' if cram v1
+          X: 'BS',
+          D: 'DL',
+          I: 'IN',
+          i: 'BA',
+          b: 'BB',
+          q: 'QQ',
+          Q: 'QS',
+          H: 'HC',
+          P: 'PD',
+          N: 'RS',
+        }[operator]
+
+        if (!data1DataSeriesName)
+          throw new Error(`invalid read feature operator "${operator}"`)
+
+        readFeature.data1 = decodeDataSeries(data1DataSeriesName)
+
+        // map of operator name -> data
+        const data2DataSeriesName = { B: 'QS' }[operator]
+        if (data2DataSeriesName)
+          readFeature.data2 = decodeDataSeries(data2DataSeriesName)
+
+        readFeatures[i] = readFeature
+
+        // if (operator === 'B') {
+        //   // ReadBase
+        //   const /* ReadBase */ readBase = new ReadBase(
+        //     pos,
+        //     baseCodec.readData(),
+        //     qualityScoreCodec.readData(),
+        //   )
+        //   readFeature.base =
+        // } else if (operator === 'X') {
+        //   const /* Substitution */ substitution = new Substitution()
+        //   substitution.setPosition(pos)
+        //   const /* byte */ code = baseSubstitutionCodec.readData()
+        //   substitution.setCode(code)
+        // } else if (operator === 'I') {
+        //   const /* Insertion */ insertion = new Insertion(
+        //     pos,
+        //     insertionCodec.readData(),
+        //   )
+        // } else if (operator === 'S') {
+        //   const /* SoftClip */ softClip = new SoftClip(
+        //     pos,
+        //     softClipCodec.readData(),
+        //   )
+        // } else if (operator === 'H') {
+        //   const /* HardClip */ hardCLip = new HardClip(
+        //     pos,
+        //     hardClipCodec.readData(),
+        //   )
+        // } else if (operator === 'P') {
+        //   const /* Padding */ padding = new Padding(
+        //     pos,
+        //     paddingCodec.readData(),
+        //   )
+        //   readFeatures[i] = padding
+        // } else if (operator === 'D') {
+        //   const /* Deletion */ deletion = new Deletion(
+        //     pos,
+        //     deletionLengthCodec.readData(),
+        //   )
+        // } else if (operator === 'N') {
+        //   const /* RefSkip */ refSkip = new RefSkip(
+        //     pos,
+        //     refSkipCodec.readData(),
+        //   )
+        // } else if (operator === 'i') {
+        //   const /* InsertBase */ insertBase = new InsertBase(
+        //     pos,
+        //     baseCodec.readData(),
+        //   )
+        // } else if (operator === 'Q') {
+        //   const /* BaseQualityScore */ baseQualityScore = new BaseQualityScore(
+        //     pos,
+        //     qualityScoreCodec.readData(),
+        //   )
+        // } else if (operator === 'b') {
+        //   const /* Bases */ bases = new Bases(pos, basesCodec.readData())
+        // } else if (operator === 'q') {
+        //   const /* Scores */ scores = new Scores(pos, scoresCodec.readData())
+        // } else {
+        //   throw new Error(`Unknown read feature operator: ${operator}`)
+        // }
+      }
+
+      // mapping quality:
+      cramRecord.mappingQuality = decodeDataSeries('MQ')
+      if (cramRecord.isPreservingQualityScores()) {
+        cramRecord.qualityScores = new Array(cramRecord.readLength).map(() =>
+          decodeDataSeries('QS'),
+        )
+        // qualityScoresCodec.readDataArray(
+        //   cramRecord.readLength,
+        // )
+      }
+    } else if (cramRecord.isUnknownBases()) {
+      cramRecord.readBases = null
+      cramRecord.qualityScores = null
+    } else {
+      const /* byte[] */ bases = new Array(
+        cramRecord.readLength,
+      ) /* new byte[cramRecord.readLength]; */
+      for (let i = 0; i < bases.length; i += 1)
+        bases[i] = decodeDataSeries('BA')
+      cramRecord.readBases = bases
+
+      if (cramRecord.isPreservingQualityScores()) {
+        cramRecord.qualityScores = new Array(cramRecord.readLength).map(() =>
+          decodeDataSeries('QS'),
+        )
+      }
+    }
+
+    // recordCounter++
+
+    // prevRecord = cramRecord
+
+    return cramRecord
+  }
+
+  parseTagData(tagType, buffer) {
+    if (tagType === 'Z') return this.readNullTerminatedStringFromBuffer(buffer)
+    else if (tagType === 'A') return String.fromCharCode(buffer[0])
+    else if (tagType === 'I') {
+      const val = Long.fromBytesLE(buffer)
+      if (
+        val.greaterThan(Number.MAX_SAFE_INTEGER) ||
+        val.lessThan(Number.MIN_SAFE_INTEGER)
+      )
+        throw new Error('integer overflow')
+      return val.toNumber()
+    } else if (tagType === 'i') return buffer.readInt32LE()
+    else if (tagType === 's') return buffer.readInt16LE()
+    else if (tagType === 'S')
+      // Convert to unsigned short stored in an int
+      return buffer.readInt16LE() & 0xffff
+    else if (tagType === 'c') return buffer[0]
+    else if (tagType === 'C')
+      // Convert to unsigned byte stored in an int
+      return buffer[0] & 0xff
+    else if (tagType === 'f') return buffer.readFloatLE()
+    if (tagType === 'H') {
+      const hex = this.readNullTerminatedStringFromBuffer(buffer)
+      return Number.parseInt(hex.replace(/^0x/, ''), 16)
+    }
+    if (tagType === 'B') return this.parseTagValueArray(buffer)
+
+    throw new Error(`Unrecognized tag type ${tagType}`)
+  }
+
+  /** given a Buffer, read a string up to the first null character */
+  readNullTerminatedStringFromBuffer(buffer) {
+    const zeroOffset = buffer.indexOf(0)
+    if (zeroOffset === -1) return buffer.toString('ascii')
+    return buffer.toString('ascii', 0, zeroOffset)
+  }
+
+  /** parse a BAM tag's array value from a binary buffer */
+  parseTagValueArray(/* buffer */) {
+    throw new Error('parseTagValueArray not yet implemented') // TODO
   }
 }
 

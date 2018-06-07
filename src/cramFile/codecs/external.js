@@ -6,6 +6,8 @@ class ExternalCodec extends CramCodec {
     super(parameters, dataType)
     if (this.dataType === 'int') {
       this._decodeData = this._decodeInt
+    } else if (this.dataType === 'byte') {
+      this._decodeData = this._decodeByte
     } else {
       throw new Error(
         `${this.dataType} decoding not yet implemented by EXTERNAL codec`,
@@ -28,6 +30,12 @@ class ExternalCodec extends CramCodec {
       cursor.bytePosition,
     )
     cursor.bytePosition += bytesRead
+    return result
+  }
+
+  _decodeByte(contentBlock, cursor) {
+    const result = contentBlock.content[cursor.bytePosition]
+    cursor.bytePosition += 1
     return result
   }
 }
