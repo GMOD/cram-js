@@ -12,7 +12,7 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getFeaturesForRange(0, 2, 200)
-    //console.log(JSON.stringify(features, null, '  '))
+    // console.log(JSON.stringify(features, null, '  '))
     expect(features).to.deep.equal([])
   })
 })
