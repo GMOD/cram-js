@@ -26,6 +26,7 @@ class IndexedCramFile {
       const blockFeatures = sliceResults[i]
       blockFeatures.forEach(feature => {
         if (
+          feature.sequenceId === seq &&
           feature.alignmentStart < end &&
           feature.alignmentStart + feature.readLength > start
         )
