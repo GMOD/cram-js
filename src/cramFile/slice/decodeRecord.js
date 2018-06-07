@@ -35,6 +35,7 @@ function parseTagValueArray(/* buffer */) {
 }
 
 function parseTagData(tagType, buffer) {
+  if (!buffer.readInt32LE) buffer = Buffer.from(buffer)
   if (tagType === 'Z') return readNullTerminatedStringFromBuffer(buffer)
   else if (tagType === 'A') return String.fromCharCode(buffer[0])
   else if (tagType === 'I') {
@@ -47,13 +48,9 @@ function parseTagData(tagType, buffer) {
     return val.toNumber()
   } else if (tagType === 'i') return buffer.readInt32LE()
   else if (tagType === 's') return buffer.readInt16LE()
-  else if (tagType === 'S')
-    // Convert to unsigned short stored in an int
-    return buffer.readInt16LE() & 0xffff
-  else if (tagType === 'c') return buffer[0]
-  else if (tagType === 'C')
-    // Convert to unsigned byte stored in an int
-    return buffer[0] & 0xff
+  else if (tagType === 'S') return buffer.readUInt16LE()
+  else if (tagType === 'c') return buffer.readInt8()
+  else if (tagType === 'C') return buffer.readUInt8()
   else if (tagType === 'f') return buffer.readFloatLE()
   if (tagType === 'H') {
     const hex = readNullTerminatedStringFromBuffer(buffer)
@@ -170,6 +167,7 @@ function decodeRecord(
       blocksByContentId,
       cursors,
     )
+    if (tagName === 'XS') debugger
     cramRecord.tags[tagName] = parseTagData(tagType, tagData)
   }
 

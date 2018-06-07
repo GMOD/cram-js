@@ -1,4 +1,4 @@
-const { getCodecClassWithId } = require('../codecs')
+const { instantiateCodec } = require('../codecs')
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -91,7 +91,7 @@ class CramContainerCompressionScheme {
     if (!this.tagCodecCache[tagName]) {
       const encodingData = this.tagEncoding[tagName]
       if (encodingData) {
-        this.tagCodecCache[tagName] = this._instantiateCodec(
+        this.tagCodecCache[tagName] = instantiateCodec(
           encodingData,
           'byteArray', // all tags are byte array data
         )
@@ -115,23 +115,13 @@ class CramContainerCompressionScheme {
         const dataType = dataSeriesTypes[dataSeriesName]
         if (!dataType)
           throw new Error(`unknown data series name ${dataSeriesName}`)
-        this.dataSeriesCodecCache[dataSeriesName] = this._instantiateCodec(
+        this.dataSeriesCodecCache[dataSeriesName] = instantiateCodec(
           encodingData,
           dataType,
         )
       }
     }
     return this.dataSeriesCodecCache[dataSeriesName]
-  }
-
-  _instantiateCodec(encodingData, dataType) {
-    const CodecClass = getCodecClassWithId(
-      dataType === 'ignore' ? 0 : encodingData.codecId,
-    )
-    if (!CodecClass)
-      throw new Error(`no codec defined for codec ID ${encodingData.codecId}`)
-
-    return new CodecClass(encodingData.parameters, dataType)
   }
 }
 
