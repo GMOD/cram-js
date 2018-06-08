@@ -2,6 +2,7 @@ const HuffmanIntCodec = require('./huffman')
 const ExternalCodec = require('./external')
 const ByteArrayStopCodec = require('./byteArrayStop')
 const ByteArrayLengthCodec = require('./byteArrayLength')
+const BetaCodec = require('./beta')
 
 // class GolombCodec extends CramCodec {}
 // class ByteArrayLengthCodec extends CramCodec {}
@@ -16,7 +17,7 @@ const codecClasses = {
   3: HuffmanIntCodec,
   4: ByteArrayLengthCodec,
   5: ByteArrayStopCodec,
-  // 6: BetaCodec,
+  6: BetaCodec,
   // 7: SubexpCodec,
   // 8: GolombRiceCodec,
   // 9: GammaCodec,

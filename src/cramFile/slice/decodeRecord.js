@@ -64,6 +64,22 @@ function parseTagData(tagType, buffer) {
 function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
   let prevPos = 0
   const readFeatures = new Array(readFeatureCount)
+
+  function decodeRFData([type, dataSeriesName]) {
+    const data = decodeDataSeries(dataSeriesName)
+    if (type === 'character') {
+      return String.fromCharCode(data)
+    } else if (type === 'string') {
+      return data.toString('ascii')
+    } else if (type === 'numArray') {
+      return data.toArray()
+    }
+    // else if (type === 'number') {
+    //   return data[0]
+    // }
+    return data
+  }
+
   for (let i = 0; i < readFeatureCount; i += 1) {
     const operator = String.fromCharCode(decodeDataSeries('FC'))
 
@@ -72,33 +88,30 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
 
     const readFeature = { operator, position }
     // map of operator name -> data series name
-    const data1DataSeriesName = {
-      B: 'BA',
-      S: 'SC', // TODO: 'IN' if cram v1
-      X: 'BS',
-      D: 'DL',
-      I: 'IN',
-      i: 'BA',
-      b: 'BB',
-      q: 'QQ',
-      Q: 'QS',
-      H: 'HC',
-      P: 'PD',
-      N: 'RS',
+    const data1Schema = {
+      B: ['character', 'BA'],
+      S: ['string', 'SC'], // TODO: 'IN' if cram v1
+      X: ['number', 'BS'],
+      D: ['number', 'DL'],
+      I: ['string', 'IN'],
+      i: ['character', 'BA'],
+      b: ['string', 'BB'],
+      q: ['numArray', 'QQ'],
+      Q: ['number', 'QS'],
+      H: ['number', 'HC'],
+      P: ['number', 'PD'],
+      N: ['number', 'RS'],
     }[operator]
 
-    if (!data1DataSeriesName)
+    if (!data1Schema)
       throw new Error(`invalid read feature operator "${operator}"`)
 
-    readFeature.data = decodeDataSeries(data1DataSeriesName)
+    readFeature.data = decodeRFData(data1Schema)
 
     // if this is a tag with two data items, make the data an array and add the second item
-    const data2DataSeriesName = { B: 'QS' }[operator]
-    if (data2DataSeriesName)
-      readFeature.data = [
-        readFeature.data,
-        decodeDataSeries(data2DataSeriesName),
-      ]
+    const data2Schema = { B: ['number', 'QS'] }[operator]
+    if (data2Schema)
+      readFeature.data = [readFeature.data, decodeRFData(data2Schema)]
 
     readFeatures[i] = readFeature
   }
@@ -167,7 +180,6 @@ function decodeRecord(
       blocksByContentId,
       cursors,
     )
-    if (tagName === 'XS') debugger
     cramRecord.tags[tagName] = parseTagData(tagType, tagData)
   }
 
