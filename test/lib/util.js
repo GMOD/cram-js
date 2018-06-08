@@ -11,13 +11,7 @@ function testDataFile(filename) {
   return fromUrl(source)
 }
 
-async function loadTestJSON(filename) {
-  const text = (await testDataFile(filename).readFile()).toString()
-  return JSON.parse(text)
-}
-
 module.exports = {
   testDataUrl,
   testDataFile,
-  loadTestJSON,
 }
