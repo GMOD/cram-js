@@ -79,7 +79,7 @@ function readStatsO1(
       x += D[i].fc[j].F
       if (!(x <= Constants.TOTFREQ)) throw new Error('assertion failed')
 
-      if (rlej === 0 && j + 1 === (0xff & cp.get(cp.position()))) {
+      if (rlej === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
         j = 0xff & cp.get()
         rlej = 0xff & cp.get()
       } else if (rlej !== 0) {
@@ -90,7 +90,7 @@ function readStatsO1(
       }
     } while (j !== 0)
 
-    if (rlei === 0 && i + 1 === (0xff & cp.get(cp.position()))) {
+    if (rlei === 0 && i + 1 === (0xff & cp.getByteAt(cp.position()))) {
       i = 0xff & cp.get()
       rlei = 0xff & cp.get()
     } else if (rlei !== 0) {

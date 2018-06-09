@@ -127,7 +127,8 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
   /* const ByteBuffer */ input,
   /* const ByteBuffer */ output,
 ) {
-  const D = new Decoding.AriDecoder[256]()
+  const D = new Array(256)
+  for (let i = 0; i < D.length; i += 1) D[i] = new Decoding.AriDecoder()
   const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
   for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Array(256)

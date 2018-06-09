@@ -53,7 +53,7 @@ function uncompress(
   for (; i7 < outputSize; i7 += 1) {
     const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, Constants.TF_SHIFT)]
     output.putAt(i7, c7)
-    rans7 = Decoding.AdvanceSymbol(
+    rans7 = Decoding.advanceSymbol(
       rans7,
       input,
       syms[l7][c7],
