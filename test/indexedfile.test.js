@@ -92,7 +92,7 @@ describe('.crai indexed cram file', () => {
 
       const features = await cram.getFeaturesForRange(0, 0, Infinity)
       // require('fs').writeFileSync(
-      //   'test/data/ce#1000.tmp.cram.test1.expected.json',
+      //   `test/data/${filename}.test2.expected.json`,
       //   JSON.stringify(features, null, '  '),
       // )
       // console.log(`${filename} first ref got ${features.length} features`)
@@ -106,7 +106,7 @@ describe('.crai indexed cram file', () => {
 
       const features = await cram.getFeaturesForRange(1, 0, Infinity)
       // require('fs').writeFileSync(
-      //   'test/data/ce#1000.tmp.cram.test1.expected.json',
+      //   `test/data/${filename}.test3.expected.json`,
       //   JSON.stringify(features, null, '  '),
       // )
       // console.log(`${filename} second ref got ${features.length} features`)
