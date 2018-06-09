@@ -20,6 +20,10 @@ class CramRecord {
   isPreservingQualityScores() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES)
   }
+
+  isUnknownBases() {
+    return !!(this.cramFlags & Constants.CRAM_FLAG_NO_SEQ)
+  }
 }
 
 /** given a Buffer, read a string up to the first null character */
