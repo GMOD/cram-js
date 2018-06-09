@@ -34,8 +34,29 @@ function readNullTerminatedStringFromBuffer(buffer) {
 }
 
 /** parse a BAM tag's array value from a binary buffer */
-function parseTagValueArray(/* buffer */) {
-  throw new Error('parseTagValueArray not yet implemented') // TODO
+function parseTagValueArray(buffer) {
+  const arrayType = String.fromCharCode(buffer[0])
+  const length = buffer.readInt32LE(1)
+
+  const schema = {
+    c: ['readInt8', 1],
+    C: ['readUInt8', 1],
+    s: ['readInt16LE', 2],
+    S: ['readUInt16LE', 2],
+    i: ['readInt32LE', 4],
+    I: ['readUInt32LE', 4],
+    f: ['readFloatLE', 4],
+  }[arrayType]
+  if (!schema) throw new Error(`invalid tag value array type '${arrayType}'`)
+
+  const [getMethod, itemSize] = schema
+  const array = new Array(length)
+  let offset = 5
+  for (let i = 0; i < length; i += 1) {
+    array[i] = buffer[getMethod](offset)
+    offset += itemSize
+  }
+  return array
 }
 
 function parseTagData(tagType, buffer) {
