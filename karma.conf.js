@@ -78,7 +78,7 @@ module.exports = config => {
         ],
       },
       watch: true,
-      devtool: 'inline-source-map',
+      devtool: 'eval-source-map',
     },
 
     webpackMiddleware: {
