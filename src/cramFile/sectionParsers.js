@@ -42,14 +42,14 @@ const cramContainerHeader2 = {
 const cramBlockHeader = {
   parser: new Parser()
     .uint8('compressionMethod', {
-      formatter: b => {
+      formatter: /* istanbul ignore next */ b => {
         const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans'][b]
         if (!method) throw new Error(`invalid compression method number ${b}`)
         return method
       },
     })
     .uint8('contentType', {
-      formatter: b => {
+      formatter: /* istanbul ignore next */ b => {
         const type = [
           'FILE_HEADER',
           'COMPRESSION_HEADER',
@@ -118,7 +118,7 @@ const cramEncoding = {
 
 const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
   length: 'size',
-  formatter: buffer => {
+  formatter: /* istanbul ignore next */ buffer => {
     function makeTagSet(stringStart, stringEnd) {
       const str = buffer.toString('ascii', stringStart, stringEnd)
       const tags = []
@@ -144,7 +144,9 @@ const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
 })
 
 // const cramPreservationMapKeys = 'XX RN AP RR SM TD'.split(' ')
-const parseByteAsBool = new Parser().uint8(null, { formatter: val => !!val })
+const parseByteAsBool = new Parser().uint8(null, {
+  formatter: /* istanbul ignore next */ val => !!val,
+})
 
 const cramPreservationMap = new Parser()
   .itf8('mapSize')
@@ -169,12 +171,13 @@ const cramPreservationMap = new Parser()
           SM: new Parser().array(null, { type: 'uint8', length: 5 }),
           TD: new Parser().nest(null, {
             type: cramTagDictionary,
-            formatter: data => data.entries,
+            formatter: /* istanbul ignore next */ data => data.entries,
           }),
         },
       }),
   })
 
+/* istanbul ignore next */
 function formatMap(data) {
   const map = {}
   data.entries.forEach(({ key, value }) => {
@@ -201,7 +204,8 @@ const cramTagEncodingMap = new Parser()
     length: 'mapCount',
     type: new Parser()
       .itf8('key', {
-        formatter: integerRepresentation =>
+        formatter: /* istanbul ignore next */ integerRepresentation =>
+          /* istanbul ignore next */
           String.fromCharCode((integerRepresentation >> 16) & 0xff) +
           String.fromCharCode((integerRepresentation >> 8) & 0xff) +
           String.fromCharCode(integerRepresentation & 0xff),
