@@ -1,6 +1,6 @@
 const { expect } = require('chai')
 
-const { testDataFile } = require('./lib/util')
+const { testDataFile, loadTestJSON } = require('./lib/util')
 const { dumpWholeFile } = require('./lib/dumpFile')
 const { CramFile } = require('../src/index')
 
@@ -51,7 +51,7 @@ xx#unsorted.tmp.cram`
         //   `test/data/${filename}.dump.json`,
         //   JSON.stringify(fileData, null, '  '),
         // )
-        const expectedFeatures = require(`./data/${filename}.dump.json`)
+        const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
         expect(JSON.parse(JSON.stringify(fileData))).to.deep.equal(
           expectedFeatures,
         )
