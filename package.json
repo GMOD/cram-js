@@ -21,9 +21,9 @@
     "dist"
   ],
   "scripts": {
-    "test": "nyc mocha",
+    "test": "mocha",
     "test-browser": "karma start --single-run",
-    "coverage": "nyc report --reporter=lcov",
+    "coverage": "nyc mocha && nyc report --reporter=lcov",
     "postcoverage": "opn coverage/lcov-report/index.html",
     "lint": "eslint src test",
     "docs": "documentation readme src --section=API",
