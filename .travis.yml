@@ -4,7 +4,6 @@ node_js:
 script:
   - set -e
   - npm run build
-  - rm -rf src; ln -s dist src;
   - npm run test
   - npm run coverage
 cache:
