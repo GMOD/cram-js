@@ -11,7 +11,9 @@ async function dumpContainerById(file, containerId) {
   const returnData = { containerHeader }
   let blockPosition
   let numBlocks = containerHeader.numBlocks
-  if (containerId > 0) {
+  // if this is not the first container, and the container has records in it,
+  // there should be a compression header as the next block.
+  if (containerId > 0 && containerHeader.numRecords) {
     const compressionHeader = await container.getCompressionHeaderBlock()
     const compressionScheme = await container.getCompressionScheme()
     blockPosition = compressionHeader._endPosition
