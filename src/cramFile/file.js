@@ -35,7 +35,7 @@ class CramFile {
     return cramFileDefinition.parser.parse(headbytes).result
   }
 
-  async getContainerByID(containerNumber) {
+  async getContainerById(containerNumber) {
     let position = sectionParsers.cramFileDefinition.maxLength
     const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers

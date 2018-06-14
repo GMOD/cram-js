@@ -18,7 +18,7 @@ describe('CRAM reader', () => {
 
   it('can read the first container header of a cram file', async () => {
     const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
-    const header = await (await file.getContainerByID(0)).getHeader()
+    const header = await (await file.getContainerById(0)).getHeader()
     expect(header).to.deep.equal({
       alignmentSpan: 0,
       crc32: 2996618296,
@@ -46,7 +46,7 @@ describe('CRAM reader', () => {
       majorVersion: 3,
       minorVersion: 0,
     })
-    expect(await (await file.getContainerByID(0)).getHeader()).to.deep.equal({
+    expect(await (await file.getContainerById(0)).getHeader()).to.deep.equal({
       alignmentSpan: 0,
       crc32: 2977905791,
       _endPosition: 45,
@@ -74,7 +74,7 @@ describe('CRAM reader', () => {
       majorVersion: 3,
       minorVersion: 0,
     })
-    expect(await (await file.getContainerByID(1)).getHeader()).to.deep.equal({
+    expect(await (await file.getContainerById(1)).getHeader()).to.deep.equal({
       alignmentSpan: 529350,
       crc32: 2139737710,
       _size: 24,
@@ -93,7 +93,7 @@ describe('CRAM reader', () => {
 
   it('can read the second container header of a cram file', async () => {
     const file = new CramFile(testDataFile('auxf#values.tmp.cram'))
-    const container = await file.getContainerByID(1)
+    const container = await file.getContainerById(1)
     const header = await container.getHeader()
     expect(header).to.deep.equal({
       alignmentSpan: 20,
@@ -158,7 +158,7 @@ describe('CRAM reader', () => {
 
   it('can read the compression header block and first slice header block from the 23rd container of ce#1000.tmp.cram', async () => {
     const file = new CramFile(testDataFile('ce#1000.tmp.cram'))
-    const container = await file.getContainerByID(23)
+    const container = await file.getContainerById(23)
     const containerHeader = await container.getHeader()
     expect(containerHeader).to.deep.equal({
       _endPosition: 108275,

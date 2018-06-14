@@ -1,7 +1,8 @@
 const { expect } = require('chai')
 
 const { testDataFile } = require('./lib/util')
-const { IndexedCramFile } = require('../src/index')
+const { dumpWholeFile } = require('./lib/dumpFile')
+const { CramFile, IndexedCramFile } = require('../src/index')
 const CramIndex = require('../src/cramIndex')
 const expectedFeatures1 = require('./data/ce#tag_padded.tmp.cram.test1.expected.json')
 const expectedFeatures2 = require('./data/ce#unmap2.tmp.cram.test1.expected.json')

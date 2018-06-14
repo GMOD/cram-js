@@ -6,11 +6,10 @@ const decodeSliceXref = require('./decodeSliceXref')
 const decodeRecord = require('./decodeRecord')
 
 class CramSlice {
-  constructor(container, position, length) {
+  constructor(container, position) {
     this.container = container
     this.file = container.file
     this.containerPosition = position
-    this.size = length
   }
 
   // memoize
@@ -19,7 +18,6 @@ class CramSlice {
     const containerHeader = await this.container.getHeader()
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
-      this.size,
     )
     if (header.contentType === 'MAPPED_SLICE_HEADER') {
       header.content = parseItem(
