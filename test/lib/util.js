@@ -1,10 +1,4 @@
-const { promisify } = require('es6-promisify')
-const zlib = require('zlib')
-
-const gunzip = promisify(zlib.gunzip)
-
 const { fromUrl } = require('./io')
-
 
 function testDataUrl(filename) {
   return typeof window === 'undefined'
@@ -18,8 +12,7 @@ function testDataFile(filename) {
 }
 
 async function loadTestJSON(filename) {
-  let data = await testDataFile(`${filename}`).readFile()
-  // data = await gunzip(data)
+  const data = await testDataFile(`${filename}`).readFile()
   const text = data.toString()
   return JSON.parse(text)
 }
