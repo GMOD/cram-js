@@ -1,5 +1,11 @@
 const CramCodec = require('./_base')
 
+function numberOfSetBits(ii) {
+  let i = (ii - (ii >> 1)) & 0x55555555
+  i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
+  return (((i + (i >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
+}
+
 class HuffmanIntCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
@@ -9,60 +15,88 @@ class HuffmanIntCodec extends CramCodec {
       )
     }
 
+    this.buildCodeBook()
+    this.buildCodes()
+    this.buildCaches()
+
+    // if this is a degenerate zero-length huffman code, special-case the decoding
+    if (this.sortedCodes[0].bitLength === 0)
+      this._decode = this._decodeZeroLengthCode
+  }
+
+  buildCodeBook() {
     // parse the parameters together into a `codes` data structure
-    this.codes = new Array(this.parameters.numCodes)
+    let codes = new Array(this.parameters.numCodes)
     for (let i = 0; i < this.parameters.numCodes; i += 1) {
-      this.codes[i] = {
+      codes[i] = {
         symbol: this.parameters.symbols[i],
         bitLength: this.parameters.bitLengths[i],
       }
     }
     // sort the codes by bit length and symbol value
-    this.codes = this.codes.sort(
+    codes = codes.sort(
       (a, b) => a.bitLength - b.bitLength || a.symbol - b.symbol,
     )
-    this._generateCanonicalCodes()
 
-    // if this is a degenerate zero-length huffman code, special-case the decoding
-    if (this.codes[0].bitLength === 0) this._decode = this._decodeZeroLengthCode
+    this.codeBook = {}
+    codes.forEach(code => {
+      if (!this.codeBook[code.bitLength]) this.codeBook[code.bitLength] = []
+      this.codeBook[code.bitLength].push(code.symbol)
+    })
   }
 
-  _generateCanonicalCodes() {
-    let val = -1
-    let lastLength = 0
-    let maxVal = 0
-    this.codes.forEach(codeRecord => {
-      val += 1
-      if (val > maxVal) throw new Error('assertion failed')
+  buildCodes() {
+    this.codes = {} /*  new TreeMap<Integer, HuffmanBitCode>(); */
+    let codeLength = 0
+    let codeValue = -1
+    Object.entries(this.codeBook).forEach(([bitLength, symbols]) => {
+      bitLength = parseInt(bitLength, 10)
+      symbols.forEach(symbol => {
+        const code = { bitLength, value: symbol }
+        codeValue += 1
+        const delta = bitLength - codeLength // new length?
+        codeValue <<= delta // pad with 0's
+        code.bitCode = codeValue // calculated: huffman code
+        codeLength += delta // adjust current code length
 
-      if (codeRecord.bitLength > lastLength) {
-        val <<= codeRecord.bitLength - lastLength
-        lastLength = codeRecord.bitLength
-        maxVal = (1 << codeRecord.bitLength) - 1
-      }
-      codeRecord.code = val
-    })
+        if (numberOfSetBits(codeValue) > bitLength)
+          throw new Error('Symbol out of range')
 
-    lastLength = 0
-    let j = 0
-    this.codes.forEach((codeRecord, i) => {
-      if (codeRecord.bitLength > lastLength) {
-        j = codeRecord.code - i
-        lastLength = codeRecord.bitLength
-      }
-      codeRecord.p = j
+        this.codes[symbol] = code
+      })
     })
+  }
+
+  buildCaches() {
+    this.sortedCodes = Object.values(this.codes).sort(
+      (a, b) => a.bitLength - b.bitLength || a.bitCode - b.bitCode,
+    )
+
+    // this.sortedValues = this.parameters.values.sort((a,b) => a-b)
+    this.sortedByValue = Object.values(this.codes).sort(
+      (a, b) => a.value - b.value,
+    )
+
+    this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
+    this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
+    this.sortedBitLengthsByBitCode = this.sortedCodes.map(c => c.bitLength)
+    const maxBitCode = Math.max(...this.sortedBitCodes)
+
+    this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
+    for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
+      this.bitCodeToValue[this.sortedCodes[i].bitCode] = i
+    }
   }
 
   decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
+    if (numItems !== 1)
+      throw new Error('only 1 decoded item supported right now')
     const items = this._decode(
       slice,
       coreDataBlock,
       cursors.coreBlock,
       numItems,
     )
-    if (numItems !== 1)
-      throw new Error('only 1 decoded item supported right now')
     return items[0]
   }
 
@@ -72,52 +106,40 @@ class HuffmanIntCodec extends CramCodec {
 
   // the special case for zero-length codes
   _decodeZeroLengthCode(slice, coreDataBlock, coreCursor, numItems) {
-    const { codes } = this
-    const output = []
-
+    const { sortedCodes } = this
+    const output = Array(numItems)
     for (let i = 0; i < numItems; i += 1) {
-      output[i] = codes[0].symbol
+      output[i] = sortedCodes[0].value
     }
     return output
   }
 
-  _decode(slice, coreDataBlock, coreCursor, numBytes) {
-    // let /* int */ cram_huffman_decode_char(cram_slice *slice, cram_codec *c,
-    //   cram_block *in, char *out, let /* int */ *out_size) {
-    const { codes } = this
-    const numCodes = codes.length
-    const output = []
+  _decode(slice, coreDataBlock, coreCursor, numBytes = 1) {
+    if (numBytes !== 1) throw new Error('numBytes > 1 not yet supported')
     const input = coreDataBlock.content
 
-    for (let i = 0; i < numBytes; i += 1) {
-      let /* int */ idx = 0
-      let /* int */ length = 0
-      let /* int */ lastLength = 0
+    let prevLen = 0
+    let bits = 0
+    for (let i = 0; i < this.sortedCodes.length; i += 1) {
+      const length = this.sortedCodes[i].bitLength
+      bits <<= length - prevLen
+      bits |= this._getBits(input, coreCursor, length - prevLen)
+      prevLen = length
+      {
+        const index = this.bitCodeToValue[bits]
+        if (index > -1 && this.sortedBitLengthsByBitCode[index] === length)
+          return [this.sortedValuesByBitCode[index]]
 
-      for (;;) {
-        const /* int */ dlen = codes[idx].bitLength - lastLength
-
-        length += dlen
-        lastLength = length
-
-        const val = this._getBits(input, coreCursor, dlen)
-
-        // let newindex = val - codes[idx].p
-        // if (newindex >= numCodes || newindex < 0 || Number.isNaN(newindex))
-        //   throw new Error('huffman decode assertion failed')
-
-        idx = val - codes[idx].p
-        if (idx >= numCodes || idx < 0 || Number.isNaN(idx))
-          throw new Error('huffman decode assertion failed')
-
-        if (codes[idx].code === val && codes[idx].bitLength === length) {
-          output[i] = codes[idx].symbol
-          break
-        }
+        for (
+          let j = i;
+          this.sortedCodes[j + 1].bitLength === length &&
+          j < this.sortedCodes.length;
+          j += 1
+        )
+          i += 1
       }
     }
-
-    return output
+    throw new Error('Not found.')
   }
 }
 

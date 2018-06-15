@@ -110,3 +110,4 @@ xx#triplet.tmp.cram
 xx#unsorted.2.1.cram
 xx#unsorted.3.0.cram
 xx#unsorted.tmp.cram`.split(/\s+/)
+// .filter(f => /cramQueryWithCRAI/.test(f))

@@ -31,9 +31,14 @@ class ByteArrayStopCodec extends CramCodec {
     // scan to the next stop byte
     const startPosition = cursor.bytePosition
     let stopPosition = cursor.bytePosition
-    while (dataBuffer[stopPosition] !== stopByte) {
-      if (stopPosition === dataBuffer.length)
-        throw new Error(`byteArrayStop reading beyond length of data buffer?`)
+    while (
+      dataBuffer[stopPosition] !== stopByte &&
+      stopPosition < dataBuffer.length
+    ) {
+      if (stopPosition === dataBuffer.length) {
+        console.warn(`byteArrayStop reading beyond length of data buffer?`)
+        break
+      }
       stopPosition += 1
     }
     cursor.bytePosition = stopPosition + 1
