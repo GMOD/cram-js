@@ -231,7 +231,7 @@ function decodeRecord(
       cramRecord.readLength,
     ) /* new byte[cramRecord.readLength]; */
     for (let i = 0; i < bases.length; i += 1) bases[i] = decodeDataSeries('BA')
-    cramRecord.readBases = bases
+    cramRecord.readBases = String.fromCharCode(...bases)
 
     if (cramRecord.isPreservingQualityScores()) {
       cramRecord.qualityScores = decodeDataSeries('QS')

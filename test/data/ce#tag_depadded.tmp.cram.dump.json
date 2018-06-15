@@ -1,0 +1,7161 @@
+[
+  {
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+    "fileId": "-"
+  },
+  {
+    "containerHeader": {
+      "length": 283,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+      "alignmentSpan": 0,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "_endPosition": 45,
+      "_size": 19,
+      "landmarks": [
+        0,
+        183
+      ],
+      "crc32": 1845886639
+    },
+    "data": [
+      {
+        "length": 283,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+        "alignmentSpan": 0,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "_endPosition": 45,
+        "_size": 19,
+        "landmarks": [
+          0,
+          183
+        ],
+        "crc32": 1845886639
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "FILE_HEADER",
+          "contentId": 0,
+          "compressedSize": 172,
+          "uncompressedSize": 172,
+          "_endPosition": 228,
+          "_size": 176,
+          "contentPosition": 52,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              168,
+              0,
+              0,
+              0,
+              64,
+              72,
+              68,
+              9,
+              86,
+              78,
+              58,
+              49,
+              46,
+              52,
+              9,
+              83,
+              79,
+              58,
+              99,
+              111,
+              111,
+              114,
+              100,
+              105,
+              110,
+              97,
+              116,
+              101,
+              10,
+              64,
+              83,
+              81,
+              9,
+              83,
+              78,
+              58,
+              67,
+              72,
+              82,
+              79,
+              77,
+              79,
+              83,
+              79,
+              77,
+              69,
+              95,
+              73,
+              9,
+              76,
+              78,
+              58,
+              49,
+              48,
+              48,
+              57,
+              56,
+              48,
+              48,
+              9,
+              77,
+              53,
+              58,
+              56,
+              101,
+              100,
+              101,
+              51,
+              54,
+              49,
+              51,
+              49,
+              101,
+              48,
+              100,
+              98,
+              102,
+              51,
+              52,
+              49,
+              55,
+              56,
+              48,
+              55,
+              101,
+              52,
+              56,
+              102,
+              55,
+              55,
+              102,
+              51,
+              101,
+              98,
+              100,
+              9,
+              85,
+              82,
+              58,
+              47,
+              85,
+              115,
+              101,
+              114,
+              115,
+              47,
+              114,
+              98,
+              117,
+              101,
+              108,
+              115,
+              47,
+              100,
+              101,
+              118,
+              47,
+              104,
+              116,
+              115,
+              108,
+              105,
+              98,
+              47,
+              116,
+              101,
+              115,
+              116,
+              47,
+              99,
+              101,
+              46,
+              102,
+              97,
+              10,
+              64,
+              82,
+              71,
+              9,
+              73,
+              68,
+              58,
+              85,
+              78,
+              75,
+              78,
+              79,
+              87,
+              78,
+              9,
+              83,
+              77,
+              58,
+              117,
+              110,
+              107,
+              110,
+              111,
+              119,
+              110,
+              9,
+              76,
+              66,
+              58,
+              85,
+              78,
+              75,
+              78,
+              79,
+              87,
+              78,
+              10
+            ]
+          },
+          "crc32": 851202625
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "raw",
+          "contentType": "FILE_HEADER",
+          "contentId": 0,
+          "compressedSize": 91,
+          "uncompressedSize": 91,
+          "_endPosition": 328,
+          "_size": 95,
+          "contentPosition": 233,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "crc32": 1923840713
+        }
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 1415,
+      "refSeqId": 0,
+      "refSeqStart": 2,
+      "alignmentSpan": 100,
+      "numRecords": 8,
+      "recordCounter": 0,
+      "numBases": 505,
+      "numBlocks": 27,
+      "numLandmarks": 2,
+      "_endPosition": 349,
+      "_size": 21,
+      "landmarks": [
+        215,
+        1074
+      ],
+      "crc32": 3108528878
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "PTZ"
+          ],
+          [],
+          [
+            "CTZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 15
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 25
+          }
+        },
+        "AP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 17
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 32
+          }
+        },
+        "FN": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 26
+          }
+        },
+        "FC": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 27
+          }
+        },
+        "FP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 28
+          }
+        },
+        "BS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 31
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "BA": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 19
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "PTZ": {
+          "codecId": 5,
+          "parametersBytes": 5,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 5264474
+          }
+        },
+        "CTZ": {
+          "codecId": 5,
+          "parametersBytes": 5,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 4412506
+          }
+        }
+      },
+      "_endPosition": 560,
+      "_size": 204,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "PTZ"
+        ],
+        [],
+        [
+          "CTZ"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 1415,
+        "refSeqId": 0,
+        "refSeqStart": 2,
+        "alignmentSpan": 100,
+        "numRecords": 8,
+        "recordCounter": 0,
+        "numBases": 505,
+        "numBlocks": 27,
+        "numLandmarks": 2,
+        "_endPosition": 349,
+        "_size": 21,
+        "landmarks": [
+          215,
+          1074
+        ],
+        "crc32": 3108528878
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 47,
+          "uncompressedSize": 47,
+          "_endPosition": 620,
+          "_size": 51,
+          "contentPosition": 569,
+          "content": {
+            "refSeqId": 0,
+            "refSeqStart": 2,
+            "refSeqSpan": 100,
+            "numRecords": 7,
+            "recordCounter": 0,
+            "numBlocks": 14,
+            "numContentIds": 13,
+            "contentIds": [
+              11,
+              12,
+              15,
+              17,
+              19,
+              25,
+              26,
+              27,
+              28,
+              31,
+              32,
+              5264474,
+              4412506
+            ],
+            "refBaseID": -1,
+            "md5": [
+              161,
+              76,
+              161,
+              164,
+              69,
+              128,
+              88,
+              67,
+              152,
+              106,
+              78,
+              166,
+              172,
+              161,
+              99,
+              13
+            ],
+            "_endPosition": 47,
+            "_size": -302
+          },
+          "crc32": 725204070
+        },
+        "features": [
+          {
+            "tags": {
+              "PT": "27;28;+;STOP;Note=tag1"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "I",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "PT": "27;27;+;PRIM;Note=tag2|28;28;+;OLIG;Note=tag3"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "II.14978392",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "PT": "1;1;+;COMM|101;101;+;COMM"
+            },
+            "flags": 0,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "III",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "i",
+                "position": 28,
+                "data": "C"
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "IV",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 0,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "V",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "CT": "+;STOP"
+            },
+            "flags": 768,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 1,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "*",
+            "mappingQuality": 255
+          },
+          {
+            "tags": {
+              "CT": "+;COMM;Note=consensus%0Amulti%09line%0Atag%0A!\"#$%25^&*()_+<>?:@~{}%7C%0A1234567890-=[]'%3B#,./\\"
+            },
+            "flags": 768,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 2,
+            "alignmentStart": 26,
+            "readGroupId": -1,
+            "readName": "*",
+            "mappingQuality": 255
+          }
+        ]
+      },
+      {
+        "block": {
+          "compressionMethod": "raw",
+          "contentType": "CORE_DATA",
+          "contentId": 0,
+          "compressedSize": 0,
+          "uncompressedSize": 0,
+          "_endPosition": 629,
+          "_size": 4,
+          "contentPosition": 625,
+          "content": {
+            "type": "Buffer",
+            "data": []
+          },
+          "crc32": 4059825967
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 11,
+          "compressedSize": 47,
+          "uncompressedSize": 27,
+          "_endPosition": 685,
+          "_size": 51,
+          "contentPosition": 634,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              73,
+              0,
+              73,
+              73,
+              46,
+              49,
+              52,
+              57,
+              55,
+              56,
+              51,
+              57,
+              50,
+              0,
+              73,
+              73,
+              73,
+              0,
+              73,
+              86,
+              0,
+              86,
+              0,
+              42,
+              0,
+              42,
+              0
+            ]
+          },
+          "crc32": 4257342289
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 12,
+          "compressedSize": 65,
+          "uncompressedSize": 504,
+          "_endPosition": 760,
+          "_size": 69,
+          "contentPosition": 691,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              1,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              255,
+              255,
+              255
+            ]
+          },
+          "crc32": 1803014978
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 15,
+          "compressedSize": 29,
+          "uncompressedSize": 9,
+          "_endPosition": 798,
+          "_size": 33,
+          "contentPosition": 765,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              16,
+              16,
+              0,
+              16,
+              0,
+              131,
+              0,
+              131,
+              0
+            ]
+          },
+          "crc32": 1341315972
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 17,
+          "compressedSize": 23,
+          "uncompressedSize": 7,
+          "_endPosition": 830,
+          "_size": 27,
+          "contentPosition": 803,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              26
+            ]
+          },
+          "crc32": 2285291093
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 19,
+          "compressedSize": 26,
+          "uncompressedSize": 9,
+          "_endPosition": 865,
+          "_size": 30,
+          "contentPosition": 835,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              128,
+              255,
+              128,
+              255
+            ]
+          },
+          "crc32": 1498048255
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 25,
+          "compressedSize": 27,
+          "uncompressedSize": 7,
+          "_endPosition": 901,
+          "_size": 31,
+          "contentPosition": 870,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              100,
+              100,
+              101,
+              100,
+              100,
+              1,
+              2
+            ]
+          },
+          "crc32": 3285089929
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 26,
+          "compressedSize": 27,
+          "uncompressedSize": 7,
+          "_endPosition": 937,
+          "_size": 31,
+          "contentPosition": 906,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              53,
+              53,
+              54,
+              53,
+              53,
+              0,
+              0
+            ]
+          },
+          "crc32": 1850370862
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 27,
+          "compressedSize": 27,
+          "uncompressedSize": 266,
+          "_endPosition": 974,
+          "_size": 31,
+          "contentPosition": 943,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              105,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88
+            ]
+          },
+          "crc32": 4059965006
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "rans",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 28,
+          "compressedSize": 85,
+          "uncompressedSize": 266,
+          "_endPosition": 1069,
+          "_size": 89,
+          "contentPosition": 980,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              4,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1
+            ]
+          },
+          "crc32": 3705479736
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "rans",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 31,
+          "compressedSize": 65,
+          "uncompressedSize": 265,
+          "_endPosition": 1144,
+          "_size": 69,
+          "contentPosition": 1075,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0
+            ]
+          },
+          "crc32": 540713469
+        }
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 1415,
+      "refSeqId": 0,
+      "refSeqStart": 2,
+      "alignmentSpan": 100,
+      "numRecords": 8,
+      "recordCounter": 0,
+      "numBases": 505,
+      "numBlocks": 27,
+      "numLandmarks": 2,
+      "_endPosition": 349,
+      "_size": 21,
+      "landmarks": [
+        215,
+        1074
+      ],
+      "crc32": 3108528878
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "PTZ"
+          ],
+          [],
+          [
+            "CTZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 15
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 25
+          }
+        },
+        "AP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 17
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 32
+          }
+        },
+        "FN": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 26
+          }
+        },
+        "FC": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 27
+          }
+        },
+        "FP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 28
+          }
+        },
+        "BS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 31
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "BA": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 19
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "PTZ": {
+          "codecId": 5,
+          "parametersBytes": 5,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 5264474
+          }
+        },
+        "CTZ": {
+          "codecId": 5,
+          "parametersBytes": 5,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 4412506
+          }
+        }
+      },
+      "_endPosition": 560,
+      "_size": 204,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "PTZ"
+        ],
+        [],
+        [
+          "CTZ"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 1415,
+        "refSeqId": 0,
+        "refSeqStart": 2,
+        "alignmentSpan": 100,
+        "numRecords": 8,
+        "recordCounter": 0,
+        "numBases": 505,
+        "numBlocks": 27,
+        "numLandmarks": 2,
+        "_endPosition": 349,
+        "_size": 21,
+        "landmarks": [
+          215,
+          1074
+        ],
+        "crc32": 3108528878
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 47,
+          "uncompressedSize": 47,
+          "_endPosition": 620,
+          "_size": 51,
+          "contentPosition": 569,
+          "content": {
+            "refSeqId": 0,
+            "refSeqStart": 2,
+            "refSeqSpan": 100,
+            "numRecords": 7,
+            "recordCounter": 0,
+            "numBlocks": 14,
+            "numContentIds": 13,
+            "contentIds": [
+              11,
+              12,
+              15,
+              17,
+              19,
+              25,
+              26,
+              27,
+              28,
+              31,
+              32,
+              5264474,
+              4412506
+            ],
+            "refBaseID": -1,
+            "md5": [
+              161,
+              76,
+              161,
+              164,
+              69,
+              128,
+              88,
+              67,
+              152,
+              106,
+              78,
+              166,
+              172,
+              161,
+              99,
+              13
+            ],
+            "_endPosition": 47,
+            "_size": -302
+          },
+          "crc32": 725204070
+        },
+        "features": [
+          {
+            "tags": {
+              "PT": "27;28;+;STOP;Note=tag1"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "I",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "PT": "27;27;+;PRIM;Note=tag2|28;28;+;OLIG;Note=tag3"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "II.14978392",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "PT": "1;1;+;COMM|101;101;+;COMM"
+            },
+            "flags": 0,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "III",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "i",
+                "position": 28,
+                "data": "C"
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "IV",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 0,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "V",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "CT": "+;STOP"
+            },
+            "flags": 768,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 1,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "*",
+            "mappingQuality": 255
+          },
+          {
+            "tags": {
+              "CT": "+;COMM;Note=consensus%0Amulti%09line%0Atag%0A!\"#$%25^&*()_+<>?:@~{}%7C%0A1234567890-=[]'%3B#,./\\"
+            },
+            "flags": 768,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 2,
+            "alignmentStart": 26,
+            "readGroupId": -1,
+            "readName": "*",
+            "mappingQuality": 255
+          }
+        ]
+      },
+      {
+        "block": {
+          "compressionMethod": "raw",
+          "contentType": "CORE_DATA",
+          "contentId": 0,
+          "compressedSize": 0,
+          "uncompressedSize": 0,
+          "_endPosition": 629,
+          "_size": 4,
+          "contentPosition": 625,
+          "content": {
+            "type": "Buffer",
+            "data": []
+          },
+          "crc32": 4059825967
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 11,
+          "compressedSize": 47,
+          "uncompressedSize": 27,
+          "_endPosition": 685,
+          "_size": 51,
+          "contentPosition": 634,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              73,
+              0,
+              73,
+              73,
+              46,
+              49,
+              52,
+              57,
+              55,
+              56,
+              51,
+              57,
+              50,
+              0,
+              73,
+              73,
+              73,
+              0,
+              73,
+              86,
+              0,
+              86,
+              0,
+              42,
+              0,
+              42,
+              0
+            ]
+          },
+          "crc32": 4257342289
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 12,
+          "compressedSize": 65,
+          "uncompressedSize": 504,
+          "_endPosition": 760,
+          "_size": 69,
+          "contentPosition": 691,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              1,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              255,
+              255,
+              255
+            ]
+          },
+          "crc32": 1803014978
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 15,
+          "compressedSize": 29,
+          "uncompressedSize": 9,
+          "_endPosition": 798,
+          "_size": 33,
+          "contentPosition": 765,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              16,
+              16,
+              0,
+              16,
+              0,
+              131,
+              0,
+              131,
+              0
+            ]
+          },
+          "crc32": 1341315972
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 17,
+          "compressedSize": 23,
+          "uncompressedSize": 7,
+          "_endPosition": 830,
+          "_size": 27,
+          "contentPosition": 803,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              26
+            ]
+          },
+          "crc32": 2285291093
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 19,
+          "compressedSize": 26,
+          "uncompressedSize": 9,
+          "_endPosition": 865,
+          "_size": 30,
+          "contentPosition": 835,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              128,
+              255,
+              128,
+              255
+            ]
+          },
+          "crc32": 1498048255
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 25,
+          "compressedSize": 27,
+          "uncompressedSize": 7,
+          "_endPosition": 901,
+          "_size": 31,
+          "contentPosition": 870,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              100,
+              100,
+              101,
+              100,
+              100,
+              1,
+              2
+            ]
+          },
+          "crc32": 3285089929
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 26,
+          "compressedSize": 27,
+          "uncompressedSize": 7,
+          "_endPosition": 937,
+          "_size": 31,
+          "contentPosition": 906,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              53,
+              53,
+              54,
+              53,
+              53,
+              0,
+              0
+            ]
+          },
+          "crc32": 1850370862
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 27,
+          "compressedSize": 27,
+          "uncompressedSize": 266,
+          "_endPosition": 974,
+          "_size": 31,
+          "contentPosition": 943,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              105,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88,
+              88
+            ]
+          },
+          "crc32": 4059965006
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "rans",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 28,
+          "compressedSize": 85,
+          "uncompressedSize": 266,
+          "_endPosition": 1069,
+          "_size": 89,
+          "contentPosition": 980,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              4,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              5,
+              1,
+              6,
+              6,
+              6,
+              5,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1,
+              2,
+              1
+            ]
+          },
+          "crc32": 3705479736
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "rans",
+          "contentType": "EXTERNAL_DATA",
+          "contentId": 31,
+          "compressedSize": 65,
+          "uncompressedSize": 265,
+          "_endPosition": 1144,
+          "_size": 69,
+          "contentPosition": 1075,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0,
+              1,
+              1,
+              2,
+              0
+            ]
+          },
+          "crc32": 540713469
+        }
+      }
+    ]
+  }
+]

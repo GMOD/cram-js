@@ -1,0 +1,6609 @@
+[
+  {
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+    "fileId": "-"
+  },
+  {
+    "containerHeader": {
+      "length": 376,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+      "alignmentSpan": 0,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "_endPosition": 45,
+      "_size": 19,
+      "landmarks": [
+        0,
+        245
+      ],
+      "crc32": 2778001801
+    },
+    "data": [
+      {
+        "length": 376,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+        "alignmentSpan": 0,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "_endPosition": 45,
+        "_size": 19,
+        "landmarks": [
+          0,
+          245
+        ],
+        "crc32": 2778001801
+      },
+      {
+        "block": {
+          "compressionMethod": "gzip",
+          "contentType": "FILE_HEADER",
+          "contentId": 0,
+          "compressedSize": 234,
+          "uncompressedSize": 516,
+          "_endPosition": 290,
+          "_size": 238,
+          "contentPosition": 52,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              2,
+              0,
+              0,
+              64,
+              83,
+              81,
+              9,
+              83,
+              78,
+              58,
+              67,
+              72,
+              82,
+              79,
+              77,
+              79,
+              83,
+              79,
+              77,
+              69,
+              95,
+              73,
+              9,
+              76,
+              78,
+              58,
+              49,
+              48,
+              48,
+              57,
+              56,
+              48,
+              48,
+              9,
+              77,
+              53,
+              58,
+              56,
+              101,
+              100,
+              101,
+              51,
+              54,
+              49,
+              51,
+              49,
+              101,
+              48,
+              100,
+              98,
+              102,
+              51,
+              52,
+              49,
+              55,
+              56,
+              48,
+              55,
+              101,
+              52,
+              56,
+              102,
+              55,
+              55,
+              102,
+              51,
+              101,
+              98,
+              100,
+              9,
+              85,
+              82,
+              58,
+              47,
+              104,
+              111,
+              109,
+              101,
+              47,
+              118,
+              97,
+              100,
+              105,
+              109,
+              47,
+              98,
+              105,
+              110,
+              47,
+              104,
+              116,
+              115,
+              108,
+              105,
+              98,
+              47,
+              116,
+              101,
+              115,
+              116,
+              47,
+              99,
+              101,
+              46,
+              102,
+              97,
+              10,
+              64,
+              83,
+              81,
+              9,
+              83,
+              78,
+              58,
+              67,
+              72,
+              82,
+              79,
+              77,
+              79,
+              83,
+              79,
+              77,
+              69,
+              95,
+              73,
+              73,
+              9,
+              76,
+              78,
+              58,
+              53,
+              48,
+              48,
+              48,
+              9,
+              77,
+              53,
+              58,
+              56,
+              101,
+              55,
+              57,
+              57,
+              51,
+              102,
+              55,
+              97,
+              57,
+              51,
+              49,
+              53,
+              56,
+              53,
+              56,
+              55,
+              101,
+              101,
+              56,
+              57,
+              55,
+              100,
+              55,
+              50,
+              56,
+              55,
+              57,
+              52,
+              56,
+              101,
+              99,
+              9,
+              85,
+              82,
+              58,
+              47,
+              104,
+              111,
+              109,
+              101,
+              47,
+              118,
+              97,
+              100,
+              105,
+              109,
+              47,
+              98,
+              105,
+              110,
+              47,
+              104,
+              116,
+              115,
+              108,
+              105,
+              98,
+              47,
+              116,
+              101,
+              115,
+              116,
+              47,
+              99,
+              101,
+              46,
+              102,
+              97,
+              10,
+              64,
+              83,
+              81,
+              9,
+              83,
+              78,
+              58,
+              67,
+              72,
+              82,
+              79,
+              77,
+              79,
+              83,
+              79,
+              77,
+              69,
+              95,
+              73,
+              73,
+              73,
+              9,
+              76,
+              78,
+              58,
+              53,
+              48,
+              48,
+              48,
+              9,
+              77,
+              53,
+              58,
+              51,
+              97,
+              100,
+              99,
+              98,
+              48,
+              54,
+              53,
+              101,
+              49,
+              99,
+              102,
+              55,
+              52,
+              102,
+              97,
+              102,
+              100,
+              98,
+              98,
+              97,
+              49,
+              101,
+              56,
+              99,
+              51,
+              53,
+              50,
+              98,
+              51,
+              50,
+              51,
+              9,
+              85,
+              82,
+              58,
+              47,
+              104,
+              111,
+              109,
+              101,
+              47,
+              118,
+              97,
+              100,
+              105,
+              109,
+              47,
+              98,
+              105,
+              110,
+              47,
+              104,
+              116,
+              115,
+              108,
+              105,
+              98,
+              47,
+              116,
+              101,
+              115,
+              116,
+              47,
+              99,
+              101,
+              46,
+              102,
+              97,
+              10,
+              64,
+              83,
+              81,
+              9,
+              83,
+              78,
+              58,
+              67,
+              72,
+              82,
+              79,
+              77,
+              79,
+              83,
+              79,
+              77,
+              69,
+              95,
+              73,
+              86,
+              9,
+              76,
+              78,
+              58,
+              53,
+              48,
+              48,
+              48,
+              9,
+              77,
+              53,
+              58,
+              50,
+              53,
+              49,
+              97,
+              102,
+              54,
+              54,
+              97,
+              54,
+              57,
+              101,
+              101,
+              53,
+              56,
+              57,
+              99,
+              57,
+              102,
+              51,
+              55,
+              53,
+              55,
+              51,
+              52,
+              48,
+              101,
+              99,
+              50,
+              100,
+              101,
+              54,
+              102,
+              9,
+              85,
+              82,
+              58,
+              47,
+              104,
+              111,
+              109,
+              101,
+              47,
+              118,
+              97,
+              100,
+              105,
+              109,
+              47,
+              98,
+              105,
+              110,
+              47,
+              104,
+              116,
+              115,
+              108,
+              105,
+              98,
+              47,
+              116,
+              101,
+              115,
+              116,
+              47,
+              99,
+              101,
+              46,
+              102,
+              97,
+              10,
+              64,
+              83,
+              81,
+              9,
+              83,
+              78,
+              58,
+              67,
+              72,
+              82,
+              79,
+              77,
+              79,
+              83,
+              79,
+              77,
+              69,
+              95,
+              86,
+              9,
+              76,
+              78,
+              58,
+              53,
+              48,
+              48,
+              48,
+              9,
+              77,
+              53,
+              58,
+              99,
+              102,
+              50,
+              48,
+              48,
+              97,
+              54,
+              53,
+              102,
+              98,
+              55,
+              53,
+              52,
+              56,
+              51,
+              54,
+              100,
+              99,
+              99,
+              53,
+              54,
+              98,
+              50,
+              52,
+              98,
+              51,
+              49,
+              55,
+              48,
+              101,
+              101,
+              56,
+              9,
+              85,
+              82,
+              58,
+              47,
+              104,
+              111,
+              109,
+              101,
+              47,
+              118,
+              97,
+              100,
+              105,
+              109,
+              47,
+              98,
+              105,
+              110,
+              47,
+              104,
+              116,
+              115,
+              108,
+              105,
+              98,
+              47,
+              116,
+              101,
+              115,
+              116,
+              47,
+              99,
+              101,
+              46,
+              102,
+              97,
+              10
+            ]
+          },
+          "crc32": 1962401954
+        }
+      },
+      {
+        "block": {
+          "compressionMethod": "raw",
+          "contentType": "FILE_HEADER",
+          "contentId": 0,
+          "compressedSize": 122,
+          "uncompressedSize": 122,
+          "_endPosition": 421,
+          "_size": 126,
+          "contentPosition": 295,
+          "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "crc32": 2863530449
+        }
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 569,
+      "refSeqId": 0,
+      "refSeqStart": 2,
+      "alignmentSpan": 101,
+      "numRecords": 1,
+      "recordCounter": 0,
+      "numBases": 100,
+      "numBlocks": 7,
+      "numLandmarks": 1,
+      "_endPosition": 439,
+      "_size": 18,
+      "landmarks": [
+        339
+      ],
+      "crc32": 2226180306
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "XGC",
+            "XMC",
+            "XNC",
+            "XOC",
+            "XSc",
+            "ASc",
+            "YTZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              16
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              100
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "FN": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              6
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "FC": {
+          "codecId": 3,
+          "parametersBytes": 6,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              68,
+              88
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "FP": {
+          "codecId": 3,
+          "parametersBytes": 10,
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              6,
+              5,
+              1,
+              4
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "BS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "DL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "XSc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XOC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XGC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XNC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "YTZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 9
+          }
+        },
+        "ASc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 774,
+      "_size": 328,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XGC",
+          "XMC",
+          "XNC",
+          "XOC",
+          "XSc",
+          "ASc",
+          "YTZ"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 569,
+        "refSeqId": 0,
+        "refSeqStart": 2,
+        "alignmentSpan": 101,
+        "numRecords": 1,
+        "recordCounter": 0,
+        "numBases": 100,
+        "numBlocks": 7,
+        "numLandmarks": 1,
+        "_endPosition": 439,
+        "_size": 18,
+        "landmarks": [
+          339
+        ],
+        "crc32": 2226180306
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 32,
+          "uncompressedSize": 32,
+          "_endPosition": 819,
+          "_size": 36,
+          "contentPosition": 783,
+          "content": {
+            "refSeqId": 0,
+            "refSeqStart": 2,
+            "refSeqSpan": 101,
+            "numRecords": 1,
+            "recordCounter": 0,
+            "numBlocks": 5,
+            "numContentIds": 4,
+            "contentIds": [
+              1,
+              9,
+              11,
+              12
+            ],
+            "refBaseID": -1,
+            "md5": [
+              13,
+              53,
+              108,
+              132,
+              13,
+              170,
+              12,
+              148,
+              54,
+              102,
+              168,
+              225,
+              81,
+              162,
+              145,
+              130
+            ],
+            "_endPosition": 32,
+            "_size": -407
+          },
+          "crc32": 1039276087
+        },
+        "features": [
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "I",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              }
+            ],
+            "mappingQuality": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 596,
+      "refSeqId": 1,
+      "refSeqStart": 2,
+      "alignmentSpan": 101,
+      "numRecords": 1,
+      "recordCounter": 1,
+      "numBases": 100,
+      "numBlocks": 7,
+      "numLandmarks": 1,
+      "_endPosition": 1026,
+      "_size": 18,
+      "landmarks": [
+        345
+      ],
+      "crc32": 2078047781
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "XGC",
+            "XMC",
+            "XNC",
+            "XOC",
+            "XSc",
+            "ASc",
+            "YTZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              16
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              100
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "FN": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              63
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "FC": {
+          "codecId": 3,
+          "parametersBytes": 6,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              68,
+              88
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "FP": {
+          "codecId": 3,
+          "parametersBytes": 12,
+          "parameters": {
+            "numCodes": 5,
+            "symbols": [
+              1,
+              2,
+              3,
+              0,
+              5
+            ],
+            "numLengths": 5,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              4,
+              4
+            ]
+          }
+        },
+        "BS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              1,
+              0,
+              2
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "DL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "XSc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XOC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XGC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XNC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "YTZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 9
+          }
+        },
+        "ASc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 1367,
+      "_size": 334,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XGC",
+          "XMC",
+          "XNC",
+          "XOC",
+          "XSc",
+          "ASc",
+          "YTZ"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 596,
+        "refSeqId": 1,
+        "refSeqStart": 2,
+        "alignmentSpan": 101,
+        "numRecords": 1,
+        "recordCounter": 1,
+        "numBases": 100,
+        "numBlocks": 7,
+        "numLandmarks": 1,
+        "_endPosition": 1026,
+        "_size": 18,
+        "landmarks": [
+          345
+        ],
+        "crc32": 2078047781
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 32,
+          "uncompressedSize": 32,
+          "_endPosition": 1412,
+          "_size": 36,
+          "contentPosition": 1376,
+          "content": {
+            "refSeqId": 1,
+            "refSeqStart": 2,
+            "refSeqSpan": 101,
+            "numRecords": 1,
+            "recordCounter": 1,
+            "numBlocks": 5,
+            "numContentIds": 4,
+            "contentIds": [
+              1,
+              9,
+              11,
+              12
+            ],
+            "refBaseID": -1,
+            "md5": [
+              89,
+              193,
+              109,
+              181,
+              10,
+              171,
+              73,
+              11,
+              137,
+              50,
+              170,
+              151,
+              82,
+              154,
+              154,
+              108
+            ],
+            "_endPosition": 32,
+            "_size": -994
+          },
+          "crc32": 4085659958
+        },
+        "features": [
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 1,
+            "readLength": 100,
+            "alignmentStart": 0,
+            "readGroupId": -1,
+            "readName": "II.14978392",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 986,
+      "refSeqId": -2,
+      "refSeqStart": 0,
+      "alignmentSpan": 0,
+      "numRecords": 5,
+      "recordCounter": 2,
+      "numBases": 400,
+      "numBlocks": 12,
+      "numLandmarks": 1,
+      "_endPosition": 1645,
+      "_size": 23,
+      "landmarks": [
+        340
+      ],
+      "crc32": 763740509
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "XGC",
+            "XMC",
+            "XNC",
+            "XOC",
+            "XSc",
+            "ASc",
+            "YTZ"
+          ],
+          []
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": false
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 9,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              16,
+              0,
+              256
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 6,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              3,
+              11
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              100
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 6,
+          "parametersBytes": 2,
+          "parameters": {
+            "offset": 0,
+            "length": 4
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 6,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              0,
+              1
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "FN": {
+          "codecId": 3,
+          "parametersBytes": 10,
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              4,
+              54,
+              63,
+              96
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              2
+            ]
+          }
+        },
+        "FC": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 27
+          }
+        },
+        "FP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 28
+          }
+        },
+        "BS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 31
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "DL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              4,
+              2,
+              3
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "XSc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XOC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XGC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XNC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "YTZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 9
+          }
+        },
+        "ASc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 1981,
+      "_size": 329,
+      "readNamesIncluded": true,
+      "APdelta": false,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XGC",
+          "XMC",
+          "XNC",
+          "XOC",
+          "XSc",
+          "ASc",
+          "YTZ"
+        ],
+        []
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 986,
+        "refSeqId": -2,
+        "refSeqStart": 0,
+        "alignmentSpan": 0,
+        "numRecords": 5,
+        "recordCounter": 2,
+        "numBases": 400,
+        "numBlocks": 12,
+        "numLandmarks": 1,
+        "_endPosition": 1645,
+        "_size": 23,
+        "landmarks": [
+          340
+        ],
+        "crc32": 763740509
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 41,
+          "uncompressedSize": 41,
+          "_endPosition": 2035,
+          "_size": 45,
+          "contentPosition": 1990,
+          "content": {
+            "refSeqId": -2,
+            "refSeqStart": 0,
+            "refSeqSpan": 0,
+            "numRecords": 5,
+            "recordCounter": 2,
+            "numBlocks": 10,
+            "numContentIds": 9,
+            "contentIds": [
+              1,
+              9,
+              11,
+              12,
+              13,
+              14,
+              27,
+              28,
+              31
+            ],
+            "refBaseID": -1,
+            "md5": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "_endPosition": 41,
+            "_size": -1604
+          },
+          "crc32": 2000883737
+        },
+        "features": [
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 2,
+            "readLength": 100,
+            "alignmentStart": 2,
+            "readGroupId": -1,
+            "readName": "III",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 3,
+            "readLength": 100,
+            "alignmentStart": 2,
+            "readGroupId": -1,
+            "readName": "IV",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 4,
+            "readLength": 100,
+            "alignmentStart": 2,
+            "readGroupId": -1,
+            "readName": "V",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 1,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 4,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 13,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 16,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 19,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 25,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 0,
+            "compressionFlags": 3,
+            "sequenceId": 4,
+            "readLength": 100,
+            "alignmentStart": 10,
+            "readGroupId": -1,
+            "readName": "VI",
+            "readFeatures": [
+              {
+                "operator": "S",
+                "position": 1,
+                "data": "AGCCTAA"
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 1
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 1
+              },
+              {
+                "operator": "I",
+                "position": 51,
+                "data": "TTTTTTTTTT"
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "S",
+                "position": 91,
+                "data": "CTAAGCCTAA"
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 256,
+            "compressionFlags": 11,
+            "sequenceId": 4,
+            "readLength": 100,
+            "alignmentStart": 10,
+            "readGroupId": -1,
+            "readName": "VI",
+            "readFeatures": [
+              {
+                "operator": "S",
+                "position": 1,
+                "data": "NNNNNNN"
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "I",
+                "position": 51,
+                "data": "NNNNNNNNNN"
+              },
+              {
+                "operator": "S",
+                "position": 91,
+                "data": "NNNNNNNNNN"
+              }
+            ],
+            "mappingQuality": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 986,
+      "refSeqId": -2,
+      "refSeqStart": 0,
+      "alignmentSpan": 0,
+      "numRecords": 5,
+      "recordCounter": 2,
+      "numBases": 400,
+      "numBlocks": 12,
+      "numLandmarks": 1,
+      "_endPosition": 1645,
+      "_size": 23,
+      "landmarks": [
+        340
+      ],
+      "crc32": 763740509
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "XGC",
+            "XMC",
+            "XNC",
+            "XOC",
+            "XSc",
+            "ASc",
+            "YTZ"
+          ],
+          []
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": false
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 9,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              16,
+              0,
+              256
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 6,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              3,
+              11
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              100
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 6,
+          "parametersBytes": 2,
+          "parameters": {
+            "offset": 0,
+            "length": 4
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 6,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              0,
+              1
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "FN": {
+          "codecId": 3,
+          "parametersBytes": 10,
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              4,
+              54,
+              63,
+              96
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              2
+            ]
+          }
+        },
+        "FC": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 27
+          }
+        },
+        "FP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 28
+          }
+        },
+        "BS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 31
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "DL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              4,
+              2,
+              3
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "XSc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XOC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XGC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XNC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "YTZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 9
+          }
+        },
+        "ASc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 1981,
+      "_size": 329,
+      "readNamesIncluded": true,
+      "APdelta": false,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XGC",
+          "XMC",
+          "XNC",
+          "XOC",
+          "XSc",
+          "ASc",
+          "YTZ"
+        ],
+        []
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 986,
+        "refSeqId": -2,
+        "refSeqStart": 0,
+        "alignmentSpan": 0,
+        "numRecords": 5,
+        "recordCounter": 2,
+        "numBases": 400,
+        "numBlocks": 12,
+        "numLandmarks": 1,
+        "_endPosition": 1645,
+        "_size": 23,
+        "landmarks": [
+          340
+        ],
+        "crc32": 763740509
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 41,
+          "uncompressedSize": 41,
+          "_endPosition": 2035,
+          "_size": 45,
+          "contentPosition": 1990,
+          "content": {
+            "refSeqId": -2,
+            "refSeqStart": 0,
+            "refSeqSpan": 0,
+            "numRecords": 5,
+            "recordCounter": 2,
+            "numBlocks": 10,
+            "numContentIds": 9,
+            "contentIds": [
+              1,
+              9,
+              11,
+              12,
+              13,
+              14,
+              27,
+              28,
+              31
+            ],
+            "refBaseID": -1,
+            "md5": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "_endPosition": 41,
+            "_size": -1604
+          },
+          "crc32": 2000883737
+        },
+        "features": [
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 2,
+            "readLength": 100,
+            "alignmentStart": 2,
+            "readGroupId": -1,
+            "readName": "III",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 3,
+            "readLength": 100,
+            "alignmentStart": 2,
+            "readGroupId": -1,
+            "readName": "IV",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
+            "flags": 16,
+            "compressionFlags": 3,
+            "sequenceId": 4,
+            "readLength": 100,
+            "alignmentStart": 2,
+            "readGroupId": -1,
+            "readName": "V",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 1,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 4,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 13,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 16,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 19,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 25,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 2
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 0,
+            "compressionFlags": 3,
+            "sequenceId": 4,
+            "readLength": 100,
+            "alignmentStart": 10,
+            "readGroupId": -1,
+            "readName": "VI",
+            "readFeatures": [
+              {
+                "operator": "S",
+                "position": 1,
+                "data": "AGCCTAA"
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 1
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 1
+              },
+              {
+                "operator": "I",
+                "position": 51,
+                "data": "TTTTTTTTTT"
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "S",
+                "position": 91,
+                "data": "CTAAGCCTAA"
+              }
+            ],
+            "mappingQuality": 1
+          },
+          {
+            "tags": {},
+            "flags": 256,
+            "compressionFlags": 11,
+            "sequenceId": 4,
+            "readLength": 100,
+            "alignmentStart": 10,
+            "readGroupId": -1,
+            "readName": "VI",
+            "readFeatures": [
+              {
+                "operator": "S",
+                "position": 1,
+                "data": "NNNNNNN"
+              },
+              {
+                "operator": "D",
+                "position": 28,
+                "data": 1
+              },
+              {
+                "operator": "I",
+                "position": 51,
+                "data": "NNNNNNNNNN"
+              },
+              {
+                "operator": "S",
+                "position": 91,
+                "data": "NNNNNNNNNN"
+              }
+            ],
+            "mappingQuality": 1
+          }
+        ]
+      }
+    ]
+  }
+]

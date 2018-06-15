@@ -1,0 +1,72 @@
+[
+  {
+    "tags": {
+      "XC": 35,
+      "OQ": "#####################################################################################################"
+    },
+    "flags": 141,
+    "compressionFlags": 3,
+    "sequenceId": -1,
+    "readLength": 101,
+    "alignmentStart": 0,
+    "readGroupId": 0,
+    "readName": "g",
+    "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+  },
+  {
+    "tags": {
+      "XC": 35,
+      "OQ": "#####################################################################################################"
+    },
+    "flags": 77,
+    "compressionFlags": 3,
+    "sequenceId": -1,
+    "readLength": 101,
+    "alignmentStart": 0,
+    "readGroupId": 0,
+    "readName": "h",
+    "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+  },
+  {
+    "tags": {
+      "XC": 35,
+      "OQ": "#####################################################################################################"
+    },
+    "flags": 141,
+    "compressionFlags": 3,
+    "sequenceId": -1,
+    "readLength": 101,
+    "alignmentStart": 0,
+    "readGroupId": 0,
+    "readName": "h",
+    "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+  },
+  {
+    "tags": {
+      "XC": 35,
+      "OQ": "#####################################################################################################"
+    },
+    "flags": 77,
+    "compressionFlags": 3,
+    "sequenceId": -1,
+    "readLength": 101,
+    "alignmentStart": 0,
+    "readGroupId": 0,
+    "readName": "i",
+    "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+  },
+  {
+    "tags": {
+      "XC": 35,
+      "OQ": "#####################################################################################################"
+    },
+    "flags": 141,
+    "compressionFlags": 3,
+    "sequenceId": -1,
+    "readLength": 101,
+    "alignmentStart": 0,
+    "readGroupId": 0,
+    "readName": "i",
+    "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+  }
+]

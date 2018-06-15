@@ -18,8 +18,8 @@ function testDataFile(filename) {
 }
 
 async function loadTestJSON(filename) {
-  let data = await testDataFile(`${filename}.gz`).readFile()
-  data = await gunzip(data)
+  let data = await testDataFile(`${filename}`).readFile()
+  // data = await gunzip(data)
   const text = data.toString()
   return JSON.parse(text)
 }

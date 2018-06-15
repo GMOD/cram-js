@@ -1,4 +1,4 @@
-module.exports = `NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
+const allFiles = `NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
 NA12878.20.21.1-100.100-SeqsPerSlice.1-unMapped.cram
 NA12878.20.21.1-100.100-SeqsPerSlice.500-unMapped.cram
 amb#amb.2.1.cram
@@ -111,3 +111,10 @@ xx#unsorted.2.1.cram
 xx#unsorted.3.0.cram
 xx#unsorted.tmp.cram`.split(/\s+/)
 // .filter(f => /cramQueryWithCRAI/.test(f))
+
+const fullFiles = allFiles.filter(f => f !== 'cramQueryWithCRAI.cram')
+
+module.exports = {
+  allFiles,
+  fullFiles,
+}

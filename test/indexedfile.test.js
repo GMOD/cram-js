@@ -9,6 +9,9 @@ const expectedFeatures1 = loadTestJSON(
 )
 const expectedFeatures2 = loadTestJSON('ce#unmap2.tmp.cram.test1.expected.json')
 const expectedFeatures3 = loadTestJSON('ce#1000.tmp.cram.test1.expected.json')
+// const expectedFeatures4 = loadTestJSON('cramQueryWithCRAI.cram.test1.expected.json')
+const expectedFeatures5 = loadTestJSON('cramQueryWithCRAI.cram.test2.expected.json')
+
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {
@@ -49,6 +52,29 @@ describe('.crai indexed cram file', () => {
     //   JSON.stringify(features, null, '  '),
     // )
     expect(features).to.deep.equal(await expectedFeatures3)
+  })
+
+  it('can read cramQueryWithCRAI.cram', async () => {
+    const cram = new IndexedCramFile({
+      cram: testDataFile('cramQueryWithCRAI.cram'),
+      index: new CramIndex(testDataFile('cramQueryWithCRAI.cram.crai')),
+    })
+
+    // const features = await cram.getFeaturesForRange(0, 0, Infinity)
+    // require('fs').writeFileSync(
+    //   'test/data/cramQueryWithCRAI.cram.test1.expected.json',
+    //   JSON.stringify(features, null, '  '),
+    // )
+    //expect(features).to.deep.equal(expectedFeatures4)
+
+    const features2 = await cram.getFeaturesForRange(-1, 0, Infinity)
+    // require('fs').writeFileSync(
+    //   'test/data/cramQueryWithCRAI.cram.test2.expected.json',
+    //   JSON.stringify(features2, null, '  '),
+    // )
+    // console.log(JSON.stringify(features2, null, '  '))
+
+    expect(features2).to.deep.equal(await expectedFeatures5)
   })
   ;[
     'auxf#values.tmp.cram',

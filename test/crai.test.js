@@ -9,8 +9,8 @@ describe('.crai reader', () => {
     const file = testDataFile('xx#unsorted.tmp.cram.crai')
     const index = new CramIndex(file)
     let data = await index.getIndex()
-    expect(data).to.deep.equal([
-      [
+    expect(data).to.deep.equal({
+      '0': [
         {
           start: 1,
           span: 20,
@@ -26,7 +26,7 @@ describe('.crai reader', () => {
           sliceBytes: 243,
         },
       ],
-      [
+      '1': [
         {
           start: 1,
           span: 10,
@@ -42,7 +42,7 @@ describe('.crai reader', () => {
           sliceBytes: 111,
         },
       ],
-    ])
+    })
 
     expect(await index.getEntriesForRange(2, 0, 0)).to.deep.equal([])
     expect(await index.getEntriesForRange(-1, 9, 9)).to.deep.equal([])
@@ -52,8 +52,8 @@ describe('.crai reader', () => {
     expect(await index.getEntriesForRange(0, 1, 21)).to.deep.equal(data[0])
     expect(await index.getEntriesForRange(1, 0, 20)).to.deep.equal(data[1])
 
-    data = [
-      [
+    data = {
+      '0': [
         { start: 1, span: 1 },
         { start: 100, span: 1 },
         { start: 101, span: 1 },
@@ -63,7 +63,7 @@ describe('.crai reader', () => {
         { start: 404, span: 1 },
         { start: 410, span: 1 },
       ],
-    ]
+    }
     index.index = Promise.resolve(data)
     expect(await index.getEntriesForRange(0, 1, 2)).to.deep.equal([data[0][0]])
     expect(await index.getEntriesForRange(0, 1, 100)).to.deep.equal([
@@ -72,5 +72,46 @@ describe('.crai reader', () => {
     expect(await index.getEntriesForRange(0, 100, 101)).to.deep.equal([
       data[0][1],
     ])
+  })
+
+  it('throws an error if you try to read cramQueryWithCRAI.cram as a .crai', () => {
+    const file = testDataFile('cramQueryWithCRAI.cram')
+    const index = new CramIndex(file)
+    const dataP = index.getIndex()
+    return dataP.then(
+      () => {
+        throw new Error('the getIndex call should have failed')
+      },
+      err => {
+        expect(err).to.match(/invalid/)
+      },
+    )
+  })
+
+  it('can read cramQueryWithCRAI.cram.crai', async () => {
+    const file = testDataFile('cramQueryWithCRAI.cram.crai')
+    const index = new CramIndex(file)
+    const data = await index.getIndex()
+    // console.log(JSON.stringify(data, null, ' '))
+    expect(data).to.deep.equal({
+      '0': [
+        {
+          start: 100009,
+          span: 102,
+          containerStart: 1953,
+          sliceStart: 592,
+          sliceBytes: 1024,
+        },
+      ],
+      '-1': [
+        {
+          start: 0,
+          span: 1,
+          containerStart: 3590,
+          sliceStart: 209,
+          sliceBytes: 271,
+        },
+      ],
+    })
   })
 })

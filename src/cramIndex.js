@@ -18,7 +18,7 @@ class CramIndex {
   }
 
   parseIndex() {
-    const index = []
+    const index = {}
     return this.readFile()
       .then(data => {
         if (data[0] === 31 && data[1] === 139) return gunzip(data)
@@ -34,6 +34,17 @@ class CramIndex {
           )
           .forEach(
             ([seqId, start, span, containerStart, sliceStart, sliceBytes]) => {
+              if (
+                [
+                  seqId,
+                  start,
+                  span,
+                  containerStart,
+                  sliceStart,
+                  sliceBytes,
+                ].some(el => el === undefined)
+              )
+                throw new Error('invalid .crai index file')
               if (!index[seqId]) index[seqId] = []
 
               index[seqId].push({
@@ -45,10 +56,9 @@ class CramIndex {
               })
             },
           )
-
         // sort each of them by start
-        index.forEach((entries, i) => {
-          index[i] = entries.sort(
+        Object.entries(index).forEach(([seqId, entries]) => {
+          index[seqId] = entries.sort(
             (a, b) => a.start - b.start || a.span - b.span,
           )
         })
