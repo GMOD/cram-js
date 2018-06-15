@@ -32,7 +32,10 @@ class CramFile {
     const { cramFileDefinition } = sectionParsers
     const headbytes = Buffer.allocUnsafe(cramFileDefinition.maxLength)
     await this.file.read(headbytes, 0, cramFileDefinition.maxLength, 0)
-    return cramFileDefinition.parser.parse(headbytes).result
+    const definition = cramFileDefinition.parser.parse(headbytes).result
+    if (definition.majorVersion !== 3)
+      throw new Error(`CRAM version ${definition.majorVersion} not supported`)
+    return definition
   }
 
   async getContainerById(containerNumber) {
