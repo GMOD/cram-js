@@ -17,6 +17,10 @@ class HuffmanIntCodec extends CramCodec {
         bitLength: this.parameters.bitLengths[i],
       }
     }
+    // sort the codes by bit length and symbol value
+    this.codes = this.codes.sort(
+      (a, b) => a.bitLength - b.bitLength || a.symbol - b.symbol,
+    )
     this._generateCanonicalCodes()
 
     // if this is a degenerate zero-length huffman code, special-case the decoding
@@ -37,6 +41,16 @@ class HuffmanIntCodec extends CramCodec {
         maxVal = (1 << codeRecord.bitLength) - 1
       }
       codeRecord.code = val
+    })
+
+    lastLength = 0
+    let j = 0
+    this.codes.forEach((codeRecord, i) => {
+      if (codeRecord.bitLength > lastLength) {
+        j = codeRecord.code - i
+        lastLength = codeRecord.bitLength
+      }
+      codeRecord.p = j
     })
   }
 
@@ -88,8 +102,12 @@ class HuffmanIntCodec extends CramCodec {
 
         const val = this._getBits(input, coreCursor, dlen)
 
+        // let newindex = val - codes[idx].p
+        // if (newindex >= numCodes || newindex < 0 || Number.isNaN(newindex))
+        //   throw new Error('huffman decode assertion failed')
+
         idx = val - codes[idx].p
-        if (idx >= numCodes || idx < 0)
+        if (idx >= numCodes || idx < 0 || Number.isNaN(idx))
           throw new Error('huffman decode assertion failed')
 
         if (codes[idx].code === val && codes[idx].bitLength === length) {
