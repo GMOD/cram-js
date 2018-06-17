@@ -3,7 +3,6 @@ const {
   CramUnimplementedError,
   CramBufferOverrunError,
 } = require('../../errors')
-const sectionParsers = require('../sectionParsers')
 const { parseItem } = require('../util')
 
 // const decodeSeqAndQual = require('./decodeSeqAndQual')
@@ -20,6 +19,7 @@ class CramSlice {
   // memoize
   async getHeader() {
     // fetch and parse the slice header
+    const sectionParsers = await this.file.getSectionParsers()
     const containerHeader = await this.container.getHeader()
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,

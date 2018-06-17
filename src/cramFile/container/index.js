@@ -1,6 +1,5 @@
 const { CramMalformedError } = require('../../errors')
 
-const sectionParsers = require('../sectionParsers')
 const { itf8Size, parseItem } = require('../util')
 const CramSlice = require('../slice')
 const CramContainerCompressionScheme = require('./compressionScheme')
@@ -21,6 +20,7 @@ class CramContainer {
 
   async getCompressionHeaderBlock() {
     if (!this._compressionBlock) {
+      const sectionParsers = await this.file.getSectionParsers()
       const containerHeader = await this.getHeader()
       this._compressionBlock = await this.file.readBlock(
         containerHeader._endPosition,
@@ -62,6 +62,7 @@ class CramContainer {
   }
 
   async _readContainerHeader(position) {
+    const sectionParsers = await this.file.getSectionParsers()
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
     const { size: fileSize } = await this.file.stat()
 

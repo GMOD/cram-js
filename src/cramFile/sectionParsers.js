@@ -234,47 +234,99 @@ const cramCompressionHeader = {
     }),
 }
 
-const cramMappedSliceHeader = {
-  parser: new Parser()
-    .itf8('refSeqId')
-    .itf8('refSeqStart')
-    .itf8('refSeqSpan')
-    .itf8('numRecords')
-    .ltf8('recordCounter') // TODO: this is itf8 in a CRAM v2 file, absent in CRAM v1
-    .itf8('numBlocks')
-    .itf8('numContentIds')
-    .array('contentIds', {
-      type: singleItf8,
-      length: 'numContentIds',
-    })
-    .itf8('refBaseID')
-    .array('md5', { type: 'uint8', length: 16 }), // TODO: this is missing in CRAM v1
-
-  maxLength: numContentIds => 5 * 3 + 9 + 5 * 2 + 5 * numContentIds + 9 + 16,
-}
-
-const cramUnmappedSliceHeader = {
-  parser: new Parser()
-    .itf8('numRecords')
-    .ltf8('recordCounter') // TODO: this is itf8 in a CRAM v2 file, absent in CRAM v1
-    .itf8('numBlocks')
-    .itf8('numContentIds')
-    .array('contentIds', {
-      type: singleItf8,
-      length: 'numContentIds',
-    })
-    .array('md5', { type: 'uint8', length: 16 }), // TODO: this is missing in CRAM v1
-
-  maxLength: numContentIds => 5 + 9 + 5 * 2 + 5 * numContentIds + 16,
-}
-
-module.exports = {
+const unversionedParsers = {
   cramFileDefinition,
   cramContainerHeader1,
   cramContainerHeader2,
   cramBlockHeader,
   cramBlockCrc32,
   cramCompressionHeader,
-  cramMappedSliceHeader,
-  cramUnmappedSliceHeader,
 }
+
+// each of these is a function of the major and minor version
+const versionedParsers = {
+  // assemble a section parser for the unmapped slice header, with slight
+  // variations depending on the major version of the cram file
+  cramUnmappedSliceHeader: majorVersion => {
+    let maxLength = 0
+    let parser = new Parser().itf8('numRecords')
+    maxLength += 5
+
+    // recordCounter is itf8 in a CRAM v2 file, absent in CRAM v1
+    if (majorVersion === 3) {
+      parser = parser.ltf8('recordCounter')
+      maxLength += 9
+    } else if (majorVersion === 2) {
+      parser = parser.itf8('recordCounter')
+      maxLength += 5
+    }
+
+    parser = parser
+      .itf8('numBlocks')
+      .itf8('numContentIds')
+      .array('contentIds', {
+        type: singleItf8,
+        length: 'numContentIds',
+      })
+    maxLength += 5 * 2 // + numContentIds*5
+
+    // the md5 sum is missing in cram v1
+    if (majorVersion >= 2) {
+      parser = parser.array('md5', { type: 'uint8', length: 16 })
+      maxLength += 16
+    }
+
+    const maxLengthFunc = numContentIds => maxLength + numContentIds * 5
+
+    return { parser, maxLength: maxLengthFunc } // : p, maxLength: numContentIds => 5 + 9 + 5 * 2 + 5 * numContentIds + 16 }
+  },
+
+  // assembles a section parser for the unmapped slice header, with slight
+  // variations depending on the major version of the cram file
+  cramMappedSliceHeader: majorVersion => {
+    let parser = new Parser()
+      .itf8('refSeqId')
+      .itf8('refSeqStart')
+      .itf8('refSeqSpan')
+      .itf8('numRecords')
+    let maxLength = 5 * 4
+
+    if (majorVersion === 3) {
+      parser = parser.ltf8('recordCounter')
+      maxLength += 9
+    } else if (majorVersion === 2) {
+      parser = parser.itf8('recordCounter')
+      maxLength += 5
+    }
+
+    parser = parser
+      .itf8('numBlocks')
+      .itf8('numContentIds')
+      .array('contentIds', {
+        type: singleItf8,
+        length: 'numContentIds',
+      })
+      .itf8('refBaseID')
+    maxLength += 5 * 3
+
+    // the md5 sum is missing in cram v1
+    if (majorVersion >= 2) {
+      parser = parser.array('md5', { type: 'uint8', length: 16 })
+      maxLength += 16
+    }
+
+    const maxLengthFunc = numContentIds => maxLength + numContentIds * 5
+
+    return { parser, maxLength: maxLengthFunc }
+  },
+}
+
+function getSectionParsers(majorVersion) {
+  const parsers = Object.assign({}, unversionedParsers)
+  Object.entries(versionedParsers).forEach(([parserName, func]) => {
+    parsers[parserName] = func(majorVersion)
+  })
+  return parsers
+}
+
+module.exports = { cramFileDefinition, getSectionParsers }

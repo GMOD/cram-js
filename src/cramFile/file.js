@@ -4,7 +4,10 @@ const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
 
 const rans = require('../rans')
-const sectionParsers = require('./sectionParsers')
+const {
+  cramFileDefinition: cramFileDefinitionParser,
+  getSectionParsers,
+} = require('./sectionParsers')
 
 const CramContainer = require('./container')
 
@@ -31,10 +34,9 @@ class CramFile {
   }
 
   async getDefinition() {
-    const { cramFileDefinition } = sectionParsers
-    const headbytes = Buffer.allocUnsafe(cramFileDefinition.maxLength)
-    await this.file.read(headbytes, 0, cramFileDefinition.maxLength, 0)
-    const definition = cramFileDefinition.parser.parse(headbytes).result
+    const headbytes = Buffer.allocUnsafe(cramFileDefinitionParser.maxLength)
+    await this.file.read(headbytes, 0, cramFileDefinitionParser.maxLength, 0)
+    const definition = cramFileDefinitionParser.parser.parse(headbytes).result
     if (definition.majorVersion !== 3)
       throw new CramUnimplementedError(
         `CRAM version ${definition.majorVersion} not supported`,
@@ -42,7 +44,16 @@ class CramFile {
     return definition
   }
 
+  async getSectionParsers() {
+    if (!this._sectionParsers) {
+      const { majorVersion } = await this.getDefinition()
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
+    return this._sectionParsers
+  }
+
   async getContainerById(containerNumber) {
+    const sectionParsers = await this.getSectionParsers()
     let position = sectionParsers.cramFileDefinition.maxLength
     const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
@@ -78,6 +89,7 @@ class CramFile {
    * @returns {number} the number of containers in the file
    */
   async containerCount() {
+    const sectionParsers = await this.getSectionParsers()
     let position = sectionParsers.cramFileDefinition.maxLength
     const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
@@ -102,6 +114,7 @@ class CramFile {
   }
 
   async readBlockHeader(position) {
+    const sectionParsers = await this.getSectionParsers()
     const { cramBlockHeader } = sectionParsers
     const { size: fileSize } = await this.file.stat()
 
@@ -151,6 +164,7 @@ class CramFile {
   }
 
   async readBlock(position) {
+    const sectionParsers = await this.getSectionParsers()
     const block = await this.readBlockHeader(position)
     const blockContentPosition = block._endPosition
     block.contentPosition = block._endPosition
