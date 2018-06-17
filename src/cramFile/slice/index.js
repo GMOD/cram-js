@@ -1,4 +1,8 @@
-const { CramMalformedError, CramUnimplementedError } = require('../../errors')
+const {
+  CramMalformedError,
+  CramUnimplementedError,
+  CramBufferOverrunError,
+} = require('../../errors')
 const sectionParsers = require('../sectionParsers')
 const { parseItem } = require('../util')
 
@@ -226,17 +230,27 @@ class CramSlice {
         )
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
-    const records = new Array(sliceHeader.content.numRecords)
+    let records = new Array(sliceHeader.content.numRecords)
     for (let i = 0; i < sliceHeader.content.numRecords; i += 1) {
-      records[i] = decodeRecord(
-        this,
-        decodeDataSeries,
-        compressionScheme,
-        sliceHeader,
-        coreDataBlock,
-        blocksByContentId,
-        cursors,
-      )
+      try {
+        records[i] = decodeRecord(
+          this,
+          decodeDataSeries,
+          compressionScheme,
+          sliceHeader,
+          coreDataBlock,
+          blocksByContentId,
+          cursors,
+        )
+      } catch (e) {
+        if (e instanceof CramBufferOverrunError) {
+          console.warn(
+            'read attempted beyond end of buffer, file seems truncated.',
+          )
+          records = records.filter(r => !!r)
+          break
+        } else throw e
+      }
     }
 
     // if the starts are delta from the previous, go through and calculate the true starts
