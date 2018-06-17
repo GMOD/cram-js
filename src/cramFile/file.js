@@ -144,7 +144,9 @@ class CramFile {
     } else if (compressionMethod === 'rans') {
       rans.uncompress(inputBuffer, outputBuffer)
     } else {
-      throw new CramUnimplementedError(`${compressionMethod} decompression not yet implemented`)
+      throw new CramUnimplementedError(
+        `${compressionMethod} decompression not yet implemented`,
+      )
     }
   }
 

@@ -51,7 +51,7 @@ class CramContainer {
   // memoize
   async getCompressionScheme() {
     const header = await this.getCompressionHeaderBlock()
-    if (!header) return
+    if (!header) return undefined
     return new CramContainerCompressionScheme(header.content)
   }
 

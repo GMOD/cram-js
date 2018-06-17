@@ -9,9 +9,12 @@ const expectedFeatures1 = loadTestJSON(
 )
 const expectedFeatures2 = loadTestJSON('ce#unmap2.tmp.cram.test1.expected.json')
 const expectedFeatures3 = loadTestJSON('ce#1000.tmp.cram.test1.expected.json')
-const expectedFeatures4 = loadTestJSON('cramQueryWithCRAI.cram.test1.expected.json')
-const expectedFeatures5 = loadTestJSON('cramQueryWithCRAI.cram.test2.expected.json')
-
+const expectedFeatures4 = loadTestJSON(
+  'cramQueryWithCRAI.cram.test1.expected.json',
+)
+const expectedFeatures5 = loadTestJSON(
+  'cramQueryWithCRAI.cram.test2.expected.json',
+)
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {

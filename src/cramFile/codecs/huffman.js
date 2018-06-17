@@ -91,7 +91,9 @@ class HuffmanIntCodec extends CramCodec {
 
   decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
     if (numItems !== 1)
-      throw new CramUnimplementedError('only 1 decoded item supported right now')
+      throw new CramUnimplementedError(
+        'only 1 decoded item supported right now',
+      )
     const items = this._decode(
       slice,
       coreDataBlock,
@@ -116,7 +118,8 @@ class HuffmanIntCodec extends CramCodec {
   }
 
   _decode(slice, coreDataBlock, coreCursor, numBytes = 1) {
-    if (numBytes !== 1) throw new CramUnimplementedError('numBytes > 1 not yet supported')
+    if (numBytes !== 1)
+      throw new CramUnimplementedError('numBytes > 1 not yet supported')
     const input = coreDataBlock.content
 
     let prevLen = 0

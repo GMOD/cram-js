@@ -62,7 +62,8 @@ const cramBlockHeader = {
           'EXTERNAL_DATA',
           'CORE_DATA',
         ][b]
-        if (!type) throw new CramMalformedError(`invalid block content type id ${b}`)
+        if (!type)
+          throw new CramMalformedError(`invalid block content type id ${b}`)
         return type
       },
     })

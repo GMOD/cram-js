@@ -48,7 +48,6 @@ class ByteArrayStopCodec extends CramCodec {
         throw new CramBufferOverrunError(
           `byteArrayStop reading beyond length of data buffer?`,
         )
-        break
       }
       stopPosition += 1
     }
