@@ -1,3 +1,5 @@
+const { CramMalformedError, CramUnimplementedError } = require('../../errors')
+
 const Long = require('long')
 const Constants = require('../constants')
 
@@ -47,7 +49,8 @@ function parseTagValueArray(buffer) {
     I: ['readUInt32LE', 4],
     f: ['readFloatLE', 4],
   }[arrayType]
-  if (!schema) throw new Error(`invalid tag value array type '${arrayType}'`)
+  if (!schema)
+    throw new CramMalformedError(`invalid tag value array type '${arrayType}'`)
 
   const [getMethod, itemSize] = schema
   const array = new Array(length)
@@ -69,7 +72,7 @@ function parseTagData(tagType, buffer) {
       val.greaterThan(Number.MAX_SAFE_INTEGER) ||
       val.lessThan(Number.MIN_SAFE_INTEGER)
     )
-      throw new Error('integer overflow')
+      throw new CramUnimplementedError('integer overflow')
     return val.toNumber()
   } else if (tagType === 'i') return buffer.readInt32LE(0)
   else if (tagType === 's') return buffer.readInt16LE(0)
@@ -83,7 +86,7 @@ function parseTagData(tagType, buffer) {
   }
   if (tagType === 'B') return parseTagValueArray(buffer)
 
-  throw new Error(`Unrecognized tag type ${tagType}`)
+  throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
 function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
@@ -129,7 +132,9 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
     }[operator]
 
     if (!data1Schema)
-      throw new Error(`invalid read feature operator "${operator}"`)
+      throw new CramMalformedError(
+        `invalid read feature operator "${operator}"`,
+      )
 
     readFeature.data = decodeRFData(data1Schema)
 
@@ -185,7 +190,7 @@ function decodeRecord(
   const TLindex = decodeDataSeries('TL')
   if (TLindex < 0)
     /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */
-    throw new Error('invalid TL index')
+    throw new CramMalformedError('invalid TL index')
 
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)
@@ -198,7 +203,9 @@ function decodeRecord(
 
     const tagCodec = compressionScheme.getCodecForTag(tagId)
     if (!tagCodec)
-      throw new Error(`no codec defined for auxiliary tag ${tagId}`)
+      throw new CramMalformedError(
+        `no codec defined for auxiliary tag ${tagId}`,
+      )
     const tagData = tagCodec.decode(
       slice,
       coreDataBlock,

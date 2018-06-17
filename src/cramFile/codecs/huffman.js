@@ -1,3 +1,4 @@
+const { CramMalformedError, CramUnimplementedError } = require('../../errors')
 const CramCodec = require('./_base')
 
 function numberOfSetBits(ii) {
@@ -10,7 +11,7 @@ class HuffmanIntCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
     if (!['byte', 'int'].includes(this.dataType)) {
-      throw new Error(
+      throw new TypeError(
         `${this.dataType} decoding not yet implemented by HUFFMAN_INT codec`,
       )
     }
@@ -60,7 +61,7 @@ class HuffmanIntCodec extends CramCodec {
         codeLength += delta // adjust current code length
 
         if (numberOfSetBits(codeValue) > bitLength)
-          throw new Error('Symbol out of range')
+          throw new CramMalformedError('Symbol out of range')
 
         this.codes[symbol] = code
       })
@@ -90,7 +91,7 @@ class HuffmanIntCodec extends CramCodec {
 
   decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
     if (numItems !== 1)
-      throw new Error('only 1 decoded item supported right now')
+      throw new CramUnimplementedError('only 1 decoded item supported right now')
     const items = this._decode(
       slice,
       coreDataBlock,
@@ -115,7 +116,7 @@ class HuffmanIntCodec extends CramCodec {
   }
 
   _decode(slice, coreDataBlock, coreCursor, numBytes = 1) {
-    if (numBytes !== 1) throw new Error('numBytes > 1 not yet supported')
+    if (numBytes !== 1) throw new CramUnimplementedError('numBytes > 1 not yet supported')
     const input = coreDataBlock.content
 
     let prevLen = 0
@@ -139,7 +140,7 @@ class HuffmanIntCodec extends CramCodec {
           i += 1
       }
     }
-    throw new Error('Not found.')
+    throw new CramMalformedError('Huffman symbol not found.')
   }
 }
 

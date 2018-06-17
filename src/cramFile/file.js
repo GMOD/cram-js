@@ -1,3 +1,5 @@
+const { CramUnimplementedError, CramMalformedError } = require('../errors')
+
 const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
 
@@ -34,7 +36,9 @@ class CramFile {
     await this.file.read(headbytes, 0, cramFileDefinition.maxLength, 0)
     const definition = cramFileDefinition.parser.parse(headbytes).result
     if (definition.majorVersion !== 3)
-      throw new Error(`CRAM version ${definition.majorVersion} not supported`)
+      throw new CramUnimplementedError(
+        `CRAM version ${definition.majorVersion} not supported`,
+      )
     return definition
   }
 
@@ -64,7 +68,7 @@ class CramFile {
     await this.file.read(b, 0, length, position)
     const calculatedCrc32 = crc32.unsigned(b)
     if (calculatedCrc32 !== recordedCrc32) {
-      throw new Error(
+      throw new CramMalformedError(
         `crc mismatch in ${description}: recorded CRC32 = ${recordedCrc32}, but calculated CRC32 = ${calculatedCrc32}`,
       )
     }
@@ -125,7 +129,7 @@ class CramFile {
     }
     const data = parseItem(buffer, section.parser, 0, position)
     if (data._size !== size)
-      throw new Error(
+      throw new CramMalformedError(
         `section read error: requested size ${size} does not equal parsed size ${
           data._size
         }`,
@@ -140,7 +144,7 @@ class CramFile {
     } else if (compressionMethod === 'rans') {
       rans.uncompress(inputBuffer, outputBuffer)
     } else {
-      throw new Error(`${compressionMethod} decompression not yet implemented`)
+      throw new CramUnimplementedError(`${compressionMethod} decompression not yet implemented`)
     }
   }
 
@@ -175,12 +179,6 @@ class CramFile {
     }
 
     block.content = uncompressedData
-
-    //   // now we have the block data
-    //   throw new Error('CORE_DATA not yet implemented')
-    // } else {
-    //   throw new Error(`unknown block content type "${block.contentType}"`)
-    // }
 
     // parse the crc32
     const crc = await this._parseSection(

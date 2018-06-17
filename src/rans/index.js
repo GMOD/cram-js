@@ -1,3 +1,5 @@
+const { CramMalformedError } = require('../errors')
+
 const Decoding = require('./decoding')
 const Frequencies = require('./frequencies')
 
@@ -206,18 +208,21 @@ function uncompress(inputBuffer, outputBuffer, initialInputPosition = 0) {
   // input.order(ByteOrder.LITTLE_ENDIAN);
 
   const order = input.get()
-  if (order !== 0 && order !== 1) throw new Error(`Invalid rANS order ${order}`)
+  if (order !== 0 && order !== 1)
+    throw new CramMalformedError(`Invalid rANS order ${order}`)
 
   const /* int */ inputSize = input.getInt()
   if (inputSize !== input.remaining() - RAW_BYTE_LENGTH)
-    throw new Error('Incorrect input length.')
+    throw new CramMalformedError('Incorrect input length.')
 
   const /* int */ outputSize = input.getInt()
   const output = new ByteBuffer(outputBuffer || Buffer.allocUnsafe(outputSize))
   // TODO output.limit(outputSize)
 
   if (output.length < outputSize)
-    throw new Error(`Output buffer too small to fit ${outputSize} bytes.`)
+    throw new CramMalformedError(
+      `Output buffer too small to fit ${outputSize} bytes.`,
+    )
 
   switch (order) {
     case 0:
@@ -227,7 +232,7 @@ function uncompress(inputBuffer, outputBuffer, initialInputPosition = 0) {
       return uncompressOrder1Way4(input, output)
 
     default:
-      throw new Error(`Unknown rANS order: ${order}`)
+      throw new CramMalformedError(`Invalid rANS order: ${order}`)
   }
 }
 

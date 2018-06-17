@@ -1,3 +1,5 @@
+const { CramBufferOverrunError } = require('../../errors')
+
 const validDataTypes = {
   int: true,
   byte: true,
@@ -12,9 +14,9 @@ class CramCodec {
     this.parameters = parameters
     this.dataType = dataType
     if (!dataType)
-      throw new Error('must provide a data type to codec constructor')
+      throw new TypeError('must provide a data type to codec constructor')
     if (!validDataTypes[dataType])
-      throw new Error(`invalid data type ${dataType}`)
+      throw new TypeError(`invalid data type ${dataType}`)
   }
 
   // decode(slice, coreDataBlock, blocksByContentId, cursors) {
@@ -22,6 +24,13 @@ class CramCodec {
 
   _getBits(data, cursor, numBits) {
     let val = 0
+    if (
+      cursor.bytePosition + (7 - cursor.bitPosition + numBits) / 8 >
+      data.length
+    )
+      throw new CramBufferOverrunError(
+        'read error during decoding. the file seems to be truncated.',
+      )
     for (let dlen = numBits; dlen; dlen -= 1) {
       // get the next `dlen` bits in the input, put them in val
       val <<= 1

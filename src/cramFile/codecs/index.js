@@ -1,3 +1,5 @@
+const { CramUnimplementedError } = require('../../errors')
+
 const HuffmanIntCodec = require('./huffman')
 const ExternalCodec = require('./external')
 const ByteArrayStopCodec = require('./byteArrayStop')
@@ -32,7 +34,9 @@ function instantiateCodec(encodingData, dataType) {
     dataType === 'ignore' ? 0 : encodingData.codecId,
   )
   if (!CodecClass)
-    throw new Error(`no codec defined for codec ID ${encodingData.codecId}`)
+    throw new CramUnimplementedError(
+      `no codec implemented for codec ID ${encodingData.codecId}`,
+    )
 
   return new CodecClass(encodingData.parameters, dataType, instantiateCodec)
 }

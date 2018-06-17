@@ -1,3 +1,5 @@
+const { CramMalformedError } = require('../errors')
+
 const Constants = require('./constants')
 
 class FC {
@@ -30,9 +32,10 @@ class Symbol {
 
 // Initialize a decoder symbol to start "start" and frequency "freq"
 function symbolInit(sym, start, freq) {
-  if (!(start <= 1 << 16)) throw new Error(`assertion failed: start <= 1<<16`)
+  if (!(start <= 1 << 16))
+    throw new CramMalformedError(`assertion failed: start <= 1<<16`)
   if (!(freq <= (1 << 16) - start))
-    throw new Error(`assertion failed: freq <= 1<<16`)
+    throw new CramMalformedError(`assertion failed: freq <= 1<<16`)
   sym.start = start
   sym.freq = freq
 }

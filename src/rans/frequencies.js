@@ -1,8 +1,10 @@
+const { CramMalformedError } = require('../errors')
+
 const Constants = require('./constants')
 const Decoding = require('./decoding')
 
 function assert(result) {
-  if (!result) throw new Error('assertion failed')
+  if (!result) throw new CramMalformedError('assertion failed')
 }
 
 function readStatsO0(
@@ -77,7 +79,7 @@ function readStatsO1(
       D[i].R.fill(j, x, x + D[i].fc[j].F)
 
       x += D[i].fc[j].F
-      if (!(x <= Constants.TOTFREQ)) throw new Error('assertion failed')
+      assert(x <= Constants.TOTFREQ)
 
       if (rlej === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
         j = 0xff & cp.get()

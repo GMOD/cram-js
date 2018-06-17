@@ -1,3 +1,8 @@
+const {
+  CramUnimplementedError,
+  CramMalformedError,
+  CramBufferOverrunError,
+} = require('../../errors')
 const CramCodec = require('./_base')
 const { parseItf8 } = require('../util')
 
@@ -9,18 +14,21 @@ class ExternalCodec extends CramCodec {
     } else if (this.dataType === 'byte') {
       this._decodeData = this._decodeByte
     } else {
-      throw new Error(
+      throw new CramUnimplementedError(
         `${this.dataType} decoding not yet implemented by EXTERNAL codec`,
       )
     }
   }
   decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1) throw new Error('decoding multiple items not supported')
+    if (numItems !== 1)
+      throw new CramUnimplementedError('decoding multiple items not supported')
 
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
     if (!contentBlock)
-      throw new Error(`no block found with content ID ${blockContentId}`)
+      throw new CramMalformedError(
+        `no block found with content ID ${blockContentId}`,
+      )
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return this._decodeData(contentBlock, cursor)
   }
@@ -34,6 +42,10 @@ class ExternalCodec extends CramCodec {
   }
 
   _decodeByte(contentBlock, cursor) {
+    if (cursor.bytePosition >= contentBlock.content.length)
+      throw new CramBufferOverrunError(
+        'attempted to read beyond end of block. this file seems truncated.',
+      )
     const result = contentBlock.content[cursor.bytePosition]
     cursor.bytePosition += 1
     return result

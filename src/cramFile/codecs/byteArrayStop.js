@@ -1,3 +1,9 @@
+const {
+  CramBufferOverrunError,
+  CramMalformedError,
+  CramUnimplementedError,
+} = require('../../errors')
+
 const CramCodec = require('./_base')
 
 class ByteArrayStopCodec extends CramCodec {
@@ -8,19 +14,22 @@ class ByteArrayStopCodec extends CramCodec {
     } else if (dataType === 'byteArrayBlock') {
       this._decode = this._decodeByteArrayBlock
     } else {
-      throw new Error(
+      throw new TypeError(
         `byteArrayStop codec does not support data type ${dataType}`,
       )
     }
   }
 
   decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1) throw new Error('decoding multiple items not supported')
+    if (numItems !== 1)
+      throw new TypeError('decoding multiple items not supported')
 
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
     if (!contentBlock)
-      throw new Error(`no block found with content ID ${blockContentId}`)
+      throw new CramMalformedError(
+        `no block found with content ID ${blockContentId}`,
+      )
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return this._decode(contentBlock, cursor)
   }
@@ -36,7 +45,9 @@ class ByteArrayStopCodec extends CramCodec {
       stopPosition < dataBuffer.length
     ) {
       if (stopPosition === dataBuffer.length) {
-        console.warn(`byteArrayStop reading beyond length of data buffer?`)
+        throw new CramBufferOverrunError(
+          `byteArrayStop reading beyond length of data buffer?`,
+        )
         break
       }
       stopPosition += 1
@@ -47,7 +58,9 @@ class ByteArrayStopCodec extends CramCodec {
   }
 
   _decodeByteArrayBlock(/* contentBlock, cursor */) {
-    throw new Error('BYTE_ARRAY_BLOCK decoding not')
+    throw new CramUnimplementedError(
+      'BYTE_ARRAY_BLOCK decoding not implemented',
+    )
   }
 }
 

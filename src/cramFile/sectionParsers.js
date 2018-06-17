@@ -1,3 +1,4 @@
+const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const { Parser } = require('../binary-parser')
 
 const singleItf8 = new Parser().itf8()
@@ -44,7 +45,10 @@ const cramBlockHeader = {
     .uint8('compressionMethod', {
       formatter: /* istanbul ignore next */ b => {
         const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans'][b]
-        if (!method) throw new Error(`invalid compression method number ${b}`)
+        if (!method)
+          throw new CramUnimplementedError(
+            `compression method number ${b} not implemented`,
+          )
         return method
       },
     })
@@ -58,7 +62,7 @@ const cramBlockHeader = {
           'EXTERNAL_DATA',
           'CORE_DATA',
         ][b]
-        if (!type) throw new Error(`invalid block content type id ${b}`)
+        if (!type) throw new CramMalformedError(`invalid block content type id ${b}`)
         return type
       },
     })

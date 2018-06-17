@@ -1,3 +1,4 @@
+const { CramMalformedError, CramUnimplementedError } = require('../../errors')
 const sectionParsers = require('../sectionParsers')
 const { parseItem } = require('../util')
 
@@ -32,7 +33,7 @@ class CramSlice {
         containerHeader._endPosition,
       )
     } else {
-      throw new Error(
+      throw new CramMalformedError(
         `error reading slice header block, invalid content type ${
           header._contentType
         }`,
@@ -93,12 +94,12 @@ class CramSlice {
       if (embeddedRefBaseID >= 0) {
         const refBlock = this.getBlockByContentId(embeddedRefBaseID)
         if (!refBlock)
-          throw new Error(
+          throw new CramMalformedError(
             'embedded reference specified, but reference block does not exist',
           )
 
         if (sliceHeader.span > refBlock.uncompressedSize) {
-          throw new Error('Embedded reference is too small')
+          throw new CramMalformedError('Embedded reference is too small')
         }
 
         return {
@@ -107,7 +108,7 @@ class CramSlice {
           end: sliceHeader.refStart + sliceHeader.refSpan - 1,
         }
       } else if (compressionBlock.content.referenceRequired) {
-        throw new Error(
+        throw new CramUnimplementedError(
           'out-of-file reference sequence fetching not yet implemented',
         )
         // if (fd.required_fields & SAM_SEQ)
@@ -135,8 +136,7 @@ class CramSlice {
 
   async getAllFeatures() {
     // read the container and compression headers
-    const cramMajorVersion = (await this.file.getDefinition()).majorVersion
-    if (cramMajorVersion !== 3) throw new Error('only CRAM v3 files supported')
+    await this.file.getDefinition()
 
     // const containerHeader = await this.container.getHeader()
     const compressionScheme = await this.container.getCompressionScheme()
@@ -148,7 +148,7 @@ class CramSlice {
     // TODO: calculate dataset dependencies like htslib? currently just decoding all
     const needDataSeries = (/* dataSeriesName */) => true
 
-    // TODO: check MD5 of reference
+    // check MD5 of reference
     // if (cramMajorVersion != 1
     //   && (fd.required_fields & SAM_SEQ)
     //   && s.hdr.ref_seq_id >= 0
@@ -203,11 +203,6 @@ class CramSlice {
     //   }
     // }
 
-    // TODO: if multiple reference sequences, init a ref seqs array
-    // if (refSeqId == -2) {
-    //   refs = calloc(fd.refs.nref, sizeof(char *));
-    // }
-
     // tracks the read position within the block. codec.decode() methods
     // advance the byte and bit positions in the cursor as they decode data
     // note that we are only decoding a single block here, the core data block
@@ -226,7 +221,9 @@ class CramSlice {
     const decodeDataSeries = dataSeriesName => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec)
-        throw new Error(`no codec defined for ${dataSeriesName} data series`)
+        throw new CramMalformedError(
+          `no codec defined for ${dataSeriesName} data series`,
+        )
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
     const records = new Array(sliceHeader.content.numRecords)

@@ -1,3 +1,5 @@
+const { CramMalformedError } = require('../../errors')
+
 const sectionParsers = require('../sectionParsers')
 const { itf8Size, parseItem } = require('../util')
 const CramSlice = require('../slice')
@@ -28,7 +30,7 @@ class CramContainer {
         this._compressionBlock = null
       } else {
         if (this._compressionBlock.contentType !== 'COMPRESSION_HEADER')
-          throw new Error(
+          throw new CramMalformedError(
             `invalid content type ${
               this._compressionBlock.contentType
             } in what is supposed to be the compression header block`,

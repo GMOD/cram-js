@@ -60,12 +60,12 @@ describe('.crai indexed cram file', () => {
       index: new CramIndex(testDataFile('cramQueryWithCRAI.cram.crai')),
     })
 
-    // const features = await cram.getFeaturesForRange(0, 0, Infinity)
+    const features = await cram.getFeaturesForRange(0, 0, Infinity)
     // require('fs').writeFileSync(
     //   'test/data/cramQueryWithCRAI.cram.test1.expected.json',
     //   JSON.stringify(features, null, '  '),
     // )
-    //expect(features).to.deep.equal(expectedFeatures4)
+    expect(features).to.deep.equal(expectedFeatures4)
 
     const features2 = await cram.getFeaturesForRange(-1, 0, Infinity)
     // require('fs').writeFileSync(

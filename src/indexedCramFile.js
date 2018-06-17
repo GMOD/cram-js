@@ -1,3 +1,5 @@
+const { CramUnimplementedError } = require('./errors')
+
 const CramFile = require('./cramFile')
 
 class IndexedCramFile {
@@ -11,7 +13,9 @@ class IndexedCramFile {
   async getFeaturesForRange(seq, start, end) {
     if (typeof seq === 'string')
       // TODO: support string reference sequence names somehow
-      throw new Error('string sequence names not yet supported')
+      throw new CramUnimplementedError(
+        'string sequence names not yet supported',
+      )
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
 

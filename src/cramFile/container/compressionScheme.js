@@ -1,3 +1,4 @@
+const { CramMalformedError } = require('../../errors')
 const { instantiateCodec } = require('../codecs')
 
 // the hardcoded data type to be decoded for each core
@@ -114,7 +115,9 @@ class CramContainerCompressionScheme {
       if (encodingData) {
         const dataType = dataSeriesTypes[dataSeriesName]
         if (!dataType)
-          throw new Error(`unknown data series name ${dataSeriesName}`)
+          throw new CramMalformedError(
+            `data series name ${dataSeriesName} not defined in file compression header`,
+          )
         this.dataSeriesCodecCache[dataSeriesName] = instantiateCodec(
           encodingData,
           dataType,

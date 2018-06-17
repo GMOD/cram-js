@@ -1,3 +1,5 @@
+const { CramMalformedError } = require('../errors')
+
 const Constants = require('./constants')
 const Decoding = require('./decoding')
 
@@ -88,7 +90,9 @@ function uncompress(
       break
 
     default:
-      throw new Error('invalid output size')
+      throw new CramMalformedError(
+        'invalid output size encountered during rANS decoding',
+      )
   }
 
   out.setPosition(0)

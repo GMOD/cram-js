@@ -1,4 +1,4 @@
-const Long = require('long')
+const { CramBufferOverrunError } = require('../errors')
 
 module.exports = {
   itf8Size(v) {
@@ -44,7 +44,11 @@ module.exports = {
       // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
       offset += 5
     }
-
+    if (offset > buffer.length) {
+      throw new CramBufferOverrunError(
+        'Attempted to read beyond end of buffer; this file seems truncated.',
+      )
+    }
     return [result, offset - initialOffset]
   },
 
@@ -106,7 +110,7 @@ module.exports = {
   //       result.greaterThan(Number.MAX_SAFE_INTEGER) ||
   //       result.lessThan(Number.MIN_SAFE_INTEGER)
   //     )
-  //       throw new Error('integer overflow')
+  //       throw new CramUnimplementedError('integer overflow')
   //     result = result.toNumber()
   //     offset += 8
   //   } else {
@@ -115,7 +119,7 @@ module.exports = {
   //       result.greaterThan(Number.MAX_SAFE_INTEGER) ||
   //       result.lessThan(Number.MIN_SAFE_INTEGER)
   //     )
-  //       throw new Error('integer overflow')
+  //       throw new CramUnimplementedError('integer overflow')
   //     result = result.toNumber()
   //     offset += 9
   //   }

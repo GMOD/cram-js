@@ -1,3 +1,5 @@
+const { CramUnimplementedError } = require('../../errors')
+
 const CramCodec = require('./_base')
 
 class ByteArrayStopCodec extends CramCodec {
@@ -5,11 +7,13 @@ class ByteArrayStopCodec extends CramCodec {
     super(parameters, dataType)
     this.instantiateCodec = instantiateCodec
     if (dataType !== 'byteArray')
-      throw new Error(`byteArrayLength does not support data type ${dataType}`)
+      throw new TypeError(
+        `byteArrayLength does not support data type ${dataType}`,
+      )
   }
 
   decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1) throw new Error('decoding multiple items not supported')
+    if (numItems !== 1) throw new CramUnimplementedError('decoding multiple items not supported')
 
     const lengthCodec = this._getLengthCodec()
     const arrayLength = lengthCodec.decode(
