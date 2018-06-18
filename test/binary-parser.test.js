@@ -10,6 +10,7 @@ describe('binary-parser fork', () => {
       [[0x80, 0xff], { result: { val: 255 }, offset: 2 }],
       [[0xff, 0xff, 0xff, 0xff, 0x0f], { result: { val: -1 }, offset: 5 }],
       [[0xff, 0xff, 0xff, 0xff, 0xff], { result: { val: -1 }, offset: 5 }],
+      [[0xff, 0xff, 0xff, 0xff, 0xfe], { result: { val: -2 }, offset: 5 }],
     ].forEach(([input, output]) => {
       it(`can parse itf8 [${input.map(n => `0x${n.toString(16)}`)}]
        -> ${output.result.val}`, () => {
