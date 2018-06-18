@@ -89,7 +89,7 @@ function parseTagData(tagType, buffer) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
+function decodeReadFeatures(readFeatureCount, decodeDataSeries, majorVersion) {
   let prevPos = 0
   const readFeatures = new Array(readFeatureCount)
 
@@ -118,7 +118,7 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries) {
     // map of operator name -> data series name
     const data1Schema = {
       B: ['character', 'BA'],
-      S: ['string', 'SC'], // TODO: 'IN' if cram v1
+      S: ['string', majorVersion > 1 ? 'SC' : 'IN'], // TODO: 'IN' if cram v1
       X: ['number', 'BS'],
       D: ['number', 'DL'],
       I: ['string', 'IN'],
@@ -156,6 +156,7 @@ function decodeRecord(
   coreDataBlock,
   blocksByContentId,
   cursors,
+  majorVersion,
 ) {
   const cramRecord = new CramRecord()
 
@@ -222,6 +223,7 @@ function decodeRecord(
       cramRecord.readFeatures = decodeReadFeatures(
         readFeatureCount,
         decodeDataSeries,
+        majorVersion,
       )
     }
 

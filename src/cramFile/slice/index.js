@@ -139,10 +139,8 @@ class CramSlice {
   }
 
   async getAllFeatures() {
-    // read the container and compression headers
-    await this.file.getDefinition()
+    const { majorVersion } = await this.file.getDefinition()
 
-    // const containerHeader = await this.container.getHeader()
     const compressionScheme = await this.container.getCompressionScheme()
 
     const sliceHeader = await this.getHeader()
@@ -241,6 +239,7 @@ class CramSlice {
           coreDataBlock,
           blocksByContentId,
           cursors,
+          majorVersion,
         )
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
