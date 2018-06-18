@@ -705,7 +705,7 @@
               11,
               12
             ],
-            "refBaseID": -1,
+            "refBaseBlockId": -1,
             "md5": [
               226,
               36,
@@ -1332,7 +1332,7 @@
               11,
               12
             ],
-            "refBaseID": -1,
+            "refBaseBlockId": -1,
             "md5": [
               226,
               36,

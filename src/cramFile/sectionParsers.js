@@ -233,7 +233,7 @@ const versionedParsers = {
         type: singleItf8,
         length: 'numContentIds',
       })
-      .itf8('refBaseID')
+      .itf8('refBaseBlockId')
     maxLength += 5 * 3
 
     // the md5 sum is missing in cram v1

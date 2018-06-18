@@ -50,7 +50,8 @@
     "babel-runtime": "^6.26.0",
     "buffer-crc32": "^0.2.13",
     "es6-promisify": "^6.0.0",
-    "long": "^4.0.0"
+    "long": "^4.0.0",
+    "md5": "^2.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

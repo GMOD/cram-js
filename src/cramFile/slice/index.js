@@ -1,3 +1,5 @@
+const md5 = require('md5')
+
 const {
   CramMalformedError,
   CramUnimplementedError,
@@ -84,19 +86,21 @@ class CramSlice {
     return blocksByContentId[id]
   }
 
-  async getReference() {
+  async getReferenceRegion(/* optional */ requestedRefId) {
     // read the slice header
-    const sliceHeader = await this.getHeader()
-    const compressionBlock = await this.container.getCompressionHeaderBlock()
+    const sliceHeader = (await this.getHeader()).content
+    const compressionScheme = await this.container.getCompressionScheme()
 
     // console.log(JSON.stringify(sliceHeader, null, '  '))
 
-    const refId = sliceHeader.refSeqId
-    const embeddedRefBaseID = sliceHeader.refBaseID
+    if (sliceHeader.refSeqId >= 0) {
+      if (requestedRefId >= 0 && requestedRefId !== sliceHeader.refSeqId)
+        throw new Error(
+          'attempt to fetch an unrelated reference sequence from a slice',
+        )
 
-    if (refId >= 0) {
-      if (embeddedRefBaseID >= 0) {
-        const refBlock = this.getBlockByContentId(embeddedRefBaseID)
+      if (sliceHeader.refBaseBlockId >= 0) {
+        const refBlock = this.getBlockByContentId(sliceHeader.refBaseBlockId)
         if (!refBlock)
           throw new CramMalformedError(
             'embedded reference specified, but reference block does not exist',
@@ -110,8 +114,9 @@ class CramSlice {
           seq: refBlock.data.toString('ascii'),
           start: sliceHeader.refStart,
           end: sliceHeader.refStart + sliceHeader.refSpan - 1,
+          span: sliceHeader.refSpan,
         }
-      } else if (compressionBlock.content.referenceRequired) {
+      } else if (compressionScheme.referenceRequired) {
         throw new CramUnimplementedError(
           'out-of-file reference sequence fetching not yet implemented',
         )
@@ -133,6 +138,11 @@ class CramSlice {
         //     s.ref_end = fd.refs.refSeqId[refSeqId].length;
         // }
       }
+    } else if (sliceHeader.refSeqId === -2) {
+      // this is a multi-reference slice
+      throw new CramUnimplementedError(
+        'ref seq fetching not yet implemented for multi-reference slices',
+      )
     }
 
     return undefined
@@ -150,60 +160,29 @@ class CramSlice {
     // TODO: calculate dataset dependencies like htslib? currently just decoding all
     const needDataSeries = (/* dataSeriesName */) => true
 
-    // check MD5 of reference
-    // if (cramMajorVersion != 1
-    //   && (fd.required_fields & SAM_SEQ)
-    //   && s.hdr.ref_seq_id >= 0
-    //   && !fd.ignore_md5
-    //   && memcmp(s.hdr.md5, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 16)) {
-    //   hts_md5_context *md5;
-    //   unsigned char digest[16];
-
-    //   if (s.ref && s.hdr.ref_seq_id >= 0) {
-    //       int start, len;
-
-    //       if (s.hdr.ref_seq_start >= s.ref_start) {
-    //           start = s.hdr.ref_seq_start - s.ref_start;
-    //       } else {
-    //           hts_log_warning("Slice starts before base 1");
-    //           start = 0;
-    //       }
-
-    //       if (s.hdr.ref_seq_span <= s.ref_end - s.ref_start + 1) {
-    //           len = s.hdr.ref_seq_span;
-    //       } else {
-    //           hts_log_warning("Slice ends beyond reference end");
-    //           len = s.ref_end - s.ref_start + 1;
-    //       }
-
-    //       if (!(md5 = hts_md5_init()))
-    //           return -1;
-    //       if (start + len > s.ref_end - s.ref_start + 1)
-    //           len = s.ref_end - s.ref_start + 1 - start;
-    //       if (len >= 0)
-    //           hts_md5_update(md5, s.ref + start, len);
-    //       hts_md5_final(digest, md5);
-    //       hts_md5_destroy(md5);
-    //   } else if (!s.ref && s.hdr.ref_base_id >= 0) {
-    //       cram_block *b = cram_get_block_by_id(s, s.hdr.ref_base_id);
-    //       if (b) {
-    //           if (!(md5 = hts_md5_init()))
-    //               return -1;
-    //           hts_md5_update(md5, b.data, b.uncomp_size);
-    //           hts_md5_final(digest, md5);
-    //           hts_md5_destroy(md5);
-    //       }
-    //   }
-    //   if ((!s.ref && s.hdr.ref_base_id < 0)
-    //       || memcmp(digest, s.hdr.md5, 16) != 0) {
-    //       char M[33];
-    //       hts_log_error("MD5 checksum reference mismatch for ref %d pos %d..%d",
-    //                     refSeqId, s.ref_start, s.ref_end);
-    //       hts_log_error("CRAM: %s", md5_print(s.hdr.md5, M));
-    //       hts_log_error("Ref : %s", md5_print(digest, M));
-    //       return -1;
-    //   }
-    // }
+    // check MD5 of reference if available
+    if (
+      majorVersion > 1 &&
+      sliceHeader.content.refSeqId >= 0 &&
+      sliceHeader.content.md5.join('') !== '0000000000000000'
+    ) {
+      const refRegion = await this.getReferenceRegion()
+      if (refRegion) {
+        const { seq, start, end } = refRegion
+        const seqMd5 = md5(seq)
+        const storedMd5 = sliceHeader.content.md5
+          .map(byte => byte.toString(16))
+          .join('')
+        if (seqMd5 !== storedMd5)
+          throw new CramMalformedError(
+            `MD5 checksum reference mismatch for ref ${
+              sliceHeader.content.refSeqId
+            } pos ${start}..${end}`,
+            `recorded MD5: ${storedMd5}`,
+            `calculated MD5: ${seqMd5}`,
+          )
+      }
+    }
 
     // tracks the read position within the block. codec.decode() methods
     // advance the byte and bit positions in the cursor as they decode data
