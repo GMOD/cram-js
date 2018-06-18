@@ -91,36 +91,6 @@ const cramBlockCrc32 = {
 //   'GAMMA', // 9
 // ]
 
-const cramEncoding = {
-  parser: new Parser()
-    .namely('cramEncoding')
-    .itf8('codecId')
-    .itf8('parametersBytes')
-    .choice('parameters', {
-      tag: 'codecId',
-      choices: {
-        0: new Parser(), // NULL
-        1: new Parser().itf8('blockContentId'), // EXTERNAL
-        2: new Parser().itf8('offset').itf8('M'), // GOLOMB,
-        // HUFFMAN_INT
-        3: Parser.start()
-          .itf8('numCodes')
-          .array('symbols', { length: 'numCodes', type: singleItf8 })
-          .itf8('numLengths')
-          .array('bitLengths', { length: 'numLengths', type: singleItf8 }),
-        4: Parser.start() // BYTE_ARRAY_LEN
-          .nest('lengthsEncoding', { type: 'cramEncoding' })
-          .nest('valuesEncoding', { type: 'cramEncoding' }),
-        5: new Parser().uint8('stopByte').itf8('blockContentId'), // BYTE_ARRAY_STOP
-        6: new Parser().itf8('offset').itf8('length'), // BETA
-        7: new Parser().itf8('offset').itf8('K'),
-        8: new Parser().itf8('offset').itf8('log2m'), // GOLOMB_RICE
-        9: new Parser().itf8('offset'), // GAMMA
-      },
-    }),
-  maxLength: undefined,
-}
-
 const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
   length: 'size',
   formatter: /* istanbul ignore next */ buffer => {
@@ -192,62 +162,19 @@ function formatMap(data) {
   return map
 }
 
-const cramDataSeriesEncodingMap = new Parser()
-  .itf8('mapSize')
-  .itf8('mapCount')
-  .array('entries', {
-    length: 'mapCount',
-    type: new Parser()
-      .string('key', { length: 2, stripNull: false })
-      .nest('value', { type: cramEncoding.parser }),
-  })
-
-const cramTagEncodingMap = new Parser()
-  .itf8('mapSize')
-  .itf8('mapCount')
-  .array('entries', {
-    length: 'mapCount',
-    type: new Parser()
-      .itf8('key', {
-        formatter: /* istanbul ignore next */ integerRepresentation =>
-          /* istanbul ignore next */
-          String.fromCharCode((integerRepresentation >> 16) & 0xff) +
-          String.fromCharCode((integerRepresentation >> 8) & 0xff) +
-          String.fromCharCode(integerRepresentation & 0xff),
-      })
-      .nest('value', { type: cramEncoding.parser }),
-  })
-
-const cramCompressionHeader = {
-  parser: new Parser()
-    .nest('preservation', {
-      type: cramPreservationMap,
-      formatter: formatMap,
-    })
-    .nest('dataSeriesEncoding', {
-      type: cramDataSeriesEncodingMap,
-      formatter: formatMap,
-    })
-    .nest('tagEncoding', {
-      type: cramTagEncodingMap,
-      formatter: formatMap,
-    }),
-}
-
 const unversionedParsers = {
   cramFileDefinition,
   cramContainerHeader1,
   cramContainerHeader2,
   cramBlockHeader,
   cramBlockCrc32,
-  cramCompressionHeader,
 }
 
 // each of these is a function of the major and minor version
 const versionedParsers = {
   // assemble a section parser for the unmapped slice header, with slight
   // variations depending on the major version of the cram file
-  cramUnmappedSliceHeader: majorVersion => {
+  cramUnmappedSliceHeader(majorVersion) {
     let maxLength = 0
     let parser = new Parser().itf8('numRecords')
     maxLength += 5
@@ -283,7 +210,7 @@ const versionedParsers = {
 
   // assembles a section parser for the unmapped slice header, with slight
   // variations depending on the major version of the cram file
-  cramMappedSliceHeader: majorVersion => {
+  cramMappedSliceHeader(majorVersion) {
     let parser = new Parser()
       .itf8('refSeqId')
       .itf8('refSeqStart')
@@ -319,12 +246,94 @@ const versionedParsers = {
 
     return { parser, maxLength: maxLengthFunc }
   },
+
+  cramEncoding(majorVersion) {
+    const parser = new Parser()
+      .namely('cramEncoding')
+      .itf8('codecId')
+      .itf8('parametersBytes')
+      .choice('parameters', {
+        tag: 'codecId',
+        choices: {
+          0: new Parser(), // NULL
+          1: new Parser().itf8('blockContentId'), // EXTERNAL
+          2: new Parser().itf8('offset').itf8('M'), // GOLOMB,
+          // HUFFMAN_INT
+          3: Parser.start()
+            .itf8('numCodes')
+            .array('symbols', { length: 'numCodes', type: singleItf8 })
+            .itf8('numLengths')
+            .array('bitLengths', { length: 'numLengths', type: singleItf8 }),
+          4: Parser.start() // BYTE_ARRAY_LEN
+            .nest('lengthsEncoding', { type: 'cramEncoding' })
+            .nest('valuesEncoding', { type: 'cramEncoding' }),
+          // BYTE_ARRAY_STOP is a little different for CRAM v1
+          5: new Parser()
+            .uint8('stopByte')
+            [majorVersion > 1 ? 'itf8' : 'int']('blockContentId'),
+          6: new Parser().itf8('offset').itf8('length'), // BETA
+          7: new Parser().itf8('offset').itf8('K'),
+          8: new Parser().itf8('offset').itf8('log2m'), // GOLOMB_RICE
+          9: new Parser().itf8('offset'), // GAMMA
+        },
+      })
+
+    return { parser }
+  },
+
+  cramDataSeriesEncodingMap(majorVersion) {
+    return new Parser()
+      .itf8('mapSize')
+      .itf8('mapCount')
+      .array('entries', {
+        length: 'mapCount',
+        type: new Parser()
+          .string('key', { length: 2, stripNull: false })
+          .nest('value', { type: this.cramEncoding(majorVersion).parser }),
+      })
+  },
+
+  cramTagEncodingMap(majorVersion) {
+    return new Parser()
+      .itf8('mapSize')
+      .itf8('mapCount')
+      .array('entries', {
+        length: 'mapCount',
+        type: new Parser()
+          .itf8('key', {
+            formatter: /* istanbul ignore next */ integerRepresentation =>
+              /* istanbul ignore next */
+              String.fromCharCode((integerRepresentation >> 16) & 0xff) +
+              String.fromCharCode((integerRepresentation >> 8) & 0xff) +
+              String.fromCharCode(integerRepresentation & 0xff),
+          })
+          .nest('value', { type: this.cramEncoding(majorVersion).parser }),
+      })
+  },
+
+  cramCompressionHeader(majorVersion) {
+    return {
+      parser: new Parser()
+        .nest('preservation', {
+          type: cramPreservationMap,
+          formatter: formatMap,
+        })
+        .nest('dataSeriesEncoding', {
+          type: this.cramDataSeriesEncodingMap(majorVersion),
+          formatter: formatMap,
+        })
+        .nest('tagEncoding', {
+          type: this.cramTagEncodingMap(majorVersion),
+          formatter: formatMap,
+        }),
+    }
+  },
 }
 
 function getSectionParsers(majorVersion) {
   const parsers = Object.assign({}, unversionedParsers)
-  Object.entries(versionedParsers).forEach(([parserName, func]) => {
-    parsers[parserName] = func(majorVersion)
+  Object.keys(versionedParsers).forEach(parserName => {
+    parsers[parserName] = versionedParsers[parserName](majorVersion)
   })
   return parsers
 }
