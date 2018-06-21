@@ -23,7 +23,7 @@
   "scripts": {
     "test": "mocha",
     "test-browser": "karma start --single-run",
-    "coverage": "nyc mocha && nyc report --reporter=lcov",
+    "coverage": "rm -rf coverage; nyc mocha; nyc report --reporter=lcov",
     "postcoverage": "opn coverage/lcov-report/index.html",
     "lint": "eslint src test",
     "docs": "documentation readme src --section=API",
