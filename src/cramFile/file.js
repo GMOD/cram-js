@@ -33,11 +33,12 @@ class CramFile {
     return this.file.stat()
   }
 
+  // memoize
   async getDefinition() {
     const headbytes = Buffer.allocUnsafe(cramFileDefinitionParser.maxLength)
     await this.file.read(headbytes, 0, cramFileDefinitionParser.maxLength, 0)
     const definition = cramFileDefinitionParser.parser.parse(headbytes).result
-    if (definition.majorVersion !== 3)
+    if (definition.majorVersion !== 2 && definition.majorVersion !== 3)
       throw new CramUnimplementedError(
         `CRAM version ${definition.majorVersion} not supported`,
       )
@@ -74,7 +75,7 @@ class CramFile {
     return currentContainer
   }
 
-  async _checkCrc32(position, length, recordedCrc32, description) {
+  async checkCrc32(position, length, recordedCrc32, description) {
     const b = Buffer.allocUnsafe(length)
     await this.file.read(b, 0, length, position)
     const calculatedCrc32 = crc32.unsigned(b)
@@ -164,6 +165,7 @@ class CramFile {
   }
 
   async readBlock(position) {
+    const { majorVersion } = await this.getDefinition()
     const sectionParsers = await this.getSectionParsers()
     const block = await this.readBlockHeader(position)
     const blockContentPosition = block._endPosition
@@ -196,26 +198,32 @@ class CramFile {
 
     block.content = uncompressedData
 
-    // parse the crc32
-    const crc = await this._parseSection(
-      sectionParsers.cramBlockCrc32,
-      blockContentPosition + block.compressedSize,
-    )
-    block.crc32 = crc.crc32
-
-    // check the block data crc32
-    if (this.validateChecksums) {
-      await this._checkCrc32(
-        position,
-        block._size + block.compressedSize,
-        block.crc32,
-        'block data',
+    if (majorVersion >= 3) {
+      // parse the crc32
+      const crc = await this._parseSection(
+        sectionParsers.cramBlockCrc32,
+        blockContentPosition + block.compressedSize,
       )
-    }
+      block.crc32 = crc.crc32
 
-    // make the endposition and size reflect the whole block
-    block._endPosition = crc._endPosition
-    block._size = block.compressedSize + sectionParsers.cramBlockCrc32.maxLength
+      // check the block data crc32
+      if (this.validateChecksums) {
+        await this.checkCrc32(
+          position,
+          block._size + block.compressedSize,
+          block.crc32,
+          'block data',
+        )
+      }
+
+      // make the endposition and size reflect the whole block
+      block._endPosition = crc._endPosition
+      block._size =
+        block.compressedSize + sectionParsers.cramBlockCrc32.maxLength
+    } else {
+      block._endPosition = blockContentPosition + block.compressedSize
+      block._size = block.compressedSize
+    }
 
     return block
   }

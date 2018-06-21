@@ -26,29 +26,13 @@ const cramContainerHeader1 = {
   maxLength: 4 + 5 * 4 + 9 * 2 + 5 + 5,
 }
 
-const cramContainerHeader2 = {
-  parser: new Parser()
-    .itf8('numLandmarks') // the number of blocks
-    // Each integer value of this array is a byte offset
-    // into the blocks byte array. Landmarks are used for
-    // random access indexing.
-    .array('landmarks', {
-      type: new Parser().itf8(),
-      length: 'numLandmarks',
-    })
-    .uint32('crc32'),
-  maxLength: numBlocks => 5 + numBlocks * 5 + 4,
-}
-
 const cramBlockHeader = {
   parser: new Parser()
     .uint8('compressionMethod', {
       formatter: /* istanbul ignore next */ b => {
         const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans'][b]
         if (!method)
-          throw new CramUnimplementedError(
-            `compression method number ${b} not implemented`,
-          )
+          throw new Error(`compression method number ${b} not implemented`)
         return method
       },
     })
@@ -62,8 +46,7 @@ const cramBlockHeader = {
           'EXTERNAL_DATA',
           'CORE_DATA',
         ][b]
-        if (!type)
-          throw new CramMalformedError(`invalid block content type id ${b}`)
+        if (!type) throw new Error(`invalid block content type id ${b}`)
         return type
       },
     })
@@ -165,7 +148,6 @@ function formatMap(data) {
 const unversionedParsers = {
   cramFileDefinition,
   cramContainerHeader1,
-  cramContainerHeader2,
   cramBlockHeader,
   cramBlockCrc32,
 }
@@ -180,7 +162,7 @@ const versionedParsers = {
     maxLength += 5
 
     // recordCounter is itf8 in a CRAM v2 file, absent in CRAM v1
-    if (majorVersion === 3) {
+    if (majorVersion >= 3) {
       parser = parser.ltf8('recordCounter')
       maxLength += 9
     } else if (majorVersion === 2) {
@@ -218,7 +200,7 @@ const versionedParsers = {
       .itf8('numRecords')
     let maxLength = 5 * 4
 
-    if (majorVersion === 3) {
+    if (majorVersion >= 3) {
       parser = parser.ltf8('recordCounter')
       maxLength += 9
     } else if (majorVersion === 2) {
@@ -312,20 +294,45 @@ const versionedParsers = {
   },
 
   cramCompressionHeader(majorVersion) {
+    let parser = new Parser()
+    // TODO: if we want to support CRAM v1, we will need to refactor
+    // compression header into 2 parts to parse the landmarks,
+    // like the container header
+    parser = parser
+      .nest('preservation', {
+        type: cramPreservationMap,
+        formatter: formatMap,
+      })
+      .nest('dataSeriesEncoding', {
+        type: this.cramDataSeriesEncodingMap(majorVersion),
+        formatter: formatMap,
+      })
+      .nest('tagEncoding', {
+        type: this.cramTagEncodingMap(majorVersion),
+        formatter: formatMap,
+      })
+    return { parser }
+  },
+
+  cramContainerHeader2(majorVersion) {
+    let parser = new Parser()
+      .itf8('numLandmarks') // the number of blocks
+      // Each integer value of this array is a byte offset
+      // into the blocks byte array. Landmarks are used for
+      // random access indexing.
+      .array('landmarks', {
+        type: new Parser().itf8(),
+        length: 'numLandmarks',
+      })
+
+    let crcLength = 0
+    if (majorVersion >= 3) {
+      parser = parser.uint32('crc32')
+      crcLength = 4
+    }
     return {
-      parser: new Parser()
-        .nest('preservation', {
-          type: cramPreservationMap,
-          formatter: formatMap,
-        })
-        .nest('dataSeriesEncoding', {
-          type: this.cramDataSeriesEncodingMap(majorVersion),
-          formatter: formatMap,
-        })
-        .nest('tagEncoding', {
-          type: this.cramTagEncodingMap(majorVersion),
-          formatter: formatMap,
-        }),
+      parser,
+      maxLength: numLandmarks => 5 + numLandmarks * 5 + crcLength,
     }
   },
 }

@@ -161,8 +161,13 @@ function decodeRecord(
   const cramRecord = new CramRecord()
 
   cramRecord.flags = decodeDataSeries('BF')
+
+  // note: the C data type of compressionFlags is byte in cram v1
+  // and int32 in cram v2+, but that does not matter for us here
+  // in javascript land.
   cramRecord.compressionFlags = decodeDataSeries('CF')
-  if (sliceHeader.content.refSeqId === -2)
+
+  if (majorVersion > 1 && sliceHeader.content.refSeqId === -2)
     cramRecord.sequenceId = decodeDataSeries('RI')
   else cramRecord.sequenceId = sliceHeader.content.refSeqId
 
@@ -176,6 +181,7 @@ function decodeRecord(
 
   // mate record
   if (cramRecord.isDetached()) {
+    // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't matter for javascript
     cramRecord.mateFlags = decodeDataSeries('MF')
     cramRecord.mate = {}
     if (!compressionScheme.readNamesIncluded)
@@ -188,6 +194,8 @@ function decodeRecord(
     cramRecord.recordsToNextFragment = decodeDataSeries('NF')
   }
 
+  // TODO: the aux tag parsing will have to be refactored if we want to support
+  // cram v1
   const TLindex = decodeDataSeries('TL')
   if (TLindex < 0)
     /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */

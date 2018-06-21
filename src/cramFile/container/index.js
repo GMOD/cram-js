@@ -86,8 +86,8 @@ class CramContainer {
     )
     const header2 = parseItem(bytes2, cramContainerHeader2.parser)
 
-    if (this.validateChecksums) {
-      await this._checkCrc32(
+    if (this.file.validateChecksums && header2.crc32 !== undefined) {
+      await this.file.checkCrc32(
         position,
         header1._size + header2._size - numLandmarksSize - 4,
         header2.crc32,
