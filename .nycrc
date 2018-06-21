@@ -1,11 +1,9 @@
 {
   "exclude": [
-    "src/binary-parser/**"
+    "src/binary-parser/**", "test/**"
   ],
   "reporter": [
     "text",
     "html"
-  ],
-  "sourceMap": false,
-  "instrument": false
+  ]
 }
