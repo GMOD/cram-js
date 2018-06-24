@@ -1,4 +1,3 @@
-const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const { Parser } = require('../binary-parser')
 
 const singleItf8 = new Parser().itf8()
@@ -10,20 +9,6 @@ const cramFileDefinition = {
     .uint8('minorVersion')
     .string('fileId', { length: 20, stripNull: true }),
   maxLength: 26,
-}
-
-const cramContainerHeader1 = {
-  parser: new Parser()
-    .uint32('length') // byte size of the container data (blocks)
-    .itf8('refSeqId') // reference sequence identifier, -1 for unmapped reads, -2 for multiple reference sequences
-    .itf8('refSeqStart') // the alignment start position or 0 for unmapped reads
-    .itf8('alignmentSpan') // the length of the alignment or 0 for unmapped reads
-    .itf8('numRecords') // number of records in the container
-    .ltf8('recordCounter') // 1-based sequential index of records in the file/stream.
-    .ltf8('numBases') // number of read bases
-    .itf8('numBlocks') // the number of blocks
-    .itf8('numLandmarks'), // the number of landmarks
-  maxLength: 4 + 5 * 4 + 9 * 2 + 5 + 5,
 }
 
 const cramBlockHeader = {
@@ -147,7 +132,6 @@ function formatMap(data) {
 
 const unversionedParsers = {
   cramFileDefinition,
-  cramContainerHeader1,
   cramBlockHeader,
   cramBlockCrc32,
 }
@@ -312,6 +296,35 @@ const versionedParsers = {
         formatter: formatMap,
       })
     return { parser }
+  },
+
+  cramContainerHeader1(majorVersion) {
+    let parser = new Parser()
+      .int32('length') // byte size of the container data (blocks)
+      .itf8('refSeqId') // reference sequence identifier, -1 for unmapped reads, -2 for multiple reference sequences
+      .itf8('refSeqStart') // the alignment start position or 0 for unmapped reads
+      .itf8('alignmentSpan') // the length of the alignment or 0 for unmapped reads
+      .itf8('numRecords') // number of records in the container
+    let maxLength = 4 + 5 * 4
+
+    if (majorVersion >= 3) {
+      parser = parser.ltf8('recordCounter') // 1-based sequential index of records in the file/stream.
+      maxLength += 9
+    } else if (majorVersion === 2) {
+      parser = parser.itf8('recordCounter')
+      maxLength += 5
+    }
+
+    if (majorVersion > 1) {
+      parser = parser.ltf8('numBases') // number of read bases
+      maxLength += 9
+    }
+    parser = parser
+      .itf8('numBlocks') // the number of blocks
+      .itf8('numLandmarks') // the number of landmarks
+    maxLength += 5 + 5
+
+    return { parser, maxLength }
   },
 
   cramContainerHeader2(majorVersion) {

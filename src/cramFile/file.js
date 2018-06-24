@@ -23,6 +23,13 @@ class CramFile {
     this.validateChecksums = true
   }
 
+  toString() {
+    if (this.file.filename) return this.file.filename
+    if (this.file.url) return this.file.url
+
+    return '(cram file)'
+  }
+
   // can just read this object like a filehandle
   read(buffer, offset, length, position) {
     return this.file.read(buffer, offset, length, position)
@@ -69,7 +76,24 @@ class CramFile {
     ) {
       currentContainer = this.getContainerAtPosition(position)
       const currentHeader = await currentContainer.getHeader()
-      position += currentHeader._size + currentHeader.length
+      if (!currentHeader)
+        throw new CramMalformedError(
+          `container ${containerNumber} not found in file`,
+        )
+      // if this is the first container, read all the blocks in the
+      // container to determine its length, because we cannot trust
+      // the container header's given length due to a bug somewhere
+      // in htslib
+      if (i === 0) {
+        position = currentHeader._endPosition
+        for (let j = 0; j < currentHeader.numBlocks; j += 1) {
+          const block = await this.readBlock(position)
+          position = block._endPosition
+        }
+      } else {
+        // otherwise, just traverse to the next container using the container's length
+        position += currentHeader._size + currentHeader.length
+      }
     }
 
     return currentContainer
@@ -104,7 +128,22 @@ class CramFile {
       const currentHeader = await this.getContainerAtPosition(
         position,
       ).getHeader()
-      position += currentHeader._size + currentHeader.length
+      if (!currentHeader) {
+        return i
+      }
+      // if this is the first container, read all the blocks in the
+      // container, because we cannot trust the container
+      // header's given length due to a bug somewhere in htslib
+      if (i === 0) {
+        position = currentHeader._endPosition
+        for (let j = 0; j < currentHeader.numBlocks; j += 1) {
+          const block = await this.readBlock(position)
+          position = block._endPosition
+        }
+      } else {
+        // otherwise, just traverse to the next container using the container's length
+        position += currentHeader._size + currentHeader.length
+      }
     }
 
     return i + 1
@@ -119,7 +158,7 @@ class CramFile {
     const { cramBlockHeader } = sectionParsers
     const { size: fileSize } = await this.file.stat()
 
-    if (position >= fileSize) return undefined
+    if (position + cramBlockHeader.maxLength >= fileSize) return undefined
 
     const buffer = Buffer.allocUnsafe(cramBlockHeader.maxLength)
     await this.file.read(buffer, 0, cramBlockHeader.maxLength, position)

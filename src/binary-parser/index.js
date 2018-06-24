@@ -790,7 +790,6 @@ Parser.prototype.ltf8 = function(varName,options) {
 Parser.prototype.generateLtf8 = function(ctx) {
   const name = ctx.generateVariable(this.varName)
   const countFlags = ctx.generateTmpVariable()
-  const dangerBits = ctx.generateTmpVariable()
   ctx.pushCode(`
   var ${countFlags} = buffer[offset];
   if (${countFlags} < 0x80) {
