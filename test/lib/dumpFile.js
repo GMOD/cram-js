@@ -35,6 +35,9 @@ async function dumpContainerById(file, containerId) {
       )
       data.push(slice)
       blockNum += slice.header.content.numBlocks
+    } else if (block.contentType === 'FILE_HEADER') {
+      // use the getSamHeader
+      data.push({ samHeader: await file.getSamHeader() })
     } else {
       data.push({ block })
     }

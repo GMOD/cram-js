@@ -113,7 +113,7 @@ xx#unsorted.tmp.cram
 c1#bounds2_.2.1.cram`
   .split(/\s+/)
 //  .filter(f => /c1#bounds.2.1.cram/.test(f))
-//  .filter(f => /ce#1.2.1.cram/.test(f))
+// .filter(f => /ce#1.2.1.cram/.test(f))
 
 const fullFiles = allFiles.filter(f => f !== 'cramQueryWithCRAI.cram')
 

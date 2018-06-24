@@ -1,8 +1,7 @@
-const { CramUnimplementedError, CramMalformedError } = require('../errors')
-
 const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
 
+const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const rans = require('../rans')
 const {
   cramFileDefinition: cramFileDefinitionParser,
@@ -12,6 +11,7 @@ const {
 const CramContainer = require('./container')
 
 const { parseItem } = require('./util')
+const { parseHeaderText } = require('../sam')
 
 class CramFile {
   /**
@@ -50,6 +50,22 @@ class CramFile {
         `CRAM version ${definition.majorVersion} not supported`,
       )
     return definition
+  }
+
+  async getSamHeader() {
+    const firstContainer = await this.getContainerById(0)
+    if (!firstContainer)
+      throw new CramMalformedError('file contains no containers')
+
+    const { content } = await firstContainer.getFirstBlock()
+    // find the end of the trailing zeros in the header text
+    const headerLength = content.readInt32LE()
+    const textStart = 4
+    // let textEnd = content.length - 1
+    // while (textEnd >= textStart && !content[textEnd]) textEnd -= 1
+    // trim off the trailing zeros
+    const text = content.toString('ascii', textStart, textStart + headerLength)
+    return parseHeaderText(text)
   }
 
   async getSectionParsers() {

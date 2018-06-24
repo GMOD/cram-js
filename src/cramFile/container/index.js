@@ -21,15 +21,14 @@ class CramContainer {
 
   async getCompressionHeaderBlock() {
     if (!this._compressionBlock) {
-      const sectionParsers = await this.file.getSectionParsers()
       const containerHeader = await this.getHeader()
-      this._compressionBlock = await this.file.readBlock(
-        containerHeader._endPosition,
-      )
+
       // if there are no records in the container, there will be no compression header
       if (!containerHeader.numRecords) {
         this._compressionBlock = null
       } else {
+        const sectionParsers = await this.file.getSectionParsers()
+        this._compressionBlock = await this.getFirstBlock()
         if (this._compressionBlock.contentType !== 'COMPRESSION_HEADER')
           throw new CramMalformedError(
             `invalid content type ${
@@ -46,6 +45,11 @@ class CramContainer {
       }
     }
     return this._compressionBlock
+  }
+
+  async getFirstBlock() {
+    const containerHeader = await this.getHeader()
+    return this.file.readBlock(containerHeader._endPosition)
   }
 
   // parses the compression header data into a CramContainerCompressionScheme object
