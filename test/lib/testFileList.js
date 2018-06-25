@@ -1,7 +1,7 @@
 const allFiles = `
-NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
-NA12878.20.21.1-100.100-SeqsPerSlice.1-unMapped.cram
-NA12878.20.21.1-100.100-SeqsPerSlice.500-unMapped.cram
+human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
+human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-SeqsPerSlice.1-unMapped.cram
+human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-SeqsPerSlice.500-unMapped.cram
 amb#amb.2.1.cram
 amb#amb.3.0.cram
 auxf#test.cram
