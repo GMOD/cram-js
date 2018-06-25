@@ -1,0 +1,4672 @@
+[
+  {
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+    "fileId": "-"
+  },
+  {
+    "containerHeader": {
+      "length": 1908,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+      "alignmentSpan": 0,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "_endPosition": 45,
+      "_size": 19,
+      "landmarks": [
+        0,
+        1265
+      ],
+      "crc32": 2074219206
+    },
+    "data": [
+      {
+        "length": 1908,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+        "alignmentSpan": 0,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "_endPosition": 45,
+        "_size": 19,
+        "landmarks": [
+          0,
+          1265
+        ],
+        "crc32": 2074219206
+      },
+      {
+        "samHeader": [
+          {
+            "tag": "HD",
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.5"
+              },
+              {
+                "tag": "GO",
+                "value": "none"
+              },
+              {
+                "tag": "SO",
+                "value": "coordinate"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.1"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.1"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.2"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.2"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.3"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.3"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.4"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.4"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.5"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.5"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.6"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.6"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.7"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.7"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.8"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.8"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.1"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.1"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.2"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.2"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.3"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.3"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.4"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.4"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.5"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.5"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.6"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.6"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.7"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.7"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.8"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.8"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "SQ",
+            "data": [
+              {
+                "tag": "SN",
+                "value": "20"
+              },
+              {
+                "tag": "LN",
+                "value": "200000"
+              },
+              {
+                "tag": "M5",
+                "value": "fcb26df26fe47f4b364854e8371e465e"
+              },
+              {
+                "tag": "UR",
+                "value": "/home/chris/projects/htsjdk/testdata/htsjdk/samtools/cram/human_g1k_v37.20.21.10M-10M200k.fasta"
+              }
+            ]
+          },
+          {
+            "tag": "SQ",
+            "data": [
+              {
+                "tag": "SN",
+                "value": "21"
+              },
+              {
+                "tag": "LN",
+                "value": "200000"
+              },
+              {
+                "tag": "M5",
+                "value": "f02fab23cf86525e5ce048774c66a23d"
+              },
+              {
+                "tag": "UR",
+                "value": "/home/chris/projects/htsjdk/testdata/htsjdk/samtools/cram/human_g1k_v37.20.21.10M-10M200k.fasta"
+              }
+            ]
+          },
+          {
+            "tag": "PG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "GATK IndelRealigner"
+              },
+              {
+                "tag": "VN",
+                "value": "1.2-573-g821421d"
+              },
+              {
+                "tag": "CL",
+                "value": "knownAlleles=[(RodBinding name=knownAlleles source=/humgen/gsa-hpprojects/GATK/data/Comparisons/Validated/dbSNP/dbsnp_132_b37.leftAligned.vcf), (RodBinding name=knownAlleles2 source=/humgen/1kg/processing/official_release/phase1/projectConsensus/ALL.wgs.projectConsensus_v2b.20101123.snps.sites.vcf), (RodBinding name=knownAlleles3 source=/humgen/gsa-hpprojects/GATK/data/Comparisons/Unvalidated/AFR+EUR+ASN+1KG.dindel_august_release_merged_pilot1.20110126.sites.vcf)] LODThresholdForCleaning=5.0 consensusDeterminationModel=USE_READS entropyThreshold=0.15 maxReadsInMemory=150000 maxIsizeForMovement=3000 maxPositionalMoveAllowed=200 maxConsensuses=30 maxReadsForConsensuses=120 maxReadsForRealignment=20000 noOriginalAlignmentTags=false nWayOut=null generate_nWayOut_md5s=false check_early=false noPGTag=false keepPGTags=false indelsFileForDebugging=null statisticsFileForDebugging=null SNPsFileForDebugging=null"
+              }
+            ]
+          },
+          {
+            "tag": "PG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "GATK TableRecalibration"
+              },
+              {
+                "tag": "VN",
+                "value": "1.2-573-g821421d"
+              },
+              {
+                "tag": "CL",
+                "value": "default_read_group=null default_platform=null force_read_group=null force_platform=null window_size_nqs=5 homopolymer_nback=7 exception_if_no_tile=false solid_recal_mode=SET_Q_ZERO solid_nocall_strategy=THROW_EXCEPTION recal_file=/humgen/gsa-firehose2/carneiro/b37_decoy/CEUTrio.HiSeq.WGS.b37.NA12878.pre_recal.csv preserve_qscores_less_than=5 smoothing=1 max_quality_score=50 doNotWriteOriginalQuals=false no_pg_tag=false fail_with_no_eof_marker=false skipUQUpdate=false Covariates=[ReadGroupCovariate, QualityScoreCovariate, CycleCovariate, DinucCovariate] "
+              }
+            ]
+          },
+          {
+            "tag": "PG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "bwa"
+              },
+              {
+                "tag": "PN",
+                "value": "bwa"
+              },
+              {
+                "tag": "VN",
+                "value": "0.5.9-r16"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "samHeader": [
+          {
+            "tag": "HD",
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.5"
+              },
+              {
+                "tag": "GO",
+                "value": "none"
+              },
+              {
+                "tag": "SO",
+                "value": "coordinate"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.1"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.1"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.2"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.2"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.3"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.3"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.4"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.4"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.5"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.5"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.6"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.6"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.7"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.7"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20FUK.8"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20FUKAAXX100202.8"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.1"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.1"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.2"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.2"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.3"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.3"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.4"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.4"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.5"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.5"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.6"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.6"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.7"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.7"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18483"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "RG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "20GAV.8"
+              },
+              {
+                "tag": "PL",
+                "value": "illumina"
+              },
+              {
+                "tag": "PU",
+                "value": "20GAVAAXX100126.8"
+              },
+              {
+                "tag": "LB",
+                "value": "Solexa-18484"
+              },
+              {
+                "tag": "SM",
+                "value": "NA12878"
+              },
+              {
+                "tag": "CN",
+                "value": "BI"
+              }
+            ]
+          },
+          {
+            "tag": "SQ",
+            "data": [
+              {
+                "tag": "SN",
+                "value": "20"
+              },
+              {
+                "tag": "LN",
+                "value": "200000"
+              },
+              {
+                "tag": "M5",
+                "value": "fcb26df26fe47f4b364854e8371e465e"
+              },
+              {
+                "tag": "UR",
+                "value": "/home/chris/projects/htsjdk/testdata/htsjdk/samtools/cram/human_g1k_v37.20.21.10M-10M200k.fasta"
+              }
+            ]
+          },
+          {
+            "tag": "SQ",
+            "data": [
+              {
+                "tag": "SN",
+                "value": "21"
+              },
+              {
+                "tag": "LN",
+                "value": "200000"
+              },
+              {
+                "tag": "M5",
+                "value": "f02fab23cf86525e5ce048774c66a23d"
+              },
+              {
+                "tag": "UR",
+                "value": "/home/chris/projects/htsjdk/testdata/htsjdk/samtools/cram/human_g1k_v37.20.21.10M-10M200k.fasta"
+              }
+            ]
+          },
+          {
+            "tag": "PG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "GATK IndelRealigner"
+              },
+              {
+                "tag": "VN",
+                "value": "1.2-573-g821421d"
+              },
+              {
+                "tag": "CL",
+                "value": "knownAlleles=[(RodBinding name=knownAlleles source=/humgen/gsa-hpprojects/GATK/data/Comparisons/Validated/dbSNP/dbsnp_132_b37.leftAligned.vcf), (RodBinding name=knownAlleles2 source=/humgen/1kg/processing/official_release/phase1/projectConsensus/ALL.wgs.projectConsensus_v2b.20101123.snps.sites.vcf), (RodBinding name=knownAlleles3 source=/humgen/gsa-hpprojects/GATK/data/Comparisons/Unvalidated/AFR+EUR+ASN+1KG.dindel_august_release_merged_pilot1.20110126.sites.vcf)] LODThresholdForCleaning=5.0 consensusDeterminationModel=USE_READS entropyThreshold=0.15 maxReadsInMemory=150000 maxIsizeForMovement=3000 maxPositionalMoveAllowed=200 maxConsensuses=30 maxReadsForConsensuses=120 maxReadsForRealignment=20000 noOriginalAlignmentTags=false nWayOut=null generate_nWayOut_md5s=false check_early=false noPGTag=false keepPGTags=false indelsFileForDebugging=null statisticsFileForDebugging=null SNPsFileForDebugging=null"
+              }
+            ]
+          },
+          {
+            "tag": "PG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "GATK TableRecalibration"
+              },
+              {
+                "tag": "VN",
+                "value": "1.2-573-g821421d"
+              },
+              {
+                "tag": "CL",
+                "value": "default_read_group=null default_platform=null force_read_group=null force_platform=null window_size_nqs=5 homopolymer_nback=7 exception_if_no_tile=false solid_recal_mode=SET_Q_ZERO solid_nocall_strategy=THROW_EXCEPTION recal_file=/humgen/gsa-firehose2/carneiro/b37_decoy/CEUTrio.HiSeq.WGS.b37.NA12878.pre_recal.csv preserve_qscores_less_than=5 smoothing=1 max_quality_score=50 doNotWriteOriginalQuals=false no_pg_tag=false fail_with_no_eof_marker=false skipUQUpdate=false Covariates=[ReadGroupCovariate, QualityScoreCovariate, CycleCovariate, DinucCovariate] "
+              }
+            ]
+          },
+          {
+            "tag": "PG",
+            "data": [
+              {
+                "tag": "ID",
+                "value": "bwa"
+              },
+              {
+                "tag": "PN",
+                "value": "bwa"
+              },
+              {
+                "tag": "VN",
+                "value": "0.5.9-r16"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 1616,
+      "refSeqId": 0,
+      "refSeqStart": 100009,
+      "alignmentSpan": 102,
+      "numRecords": 7,
+      "recordCounter": 0,
+      "numBases": 707,
+      "numBlocks": 12,
+      "numLandmarks": 1,
+      "_endPosition": 1974,
+      "_size": 21,
+      "landmarks": [
+        592
+      ],
+      "crc32": 550143541
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "X0C",
+            "X1C",
+            "XGC",
+            "AMC",
+            "SMC",
+            "XMC",
+            "XOC",
+            "BQZ",
+            "MQC",
+            "OQZ",
+            "XTA"
+          ],
+          [
+            "X0C",
+            "X1C",
+            "XGC",
+            "AMC",
+            "SMC",
+            "XMC",
+            "XOC",
+            "MQC",
+            "OQZ",
+            "XTA"
+          ],
+          [
+            "X0C",
+            "X1C",
+            "XCC",
+            "XGC",
+            "AMC",
+            "SMC",
+            "XMC",
+            "XOC",
+            "MQC",
+            "OQZ",
+            "XTA"
+          ],
+          [
+            "XCC",
+            "OQZ"
+          ],
+          [
+            "X0C",
+            "X1C",
+            "XCC",
+            "XGC",
+            "AMC",
+            "SMC",
+            "XMC",
+            "XOC",
+            "BQZ",
+            "OQZ",
+            "XTA"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 19,
+          "parameters": {
+            "numCodes": 6,
+            "symbols": [
+              163,
+              1123,
+              69,
+              137,
+              147,
+              1107
+            ],
+            "numLengths": 6,
+            "bitLengths": [
+              2,
+              2,
+              3,
+              3,
+              3,
+              3
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              101
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              0,
+              1,
+              2
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 10,
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              4,
+              10,
+              2,
+              13
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              1,
+              0,
+              2
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 22,
+          "parameters": {
+            "numCodes": 5,
+            "symbols": [
+              99694,
+              100013,
+              100257,
+              99760,
+              100318
+            ],
+            "numLengths": 5,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 22,
+          "parameters": {
+            "numCodes": 5,
+            "symbols": [
+              -373,
+              0,
+              348,
+              -350,
+              409
+            ],
+            "numLengths": 5,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 12,
+          "parameters": {
+            "numCodes": 5,
+            "symbols": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "numLengths": 5,
+            "bitLengths": [
+              1,
+              3,
+              3,
+              3,
+              3
+            ]
+          }
+        },
+        "FN": {
+          "codecId": 3,
+          "parametersBytes": 10,
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              74,
+              75,
+              28,
+              45
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "FC": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 27
+          }
+        },
+        "FP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 28
+          }
+        },
+        "BS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 31
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "BA": {
+          "codecId": 3,
+          "parametersBytes": 10,
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              65,
+              84,
+              67,
+              71
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              60,
+              0,
+              37
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "XTA": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "SMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "AMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "X1C": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "MQC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "X0C": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XGC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XCC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "BQZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 3
+          }
+        },
+        "OQZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 2
+          }
+        },
+        "XOC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 2562,
+      "_size": 581,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "X0C",
+          "X1C",
+          "XGC",
+          "AMC",
+          "SMC",
+          "XMC",
+          "XOC",
+          "BQZ",
+          "MQC",
+          "OQZ",
+          "XTA"
+        ],
+        [
+          "X0C",
+          "X1C",
+          "XGC",
+          "AMC",
+          "SMC",
+          "XMC",
+          "XOC",
+          "MQC",
+          "OQZ",
+          "XTA"
+        ],
+        [
+          "X0C",
+          "X1C",
+          "XCC",
+          "XGC",
+          "AMC",
+          "SMC",
+          "XMC",
+          "XOC",
+          "MQC",
+          "OQZ",
+          "XTA"
+        ],
+        [
+          "XCC",
+          "OQZ"
+        ],
+        [
+          "X0C",
+          "X1C",
+          "XCC",
+          "XGC",
+          "AMC",
+          "SMC",
+          "XMC",
+          "XOC",
+          "BQZ",
+          "OQZ",
+          "XTA"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 1616,
+        "refSeqId": 0,
+        "refSeqStart": 100009,
+        "alignmentSpan": 102,
+        "numRecords": 7,
+        "recordCounter": 0,
+        "numBases": 707,
+        "numBlocks": 12,
+        "numLandmarks": 1,
+        "_endPosition": 1974,
+        "_size": 21,
+        "landmarks": [
+          592
+        ],
+        "crc32": 550143541
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 39,
+          "uncompressedSize": 39,
+          "_endPosition": 2614,
+          "_size": 43,
+          "contentPosition": 2571,
+          "content": {
+            "refSeqId": 0,
+            "refSeqStart": 100009,
+            "refSeqSpan": 102,
+            "numRecords": 7,
+            "recordCounter": 0,
+            "numBlocks": 10,
+            "numContentIds": 9,
+            "contentIds": [
+              1,
+              2,
+              3,
+              11,
+              12,
+              14,
+              27,
+              28,
+              31
+            ],
+            "refBaseBlockId": -1,
+            "md5": [
+              73,
+              32,
+              113,
+              10,
+              111,
+              150,
+              250,
+              156,
+              215,
+              123,
+              58,
+              33,
+              210,
+              178,
+              198,
+              190
+            ],
+            "_endPosition": 39,
+            "_size": -1935
+          },
+          "crc32": 49904416
+        },
+        "features": [
+          {
+            "tags": {
+              "X0": 1,
+              "X1": 0,
+              "XG": 0,
+              "AM": 37,
+              "SM": 37,
+              "XM": 0,
+              "XO": 0,
+              "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+              "MQ": 60,
+              "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGGHHHHHIHHHHHHHHHHHHHHHHHHHHHGBH6ADAAHHHHGB",
+              "XT": "U"
+            },
+            "flags": 163,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 2,
+            "readName": "a",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 4,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 12,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 13,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 19,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 25,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 70,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 79,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 103,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 0
+          },
+          {
+            "tags": {
+              "X0": 1,
+              "X1": 0,
+              "XG": 0,
+              "AM": 37,
+              "SM": 37,
+              "XM": 0,
+              "XO": 0,
+              "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+              "MQ": 60,
+              "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGEHHHHHIHHHHHHHHHHHHHHHHEHHHHHHHHHHHEFFFBF#",
+              "XT": "U"
+            },
+            "flags": 163,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 4,
+            "readName": "b",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 4,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 16,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 19,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 60
+          },
+          {
+            "tags": {
+              "X0": 1,
+              "X1": 0,
+              "XG": 0,
+              "AM": 37,
+              "SM": 37,
+              "XM": 0,
+              "XO": 0,
+              "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+              "MQ": 60,
+              "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHI",
+              "XT": "U"
+            },
+            "flags": 1123,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 2,
+            "readGroupId": 13,
+            "readName": "c",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 4,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 16,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 19,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              }
+            ],
+            "mappingQuality": 60
+          },
+          {
+            "tags": {
+              "X0": 1,
+              "X1": 0,
+              "XG": 0,
+              "AM": 37,
+              "SM": 37,
+              "XM": 0,
+              "XO": 0,
+              "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+              "MQ": 60,
+              "OQ": "@?A??A>AA@?A@@9??@BB@>A@@B@@AAAA@AA@A@ABAAA?AABBBB?AA>AAABBABAABBBABBBB?BBBBB@BB@BBB>?ABBBBBBBBABBBBB",
+              "XT": "U"
+            },
+            "flags": 1123,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 2,
+            "readGroupId": 10,
+            "readName": "d",
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 4,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 5,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 16,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 17,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 19,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 21,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 52,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              },
+              {
+                "operator": "S",
+                "position": 101,
+                "data": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTAC"
+              }
+            ],
+            "mappingQuality": 0
+          },
+          {
+            "tags": {
+              "XC": 1,
+              "OQ": "#############################################A9;FFEA=7775441555544454.+7=59A4544444/54/114.9@99FEEEEE"
+            },
+            "flags": 69,
+            "compressionFlags": 3,
+            "sequenceId": 0,
+            "readLength": 101,
+            "alignmentStart": 2,
+            "readGroupId": 4,
+            "readName": "e",
+            "readBases": "TTTCCATAGTGTAAAATGTTACTATGAAAAAAGTTTAACAAAACTGATGAAAAATTTGCCAAAAGACACTACAAACATCTCATTACAGAGATTGTGGAAGA"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 480,
+      "refSeqId": -1,
+      "refSeqStart": 0,
+      "alignmentSpan": 1,
+      "numRecords": 5,
+      "recordCounter": 7,
+      "numBases": 505,
+      "numBlocks": 8,
+      "numLandmarks": 1,
+      "_endPosition": 3613,
+      "_size": 23,
+      "landmarks": [
+        209
+      ],
+      "crc32": 2076630037
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "XCC",
+            "OQZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 7,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              77,
+              141
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              101
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              2
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "BA": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 30
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "OQZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 2
+          }
+        },
+        "XCC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 3818,
+      "_size": 198,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XCC",
+          "OQZ"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 480,
+        "refSeqId": -1,
+        "refSeqStart": 0,
+        "alignmentSpan": 1,
+        "numRecords": 5,
+        "recordCounter": 7,
+        "numBases": 505,
+        "numBlocks": 8,
+        "numLandmarks": 1,
+        "_endPosition": 3613,
+        "_size": 23,
+        "landmarks": [
+          209
+        ],
+        "crc32": 2076630037
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 37,
+          "uncompressedSize": 37,
+          "_endPosition": 3868,
+          "_size": 41,
+          "contentPosition": 3827,
+          "content": {
+            "refSeqId": -1,
+            "refSeqStart": 0,
+            "refSeqSpan": 1,
+            "numRecords": 5,
+            "recordCounter": 7,
+            "numBlocks": 6,
+            "numContentIds": 5,
+            "contentIds": [
+              1,
+              2,
+              11,
+              12,
+              30
+            ],
+            "refBaseBlockId": -1,
+            "md5": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "_endPosition": 37,
+            "_size": -3576
+          },
+          "crc32": 2853722550
+        },
+        "features": [
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 141,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "g",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 77,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "h",
+            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 141,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "h",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 77,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "i",
+            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 141,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "i",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "containerHeader": {
+      "length": 480,
+      "refSeqId": -1,
+      "refSeqStart": 0,
+      "alignmentSpan": 1,
+      "numRecords": 5,
+      "recordCounter": 7,
+      "numBases": 505,
+      "numBlocks": 8,
+      "numLandmarks": 1,
+      "_endPosition": 3613,
+      "_size": 23,
+      "landmarks": [
+        209
+      ],
+      "crc32": 2076630037
+    },
+    "compressionScheme": {
+      "preservation": {
+        "TD": [
+          [
+            "XCC",
+            "OQZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 7,
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              77,
+              141
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              101
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RG": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              2
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "BA": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 30
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "tagEncoding": {
+        "OQZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 2
+          }
+        },
+        "XCC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
+      },
+      "_endPosition": 3818,
+      "_size": 198,
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XCC",
+          "OQZ"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
+      "dataSeriesCodecCache": {},
+      "tagCodecCache": {}
+    },
+    "data": [
+      {
+        "length": 480,
+        "refSeqId": -1,
+        "refSeqStart": 0,
+        "alignmentSpan": 1,
+        "numRecords": 5,
+        "recordCounter": 7,
+        "numBases": 505,
+        "numBlocks": 8,
+        "numLandmarks": 1,
+        "_endPosition": 3613,
+        "_size": 23,
+        "landmarks": [
+          209
+        ],
+        "crc32": 2076630037
+      },
+      {
+        "header": {
+          "compressionMethod": "raw",
+          "contentType": "MAPPED_SLICE_HEADER",
+          "contentId": 0,
+          "compressedSize": 37,
+          "uncompressedSize": 37,
+          "_endPosition": 3868,
+          "_size": 41,
+          "contentPosition": 3827,
+          "content": {
+            "refSeqId": -1,
+            "refSeqStart": 0,
+            "refSeqSpan": 1,
+            "numRecords": 5,
+            "recordCounter": 7,
+            "numBlocks": 6,
+            "numContentIds": 5,
+            "contentIds": [
+              1,
+              2,
+              11,
+              12,
+              30
+            ],
+            "refBaseBlockId": -1,
+            "md5": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "_endPosition": 37,
+            "_size": -3576
+          },
+          "crc32": 2853722550
+        },
+        "features": [
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 141,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "g",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 77,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "h",
+            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 141,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "h",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 77,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "i",
+            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          },
+          {
+            "tags": {
+              "XC": 35,
+              "OQ": "#####################################################################################################"
+            },
+            "flags": 141,
+            "compressionFlags": 3,
+            "sequenceId": -1,
+            "readLength": 101,
+            "alignmentStart": 0,
+            "readGroupId": 0,
+            "readName": "i",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+          }
+        ]
+      }
+    ]
+  }
+]

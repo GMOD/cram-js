@@ -1,14 +1,17 @@
-const allFiles = `NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
+const allFiles = `
+NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
 NA12878.20.21.1-100.100-SeqsPerSlice.1-unMapped.cram
 NA12878.20.21.1-100.100-SeqsPerSlice.500-unMapped.cram
 amb#amb.2.1.cram
 amb#amb.3.0.cram
+auxf#test.cram
 auxf#values.2.1.cram
 auxf#values.3.0.cram
 auxf#values.tmp.cram
 c1#bounds.2.1.cram
 c1#bounds.3.0.cram
 c1#bounds.tmp.cram
+c1#bounds2_.2.1.cram
 c1#clip.2.1.cram
 c1#clip.3.0.cram
 c1#clip.tmp.cram
@@ -64,21 +67,20 @@ ce#unmap1.tmp.cram
 ce#unmap2.2.1.cram
 ce#unmap2.3.0.cram
 ce#unmap2.tmp.cram
-cramQueryTest.cram
-cramQueryTestEmpty.cram
-cramQueryWithBAI.cram
-cramQueryWithCRAI.cram
 cram_query_sorted.cram
-cram_with_bai_index.cram
-cram_with_crai_index.cram
 headernul.tmp.cram
+hg19mini#cramQueryTest.cram
+hg19mini#cramQueryTestEmpty.cram
+hg19mini#cram_with_bai_index.cram
+hg19mini#cram_with_crai_index.cram
+human_g1k_v37.20.21.10M-10M200k#cramQueryWithBAI.cram
+human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram
 md#1.tmp.cram
 nm_tag_validation.cram
 sam_alignment.tmp.cram
 samtoolsSliceMD5WithAmbiguityCodesTest.cram
-test.cram
-test2.cram
-testContigNotInRef.cram
+auxf#test2.cram
+testContigNotInRef#one.cram
 xx#blank.2.1.cram
 xx#blank.3.0.cram
 xx#blank.tmp.cram
@@ -110,9 +112,10 @@ xx#triplet.tmp.cram
 xx#unsorted.2.1.cram
 xx#unsorted.3.0.cram
 xx#unsorted.tmp.cram
-c1#bounds2_.2.1.cram`
+`
   .split(/\s+/)
-//  .filter(f => /c1#bounds.2.1.cram/.test(f))
+  .filter(f => !!f)
+  //.filter(f => /cram_with_crai_index.cram/.test(f))
 // .filter(f => /ce#1.2.1.cram/.test(f))
 
 const fullFiles = allFiles.filter(f => f !== 'cramQueryWithCRAI.cram')

@@ -10,10 +10,10 @@ const expectedFeatures1 = loadTestJSON(
 const expectedFeatures2 = loadTestJSON('ce#unmap2.tmp.cram.test1.expected.json')
 const expectedFeatures3 = loadTestJSON('ce#1000.tmp.cram.test1.expected.json')
 const expectedFeatures4 = loadTestJSON(
-  'cramQueryWithCRAI.cram.test1.expected.json',
+  'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
 )
 const expectedFeatures5 = loadTestJSON(
-  'cramQueryWithCRAI.cram.test2.expected.json',
+  'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
 )
 
 describe('.crai indexed cram file', () => {
@@ -57,10 +57,10 @@ describe('.crai indexed cram file', () => {
     expect(features).to.deep.equal(await expectedFeatures3)
   })
 
-  it('can read cramQueryWithCRAI.cram', async () => {
+  it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
     const cram = new IndexedCramFile({
-      cram: testDataFile('cramQueryWithCRAI.cram'),
-      index: new CramIndex(testDataFile('cramQueryWithCRAI.cram.crai')),
+      cram: testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram'),
+      index: new CramIndex(testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai')),
     })
 
     const features = await cram.getFeaturesForRange(0, 0, Infinity)

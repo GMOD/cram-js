@@ -21,7 +21,7 @@ const cram = require('@gmod/cram').default
 // or in ES6 (recommended)
 import {CramFile,IndexedCramFile} from '@gmod/cram'
 
-const bareFile = new CramFile('http://example.com/my.cram')
+const bareFile = new CramFile({ filehandle: 'http://example.com/my.cram'})
 
 const indexedFile = new IndexedCramFile('http://example.com/my.cram')
 // above will assume the index is at http://example.com/my.cram.crai

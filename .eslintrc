@@ -21,6 +21,7 @@
     "no-param-reassign": "warn",
     "prefer-arrow-callback": "warn",
     "prefer-destructuring": "warn",
+    "prefer-const": "warn",
     "class-methods-use-this": 0,
     "prettier/prettier": [
       "error",

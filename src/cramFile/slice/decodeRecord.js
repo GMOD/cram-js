@@ -31,8 +31,8 @@ class CramRecord {
 /** given a Buffer, read a string up to the first null character */
 function readNullTerminatedStringFromBuffer(buffer) {
   const zeroOffset = buffer.indexOf(0)
-  if (zeroOffset === -1) return buffer.toString('ascii')
-  return buffer.toString('ascii', 0, zeroOffset)
+  if (zeroOffset === -1) return buffer.toString('utf8')
+  return buffer.toString('utf8', 0, zeroOffset)
 }
 
 /** parse a BAM tag's array value from a binary buffer */
@@ -98,7 +98,7 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries, majorVersion) {
     if (type === 'character') {
       return String.fromCharCode(data)
     } else if (type === 'string') {
-      return data.toString('ascii')
+      return data.toString('utf8')
     } else if (type === 'numArray') {
       return data.toArray()
     }
@@ -177,7 +177,7 @@ function decodeRecord(
   cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded)
-    cramRecord.readName = decodeDataSeries('RN').toString('ascii') // new String(readNameCodec.readData(), charset)
+    cramRecord.readName = decodeDataSeries('RN').toString('utf8') // new String(readNameCodec.readData(), charset)
 
   // mate record
   if (cramRecord.isDetached()) {

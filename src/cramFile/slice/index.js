@@ -111,15 +111,30 @@ class CramSlice {
         }
 
         return {
-          seq: refBlock.data.toString('ascii'),
-          start: sliceHeader.refStart,
-          end: sliceHeader.refStart + sliceHeader.refSpan - 1,
-          span: sliceHeader.refSpan,
+          seq: refBlock.data.toString('utf8'),
+          start: sliceHeader.refSeqStart,
+          end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+          span: sliceHeader.refSeqSpan,
         }
       } else if (compressionScheme.referenceRequired) {
-        throw new CramUnimplementedError(
-          'out-of-file reference sequence fetching not yet implemented',
+        if (!this.file.fetchReferenceSequenceCallback)
+          throw new Error(
+            'reference sequence not embedded, and seqFetch callback not provided, cannot fetch reference sequence',
+          )
+
+        const seq = await this.file.fetchReferenceSequenceCallback(
+          sliceHeader.refSeqId,
+          sliceHeader.refSeqStart,
+          sliceHeader.refSeqSpan,
         )
+
+        return {
+          seq,
+          start: sliceHeader.refSeqStart,
+          end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+          span: sliceHeader.refSeqSpan,
+        }
+
         // if (fd.required_fields & SAM_SEQ)
         //     s.ref =
         //     cram_get_ref(fd, sliceHeader.ref_seq_id,
@@ -171,15 +186,13 @@ class CramSlice {
         const { seq, start, end } = refRegion
         const seqMd5 = md5(seq)
         const storedMd5 = sliceHeader.content.md5
-          .map(byte => byte.toString(16))
+          .map(byte => (byte < 15 ? '0' : '') + byte.toString(16))
           .join('')
         if (seqMd5 !== storedMd5)
           throw new CramMalformedError(
             `MD5 checksum reference mismatch for ref ${
               sliceHeader.content.refSeqId
-            } pos ${start}..${end}`,
-            `recorded MD5: ${storedMd5}`,
-            `calculated MD5: ${seqMd5}`,
+            } pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
           )
       }
     }

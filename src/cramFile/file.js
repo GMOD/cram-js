@@ -18,9 +18,10 @@ class CramFile {
    * @param {object} filehandle - a filehandle that implements the stat() and
    * read() methods of the Node filehandle API https://nodejs.org/api/fs.html#fs_class_filehandle
    */
-  constructor(filehandle) {
+  constructor({ filehandle, seqFetch }) {
     this.file = filehandle
     this.validateChecksums = true
+    this.fetchReferenceSequenceCallback = seqFetch
   }
 
   toString() {
@@ -64,7 +65,7 @@ class CramFile {
     // let textEnd = content.length - 1
     // while (textEnd >= textStart && !content[textEnd]) textEnd -= 1
     // trim off the trailing zeros
-    const text = content.toString('ascii', textStart, textStart + headerLength)
+    const text = content.toString('utf8', textStart, textStart + headerLength)
     return parseHeaderText(text)
   }
 

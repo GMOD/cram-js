@@ -75,7 +75,7 @@ describe('.crai reader', () => {
   })
 
   it('throws an error if you try to read cramQueryWithCRAI.cram as a .crai', () => {
-    const file = testDataFile('cramQueryWithCRAI.cram')
+    const file = testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram')
     const index = new CramIndex(file)
     const dataP = index.getIndex()
     return dataP.then(
@@ -89,7 +89,7 @@ describe('.crai reader', () => {
   })
 
   it('can read cramQueryWithCRAI.cram.crai', async () => {
-    const file = testDataFile('cramQueryWithCRAI.cram.crai')
+    const file = testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai')
     const index = new CramIndex(file)
     const data = await index.getIndex()
     // console.log(JSON.stringify(data, null, ' '))

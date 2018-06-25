@@ -63,7 +63,7 @@ const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
   length: 'size',
   formatter: /* istanbul ignore next */ buffer => {
     function makeTagSet(stringStart, stringEnd) {
-      const str = buffer.toString('ascii', stringStart, stringEnd)
+      const str = buffer.toString('utf8', stringStart, stringEnd)
       const tags = []
       for (let i = 0; i < str.length; i += 3) {
         tags.push(str.substr(i, 3))

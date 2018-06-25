@@ -4,7 +4,8 @@ const CramFile = require('./cramFile')
 
 class IndexedCramFile {
   constructor({ cram, index /* fasta, fastaIndex */ }) {
-    if (!(cram instanceof CramFile)) this.cram = new CramFile(cram)
+    if (!(cram instanceof CramFile))
+      this.cram = new CramFile({ filehandle: cram })
     else this.cram = cram
 
     this.index = index

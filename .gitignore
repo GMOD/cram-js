@@ -5,3 +5,5 @@ dist
 *.log
 .vscode/
 .nyc_output
+test/data/*.sam
+test/data/*.fai
