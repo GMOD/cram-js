@@ -1,3 +1,5 @@
+const IndexedFasta = require('./indexedFasta')
+
 function parseSmallFasta(text) {
   return text
     .split('>')
@@ -28,4 +30,4 @@ class FetchableSmallFasta {
   }
 }
 
-module.exports = { parseSmallFasta, FetchableSmallFasta }
+module.exports = { parseSmallFasta, FetchableSmallFasta, IndexedFasta }

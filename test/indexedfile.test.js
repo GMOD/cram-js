@@ -1,7 +1,8 @@
 const { expect } = require('chai')
 
-const { testDataFile, loadTestJSON } = require('./lib/util')
+const { testDataFile, loadTestJSON, extended } = require('./lib/util')
 const { IndexedCramFile } = require('../src/index')
+const IndexedFastaFile = require('./lib/fasta/indexedFasta')
 const CramIndex = require('../src/cramIndex')
 
 const expectedFeatures1 = loadTestJSON(
@@ -59,8 +60,14 @@ describe('.crai indexed cram file', () => {
 
   it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
     const cram = new IndexedCramFile({
-      cram: testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram'),
-      index: new CramIndex(testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai')),
+      cram: testDataFile(
+        'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram',
+      ),
+      index: new CramIndex(
+        testDataFile(
+          'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
+        ),
+      ),
     })
 
     const features = await cram.getFeaturesForRange(0, 0, Infinity)
@@ -145,4 +152,32 @@ describe('.crai indexed cram file', () => {
       expect(features.length).to.be.greaterThan(-1)
     })
   })
+
+  extended(
+    'can fetch some regions of tomato example data correctly',
+    async () => {
+      const fasta = new IndexedFastaFile({
+        fasta: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa'),
+        fai: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa.fai'),
+      })
+      const cram = new IndexedCramFile({
+        cram: testDataFile('extended/RNAseq_mapping_def.cram'),
+        index: new CramIndex(
+          testDataFile('extended/RNAseq_mapping_def.cram.crai'),
+        ),
+        // seqFetch: fasta.fetch.bind(fasta),
+      })
+
+      const features = await cram.getFeaturesForRange(1, 20000, 30000)
+      // require('fs').writeFileSync(
+      //   `test/data/extended/RNAseq_mapping_def.cram.test1.expected.json`,
+      //   JSON.stringify(features, null, '  '),
+      // )
+      const expectedFeatures = await loadTestJSON(
+        'extended/RNAseq_mapping_def.cram.test1.expected.json',
+      )
+
+      expect(features).to.deep.equal(expectedFeatures)
+    },
+  )
 })

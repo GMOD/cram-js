@@ -3,9 +3,9 @@ const { CramUnimplementedError } = require('./errors')
 const CramFile = require('./cramFile')
 
 class IndexedCramFile {
-  constructor({ cram, index /* fasta, fastaIndex */ }) {
+  constructor({ cram, index, seqFetch /* fasta, fastaIndex */ }) {
     if (!(cram instanceof CramFile))
-      this.cram = new CramFile({ filehandle: cram })
+      this.cram = new CramFile({ filehandle: cram, seqFetch })
     else this.cram = cram
 
     this.index = index
