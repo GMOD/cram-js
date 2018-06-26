@@ -118,9 +118,7 @@ xx#unsorted.tmp.cram
   //.filter(f => /cram_with_crai_index.cram/.test(f))
 // .filter(f => /ce#1.2.1.cram/.test(f))
 
-const fullFiles = allFiles.filter(f => f !== 'cramQueryWithCRAI.cram')
-
 module.exports = {
   allFiles,
-  fullFiles,
+  fullFiles: allFiles,
 }

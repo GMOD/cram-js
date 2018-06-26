@@ -508,8 +508,8 @@
               126,
               99
             ],
-            "_endPosition": 30,
-            "_size": -240
+            "_endPosition": 300,
+            "_size": 30
           },
           "crc32": 2667260533
         },
@@ -840,8 +840,8 @@
               67,
               220
             ],
-            "_endPosition": 32,
-            "_size": -548
+            "_endPosition": 612,
+            "_size": 32
           },
           "crc32": 3600313399
         },
@@ -1233,8 +1233,8 @@
               0,
               0
             ],
-            "_endPosition": 37,
-            "_size": -908
+            "_endPosition": 982,
+            "_size": 37
           },
           "crc32": 3740379859
         },
@@ -1637,8 +1637,8 @@
               0,
               0
             ],
-            "_endPosition": 37,
-            "_size": -908
+            "_endPosition": 982,
+            "_size": 37
           },
           "crc32": 3740379859
         },

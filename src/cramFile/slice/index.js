@@ -30,12 +30,14 @@ class CramSlice {
       header.content = parseItem(
         header.content,
         sectionParsers.cramMappedSliceHeader.parser,
+        0,
         containerHeader._endPosition,
       )
     } else if (header.contentType === 'UNMAPPED_SLICE_HEADER') {
       header.content = parseItem(
         header.content,
         sectionParsers.cramUnmappedSliceHeader.parser,
+        0,
         containerHeader._endPosition,
       )
     } else {
