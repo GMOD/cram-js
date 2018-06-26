@@ -5,7 +5,7 @@ const {
   CramUnimplementedError,
   CramBufferOverrunError,
 } = require('../../errors')
-const { parseItem } = require('../util')
+const { parseItem, tinyMemoize } = require('../util')
 
 // const decodeSeqAndQual = require('./decodeSeqAndQual')
 const decodeSliceXref = require('./decodeSliceXref')
@@ -261,5 +261,10 @@ class CramSlice {
     return records
   }
 }
+
+// memoize several methods in the class for performance
+'getHeader getBlocks _getBlocksContentIdIndex'
+  .split(' ')
+  .forEach(method => tinyMemoize(CramSlice, method))
 
 module.exports = CramSlice

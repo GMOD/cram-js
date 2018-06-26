@@ -140,8 +140,8 @@ module.exports = {
   tinyMemoize(_class, methodName) {
     const method = _class.prototype[methodName]
     const memoAttrName = `_memo_${methodName}`
-    _class.prototype[methodName] = function _tinyMemoizedMethod() {
-      if (!this[memoAttrName]) this[memoAttrName] = method.call(this)
+    _class.prototype[methodName] = function _tinyMemoized() {
+      if (!(memoAttrName in this)) this[memoAttrName] = method.call(this)
       return this[memoAttrName]
     }
   },

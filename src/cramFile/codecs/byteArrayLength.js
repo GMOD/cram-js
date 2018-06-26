@@ -1,4 +1,5 @@
 const { CramUnimplementedError } = require('../../errors')
+const { tinyMemoize } = require('../util')
 
 const CramCodec = require('./_base')
 
@@ -44,11 +45,16 @@ class ByteArrayStopCodec extends CramCodec {
     return this.instantiateCodec(encodingParams, 'int')
   }
 
+  // memoize
   _getDataCodec() {
     const encodingParams = this.parameters.valuesEncoding
 
     return this.instantiateCodec(encodingParams, 'byte')
   }
 }
+
+'_getLengthCodec _getDataCodec'
+  .split(' ')
+  .forEach(method => tinyMemoize(ByteArrayStopCodec, method))
 
 module.exports = ByteArrayStopCodec

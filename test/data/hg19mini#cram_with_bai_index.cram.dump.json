@@ -564,7 +564,792 @@
           "G"
         ]
       ],
-      "dataSeriesCodecCache": {},
+      "dataSeriesCodecCache": {
+        "BF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              67
+            ]
+          },
+          "codes": {
+            "67": {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            67
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "CF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              3
+            ]
+          },
+          "codes": {
+            "3": {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            3
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "AP": {
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              0,
+              5,
+              100,
+              790
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              2
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "2": [
+              0,
+              5,
+              100,
+              790
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 0
+            },
+            "5": {
+              "bitLength": 2,
+              "value": 5,
+              "bitCode": 1
+            },
+            "100": {
+              "bitLength": 2,
+              "value": 100,
+              "bitCode": 2
+            },
+            "790": {
+              "bitLength": 2,
+              "value": 790,
+              "bitCode": 3
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 5,
+              "bitCode": 1
+            },
+            {
+              "bitLength": 2,
+              "value": 100,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 2,
+              "value": 790,
+              "bitCode": 3
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 5,
+              "bitCode": 1
+            },
+            {
+              "bitLength": 2,
+              "value": 100,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 2,
+              "value": 790,
+              "bitCode": 3
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            5,
+            100,
+            790
+          ],
+          "sortedBitCodes": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "sortedBitLengthsByBitCode": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "bitCodeToValue": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "RG": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RN": {
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 2
+              }
+            }
+          },
+          "dataType": "byteArray",
+          "_memo__getLengthCodec": {
+            "parameters": {
+              "numCodes": 1,
+              "symbols": [
+                1
+              ],
+              "numLengths": 1,
+              "bitLengths": [
+                0
+              ]
+            },
+            "dataType": "int",
+            "codeBook": {
+              "0": [
+                1
+              ]
+            },
+            "codes": {
+              "1": {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            },
+            "sortedCodes": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedByValue": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedValuesByBitCode": [
+              1
+            ],
+            "sortedBitCodes": [
+              0
+            ],
+            "sortedBitLengthsByBitCode": [
+              0
+            ],
+            "bitCodeToValue": [
+              0
+            ]
+          },
+          "_memo__getDataCodec": {
+            "parameters": {
+              "blockContentId": 2
+            },
+            "dataType": "byte"
+          }
+        },
+        "TL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FN": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FC": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              88
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "0": [
+              88
+            ]
+          },
+          "codes": {
+            "88": {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            88
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "BS": {
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "1": [
+              0
+            ],
+            "2": [
+              1
+            ],
+            "3": [
+              2,
+              3
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            "2": {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            "3": {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            -1,
+            -1,
+            -1,
+            2,
+            3
+          ]
+        },
+        "MQ": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        }
+      },
       "tagCodecCache": {}
     },
     "data": [
@@ -3020,7 +3805,773 @@
           "G"
         ]
       ],
-      "dataSeriesCodecCache": {},
+      "dataSeriesCodecCache": {
+        "BF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              67
+            ]
+          },
+          "codes": {
+            "67": {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            67
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "CF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              3
+            ]
+          },
+          "codes": {
+            "3": {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            3
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "AP": {
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              0,
+              50,
+              100
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              2,
+              2,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              100
+            ],
+            "2": [
+              0,
+              50
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 2
+            },
+            "50": {
+              "bitLength": 2,
+              "value": 50,
+              "bitCode": 3
+            },
+            "100": {
+              "bitLength": 1,
+              "value": 100,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 100,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 2,
+              "value": 50,
+              "bitCode": 3
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 2,
+              "value": 50,
+              "bitCode": 3
+            },
+            {
+              "bitLength": 1,
+              "value": 100,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            100,
+            0,
+            50
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            3
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            2
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            2
+          ]
+        },
+        "RG": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RN": {
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 2
+              }
+            }
+          },
+          "dataType": "byteArray",
+          "_memo__getLengthCodec": {
+            "parameters": {
+              "numCodes": 1,
+              "symbols": [
+                1
+              ],
+              "numLengths": 1,
+              "bitLengths": [
+                0
+              ]
+            },
+            "dataType": "int",
+            "codeBook": {
+              "0": [
+                1
+              ]
+            },
+            "codes": {
+              "1": {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            },
+            "sortedCodes": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedByValue": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedValuesByBitCode": [
+              1
+            ],
+            "sortedBitCodes": [
+              0
+            ],
+            "sortedBitLengthsByBitCode": [
+              0
+            ],
+            "bitCodeToValue": [
+              0
+            ]
+          },
+          "_memo__getDataCodec": {
+            "parameters": {
+              "blockContentId": 2
+            },
+            "dataType": "byte"
+          }
+        },
+        "TL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FN": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FC": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              88
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "0": [
+              88
+            ]
+          },
+          "codes": {
+            "88": {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            88
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "BS": {
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "1": [
+              0
+            ],
+            "2": [
+              1
+            ],
+            "3": [
+              2,
+              3
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            "2": {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            "3": {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            -1,
+            -1,
+            -1,
+            2,
+            3
+          ]
+        },
+        "MQ": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        }
+      },
       "tagCodecCache": {}
     },
     "data": [
@@ -4688,7 +6239,748 @@
           "G"
         ]
       ],
-      "dataSeriesCodecCache": {},
+      "dataSeriesCodecCache": {
+        "BF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              67
+            ]
+          },
+          "codes": {
+            "67": {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            67
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "CF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              3
+            ]
+          },
+          "codes": {
+            "3": {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            3
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "AP": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              0,
+              100
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              0,
+              100
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "100": {
+              "bitLength": 1,
+              "value": 100,
+              "bitCode": 1
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 100,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 100,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            100
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
+        "RG": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RN": {
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 2
+              }
+            }
+          },
+          "dataType": "byteArray",
+          "_memo__getLengthCodec": {
+            "parameters": {
+              "numCodes": 1,
+              "symbols": [
+                1
+              ],
+              "numLengths": 1,
+              "bitLengths": [
+                0
+              ]
+            },
+            "dataType": "int",
+            "codeBook": {
+              "0": [
+                1
+              ]
+            },
+            "codes": {
+              "1": {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            },
+            "sortedCodes": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedByValue": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedValuesByBitCode": [
+              1
+            ],
+            "sortedBitCodes": [
+              0
+            ],
+            "sortedBitLengthsByBitCode": [
+              0
+            ],
+            "bitCodeToValue": [
+              0
+            ]
+          },
+          "_memo__getDataCodec": {
+            "parameters": {
+              "blockContentId": 2
+            },
+            "dataType": "byte"
+          }
+        },
+        "TL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FN": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FC": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              88
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "0": [
+              88
+            ]
+          },
+          "codes": {
+            "88": {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            88
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "BS": {
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "1": [
+              0
+            ],
+            "2": [
+              1
+            ],
+            "3": [
+              2,
+              3
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            "2": {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            "3": {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            -1,
+            -1,
+            -1,
+            2,
+            3
+          ]
+        },
+        "MQ": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        }
+      },
       "tagCodecCache": {}
     },
     "data": [
@@ -5961,7 +8253,726 @@
           "G"
         ]
       ],
-      "dataSeriesCodecCache": {},
+      "dataSeriesCodecCache": {
+        "BF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              67
+            ]
+          },
+          "codes": {
+            "67": {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            67
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "CF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              3
+            ]
+          },
+          "codes": {
+            "3": {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            3
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "AP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RG": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RN": {
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 2
+              }
+            }
+          },
+          "dataType": "byteArray",
+          "_memo__getLengthCodec": {
+            "parameters": {
+              "numCodes": 1,
+              "symbols": [
+                1
+              ],
+              "numLengths": 1,
+              "bitLengths": [
+                0
+              ]
+            },
+            "dataType": "int",
+            "codeBook": {
+              "0": [
+                1
+              ]
+            },
+            "codes": {
+              "1": {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            },
+            "sortedCodes": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedByValue": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedValuesByBitCode": [
+              1
+            ],
+            "sortedBitCodes": [
+              0
+            ],
+            "sortedBitLengthsByBitCode": [
+              0
+            ],
+            "bitCodeToValue": [
+              0
+            ]
+          },
+          "_memo__getDataCodec": {
+            "parameters": {
+              "blockContentId": 2
+            },
+            "dataType": "byte"
+          }
+        },
+        "TL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FN": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FC": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              88
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "0": [
+              88
+            ]
+          },
+          "codes": {
+            "88": {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            88
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "BS": {
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "1": [
+              0
+            ],
+            "2": [
+              1
+            ],
+            "3": [
+              2,
+              3
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            "2": {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            "3": {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            -1,
+            -1,
+            -1,
+            2,
+            3
+          ]
+        },
+        "MQ": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        }
+      },
       "tagCodecCache": {}
     },
     "data": [
@@ -6841,7 +9852,726 @@
           "G"
         ]
       ],
-      "dataSeriesCodecCache": {},
+      "dataSeriesCodecCache": {
+        "BF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              67
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              67
+            ]
+          },
+          "codes": {
+            "67": {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 67,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            67
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "CF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              3
+            ]
+          },
+          "codes": {
+            "3": {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 3,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            3
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "AP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RG": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "RN": {
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 2
+              }
+            }
+          },
+          "dataType": "byteArray",
+          "_memo__getLengthCodec": {
+            "parameters": {
+              "numCodes": 1,
+              "symbols": [
+                1
+              ],
+              "numLengths": 1,
+              "bitLengths": [
+                0
+              ]
+            },
+            "dataType": "int",
+            "codeBook": {
+              "0": [
+                1
+              ]
+            },
+            "codes": {
+              "1": {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            },
+            "sortedCodes": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedByValue": [
+              {
+                "bitLength": 0,
+                "value": 1,
+                "bitCode": 0
+              }
+            ],
+            "sortedValuesByBitCode": [
+              1
+            ],
+            "sortedBitCodes": [
+              0
+            ],
+            "sortedBitLengthsByBitCode": [
+              0
+            ],
+            "bitCodeToValue": [
+              0
+            ]
+          },
+          "_memo__getDataCodec": {
+            "parameters": {
+              "blockContentId": 2
+            },
+            "dataType": "byte"
+          }
+        },
+        "TL": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FN": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              76
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              76
+            ]
+          },
+          "codes": {
+            "76": {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 76,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            76
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FC": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              88
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "0": [
+              88
+            ]
+          },
+          "codes": {
+            "88": {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 88,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            88
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "FP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "BS": {
+          "parameters": {
+            "numCodes": 4,
+            "symbols": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "numLengths": 4,
+            "bitLengths": [
+              1,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "byte",
+          "codeBook": {
+            "1": [
+              0
+            ],
+            "2": [
+              1
+            ],
+            "3": [
+              2,
+              3
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            "2": {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            "3": {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 1,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 2,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 3,
+              "bitCode": 7
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            -1,
+            -1,
+            -1,
+            2,
+            3
+          ]
+        },
+        "MQ": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        }
+      },
       "tagCodecCache": {}
     },
     "data": [

@@ -1,6 +1,6 @@
 const { CramMalformedError } = require('../../errors')
 
-const { itf8Size, parseItem } = require('../util')
+const { itf8Size, parseItem, tinyMemoize } = require('../util')
 const CramSlice = require('../slice')
 const CramContainerCompressionScheme = require('./compressionScheme')
 
@@ -13,38 +13,35 @@ class CramContainer {
     // console.log(`container: ${this.filePosition}`)
   }
 
+  // memoize
   getHeader() {
-    if (!this._header)
-      this._header = this._readContainerHeader(this.filePosition)
-    return this._header
+    return this._readContainerHeader(this.filePosition)
   }
 
+  // memoize
   async getCompressionHeaderBlock() {
-    if (!this._compressionBlock) {
-      const containerHeader = await this.getHeader()
+    const containerHeader = await this.getHeader()
 
-      // if there are no records in the container, there will be no compression header
-      if (!containerHeader.numRecords) {
-        this._compressionBlock = null
-      } else {
-        const sectionParsers = await this.file.getSectionParsers()
-        this._compressionBlock = await this.getFirstBlock()
-        if (this._compressionBlock.contentType !== 'COMPRESSION_HEADER')
-          throw new CramMalformedError(
-            `invalid content type ${
-              this._compressionBlock.contentType
-            } in what is supposed to be the compression header block`,
-          )
-        const content = parseItem(
-          this._compressionBlock.content,
-          sectionParsers.cramCompressionHeader.parser,
-          0,
-          this._compressionBlock.contentPosition,
-        )
-        this._compressionBlock.content = content
-      }
+    // if there are no records in the container, there will be no compression header
+    if (!containerHeader.numRecords) {
+      return null
     }
-    return this._compressionBlock
+    const sectionParsers = await this.file.getSectionParsers()
+    const block = await this.getFirstBlock()
+    if (block.contentType !== 'COMPRESSION_HEADER')
+      throw new CramMalformedError(
+        `invalid content type ${
+          block.contentType
+        } in what is supposed to be the compression header block`,
+      )
+    const content = parseItem(
+      block.content,
+      sectionParsers.cramCompressionHeader.parser,
+      0,
+      block.contentPosition,
+    )
+    block.content = content
+    return block
   }
 
   async getFirstBlock() {
@@ -117,5 +114,9 @@ class CramContainer {
     return completeHeader
   }
 }
+
+'getHeader getCompressionHeaderBlock getCompressionScheme'
+  .split(' ')
+  .forEach(method => tinyMemoize(CramContainer, method))
 
 module.exports = CramContainer

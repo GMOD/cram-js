@@ -10,7 +10,7 @@ const {
 
 const CramContainer = require('./container')
 
-const { parseItem } = require('./util')
+const { parseItem, tinyMemoize } = require('./util')
 const { parseHeaderText } = require('../sam')
 
 class CramFile {
@@ -41,7 +41,7 @@ class CramFile {
     return this.file.stat()
   }
 
-  // memoize
+  // memoized
   async getDefinition() {
     const headbytes = Buffer.allocUnsafe(cramFileDefinitionParser.maxLength)
     await this.file.read(headbytes, 0, cramFileDefinitionParser.maxLength, 0)
@@ -53,6 +53,7 @@ class CramFile {
     return definition
   }
 
+  // memoize
   async getSamHeader() {
     const firstContainer = await this.getContainerById(0)
     if (!firstContainer)
@@ -69,12 +70,10 @@ class CramFile {
     return parseHeaderText(text)
   }
 
+  // memoize
   async getSectionParsers() {
-    if (!this._sectionParsers) {
-      const { majorVersion } = await this.getDefinition()
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
-    return this._sectionParsers
+    const { majorVersion } = await this.getDefinition()
+    return getSectionParsers(majorVersion)
   }
 
   async getContainerById(containerNumber) {
@@ -284,5 +283,9 @@ class CramFile {
     return block
   }
 }
+
+'getDefinition getSectionParsers getSamHeader'
+  .split(' ')
+  .forEach(method => tinyMemoize(CramFile, method))
 
 module.exports = CramFile
