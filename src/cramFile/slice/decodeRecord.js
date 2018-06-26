@@ -118,7 +118,7 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries, majorVersion) {
     // map of operator name -> data series name
     const data1Schema = {
       B: ['character', 'BA'],
-      S: ['string', majorVersion > 1 ? 'SC' : 'IN'], // TODO: 'IN' if cram v1
+      S: ['string', majorVersion > 1 ? 'SC' : 'IN'], // IN if cram v1, SC otherwise
       X: ['number', 'BS'],
       D: ['number', 'DL'],
       I: ['string', 'IN'],
