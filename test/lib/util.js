@@ -1,3 +1,4 @@
+const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
 const { fromUrl } = require('./io')
 
 function testDataUrl(filename) {
@@ -17,8 +18,20 @@ async function loadTestJSON(filename) {
   return JSON.parse(text)
 }
 
+let extended = xit
+try {
+  if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`)))
+    extended = it
+} catch (e) {
+  // ignore
+  console.log(
+    'extended tests disabled, download the extended test dataset and fix all the symlinks in tests/data/extended to enable them',
+  )
+}
+
 module.exports = {
   testDataUrl,
   testDataFile,
   loadTestJSON,
+  extended,
 }

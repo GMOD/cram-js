@@ -2,7 +2,7 @@ const { expect } = require('chai')
 const { CramFile } = require('../src')
 
 const { fromUrl } = require('./lib/io')
-const { testDataFile } = require('./lib/util')
+const { testDataFile, extended } = require('./lib/util')
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {
@@ -40,11 +40,9 @@ describe('CRAM reader', () => {
     })
   })
 
-  xit('can read a bigger cram file', async () => {
+  extended('can read a bigger cram file', async () => {
     const file = new CramFile({
-      filehandle: fromUrl(
-        'file:///Users/rbuels/dev/sample_data/insilico_21.cram',
-      ),
+      filehandle: testDataFile('extended/insilico_21.cram'),
     })
     expect(await file.getDefinition()).to.deep.equal({
       fileId: '21_1mil.cram',
@@ -68,11 +66,9 @@ describe('CRAM reader', () => {
       refSeqStart: 0,
     })
   })
-  xit('can read an even bigger cram file', async () => {
+  extended('can read an even bigger cram file', async () => {
     const file = new CramFile({
-      filehandle: fromUrl(
-        'file:///Users/rbuels/dev/sample_data/SGN/RNAseq_mapping_def.cram',
-      ),
+      filehandle: testDataFile('extended/RNAseq_mapping_def.cram'),
     })
     expect(await file.getDefinition()).to.deep.equal({
       fileId: '-',
@@ -81,7 +77,7 @@ describe('CRAM reader', () => {
       minorVersion: 0,
     })
     expect(await (await file.getContainerById(1)).getHeader()).to.deep.equal({
-      alignmentSpan: 529350,
+      alignmentSpan: 574995,
       crc32: 2139737710,
       _size: 24,
       _endPosition: 1178,
