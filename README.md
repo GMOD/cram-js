@@ -6,9 +6,9 @@
 
 Read CRAM files (indexed or unindexed) in node or in the browser.
 
-- Supports CRAM 3.x and 2.x
-- Does not support CRAM 1.x
-- Will eventually be published on npm as @gmod/cram
+-   Supports CRAM 3.x and 2.x
+-   Does not support CRAM 1.x
+-   Will eventually be published on npm as @gmod/cram
 
 ## Install
 
@@ -55,9 +55,11 @@ const features = await indexedFile.getFeaturesForRange('chr1', 10000, 20000)
 **Parameters**
 
 -   `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
-    -   `args.filehandle` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** a filehandle that implements the stat() and
+    -   `args.filehandle` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** a filehandle that implements the stat() and
         read() methods of the Node filehandle API <https://nodejs.org/api/fs.html#fs_class_filehandle>
-    -   `args.seqFetch` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)** a function with signature
+    -   `args.path` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** path to the cram file
+    -   `args.url` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** url for the cram file.  also supports file:// urls for local files
+    -   `args.seqFetch` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)?** a function with signature
         `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
 
 #### containerCount
