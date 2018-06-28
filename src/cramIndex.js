@@ -3,6 +3,7 @@ const zlib = require('zlib')
 
 const gunzip = promisify(zlib.gunzip)
 
+const { open } = require('./io')
 const { CramMalformedError } = require('./errors')
 
 class CramIndex {
@@ -14,7 +15,8 @@ class CramIndex {
   // 5. Slice start byte position in the container data (‘blocks’)
   // 6. Slice size in bytes
   // Each line represents a slice in the CRAM file. Please note that all slices must be listed in index file.
-  constructor(filehandle) {
+  constructor(args) {
+    const filehandle = open(args.url, args.path, args.filehandle)
     this.readFile = filehandle.readFile.bind(filehandle)
     this.index = this.parseIndex()
   }

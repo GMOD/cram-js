@@ -1,5 +1,5 @@
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
-const { fromUrl } = require('./io')
+const { fromUrl } = require('../../src/io')
 
 function testDataUrl(filename) {
   return typeof window === 'undefined'

@@ -3,12 +3,22 @@ const { CramUnimplementedError } = require('./errors')
 const CramFile = require('./cramFile')
 
 class IndexedCramFile {
-  constructor({ cram, index, seqFetch /* fasta, fastaIndex */ }) {
-    if (!(cram instanceof CramFile))
-      this.cram = new CramFile({ filehandle: cram, seqFetch })
-    else this.cram = cram
+  constructor(args) {
+    // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
+    if (args.cram) this.cram = args.cram
+    else
+      this.cram = new CramFile({
+        url: args.cramUrl,
+        path: args.cramPath,
+        filehandle: args.cramFilehandle,
+      })
 
-    this.index = index
+    if (!(this.cram instanceof CramFile))
+      throw new Error('invalid arguments: no cramfile')
+
+    this.index = args.index
+    if (!this.index.getEntriesForRange)
+      throw new Error('invalid arguments: not an index')
   }
 
   async getFeaturesForRange(seq, start, end) {

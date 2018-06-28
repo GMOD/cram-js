@@ -10,21 +10,24 @@ const {
 
 const CramContainer = require('./container')
 
+const { open } = require('../io')
 const { parseItem, tinyMemoize } = require('./util')
 const { parseHeaderText } = require('../sam')
 
 class CramFile {
   /**
    * @param {object} args
-   * @param {object} args.filehandle - a filehandle that implements the stat() and
+   * @param {object} [args.filehandle] - a filehandle that implements the stat() and
    * read() methods of the Node filehandle API https://nodejs.org/api/fs.html#fs_class_filehandle
-   * @param {function} args.seqFetch - a function with signature
+   * @param {object} [args.path] - path to the cram file
+   * @param {object} [args.url] - url for the cram file.  also supports file:// urls for local files
+   * @param {function} [args.seqFetch] - a function with signature
    * `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
    */
-  constructor({ filehandle, seqFetch }) {
-    this.file = filehandle
+  constructor(args) {
+    this.file = open(args.url, args.path, args.filehandle)
     this.validateChecksums = true
-    this.fetchReferenceSequenceCallback = seqFetch
+    this.fetchReferenceSequenceCallback = args.seqFetch
   }
 
   toString() {

@@ -17,24 +17,29 @@ Read CRAM files (indexed or unindexed) in node or in the browser.
 ## Usage
 
 ```js
-const { IndexedCramFile, CramFile } = require('@gmod/cram')
+const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 
-// working with remote URLs
+// open remote URLs
 const bareFile = new CramFile({ url: 'http://example.com/my.cram'})
 const indexedFile = new IndexedCramFile({
   cramUrl: 'http://example.com/my.cram',
-  craiUrl: 'http://example.com/my.cram.crai',
+  index: new CraiIndex({ url: 'http://example.com/my.cram.crai' }),
 })
 
 // or with local files
-const bareFile = new CramFile({ path: '/path/to/my.cram'})
+const bareFile = new CramFile({ path: '/path/to/my.cram' })
 const indexedFile = new IndexedCramFile({
   cramPath: '/path/to/my.cram',
-  craiPath: '/path/to/my.cram.crai',
+  index: new CraiIndex({ path: '/path/to/my.cram.crai' })
 })
+
+// fetch features from an indexed CRAM file
+const features = await indexedFile.getFeaturesForRange(0, 10000, 20000)
+// can use either a numeric ref seq id or a string ref seq name
+const features = await indexedFile.getFeaturesForRange('chr1', 10000, 20000)
 ```
 
-## API
+## API (auto-generated)
 
 ### CramFile
 

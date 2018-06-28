@@ -1,7 +1,6 @@
 const { expect } = require('chai')
 const { CramFile } = require('../src')
 
-const { fromUrl } = require('./lib/io')
 const { testDataFile, extended } = require('./lib/util')
 
 describe('CRAM reader', () => {

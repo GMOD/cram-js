@@ -6,8 +6,8 @@ const CramIndex = require('../src/cramIndex')
 
 describe('.crai reader', () => {
   it('can read xx#unsorted.tmp.cram.crai', async () => {
-    const file = testDataFile('xx#unsorted.tmp.cram.crai')
-    const index = new CramIndex(file)
+    const filehandle = testDataFile('xx#unsorted.tmp.cram.crai')
+    const index = new CramIndex({ filehandle })
     let data = await index.getIndex()
     expect(data).to.deep.equal({
       '0': [
@@ -75,8 +75,10 @@ describe('.crai reader', () => {
   })
 
   it('throws an error if you try to read cramQueryWithCRAI.cram as a .crai', () => {
-    const file = testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram')
-    const index = new CramIndex(file)
+    const filehandle = testDataFile(
+      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram',
+    )
+    const index = new CramIndex({ filehandle })
     const dataP = index.getIndex()
     return dataP.then(
       () => {
@@ -89,8 +91,10 @@ describe('.crai reader', () => {
   })
 
   it('can read cramQueryWithCRAI.cram.crai', async () => {
-    const file = testDataFile('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai')
-    const index = new CramIndex(file)
+    const filehandle = testDataFile(
+      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
+    )
+    const index = new CramIndex({ filehandle })
     const data = await index.getIndex()
     // console.log(JSON.stringify(data, null, ' '))
     expect(data).to.deep.equal({
