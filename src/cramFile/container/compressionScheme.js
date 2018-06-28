@@ -85,8 +85,8 @@ class CramContainerCompressionScheme {
   }
 
   /**
-   *
    * @param {string} tagName three-character tag name
+   * @private
    */
   getCodecForTag(tagName) {
     if (!this.tagCodecCache[tagName]) {
@@ -104,6 +104,7 @@ class CramContainerCompressionScheme {
   /**
    *
    * @param {number} tagListId ID of the tag list to fetch from the tag dictionary
+   * @private
    */
   getTagNames(tagListId) {
     return this.tagIdsDictionary[tagListId]

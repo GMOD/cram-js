@@ -144,7 +144,7 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
   return output
 }
 
-/** compat layer to make a node buffer act like a java ByteBuffer */
+/* compat layer to make a node buffer act like a java ByteBuffer */
 class ByteBuffer {
   constructor(nodeBuffer, initialInputPosition = 0) {
     this._buffer = nodeBuffer

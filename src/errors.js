@@ -6,7 +6,9 @@ class CramUnimplementedError extends Error {}
 /** An error caused by malformed data.  */
 class CramMalformedError extends CramError {}
 
-/** An error caused by attempting to read beyond the end of the defined data. */
+/**
+ * An error caused by attempting to read beyond the end of the defined data.
+ */
 class CramBufferOverrunError extends CramMalformedError {}
 
 module.exports = {

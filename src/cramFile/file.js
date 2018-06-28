@@ -15,8 +15,11 @@ const { parseHeaderText } = require('../sam')
 
 class CramFile {
   /**
-   * @param {object} filehandle - a filehandle that implements the stat() and
+   * @param {object} args
+   * @param {object} args.filehandle - a filehandle that implements the stat() and
    * read() methods of the Node filehandle API https://nodejs.org/api/fs.html#fs_class_filehandle
+   * @param {function} args.seqFetch - a function with signature
+   * `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
    */
   constructor({ filehandle, seqFetch }) {
     this.file = filehandle

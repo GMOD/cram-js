@@ -28,14 +28,20 @@ class CramRecord {
   }
 }
 
-/** given a Buffer, read a string up to the first null character */
+/**
+ * given a Buffer, read a string up to the first null character
+ * @private
+ */
 function readNullTerminatedStringFromBuffer(buffer) {
   const zeroOffset = buffer.indexOf(0)
   if (zeroOffset === -1) return buffer.toString('utf8')
   return buffer.toString('utf8', 0, zeroOffset)
 }
 
-/** parse a BAM tag's array value from a binary buffer */
+/**
+ * parse a BAM tag's array value from a binary buffer
+ * @private
+ */
 function parseTagValueArray(buffer) {
   const arrayType = String.fromCharCode(buffer[0])
   const length = buffer.readInt32LE(1)

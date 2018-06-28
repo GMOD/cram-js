@@ -8,7 +8,7 @@ const validDataTypes = {
   byteArrayBlock: true,
 }
 
-/** codec base class */
+// codec base class
 class CramCodec {
   constructor(parameters = {}, dataType) {
     this.parameters = parameters
