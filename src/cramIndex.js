@@ -15,6 +15,14 @@ class CramIndex {
   // 5. Slice start byte position in the container data (‘blocks’)
   // 6. Slice size in bytes
   // Each line represents a slice in the CRAM file. Please note that all slices must be listed in index file.
+
+  /**
+   *
+   * @param {object} args
+   * @param {string} [args.path]
+   * @param {string} [args.url]
+   * @param {FileHandle} [args.filehandle]
+   */
   constructor(args) {
     const filehandle = open(args.url, args.path, args.filehandle)
     this.readFile = filehandle.readFile.bind(filehandle)
@@ -74,6 +82,13 @@ class CramIndex {
     return this.index
   }
 
+  /**
+   * fetch index entries for the given range
+   *
+   * @param {*} seqId
+   * @param {*} queryStart
+   * @param {*} queryEnd
+   */
   async getEntriesForRange(seqId, queryStart, queryEnd) {
     const seqEntries = (await this.index)[seqId]
     if (!seqEntries) return []

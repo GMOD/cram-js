@@ -3,9 +3,12 @@ class IndexedFasta {
     this.fasta = fasta
     this.fai = fai
 
-    this.indexes = this._readFAI()
-
     this.chunkSizeLimit = chunkSizeLimit
+  }
+
+  async _getIndexes() {
+    if( ! this.indexes ) this.indexes = await this._readFAI()
+    return this.indexes
   }
 
   async _readFAI() {
@@ -46,13 +49,34 @@ class IndexedFasta {
     return { name: indexByName, id: indexById }
   }
 
-  async fetch(seqId, min, max) {
-    const indexEntry = (await this.indexes).id[seqId]
+  /**
+   * @returns {array[string]} array of string sequence
+   * names that are present in the index, in which the
+   * array index indicates the sequence ID, and the value
+   * is the sequence name
+   */
+  async getSequenceList() {
+    return (await this._getIndexes()).id.map(entry => entry.name)
+  }
+
+  /**
+   *
+   * @param {number} seqId
+   * @param {number} min
+   * @param {number} max
+   */
+  async getResiduesById(seqId, min, max) {
+    const indexEntry = (await this._getIndexes()).id[seqId]
     return this._fetchFromIndexEntry(indexEntry, min, max)
   }
 
-  async fetchByName(seqName, min, max) {
-    const indexEntry = (await this.indexes).name[seqName]
+  /**
+   * @param {string} seqName
+   * @param {number} min
+   * @param {number} max
+   */
+  async getResiduesByName(seqName, min, max) {
+    const indexEntry = (await this._getIndexes()).name[seqName]
     return this._fetchFromIndexEntry(indexEntry, min, max)
   }
 
@@ -61,17 +85,14 @@ class IndexedFasta {
     const position = this._faiOffset(indexEntry, start)
     const readlen = this._faiOffset(indexEntry, max) - position
 
+    if (readlen > this.chunkSizeLimit)
+      throw new Error('chunkSizeLimit exceeded')
+
     let residues = Buffer.allocUnsafe(readlen)
     await this.data.read(residues, 0, readlen, position)
     residues = residues.toString('utf8').replace(/\s+/g, '')
 
-    return {
-      start,
-      end: max,
-      residues,
-      seqName: indexEntry.name,
-      seqId: indexEntry.id,
-    }
+    return residues
   }
 
   _faiOffset(idx, pos) {
@@ -82,14 +103,5 @@ class IndexedFasta {
     )
   }
 }
-
-// fetch: function(chr, min, max, featCallback, endCallback, errorCallback ) {
-// errorCallback = errorCallback || function(e) { console.error(e); };
-
-// },
-
-// });
-
-// });
 
 module.exports = IndexedFasta

@@ -3,6 +3,11 @@ const { CramUnimplementedError } = require('./errors')
 const CramFile = require('./cramFile')
 
 class IndexedCramFile {
+
+  /**
+   *
+   * @param {*} args
+   */
   constructor(args) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
     if (args.cram) this.cram = args.cram
@@ -11,6 +16,7 @@ class IndexedCramFile {
         url: args.cramUrl,
         path: args.cramPath,
         filehandle: args.cramFilehandle,
+        seqFetch: args.seqFetch,
       })
 
     if (!(this.cram instanceof CramFile))
@@ -21,6 +27,12 @@ class IndexedCramFile {
       throw new Error('invalid arguments: not an index')
   }
 
+  /**
+   *
+   * @param {string|number} seq string or numeric ID of the reference sequence
+   * @param {number} start
+   * @param {number} end
+   */
   async getFeaturesForRange(seq, start, end) {
     if (typeof seq === 'string')
       // TODO: support string reference sequence names somehow

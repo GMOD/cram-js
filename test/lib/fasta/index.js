@@ -28,6 +28,11 @@ class FetchableSmallFasta {
     if (!entry) throw new Error(`no sequence with id ${id} exists`)
     return entry.sequence.substr(start - 1, length)
   }
+
+  async getSequenceList() {
+    const data = await this.data
+    return data.map(entry => entry.id)
+  }
 }
 
 module.exports = { parseSmallFasta, FetchableSmallFasta, IndexedFasta }

@@ -26,7 +26,7 @@
     "coverage": "rm -rf coverage; nyc mocha; nyc report --reporter=lcov",
     "postcoverage": "opn coverage/lcov-report/index.html",
     "lint": "eslint src test",
-    "docs": "documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramIndex.js --section=CraiIndex;  documentation readme --shallow src/errors.js '--section=Exception Classes'",
+    "docs": "documentation readme --shallow src/indexedCramFile.js --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramIndex.js --section=CraiIndex;  documentation readme --shallow src/errors.js '--section=Exception Classes'",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "babel src -d dist",
