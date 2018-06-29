@@ -24,6 +24,11 @@ const bareFile = new CramFile({ url: 'http://example.com/my.cram'})
 const indexedFile = new IndexedCramFile({
   cramUrl: 'http://example.com/my.cram',
   index: new CraiIndex({ url: 'http://example.com/my.cram.crai' }),
+  // if reference sequences are not embedded, must also provide a
+  // `seqFetch` function that returns a promise for a string of residues
+  seqFetch: async (seqId, start, end) => {
+    return 'ACCTAGCTAGCTAGTAGTACGTAGTCGAGTCGATACTGT'
+  }
 })
 
 // or with local files
@@ -33,10 +38,9 @@ const indexedFile = new IndexedCramFile({
   index: new CraiIndex({ path: '/path/to/my.cram.crai' })
 })
 
-// fetch features from an indexed CRAM file
+// fetch features from an indexed CRAM file.
+// NOTE: only numeric IDs for the reference sequence are accepted
 const features = await indexedFile.getFeaturesForRange(0, 10000, 20000)
-// can use either a numeric ref seq id or a string ref seq name
-const features = await indexedFile.getFeaturesForRange('chr1', 10000, 20000)
 ```
 
 ## API (auto-generated)
