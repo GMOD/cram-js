@@ -19,6 +19,7 @@
     "no-bitwise": 0,
     "no-await-in-loop": "warn",
     "no-param-reassign": "warn",
+    "no-loop-func": "warn",
     "prefer-arrow-callback": "warn",
     "prefer-destructuring": "warn",
     "prefer-const": "warn",

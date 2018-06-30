@@ -1,7 +1,7 @@
 const LRU = require('lru-cache')
 
 class BufferCache {
-  constructor({ fetch, size = 10000000, chunkSize = 4000 }) {
+  constructor({ fetch, size = 10000000, chunkSize = 16000 }) {
     if (!fetch) throw new Error('fetch function required')
     this.fetch = fetch
     this.chunkSize = chunkSize
@@ -18,7 +18,10 @@ class BufferCache {
     // fetch them all as necessary
     const fetches = new Array(lastChunk - firstChunk + 1)
     for (let chunk = firstChunk; chunk <= lastChunk; chunk += 1) {
-      fetches[chunk - firstChunk] = this._getChunk(chunk)
+      fetches[chunk - firstChunk] = this._getChunk(chunk).then(data => ({
+        data,
+        chunkNumber: chunk,
+      }))
     }
 
     // stitch together the response buffer using them
@@ -43,13 +46,16 @@ class BufferCache {
     })
   }
 
-  async _getChunk(chunkNumber) {
-    const cached = this.lruCache.get(chunkNumber)
-    if (cached) return { data: cached, chunkNumber }
+  _getChunk(chunkNumber) {
+    const cachedPromise = this.lruCache.get(chunkNumber)
+    if (cachedPromise) return cachedPromise
 
-    const fresh = await this.fetch(chunkNumber * this.chunkSize, this.chunkSize)
-    this.lruCache.set(chunkNumber, fresh)
-    return { data: fresh, chunkNumber }
+    const freshPromise = this.fetch(
+      chunkNumber * this.chunkSize,
+      this.chunkSize,
+    )
+    this.lruCache.set(chunkNumber, freshPromise)
+    return freshPromise
   }
 }
 module.exports = BufferCache
