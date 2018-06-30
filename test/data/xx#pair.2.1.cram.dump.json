@@ -872,7 +872,7 @@
             "compressionFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a1",
             "mappingQuality": 1
@@ -883,7 +883,7 @@
             "compressionFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1
@@ -894,7 +894,7 @@
             "compressionFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "c1",
             "mappingQuality": 1
@@ -905,7 +905,7 @@
             "compressionFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 10,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "a1",
             "mappingQuality": 1
@@ -916,7 +916,7 @@
             "compressionFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 10,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1
@@ -927,7 +927,7 @@
             "compressionFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 10,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "c1",
             "mappingQuality": 1
@@ -1742,7 +1742,7 @@
             "compressionFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a1",
             "mappingQuality": 1
@@ -1753,7 +1753,7 @@
             "compressionFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1
@@ -1764,7 +1764,7 @@
             "compressionFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "c1",
             "mappingQuality": 1
@@ -1775,7 +1775,7 @@
             "compressionFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 10,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "a1",
             "mappingQuality": 1
@@ -1786,7 +1786,7 @@
             "compressionFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 10,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1
@@ -1797,7 +1797,7 @@
             "compressionFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 10,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "c1",
             "mappingQuality": 1

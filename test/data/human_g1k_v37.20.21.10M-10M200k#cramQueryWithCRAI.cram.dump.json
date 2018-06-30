@@ -3957,7 +3957,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
-            "alignmentStart": 0,
+            "alignmentStart": 100009,
             "readGroupId": 2,
             "readName": "a",
             "readFeatures": [
@@ -4357,7 +4357,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
-            "alignmentStart": 0,
+            "alignmentStart": 100009,
             "readGroupId": 4,
             "readName": "b",
             "readFeatures": [
@@ -4752,7 +4752,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
-            "alignmentStart": 2,
+            "alignmentStart": 100011,
             "readGroupId": 13,
             "readName": "c",
             "readFeatures": [
@@ -5147,7 +5147,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
-            "alignmentStart": 2,
+            "alignmentStart": 100011,
             "readGroupId": 10,
             "readName": "d",
             "readFeatures": [
@@ -5538,7 +5538,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
-            "alignmentStart": 2,
+            "alignmentStart": 100011,
             "readGroupId": 4,
             "readName": "e",
             "readBases": "TTTCCATAGTGTAAAATGTTACTATGAAAAAAGTTTAACAAAACTGATGAAAAATTTGCCAAAAGACACTACAAACATCTCATTACAGAGATTGTGGAAGA"

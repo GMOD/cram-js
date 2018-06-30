@@ -27,6 +27,12 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getFeaturesForRange(0, 2, 200)
+    // require('fs').writeFileSync(
+    //   'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
+    //   JSON.stringify(features, null, '  '),
+    // )
+
+    expect(features.length).to.equal(8)
     expect(features).to.deep.equal(await expectedFeatures1)
 
     expect(await cram.getFeaturesForRange(1, 2, 200)).to.deep.equal([])
@@ -80,14 +86,14 @@ describe('.crai indexed cram file', () => {
 
     const features = await cram.getFeaturesForRange(0, 0, Infinity)
     // require('fs').writeFileSync(
-    //   'test/data/cramQueryWithCRAI.cram.test1.expected.json',
+    //   'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
     //   JSON.stringify(features, null, '  '),
     // )
     expect(features).to.deep.equal(await expectedFeatures4)
 
     const features2 = await cram.getFeaturesForRange(-1, 0, Infinity)
     // require('fs').writeFileSync(
-    //   'test/data/cramQueryWithCRAI.cram.test2.expected.json',
+    //   'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
     //   JSON.stringify(features2, null, '  '),
     // )
     // console.log(JSON.stringify(features2, null, '  '))

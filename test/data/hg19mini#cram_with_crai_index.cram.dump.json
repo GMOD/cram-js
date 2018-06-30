@@ -1424,7 +1424,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
-            "alignmentStart": 0,
+            "alignmentStart": 200,
             "readGroupId": 0,
             "readName": "97",
             "readFeatures": [
@@ -1817,7 +1817,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
-            "alignmentStart": 5,
+            "alignmentStart": 205,
             "readGroupId": 0,
             "readName": "98",
             "readFeatures": [
@@ -2210,7 +2210,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
-            "alignmentStart": 10,
+            "alignmentStart": 210,
             "readGroupId": 0,
             "readName": "99",
             "readFeatures": [
@@ -2603,7 +2603,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
-            "alignmentStart": 800,
+            "alignmentStart": 1000,
             "readGroupId": 0,
             "readName": "100",
             "readFeatures": [
@@ -2996,7 +2996,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
-            "alignmentStart": 900,
+            "alignmentStart": 1100,
             "readGroupId": 0,
             "readName": "101",
             "readFeatures": [
@@ -4646,7 +4646,7 @@
             "compressionFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
-            "alignmentStart": 0,
+            "alignmentStart": 500,
             "readGroupId": 0,
             "readName": "102",
             "readFeatures": [
@@ -5039,7 +5039,7 @@
             "compressionFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
-            "alignmentStart": 50,
+            "alignmentStart": 550,
             "readGroupId": 0,
             "readName": "103",
             "readFeatures": [
@@ -5432,7 +5432,7 @@
             "compressionFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
-            "alignmentStart": 150,
+            "alignmentStart": 650,
             "readGroupId": 0,
             "readName": "104",
             "readFeatures": [
@@ -7055,7 +7055,7 @@
             "compressionFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
-            "alignmentStart": 0,
+            "alignmentStart": 300,
             "readGroupId": 0,
             "readName": "105",
             "readFeatures": [
@@ -7448,7 +7448,7 @@
             "compressionFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
-            "alignmentStart": 100,
+            "alignmentStart": 400,
             "readGroupId": 0,
             "readName": "106",
             "readFeatures": [
@@ -9047,7 +9047,7 @@
             "compressionFlags": 3,
             "sequenceId": 3,
             "readLength": 76,
-            "alignmentStart": 0,
+            "alignmentStart": 700,
             "readGroupId": 0,
             "readName": "107",
             "readFeatures": [
@@ -10646,7 +10646,7 @@
             "compressionFlags": 3,
             "sequenceId": 3,
             "readLength": 76,
-            "alignmentStart": 0,
+            "alignmentStart": 700,
             "readGroupId": 0,
             "readName": "107",
             "readFeatures": [

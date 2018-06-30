@@ -1510,7 +1510,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sq1",
             "mappingQuality": 0
@@ -1521,7 +1521,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sQ1",
             "mappingQuality": 0
@@ -1535,7 +1535,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "SQ1",
             "mappingQuality": 0
@@ -1546,7 +1546,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sq2",
             "readFeatures": [
@@ -1564,7 +1564,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sQ2",
             "readFeatures": [
@@ -1585,7 +1585,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "SQ2",
             "readFeatures": [
@@ -1603,7 +1603,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sq3",
             "readBases": "AACCCGGTT"
@@ -1614,7 +1614,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sQ3",
             "readBases": "AACCCGGTT"
@@ -1625,7 +1625,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 0,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "SQ3",
             "readBases": ""
@@ -3049,7 +3049,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sq1",
             "mappingQuality": 0
@@ -3060,7 +3060,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sQ1",
             "mappingQuality": 0
@@ -3074,7 +3074,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "SQ1",
             "mappingQuality": 0
@@ -3085,7 +3085,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sq2",
             "readFeatures": [
@@ -3103,7 +3103,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sQ2",
             "readFeatures": [
@@ -3124,7 +3124,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "SQ2",
             "readFeatures": [
@@ -3142,7 +3142,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sq3",
             "readBases": "AACCCGGTT"
@@ -3153,7 +3153,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "sQ3",
             "readBases": "AACCCGGTT"
@@ -3164,7 +3164,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 0,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "SQ3",
             "readBases": ""

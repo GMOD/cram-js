@@ -2034,7 +2034,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 0,
+            "alignmentStart": 2,
             "readGroupId": -1,
             "readName": "SRR065390.14978392",
             "readFeatures": [
@@ -2085,7 +2085,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 1,
+            "alignmentStart": 3,
             "readGroupId": -1,
             "readName": "SRR065390.921023",
             "readFeatures": [
@@ -2121,7 +2121,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 1,
+            "alignmentStart": 3,
             "readGroupId": -1,
             "readName": "SRR065390.1871511",
             "mappingQuality": 1
@@ -2140,7 +2140,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 1,
+            "alignmentStart": 3,
             "readGroupId": -1,
             "readName": "SRR065390.3743423",
             "mappingQuality": 1
@@ -2159,7 +2159,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 1,
+            "alignmentStart": 3,
             "readGroupId": -1,
             "readName": "SRR065390.4251890",
             "mappingQuality": 1
@@ -2178,7 +2178,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 1,
+            "alignmentStart": 3,
             "readGroupId": -1,
             "readName": "SRR065390.5238868",
             "mappingQuality": 1
@@ -2197,7 +2197,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 1,
+            "alignmentStart": 3,
             "readGroupId": -1,
             "readName": "SRR065390.6023338",
             "readFeatures": [

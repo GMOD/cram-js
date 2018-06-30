@@ -1086,7 +1086,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 40,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "x",
             "mappingQuality": 255
@@ -1100,7 +1100,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 40,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "x*",
             "readFeatures": [
@@ -1133,7 +1133,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 48,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xIP",
             "readFeatures": [
@@ -1201,7 +1201,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 48,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xIP*",
             "readFeatures": [
@@ -1292,7 +1292,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 30,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xD",
             "readFeatures": [
@@ -1333,7 +1333,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 30,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xD*",
             "readFeatures": [
@@ -1396,7 +1396,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 20,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xN",
             "readFeatures": [
@@ -3126,7 +3126,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 40,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "x",
             "mappingQuality": 255
@@ -3140,7 +3140,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 40,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "x*",
             "readFeatures": [
@@ -3173,7 +3173,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 48,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xIP",
             "readFeatures": [
@@ -3241,7 +3241,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 48,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xIP*",
             "readFeatures": [
@@ -3332,7 +3332,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 30,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xD",
             "readFeatures": [
@@ -3373,7 +3373,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 30,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xD*",
             "readFeatures": [
@@ -3436,7 +3436,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 20,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "xN",
             "readFeatures": [

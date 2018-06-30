@@ -248,7 +248,7 @@ class CramSlice {
 
     // if the starts are delta from the previous, go through and calculate the true starts
     if (compressionScheme.APdelta) {
-      let lastStart = sliceHeader.refSeqStart || 0
+      let lastStart = sliceHeader.content.refSeqStart || 0
       records.forEach(rec => {
         rec.alignmentStart += lastStart
         lastStart = rec.alignmentStart

@@ -894,7 +894,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_sqm",
             "readFeatures": [
@@ -922,7 +922,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_sm",
             "readFeatures": [
@@ -950,7 +950,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_m",
             "readFeatures": [
@@ -973,7 +973,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_squ",
             "readBases": "AACCCTCGTT"
@@ -984,7 +984,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_su",
             "readBases": "AACCCTCGTT"
@@ -995,7 +995,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 0,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_u",
             "readBases": ""
@@ -1771,7 +1771,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_sqm",
             "readFeatures": [
@@ -1799,7 +1799,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_sm",
             "readFeatures": [
@@ -1827,7 +1827,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_m",
             "readFeatures": [
@@ -1850,7 +1850,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_squ",
             "readBases": "AACCCTCGTT"
@@ -1861,7 +1861,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_su",
             "readBases": "AACCCTCGTT"
@@ -1872,7 +1872,7 @@
             "compressionFlags": 11,
             "sequenceId": 0,
             "readLength": 0,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "_u",
             "readBases": ""

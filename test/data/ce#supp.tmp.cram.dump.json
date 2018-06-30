@@ -852,7 +852,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 0,
+            "alignmentStart": 100,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -870,7 +870,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 50,
-            "alignmentStart": 100,
+            "alignmentStart": 200,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -888,7 +888,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 50,
-            "alignmentStart": 400,
+            "alignmentStart": 500,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -906,7 +906,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 500,
+            "alignmentStart": 600,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -1663,7 +1663,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 0,
+            "alignmentStart": 100,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -1681,7 +1681,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 50,
-            "alignmentStart": 100,
+            "alignmentStart": 200,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -1699,7 +1699,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 50,
-            "alignmentStart": 400,
+            "alignmentStart": 500,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [
@@ -1717,7 +1717,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 500,
+            "alignmentStart": 600,
             "readGroupId": -1,
             "readName": "supp",
             "readFeatures": [

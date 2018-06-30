@@ -936,7 +936,7 @@
             "compressionFlags": 3,
             "sequenceId": 1,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1

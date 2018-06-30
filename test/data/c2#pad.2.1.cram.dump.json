@@ -1878,7 +1878,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s1",
             "readFeatures": [
@@ -1901,7 +1901,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 5,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s1b",
             "readFeatures": [
@@ -1934,7 +1934,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 6,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s2",
             "readFeatures": [
@@ -1982,7 +1982,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 6,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s2p",
             "readFeatures": [
@@ -2040,7 +2040,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 8,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s3",
             "readFeatures": [
@@ -2088,7 +2088,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 11,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s3b",
             "readFeatures": [
@@ -2146,7 +2146,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s4",
             "readFeatures": [
@@ -2184,7 +2184,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s4p",
             "readFeatures": [
@@ -2232,7 +2232,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s5",
             "readFeatures": [
@@ -3983,7 +3983,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s1",
             "readFeatures": [
@@ -4006,7 +4006,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 5,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s1b",
             "readFeatures": [
@@ -4039,7 +4039,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 6,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s2",
             "readFeatures": [
@@ -4087,7 +4087,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 6,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s2p",
             "readFeatures": [
@@ -4145,7 +4145,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 8,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s3",
             "readFeatures": [
@@ -4193,7 +4193,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 11,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s3b",
             "readFeatures": [
@@ -4251,7 +4251,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s4",
             "readFeatures": [
@@ -4289,7 +4289,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s4p",
             "readFeatures": [
@@ -4337,7 +4337,7 @@
             "compressionFlags": 3,
             "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 0,
+            "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "s5",
             "readFeatures": [
