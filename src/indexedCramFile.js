@@ -1,3 +1,5 @@
+const LRU = require('lru-cache')
+
 const { CramUnimplementedError } = require('./errors')
 
 const CramFile = require('./cramFile')
@@ -8,6 +10,7 @@ class IndexedCramFile {
    * @param {*} args
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
+   * @param {number} cacheSlices optional maximum number of CRAM slices to cache. default 5
    */
   constructor(args) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
@@ -26,6 +29,9 @@ class IndexedCramFile {
     this.index = args.index
     if (!this.index.getEntriesForRange)
       throw new Error('invalid arguments: not an index')
+
+    const cacheSize = args.cacheSlices === undefined ? 5 : args.cacheSlices
+    this.lruCache = LRU({ max: cacheSize })
   }
 
   /**
@@ -65,9 +71,20 @@ class IndexedCramFile {
   }
 
   getFeaturesInSlice({ containerStart, sliceStart, sliceBytes }) {
+    const cacheKey = `${containerStart}+${sliceStart}`
+    const cachedPromise = this.lruCache.get(cacheKey)
+    if (cachedPromise) {
+      // console.log('cache hit',containerStart,sliceStart)
+      return cachedPromise
+    }
+
+    // console.log('cache miss',containerStart,sliceStart)
+
     const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
-    return slice.getAllFeatures()
+    const freshPromise = slice.getAllFeatures()
+    this.lruCache.set(cacheKey, freshPromise)
+    return freshPromise
   }
 
   /**
