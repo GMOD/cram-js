@@ -3,10 +3,11 @@ const { CramUnimplementedError } = require('./errors')
 const CramFile = require('./cramFile')
 
 class IndexedCramFile {
-
   /**
    *
    * @param {*} args
+   * @param {CramFile} args.cram
+   * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
    */
   constructor(args) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
@@ -67,6 +68,16 @@ class IndexedCramFile {
     const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
     return slice.getAllFeatures()
+  }
+
+  /**
+   *
+   * @param {number} seqId
+   * @returns {Promise[boolean]} true if the CRAM file contains data for the given
+   * reference sequence numerical ID
+   */
+  hasDataForReferenceSequence(seqId) {
+    return this.index.hasDataForReferenceSequence(seqId)
   }
 }
 

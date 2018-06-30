@@ -83,11 +83,20 @@ class CramIndex {
   }
 
   /**
+   * @param {number} seqId
+   * @returns {Promise[boolean]} true if the index contains entries for
+   * the given reference sequence ID, false otherwise
+   */
+  async hasDataForReferenceSequence(seqId) {
+    return !!(await this.index)[seqId]
+  }
+
+  /**
    * fetch index entries for the given range
    *
-   * @param {*} seqId
-   * @param {*} queryStart
-   * @param {*} queryEnd
+   * @param {number} seqId
+   * @param {number} queryStart
+   * @param {number} queryEnd
    */
   async getEntriesForRange(seqId, queryStart, queryEnd) {
     const seqEntries = (await this.index)[seqId]

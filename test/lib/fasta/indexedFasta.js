@@ -61,6 +61,15 @@ class IndexedFasta {
 
   /**
    *
+   * @param {string} name
+   * @returns {Promise[boolean]} true if the file contains the given reference sequence name
+   */
+  async hasReferenceSequence(name) {
+    return !!(await this._getIndexes()).name[name]
+  }
+
+  /**
+   *
    * @param {number} seqId
    * @param {number} min
    * @param {number} max

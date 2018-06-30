@@ -30,6 +30,8 @@ describe('.crai indexed cram file', () => {
     expect(features).to.deep.equal(await expectedFeatures1)
 
     expect(await cram.getFeaturesForRange(1, 2, 200)).to.deep.equal([])
+    expect(await cram.hasDataForReferenceSequence(1)).to.equal(false)
+    expect(await cram.hasDataForReferenceSequence(0)).to.equal(true)
   })
 
   it('can read ce#unmap2.tmp.cram', async () => {
