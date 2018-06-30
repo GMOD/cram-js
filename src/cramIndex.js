@@ -106,7 +106,6 @@ class CramIndex {
     // binary search to find an entry that
     // overlaps the range, then extend backward
     // and forward from that
-    let searchPosition = Math.floor(len / 2)
     const compare = entry => {
       const entryStart = entry.start
       const entryEnd = entry.start + entry.span
@@ -114,21 +113,27 @@ class CramIndex {
       if (entryEnd <= queryStart) return 1 // entry is behind query
       return 0 // entry overlaps query
     }
+
+    let lowerBound = 0
+    let upperBound = len - 1
+    let searchPosition = Math.floor(len / 2)
+
+    let lastSearchPosition = -1
     let nextSearchDirection
-    do {
+    for (;;) {
       nextSearchDirection = compare(seqEntries[searchPosition])
       if (nextSearchDirection > 0) {
-        if (searchPosition === len - 1)
-          // we are at the right end and have found no overlapping ranges
-          return []
-        searchPosition = Math.floor((searchPosition + len) / 2)
+        lowerBound = searchPosition
       } else if (nextSearchDirection < 0) {
-        if (searchPosition === 0)
-          // we are all the way at the left end and have found no overlapping ranges
-          return []
-        searchPosition = Math.floor(searchPosition / 2)
+        upperBound = searchPosition
+      } else {
+        break
       }
-    } while (nextSearchDirection)
+
+      lastSearchPosition = searchPosition
+      searchPosition = Math.floor((upperBound + lowerBound) / 2)
+      if (lastSearchPosition === searchPosition) return []
+    }
 
     // now extend backward
     let overlapStart = searchPosition

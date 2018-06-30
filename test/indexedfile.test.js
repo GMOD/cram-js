@@ -192,6 +192,18 @@ describe('.crai indexed cram file', () => {
       )
 
       expect(features).to.deep.equal(expectedFeatures)
+
+      const moreFeatures = await cram.getFeaturesForRange(6, 12437859, 12437959)
+      // require('fs').writeFileSync(
+      //   `test/data/extended/RNAseq_mapping_def.cram.test2.expected.json`,
+      //   JSON.stringify(moreFeatures, null, '  '),
+      // )
+
+      // const moreExpectedFeatures = await loadTestJSON(
+      //   'extended/RNAseq_mapping_def.cram.test2.expected.json',
+      // )
+
+      expect(moreFeatures).to.deep.equal([])
     },
   )
 })
