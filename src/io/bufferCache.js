@@ -1,7 +1,7 @@
 const LRU = require('lru-cache')
 
 class BufferCache {
-  constructor({ fetch, size = 10000000, chunkSize = 16000 }) {
+  constructor({ fetch, size = 10000000, chunkSize = 32768 }) {
     if (!fetch) throw new Error('fetch function required')
     this.fetch = fetch
     this.chunkSize = chunkSize
