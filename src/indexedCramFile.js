@@ -1,6 +1,6 @@
 const LRU = require('lru-cache')
 
-const { CramUnimplementedError } = require('./errors')
+const { CramUnimplementedError, CramSizeLimitError } = require('./errors')
 
 const CramFile = require('./cramFile')
 
@@ -11,6 +11,7 @@ class IndexedCramFile {
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
    * @param {number} cacheSlices optional maximum number of CRAM slices to cache. default 5
+   * @param {number} fetchSizeLimit maximum number of bytes to fetch in a single getFeaturesForRange call.  Default 3 MiB.
    */
   constructor(args) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
@@ -32,6 +33,8 @@ class IndexedCramFile {
 
     const cacheSize = args.cacheSlices === undefined ? 5 : args.cacheSlices
     this.lruCache = LRU({ max: cacheSize })
+
+    this.fetchSizeLimit = args.fetchSizeLimit || 3000000
   }
 
   /**
@@ -48,6 +51,16 @@ class IndexedCramFile {
       )
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
+    const totalSize = slices.map(s => s.sliceBytes).reduce((a, b) => a + b, 0)
+    if (totalSize > this.fetchSizeLimit)
+      throw new CramSizeLimitError(
+        `data size of ${totalSize.toLocaleString()} bytes exceeded fetch size limit of ${this.fetchSizeLimit.toLocaleString()} bytes`,
+      )
+    // console.log(
+    //   `fetching ${
+    //     slices.length
+    //   } slices for ${seq}:${start}..${end}, total size ${totalSize}`,
+    // )
 
     // TODO: do we need to merge or de-duplicate the blocks?
 
