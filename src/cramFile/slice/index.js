@@ -235,6 +235,7 @@ class CramSlice {
           cursors,
           majorVersion,
         )
+        records[i].uniqueId = sliceHeader.content.recordCounter + i
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
           console.warn(
