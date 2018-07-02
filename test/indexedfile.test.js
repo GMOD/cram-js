@@ -203,7 +203,10 @@ describe('.crai indexed cram file', () => {
       //   'extended/RNAseq_mapping_def.cram.test2.expected.json',
       // )
 
-      expect(moreFeatures).to.deep.equal([])
+      const moreFeatures2 = await cram.getFeaturesForRange(6, 4765916, 4768415)
+      expect(moreFeatures2.length).to.equal(1)
+      expect(moreFeatures2[0].readName).to.equal('7033952-2')
+      expect(moreFeatures2[0].alignmentStart).to.equal(4767144)
     },
   )
 })

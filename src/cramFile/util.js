@@ -23,7 +23,6 @@ module.exports = {
       result =
         ((countFlags << 16) | (buffer[offset + 1] << 8) | buffer[offset + 2]) &
         0x1fffff
-      result = ((countFlags & 63) << 16) | buffer.readUInt16LE(offset + 1)
       offset += 3
     } else if (countFlags < 0xf0) {
       result =

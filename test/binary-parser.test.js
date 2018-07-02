@@ -2,6 +2,8 @@ const { expect } = require('chai')
 
 const { Parser } = require('../src/binary-parser')
 
+const { parseItf8 } = require('../src/cramFile/util')
+
 describe('binary-parser fork', () => {
   describe('itf8', () => {
     const ip = new Parser().itf8('val')
@@ -11,10 +13,15 @@ describe('binary-parser fork', () => {
       [[0xff, 0xff, 0xff, 0xff, 0x0f], { result: { val: -1 }, offset: 5 }],
       [[0xff, 0xff, 0xff, 0xff, 0xff], { result: { val: -1 }, offset: 5 }],
       [[0xff, 0xff, 0xff, 0xff, 0xfe], { result: { val: -2 }, offset: 5 }],
+      [[192, 170, 130, 140, 174], { result: { val: 43650 }, offset: 3 }],
     ].forEach(([input, output]) => {
       it(`can parse itf8 [${input.map(n => `0x${n.toString(16)}`)}]
        -> ${output.result.val}`, () => {
         expect(ip.parse(Buffer.from(input))).deep.equal(output)
+
+        const otherParseResult = parseItf8(Buffer.from(input), 0)
+        expect(otherParseResult[0]).equal(output.result.val)
+        expect(otherParseResult[1]).equal(output.offset)
       })
     })
     it('can parse several itf8 numbers in a row', () => {
