@@ -1,32 +1,8 @@
 const { CramMalformedError, CramUnimplementedError } = require('../../errors')
 
 const Long = require('long')
-const Constants = require('../constants')
 
-class CramRecord {
-  constructor() {
-    this.tags = {}
-  }
-  isDetached() {
-    return !!(this.cramFlags & Constants.CRAM_FLAG_DETACHED)
-  }
-
-  hasMateDownStream() {
-    return !!(this.cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM)
-  }
-
-  isSegmentUnmapped() {
-    return !!(this.flags & Constants.BAM_FUNMAP)
-  }
-
-  isPreservingQualityScores() {
-    return !!(this.cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES)
-  }
-
-  isUnknownBases() {
-    return !!(this.cramFlags & Constants.CRAM_FLAG_NO_SEQ)
-  }
-}
+const CramRecord = require('../record')
 
 /**
  * given a Buffer, read a string up to the first null character
