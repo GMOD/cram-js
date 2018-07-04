@@ -5037,7 +5037,18 @@
             "readName": "Fred",
             "templateSize": 0,
             "mappingQuality": 86,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -5090,7 +5101,18 @@
             "readName": "Jim",
             "templateSize": 0,
             "mappingQuality": 11,
-            "qualityScores": 9,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 1
           }
         ]
@@ -9987,7 +10009,18 @@
             "readName": "Fred",
             "templateSize": 0,
             "mappingQuality": 86,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -10040,7 +10073,18 @@
             "readName": "Jim",
             "templateSize": 0,
             "mappingQuality": 11,
-            "qualityScores": 9,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 1
           }
         ]

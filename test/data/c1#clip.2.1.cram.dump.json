@@ -1755,7 +1755,18 @@
             "readName": "s0a",
             "templateSize": 0,
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -1776,7 +1787,14 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 1
           },
           {
@@ -1802,7 +1820,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 2
           },
           {
@@ -1828,7 +1857,16 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 3
           },
           {
@@ -1854,7 +1892,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 4
           },
           {
@@ -1885,7 +1934,20 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 5
           },
           {
@@ -1911,7 +1973,14 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 6
           }
         ]
@@ -3607,7 +3676,18 @@
             "readName": "s0a",
             "templateSize": 0,
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -3628,7 +3708,14 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 1
           },
           {
@@ -3654,7 +3741,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 2
           },
           {
@@ -3680,7 +3778,16 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 3
           },
           {
@@ -3706,7 +3813,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 4
           },
           {
@@ -3737,7 +3855,20 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 5
           },
           {
@@ -3763,7 +3894,14 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 6
           }
         ]

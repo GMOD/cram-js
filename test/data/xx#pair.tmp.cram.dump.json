@@ -761,7 +761,18 @@
             "readName": "a1",
             "recordsToNextFragment": 3,
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -775,7 +786,18 @@
             "readName": "b1",
             "recordsToNextFragment": 4,
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 1
           },
           {
@@ -789,7 +811,18 @@
             "readName": "c1",
             "recordsToNextFragment": 5,
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 2
           },
           {
@@ -802,7 +835,18 @@
             "readGroupId": -1,
             "readName": "a1",
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 3
           },
           {
@@ -815,7 +859,18 @@
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 4
           },
           {
@@ -828,7 +883,18 @@
             "readGroupId": -1,
             "readName": "c1",
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 5
           }
         ]
@@ -1501,7 +1567,18 @@
             "readName": "a1",
             "recordsToNextFragment": 3,
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -1515,7 +1592,18 @@
             "readName": "b1",
             "recordsToNextFragment": 4,
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 1
           },
           {
@@ -1529,7 +1617,18 @@
             "readName": "c1",
             "recordsToNextFragment": 5,
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 2
           },
           {
@@ -1542,7 +1641,18 @@
             "readGroupId": -1,
             "readName": "a1",
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 3
           },
           {
@@ -1555,7 +1665,18 @@
             "readGroupId": -1,
             "readName": "b1",
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 4
           },
           {
@@ -1568,7 +1689,18 @@
             "readGroupId": -1,
             "readName": "c1",
             "mappingQuality": 1,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 5
           }
         ]

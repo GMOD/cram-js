@@ -2319,7 +2319,9 @@
             "readName": "a1",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 0
           },
           {
@@ -2336,7 +2338,9 @@
             "readName": "a2",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 1
           },
           {
@@ -2354,7 +2358,9 @@
             "readName": "a3",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 2
           },
           {
@@ -2373,7 +2379,9 @@
             "readName": "a4",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 3
           },
           {
@@ -2393,7 +2401,9 @@
             "readName": "a5",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 4
           },
           {
@@ -2414,7 +2424,9 @@
             "readName": "a6",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 5
           },
           {
@@ -2436,7 +2448,9 @@
             "readName": "a7",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 6
           }
         ]
@@ -2779,7 +2793,9 @@
             "readName": "a8",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 7
           },
           {
@@ -2803,7 +2819,9 @@
             "readName": "a9",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 8
           },
           {
@@ -2828,7 +2846,9 @@
             "readName": "aA",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 9
           }
         ]
@@ -5059,7 +5079,9 @@
             "readName": "a1",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 0
           },
           {
@@ -5076,7 +5098,9 @@
             "readName": "a2",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 1
           },
           {
@@ -5094,7 +5118,9 @@
             "readName": "a3",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 2
           },
           {
@@ -5113,7 +5139,9 @@
             "readName": "a4",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 3
           },
           {
@@ -5133,7 +5161,9 @@
             "readName": "a5",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 4
           },
           {
@@ -5154,7 +5184,9 @@
             "readName": "a6",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 5
           },
           {
@@ -5176,7 +5208,9 @@
             "readName": "a7",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 6
           }
         ]
@@ -5519,7 +5553,9 @@
             "readName": "a8",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 7
           },
           {
@@ -5543,7 +5579,9 @@
             "readName": "a9",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 8
           },
           {
@@ -5568,7 +5606,9 @@
             "readName": "aA",
             "templateSize": 0,
             "mappingQuality": 1,
-            "qualityScores": 2,
+            "qualityScores": [
+              2
+            ],
             "uniqueId": 9
           }
         ]

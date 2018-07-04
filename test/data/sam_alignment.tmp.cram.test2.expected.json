@@ -17,7 +17,12 @@
       }
     ],
     "mappingQuality": 10,
-    "qualityScores": 80,
+    "qualityScores": [
+      80,
+      80,
+      80,
+      80
+    ],
     "uniqueId": 0
   },
   {
@@ -43,7 +48,12 @@
       }
     ],
     "mappingQuality": 10,
-    "qualityScores": 80,
+    "qualityScores": [
+      80,
+      80,
+      80,
+      80
+    ],
     "uniqueId": 1
   },
   {
@@ -74,7 +84,12 @@
       }
     ],
     "mappingQuality": 10,
-    "qualityScores": 80,
+    "qualityScores": [
+      80,
+      80,
+      80,
+      80
+    ],
     "uniqueId": 2
   },
   {
@@ -110,7 +125,12 @@
       }
     ],
     "mappingQuality": 10,
-    "qualityScores": 80,
+    "qualityScores": [
+      80,
+      80,
+      80,
+      80
+    ],
     "uniqueId": 3
   },
   {
@@ -141,7 +161,12 @@
       }
     ],
     "mappingQuality": 10,
-    "qualityScores": 80,
+    "qualityScores": [
+      80,
+      80,
+      80,
+      80
+    ],
     "uniqueId": 4
   }
 ]

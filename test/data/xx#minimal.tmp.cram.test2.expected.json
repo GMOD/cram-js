@@ -20,7 +20,7 @@
       }
     ],
     "mappingQuality": 1,
-    "qualityScores": 255,
+    "qualityScores": [],
     "uniqueId": 0
   },
   {
@@ -44,7 +44,7 @@
       }
     ],
     "mappingQuality": 1,
-    "qualityScores": 255,
+    "qualityScores": [],
     "uniqueId": 1
   },
   {
@@ -70,7 +70,18 @@
       }
     ],
     "mappingQuality": 1,
-    "qualityScores": 255,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 2
   }
 ]

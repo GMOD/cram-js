@@ -10,7 +10,13 @@
     "readName": "x1",
     "recordsToNextFragment": 1,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 0
   },
   {
@@ -23,7 +29,13 @@
     "readGroupId": -1,
     "readName": "x1",
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 1
   },
   {
@@ -37,7 +49,13 @@
     "readName": "x2",
     "recordsToNextFragment": 3,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 2
   },
   {
@@ -50,7 +68,13 @@
     "readGroupId": -1,
     "readName": "x2",
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 3
   },
   {
@@ -64,7 +88,13 @@
     "readName": "x3",
     "recordsToNextFragment": 5,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 4
   },
   {
@@ -77,7 +107,13 @@
     "readGroupId": -1,
     "readName": "x3",
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 5
   },
   {
@@ -96,7 +132,13 @@
     },
     "templateSize": 20,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 6
   },
   {
@@ -115,7 +157,13 @@
     },
     "templateSize": -20,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 7
   }
 ]

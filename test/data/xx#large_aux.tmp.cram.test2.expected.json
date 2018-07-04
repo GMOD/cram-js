@@ -266,7 +266,18 @@
     "readName": "a1",
     "templateSize": 0,
     "mappingQuality": 1,
-    "qualityScores": 255,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 0
   },
   {
@@ -791,7 +802,18 @@
     "readName": "a2",
     "templateSize": 0,
     "mappingQuality": 1,
-    "qualityScores": 255,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 1
   },
   {
@@ -807,7 +829,18 @@
     "readName": "b1",
     "templateSize": 0,
     "mappingQuality": 1,
-    "qualityScores": 255,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 2
   }
 ]

@@ -1134,7 +1134,18 @@
             "readName": "s0",
             "templateSize": 0,
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -1161,7 +1172,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 1
           },
           {
@@ -1196,7 +1218,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 2
           }
         ]
@@ -2271,7 +2304,18 @@
             "readName": "s0",
             "templateSize": 0,
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 0
           },
           {
@@ -2298,7 +2342,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 1
           },
           {
@@ -2333,7 +2388,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 9,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
             "uniqueId": 2
           }
         ]

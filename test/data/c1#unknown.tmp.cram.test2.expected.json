@@ -27,7 +27,18 @@
       }
     ],
     "mappingQuality": 0,
-    "qualityScores": 40,
+    "qualityScores": [
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40
+    ],
     "uniqueId": 0
   },
   {
@@ -58,7 +69,18 @@
       }
     ],
     "mappingQuality": 0,
-    "qualityScores": 40,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 1
   },
   {
@@ -84,7 +106,18 @@
       }
     ],
     "mappingQuality": 0,
-    "qualityScores": 40,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 2
   },
   {
@@ -98,7 +131,18 @@
     "readName": "_squ",
     "templateSize": 0,
     "readBases": "AACCCTCGTT",
-    "qualityScores": 40,
+    "qualityScores": [
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40
+    ],
     "uniqueId": 3
   },
   {
@@ -112,7 +156,18 @@
     "readName": "_su",
     "templateSize": 0,
     "readBases": "AACCCTCGTT",
-    "qualityScores": 40,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "uniqueId": 4
   },
   {

@@ -10,7 +10,13 @@
     "readName": "y1",
     "recordsToNextFragment": 1,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 8
   },
   {
@@ -23,7 +29,13 @@
     "readGroupId": -1,
     "readName": "y1",
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 9
   },
   {
@@ -37,7 +49,13 @@
     "readName": "y2",
     "recordsToNextFragment": 3,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 10
   },
   {
@@ -50,7 +68,13 @@
     "readGroupId": -1,
     "readName": "y2",
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 11
   },
   {
@@ -69,7 +93,13 @@
     },
     "templateSize": -2,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 12
   },
   {
@@ -88,7 +118,13 @@
     },
     "templateSize": 2,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 13
   },
   {
@@ -107,7 +143,13 @@
     },
     "templateSize": 10,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 14
   },
   {
@@ -126,7 +168,13 @@
     },
     "templateSize": -10,
     "mappingQuality": 1,
-    "qualityScores": 9,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "uniqueId": 15
   }
 ]

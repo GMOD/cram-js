@@ -222,7 +222,10 @@ function decodeRecord(
     // mapping quality:
     cramRecord.mappingQuality = decodeDataSeries('MQ')
     if (cramRecord.isPreservingQualityScores()) {
-      cramRecord.qualityScores = decodeDataSeries('QS')
+      const /* byte[] */ bases = new Array(cramRecord.readLength)
+      for (let i = 0; i < bases.length; i += 1)
+        bases[i] = decodeDataSeries('QS')
+      cramRecord.qualityScores = bases
     }
   } else if (cramRecord.isUnknownBases()) {
     cramRecord.readBases = null
@@ -235,7 +238,10 @@ function decodeRecord(
     cramRecord.readBases = String.fromCharCode(...bases)
 
     if (cramRecord.isPreservingQualityScores()) {
-      cramRecord.qualityScores = decodeDataSeries('QS')
+      for (let i = 0; i < bases.length; i += 1)
+        bases[i] = decodeDataSeries('QS')
+
+      cramRecord.qualityScores = bases
     }
   }
 

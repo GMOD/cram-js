@@ -5,18 +5,6 @@ const { IndexedCramFile } = require('../src/index')
 const IndexedFastaFile = require('./lib/fasta/indexedFasta')
 const CramIndex = require('../src/cramIndex')
 
-const expectedFeatures1 = loadTestJSON(
-  'ce#tag_padded.tmp.cram.test1.expected.json',
-)
-const expectedFeatures2 = loadTestJSON('ce#unmap2.tmp.cram.test1.expected.json')
-const expectedFeatures3 = loadTestJSON('ce#1000.tmp.cram.test1.expected.json')
-const expectedFeatures4 = loadTestJSON(
-  'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
-)
-const expectedFeatures5 = loadTestJSON(
-  'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
-)
-
 const REWRITE_EXPECTED_DATA = false
 
 describe('.crai indexed cram file', () => {
@@ -34,6 +22,10 @@ describe('.crai indexed cram file', () => {
         'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
+
+    const expectedFeatures1 = loadTestJSON(
+      'ce#tag_padded.tmp.cram.test1.expected.json',
+    )
 
     expect(features.length).to.equal(8)
     expect(features).to.deep.equal(await expectedFeatures1)
@@ -57,6 +49,8 @@ describe('.crai indexed cram file', () => {
         'test/data/ce#unmap2.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
+
+    const expectedFeatures2 = loadTestJSON('ce#unmap2.tmp.cram.test1.expected.json')
     expect(features).to.deep.equal(await expectedFeatures2)
   })
 
@@ -74,6 +68,7 @@ describe('.crai indexed cram file', () => {
         'test/data/ce#1000.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
+    const expectedFeatures3 = loadTestJSON('ce#1000.tmp.cram.test1.expected.json')
     expect(features).to.deep.equal(await expectedFeatures3)
   })
 
@@ -95,15 +90,22 @@ describe('.crai indexed cram file', () => {
         'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
+    const expectedFeatures4 = loadTestJSON(
+      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
+    )
     expect(features).to.deep.equal(await expectedFeatures4)
 
     const features2 = await cram.getFeaturesForRange(-1, 0, Infinity)
+
     if (REWRITE_EXPECTED_DATA)
       require('fs').writeFileSync(
-        'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
+        'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
         JSON.stringify(features2, null, '  '),
       )
     // console.log(JSON.stringify(features2, null, '  '))
+    const expectedFeatures5 = loadTestJSON(
+      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
+    )
 
     expect(features2).to.deep.equal(await expectedFeatures5)
   })

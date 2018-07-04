@@ -1,0 +1,87 @@
+[
+  {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 1,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "A0",
+    "templateSize": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 3
+  },
+  {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 1,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "A1",
+    "templateSize": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 4
+  },
+  {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 1,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "A2",
+    "templateSize": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 5
+  },
+  {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 1,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "A3",
+    "templateSize": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 6
+  },
+  {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 1,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "A4",
+    "templateSize": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 7
+  }
+]

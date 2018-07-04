@@ -1952,7 +1952,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 0
           },
           {
@@ -1978,7 +1989,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 1
           },
           {
@@ -2004,7 +2026,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 2
           },
           {
@@ -2030,7 +2063,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 3
           },
           {
@@ -2051,7 +2095,24 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 4
           },
           {
@@ -2087,7 +2148,22 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 5
           },
           {
@@ -2113,7 +2189,21 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 6
           },
           {
@@ -2144,7 +2234,21 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 7
           },
           {
@@ -2185,7 +2289,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 8
           },
           {
@@ -2221,7 +2336,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 9
           },
           {
@@ -2252,7 +2378,16 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 10
           },
           {
@@ -2283,7 +2418,10 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              0,
+              0
+            ],
             "uniqueId": 11
           }
         ]
@@ -4159,7 +4297,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 0
           },
           {
@@ -4185,7 +4334,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 1
           },
           {
@@ -4211,7 +4371,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 2
           },
           {
@@ -4237,7 +4408,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 3
           },
           {
@@ -4258,7 +4440,24 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 4
           },
           {
@@ -4294,7 +4493,22 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 5
           },
           {
@@ -4320,7 +4534,21 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 6
           },
           {
@@ -4351,7 +4579,21 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 7
           },
           {
@@ -4392,7 +4634,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 8
           },
           {
@@ -4428,7 +4681,18 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 9
           },
           {
@@ -4459,7 +4723,16 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
             "uniqueId": 10
           },
           {
@@ -4490,7 +4763,10 @@
               }
             ],
             "mappingQuality": 0,
-            "qualityScores": 255,
+            "qualityScores": [
+              0,
+              0
+            ],
             "uniqueId": 11
           }
         ]
