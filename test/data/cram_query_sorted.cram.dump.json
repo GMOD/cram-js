@@ -914,6 +914,465 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 3,
+            "symbols": [
+              1,
+              0,
+              2
+            ],
+            "numLengths": 3,
+            "bitLengths": [
+              1,
+              2,
+              2
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              1
+            ],
+            "2": [
+              0,
+              2
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 2
+            },
+            "1": {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            "2": {
+              "bitLength": 2,
+              "value": 2,
+              "bitCode": 3
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 2,
+              "value": 2,
+              "bitCode": 3
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 2,
+              "value": 0,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 2,
+              "bitCode": 3
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1,
+            0,
+            2
+          ],
+          "sortedBitCodes": [
+            0,
+            2,
+            3
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            2,
+            2
+          ],
+          "bitCodeToValue": [
+            0,
+            -1,
+            1,
+            2
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              -1,
+              6
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              -1,
+              6
+            ]
+          },
+          "codes": {
+            "6": {
+              "bitLength": 1,
+              "value": 6,
+              "bitCode": 1
+            },
+            "-1": {
+              "bitLength": 1,
+              "value": -1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": -1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 6,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": -1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 6,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -1,
+            6
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 5,
+            "symbols": [
+              16,
+              21,
+              302,
+              0,
+              1
+            ],
+            "numLengths": 5,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "2": [
+              16,
+              21,
+              302
+            ],
+            "3": [
+              0,
+              1
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 3,
+              "value": 0,
+              "bitCode": 6
+            },
+            "1": {
+              "bitLength": 3,
+              "value": 1,
+              "bitCode": 7
+            },
+            "16": {
+              "bitLength": 2,
+              "value": 16,
+              "bitCode": 0
+            },
+            "21": {
+              "bitLength": 2,
+              "value": 21,
+              "bitCode": 1
+            },
+            "302": {
+              "bitLength": 2,
+              "value": 302,
+              "bitCode": 2
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 2,
+              "value": 16,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 21,
+              "bitCode": 1
+            },
+            {
+              "bitLength": 2,
+              "value": 302,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 0,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 1,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 3,
+              "value": 0,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 1,
+              "bitCode": 7
+            },
+            {
+              "bitLength": 2,
+              "value": 16,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": 21,
+              "bitCode": 1
+            },
+            {
+              "bitLength": 2,
+              "value": 302,
+              "bitCode": 2
+            }
+          ],
+          "sortedValuesByBitCode": [
+            16,
+            21,
+            302,
+            0,
+            1
+          ],
+          "sortedBitCodes": [
+            0,
+            1,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            1,
+            2,
+            -1,
+            -1,
+            -1,
+            3,
+            4
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 5,
+            "symbols": [
+              -201,
+              -96,
+              201,
+              0,
+              96
+            ],
+            "numLengths": 5,
+            "bitLengths": [
+              2,
+              2,
+              2,
+              3,
+              3
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "2": [
+              -201,
+              -96,
+              201
+            ],
+            "3": [
+              0,
+              96
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 3,
+              "value": 0,
+              "bitCode": 6
+            },
+            "96": {
+              "bitLength": 3,
+              "value": 96,
+              "bitCode": 7
+            },
+            "201": {
+              "bitLength": 2,
+              "value": 201,
+              "bitCode": 2
+            },
+            "-201": {
+              "bitLength": 2,
+              "value": -201,
+              "bitCode": 0
+            },
+            "-96": {
+              "bitLength": 2,
+              "value": -96,
+              "bitCode": 1
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 2,
+              "value": -201,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": -96,
+              "bitCode": 1
+            },
+            {
+              "bitLength": 2,
+              "value": 201,
+              "bitCode": 2
+            },
+            {
+              "bitLength": 3,
+              "value": 0,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 96,
+              "bitCode": 7
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 2,
+              "value": -201,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 2,
+              "value": -96,
+              "bitCode": 1
+            },
+            {
+              "bitLength": 3,
+              "value": 0,
+              "bitCode": 6
+            },
+            {
+              "bitLength": 3,
+              "value": 96,
+              "bitCode": 7
+            },
+            {
+              "bitLength": 2,
+              "value": 201,
+              "bitCode": 2
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -201,
+            -96,
+            201,
+            0,
+            96
+          ],
+          "sortedBitCodes": [
+            0,
+            1,
+            2,
+            6,
+            7
+          ],
+          "sortedBitLengthsByBitCode": [
+            2,
+            2,
+            2,
+            3,
+            3
+          ],
+          "bitCodeToValue": [
+            0,
+            1,
+            2,
+            -1,
+            -1,
+            -1,
+            3,
+            4
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -1195,6 +1654,12 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {}
@@ -1267,12 +1732,18 @@
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 6,
             "readLength": 101,
             "alignmentStart": 21,
             "readGroupId": 0,
             "readName": "both_reads_align_clip_adapter",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 6,
+              "alignmentStart": 16
+            },
+            "templateSize": 96,
             "readFeatures": [
               {
                 "operator": "X",
@@ -1648,29 +2119,102 @@
                 "operator": "X",
                 "position": 86,
                 "data": 1
-              }
-            ],
-            "mappingQuality": 255
-          },
-          {
-            "tags": {},
-            "flags": 99,
-            "compressionFlags": 3,
-            "sequenceId": 6,
-            "readLength": 101,
-            "alignmentStart": 500,
-            "readGroupId": 0,
-            "readName": "both_reads_align_clip_adapter",
-            "readFeatures": [
+              },
               {
                 "operator": "X",
-                "position": 1,
+                "position": 87,
                 "data": 0
               },
               {
                 "operator": "X",
-                "position": 2,
+                "position": 88,
                 "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 95,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 3
+              }
+            ],
+            "mappingQuality": 255,
+            "qualityScores": 8,
+            "uniqueId": 0
+          },
+          {
+            "tags": {},
+            "flags": 147,
+            "cramFlags": 3,
+            "sequenceId": 6,
+            "readLength": 101,
+            "alignmentStart": 16,
+            "readGroupId": 0,
+            "readName": "both_reads_align_clip_adapter",
+            "mate": {
+              "flags": 0,
+              "sequenceID": 6,
+              "alignmentStart": 21
+            },
+            "templateSize": -96,
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 1,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 0
               },
               {
                 "operator": "X",
@@ -1679,18 +2223,23 @@
               },
               {
                 "operator": "X",
-                "position": 5,
-                "data": 3
+                "position": 4,
+                "data": 1
               },
               {
                 "operator": "X",
-                "position": 6,
+                "position": 5,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 7,
                 "data": 0
               },
               {
                 "operator": "X",
                 "position": 8,
-                "data": 1
+                "data": 0
               },
               {
                 "operator": "X",
@@ -1705,42 +2254,37 @@
               {
                 "operator": "X",
                 "position": 11,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 12,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 13,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 14,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 15,
                 "data": 3
               },
               {
                 "operator": "X",
+                "position": 13,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 0
+              },
+              {
+                "operator": "X",
                 "position": 16,
-                "data": 1
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 17,
-                "data": 0
+                "data": 1
               },
               {
                 "operator": "X",
                 "position": 18,
-                "data": 0
+                "data": 2
               },
               {
                 "operator": "X",
@@ -1749,141 +2293,23 @@
               },
               {
                 "operator": "X",
-                "position": 20,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 22,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 23,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 24,
-                "data": 2
-              }
-            ],
-            "mappingQuality": 255
-          },
-          {
-            "tags": {},
-            "flags": 163,
-            "compressionFlags": 3,
-            "sequenceId": 6,
-            "readLength": 101,
-            "alignmentStart": 42,
-            "readGroupId": 0,
-            "readName": "both_reads_align_clip_marked",
-            "readFeatures": [
-              {
-                "operator": "X",
-                "position": 1,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 2,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 4,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 5,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 6,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 7,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 8,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 9,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 10,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 12,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 14,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 15,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 16,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 17,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 18,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 20,
-                "data": 2
-              },
-              {
-                "operator": "X",
                 "position": 21,
                 "data": 2
               },
               {
                 "operator": "X",
-                "position": 22,
-                "data": 0
-              },
-              {
-                "operator": "X",
                 "position": 23,
-                "data": 1
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 24,
-                "data": 1
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 25,
-                "data": 0
+                "data": 2
               },
               {
                 "operator": "X",
@@ -1892,18 +2318,28 @@
               },
               {
                 "operator": "X",
-                "position": 29,
+                "position": 27,
                 "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 30,
-                "data": 1
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 31,
-                "data": 2
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 1
               },
               {
                 "operator": "X",
@@ -1913,7 +2349,7 @@
               {
                 "operator": "X",
                 "position": 34,
-                "data": 2
+                "data": 0
               },
               {
                 "operator": "X",
@@ -1922,38 +2358,23 @@
               },
               {
                 "operator": "X",
-                "position": 36,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 37,
-                "data": 0
-              },
-              {
-                "operator": "X",
                 "position": 38,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 39,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 40,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 41,
-                "data": 3
+                "position": 39,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 42,
-                "data": 2
+                "data": 1
               },
               {
                 "operator": "X",
@@ -1963,22 +2384,22 @@
               {
                 "operator": "X",
                 "position": 44,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 45,
                 "data": 2
               },
               {
                 "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
                 "position": 46,
-                "data": 1
+                "data": 0
               },
               {
                 "operator": "X",
                 "position": 47,
-                "data": 1
+                "data": 3
               },
               {
                 "operator": "X",
@@ -1988,22 +2409,22 @@
               {
                 "operator": "X",
                 "position": 49,
-                "data": 3
+                "data": 1
               },
               {
                 "operator": "X",
                 "position": 50,
-                "data": 2
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 51,
-                "data": 0
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 52,
-                "data": 3
+                "data": 2
               },
               {
                 "operator": "X",
@@ -2013,17 +2434,17 @@
               {
                 "operator": "X",
                 "position": 54,
-                "data": 3
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 55,
-                "data": 3
+                "data": 1
               },
               {
                 "operator": "X",
                 "position": 56,
-                "data": 3
+                "data": 1
               },
               {
                 "operator": "X",
@@ -2038,7 +2459,7 @@
               {
                 "operator": "X",
                 "position": 59,
-                "data": 3
+                "data": 2
               },
               {
                 "operator": "X",
@@ -2048,350 +2469,42 @@
               {
                 "operator": "X",
                 "position": 61,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 63,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 64,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 65,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 66,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 68,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 69,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 71,
                 "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 72,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 73,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 75,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 76,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 77,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 79,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 80,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 81,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 82,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 83,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 85,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 90,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 92,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 102,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 103,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 106,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 139,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 140,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 142,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 145,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 149,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 150,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 153,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 154,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 155,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 156,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 157,
-                "data": 3
-              }
-            ],
-            "mappingQuality": 255
-          },
-          {
-            "tags": {},
-            "flags": 147,
-            "compressionFlags": 3,
-            "sequenceId": 6,
-            "readLength": 101,
-            "alignmentStart": 256,
-            "readGroupId": 0,
-            "readName": "both_reads_align_clip_marked",
-            "readFeatures": [
-              {
-                "operator": "X",
-                "position": 1,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 2,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 3,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 15,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 26,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 34,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 36,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 37,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 38,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 39,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 42,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 43,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 44,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 45,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 46,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 47,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 49,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 50,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 51,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 52,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 54,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 56,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 58,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 59,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 60,
-                "data": 1
               },
               {
                 "operator": "X",
                 "position": 62,
-                "data": 0
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 63,
-                "data": 1
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 64,
-                "data": 0
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 65,
-                "data": 2
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 66,
-                "data": 0
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 67,
-                "data": 0
+                "data": 3
               },
               {
                 "operator": "X",
                 "position": 68,
-                "data": 0
+                "data": 3
               },
               {
                 "operator": "X",
@@ -2406,6 +2519,11 @@
               {
                 "operator": "X",
                 "position": 72,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 73,
                 "data": 1
               },
               {
@@ -2420,13 +2538,530 @@
               },
               {
                 "operator": "X",
-                "position": 76,
-                "data": 1
+                "position": 77,
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 78,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 84,
                 "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 85,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 3
+              }
+            ],
+            "mappingQuality": 255,
+            "qualityScores": 6,
+            "uniqueId": 1
+          },
+          {
+            "tags": {},
+            "flags": 83,
+            "cramFlags": 3,
+            "sequenceId": 6,
+            "readLength": 101,
+            "alignmentStart": 1,
+            "readGroupId": 0,
+            "readName": "both_reads_align_clip_marked",
+            "mate": {
+              "flags": 0,
+              "sequenceID": 6,
+              "alignmentStart": 302
+            },
+            "templateSize": 201,
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 3
+              }
+            ],
+            "mappingQuality": 255,
+            "qualityScores": 13,
+            "uniqueId": 2
+          },
+          {
+            "tags": {},
+            "flags": 163,
+            "cramFlags": 3,
+            "sequenceId": 6,
+            "readLength": 101,
+            "alignmentStart": 302,
+            "readGroupId": 0,
+            "readName": "both_reads_align_clip_marked",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 6,
+              "alignmentStart": 1
+            },
+            "templateSize": -201,
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 1,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 2,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 3,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 6,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 7,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 8,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 10,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 11,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 13,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 15,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 16,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 18,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 20,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 22,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 23,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 24,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 27,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 28,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 49,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 51,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 0
               },
               {
                 "operator": "X",
@@ -2436,11 +3071,6 @@
               {
                 "operator": "X",
                 "position": 81,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 82,
                 "data": 2
               },
               {
@@ -2451,42 +3081,47 @@
               {
                 "operator": "X",
                 "position": 84,
-                "data": 1
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 85,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 86,
-                "data": 1
+                "data": 2
               },
               {
                 "operator": "X",
                 "position": 87,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 91,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 92,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 93,
-                "data": 2
+                "position": 89,
+                "data": 1
               },
               {
                 "operator": "X",
-                "position": 94,
-                "data": 2
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 96,
+                "data": 0
               },
               {
                 "operator": "X",
@@ -2500,116 +3135,139 @@
               },
               {
                 "operator": "X",
-                "position": 99,
+                "position": 100,
+                "data": 1
+              }
+            ],
+            "mappingQuality": 255,
+            "qualityScores": 9,
+            "uniqueId": 3
+          },
+          {
+            "tags": {},
+            "flags": 89,
+            "cramFlags": 3,
+            "sequenceId": 6,
+            "readLength": 101,
+            "alignmentStart": 1,
+            "readGroupId": 0,
+            "readName": "both_reads_present_only_first_aligns",
+            "mate": {
+              "flags": 2,
+              "sequenceID": -1,
+              "alignmentStart": 0
+            },
+            "templateSize": 0,
+            "readFeatures": [
+              {
+                "operator": "X",
+                "position": 10,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 100,
-                "data": 2
+                "position": 11,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 14,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 63,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 64,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
               },
               {
                 "operator": "X",
                 "position": 101,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 102,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 103,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 104,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 105,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 107,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 108,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 109,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 110,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 111,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 113,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 114,
-                "data": 0
-              },
-              {
-                "operator": "X",
-                "position": 116,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 117,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 119,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 120,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 121,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 123,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 125,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 126,
-                "data": 1
+                "data": 3
               }
             ],
-            "mappingQuality": 255
+            "mappingQuality": 255,
+            "qualityScores": 13,
+            "uniqueId": 4
           }
         ]
       }
@@ -3174,6 +3832,210 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              6
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              6
+            ]
+          },
+          "codes": {
+            "6": {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            6
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              1
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -3368,6 +4230,12 @@
             3,
             4
           ]
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {}
@@ -3438,13 +4306,21 @@
           {
             "tags": {},
             "flags": 165,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "both_reads_present_only_first_aligns",
-            "readBases": "NCGCGGCATCNCGATTTCTTTCCGCAGCTAACCTCCCGACAGATCGGCAGCGCGTCGTGTAGGTTATTATGGTACATCTTGTCGTGCGGCNAGAGCATACA"
+            "mate": {
+              "flags": 1,
+              "sequenceID": 6,
+              "alignmentStart": 1
+            },
+            "templateSize": 0,
+            "readBases": "NCGCGGCATCNCGATTTCTTTCCGCAGCTAACCTCCCGACAGATCGGCAGCGCGTCGTGTAGGTTATTATGGTACATCTTGTCGTGCGGCNAGAGCATACA",
+            "qualityScores": 5,
+            "uniqueId": 5
           }
         ]
       }
@@ -4120,6 +4996,276 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              0,
+              1
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              0,
+              1
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 1
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              6
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              6
+            ]
+          },
+          "codes": {
+            "6": {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            6
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              1,
+              302
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              1,
+              302
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            "302": {
+              "bitLength": 1,
+              "value": 302,
+              "bitCode": 1
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 302,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 302,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1,
+            302
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              -201,
+              201
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              -201,
+              201
+            ]
+          },
+          "codes": {
+            "201": {
+              "bitLength": 1,
+              "value": 201,
+              "bitCode": 1
+            },
+            "-201": {
+              "bitLength": 1,
+              "value": -201,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": -201,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 201,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": -201,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 201,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -201,
+            201
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -4672,13 +5818,6 @@
             10
           ]
         },
-        "IN": {
-          "parameters": {
-            "stopByte": 0,
-            "blockContentId": 13
-          },
-          "dataType": "byteArray"
-        },
         "BS": {
           "parameters": {
             "numCodes": 4,
@@ -4847,6 +5986,12 @@
             0
           ]
         },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
+        },
         "DL": {
           "parameters": {
             "numCodes": 1,
@@ -4897,6 +6042,13 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "IN": {
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          },
+          "dataType": "byteArray"
         }
       },
       "tagCodecCache": {}
@@ -4968,31 +6120,37 @@
           {
             "tags": {},
             "flags": 83,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 6,
             "readLength": 101,
             "alignmentStart": 1,
             "readGroupId": 0,
             "readName": "read_2_too_many_gaps",
+            "mate": {
+              "flags": 0,
+              "sequenceID": 6,
+              "alignmentStart": 302
+            },
+            "templateSize": 201,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 1,
-                "data": "TCCGC"
-              },
-              {
                 "operator": "X",
-                "position": 11,
+                "position": 10,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 12,
+                "position": 11,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 15,
+                "position": 14,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 47,
                 "data": 3
               },
               {
@@ -5002,17 +6160,17 @@
               },
               {
                 "operator": "X",
-                "position": 49,
+                "position": 50,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 51,
+                "position": 53,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 54,
+                "position": 57,
                 "data": 3
               },
               {
@@ -5022,7 +6180,7 @@
               },
               {
                 "operator": "X",
-                "position": 59,
+                "position": 61,
                 "data": 3
               },
               {
@@ -5062,71 +6220,79 @@
               },
               {
                 "operator": "X",
-                "position": 69,
+                "position": 80,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 81,
+                "position": 91,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 92,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 100,
+                "position": 99,
                 "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 3
               }
             ],
-            "mappingQuality": 255
+            "mappingQuality": 255,
+            "qualityScores": 8,
+            "uniqueId": 6
           },
           {
             "tags": {},
-            "flags": 83,
-            "compressionFlags": 3,
+            "flags": 163,
+            "cramFlags": 3,
             "sequenceId": 6,
             "readLength": 101,
-            "alignmentStart": 377,
+            "alignmentStart": 302,
             "readGroupId": 0,
             "readName": "read_2_too_many_gaps",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 6,
+              "alignmentStart": 1
+            },
+            "templateSize": -201,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 2,
-                "data": ""
+                "operator": "X",
+                "position": 1,
+                "data": 3
               },
               {
-                "operator": "D",
+                "operator": "X",
+                "position": 2,
+                "data": 0
+              },
+              {
+                "operator": "X",
                 "position": 3,
                 "data": 1
               },
               {
-                "operator": "D",
-                "position": 4,
-                "data": 1
-              },
-              {
-                "operator": "I",
-                "position": 5,
-                "data": ""
-              },
-              {
                 "operator": "X",
                 "position": 6,
-                "data": 0
+                "data": 1
               },
               {
                 "operator": "X",
                 "position": 7,
-                "data": 2
+                "data": 1
               },
               {
-                "operator": "I",
+                "operator": "X",
                 "position": 8,
-                "data": ""
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
               },
               {
                 "operator": "X",
@@ -5140,66 +6306,368 @@
               },
               {
                 "operator": "X",
-                "position": 12,
-                "data": 0
+                "position": 11,
+                "data": 3
               },
               {
-                "operator": "D",
+                "operator": "X",
                 "position": 13,
                 "data": 1
               },
               {
                 "operator": "X",
                 "position": 14,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 15,
-                "data": 1
-              },
-              {
-                "operator": "I",
-                "position": 16,
-                "data": ""
-              },
-              {
-                "operator": "X",
-                "position": 17,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 19,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 20,
                 "data": 0
               },
               {
                 "operator": "X",
-                "position": 21,
+                "position": 15,
                 "data": 2
               },
               {
                 "operator": "X",
-                "position": 24,
+                "position": 18,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 25,
+                "position": 19,
                 "data": 2
               },
               {
                 "operator": "I",
+                "position": 21,
+                "data": "TCCGC"
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
                 "position": 27,
-                "data": ""
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 0
               }
             ],
-            "mappingQuality": 255
+            "mappingQuality": 255,
+            "qualityScores": 6,
+            "uniqueId": 7
           }
         ]
       }
@@ -5875,6 +7343,276 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              0,
+              1
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              0,
+              1
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            "1": {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 1
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 0,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0,
+            1
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              6
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              6
+            ]
+          },
+          "codes": {
+            "6": {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 6,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            6
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              1,
+              302
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              1,
+              302
+            ]
+          },
+          "codes": {
+            "1": {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            "302": {
+              "bitLength": 1,
+              "value": 302,
+              "bitCode": 1
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 302,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": 1,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 302,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            1,
+            302
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 2,
+            "symbols": [
+              -201,
+              201
+            ],
+            "numLengths": 2,
+            "bitLengths": [
+              1,
+              1
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "1": [
+              -201,
+              201
+            ]
+          },
+          "codes": {
+            "201": {
+              "bitLength": 1,
+              "value": 201,
+              "bitCode": 1
+            },
+            "-201": {
+              "bitLength": 1,
+              "value": -201,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 1,
+              "value": -201,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 201,
+              "bitCode": 1
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 1,
+              "value": -201,
+              "bitCode": 0
+            },
+            {
+              "bitLength": 1,
+              "value": 201,
+              "bitCode": 1
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -201,
+            201
+          ],
+          "sortedBitCodes": [
+            0,
+            1
+          ],
+          "sortedBitLengthsByBitCode": [
+            1,
+            1
+          ],
+          "bitCodeToValue": [
+            0,
+            1
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -6427,13 +8165,6 @@
             10
           ]
         },
-        "IN": {
-          "parameters": {
-            "stopByte": 0,
-            "blockContentId": 13
-          },
-          "dataType": "byteArray"
-        },
         "BS": {
           "parameters": {
             "numCodes": 4,
@@ -6602,6 +8333,12 @@
             0
           ]
         },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
+        },
         "DL": {
           "parameters": {
             "numCodes": 1,
@@ -6652,6 +8389,13 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "IN": {
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          },
+          "dataType": "byteArray"
         }
       },
       "tagCodecCache": {}
@@ -6723,31 +8467,37 @@
           {
             "tags": {},
             "flags": 83,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 6,
             "readLength": 101,
             "alignmentStart": 1,
             "readGroupId": 0,
             "readName": "read_2_too_many_gaps",
+            "mate": {
+              "flags": 0,
+              "sequenceID": 6,
+              "alignmentStart": 302
+            },
+            "templateSize": 201,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 1,
-                "data": "TCCGC"
-              },
-              {
                 "operator": "X",
-                "position": 11,
+                "position": 10,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 12,
+                "position": 11,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 15,
+                "position": 14,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 47,
                 "data": 3
               },
               {
@@ -6757,17 +8507,17 @@
               },
               {
                 "operator": "X",
-                "position": 49,
+                "position": 50,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 51,
+                "position": 53,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 54,
+                "position": 57,
                 "data": 3
               },
               {
@@ -6777,7 +8527,7 @@
               },
               {
                 "operator": "X",
-                "position": 59,
+                "position": 61,
                 "data": 3
               },
               {
@@ -6817,71 +8567,79 @@
               },
               {
                 "operator": "X",
-                "position": 69,
+                "position": 80,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 81,
+                "position": 91,
                 "data": 3
               },
               {
                 "operator": "X",
-                "position": 92,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 100,
+                "position": 99,
                 "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 3
               }
             ],
-            "mappingQuality": 255
+            "mappingQuality": 255,
+            "qualityScores": 8,
+            "uniqueId": 6
           },
           {
             "tags": {},
-            "flags": 83,
-            "compressionFlags": 3,
+            "flags": 163,
+            "cramFlags": 3,
             "sequenceId": 6,
             "readLength": 101,
-            "alignmentStart": 377,
+            "alignmentStart": 302,
             "readGroupId": 0,
             "readName": "read_2_too_many_gaps",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 6,
+              "alignmentStart": 1
+            },
+            "templateSize": -201,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 2,
-                "data": ""
+                "operator": "X",
+                "position": 1,
+                "data": 3
               },
               {
-                "operator": "D",
+                "operator": "X",
+                "position": 2,
+                "data": 0
+              },
+              {
+                "operator": "X",
                 "position": 3,
                 "data": 1
               },
               {
-                "operator": "D",
-                "position": 4,
-                "data": 1
-              },
-              {
-                "operator": "I",
-                "position": 5,
-                "data": ""
-              },
-              {
                 "operator": "X",
                 "position": 6,
-                "data": 0
+                "data": 1
               },
               {
                 "operator": "X",
                 "position": 7,
-                "data": 2
+                "data": 1
               },
               {
-                "operator": "I",
+                "operator": "X",
                 "position": 8,
-                "data": ""
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 9,
+                "data": 2
               },
               {
                 "operator": "X",
@@ -6895,66 +8653,368 @@
               },
               {
                 "operator": "X",
-                "position": 12,
-                "data": 0
+                "position": 11,
+                "data": 3
               },
               {
-                "operator": "D",
+                "operator": "X",
                 "position": 13,
                 "data": 1
               },
               {
                 "operator": "X",
                 "position": 14,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 15,
-                "data": 1
-              },
-              {
-                "operator": "I",
-                "position": 16,
-                "data": ""
-              },
-              {
-                "operator": "X",
-                "position": 17,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 19,
-                "data": 1
-              },
-              {
-                "operator": "X",
-                "position": 20,
                 "data": 0
               },
               {
                 "operator": "X",
-                "position": 21,
+                "position": 15,
                 "data": 2
               },
               {
                 "operator": "X",
-                "position": 24,
+                "position": 18,
                 "data": 1
               },
               {
                 "operator": "X",
-                "position": 25,
+                "position": 19,
                 "data": 2
               },
               {
                 "operator": "I",
+                "position": 21,
+                "data": "TCCGC"
+              },
+              {
+                "operator": "X",
+                "position": 26,
+                "data": 0
+              },
+              {
+                "operator": "X",
                 "position": 27,
-                "data": ""
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 29,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 30,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 31,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 32,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 33,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 34,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 35,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 36,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 37,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 38,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 39,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 40,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 41,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 42,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 43,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 44,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 45,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 46,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 47,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 48,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 50,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 53,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 54,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 55,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 56,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 57,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 58,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 59,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 60,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 61,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 62,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 65,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 66,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 67,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 68,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 69,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 71,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 72,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 73,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 74,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 75,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 76,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 77,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 78,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 80,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 81,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 82,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 83,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 84,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 86,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 87,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 88,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 89,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 90,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 91,
+                "data": 3
+              },
+              {
+                "operator": "X",
+                "position": 92,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 93,
+                "data": 1
+              },
+              {
+                "operator": "X",
+                "position": 94,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 97,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 98,
+                "data": 2
+              },
+              {
+                "operator": "X",
+                "position": 99,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 100,
+                "data": 0
+              },
+              {
+                "operator": "X",
+                "position": 101,
+                "data": 0
               }
             ],
-            "mappingQuality": 255
+            "mappingQuality": 255,
+            "qualityScores": 6,
+            "uniqueId": 7
           }
         ]
       }

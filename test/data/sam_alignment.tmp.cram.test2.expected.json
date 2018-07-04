@@ -1,0 +1,147 @@
+[
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 4,
+    "alignmentStart": 100,
+    "readGroupId": -1,
+    "readName": "a",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 10,
+    "qualityScores": 80,
+    "uniqueId": 0
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 4,
+    "alignmentStart": 200,
+    "readGroupId": -1,
+    "readName": "bc",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 3,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 4,
+        "data": 0
+      }
+    ],
+    "mappingQuality": 10,
+    "qualityScores": 80,
+    "uniqueId": 1
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 4,
+    "alignmentStart": 300,
+    "readGroupId": -1,
+    "readName": "def",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 3,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 4,
+        "data": 0
+      }
+    ],
+    "mappingQuality": 10,
+    "qualityScores": 80,
+    "uniqueId": 2
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 4,
+    "alignmentStart": 400,
+    "readGroupId": -1,
+    "readName": "ghij",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 1,
+        "data": 0
+      },
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 3,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 4,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 10,
+    "qualityScores": 80,
+    "uniqueId": 3
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 4,
+    "alignmentStart": 500,
+    "readGroupId": -1,
+    "readName": "klmno",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 1,
+        "data": 0
+      },
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 4,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 10,
+    "qualityScores": 80,
+    "uniqueId": 4
+  }
+]

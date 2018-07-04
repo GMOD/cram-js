@@ -139,6 +139,7 @@ function decodeRecord(
   blocksByContentId,
   cursors,
   majorVersion,
+  recordNumber,
 ) {
   const cramRecord = new CramRecord()
 
@@ -147,7 +148,7 @@ function decodeRecord(
   // note: the C data type of compressionFlags is byte in cram v1
   // and int32 in cram v2+, but that does not matter for us here
   // in javascript land.
-  cramRecord.compressionFlags = decodeDataSeries('CF')
+  cramRecord.cramFlags = decodeDataSeries('CF')
 
   if (majorVersion > 1 && sliceHeader.content.refSeqId === -2)
     cramRecord.sequenceId = decodeDataSeries('RI')
@@ -164,16 +165,17 @@ function decodeRecord(
   // mate record
   if (cramRecord.isDetached()) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't matter for javascript
-    cramRecord.mateFlags = decodeDataSeries('MF')
-    cramRecord.mate = {}
+    const mate = {}
+    mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded)
       cramRecord.mate.readName = decodeDataSeries('RN') // new String(readNameCodec.readData(), charset)
-    cramRecord.mate.sequenceID = decodeDataSeries('NS')
-    cramRecord.mate.alignmentStart = decodeDataSeries('NP')
+    mate.sequenceID = decodeDataSeries('NS')
+    mate.alignmentStart = decodeDataSeries('NP')
+    if (mate.flags || mate.sequenceID > -1) cramRecord.mate = mate
     cramRecord.templateSize = decodeDataSeries('TS')
     // detachedCount++
   } else if (cramRecord.hasMateDownStream()) {
-    cramRecord.recordsToNextFragment = decodeDataSeries('NF')
+    cramRecord.recordsToNextFragment = decodeDataSeries('NF') + recordNumber + 1
   }
 
   // TODO: the aux tag parsing will have to be refactored if we want to support

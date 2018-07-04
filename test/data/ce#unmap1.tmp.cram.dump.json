@@ -1012,6 +1012,210 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              -1
+            ]
+          },
+          "codes": {
+            "-1": {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -1066,6 +1270,12 @@
         "BA": {
           "parameters": {
             "blockContentId": 30
+          },
+          "dataType": "byte"
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
           },
           "dataType": "byte"
         }
@@ -1153,91 +1363,112 @@
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808391",
-            "readBases": "GATCGCACTGAAAATCTGGATATAGAACGTGTGCAAATGATTGTCTCTACCGTTCCGTAAAAATTATTGCTAATTAGCAATGATTTTAAGCTAATTAGTT"
+            "templateSize": 0,
+            "readBases": "GATCGCACTGAAAATCTGGATATAGAACGTGTGCAAATGATTGTCTCTACCGTTCCGTAAAAATTATTGCTAATTAGCAATGATTTTAAGCTAATTAGTT",
+            "qualityScores": 34,
+            "uniqueId": 0
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808433",
-            "readBases": "NCATCTTCTGCAGGCGCGGTCGGCACCGTGTATTCGTTACGTTCCACGCCGATGATATTAGACACCAGCACGGTGTGATGCGCAGTCACCGCACGACCCG"
+            "templateSize": 0,
+            "readBases": "NCATCTTCTGCAGGCGCGGTCGGCACCGTGTATTCGTTACGTTCCACGCCGATGATATTAGACACCAGCACGGTGTGATGCGCAGTCACCGCACGACCCG",
+            "qualityScores": 34,
+            "uniqueId": 1
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808462",
-            "readBases": "NGTTTGAGCGCAATGACTTGACGATGACCGGTGATTACAGTAACCAGCATATTGTGCCGATGAAGCAGGCTGTCGCTCCGCAATTTGAAGAGGGACACGA"
+            "templateSize": 0,
+            "readBases": "NGTTTGAGCGCAATGACTTGACGATGACCGGTGATTACAGTAACCAGCATATTGTGCCGATGAAGCAGGCTGTCGCTCCGCAATTTGAAGAGGGACACGA",
+            "qualityScores": 34,
+            "uniqueId": 2
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808468",
-            "readBases": "NGCTTCCCACTATATTTTACTCTCTGTGGCTTCCCACTTTATTTTACTCTCTGTGGCTTTATCGATTATTTTTTTCTCCTTGGCTTTCCTCTTTATTTTT"
+            "templateSize": 0,
+            "readBases": "NGCTTCCCACTATATTTTACTCTCTGTGGCTTCCCACTTTATTTTACTCTCTGTGGCTTTATCGATTATTTTTTTCTCCTTGGCTTTCCTCTTTATTTTT",
+            "qualityScores": 34,
+            "uniqueId": 3
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808471",
-            "readBases": "NCGTCTTCTGCGGTTTCTATGATAGAGCAATTCTGTGGCGGATATTAAGATAACGGGTATCTGTTCTTTAATGATGCCGCAAAAAATGGAAAGTTAAGAA"
+            "templateSize": 0,
+            "readBases": "NCGTCTTCTGCGGTTTCTATGATAGAGCAATTCTGTGGCGGATATTAAGATAACGGGTATCTGTTCTTTAATGATGCCGCAAAAAATGGAAAGTTAAGAA",
+            "qualityScores": 34,
+            "uniqueId": 4
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808489",
-            "readBases": "NGGAAATTCTGCGGTATCGAGAGATATTTGCCTTTAATTACCCCATAGCCGATTAACATCCCGGCACTATTAATCATTTCAATATTATCAATCACAAAGT"
+            "templateSize": 0,
+            "readBases": "NGGAAATTCTGCGGTATCGAGAGATATTTGCCTTTAATTACCCCATAGCCGATTAACATCCCGGCACTATTAATCATTTCAATATTATCAATCACAAAGT",
+            "qualityScores": 34,
+            "uniqueId": 5
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808504",
-            "readBases": "NTGGAACACCATGCCCACTTTCGCACGCAGCAGGGCGATATCCTGAGAGTTGGTCAGGATGTTGTCGCCATCAAGCAGAATTTCACCTTCCGCACGCTGC"
+            "templateSize": 0,
+            "readBases": "NTGGAACACCATGCCCACTTTCGCACGCAGCAGGGCGATATCCTGAGAGTTGGTCAGGATGTTGTCGCCATCAAGCAGAATTTCACCTTCCGCACGCTGC",
+            "qualityScores": 34,
+            "uniqueId": 6
           }
         ]
       },
@@ -2945,39 +3176,48 @@
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808511",
-            "readBases": "NCAGAAATATATTGAACTTTTGAAACATGTCCCAACTTTTTTTTTTTTTAGAACACGTTGGCTGGTTTTTCAAGTTTTGAATACTTTTTAGGTTTTTTTG"
+            "templateSize": 0,
+            "readBases": "NCAGAAATATATTGAACTTTTGAAACATGTCCCAACTTTTTTTTTTTTTAGAACACGTTGGCTGGTTTTTCAAGTTTTGAATACTTTTTAGGTTTTTTTG",
+            "qualityScores": 0,
+            "uniqueId": 7
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808521",
-            "readBases": "NTGTCAATACATTGTAAGGATTTCCCATTATGTCAATACATAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATTTCGTATGTCGTGTTTCTTT"
+            "templateSize": 0,
+            "readBases": "NTGTCAATACATTGTAAGGATTTCCCATTATGTCAATACATAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATTTCGTATGTCGTGTTTCTTT",
+            "qualityScores": 9,
+            "uniqueId": 8
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808523",
-            "readBases": "NTACTTCTTACAAGATTTTTATCGCTACTTGAAAAAAATTCATCAACATAATCGCCATGACTATCTGCACCGTGAGTATGATAAGCAGCAACTCTATCTG"
+            "templateSize": 0,
+            "readBases": "NTACTTCTTACAAGATTTTTATCGCTACTTGAAAAAAATTCATCAACATAATCGCCATGACTATCTGCACCGTGAGTATGATAAGCAGCAACTCTATCTG",
+            "qualityScores": 9,
+            "uniqueId": 9
           }
         ]
       }
@@ -3562,6 +3802,210 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              -1
+            ]
+          },
+          "codes": {
+            "-1": {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -3616,6 +4060,12 @@
         "BA": {
           "parameters": {
             "blockContentId": 30
+          },
+          "dataType": "byte"
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
           },
           "dataType": "byte"
         }
@@ -3703,91 +4153,112 @@
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808391",
-            "readBases": "GATCGCACTGAAAATCTGGATATAGAACGTGTGCAAATGATTGTCTCTACCGTTCCGTAAAAATTATTGCTAATTAGCAATGATTTTAAGCTAATTAGTT"
+            "templateSize": 0,
+            "readBases": "GATCGCACTGAAAATCTGGATATAGAACGTGTGCAAATGATTGTCTCTACCGTTCCGTAAAAATTATTGCTAATTAGCAATGATTTTAAGCTAATTAGTT",
+            "qualityScores": 34,
+            "uniqueId": 0
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808433",
-            "readBases": "NCATCTTCTGCAGGCGCGGTCGGCACCGTGTATTCGTTACGTTCCACGCCGATGATATTAGACACCAGCACGGTGTGATGCGCAGTCACCGCACGACCCG"
+            "templateSize": 0,
+            "readBases": "NCATCTTCTGCAGGCGCGGTCGGCACCGTGTATTCGTTACGTTCCACGCCGATGATATTAGACACCAGCACGGTGTGATGCGCAGTCACCGCACGACCCG",
+            "qualityScores": 34,
+            "uniqueId": 1
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808462",
-            "readBases": "NGTTTGAGCGCAATGACTTGACGATGACCGGTGATTACAGTAACCAGCATATTGTGCCGATGAAGCAGGCTGTCGCTCCGCAATTTGAAGAGGGACACGA"
+            "templateSize": 0,
+            "readBases": "NGTTTGAGCGCAATGACTTGACGATGACCGGTGATTACAGTAACCAGCATATTGTGCCGATGAAGCAGGCTGTCGCTCCGCAATTTGAAGAGGGACACGA",
+            "qualityScores": 34,
+            "uniqueId": 2
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808468",
-            "readBases": "NGCTTCCCACTATATTTTACTCTCTGTGGCTTCCCACTTTATTTTACTCTCTGTGGCTTTATCGATTATTTTTTTCTCCTTGGCTTTCCTCTTTATTTTT"
+            "templateSize": 0,
+            "readBases": "NGCTTCCCACTATATTTTACTCTCTGTGGCTTCCCACTTTATTTTACTCTCTGTGGCTTTATCGATTATTTTTTTCTCCTTGGCTTTCCTCTTTATTTTT",
+            "qualityScores": 34,
+            "uniqueId": 3
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808471",
-            "readBases": "NCGTCTTCTGCGGTTTCTATGATAGAGCAATTCTGTGGCGGATATTAAGATAACGGGTATCTGTTCTTTAATGATGCCGCAAAAAATGGAAAGTTAAGAA"
+            "templateSize": 0,
+            "readBases": "NCGTCTTCTGCGGTTTCTATGATAGAGCAATTCTGTGGCGGATATTAAGATAACGGGTATCTGTTCTTTAATGATGCCGCAAAAAATGGAAAGTTAAGAA",
+            "qualityScores": 34,
+            "uniqueId": 4
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808489",
-            "readBases": "NGGAAATTCTGCGGTATCGAGAGATATTTGCCTTTAATTACCCCATAGCCGATTAACATCCCGGCACTATTAATCATTTCAATATTATCAATCACAAAGT"
+            "templateSize": 0,
+            "readBases": "NGGAAATTCTGCGGTATCGAGAGATATTTGCCTTTAATTACCCCATAGCCGATTAACATCCCGGCACTATTAATCATTTCAATATTATCAATCACAAAGT",
+            "qualityScores": 34,
+            "uniqueId": 5
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808504",
-            "readBases": "NTGGAACACCATGCCCACTTTCGCACGCAGCAGGGCGATATCCTGAGAGTTGGTCAGGATGTTGTCGCCATCAAGCAGAATTTCACCTTCCGCACGCTGC"
+            "templateSize": 0,
+            "readBases": "NTGGAACACCATGCCCACTTTCGCACGCAGCAGGGCGATATCCTGAGAGTTGGTCAGGATGTTGTCGCCATCAAGCAGAATTTCACCTTCCGCACGCTGC",
+            "qualityScores": 34,
+            "uniqueId": 6
           }
         ]
       },
@@ -5495,39 +5966,48 @@
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808511",
-            "readBases": "NCAGAAATATATTGAACTTTTGAAACATGTCCCAACTTTTTTTTTTTTTAGAACACGTTGGCTGGTTTTTCAAGTTTTGAATACTTTTTAGGTTTTTTTG"
+            "templateSize": 0,
+            "readBases": "NCAGAAATATATTGAACTTTTGAAACATGTCCCAACTTTTTTTTTTTTTAGAACACGTTGGCTGGTTTTTCAAGTTTTGAATACTTTTTAGGTTTTTTTG",
+            "qualityScores": 0,
+            "uniqueId": 7
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808521",
-            "readBases": "NTGTCAATACATTGTAAGGATTTCCCATTATGTCAATACATAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATTTCGTATGTCGTGTTTCTTT"
+            "templateSize": 0,
+            "readBases": "NTGTCAATACATTGTAAGGATTTCCCATTATGTCAATACATAGATCGGAAGAGCGGTTCAGCAGGAATGCCGAGACCGATTTCGTATGTCGTGTTTCTTT",
+            "qualityScores": 9,
+            "uniqueId": 8
           },
           {
             "tags": {
               "YT": "UU"
             },
             "flags": 4,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 100,
             "alignmentStart": 0,
             "readGroupId": -1,
             "readName": "SRR065390.33808523",
-            "readBases": "NTACTTCTTACAAGATTTTTATCGCTACTTGAAAAAAATTCATCAACATAATCGCCATGACTATCTGCACCGTGAGTATGATAAGCAGCAACTCTATCTG"
+            "templateSize": 0,
+            "readBases": "NTACTTCTTACAAGATTTTTATCGCTACTTGAAAAAAATTCATCAACATAATCGCCATGACTATCTGCACCGTGAGTATGATAAGCAGCAACTCTATCTG",
+            "qualityScores": 9,
+            "uniqueId": 9
           }
         ]
       }

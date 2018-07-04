@@ -17,6 +17,8 @@ const expectedFeatures5 = loadTestJSON(
   'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
 )
 
+const REWRITE_EXPECTED_DATA = false
+
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {
     const cram = new IndexedCramFile({
@@ -27,10 +29,11 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getFeaturesForRange(0, 2, 200)
-    // require('fs').writeFileSync(
-    //   'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
-    //   JSON.stringify(features, null, '  '),
-    // )
+    if (REWRITE_EXPECTED_DATA)
+      require('fs').writeFileSync(
+        'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
+        JSON.stringify(features, null, '  '),
+      )
 
     expect(features.length).to.equal(8)
     expect(features).to.deep.equal(await expectedFeatures1)
@@ -49,10 +52,11 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getFeaturesForRange(0, 2, 200)
-    // require('fs').writeFileSync(
-    //   'test/data/ce#unmap2.tmp.cram.test1.expected.json',
-    //   JSON.stringify(features, null, '  '),
-    // )
+    if (REWRITE_EXPECTED_DATA)
+      require('fs').writeFileSync(
+        'test/data/ce#unmap2.tmp.cram.test1.expected.json',
+        JSON.stringify(features, null, '  '),
+      )
     expect(features).to.deep.equal(await expectedFeatures2)
   })
 
@@ -65,10 +69,11 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getFeaturesForRange(0, 2, 200)
-    // require('fs').writeFileSync(
-    //   'test/data/ce#1000.tmp.cram.test1.expected.json',
-    //   JSON.stringify(features, null, '  '),
-    // )
+    if (REWRITE_EXPECTED_DATA)
+      require('fs').writeFileSync(
+        'test/data/ce#1000.tmp.cram.test1.expected.json',
+        JSON.stringify(features, null, '  '),
+      )
     expect(features).to.deep.equal(await expectedFeatures3)
   })
 
@@ -85,17 +90,19 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getFeaturesForRange(0, 0, Infinity)
-    // require('fs').writeFileSync(
-    //   'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
-    //   JSON.stringify(features, null, '  '),
-    // )
+    if (REWRITE_EXPECTED_DATA)
+      require('fs').writeFileSync(
+        'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
+        JSON.stringify(features, null, '  '),
+      )
     expect(features).to.deep.equal(await expectedFeatures4)
 
     const features2 = await cram.getFeaturesForRange(-1, 0, Infinity)
-    // require('fs').writeFileSync(
-    //   'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
-    //   JSON.stringify(features2, null, '  '),
-    // )
+    if (REWRITE_EXPECTED_DATA)
+      require('fs').writeFileSync(
+        'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
+        JSON.stringify(features2, null, '  '),
+      )
     // console.log(JSON.stringify(features2, null, '  '))
 
     expect(features2).to.deep.equal(await expectedFeatures5)
@@ -144,10 +151,11 @@ describe('.crai indexed cram file', () => {
       })
 
       const features = await cram.getFeaturesForRange(0, 0, Infinity)
-      // require('fs').writeFileSync(
-      //   `test/data/${filename}.test2.expected.json`,
-      //   JSON.stringify(features, null, '  '),
-      // )
+      if (REWRITE_EXPECTED_DATA)
+        require('fs').writeFileSync(
+          `test/data/${filename}.test2.expected.json`,
+          JSON.stringify(features, null, '  '),
+        )
       // console.log(`${filename} first ref got ${features.length} features`)
       expect(features.length).to.be.greaterThan(-1)
     })
@@ -158,10 +166,11 @@ describe('.crai indexed cram file', () => {
       })
 
       const features = await cram.getFeaturesForRange(1, 0, Infinity)
-      // require('fs').writeFileSync(
-      //   `test/data/${filename}.test3.expected.json`,
-      //   JSON.stringify(features, null, '  '),
-      // )
+      if (REWRITE_EXPECTED_DATA)
+        require('fs').writeFileSync(
+          `test/data/${filename}.test3.expected.json`,
+          JSON.stringify(features, null, '  '),
+        )
       // console.log(`${filename} second ref got ${features.length} features`)
       expect(features.length).to.be.greaterThan(-1)
     })
@@ -183,10 +192,12 @@ describe('.crai indexed cram file', () => {
       })
 
       const features = await cram.getFeaturesForRange(1, 20000, 30000)
-      // require('fs').writeFileSync(
-      //   `test/data/extended/RNAseq_mapping_def.cram.test1.expected.json`,
-      //   JSON.stringify(features, null, '  '),
-      // )
+      if (REWRITE_EXPECTED_DATA)
+        require('fs').writeFileSync(
+          `test/data/extended/RNAseq_mapping_def.cram.test1.expected.json`,
+          JSON.stringify(features, null, '  '),
+        )
+
       const expectedFeatures = await loadTestJSON(
         'extended/RNAseq_mapping_def.cram.test1.expected.json',
       )
@@ -194,10 +205,11 @@ describe('.crai indexed cram file', () => {
       expect(features).to.deep.equal(expectedFeatures)
 
       const moreFeatures = await cram.getFeaturesForRange(6, 12437859, 12437959)
-      // require('fs').writeFileSync(
-      //   `test/data/extended/RNAseq_mapping_def.cram.test2.expected.json`,
-      //   JSON.stringify(moreFeatures, null, '  '),
-      // )
+      if (REWRITE_EXPECTED_DATA)
+        require('fs').writeFileSync(
+          `test/data/extended/RNAseq_mapping_def.cram.test2.expected.json`,
+          JSON.stringify(moreFeatures, null, '  '),
+        )
 
       // const moreExpectedFeatures = await loadTestJSON(
       //   'extended/RNAseq_mapping_def.cram.test2.expected.json',

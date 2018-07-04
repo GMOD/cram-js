@@ -1,0 +1,421 @@
+[
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 9,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s1",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 8,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 0
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 5,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s1b",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 4,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 4,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 1
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 6,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s2",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 2
+      },
+      {
+        "operator": "i",
+        "position": 3,
+        "data": "G"
+      },
+      {
+        "operator": "D",
+        "position": 4,
+        "data": 1
+      },
+      {
+        "operator": "i",
+        "position": 4,
+        "data": "G"
+      },
+      {
+        "operator": "D",
+        "position": 5,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 5,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 2
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 6,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s2p",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 2
+      },
+      {
+        "operator": "i",
+        "position": 3,
+        "data": "G"
+      },
+      {
+        "operator": "P",
+        "position": 4,
+        "data": 1
+      },
+      {
+        "operator": "D",
+        "position": 4,
+        "data": 1
+      },
+      {
+        "operator": "P",
+        "position": 4,
+        "data": 1
+      },
+      {
+        "operator": "i",
+        "position": 4,
+        "data": "G"
+      },
+      {
+        "operator": "D",
+        "position": 5,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 5,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 3
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 8,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s3",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 2
+      },
+      {
+        "operator": "I",
+        "position": 3,
+        "data": "GG"
+      },
+      {
+        "operator": "D",
+        "position": 5,
+        "data": 1
+      },
+      {
+        "operator": "I",
+        "position": 5,
+        "data": "GG"
+      },
+      {
+        "operator": "D",
+        "position": 7,
+        "data": 2
+      },
+      {
+        "operator": "X",
+        "position": 7,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 4
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 11,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s3b",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 3,
+        "data": 0
+      },
+      {
+        "operator": "I",
+        "position": 4,
+        "data": "GG"
+      },
+      {
+        "operator": "X",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "I",
+        "position": 7,
+        "data": "GG"
+      },
+      {
+        "operator": "X",
+        "position": 9,
+        "data": 0
+      },
+      {
+        "operator": "D",
+        "position": 10,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 10,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 5
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s4",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "i",
+        "position": 5,
+        "data": "G"
+      },
+      {
+        "operator": "D",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "i",
+        "position": 6,
+        "data": "G"
+      },
+      {
+        "operator": "X",
+        "position": 9,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 55,
+    "uniqueId": 6
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s4p",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "i",
+        "position": 5,
+        "data": "G"
+      },
+      {
+        "operator": "P",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "D",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "P",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "i",
+        "position": 6,
+        "data": "G"
+      },
+      {
+        "operator": "X",
+        "position": 9,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 7
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s5",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "I",
+        "position": 3,
+        "data": "GGG"
+      },
+      {
+        "operator": "D",
+        "position": 6,
+        "data": 5
+      },
+      {
+        "operator": "I",
+        "position": 6,
+        "data": "GGG"
+      },
+      {
+        "operator": "X",
+        "position": 9,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 8
+  }
+]

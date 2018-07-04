@@ -1054,6 +1054,210 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              -1
+            ]
+          },
+          "codes": {
+            "-1": {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 10,
@@ -1412,6 +1616,12 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {
@@ -2316,13 +2526,16 @@
               "aa": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a1",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 0
           },
           {
             "tags": {
@@ -2330,13 +2543,16 @@
               "ab": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a2",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 1
           },
           {
             "tags": {
@@ -2345,13 +2561,16 @@
               "ac": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a3",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 2
           },
           {
             "tags": {
@@ -2361,13 +2580,16 @@
               "ad": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a4",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 3
           },
           {
             "tags": {
@@ -2378,13 +2600,16 @@
               "ae": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a5",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 4
           },
           {
             "tags": {
@@ -2396,13 +2621,16 @@
               "af": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a6",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 5
           },
           {
             "tags": {
@@ -2415,13 +2643,16 @@
               "ag": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a7",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 6
           },
           {
             "tags": {
@@ -2435,13 +2666,16 @@
               "ah": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a8",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 7
           },
           {
             "tags": {
@@ -2456,13 +2690,16 @@
               "ai": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a9",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 8
           },
           {
             "tags": {
@@ -2478,13 +2715,16 @@
               "aj": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "aA",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 9
           }
         ]
       }
@@ -3478,6 +3718,210 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              -1
+            ]
+          },
+          "codes": {
+            "-1": {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": -1,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            -1
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "NP": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
+        "TS": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              0
+            ]
+          },
+          "codes": {
+            "0": {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 0,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            0
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 10,
@@ -3836,6 +4280,12 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {
@@ -4740,13 +5190,16 @@
               "aa": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a1",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 0
           },
           {
             "tags": {
@@ -4754,13 +5207,16 @@
               "ab": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a2",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 1
           },
           {
             "tags": {
@@ -4769,13 +5225,16 @@
               "ac": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a3",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 2
           },
           {
             "tags": {
@@ -4785,13 +5244,16 @@
               "ad": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a4",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 3
           },
           {
             "tags": {
@@ -4802,13 +5264,16 @@
               "ae": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a5",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 4
           },
           {
             "tags": {
@@ -4820,13 +5285,16 @@
               "af": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a6",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 5
           },
           {
             "tags": {
@@ -4839,13 +5307,16 @@
               "ag": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a7",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 6
           },
           {
             "tags": {
@@ -4859,13 +5330,16 @@
               "ah": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a8",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 7
           },
           {
             "tags": {
@@ -4880,13 +5354,16 @@
               "ai": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a9",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 8
           },
           {
             "tags": {
@@ -4902,13 +5379,16 @@
               "aj": 1
             },
             "flags": 0,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 1,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "aA",
-            "mappingQuality": 1
+            "templateSize": 0,
+            "mappingQuality": 1,
+            "qualityScores": 2,
+            "uniqueId": 9
           }
         ]
       }

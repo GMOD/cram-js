@@ -1,0 +1,327 @@
+[
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0a",
+    "templateSize": 0,
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 0
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0b",
+    "templateSize": 0,
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 1
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0c",
+    "templateSize": 0,
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 2
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0d",
+    "templateSize": 0,
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 3
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 16,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s1",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "I",
+        "position": 6,
+        "data": "GTTAAC"
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 4
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 14,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s2",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "P",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "I",
+        "position": 6,
+        "data": "TTAA"
+      },
+      {
+        "operator": "P",
+        "position": 10,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 5
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 13,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s3",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "I",
+        "position": 6,
+        "data": "GTT"
+      },
+      {
+        "operator": "P",
+        "position": 9,
+        "data": 3
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 6
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 13,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s4",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "P",
+        "position": 6,
+        "data": 3
+      },
+      {
+        "operator": "I",
+        "position": 6,
+        "data": "AAC"
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 7
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s5",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "D",
+        "position": 5,
+        "data": 1
+      },
+      {
+        "operator": "P",
+        "position": 5,
+        "data": 2
+      },
+      {
+        "operator": "I",
+        "position": 5,
+        "data": "TA"
+      },
+      {
+        "operator": "P",
+        "position": 7,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 7,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 8
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s6",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 3
+      },
+      {
+        "operator": "I",
+        "position": 3,
+        "data": "GTTAAC"
+      },
+      {
+        "operator": "D",
+        "position": 9,
+        "data": 3
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 9
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 8,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s7",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "D",
+        "position": 5,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 10
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 2,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s8",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "D",
+        "position": 1,
+        "data": 5
+      },
+      {
+        "operator": "P",
+        "position": 1,
+        "data": 2
+      },
+      {
+        "operator": "I",
+        "position": 1,
+        "data": "TA"
+      },
+      {
+        "operator": "P",
+        "position": 3,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 3,
+        "data": 5
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 11
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 3,
+    "alignmentStart": 5,
+    "readGroupId": -1,
+    "readName": "s9",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "P",
+        "position": 2,
+        "data": 2
+      },
+      {
+        "operator": "I",
+        "position": 2,
+        "data": "TA"
+      },
+      {
+        "operator": "P",
+        "position": 4,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 255,
+    "uniqueId": 12
+  }
+]

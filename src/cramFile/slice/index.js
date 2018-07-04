@@ -234,6 +234,7 @@ class CramSlice {
           blocksByContentId,
           cursors,
           majorVersion,
+          i,
         )
         records[i].uniqueId = sliceHeader.content.recordCounter + i
       } catch (e) {

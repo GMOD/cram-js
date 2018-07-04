@@ -1,0 +1,56 @@
+[
+  {
+    "tags": {
+      "XG": 1,
+      "XM": 5,
+      "XN": 0,
+      "XO": 1,
+      "AS": -18,
+      "XS": -18,
+      "YT": "UU"
+    },
+    "flags": 16,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 100,
+    "alignmentStart": 2,
+    "readGroupId": -1,
+    "readName": "SRR065390.14978392",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "X",
+        "position": 5,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 6,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 12,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 18,
+        "data": 1
+      },
+      {
+        "operator": "X",
+        "position": 24,
+        "data": 1
+      },
+      {
+        "operator": "D",
+        "position": 28,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 1,
+    "qualityScores": 2,
+    "uniqueId": 0
+  }
+]

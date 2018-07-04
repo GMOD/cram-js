@@ -480,6 +480,30 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "blockContentId": 19
+          },
+          "dataType": "int"
+        },
+        "NS": {
+          "parameters": {
+            "blockContentId": 20
+          },
+          "dataType": "int"
+        },
+        "NP": {
+          "parameters": {
+            "blockContentId": 13
+          },
+          "dataType": "int"
+        },
+        "TS": {
+          "parameters": {
+            "blockContentId": 14
+          },
+          "dataType": "int"
+        },
         "TL": {
           "parameters": {
             "blockContentId": 24
@@ -515,6 +539,12 @@
             "blockContentId": 11
           },
           "dataType": "int"
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 4
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {}
@@ -611,12 +641,18 @@
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 200,
             "readGroupId": 0,
             "readName": "a",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -999,17 +1035,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 0
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 205,
             "readGroupId": 0,
             "readName": "b",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -1392,17 +1436,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 1
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 210,
             "readGroupId": 0,
             "readName": "c",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -1785,17 +1837,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 2
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 1000,
             "readGroupId": 0,
             "readName": "d",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -2178,17 +2238,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 3
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 1100,
             "readGroupId": 0,
             "readName": "e",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -2571,17 +2639,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 34,
+            "uniqueId": 4
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
             "alignmentStart": 500,
             "readGroupId": 0,
             "readName": "f",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 1,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -2964,17 +3040,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 31,
+            "uniqueId": 5
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
             "alignmentStart": 550,
             "readGroupId": 0,
             "readName": "g",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 1,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -3357,17 +3441,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 34,
+            "uniqueId": 6
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
             "alignmentStart": 650,
             "readGroupId": 0,
             "readName": "h",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 1,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -3750,17 +3842,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 30,
+            "uniqueId": 7
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
             "alignmentStart": 300,
             "readGroupId": 0,
             "readName": "i",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 2,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -4143,17 +4243,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 32,
+            "uniqueId": 8
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
             "alignmentStart": 400,
             "readGroupId": 0,
             "readName": "j",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 2,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -4536,17 +4644,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 32,
+            "uniqueId": 9
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 3,
             "readLength": 76,
             "alignmentStart": 700,
             "readGroupId": 0,
             "readName": "k",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 3,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -4929,7 +5045,9 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 10
           }
         ]
       }
@@ -5254,6 +5372,30 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "blockContentId": 19
+          },
+          "dataType": "int"
+        },
+        "NS": {
+          "parameters": {
+            "blockContentId": 20
+          },
+          "dataType": "int"
+        },
+        "NP": {
+          "parameters": {
+            "blockContentId": 13
+          },
+          "dataType": "int"
+        },
+        "TS": {
+          "parameters": {
+            "blockContentId": 14
+          },
+          "dataType": "int"
+        },
         "TL": {
           "parameters": {
             "blockContentId": 24
@@ -5289,6 +5431,12 @@
             "blockContentId": 11
           },
           "dataType": "int"
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 4
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {}
@@ -5385,12 +5533,18 @@
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 200,
             "readGroupId": 0,
             "readName": "a",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -5773,17 +5927,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 0
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 205,
             "readGroupId": 0,
             "readName": "b",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -6166,17 +6328,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 1
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 210,
             "readGroupId": 0,
             "readName": "c",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -6559,17 +6729,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 2
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 1000,
             "readGroupId": 0,
             "readName": "d",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -6952,17 +7130,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 3
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
             "alignmentStart": 1100,
             "readGroupId": 0,
             "readName": "e",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -7345,17 +7531,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 34,
+            "uniqueId": 4
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
             "alignmentStart": 500,
             "readGroupId": 0,
             "readName": "f",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 1,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -7738,17 +7932,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 31,
+            "uniqueId": 5
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
             "alignmentStart": 550,
             "readGroupId": 0,
             "readName": "g",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 1,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -8131,17 +8333,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 34,
+            "uniqueId": 6
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
             "alignmentStart": 650,
             "readGroupId": 0,
             "readName": "h",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 1,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -8524,17 +8734,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 30,
+            "uniqueId": 7
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
             "alignmentStart": 300,
             "readGroupId": 0,
             "readName": "i",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 2,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -8917,17 +9135,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 32,
+            "uniqueId": 8
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
             "alignmentStart": 400,
             "readGroupId": 0,
             "readName": "j",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 2,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -9310,17 +9536,25 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 32,
+            "uniqueId": 9
           },
           {
             "tags": {},
             "flags": 67,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 3,
             "readLength": 76,
             "alignmentStart": 700,
             "readGroupId": 0,
             "readName": "k",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 3,
+              "alignmentStart": 255
+            },
+            "templateSize": -130,
             "readFeatures": [
               {
                 "operator": "X",
@@ -9703,7 +9937,9 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 0
+            "mappingQuality": 0,
+            "qualityScores": 33,
+            "uniqueId": 10
           }
         ]
       }

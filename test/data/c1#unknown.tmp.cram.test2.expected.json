@@ -1,0 +1,132 @@
+[
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "_sqm",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "i",
+        "position": 3,
+        "data": "C"
+      },
+      {
+        "operator": "X",
+        "position": 6,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 8,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 40,
+    "uniqueId": 0
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "_sm",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "i",
+        "position": 3,
+        "data": "C"
+      },
+      {
+        "operator": "X",
+        "position": 6,
+        "data": 2
+      },
+      {
+        "operator": "D",
+        "position": 8,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 40,
+    "uniqueId": 1
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "_m",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "i",
+        "position": 3,
+        "data": "N"
+      },
+      {
+        "operator": "D",
+        "position": 8,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 40,
+    "uniqueId": 2
+  },
+  {
+    "tags": {},
+    "flags": 4,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "_squ",
+    "templateSize": 0,
+    "readBases": "AACCCTCGTT",
+    "qualityScores": 40,
+    "uniqueId": 3
+  },
+  {
+    "tags": {},
+    "flags": 4,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "_su",
+    "templateSize": 0,
+    "readBases": "AACCCTCGTT",
+    "qualityScores": 40,
+    "uniqueId": 4
+  },
+  {
+    "tags": {},
+    "flags": 4,
+    "cramFlags": 11,
+    "sequenceId": 0,
+    "readLength": 0,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "_u",
+    "templateSize": 0,
+    "readBases": null,
+    "qualityScores": null,
+    "uniqueId": 5
+  }
+]

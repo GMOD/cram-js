@@ -1,0 +1,78 @@
+[
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0",
+    "templateSize": 0,
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 0
+  },
+  {
+    "tags": {
+      "MD": "9",
+      "NM": 0
+    },
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 2,
+    "readGroupId": -1,
+    "readName": "s1",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "B",
+        "position": 10,
+        "data": [
+          "C",
+          9
+        ]
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 1
+  },
+  {
+    "tags": {
+      "MD": "8",
+      "NM": 0
+    },
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 3,
+    "readGroupId": -1,
+    "readName": "s2",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "B",
+        "position": 9,
+        "data": [
+          "C",
+          9
+        ]
+      },
+      {
+        "operator": "B",
+        "position": 10,
+        "data": [
+          "G",
+          9
+        ]
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 2
+  }
+]

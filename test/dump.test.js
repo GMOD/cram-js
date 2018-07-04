@@ -5,6 +5,8 @@ const { dumpWholeFile } = require('./lib/dumpFile')
 const { CramFile } = require('../src/index')
 const { FetchableSmallFasta } = require('./lib/fasta')
 
+const REWRITE_EXPECTED_DATA = false
+
 describe('dumping cram files', () => {
   testFileList.forEach(filename => {
     // ;['xx#unsorted.tmp.cram'].forEach(filename => {
@@ -20,10 +22,11 @@ describe('dumping cram files', () => {
       const file = new CramFile({ filehandle, seqFetch })
       const fileData = await dumpWholeFile(file)
       // console.log(JSON.stringify(fileData, null, '  '))
-      // require('fs').writeFileSync(
-      //   `test/data/${filename}.dump.json`,
-      //   JSON.stringify(fileData, null, '  '),
-      // )
+      if (REWRITE_EXPECTED_DATA)
+        require('fs').writeFileSync(
+          `test/data/${filename}.dump.json`,
+          JSON.stringify(fileData, null, '  '),
+        )
       const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
       expect(JSON.parse(JSON.stringify(fileData))).to.deep.equal(
         expectedFeatures,

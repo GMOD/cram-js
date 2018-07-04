@@ -1398,6 +1398,30 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "blockContentId": 19
+          },
+          "dataType": "int"
+        },
+        "NS": {
+          "parameters": {
+            "blockContentId": 20
+          },
+          "dataType": "int"
+        },
+        "NP": {
+          "parameters": {
+            "blockContentId": 13
+          },
+          "dataType": "int"
+        },
+        "TS": {
+          "parameters": {
+            "blockContentId": 14
+          },
+          "dataType": "int"
+        },
         "TL": {
           "parameters": {
             "blockContentId": 24
@@ -1434,12 +1458,24 @@
           },
           "dataType": "int"
         },
+        "QS": {
+          "parameters": {
+            "blockContentId": 4
+          },
+          "dataType": "byte"
+        },
         "SC": {
           "parameters": {
             "stopByte": 9,
             "blockContentId": 27
           },
           "dataType": "byteArray"
+        },
+        "NF": {
+          "parameters": {
+            "blockContentId": 8
+          },
+          "dataType": "int"
         },
         "BA": {
           "parameters": {
@@ -2657,12 +2693,18 @@
               "XT": "U"
             },
             "flags": 131,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100009,
             "readGroupId": 2,
             "readName": "a",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 100257
+            },
+            "templateSize": 348,
             "readFeatures": [
               {
                 "operator": "X",
@@ -3035,7 +3077,9 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 60
+            "mappingQuality": 60,
+            "qualityScores": 32,
+            "uniqueId": 0
           },
           {
             "tags": {
@@ -3054,12 +3098,18 @@
               "XT": "U"
             },
             "flags": 131,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100009,
             "readGroupId": 4,
             "readName": "b",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 100318
+            },
+            "templateSize": 409,
             "readFeatures": [
               {
                 "operator": "X",
@@ -3432,7 +3482,9 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 60
+            "mappingQuality": 60,
+            "qualityScores": 33,
+            "uniqueId": 1
           },
           {
             "tags": {
@@ -3450,12 +3502,18 @@
               "XT": "U"
             },
             "flags": 1091,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100009,
             "readGroupId": 10,
             "readName": "c",
+            "mate": {
+              "flags": 1,
+              "sequenceID": 0,
+              "alignmentStart": 100257
+            },
+            "templateSize": 348,
             "readFeatures": [
               {
                 "operator": "X",
@@ -3828,7 +3886,9 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 60
+            "mappingQuality": 60,
+            "qualityScores": 36,
+            "uniqueId": 2
           },
           {
             "tags": {
@@ -3847,12 +3907,18 @@
               "XT": "U"
             },
             "flags": 147,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100010,
             "readGroupId": 10,
             "readName": "d",
+            "mate": {
+              "flags": 0,
+              "sequenceID": 0,
+              "alignmentStart": 99760
+            },
+            "templateSize": -350,
             "readFeatures": [
               {
                 "operator": "X",
@@ -4230,7 +4296,9 @@
                 "data": 1
               }
             ],
-            "mappingQuality": 60
+            "mappingQuality": 60,
+            "qualityScores": 35,
+            "uniqueId": 3
           },
           {
             "tags": {
@@ -4249,12 +4317,18 @@
               "XT": "U"
             },
             "flags": 1107,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100011,
             "readGroupId": 13,
             "readName": "e",
+            "mate": {
+              "flags": 0,
+              "sequenceID": 0,
+              "alignmentStart": 99694
+            },
+            "templateSize": -373,
             "readFeatures": [
               {
                 "operator": "S",
@@ -4482,7 +4556,9 @@
                 "data": 0
               }
             ],
-            "mappingQuality": 60
+            "mappingQuality": 60,
+            "qualityScores": 32,
+            "uniqueId": 4
           },
           {
             "tags": {
@@ -4490,13 +4566,16 @@
               "XC": 35
             },
             "flags": 69,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100013,
             "readGroupId": 4,
             "readName": "f",
-            "readBases": "AAAAAGTTTAACAAAACTGATGAAAAATTTGCCAAAAGACACTACAAACATCTCATTACAGAGATTGTGGAAGACCAAATAAATGATAAGCTATTGCAGGT"
+            "recordsToNextFragment": 6,
+            "readBases": "AAAAAGTTTAACAAAACTGATGAAAAATTTGCCAAAAGACACTACAAACATCTCATTACAGAGATTGTGGAAGACCAAATAAATGATAAGCTATTGCAGGT",
+            "qualityScores": 34,
+            "uniqueId": 5
           },
           {
             "tags": {
@@ -4515,7 +4594,7 @@
               "XT": "U"
             },
             "flags": 129,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 101,
             "alignmentStart": 100013,
@@ -4663,7 +4742,9 @@
                 "data": "CTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
               }
             ],
-            "mappingQuality": 37
+            "mappingQuality": 37,
+            "qualityScores": 35,
+            "uniqueId": 6
           }
         ]
       }
@@ -5045,6 +5126,30 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "blockContentId": 19
+          },
+          "dataType": "int"
+        },
+        "NS": {
+          "parameters": {
+            "blockContentId": 20
+          },
+          "dataType": "int"
+        },
+        "NP": {
+          "parameters": {
+            "blockContentId": 13
+          },
+          "dataType": "int"
+        },
+        "TS": {
+          "parameters": {
+            "blockContentId": 14
+          },
+          "dataType": "int"
+        },
         "TL": {
           "parameters": {
             "blockContentId": 24
@@ -5056,6 +5161,18 @@
             "blockContentId": 6
           },
           "dataType": "byte"
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 4
+          },
+          "dataType": "byte"
+        },
+        "NF": {
+          "parameters": {
+            "blockContentId": 8
+          },
+          "dataType": "int"
         }
       },
       "tagCodecCache": {
@@ -5324,13 +5441,21 @@
               "XC": 35
             },
             "flags": 133,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "g",
-            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "mate": {
+              "flags": 2,
+              "sequenceID": -1,
+              "alignmentStart": 0
+            },
+            "templateSize": 0,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 7
           },
           {
             "tags": {
@@ -5338,13 +5463,16 @@
               "XC": 35
             },
             "flags": 69,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "recordsToNextFragment": 2,
+            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 8
           },
           {
             "tags": {
@@ -5352,13 +5480,15 @@
               "XC": 35
             },
             "flags": 133,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 9
           },
           {
             "tags": {
@@ -5366,13 +5496,16 @@
               "XC": 35
             },
             "flags": 69,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "recordsToNextFragment": 4,
+            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 10
           },
           {
             "tags": {
@@ -5380,13 +5513,15 @@
               "XC": 35
             },
             "flags": 133,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 11
           }
         ]
       }
@@ -5768,6 +5903,30 @@
           },
           "dataType": "byteArray"
         },
+        "MF": {
+          "parameters": {
+            "blockContentId": 19
+          },
+          "dataType": "int"
+        },
+        "NS": {
+          "parameters": {
+            "blockContentId": 20
+          },
+          "dataType": "int"
+        },
+        "NP": {
+          "parameters": {
+            "blockContentId": 13
+          },
+          "dataType": "int"
+        },
+        "TS": {
+          "parameters": {
+            "blockContentId": 14
+          },
+          "dataType": "int"
+        },
         "TL": {
           "parameters": {
             "blockContentId": 24
@@ -5779,6 +5938,18 @@
             "blockContentId": 6
           },
           "dataType": "byte"
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 4
+          },
+          "dataType": "byte"
+        },
+        "NF": {
+          "parameters": {
+            "blockContentId": 8
+          },
+          "dataType": "int"
         }
       },
       "tagCodecCache": {
@@ -6047,13 +6218,21 @@
               "XC": 35
             },
             "flags": 133,
-            "compressionFlags": 3,
+            "cramFlags": 3,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "g",
-            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "mate": {
+              "flags": 2,
+              "sequenceID": -1,
+              "alignmentStart": 0
+            },
+            "templateSize": 0,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 7
           },
           {
             "tags": {
@@ -6061,13 +6240,16 @@
               "XC": 35
             },
             "flags": 69,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "recordsToNextFragment": 2,
+            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 8
           },
           {
             "tags": {
@@ -6075,13 +6257,15 @@
               "XC": 35
             },
             "flags": 133,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 9
           },
           {
             "tags": {
@@ -6089,13 +6273,16 @@
               "XC": 35
             },
             "flags": 69,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "recordsToNextFragment": 4,
+            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 10
           },
           {
             "tags": {
@@ -6103,13 +6290,15 @@
               "XC": 35
             },
             "flags": 133,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": -1,
             "readLength": 101,
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "qualityScores": 2,
+            "uniqueId": 11
           }
         ]
       }

@@ -1,0 +1,40 @@
+[
+  {
+    "tags": {},
+    "flags": 99,
+    "cramFlags": 3,
+    "sequenceId": 1,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "b1",
+    "mate": {
+      "flags": 1,
+      "sequenceID": 1,
+      "alignmentStart": 11
+    },
+    "templateSize": 20,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 3
+  },
+  {
+    "tags": {},
+    "flags": 147,
+    "cramFlags": 3,
+    "sequenceId": 1,
+    "readLength": 10,
+    "alignmentStart": 11,
+    "readGroupId": -1,
+    "readName": "b1",
+    "mate": {
+      "flags": 0,
+      "sequenceID": 1,
+      "alignmentStart": 1
+    },
+    "templateSize": -20,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 0
+  }
+]

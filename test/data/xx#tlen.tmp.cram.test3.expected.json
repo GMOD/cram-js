@@ -1,0 +1,132 @@
+[
+  {
+    "tags": {},
+    "flags": 99,
+    "cramFlags": 5,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "y1",
+    "recordsToNextFragment": 1,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 8
+  },
+  {
+    "tags": {},
+    "flags": 147,
+    "cramFlags": 1,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 16,
+    "readGroupId": -1,
+    "readName": "y1",
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 9
+  },
+  {
+    "tags": {},
+    "flags": 99,
+    "cramFlags": 5,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 7,
+    "readGroupId": -1,
+    "readName": "y2",
+    "recordsToNextFragment": 3,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 10
+  },
+  {
+    "tags": {},
+    "flags": 147,
+    "cramFlags": 1,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 10,
+    "readGroupId": -1,
+    "readName": "y2",
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 11
+  },
+  {
+    "tags": {},
+    "flags": 147,
+    "cramFlags": 3,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 7,
+    "readGroupId": -1,
+    "readName": "y3",
+    "mate": {
+      "flags": 0,
+      "sequenceID": 1,
+      "alignmentStart": 10
+    },
+    "templateSize": -2,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 12
+  },
+  {
+    "tags": {},
+    "flags": 99,
+    "cramFlags": 3,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 10,
+    "readGroupId": -1,
+    "readName": "y3",
+    "mate": {
+      "flags": 1,
+      "sequenceID": 1,
+      "alignmentStart": 7
+    },
+    "templateSize": 2,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 13
+  },
+  {
+    "tags": {},
+    "flags": 147,
+    "cramFlags": 3,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "y4",
+    "mate": {
+      "flags": 0,
+      "sequenceID": 1,
+      "alignmentStart": 16
+    },
+    "templateSize": 10,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 14
+  },
+  {
+    "tags": {},
+    "flags": 99,
+    "cramFlags": 3,
+    "sequenceId": 1,
+    "readLength": 5,
+    "alignmentStart": 16,
+    "readGroupId": -1,
+    "readName": "y4",
+    "mate": {
+      "flags": 1,
+      "sequenceID": 1,
+      "alignmentStart": 1
+    },
+    "templateSize": -10,
+    "mappingQuality": 1,
+    "qualityScores": 9,
+    "uniqueId": 15
+  }
+]

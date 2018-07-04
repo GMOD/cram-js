@@ -697,6 +697,57 @@
           },
           "dataType": "byteArray"
         },
+        "NF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              2
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              2
+            ]
+          },
+          "codes": {
+            "2": {
+              "bitLength": 0,
+              "value": 2,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 2,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 2,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            2
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -849,6 +900,12 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {}
@@ -921,68 +978,83 @@
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a1",
-            "mappingQuality": 1
+            "recordsToNextFragment": 3,
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 0
           },
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "b1",
-            "mappingQuality": 1
+            "recordsToNextFragment": 4,
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 1
           },
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "c1",
-            "mappingQuality": 1
+            "recordsToNextFragment": 5,
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 2
           },
           {
             "tags": {},
             "flags": 147,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "a1",
-            "mappingQuality": 1
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 3
           },
           {
             "tags": {},
             "flags": 147,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
-            "mappingQuality": 1
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 4
           },
           {
             "tags": {},
             "flags": 147,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "c1",
-            "mappingQuality": 1
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 5
           }
         ]
       }
@@ -1590,6 +1662,57 @@
           },
           "dataType": "byteArray"
         },
+        "NF": {
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              2
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          },
+          "dataType": "int",
+          "codeBook": {
+            "0": [
+              2
+            ]
+          },
+          "codes": {
+            "2": {
+              "bitLength": 0,
+              "value": 2,
+              "bitCode": 0
+            }
+          },
+          "sortedCodes": [
+            {
+              "bitLength": 0,
+              "value": 2,
+              "bitCode": 0
+            }
+          ],
+          "sortedByValue": [
+            {
+              "bitLength": 0,
+              "value": 2,
+              "bitCode": 0
+            }
+          ],
+          "sortedValuesByBitCode": [
+            2
+          ],
+          "sortedBitCodes": [
+            0
+          ],
+          "sortedBitLengthsByBitCode": [
+            0
+          ],
+          "bitCodeToValue": [
+            0
+          ]
+        },
         "TL": {
           "parameters": {
             "numCodes": 1,
@@ -1742,6 +1865,12 @@
           "bitCodeToValue": [
             0
           ]
+        },
+        "QS": {
+          "parameters": {
+            "blockContentId": 12
+          },
+          "dataType": "byte"
         }
       },
       "tagCodecCache": {}
@@ -1814,68 +1943,83 @@
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "a1",
-            "mappingQuality": 1
+            "recordsToNextFragment": 3,
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 0
           },
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "b1",
-            "mappingQuality": 1
+            "recordsToNextFragment": 4,
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 1
           },
           {
             "tags": {},
             "flags": 99,
-            "compressionFlags": 5,
+            "cramFlags": 5,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 1,
             "readGroupId": -1,
             "readName": "c1",
-            "mappingQuality": 1
+            "recordsToNextFragment": 5,
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 2
           },
           {
             "tags": {},
             "flags": 147,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "a1",
-            "mappingQuality": 1
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 3
           },
           {
             "tags": {},
             "flags": 147,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
-            "mappingQuality": 1
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 4
           },
           {
             "tags": {},
             "flags": 147,
-            "compressionFlags": 1,
+            "cramFlags": 1,
             "sequenceId": 0,
             "readLength": 10,
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "c1",
-            "mappingQuality": 1
+            "mappingQuality": 1,
+            "qualityScores": 9,
+            "uniqueId": 5
           }
         ]
       }

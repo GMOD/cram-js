@@ -1,0 +1,172 @@
+[
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0a",
+    "templateSize": 0,
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 0
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 6,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "s0A",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "N",
+        "position": 4,
+        "data": 4
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 1
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 2,
+    "readGroupId": -1,
+    "readName": "s0b",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "S",
+        "position": 1,
+        "data": "A"
+      },
+      {
+        "operator": "S",
+        "position": 10,
+        "data": "T"
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 2
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 8,
+    "alignmentStart": 2,
+    "readGroupId": -1,
+    "readName": "s0B",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "H",
+        "position": 1,
+        "data": 1
+      },
+      {
+        "operator": "H",
+        "position": 9,
+        "data": 1
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 3
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 10,
+    "alignmentStart": 3,
+    "readGroupId": -1,
+    "readName": "s0c",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "S",
+        "position": 1,
+        "data": "AA"
+      },
+      {
+        "operator": "S",
+        "position": 9,
+        "data": "TT"
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 4
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 12,
+    "alignmentStart": 3,
+    "readGroupId": -1,
+    "readName": "s0c",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "S",
+        "position": 1,
+        "data": "AA"
+      },
+      {
+        "operator": "I",
+        "position": 6,
+        "data": "NN"
+      },
+      {
+        "operator": "S",
+        "position": 11,
+        "data": "TT"
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 5
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 6,
+    "alignmentStart": 3,
+    "readGroupId": -1,
+    "readName": "s0C",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "operator": "H",
+        "position": 1,
+        "data": 2
+      },
+      {
+        "operator": "H",
+        "position": 7,
+        "data": 2
+      }
+    ],
+    "mappingQuality": 0,
+    "qualityScores": 9,
+    "uniqueId": 6
+  }
+]
