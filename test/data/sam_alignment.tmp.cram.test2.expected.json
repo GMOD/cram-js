@@ -11,8 +11,8 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 2
       }
     ],
@@ -37,13 +37,13 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 3,
+        "code": "X",
+        "pos": 3,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 0
       }
     ],
@@ -68,18 +68,18 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 3,
+        "code": "X",
+        "pos": 3,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 0
       }
     ],
@@ -104,23 +104,23 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 3,
+        "code": "X",
+        "pos": 3,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 1
       }
     ],
@@ -145,18 +145,18 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 1
       }
     ],

@@ -1894,8 +1894,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "GTTAAC"
               }
             ],
@@ -1932,18 +1932,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "P",
-                "position": 6,
+                "code": "P",
+                "pos": 6,
                 "data": 1
               },
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "TTAA"
               },
               {
-                "operator": "P",
-                "position": 10,
+                "code": "P",
+                "pos": 10,
                 "data": 1
               }
             ],
@@ -1978,13 +1978,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "GTT"
               },
               {
-                "operator": "P",
-                "position": 9,
+                "code": "P",
+                "pos": 9,
                 "data": 3
               }
             ],
@@ -2018,13 +2018,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "P",
-                "position": 6,
+                "code": "P",
+                "pos": 6,
                 "data": 3
               },
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "AAC"
               }
             ],
@@ -2058,28 +2058,28 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               },
               {
-                "operator": "P",
-                "position": 5,
+                "code": "P",
+                "pos": 5,
                 "data": 2
               },
               {
-                "operator": "I",
-                "position": 5,
+                "code": "I",
+                "pos": 5,
                 "data": "TA"
               },
               {
-                "operator": "P",
-                "position": 7,
+                "code": "P",
+                "pos": 7,
                 "data": 2
               },
               {
-                "operator": "D",
-                "position": 7,
+                "code": "D",
+                "pos": 7,
                 "data": 1
               }
             ],
@@ -2110,18 +2110,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 3,
+                "code": "D",
+                "pos": 3,
                 "data": 3
               },
               {
-                "operator": "I",
-                "position": 3,
+                "code": "I",
+                "pos": 3,
                 "data": "GTTAAC"
               },
               {
-                "operator": "D",
-                "position": 9,
+                "code": "D",
+                "pos": 9,
                 "data": 3
               }
             ],
@@ -3943,8 +3943,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "GTTAAC"
               }
             ],
@@ -3981,18 +3981,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "P",
-                "position": 6,
+                "code": "P",
+                "pos": 6,
                 "data": 1
               },
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "TTAA"
               },
               {
-                "operator": "P",
-                "position": 10,
+                "code": "P",
+                "pos": 10,
                 "data": 1
               }
             ],
@@ -4027,13 +4027,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "GTT"
               },
               {
-                "operator": "P",
-                "position": 9,
+                "code": "P",
+                "pos": 9,
                 "data": 3
               }
             ],
@@ -4067,13 +4067,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "P",
-                "position": 6,
+                "code": "P",
+                "pos": 6,
                 "data": 3
               },
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "AAC"
               }
             ],
@@ -4107,28 +4107,28 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               },
               {
-                "operator": "P",
-                "position": 5,
+                "code": "P",
+                "pos": 5,
                 "data": 2
               },
               {
-                "operator": "I",
-                "position": 5,
+                "code": "I",
+                "pos": 5,
                 "data": "TA"
               },
               {
-                "operator": "P",
-                "position": 7,
+                "code": "P",
+                "pos": 7,
                 "data": 2
               },
               {
-                "operator": "D",
-                "position": 7,
+                "code": "D",
+                "pos": 7,
                 "data": 1
               }
             ],
@@ -4159,18 +4159,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 3,
+                "code": "D",
+                "pos": 3,
                 "data": 3
               },
               {
-                "operator": "I",
-                "position": 3,
+                "code": "I",
+                "pos": 3,
                 "data": "GTTAAC"
               },
               {
-                "operator": "D",
-                "position": 9,
+                "code": "D",
+                "pos": 9,
                 "data": 3
               }
             ],

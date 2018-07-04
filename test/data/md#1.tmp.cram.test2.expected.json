@@ -72,23 +72,23 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 10,
+        "code": "X",
+        "pos": 10,
         "data": 3
       },
       {
-        "operator": "X",
-        "position": 11,
+        "code": "X",
+        "pos": 11,
         "data": 3
       },
       {
-        "operator": "X",
-        "position": 40,
+        "code": "X",
+        "pos": 40,
         "data": 1
       }
     ],
@@ -149,58 +149,58 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "i",
-        "position": 1,
+        "code": "i",
+        "pos": 1,
         "data": "N"
       },
       {
-        "operator": "i",
-        "position": 12,
+        "code": "i",
+        "pos": 12,
         "data": "G"
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 1
       },
       {
-        "operator": "I",
-        "position": 23,
+        "code": "I",
+        "pos": 23,
         "data": "AA"
       },
       {
-        "operator": "X",
-        "position": 25,
+        "code": "X",
+        "pos": 25,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 26,
+        "code": "X",
+        "pos": 26,
         "data": 2
       },
       {
-        "operator": "P",
-        "position": 35,
+        "code": "P",
+        "pos": 35,
         "data": 2
       },
       {
-        "operator": "I",
-        "position": 35,
+        "code": "I",
+        "pos": 35,
         "data": "CCC"
       },
       {
-        "operator": "P",
-        "position": 38,
+        "code": "P",
+        "pos": 38,
         "data": 2
       },
       {
-        "operator": "i",
-        "position": 48,
+        "code": "i",
+        "pos": 48,
         "data": "N"
       }
     ],
@@ -269,78 +269,78 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "i",
-        "position": 1,
+        "code": "i",
+        "pos": 1,
         "data": "N"
       },
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 0
       },
       {
-        "operator": "i",
-        "position": 12,
+        "code": "i",
+        "pos": 12,
         "data": "G"
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 1
       },
       {
-        "operator": "I",
-        "position": 23,
+        "code": "I",
+        "pos": 23,
         "data": "AA"
       },
       {
-        "operator": "X",
-        "position": 25,
+        "code": "X",
+        "pos": 25,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 26,
+        "code": "X",
+        "pos": 26,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 34,
+        "code": "X",
+        "pos": 34,
         "data": 0
       },
       {
-        "operator": "P",
-        "position": 35,
+        "code": "P",
+        "pos": 35,
         "data": 2
       },
       {
-        "operator": "I",
-        "position": 35,
+        "code": "I",
+        "pos": 35,
         "data": "CCC"
       },
       {
-        "operator": "P",
-        "position": 38,
+        "code": "P",
+        "pos": 38,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 38,
+        "code": "X",
+        "pos": 38,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 47,
+        "code": "X",
+        "pos": 47,
         "data": 1
       },
       {
-        "operator": "i",
-        "position": 48,
+        "code": "i",
+        "pos": 48,
         "data": "N"
       }
     ],
@@ -412,31 +412,31 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "D",
-        "position": 10,
+        "code": "D",
+        "pos": 10,
         "data": 1
       },
       {
-        "operator": "B",
-        "position": 16,
+        "code": "B",
+        "pos": 16,
         "data": [
           "Y",
           255
         ]
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 3
       },
       {
-        "operator": "D",
-        "position": 18,
+        "code": "D",
+        "pos": 18,
         "data": 2
       },
       {
-        "operator": "D",
-        "position": 25,
+        "code": "D",
+        "pos": 25,
         "data": 3
       }
     ],
@@ -487,53 +487,53 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 9,
+        "code": "X",
+        "pos": 9,
         "data": 3
       },
       {
-        "operator": "D",
-        "position": 10,
+        "code": "D",
+        "pos": 10,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 10,
+        "code": "X",
+        "pos": 10,
         "data": 3
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 2
       },
       {
-        "operator": "D",
-        "position": 18,
+        "code": "D",
+        "pos": 18,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 3
       },
       {
-        "operator": "X",
-        "position": 19,
+        "code": "X",
+        "pos": 19,
         "data": 2
       },
       {
-        "operator": "D",
-        "position": 25,
+        "code": "D",
+        "pos": 25,
         "data": 3
       },
       {
-        "operator": "X",
-        "position": 30,
+        "code": "X",
+        "pos": 30,
         "data": 0
       }
     ],
@@ -584,8 +584,8 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "N",
-        "position": 11,
+        "code": "N",
+        "pos": 11,
         "data": 20
       }
     ],
@@ -626,38 +626,38 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 9,
+        "code": "X",
+        "pos": 9,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 10,
+        "code": "X",
+        "pos": 10,
         "data": 0
       },
       {
-        "operator": "N",
-        "position": 11,
+        "code": "N",
+        "pos": 11,
         "data": 20
       },
       {
-        "operator": "X",
-        "position": 11,
+        "code": "X",
+        "pos": 11,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 20,
+        "code": "X",
+        "pos": 20,
         "data": 0
       }
     ],
@@ -701,23 +701,23 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "H",
-        "position": 1,
+        "code": "H",
+        "pos": 1,
         "data": 5
       },
       {
-        "operator": "S",
-        "position": 1,
+        "code": "S",
+        "pos": 1,
         "data": "AAAAAAAAAA"
       },
       {
-        "operator": "S",
-        "position": 31,
+        "code": "S",
+        "pos": 31,
         "data": "TTTTTTTTTT"
       },
       {
-        "operator": "H",
-        "position": 41,
+        "code": "H",
+        "pos": 41,
         "data": 5
       }
     ],
@@ -781,23 +781,23 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "H",
-        "position": 1,
+        "code": "H",
+        "pos": 1,
         "data": 5
       },
       {
-        "operator": "S",
-        "position": 1,
+        "code": "S",
+        "pos": 1,
         "data": "CAAAATAAAA"
       },
       {
-        "operator": "S",
-        "position": 31,
+        "code": "S",
+        "pos": 31,
         "data": "TTTTATTTTC"
       },
       {
-        "operator": "H",
-        "position": 41,
+        "code": "H",
+        "pos": 41,
         "data": 5
       }
     ],

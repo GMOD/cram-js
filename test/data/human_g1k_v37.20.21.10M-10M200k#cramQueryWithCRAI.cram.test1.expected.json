@@ -28,373 +28,373 @@
     "templateSize": 348,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 5,
+        "code": "X",
+        "pos": 5,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 6,
+        "code": "X",
+        "pos": 6,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 7,
+        "code": "X",
+        "pos": 7,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 8,
+        "code": "X",
+        "pos": 8,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 9,
+        "code": "X",
+        "pos": 9,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 13,
+        "code": "X",
+        "pos": 13,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 19,
+        "code": "X",
+        "pos": 19,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 20,
+        "code": "X",
+        "pos": 20,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 23,
+        "code": "X",
+        "pos": 23,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 24,
+        "code": "X",
+        "pos": 24,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 25,
+        "code": "X",
+        "pos": 25,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 26,
+        "code": "X",
+        "pos": 26,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 28,
+        "code": "X",
+        "pos": 28,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 30,
+        "code": "X",
+        "pos": 30,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 31,
+        "code": "X",
+        "pos": 31,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 32,
+        "code": "X",
+        "pos": 32,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 33,
+        "code": "X",
+        "pos": 33,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 34,
+        "code": "X",
+        "pos": 34,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 35,
+        "code": "X",
+        "pos": 35,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 36,
+        "code": "X",
+        "pos": 36,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 37,
+        "code": "X",
+        "pos": 37,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 38,
+        "code": "X",
+        "pos": 38,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 39,
+        "code": "X",
+        "pos": 39,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 40,
+        "code": "X",
+        "pos": 40,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 41,
+        "code": "X",
+        "pos": 41,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 42,
+        "code": "X",
+        "pos": 42,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 43,
+        "code": "X",
+        "pos": 43,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 45,
+        "code": "X",
+        "pos": 45,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 46,
+        "code": "X",
+        "pos": 46,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 47,
+        "code": "X",
+        "pos": 47,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 49,
+        "code": "X",
+        "pos": 49,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 50,
+        "code": "X",
+        "pos": 50,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 51,
+        "code": "X",
+        "pos": 51,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 52,
+        "code": "X",
+        "pos": 52,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 54,
+        "code": "X",
+        "pos": 54,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 55,
+        "code": "X",
+        "pos": 55,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 58,
+        "code": "X",
+        "pos": 58,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 59,
+        "code": "X",
+        "pos": 59,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 60,
+        "code": "X",
+        "pos": 60,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 63,
+        "code": "X",
+        "pos": 63,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 65,
+        "code": "X",
+        "pos": 65,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 66,
+        "code": "X",
+        "pos": 66,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 67,
+        "code": "X",
+        "pos": 67,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 68,
+        "code": "X",
+        "pos": 68,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 70,
+        "code": "X",
+        "pos": 70,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 71,
+        "code": "X",
+        "pos": 71,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 73,
+        "code": "X",
+        "pos": 73,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 74,
+        "code": "X",
+        "pos": 74,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 75,
+        "code": "X",
+        "pos": 75,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 76,
+        "code": "X",
+        "pos": 76,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 77,
+        "code": "X",
+        "pos": 77,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 78,
+        "code": "X",
+        "pos": 78,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 79,
+        "code": "X",
+        "pos": 79,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 80,
+        "code": "X",
+        "pos": 80,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 82,
+        "code": "X",
+        "pos": 82,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 83,
+        "code": "X",
+        "pos": 83,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 84,
+        "code": "X",
+        "pos": 84,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 85,
+        "code": "X",
+        "pos": 85,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 86,
+        "code": "X",
+        "pos": 86,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 87,
+        "code": "X",
+        "pos": 87,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 90,
+        "code": "X",
+        "pos": 90,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 91,
+        "code": "X",
+        "pos": 91,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 94,
+        "code": "X",
+        "pos": 94,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 95,
+        "code": "X",
+        "pos": 95,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 96,
+        "code": "X",
+        "pos": 96,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 100,
+        "code": "X",
+        "pos": 100,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 101,
+        "code": "X",
+        "pos": 101,
         "data": 0
       }
     ],
@@ -533,373 +533,373 @@
     "templateSize": 409,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 5,
+        "code": "X",
+        "pos": 5,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 6,
+        "code": "X",
+        "pos": 6,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 7,
+        "code": "X",
+        "pos": 7,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 8,
+        "code": "X",
+        "pos": 8,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 9,
+        "code": "X",
+        "pos": 9,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 13,
+        "code": "X",
+        "pos": 13,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 19,
+        "code": "X",
+        "pos": 19,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 20,
+        "code": "X",
+        "pos": 20,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 23,
+        "code": "X",
+        "pos": 23,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 24,
+        "code": "X",
+        "pos": 24,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 25,
+        "code": "X",
+        "pos": 25,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 26,
+        "code": "X",
+        "pos": 26,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 28,
+        "code": "X",
+        "pos": 28,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 30,
+        "code": "X",
+        "pos": 30,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 31,
+        "code": "X",
+        "pos": 31,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 32,
+        "code": "X",
+        "pos": 32,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 33,
+        "code": "X",
+        "pos": 33,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 34,
+        "code": "X",
+        "pos": 34,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 35,
+        "code": "X",
+        "pos": 35,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 36,
+        "code": "X",
+        "pos": 36,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 37,
+        "code": "X",
+        "pos": 37,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 38,
+        "code": "X",
+        "pos": 38,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 39,
+        "code": "X",
+        "pos": 39,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 40,
+        "code": "X",
+        "pos": 40,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 41,
+        "code": "X",
+        "pos": 41,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 42,
+        "code": "X",
+        "pos": 42,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 43,
+        "code": "X",
+        "pos": 43,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 45,
+        "code": "X",
+        "pos": 45,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 46,
+        "code": "X",
+        "pos": 46,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 47,
+        "code": "X",
+        "pos": 47,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 49,
+        "code": "X",
+        "pos": 49,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 50,
+        "code": "X",
+        "pos": 50,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 51,
+        "code": "X",
+        "pos": 51,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 52,
+        "code": "X",
+        "pos": 52,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 54,
+        "code": "X",
+        "pos": 54,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 55,
+        "code": "X",
+        "pos": 55,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 58,
+        "code": "X",
+        "pos": 58,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 59,
+        "code": "X",
+        "pos": 59,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 60,
+        "code": "X",
+        "pos": 60,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 63,
+        "code": "X",
+        "pos": 63,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 65,
+        "code": "X",
+        "pos": 65,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 66,
+        "code": "X",
+        "pos": 66,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 67,
+        "code": "X",
+        "pos": 67,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 68,
+        "code": "X",
+        "pos": 68,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 70,
+        "code": "X",
+        "pos": 70,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 71,
+        "code": "X",
+        "pos": 71,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 73,
+        "code": "X",
+        "pos": 73,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 74,
+        "code": "X",
+        "pos": 74,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 75,
+        "code": "X",
+        "pos": 75,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 76,
+        "code": "X",
+        "pos": 76,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 77,
+        "code": "X",
+        "pos": 77,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 78,
+        "code": "X",
+        "pos": 78,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 79,
+        "code": "X",
+        "pos": 79,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 80,
+        "code": "X",
+        "pos": 80,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 82,
+        "code": "X",
+        "pos": 82,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 83,
+        "code": "X",
+        "pos": 83,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 84,
+        "code": "X",
+        "pos": 84,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 85,
+        "code": "X",
+        "pos": 85,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 86,
+        "code": "X",
+        "pos": 86,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 87,
+        "code": "X",
+        "pos": 87,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 90,
+        "code": "X",
+        "pos": 90,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 91,
+        "code": "X",
+        "pos": 91,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 94,
+        "code": "X",
+        "pos": 94,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 95,
+        "code": "X",
+        "pos": 95,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 96,
+        "code": "X",
+        "pos": 96,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 100,
+        "code": "X",
+        "pos": 100,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 101,
+        "code": "X",
+        "pos": 101,
         "data": 0
       }
     ],
@@ -1037,373 +1037,373 @@
     "templateSize": 348,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 5,
+        "code": "X",
+        "pos": 5,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 6,
+        "code": "X",
+        "pos": 6,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 7,
+        "code": "X",
+        "pos": 7,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 8,
+        "code": "X",
+        "pos": 8,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 9,
+        "code": "X",
+        "pos": 9,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 13,
+        "code": "X",
+        "pos": 13,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 19,
+        "code": "X",
+        "pos": 19,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 20,
+        "code": "X",
+        "pos": 20,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 23,
+        "code": "X",
+        "pos": 23,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 24,
+        "code": "X",
+        "pos": 24,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 25,
+        "code": "X",
+        "pos": 25,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 26,
+        "code": "X",
+        "pos": 26,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 28,
+        "code": "X",
+        "pos": 28,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 30,
+        "code": "X",
+        "pos": 30,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 31,
+        "code": "X",
+        "pos": 31,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 32,
+        "code": "X",
+        "pos": 32,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 33,
+        "code": "X",
+        "pos": 33,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 34,
+        "code": "X",
+        "pos": 34,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 35,
+        "code": "X",
+        "pos": 35,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 36,
+        "code": "X",
+        "pos": 36,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 37,
+        "code": "X",
+        "pos": 37,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 38,
+        "code": "X",
+        "pos": 38,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 39,
+        "code": "X",
+        "pos": 39,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 40,
+        "code": "X",
+        "pos": 40,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 41,
+        "code": "X",
+        "pos": 41,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 42,
+        "code": "X",
+        "pos": 42,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 43,
+        "code": "X",
+        "pos": 43,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 45,
+        "code": "X",
+        "pos": 45,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 46,
+        "code": "X",
+        "pos": 46,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 47,
+        "code": "X",
+        "pos": 47,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 49,
+        "code": "X",
+        "pos": 49,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 50,
+        "code": "X",
+        "pos": 50,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 51,
+        "code": "X",
+        "pos": 51,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 52,
+        "code": "X",
+        "pos": 52,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 54,
+        "code": "X",
+        "pos": 54,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 55,
+        "code": "X",
+        "pos": 55,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 58,
+        "code": "X",
+        "pos": 58,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 59,
+        "code": "X",
+        "pos": 59,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 60,
+        "code": "X",
+        "pos": 60,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 63,
+        "code": "X",
+        "pos": 63,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 65,
+        "code": "X",
+        "pos": 65,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 66,
+        "code": "X",
+        "pos": 66,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 67,
+        "code": "X",
+        "pos": 67,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 68,
+        "code": "X",
+        "pos": 68,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 70,
+        "code": "X",
+        "pos": 70,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 71,
+        "code": "X",
+        "pos": 71,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 73,
+        "code": "X",
+        "pos": 73,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 74,
+        "code": "X",
+        "pos": 74,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 75,
+        "code": "X",
+        "pos": 75,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 76,
+        "code": "X",
+        "pos": 76,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 77,
+        "code": "X",
+        "pos": 77,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 78,
+        "code": "X",
+        "pos": 78,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 79,
+        "code": "X",
+        "pos": 79,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 80,
+        "code": "X",
+        "pos": 80,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 82,
+        "code": "X",
+        "pos": 82,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 83,
+        "code": "X",
+        "pos": 83,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 84,
+        "code": "X",
+        "pos": 84,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 85,
+        "code": "X",
+        "pos": 85,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 86,
+        "code": "X",
+        "pos": 86,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 87,
+        "code": "X",
+        "pos": 87,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 90,
+        "code": "X",
+        "pos": 90,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 91,
+        "code": "X",
+        "pos": 91,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 94,
+        "code": "X",
+        "pos": 94,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 95,
+        "code": "X",
+        "pos": 95,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 96,
+        "code": "X",
+        "pos": 96,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 100,
+        "code": "X",
+        "pos": 100,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 101,
+        "code": "X",
+        "pos": 101,
         "data": 0
       }
     ],
@@ -1542,378 +1542,378 @@
     "templateSize": -350,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 3,
+        "code": "X",
+        "pos": 3,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 5,
+        "code": "X",
+        "pos": 5,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 6,
+        "code": "X",
+        "pos": 6,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 7,
+        "code": "X",
+        "pos": 7,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 8,
+        "code": "X",
+        "pos": 8,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 11,
+        "code": "X",
+        "pos": 11,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 16,
+        "code": "X",
+        "pos": 16,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 19,
+        "code": "X",
+        "pos": 19,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 20,
+        "code": "X",
+        "pos": 20,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 23,
+        "code": "X",
+        "pos": 23,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 24,
+        "code": "X",
+        "pos": 24,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 25,
+        "code": "X",
+        "pos": 25,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 27,
+        "code": "X",
+        "pos": 27,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 29,
+        "code": "X",
+        "pos": 29,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 30,
+        "code": "X",
+        "pos": 30,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 31,
+        "code": "X",
+        "pos": 31,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 32,
+        "code": "X",
+        "pos": 32,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 33,
+        "code": "X",
+        "pos": 33,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 34,
+        "code": "X",
+        "pos": 34,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 35,
+        "code": "X",
+        "pos": 35,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 36,
+        "code": "X",
+        "pos": 36,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 37,
+        "code": "X",
+        "pos": 37,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 38,
+        "code": "X",
+        "pos": 38,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 39,
+        "code": "X",
+        "pos": 39,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 40,
+        "code": "X",
+        "pos": 40,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 41,
+        "code": "X",
+        "pos": 41,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 42,
+        "code": "X",
+        "pos": 42,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 44,
+        "code": "X",
+        "pos": 44,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 45,
+        "code": "X",
+        "pos": 45,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 46,
+        "code": "X",
+        "pos": 46,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 48,
+        "code": "X",
+        "pos": 48,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 49,
+        "code": "X",
+        "pos": 49,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 50,
+        "code": "X",
+        "pos": 50,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 51,
+        "code": "X",
+        "pos": 51,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 53,
+        "code": "X",
+        "pos": 53,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 54,
+        "code": "X",
+        "pos": 54,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 57,
+        "code": "X",
+        "pos": 57,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 58,
+        "code": "X",
+        "pos": 58,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 59,
+        "code": "X",
+        "pos": 59,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 62,
+        "code": "X",
+        "pos": 62,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 64,
+        "code": "X",
+        "pos": 64,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 65,
+        "code": "X",
+        "pos": 65,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 66,
+        "code": "X",
+        "pos": 66,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 67,
+        "code": "X",
+        "pos": 67,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 69,
+        "code": "X",
+        "pos": 69,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 70,
+        "code": "X",
+        "pos": 70,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 72,
+        "code": "X",
+        "pos": 72,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 73,
+        "code": "X",
+        "pos": 73,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 74,
+        "code": "X",
+        "pos": 74,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 75,
+        "code": "X",
+        "pos": 75,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 76,
+        "code": "X",
+        "pos": 76,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 77,
+        "code": "X",
+        "pos": 77,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 78,
+        "code": "X",
+        "pos": 78,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 79,
+        "code": "X",
+        "pos": 79,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 81,
+        "code": "X",
+        "pos": 81,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 82,
+        "code": "X",
+        "pos": 82,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 83,
+        "code": "X",
+        "pos": 83,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 84,
+        "code": "X",
+        "pos": 84,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 85,
+        "code": "X",
+        "pos": 85,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 86,
+        "code": "X",
+        "pos": 86,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 89,
+        "code": "X",
+        "pos": 89,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 90,
+        "code": "X",
+        "pos": 90,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 93,
+        "code": "X",
+        "pos": 93,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 94,
+        "code": "X",
+        "pos": 94,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 95,
+        "code": "X",
+        "pos": 95,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 99,
+        "code": "X",
+        "pos": 99,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 100,
+        "code": "X",
+        "pos": 100,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 101,
+        "code": "X",
+        "pos": 101,
         "data": 0
       }
     ],
@@ -2052,228 +2052,228 @@
     "templateSize": -373,
     "readFeatures": [
       {
-        "operator": "S",
-        "position": 1,
+        "code": "S",
+        "pos": 1,
         "data": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTAC"
       },
       {
-        "operator": "X",
-        "position": 46,
+        "code": "X",
+        "pos": 46,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 47,
+        "code": "X",
+        "pos": 47,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 48,
+        "code": "X",
+        "pos": 48,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 49,
+        "code": "X",
+        "pos": 49,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 50,
+        "code": "X",
+        "pos": 50,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 51,
+        "code": "X",
+        "pos": 51,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 54,
+        "code": "X",
+        "pos": 54,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 55,
+        "code": "X",
+        "pos": 55,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 59,
+        "code": "X",
+        "pos": 59,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 60,
+        "code": "X",
+        "pos": 60,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 61,
+        "code": "X",
+        "pos": 61,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 62,
+        "code": "X",
+        "pos": 62,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 63,
+        "code": "X",
+        "pos": 63,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 64,
+        "code": "X",
+        "pos": 64,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 65,
+        "code": "X",
+        "pos": 65,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 66,
+        "code": "X",
+        "pos": 66,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 67,
+        "code": "X",
+        "pos": 67,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 68,
+        "code": "X",
+        "pos": 68,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 70,
+        "code": "X",
+        "pos": 70,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 72,
+        "code": "X",
+        "pos": 72,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 73,
+        "code": "X",
+        "pos": 73,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 74,
+        "code": "X",
+        "pos": 74,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 75,
+        "code": "X",
+        "pos": 75,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 76,
+        "code": "X",
+        "pos": 76,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 77,
+        "code": "X",
+        "pos": 77,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 78,
+        "code": "X",
+        "pos": 78,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 79,
+        "code": "X",
+        "pos": 79,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 80,
+        "code": "X",
+        "pos": 80,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 81,
+        "code": "X",
+        "pos": 81,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 82,
+        "code": "X",
+        "pos": 82,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 83,
+        "code": "X",
+        "pos": 83,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 84,
+        "code": "X",
+        "pos": 84,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 85,
+        "code": "X",
+        "pos": 85,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 87,
+        "code": "X",
+        "pos": 87,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 88,
+        "code": "X",
+        "pos": 88,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 89,
+        "code": "X",
+        "pos": 89,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 91,
+        "code": "X",
+        "pos": 91,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 92,
+        "code": "X",
+        "pos": 92,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 93,
+        "code": "X",
+        "pos": 93,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 94,
+        "code": "X",
+        "pos": 94,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 96,
+        "code": "X",
+        "pos": 96,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 97,
+        "code": "X",
+        "pos": 97,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 100,
+        "code": "X",
+        "pos": 100,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 101,
+        "code": "X",
+        "pos": 101,
         "data": 2
       }
     ],
@@ -2536,143 +2536,143 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 1,
+        "code": "X",
+        "pos": 1,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 2,
+        "code": "X",
+        "pos": 2,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 3,
+        "code": "X",
+        "pos": 3,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 4,
+        "code": "X",
+        "pos": 4,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 5,
+        "code": "X",
+        "pos": 5,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 8,
+        "code": "X",
+        "pos": 8,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 9,
+        "code": "X",
+        "pos": 9,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 13,
+        "code": "X",
+        "pos": 13,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 14,
+        "code": "X",
+        "pos": 14,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 15,
+        "code": "X",
+        "pos": 15,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 16,
+        "code": "X",
+        "pos": 16,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 17,
+        "code": "X",
+        "pos": 17,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 19,
+        "code": "X",
+        "pos": 19,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 20,
+        "code": "X",
+        "pos": 20,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 21,
+        "code": "X",
+        "pos": 21,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 22,
+        "code": "X",
+        "pos": 22,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 24,
+        "code": "X",
+        "pos": 24,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 26,
+        "code": "X",
+        "pos": 26,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 27,
+        "code": "X",
+        "pos": 27,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 29,
+        "code": "X",
+        "pos": 29,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 30,
+        "code": "X",
+        "pos": 30,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 31,
+        "code": "X",
+        "pos": 31,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 32,
+        "code": "X",
+        "pos": 32,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 33,
+        "code": "X",
+        "pos": 33,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 34,
+        "code": "X",
+        "pos": 34,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 35,
+        "code": "X",
+        "pos": 35,
         "data": 2
       },
       {
-        "operator": "S",
-        "position": 36,
+        "code": "S",
+        "pos": 36,
         "data": "CTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
       }
     ],

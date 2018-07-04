@@ -17,9 +17,15 @@ class CramBufferOverrunError extends CramMalformedError {}
  */
 class CramSizeLimitError extends CramError {}
 
+/**
+ * An invalid argument was supplied to a cram-js method or object.
+ */
+class CramArgumentError extends CramError {}
+
 module.exports = {
   CramBufferOverrunError,
   CramMalformedError,
   CramUnimplementedError,
   CramSizeLimitError,
+  CramArgumentError,
 }

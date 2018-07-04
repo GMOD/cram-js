@@ -1728,8 +1728,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               }
             ],
@@ -1759,8 +1759,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               }
             ],
@@ -1793,8 +1793,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               }
             ],
@@ -3540,8 +3540,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               }
             ],
@@ -3571,8 +3571,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               }
             ],
@@ -3605,8 +3605,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 5,
+                "code": "D",
+                "pos": 5,
                 "data": 1
               }
             ],

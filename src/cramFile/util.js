@@ -1,3 +1,4 @@
+const md5 = require('md5')
 const { CramBufferOverrunError } = require('../errors')
 
 module.exports = {
@@ -143,5 +144,9 @@ module.exports = {
       if (!(memoAttrName in this)) this[memoAttrName] = method.call(this)
       return this[memoAttrName]
     }
+  },
+
+  sequenceMD5(seq) {
+    return md5(seq.toUpperCase().replace(/[^\x21-\x7e]/g, ''))
   },
 }

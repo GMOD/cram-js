@@ -5138,18 +5138,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 7,
+                "code": "X",
+                "pos": 7,
                 "data": 3
               },
               {
-                "operator": "X",
-                "position": 8,
+                "code": "X",
+                "pos": 8,
                 "data": 1
               },
               {
-                "operator": "X",
-                "position": 9,
+                "code": "X",
+                "pos": 9,
                 "data": 0
               }
             ],
@@ -5217,13 +5217,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 2,
+                "code": "X",
+                "pos": 2,
                 "data": 0
               },
               {
-                "operator": "X",
-                "position": 3,
+                "code": "X",
+                "pos": 3,
                 "data": 0
               }
             ],
@@ -10229,18 +10229,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 7,
+                "code": "X",
+                "pos": 7,
                 "data": 3
               },
               {
-                "operator": "X",
-                "position": 8,
+                "code": "X",
+                "pos": 8,
                 "data": 1
               },
               {
-                "operator": "X",
-                "position": 9,
+                "code": "X",
+                "pos": 9,
                 "data": 0
               }
             ],
@@ -10308,13 +10308,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 2,
+                "code": "X",
+                "pos": 2,
                 "data": 0
               },
               {
-                "operator": "X",
-                "position": 3,
+                "code": "X",
+                "pos": 3,
                 "data": 0
               }
             ],

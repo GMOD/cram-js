@@ -1493,8 +1493,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 51,
+                "code": "S",
+                "pos": 51,
                 "data": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
               }
             ],
@@ -1620,8 +1620,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 50
               }
             ],
@@ -1692,8 +1692,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 51,
+                "code": "H",
+                "pos": 51,
                 "data": 50
               }
             ],
@@ -1764,8 +1764,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
               }
             ],
@@ -3297,8 +3297,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 51,
+                "code": "S",
+                "pos": 51,
                 "data": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
               }
             ],
@@ -3424,8 +3424,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 50
               }
             ],
@@ -3496,8 +3496,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 51,
+                "code": "H",
+                "pos": 51,
                 "data": 50
               }
             ],
@@ -3568,8 +3568,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
               }
             ],

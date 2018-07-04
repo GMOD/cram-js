@@ -19,33 +19,33 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 5,
+        "code": "X",
+        "pos": 5,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 6,
+        "code": "X",
+        "pos": 6,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 18,
+        "code": "X",
+        "pos": 18,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 24,
+        "code": "X",
+        "pos": 24,
         "data": 1
       },
       {
-        "operator": "D",
-        "position": 28,
+        "code": "D",
+        "pos": 28,
         "data": 1
       }
     ],
@@ -174,18 +174,18 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 11,
+        "code": "X",
+        "pos": 11,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 12,
+        "code": "X",
+        "pos": 12,
         "data": 2
       },
       {
-        "operator": "X",
-        "position": 23,
+        "code": "X",
+        "pos": 23,
         "data": 1
       }
     ],
@@ -806,18 +806,18 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "X",
-        "position": 95,
+        "code": "X",
+        "pos": 95,
         "data": 0
       },
       {
-        "operator": "X",
-        "position": 96,
+        "code": "X",
+        "pos": 96,
         "data": 1
       },
       {
-        "operator": "X",
-        "position": 100,
+        "code": "X",
+        "pos": 100,
         "data": 0
       }
     ],

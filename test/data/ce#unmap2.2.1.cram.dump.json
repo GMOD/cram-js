@@ -2774,33 +2774,43 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 5,
-                "data": 1
+                "code": "X",
+                "pos": 5,
+                "data": 1,
+                "ref": "A",
+                "sub": "G"
               },
               {
-                "operator": "X",
-                "position": 6,
-                "data": 1
+                "code": "X",
+                "pos": 6,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 12,
-                "data": 1
+                "code": "X",
+                "pos": 12,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 18,
-                "data": 1
+                "code": "X",
+                "pos": 18,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 24,
-                "data": 1
+                "code": "X",
+                "pos": 24,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
               },
               {
-                "operator": "D",
-                "position": 28,
+                "code": "D",
+                "pos": 28,
                 "data": 1
               }
             ],
@@ -2929,19 +2939,25 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 11,
-                "data": 0
+                "code": "X",
+                "pos": 11,
+                "data": 0,
+                "ref": "G",
+                "sub": "A"
               },
               {
-                "operator": "X",
-                "position": 12,
-                "data": 2
+                "code": "X",
+                "pos": 12,
+                "data": 2,
+                "ref": "C",
+                "sub": "T"
               },
               {
-                "operator": "X",
-                "position": 23,
-                "data": 1
+                "code": "X",
+                "pos": 23,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
               }
             ],
             "mappingQuality": 12,
@@ -3561,19 +3577,25 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 95,
-                "data": 0
+                "code": "X",
+                "pos": 95,
+                "data": 0,
+                "ref": "G",
+                "sub": "A"
               },
               {
-                "operator": "X",
-                "position": 96,
-                "data": 1
+                "code": "X",
+                "pos": 96,
+                "data": 1,
+                "ref": "C",
+                "sub": "G"
               },
               {
-                "operator": "X",
-                "position": 100,
-                "data": 0
+                "code": "X",
+                "pos": 100,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               }
             ],
             "mappingQuality": 1,

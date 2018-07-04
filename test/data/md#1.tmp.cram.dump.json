@@ -1354,24 +1354,32 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 1,
-                "data": 0
+                "code": "X",
+                "pos": 1,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 10,
-                "data": 3
+                "code": "X",
+                "pos": 10,
+                "data": 3,
+                "ref": "A",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 11,
-                "data": 3
+                "code": "X",
+                "pos": 11,
+                "data": 3,
+                "ref": "C",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 40,
-                "data": 1
+                "code": "X",
+                "pos": 40,
+                "data": 1,
+                "ref": "T",
+                "sub": "C"
               }
             ],
             "mappingQuality": 255,
@@ -1431,58 +1439,66 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "i",
-                "position": 1,
+                "code": "i",
+                "pos": 1,
                 "data": "N"
               },
               {
-                "operator": "i",
-                "position": 12,
+                "code": "i",
+                "pos": 12,
                 "data": "G"
               },
               {
-                "operator": "X",
-                "position": 21,
-                "data": 1
+                "code": "X",
+                "pos": 21,
+                "data": 1,
+                "ref": "N",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 22,
-                "data": 1
+                "code": "X",
+                "pos": 22,
+                "data": 1,
+                "ref": "R",
+                "sub": "C"
               },
               {
-                "operator": "I",
-                "position": 23,
+                "code": "I",
+                "pos": 23,
                 "data": "AA"
               },
               {
-                "operator": "X",
-                "position": 25,
+                "code": "X",
+                "pos": 25,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "X",
+                "pos": 26,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "P",
+                "pos": 35,
                 "data": 2
               },
               {
-                "operator": "X",
-                "position": 26,
-                "data": 2
-              },
-              {
-                "operator": "P",
-                "position": 35,
-                "data": 2
-              },
-              {
-                "operator": "I",
-                "position": 35,
+                "code": "I",
+                "pos": 35,
                 "data": "CCC"
               },
               {
-                "operator": "P",
-                "position": 38,
+                "code": "P",
+                "pos": 38,
                 "data": 2
               },
               {
-                "operator": "i",
-                "position": 48,
+                "code": "i",
+                "pos": 48,
                 "data": "N"
               }
             ],
@@ -1551,78 +1567,93 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "i",
-                "position": 1,
+                "code": "i",
+                "pos": 1,
                 "data": "N"
               },
               {
-                "operator": "X",
-                "position": 2,
-                "data": 0
+                "code": "X",
+                "pos": 2,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               },
               {
-                "operator": "i",
-                "position": 12,
+                "code": "i",
+                "pos": 12,
                 "data": "G"
               },
               {
-                "operator": "X",
-                "position": 21,
-                "data": 1
+                "code": "X",
+                "pos": 21,
+                "data": 1,
+                "ref": "N",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 22,
-                "data": 1
+                "code": "X",
+                "pos": 22,
+                "data": 1,
+                "ref": "R",
+                "sub": "C"
               },
               {
-                "operator": "I",
-                "position": 23,
+                "code": "I",
+                "pos": 23,
                 "data": "AA"
               },
               {
-                "operator": "X",
-                "position": 25,
+                "code": "X",
+                "pos": 25,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "X",
+                "pos": 26,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "X",
+                "pos": 34,
+                "data": 0,
+                "ref": "T",
+                "sub": "A"
+              },
+              {
+                "code": "P",
+                "pos": 35,
                 "data": 2
               },
               {
-                "operator": "X",
-                "position": 26,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 34,
-                "data": 0
-              },
-              {
-                "operator": "P",
-                "position": 35,
-                "data": 2
-              },
-              {
-                "operator": "I",
-                "position": 35,
+                "code": "I",
+                "pos": 35,
                 "data": "CCC"
               },
               {
-                "operator": "P",
-                "position": 38,
+                "code": "P",
+                "pos": 38,
                 "data": 2
               },
               {
-                "operator": "X",
-                "position": 38,
-                "data": 0
+                "code": "X",
+                "pos": 38,
+                "data": 0,
+                "ref": "T",
+                "sub": "A"
               },
               {
-                "operator": "X",
-                "position": 47,
-                "data": 1
+                "code": "X",
+                "pos": 47,
+                "data": 1,
+                "sub": "C"
               },
               {
-                "operator": "i",
-                "position": 48,
+                "code": "i",
+                "pos": 48,
                 "data": "N"
               }
             ],
@@ -1694,31 +1725,33 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 10,
+                "code": "D",
+                "pos": 10,
                 "data": 1
               },
               {
-                "operator": "B",
-                "position": 16,
+                "code": "B",
+                "pos": 16,
                 "data": [
                   "Y",
                   255
                 ]
               },
               {
-                "operator": "X",
-                "position": 17,
-                "data": 3
+                "code": "X",
+                "pos": 17,
+                "data": 3,
+                "ref": "C",
+                "sub": "N"
               },
               {
-                "operator": "D",
-                "position": 18,
+                "code": "D",
+                "pos": 18,
                 "data": 2
               },
               {
-                "operator": "D",
-                "position": 25,
+                "code": "D",
+                "pos": 25,
                 "data": 3
               }
             ],
@@ -1769,54 +1802,68 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 1,
-                "data": 0
+                "code": "X",
+                "pos": 1,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 9,
-                "data": 3
+                "code": "X",
+                "pos": 9,
+                "data": 3,
+                "ref": "A",
+                "sub": "N"
               },
               {
-                "operator": "D",
-                "position": 10,
+                "code": "D",
+                "pos": 10,
                 "data": 1
               },
               {
-                "operator": "X",
-                "position": 10,
-                "data": 3
+                "code": "X",
+                "pos": 10,
+                "data": 3,
+                "ref": "A",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 17,
+                "code": "X",
+                "pos": 17,
+                "data": 2,
+                "ref": "C",
+                "sub": "T"
+              },
+              {
+                "code": "D",
+                "pos": 18,
                 "data": 2
               },
               {
-                "operator": "D",
-                "position": 18,
-                "data": 2
+                "code": "X",
+                "pos": 18,
+                "data": 3,
+                "ref": "C",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 18,
+                "code": "X",
+                "pos": 19,
+                "data": 2,
+                "ref": "Y",
+                "sub": "G"
+              },
+              {
+                "code": "D",
+                "pos": 25,
                 "data": 3
               },
               {
-                "operator": "X",
-                "position": 19,
-                "data": 2
-              },
-              {
-                "operator": "D",
-                "position": 25,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 30,
-                "data": 0
+                "code": "X",
+                "pos": 30,
+                "data": 0,
+                "ref": "G",
+                "sub": "A"
               }
             ],
             "mappingQuality": 255,
@@ -1866,8 +1913,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "N",
-                "position": 11,
+                "code": "N",
+                "pos": 11,
                 "data": 20
               }
             ],
@@ -3882,24 +3929,32 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 1,
-                "data": 0
+                "code": "X",
+                "pos": 1,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 10,
-                "data": 3
+                "code": "X",
+                "pos": 10,
+                "data": 3,
+                "ref": "A",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 11,
-                "data": 3
+                "code": "X",
+                "pos": 11,
+                "data": 3,
+                "ref": "C",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 40,
-                "data": 1
+                "code": "X",
+                "pos": 40,
+                "data": 1,
+                "ref": "T",
+                "sub": "C"
               }
             ],
             "mappingQuality": 255,
@@ -3959,58 +4014,66 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "i",
-                "position": 1,
+                "code": "i",
+                "pos": 1,
                 "data": "N"
               },
               {
-                "operator": "i",
-                "position": 12,
+                "code": "i",
+                "pos": 12,
                 "data": "G"
               },
               {
-                "operator": "X",
-                "position": 21,
-                "data": 1
+                "code": "X",
+                "pos": 21,
+                "data": 1,
+                "ref": "N",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 22,
-                "data": 1
+                "code": "X",
+                "pos": 22,
+                "data": 1,
+                "ref": "R",
+                "sub": "C"
               },
               {
-                "operator": "I",
-                "position": 23,
+                "code": "I",
+                "pos": 23,
                 "data": "AA"
               },
               {
-                "operator": "X",
-                "position": 25,
+                "code": "X",
+                "pos": 25,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "X",
+                "pos": 26,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "P",
+                "pos": 35,
                 "data": 2
               },
               {
-                "operator": "X",
-                "position": 26,
-                "data": 2
-              },
-              {
-                "operator": "P",
-                "position": 35,
-                "data": 2
-              },
-              {
-                "operator": "I",
-                "position": 35,
+                "code": "I",
+                "pos": 35,
                 "data": "CCC"
               },
               {
-                "operator": "P",
-                "position": 38,
+                "code": "P",
+                "pos": 38,
                 "data": 2
               },
               {
-                "operator": "i",
-                "position": 48,
+                "code": "i",
+                "pos": 48,
                 "data": "N"
               }
             ],
@@ -4079,78 +4142,93 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "i",
-                "position": 1,
+                "code": "i",
+                "pos": 1,
                 "data": "N"
               },
               {
-                "operator": "X",
-                "position": 2,
-                "data": 0
+                "code": "X",
+                "pos": 2,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               },
               {
-                "operator": "i",
-                "position": 12,
+                "code": "i",
+                "pos": 12,
                 "data": "G"
               },
               {
-                "operator": "X",
-                "position": 21,
-                "data": 1
+                "code": "X",
+                "pos": 21,
+                "data": 1,
+                "ref": "N",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 22,
-                "data": 1
+                "code": "X",
+                "pos": 22,
+                "data": 1,
+                "ref": "R",
+                "sub": "C"
               },
               {
-                "operator": "I",
-                "position": 23,
+                "code": "I",
+                "pos": 23,
                 "data": "AA"
               },
               {
-                "operator": "X",
-                "position": 25,
+                "code": "X",
+                "pos": 25,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "X",
+                "pos": 26,
+                "data": 2,
+                "ref": "G",
+                "sub": "T"
+              },
+              {
+                "code": "X",
+                "pos": 34,
+                "data": 0,
+                "ref": "T",
+                "sub": "A"
+              },
+              {
+                "code": "P",
+                "pos": 35,
                 "data": 2
               },
               {
-                "operator": "X",
-                "position": 26,
-                "data": 2
-              },
-              {
-                "operator": "X",
-                "position": 34,
-                "data": 0
-              },
-              {
-                "operator": "P",
-                "position": 35,
-                "data": 2
-              },
-              {
-                "operator": "I",
-                "position": 35,
+                "code": "I",
+                "pos": 35,
                 "data": "CCC"
               },
               {
-                "operator": "P",
-                "position": 38,
+                "code": "P",
+                "pos": 38,
                 "data": 2
               },
               {
-                "operator": "X",
-                "position": 38,
-                "data": 0
+                "code": "X",
+                "pos": 38,
+                "data": 0,
+                "ref": "T",
+                "sub": "A"
               },
               {
-                "operator": "X",
-                "position": 47,
-                "data": 1
+                "code": "X",
+                "pos": 47,
+                "data": 1,
+                "sub": "C"
               },
               {
-                "operator": "i",
-                "position": 48,
+                "code": "i",
+                "pos": 48,
                 "data": "N"
               }
             ],
@@ -4222,31 +4300,33 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 10,
+                "code": "D",
+                "pos": 10,
                 "data": 1
               },
               {
-                "operator": "B",
-                "position": 16,
+                "code": "B",
+                "pos": 16,
                 "data": [
                   "Y",
                   255
                 ]
               },
               {
-                "operator": "X",
-                "position": 17,
-                "data": 3
+                "code": "X",
+                "pos": 17,
+                "data": 3,
+                "ref": "C",
+                "sub": "N"
               },
               {
-                "operator": "D",
-                "position": 18,
+                "code": "D",
+                "pos": 18,
                 "data": 2
               },
               {
-                "operator": "D",
-                "position": 25,
+                "code": "D",
+                "pos": 25,
                 "data": 3
               }
             ],
@@ -4297,54 +4377,68 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "X",
-                "position": 1,
-                "data": 0
+                "code": "X",
+                "pos": 1,
+                "data": 0,
+                "ref": "A",
+                "sub": "C"
               },
               {
-                "operator": "X",
-                "position": 9,
-                "data": 3
+                "code": "X",
+                "pos": 9,
+                "data": 3,
+                "ref": "A",
+                "sub": "N"
               },
               {
-                "operator": "D",
-                "position": 10,
+                "code": "D",
+                "pos": 10,
                 "data": 1
               },
               {
-                "operator": "X",
-                "position": 10,
-                "data": 3
+                "code": "X",
+                "pos": 10,
+                "data": 3,
+                "ref": "A",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 17,
+                "code": "X",
+                "pos": 17,
+                "data": 2,
+                "ref": "C",
+                "sub": "T"
+              },
+              {
+                "code": "D",
+                "pos": 18,
                 "data": 2
               },
               {
-                "operator": "D",
-                "position": 18,
-                "data": 2
+                "code": "X",
+                "pos": 18,
+                "data": 3,
+                "ref": "C",
+                "sub": "N"
               },
               {
-                "operator": "X",
-                "position": 18,
+                "code": "X",
+                "pos": 19,
+                "data": 2,
+                "ref": "Y",
+                "sub": "G"
+              },
+              {
+                "code": "D",
+                "pos": 25,
                 "data": 3
               },
               {
-                "operator": "X",
-                "position": 19,
-                "data": 2
-              },
-              {
-                "operator": "D",
-                "position": 25,
-                "data": 3
-              },
-              {
-                "operator": "X",
-                "position": 30,
-                "data": 0
+                "code": "X",
+                "pos": 30,
+                "data": 0,
+                "ref": "G",
+                "sub": "A"
               }
             ],
             "mappingQuality": 255,
@@ -4394,8 +4488,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "N",
-                "position": 11,
+                "code": "N",
+                "pos": 11,
                 "data": 20
               }
             ],

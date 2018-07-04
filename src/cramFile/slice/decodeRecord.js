@@ -71,7 +71,33 @@ function parseTagData(tagType, buffer) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-function decodeReadFeatures(readFeatureCount, decodeDataSeries, majorVersion) {
+function decodeBaseSubstitution(
+  cramRecord,
+  refRegion,
+  compressionScheme,
+  readFeature,
+) {
+  if (!refRegion) return
+
+  // decode base substitution code using the substitution matrix
+  const refCoord = cramRecord.alignmentStart + readFeature.pos - refRegion.start - 1
+  const refBase = refRegion.seq.charAt(refCoord)
+  if (refBase) readFeature.ref = refBase
+  let baseNumber = { A: 0, C: 1, G: 2, T: 3, N: 4 }[refBase]
+  if (baseNumber === undefined) baseNumber = 4
+  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]
+  const base = substitutionScheme[readFeature.data]
+  if (base) readFeature.sub = base
+}
+
+function decodeReadFeatures(
+  cramRecord,
+  readFeatureCount,
+  decodeDataSeries,
+  compressionScheme,
+  refRegion,
+  majorVersion,
+) {
   let prevPos = 0
   const readFeatures = new Array(readFeatureCount)
 
@@ -96,7 +122,7 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries, majorVersion) {
     const position = prevPos + decodeDataSeries('FP')
     prevPos = position
 
-    const readFeature = { operator, position }
+    const readFeature = { code: operator, pos: position }
     // map of operator name -> data series name
     const data1Schema = {
       B: ['character', 'BA'],
@@ -125,6 +151,17 @@ function decodeReadFeatures(readFeatureCount, decodeDataSeries, majorVersion) {
     if (data2Schema)
       readFeature.data = [readFeature.data, decodeRFData(data2Schema)]
 
+    // decode the base substituted in a base substitution,
+    // if we can fetch the reference sequence
+    if (operator === 'X') {
+      decodeBaseSubstitution(
+        cramRecord,
+        refRegion,
+        compressionScheme,
+        readFeature,
+      )
+    }
+
     readFeatures[i] = readFeature
   }
   return readFeatures
@@ -138,6 +175,7 @@ function decodeRecord(
   coreDataBlock,
   blocksByContentId,
   cursors,
+  refRegion,
   majorVersion,
   recordNumber,
 ) {
@@ -157,6 +195,9 @@ function decodeRecord(
   cramRecord.readLength = decodeDataSeries('RL')
   // if APDelta, will calculate the true start in a second pass
   cramRecord.alignmentStart = decodeDataSeries('AP')
+  if (compressionScheme.APdelta)
+    cramRecord.alignmentStart += cursors.lastAlignmentStart
+  cursors.lastAlignmentStart = cramRecord.alignmentStart
   cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded)
@@ -213,8 +254,11 @@ function decodeRecord(
     const /* int */ readFeatureCount = decodeDataSeries('FN')
     if (readFeatureCount) {
       cramRecord.readFeatures = decodeReadFeatures(
+        cramRecord,
         readFeatureCount,
         decodeDataSeries,
+        compressionScheme,
+        refRegion,
         majorVersion,
       )
     }

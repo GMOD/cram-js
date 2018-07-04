@@ -1781,8 +1781,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "N",
-                "position": 4,
+                "code": "N",
+                "pos": 4,
                 "data": 4
               }
             ],
@@ -1809,13 +1809,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "A"
               },
               {
-                "operator": "S",
-                "position": 10,
+                "code": "S",
+                "pos": 10,
                 "data": "T"
               }
             ],
@@ -1846,13 +1846,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 1
               },
               {
-                "operator": "H",
-                "position": 9,
+                "code": "H",
+                "pos": 9,
                 "data": 1
               }
             ],
@@ -1881,13 +1881,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "AA"
               },
               {
-                "operator": "S",
-                "position": 9,
+                "code": "S",
+                "pos": 9,
                 "data": "TT"
               }
             ],
@@ -1918,18 +1918,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "AA"
               },
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "NN"
               },
               {
-                "operator": "S",
-                "position": 11,
+                "code": "S",
+                "pos": 11,
                 "data": "TT"
               }
             ],
@@ -1962,13 +1962,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 2
               },
               {
-                "operator": "H",
-                "position": 7,
+                "code": "H",
+                "pos": 7,
                 "data": 2
               }
             ],
@@ -3702,8 +3702,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "N",
-                "position": 4,
+                "code": "N",
+                "pos": 4,
                 "data": 4
               }
             ],
@@ -3730,13 +3730,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "A"
               },
               {
-                "operator": "S",
-                "position": 10,
+                "code": "S",
+                "pos": 10,
                 "data": "T"
               }
             ],
@@ -3767,13 +3767,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 1
               },
               {
-                "operator": "H",
-                "position": 9,
+                "code": "H",
+                "pos": 9,
                 "data": 1
               }
             ],
@@ -3802,13 +3802,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "AA"
               },
               {
-                "operator": "S",
-                "position": 9,
+                "code": "S",
+                "pos": 9,
                 "data": "TT"
               }
             ],
@@ -3839,18 +3839,18 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "S",
-                "position": 1,
+                "code": "S",
+                "pos": 1,
                 "data": "AA"
               },
               {
-                "operator": "I",
-                "position": 6,
+                "code": "I",
+                "pos": 6,
                 "data": "NN"
               },
               {
-                "operator": "S",
-                "position": 11,
+                "code": "S",
+                "pos": 11,
                 "data": "TT"
               }
             ],
@@ -3883,13 +3883,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 2
               },
               {
-                "operator": "H",
-                "position": 7,
+                "code": "H",
+                "pos": 7,
                 "data": 2
               }
             ],

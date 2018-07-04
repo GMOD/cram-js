@@ -1,11 +1,9 @@
-const md5 = require('md5')
-
 const {
   CramMalformedError,
-  CramUnimplementedError,
   CramBufferOverrunError,
+  CramArgumentError,
 } = require('../../errors')
-const { parseItem, tinyMemoize } = require('../util')
+const { parseItem, tinyMemoize, sequenceMD5 } = require('../util')
 
 // const decodeSeqAndQual = require('./decodeSeqAndQual')
 const decodeSliceXref = require('./decodeSliceXref')
@@ -88,78 +86,59 @@ class CramSlice {
     return blocksByContentId[id]
   }
 
-  async getReferenceRegion(/* optional */ requestedRefId) {
+  async getReferenceRegion() {
     // read the slice header
     const sliceHeader = (await this.getHeader()).content
+
+    if (sliceHeader.refSeqId < 0) return undefined
+
     const compressionScheme = await this.container.getCompressionScheme()
 
     // console.log(JSON.stringify(sliceHeader, null, '  '))
 
-    if (sliceHeader.refSeqId >= 0) {
-      if (requestedRefId >= 0 && requestedRefId !== sliceHeader.refSeqId)
-        throw new Error(
-          'attempt to fetch an unrelated reference sequence from a slice',
+    if (sliceHeader.refBaseBlockId >= 0) {
+      const refBlock = this.getBlockByContentId(sliceHeader.refBaseBlockId)
+      if (!refBlock)
+        throw new CramMalformedError(
+          'embedded reference specified, but reference block does not exist',
         )
 
-      if (sliceHeader.refBaseBlockId >= 0) {
-        const refBlock = this.getBlockByContentId(sliceHeader.refBaseBlockId)
-        if (!refBlock)
-          throw new CramMalformedError(
-            'embedded reference specified, but reference block does not exist',
-          )
-
-        if (sliceHeader.span > refBlock.uncompressedSize) {
-          throw new CramMalformedError('Embedded reference is too small')
-        }
-
-        return {
-          seq: refBlock.data.toString('utf8'),
-          start: sliceHeader.refSeqStart,
-          end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
-          span: sliceHeader.refSeqSpan,
-        }
-      } else if (compressionScheme.referenceRequired) {
-        if (!this.file.fetchReferenceSequenceCallback)
-          throw new Error(
-            'reference sequence not embedded, and seqFetch callback not provided, cannot fetch reference sequence',
-          )
-
-        const seq = await this.file.fetchReferenceSequenceCallback(
-          sliceHeader.refSeqId,
-          sliceHeader.refSeqStart,
-          sliceHeader.refSeqSpan,
-        )
-
-        return {
-          seq,
-          start: sliceHeader.refSeqStart,
-          end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
-          span: sliceHeader.refSeqSpan,
-        }
-
-        // if (fd.required_fields & SAM_SEQ)
-        //     s.ref =
-        //     cram_get_ref(fd, sliceHeader.ref_seq_id,
-        //                  sliceHeader.ref_seq_start,
-        //                  sliceHeader.ref_seq_start + sliceHeader.ref_seq_span -1);
-        // s.ref_start = sliceHeader.ref_seq_start;
-        // s.ref_end   = sliceHeader.ref_seq_start + sliceHeader.ref_seq_span-1;
-        // /* Sanity check */
-        // if (s.ref_start < 0) {
-        //     hts_log_warning("Slice starts before base 1");
-        //     s.ref_start = 0;
-        // }
-        // if ((fd.required_fields & SAM_SEQ) &&
-        //     refSeqId < fd.refs.nref &&
-        //     s.ref_end > fd.refs.refSeqId[refSeqId].length) {
-        //     s.ref_end = fd.refs.refSeqId[refSeqId].length;
-        // }
+      if (sliceHeader.span > refBlock.uncompressedSize) {
+        throw new CramMalformedError('Embedded reference is too small')
       }
-    } else if (sliceHeader.refSeqId === -2) {
-      // this is a multi-reference slice
-      throw new CramUnimplementedError(
-        'ref seq fetching not yet implemented for multi-reference slices',
+
+      return {
+        seq: refBlock.data.toString('utf8').toUpperCase(),
+        start: sliceHeader.refSeqStart,
+        end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+        span: sliceHeader.refSeqSpan,
+      }
+    } else if (
+      compressionScheme.referenceRequired ||
+      this.file.fetchReferenceSequenceCallback
+    ) {
+      if (!this.file.fetchReferenceSequenceCallback)
+        throw new Error(
+          'reference sequence not embedded, and seqFetch callback not provided, cannot fetch reference sequence',
+        )
+
+      const seq = await this.file.fetchReferenceSequenceCallback(
+        sliceHeader.refSeqId,
+        sliceHeader.refSeqStart,
+        sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
       )
+
+      if (seq.length !== sliceHeader.refSeqSpan)
+        throw new CramArgumentError(
+          'seqFetch callback returned a reference sequence of the wrong length',
+        )
+
+      return {
+        seq: seq.toUpperCase(),
+        start: sliceHeader.refSeqStart,
+        end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+        span: sliceHeader.refSeqSpan,
+      }
     }
 
     return undefined
@@ -177,18 +156,19 @@ class CramSlice {
     // TODO: calculate dataset dependencies like htslib? currently just decoding all
     const needDataSeries = (/* dataSeriesName */) => true
 
+    const refRegion = await this.getReferenceRegion()
+
     // check MD5 of reference if available
     if (
       majorVersion > 1 &&
       sliceHeader.content.refSeqId >= 0 &&
       sliceHeader.content.md5.join('') !== '0000000000000000'
     ) {
-      const refRegion = await this.getReferenceRegion()
       if (refRegion) {
         const { seq, start, end } = refRegion
-        const seqMd5 = md5(seq)
+        const seqMd5 = sequenceMD5(seq)
         const storedMd5 = sliceHeader.content.md5
-          .map(byte => (byte < 15 ? '0' : '') + byte.toString(16))
+          .map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
           .join('')
         if (seqMd5 !== storedMd5)
           throw new CramMalformedError(
@@ -204,6 +184,7 @@ class CramSlice {
     // note that we are only decoding a single block here, the core data block
     const coreDataBlock = await this.getCoreDataBlock()
     const cursors = {
+      lastAlignmentStart: sliceHeader.content.refSeqStart || 0,
       coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
         getCursor(contentId) {
@@ -233,6 +214,7 @@ class CramSlice {
           coreDataBlock,
           blocksByContentId,
           cursors,
+          refRegion,
           majorVersion,
           i,
         )
@@ -246,15 +228,6 @@ class CramSlice {
           break
         } else throw e
       }
-    }
-
-    // if the starts are delta from the previous, go through and calculate the true starts
-    if (compressionScheme.APdelta) {
-      let lastStart = sliceHeader.content.refSeqStart || 0
-      records.forEach(rec => {
-        rec.alignmentStart += lastStart
-        lastStart = rec.alignmentStart
-      })
     }
 
     // Resolve mate pair cross-references between records in this slice

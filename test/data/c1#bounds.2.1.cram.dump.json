@@ -1428,8 +1428,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "B",
-                "position": 10,
+                "code": "B",
+                "pos": 10,
                 "data": [
                   "C",
                   9
@@ -1463,16 +1463,16 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "B",
-                "position": 9,
+                "code": "B",
+                "pos": 9,
                 "data": [
                   "C",
                   9
                 ]
               },
               {
-                "operator": "B",
-                "position": 10,
+                "code": "B",
+                "pos": 10,
                 "data": [
                   "G",
                   9
@@ -2860,8 +2860,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "B",
-                "position": 10,
+                "code": "B",
+                "pos": 10,
                 "data": [
                   "C",
                   9
@@ -2895,16 +2895,16 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "B",
-                "position": 9,
+                "code": "B",
+                "pos": 9,
                 "data": [
                   "C",
                   9
                 ]
               },
               {
-                "operator": "B",
-                "position": 10,
+                "code": "B",
+                "pos": 10,
                 "data": [
                   "G",
                   9

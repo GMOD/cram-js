@@ -1548,8 +1548,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 10
               }
             ],
@@ -1569,13 +1569,13 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 5
               },
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 5
               }
             ],
@@ -1595,23 +1595,23 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 5
               },
               {
-                "operator": "I",
-                "position": 1,
+                "code": "I",
+                "pos": 1,
                 "data": ""
               },
               {
-                "operator": "D",
-                "position": 11,
+                "code": "D",
+                "pos": 11,
                 "data": 0
               },
               {
-                "operator": "H",
-                "position": 11,
+                "code": "H",
+                "pos": 11,
                 "data": 5
               }
             ],
@@ -3048,8 +3048,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 0
               }
             ],
@@ -3069,8 +3069,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 1,
+                "code": "I",
+                "pos": 1,
                 "data": ""
               }
             ],
@@ -3090,8 +3090,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 1,
+                "code": "D",
+                "pos": 1,
                 "data": 0
               }
             ],
@@ -3125,8 +3125,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "P",
-                "position": 1,
+                "code": "P",
+                "pos": 1,
                 "data": 0
               }
             ],
@@ -4552,8 +4552,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "H",
-                "position": 1,
+                "code": "H",
+                "pos": 1,
                 "data": 0
               }
             ],
@@ -4573,8 +4573,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "I",
-                "position": 1,
+                "code": "I",
+                "pos": 1,
                 "data": ""
               }
             ],
@@ -4594,8 +4594,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "D",
-                "position": 1,
+                "code": "D",
+                "pos": 1,
                 "data": 0
               }
             ],
@@ -4629,8 +4629,8 @@
             "templateSize": 0,
             "readFeatures": [
               {
-                "operator": "P",
-                "position": 1,
+                "code": "P",
+                "pos": 1,
                 "data": 0
               }
             ],

@@ -14,8 +14,8 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "H",
-        "position": 1,
+        "code": "H",
+        "pos": 1,
         "data": 10
       }
     ],
@@ -38,8 +38,8 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "H",
-        "position": 1,
+        "code": "H",
+        "pos": 1,
         "data": 10
       }
     ],
@@ -59,13 +59,13 @@
     "templateSize": 0,
     "readFeatures": [
       {
-        "operator": "H",
-        "position": 1,
+        "code": "H",
+        "pos": 1,
         "data": 5
       },
       {
-        "operator": "H",
-        "position": 11,
+        "code": "H",
+        "pos": 11,
         "data": 5
       }
     ],
