@@ -18,6 +18,10 @@ async function loadTestJSON(filename) {
   return JSON.parse(text)
 }
 
+function JsonClone(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
+
 let extended = xit
 try {
   if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`)))
@@ -34,4 +38,5 @@ module.exports = {
   testDataFile,
   loadTestJSON,
   extended,
+  JsonClone,
 }
