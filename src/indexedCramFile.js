@@ -10,8 +10,10 @@ class IndexedCramFile {
    * @param {*} args
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
-   * @param {number} cacheSlices optional maximum number of CRAM slices to cache. default 5
-   * @param {number} fetchSizeLimit maximum number of bytes to fetch in a single getFeaturesForRange call.  Default 3 MiB.
+   * @param {number} [args.cacheSlices] optional maximum number of CRAM slices to cache. default 5
+   * @param {number} [args.fetchSizeLimit] optional maximum number of bytes to fetch in a single getFeaturesForRange call.  Default 3 MiB.
+   * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
+   * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
    */
   constructor(args) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
@@ -22,6 +24,7 @@ class IndexedCramFile {
         path: args.cramPath,
         filehandle: args.cramFilehandle,
         seqFetch: args.seqFetch,
+        checkSequenceMD5: args.checkSequenceMD5,
       })
 
     if (!(this.cram instanceof CramFile))

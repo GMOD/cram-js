@@ -23,11 +23,16 @@ class CramFile {
    * @param {object} [args.url] - url for the cram file.  also supports file:// urls for local files
    * @param {function} [args.seqFetch] - a function with signature
    * `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
+   * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
+   * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
    */
   constructor(args) {
     this.file = open(args.url, args.path, args.filehandle)
     this.validateChecksums = true
     this.fetchReferenceSequenceCallback = args.seqFetch
+    this.options = {
+      checkSequenceMD5: args.checkSequenceMD5 !== false,
+    }
   }
 
   toString() {

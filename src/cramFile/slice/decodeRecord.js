@@ -71,31 +71,11 @@ function parseTagData(tagType, buffer) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-function decodeBaseSubstitution(
-  cramRecord,
-  refRegion,
-  compressionScheme,
-  readFeature,
-) {
-  if (!refRegion) return
-
-  // decode base substitution code using the substitution matrix
-  const refCoord = cramRecord.alignmentStart + readFeature.pos - refRegion.start - 1
-  const refBase = refRegion.seq.charAt(refCoord)
-  if (refBase) readFeature.ref = refBase
-  let baseNumber = { A: 0, C: 1, G: 2, T: 3, N: 4 }[refBase]
-  if (baseNumber === undefined) baseNumber = 4
-  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]
-  const base = substitutionScheme[readFeature.data]
-  if (base) readFeature.sub = base
-}
-
 function decodeReadFeatures(
   cramRecord,
   readFeatureCount,
   decodeDataSeries,
   compressionScheme,
-  refRegion,
   majorVersion,
 ) {
   let prevPos = 0
@@ -151,17 +131,6 @@ function decodeReadFeatures(
     if (data2Schema)
       readFeature.data = [readFeature.data, decodeRFData(data2Schema)]
 
-    // decode the base substituted in a base substitution,
-    // if we can fetch the reference sequence
-    if (operator === 'X') {
-      decodeBaseSubstitution(
-        cramRecord,
-        refRegion,
-        compressionScheme,
-        readFeature,
-      )
-    }
-
     readFeatures[i] = readFeature
   }
   return readFeatures
@@ -175,7 +144,6 @@ function decodeRecord(
   coreDataBlock,
   blocksByContentId,
   cursors,
-  refRegion,
   majorVersion,
   recordNumber,
 ) {
@@ -258,7 +226,6 @@ function decodeRecord(
         readFeatureCount,
         decodeDataSeries,
         compressionScheme,
-        refRegion,
         majorVersion,
       )
     }

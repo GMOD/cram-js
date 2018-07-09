@@ -108,7 +108,7 @@ class CramSlice {
       }
 
       return {
-        seq: refBlock.data.toString('utf8').toUpperCase(),
+        seq: refBlock.data.toString('utf8'),
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
@@ -134,7 +134,7 @@ class CramSlice {
         )
 
       return {
-        seq: seq.toUpperCase(),
+        seq: seq,
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
@@ -144,7 +144,11 @@ class CramSlice {
     return undefined
   }
 
-  async getAllFeatures() {
+  getAllFeatures() {
+    return this.getRecords(() => true)
+  }
+
+  async getRecords(filterFunction) {
     const { majorVersion } = await this.file.getDefinition()
 
     const compressionScheme = await this.container.getCompressionScheme()
@@ -153,17 +157,14 @@ class CramSlice {
 
     const blocksByContentId = await this._getBlocksContentIdIndex()
 
-    // TODO: calculate dataset dependencies like htslib? currently just decoding all
-    const needDataSeries = (/* dataSeriesName */) => true
-
-    const refRegion = await this.getReferenceRegion()
-
     // check MD5 of reference if available
     if (
       majorVersion > 1 &&
+      this.file.options.checkSequenceMD5 &&
       sliceHeader.content.refSeqId >= 0 &&
       sliceHeader.content.md5.join('') !== '0000000000000000'
     ) {
+      const refRegion = await this.getReferenceRegion()
       if (refRegion) {
         const { seq, start, end } = refRegion
         const seqMd5 = sequenceMD5(seq)
@@ -203,10 +204,10 @@ class CramSlice {
         )
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
-    let records = new Array(sliceHeader.content.numRecords)
+    let records = []
     for (let i = 0; i < sliceHeader.content.numRecords; i += 1) {
       try {
-        records[i] = decodeRecord(
+        const record = decodeRecord(
           this,
           decodeDataSeries,
           compressionScheme,
@@ -214,11 +215,11 @@ class CramSlice {
           coreDataBlock,
           blocksByContentId,
           cursors,
-          refRegion,
           majorVersion,
           i,
         )
-        records[i].uniqueId = sliceHeader.content.recordCounter + i
+        record.uniqueId = sliceHeader.content.recordCounter + i
+        if (filterFunction(record)) records.push(record)
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
           console.warn(
@@ -231,7 +232,27 @@ class CramSlice {
     }
 
     // Resolve mate pair cross-references between records in this slice
-    decodeSliceXref(this, needDataSeries)
+    decodeSliceXref(this, records)
+
+    // if we can fetch reference sequence, add the reference sequence to the records
+    if (
+      records.length &&
+      this.file.fetchReferenceSequenceCallback &&
+      sliceHeader.content.refSeqId >= 0
+    ) {
+      const refStart = records[0].alignmentStart
+      const lastRecord = records[records.length - 1]
+      const refEnd = lastRecord.alignmentStart + lastRecord.lengthOnRef() - 1
+      const seq = await this.file.fetchReferenceSequenceCallback(
+        sliceHeader.content.refSeqId,
+        refStart,
+        refEnd,
+      )
+      const refRegion = { seq, start: refStart, end: refEnd }
+      records.forEach(r => {
+        r.addReferenceSequence(refRegion, compressionScheme)
+      })
+    }
 
     return records
   }

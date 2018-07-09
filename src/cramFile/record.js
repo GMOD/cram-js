@@ -1,5 +1,36 @@
 const Constants = require('./constants')
 
+function decodeBaseSubstitution(
+  cramRecord,
+  refRegion,
+  compressionScheme,
+  readFeature,
+) {
+  if (!refRegion) return
+
+  // decode base substitution code using the substitution matrix
+  const refCoord =
+    cramRecord.alignmentStart + readFeature.pos - refRegion.start - 1
+  const refBase = refRegion.seq.charAt(refCoord)
+  if (refBase) readFeature.ref = refBase
+  let baseNumber = {
+    a: 0,
+    A: 0,
+    c: 1,
+    C: 1,
+    g: 2,
+    G: 2,
+    t: 3,
+    T: 3,
+    n: 4,
+    N: 4,
+  }[refBase]
+  if (baseNumber === undefined) baseNumber = 4
+  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]
+  const base = substitutionScheme[readFeature.data]
+  if (base) readFeature.sub = base
+}
+
 /**
  * Class of each CRAM record/feature.
  */
@@ -90,6 +121,46 @@ class CramRecord {
   /** */
   isUnknownBases() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_NO_SEQ)
+  }
+
+  lengthOnRef() {
+    let lengthOnRef = this.readLength
+    if (this.readFeatures)
+      this.readFeatures.forEach(({ code, data }) => {
+        if (code === 'D' || code === 'N')
+          lengthOnRef += data
+        else if (code === 'H' || code === 'S')
+          lengthOnRef -= data
+        else if (code === 'I' || code === 'i')
+          lengthOnRef -= data.length
+      })
+
+    return lengthOnRef
+  }
+
+  /**
+   * annotates this feature with the given reference region.
+   * right now, this only uses the reference sequence to decode
+   * which bases are being substituted in base substitution features.
+   * @param {number} refRegion.start
+   * @param {number} refRegion.end
+   * @param {string} refRegion.seq
+   * @param {CramContainerCompressionScheme} compressionScheme
+   */
+  addReferenceSequence(refRegion, compressionScheme) {
+    if (this.readFeatures) {
+      // decode the base substituted in a base substitution,
+      // if we can fetch the reference sequence
+      this.readFeatures.forEach(readFeature => {
+        if (readFeature.code === 'X')
+          decodeBaseSubstitution(
+            this,
+            refRegion,
+            compressionScheme,
+            readFeature,
+          )
+      })
+    }
   }
 }
 
