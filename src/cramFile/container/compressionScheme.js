@@ -127,6 +127,15 @@ class CramContainerCompressionScheme {
     }
     return this.dataSeriesCodecCache[dataSeriesName]
   }
+
+  toJSON() {
+    const data = {}
+    Object.keys(this).forEach(k => {
+      if (/Cache$/.test(k)) return
+      data[k] = this[k]
+    })
+    return data
+  }
 }
 
 module.exports = CramContainerCompressionScheme
