@@ -1,5 +1,3 @@
-const LRU = require('lru-cache')
-
 const { CramUnimplementedError, CramSizeLimitError } = require('./errors')
 
 const CramFile = require('./cramFile')
@@ -10,7 +8,7 @@ class IndexedCramFile {
    * @param {*} args
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
-   * @param {number} [args.cacheSlices] optional maximum number of CRAM slices to cache. default 5
+   * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
    * @param {number} [args.fetchSizeLimit] optional maximum number of bytes to fetch in a single getFeaturesForRange call.  Default 3 MiB.
    * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
    * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
@@ -25,6 +23,7 @@ class IndexedCramFile {
         filehandle: args.cramFilehandle,
         seqFetch: args.seqFetch,
         checkSequenceMD5: args.checkSequenceMD5,
+        cacheSize: args.cacheSize
       })
 
     if (!(this.cram instanceof CramFile))
@@ -33,9 +32,6 @@ class IndexedCramFile {
     this.index = args.index
     if (!this.index.getEntriesForRange)
       throw new Error('invalid arguments: not an index')
-
-    const cacheSize = args.cacheSlices === undefined ? 5 : args.cacheSlices
-    this.lruCache = LRU({ max: cacheSize })
 
     this.fetchSizeLimit = args.fetchSizeLimit || 3000000
   }
@@ -68,10 +64,13 @@ class IndexedCramFile {
     // TODO: do we need to merge or de-duplicate the blocks?
 
     // fetch all the slices and parse the feature data
-    const filter = feature =>
-      feature.sequenceId === seq &&
-      feature.alignmentStart < end &&
-      feature.alignmentStart + feature.lengthOnRef() > start
+    const filter = feature => {
+      return (
+        feature.sequenceId === seq &&
+        feature.alignmentStart <= end &&
+        feature.alignmentStart + feature.lengthOnRef() >= start
+      )
+    }
     const sliceResults = await Promise.all(
       slices.map(slice => this.getFeaturesInSlice(slice, filter)),
     )
@@ -83,20 +82,9 @@ class IndexedCramFile {
     { containerStart, sliceStart, sliceBytes },
     filterFunction,
   ) {
-    const cacheKey = `${containerStart}+${sliceStart}`
-    const cachedPromise = this.lruCache.get(cacheKey)
-    if (cachedPromise) {
-      // console.log('cache hit',containerStart,sliceStart)
-      return cachedPromise
-    }
-
-    // console.log('cache miss',containerStart,sliceStart)
-
     const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
-    const freshPromise = slice.getRecords(filterFunction)
-    this.lruCache.set(cacheKey, freshPromise)
-    return freshPromise
+    return slice.getRecords(filterFunction)
   }
 
   /**

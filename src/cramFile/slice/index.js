@@ -144,11 +144,11 @@ class CramSlice {
     return undefined
   }
 
-  getAllFeatures() {
+  getAllRecords() {
     return this.getRecords(() => true)
   }
 
-  async getRecords(filterFunction) {
+  async _fetchRecords() {
     const { majorVersion } = await this.file.getDefinition()
 
     const compressionScheme = await this.container.getCompressionScheme()
@@ -204,10 +204,10 @@ class CramSlice {
         )
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
-    let records = []
-    for (let i = 0; i < sliceHeader.content.numRecords; i += 1) {
+    let records = new Array(sliceHeader.content.numRecords)
+    for (let i = 0; i < records.length; i += 1) {
       try {
-        const record = decodeRecord(
+        records[i] = decodeRecord(
           this,
           decodeDataSeries,
           compressionScheme,
@@ -218,8 +218,7 @@ class CramSlice {
           majorVersion,
           i,
         )
-        record.uniqueId = sliceHeader.content.recordCounter + i
-        if (filterFunction(record)) records.push(record)
+        records[i].uniqueId = sliceHeader.content.recordCounter + i
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
           console.warn(
@@ -234,24 +233,37 @@ class CramSlice {
     // Resolve mate pair cross-references between records in this slice
     decodeSliceXref(this, records)
 
+    return records
+  }
+
+  async getRecords(filterFunction) {
+    // fetch the features if necessary, using the file-level feature cache
+    let recordsPromise = this.file.featureCache.get(this.containerPosition)
+    if (!recordsPromise) {
+      recordsPromise = this._fetchRecords()
+      this.file.featureCache.set(this.containerPosition, recordsPromise)
+    }
+
+    const records = (await recordsPromise).filter(filterFunction)
+
     // if we can fetch reference sequence, add the reference sequence to the records
-    if (
-      records.length &&
-      this.file.fetchReferenceSequenceCallback &&
-      sliceHeader.content.refSeqId >= 0
-    ) {
-      const refStart = records[0].alignmentStart
-      const lastRecord = records[records.length - 1]
-      const refEnd = lastRecord.alignmentStart + lastRecord.lengthOnRef() - 1
-      const seq = await this.file.fetchReferenceSequenceCallback(
-        sliceHeader.content.refSeqId,
-        refStart,
-        refEnd,
-      )
-      const refRegion = { seq, start: refStart, end: refEnd }
-      records.forEach(r => {
-        r.addReferenceSequence(refRegion, compressionScheme)
-      })
+    if (records.length && this.file.fetchReferenceSequenceCallback) {
+      const sliceHeader = await this.getHeader()
+      if (sliceHeader.content.refSeqId >= 0) {
+        const compressionScheme = await this.container.getCompressionScheme()
+        const refStart = records[0].alignmentStart
+        const lastRecord = records[records.length - 1]
+        const refEnd = lastRecord.alignmentStart + lastRecord.lengthOnRef() - 1
+        const seq = await this.file.fetchReferenceSequenceCallback(
+          sliceHeader.content.refSeqId,
+          refStart,
+          refEnd,
+        )
+        const refRegion = { seq, start: refStart, end: refEnd }
+        records.forEach(r => {
+          r.addReferenceSequence(refRegion, compressionScheme)
+        })
+      }
     }
 
     return records

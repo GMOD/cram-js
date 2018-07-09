@@ -1,7 +1,7 @@
 async function dumpSlice(container, sliceOffset) {
   const slice = container.getSlice(sliceOffset)
   const header = await slice.getHeader()
-  const features = await slice.getAllFeatures()
+  const features = await slice.getAllRecords()
   return { header, features }
 }
 

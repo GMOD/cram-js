@@ -1,5 +1,6 @@
 const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
+const LRU = require('lru-cache')
 
 const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const rans = require('../rans')
@@ -23,6 +24,7 @@ class CramFile {
    * @param {object} [args.url] - url for the cram file.  also supports file:// urls for local files
    * @param {function} [args.seqFetch] - a function with signature
    * `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
+   * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
    * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
    * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
    */
@@ -32,7 +34,17 @@ class CramFile {
     this.fetchReferenceSequenceCallback = args.seqFetch
     this.options = {
       checkSequenceMD5: args.checkSequenceMD5 !== false,
+      cacheSize: args.cacheSize !== undefined ? args.cacheSize : 20000,
     }
+
+    // cache of features in a slice, keyed by the
+    // slice offset. caches all of the features in a slice, or none.
+    // the cache is actually used by the slice object, it's just
+    // kept here at the level of the file
+    this.featureCache = LRU({
+      max: this.options.cacheSize,
+      length: featureArray => featureArray.length,
+    })
   }
 
   toString() {
