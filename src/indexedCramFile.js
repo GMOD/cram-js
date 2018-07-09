@@ -68,25 +68,21 @@ class IndexedCramFile {
     // TODO: do we need to merge or de-duplicate the blocks?
 
     // fetch all the slices and parse the feature data
-    const features = []
+    const filter = feature =>
+      feature.sequenceId === seq &&
+      feature.alignmentStart < end &&
+      feature.alignmentStart + feature.lengthOnRef() > start
     const sliceResults = await Promise.all(
-      slices.map(slice => this.getFeaturesInSlice(slice)),
+      slices.map(slice => this.getFeaturesInSlice(slice, filter)),
     )
-    for (let i = 0; i < sliceResults.length; i += 1) {
-      const blockFeatures = sliceResults[i]
-      blockFeatures.forEach(feature => {
-        if (
-          feature.sequenceId === seq &&
-          feature.alignmentStart < end &&
-          feature.alignmentStart + feature.readLength > start
-        )
-          features.push(feature)
-      })
-    }
-    return features
+
+    return Array.prototype.concat(...sliceResults)
   }
 
-  getFeaturesInSlice({ containerStart, sliceStart, sliceBytes }) {
+  getFeaturesInSlice(
+    { containerStart, sliceStart, sliceBytes },
+    filterFunction,
+  ) {
     const cacheKey = `${containerStart}+${sliceStart}`
     const cachedPromise = this.lruCache.get(cacheKey)
     if (cachedPromise) {
@@ -98,7 +94,7 @@ class IndexedCramFile {
 
     const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
-    const freshPromise = slice.getAllFeatures()
+    const freshPromise = slice.getRecords(filterFunction)
     this.lruCache.set(cacheKey, freshPromise)
     return freshPromise
   }

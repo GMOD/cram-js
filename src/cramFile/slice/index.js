@@ -134,7 +134,7 @@ class CramSlice {
         )
 
       return {
-        seq: seq,
+        seq,
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,

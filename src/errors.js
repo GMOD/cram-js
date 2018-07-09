@@ -11,7 +11,6 @@ class CramMalformedError extends CramError {}
  */
 class CramBufferOverrunError extends CramMalformedError {}
 
-
 /**
  * An error caused by data being too big, exceeding a size limit.
  */

@@ -10,7 +10,7 @@ function decodeBaseSubstitution(
 
   // decode base substitution code using the substitution matrix
   const refCoord =
-    cramRecord.alignmentStart + readFeature.pos - refRegion.start - 1
+    cramRecord.alignmentStart + (readFeature.pos - 1) - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
   if (refBase) readFeature.ref = refBase
   let baseNumber = {
@@ -124,18 +124,30 @@ class CramRecord {
   }
 
   lengthOnRef() {
-    let lengthOnRef = this.readLength
-    if (this.readFeatures)
-      this.readFeatures.forEach(({ code, data }) => {
-        if (code === 'D' || code === 'N')
-          lengthOnRef += data
-        else if (code === 'H' || code === 'S')
-          lengthOnRef -= data
-        else if (code === 'I' || code === 'i')
-          lengthOnRef -= data.length
-      })
+    if (!('_lengthOnRef' in this)) {
+      let lengthOnRef = this.readLength
 
-    return lengthOnRef
+      if (this.readFeatures)
+        this.readFeatures.forEach(({ code, data }) => {
+          if (code === 'D' || code === 'N') lengthOnRef += data
+          else if (code === 'H') lengthOnRef -= data
+          else if (code === 'I' || code === 'S') lengthOnRef -= data.length
+          else if (code === 'i') lengthOnRef -= 1
+        })
+      if (Number.isNaN(lengthOnRef)) {
+        console.warn(
+          `${this.readName ||
+            `${this.sequenceID}:${
+              this.alignmentStart
+            }`} feature has invalid read features`,
+        )
+        lengthOnRef = 0
+      }
+
+      this._lengthOnRef = lengthOnRef
+    }
+
+    return this._lengthOnRef
   }
 
   /**
@@ -161,6 +173,16 @@ class CramRecord {
           )
       })
     }
+  }
+
+  toJSON() {
+    const data = {}
+    Object.keys(this).forEach(k => {
+      if (k.charAt(0) === '_') return
+      data[k] = this[k]
+    })
+
+    return data
   }
 }
 
