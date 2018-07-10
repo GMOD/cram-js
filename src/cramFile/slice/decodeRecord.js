@@ -78,7 +78,8 @@ function decodeReadFeatures(
   compressionScheme,
   majorVersion,
 ) {
-  let prevPos = 0
+  let currentReadPos = 0
+  let currentRefPos = cramRecord.alignmentStart - 1
   const readFeatures = new Array(readFeatureCount)
 
   function decodeRFData([type, dataSeriesName]) {
@@ -97,12 +98,11 @@ function decodeReadFeatures(
   }
 
   for (let i = 0; i < readFeatureCount; i += 1) {
-    const operator = String.fromCharCode(decodeDataSeries('FC'))
+    const code = String.fromCharCode(decodeDataSeries('FC'))
 
-    const position = prevPos + decodeDataSeries('FP')
-    prevPos = position
+    const readPosDelta = decodeDataSeries('FP')
 
-    const readFeature = { code: operator, pos: position }
+    const readFeature = { code }
     // map of operator name -> data series name
     const data1Schema = {
       B: ['character', 'BA'],
@@ -117,19 +117,30 @@ function decodeReadFeatures(
       H: ['number', 'HC'],
       P: ['number', 'PD'],
       N: ['number', 'RS'],
-    }[operator]
+    }[code]
 
     if (!data1Schema)
-      throw new CramMalformedError(
-        `invalid read feature operator "${operator}"`,
-      )
+      throw new CramMalformedError(`invalid read feature code "${code}"`)
 
     readFeature.data = decodeRFData(data1Schema)
 
     // if this is a tag with two data items, make the data an array and add the second item
-    const data2Schema = { B: ['number', 'QS'] }[operator]
+    const data2Schema = { B: ['number', 'QS'] }[code]
     if (data2Schema)
       readFeature.data = [readFeature.data, decodeRFData(data2Schema)]
+
+    currentReadPos += readPosDelta
+    readFeature.pos = currentReadPos
+
+    currentRefPos += readPosDelta
+    readFeature.refPos = currentRefPos
+
+    // for gapping features, adjust the reference position for read features that follow
+    if (code === 'D' || code === 'N') currentRefPos += readFeature.data
+    else if (code === 'H') currentRefPos -= readFeature.data
+    else if (code === 'I' || code === 'S')
+      currentRefPos -= readFeature.data.length
+    else if (code === 'i') currentRefPos -= 1
 
     readFeatures[i] = readFeature
   }

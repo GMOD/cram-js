@@ -1496,476 +1496,550 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 2,
-                "data": 1,
+                "refPos": 100010,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 4,
-                "data": 0,
+                "refPos": 100012,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 5,
-                "data": 1,
+                "refPos": 100013,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 6,
-                "data": 0,
+                "refPos": 100014,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 7,
-                "data": 0,
+                "refPos": 100015,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 8,
-                "data": 0,
+                "refPos": 100016,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 9,
-                "data": 0,
+                "refPos": 100017,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 12,
-                "data": 2,
+                "refPos": 100020,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 13,
-                "data": 0,
+                "refPos": 100021,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 17,
-                "data": 0,
+                "refPos": 100025,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 18,
-                "data": 0,
+                "refPos": 100026,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 19,
-                "data": 0,
+                "refPos": 100027,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 20,
-                "data": 0,
+                "refPos": 100028,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 21,
-                "data": 0,
+                "refPos": 100029,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 22,
-                "data": 1,
+                "refPos": 100030,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 23,
-                "data": 1,
+                "refPos": 100031,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 24,
-                "data": 1,
+                "refPos": 100032,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 25,
-                "data": 0,
+                "refPos": 100033,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 26,
-                "data": 2,
+                "refPos": 100034,
                 "ref": "T",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 28,
-                "data": 1,
+                "refPos": 100036,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 30,
-                "data": 1,
+                "refPos": 100038,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 31,
-                "data": 2,
+                "refPos": 100039,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 32,
                 "data": 0,
+                "pos": 32,
+                "refPos": 100040,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 33,
                 "data": 0,
+                "pos": 33,
+                "refPos": 100041,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 34,
-                "data": 0,
+                "refPos": 100042,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 35,
-                "data": 0,
+                "refPos": 100043,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 36,
-                "data": 1,
+                "refPos": 100044,
                 "ref": "C",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 37,
                 "data": 2,
+                "pos": 37,
+                "refPos": 100045,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 38,
-                "data": 0,
+                "refPos": 100046,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 39,
-                "data": 0,
+                "refPos": 100047,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 40,
-                "data": 1,
+                "refPos": 100048,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 41,
-                "data": 0,
+                "refPos": 100049,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 42,
-                "data": 1,
+                "refPos": 100050,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 43,
-                "data": 0,
+                "refPos": 100051,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 45,
-                "data": 2,
+                "refPos": 100053,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 46,
-                "data": 1,
+                "refPos": 100054,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 47,
-                "data": 0,
+                "refPos": 100055,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 49,
-                "data": 0,
+                "refPos": 100057,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 50,
-                "data": 2,
+                "refPos": 100058,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 51,
-                "data": 0,
+                "refPos": 100059,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 52,
-                "data": 0,
+                "refPos": 100060,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 54,
-                "data": 2,
+                "refPos": 100062,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 55,
-                "data": 0,
+                "refPos": 100063,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 58,
-                "data": 0,
+                "refPos": 100066,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 59,
-                "data": 0,
+                "refPos": 100067,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 60,
-                "data": 1,
+                "refPos": 100068,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 63,
-                "data": 2,
+                "refPos": 100071,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 65,
-                "data": 2,
+                "refPos": 100073,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 66,
-                "data": 0,
+                "refPos": 100074,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 67,
-                "data": 0,
+                "refPos": 100075,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 68,
-                "data": 0,
+                "refPos": 100076,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 70,
-                "data": 0,
+                "refPos": 100078,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 71,
-                "data": 0,
+                "refPos": 100079,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 73,
-                "data": 1,
+                "refPos": 100081,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 74,
-                "data": 1,
+                "refPos": 100082,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 75,
-                "data": 0,
+                "refPos": 100083,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 76,
-                "data": 1,
+                "refPos": 100084,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 77,
-                "data": 0,
+                "refPos": 100085,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 78,
-                "data": 0,
+                "refPos": 100086,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 79,
-                "data": 1,
+                "refPos": 100087,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 80,
-                "data": 0,
+                "refPos": 100088,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 82,
-                "data": 2,
+                "refPos": 100090,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 83,
-                "data": 2,
+                "refPos": 100091,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 84,
-                "data": 0,
+                "refPos": 100092,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 85,
-                "data": 0,
+                "refPos": 100093,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 86,
-                "data": 1,
+                "refPos": 100094,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 87,
-                "data": 2,
+                "refPos": 100095,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 90,
-                "data": 1,
+                "refPos": 100098,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 91,
-                "data": 2,
+                "refPos": 100099,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 94,
-                "data": 2,
+                "refPos": 100102,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 95,
-                "data": 2,
+                "refPos": 100103,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 96,
                 "data": 1,
+                "pos": 96,
+                "refPos": 100104,
                 "sub": "C"
               },
               {
                 "code": "X",
-                "pos": 100,
                 "data": 2,
+                "pos": 100,
+                "refPos": 100108,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 101,
                 "data": 1,
+                "pos": 101,
+                "refPos": 100109,
                 "sub": "C"
               }
             ],
@@ -2107,476 +2181,550 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 2,
-                "data": 1,
+                "refPos": 100010,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 4,
-                "data": 0,
+                "refPos": 100012,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 5,
-                "data": 1,
+                "refPos": 100013,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 6,
-                "data": 0,
+                "refPos": 100014,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 7,
-                "data": 0,
+                "refPos": 100015,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 8,
-                "data": 0,
+                "refPos": 100016,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 9,
-                "data": 0,
+                "refPos": 100017,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 12,
-                "data": 2,
+                "refPos": 100020,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 13,
-                "data": 0,
+                "refPos": 100021,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 17,
-                "data": 0,
+                "refPos": 100025,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 18,
-                "data": 0,
+                "refPos": 100026,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 19,
-                "data": 0,
+                "refPos": 100027,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 20,
-                "data": 0,
+                "refPos": 100028,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 21,
-                "data": 0,
+                "refPos": 100029,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 22,
-                "data": 1,
+                "refPos": 100030,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 23,
-                "data": 1,
+                "refPos": 100031,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 24,
-                "data": 1,
+                "refPos": 100032,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 25,
-                "data": 0,
+                "refPos": 100033,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 26,
-                "data": 2,
+                "refPos": 100034,
                 "ref": "T",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 28,
-                "data": 1,
+                "refPos": 100036,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 30,
-                "data": 1,
+                "refPos": 100038,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 31,
-                "data": 2,
+                "refPos": 100039,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 32,
                 "data": 0,
+                "pos": 32,
+                "refPos": 100040,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 33,
                 "data": 0,
+                "pos": 33,
+                "refPos": 100041,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 34,
-                "data": 0,
+                "refPos": 100042,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 35,
-                "data": 0,
+                "refPos": 100043,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 36,
-                "data": 1,
+                "refPos": 100044,
                 "ref": "C",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 37,
                 "data": 2,
+                "pos": 37,
+                "refPos": 100045,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 38,
-                "data": 0,
+                "refPos": 100046,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 39,
-                "data": 0,
+                "refPos": 100047,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 40,
-                "data": 1,
+                "refPos": 100048,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 41,
-                "data": 0,
+                "refPos": 100049,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 42,
-                "data": 1,
+                "refPos": 100050,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 43,
-                "data": 0,
+                "refPos": 100051,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 45,
-                "data": 2,
+                "refPos": 100053,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 46,
-                "data": 1,
+                "refPos": 100054,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 47,
-                "data": 0,
+                "refPos": 100055,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 49,
-                "data": 0,
+                "refPos": 100057,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 50,
-                "data": 2,
+                "refPos": 100058,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 51,
-                "data": 0,
+                "refPos": 100059,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 52,
-                "data": 0,
+                "refPos": 100060,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 54,
-                "data": 2,
+                "refPos": 100062,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 55,
-                "data": 0,
+                "refPos": 100063,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 58,
-                "data": 0,
+                "refPos": 100066,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 59,
-                "data": 0,
+                "refPos": 100067,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 60,
-                "data": 1,
+                "refPos": 100068,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 63,
-                "data": 2,
+                "refPos": 100071,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 65,
-                "data": 2,
+                "refPos": 100073,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 66,
-                "data": 0,
+                "refPos": 100074,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 67,
-                "data": 0,
+                "refPos": 100075,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 68,
-                "data": 0,
+                "refPos": 100076,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 70,
-                "data": 0,
+                "refPos": 100078,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 71,
-                "data": 0,
+                "refPos": 100079,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 73,
-                "data": 1,
+                "refPos": 100081,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 74,
-                "data": 1,
+                "refPos": 100082,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 75,
-                "data": 0,
+                "refPos": 100083,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 76,
-                "data": 1,
+                "refPos": 100084,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 77,
-                "data": 0,
+                "refPos": 100085,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 78,
-                "data": 0,
+                "refPos": 100086,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 79,
-                "data": 1,
+                "refPos": 100087,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 80,
-                "data": 0,
+                "refPos": 100088,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 82,
-                "data": 2,
+                "refPos": 100090,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 83,
-                "data": 2,
+                "refPos": 100091,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 84,
-                "data": 0,
+                "refPos": 100092,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 85,
-                "data": 0,
+                "refPos": 100093,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 86,
-                "data": 1,
+                "refPos": 100094,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 87,
-                "data": 2,
+                "refPos": 100095,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 90,
-                "data": 1,
+                "refPos": 100098,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 91,
-                "data": 2,
+                "refPos": 100099,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 94,
-                "data": 2,
+                "refPos": 100102,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 95,
-                "data": 2,
+                "refPos": 100103,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 96,
                 "data": 1,
+                "pos": 96,
+                "refPos": 100104,
                 "sub": "C"
               },
               {
                 "code": "X",
-                "pos": 100,
                 "data": 2,
+                "pos": 100,
+                "refPos": 100108,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 101,
                 "data": 1,
+                "pos": 101,
+                "refPos": 100109,
                 "sub": "C"
               }
             ],
@@ -2717,476 +2865,550 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 2,
-                "data": 1,
+                "refPos": 100010,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 4,
-                "data": 0,
+                "refPos": 100012,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 5,
-                "data": 1,
+                "refPos": 100013,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 6,
-                "data": 0,
+                "refPos": 100014,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 7,
-                "data": 0,
+                "refPos": 100015,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 8,
-                "data": 0,
+                "refPos": 100016,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 9,
-                "data": 0,
+                "refPos": 100017,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 12,
-                "data": 2,
+                "refPos": 100020,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 13,
-                "data": 0,
+                "refPos": 100021,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 17,
-                "data": 0,
+                "refPos": 100025,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 18,
-                "data": 0,
+                "refPos": 100026,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 19,
-                "data": 0,
+                "refPos": 100027,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 20,
-                "data": 0,
+                "refPos": 100028,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 21,
-                "data": 0,
+                "refPos": 100029,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 22,
-                "data": 1,
+                "refPos": 100030,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 23,
-                "data": 1,
+                "refPos": 100031,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 24,
-                "data": 1,
+                "refPos": 100032,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 25,
-                "data": 0,
+                "refPos": 100033,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 26,
-                "data": 2,
+                "refPos": 100034,
                 "ref": "T",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 28,
-                "data": 1,
+                "refPos": 100036,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 30,
-                "data": 1,
+                "refPos": 100038,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 31,
-                "data": 2,
+                "refPos": 100039,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 32,
                 "data": 0,
+                "pos": 32,
+                "refPos": 100040,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 33,
                 "data": 0,
+                "pos": 33,
+                "refPos": 100041,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 34,
-                "data": 0,
+                "refPos": 100042,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 35,
-                "data": 0,
+                "refPos": 100043,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 36,
-                "data": 1,
+                "refPos": 100044,
                 "ref": "C",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 37,
                 "data": 2,
+                "pos": 37,
+                "refPos": 100045,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 38,
-                "data": 0,
+                "refPos": 100046,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 39,
-                "data": 0,
+                "refPos": 100047,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 40,
-                "data": 1,
+                "refPos": 100048,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 41,
-                "data": 0,
+                "refPos": 100049,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 42,
-                "data": 1,
+                "refPos": 100050,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 43,
-                "data": 0,
+                "refPos": 100051,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 45,
-                "data": 2,
+                "refPos": 100053,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 46,
-                "data": 1,
+                "refPos": 100054,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 47,
-                "data": 0,
+                "refPos": 100055,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 49,
-                "data": 0,
+                "refPos": 100057,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 50,
-                "data": 2,
+                "refPos": 100058,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 51,
-                "data": 0,
+                "refPos": 100059,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 52,
-                "data": 0,
+                "refPos": 100060,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 54,
-                "data": 2,
+                "refPos": 100062,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 55,
-                "data": 0,
+                "refPos": 100063,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 58,
-                "data": 0,
+                "refPos": 100066,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 59,
-                "data": 0,
+                "refPos": 100067,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 60,
-                "data": 1,
+                "refPos": 100068,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 63,
-                "data": 2,
+                "refPos": 100071,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 65,
-                "data": 2,
+                "refPos": 100073,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 66,
-                "data": 0,
+                "refPos": 100074,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 67,
-                "data": 0,
+                "refPos": 100075,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 68,
-                "data": 0,
+                "refPos": 100076,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 70,
-                "data": 0,
+                "refPos": 100078,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 71,
-                "data": 0,
+                "refPos": 100079,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 73,
-                "data": 1,
+                "refPos": 100081,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 74,
-                "data": 1,
+                "refPos": 100082,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 75,
-                "data": 0,
+                "refPos": 100083,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 76,
-                "data": 1,
+                "refPos": 100084,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 77,
-                "data": 0,
+                "refPos": 100085,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 78,
-                "data": 0,
+                "refPos": 100086,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 79,
-                "data": 1,
+                "refPos": 100087,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 80,
-                "data": 0,
+                "refPos": 100088,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 82,
-                "data": 2,
+                "refPos": 100090,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 83,
-                "data": 2,
+                "refPos": 100091,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 84,
-                "data": 0,
+                "refPos": 100092,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 85,
-                "data": 0,
+                "refPos": 100093,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 86,
-                "data": 1,
+                "refPos": 100094,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 87,
-                "data": 2,
+                "refPos": 100095,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 90,
-                "data": 1,
+                "refPos": 100098,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 91,
-                "data": 2,
+                "refPos": 100099,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 94,
-                "data": 2,
+                "refPos": 100102,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 95,
-                "data": 2,
+                "refPos": 100103,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 96,
                 "data": 1,
+                "pos": 96,
+                "refPos": 100104,
                 "sub": "C"
               },
               {
                 "code": "X",
-                "pos": 100,
                 "data": 2,
+                "pos": 100,
+                "refPos": 100108,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 101,
                 "data": 1,
+                "pos": 101,
+                "refPos": 100109,
                 "sub": "C"
               }
             ],
@@ -3328,482 +3550,557 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 1,
-                "data": 1,
+                "refPos": 100010,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 3,
-                "data": 0,
+                "refPos": 100012,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 4,
-                "data": 1,
+                "refPos": 100013,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 5,
-                "data": 0,
+                "refPos": 100014,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 6,
-                "data": 0,
+                "refPos": 100015,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 7,
-                "data": 0,
+                "refPos": 100016,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 8,
-                "data": 0,
+                "refPos": 100017,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 11,
-                "data": 2,
+                "refPos": 100020,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 12,
-                "data": 0,
+                "refPos": 100021,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 16,
-                "data": 0,
+                "refPos": 100025,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 17,
-                "data": 0,
+                "refPos": 100026,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 18,
-                "data": 0,
+                "refPos": 100027,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 19,
-                "data": 0,
+                "refPos": 100028,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 20,
-                "data": 0,
+                "refPos": 100029,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 21,
-                "data": 1,
+                "refPos": 100030,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 22,
-                "data": 1,
+                "refPos": 100031,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 23,
-                "data": 1,
+                "refPos": 100032,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 24,
-                "data": 0,
+                "refPos": 100033,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 25,
-                "data": 2,
+                "refPos": 100034,
                 "ref": "T",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 27,
-                "data": 1,
+                "refPos": 100036,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 29,
-                "data": 1,
+                "refPos": 100038,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 30,
-                "data": 2,
+                "refPos": 100039,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 31,
                 "data": 0,
+                "pos": 31,
+                "refPos": 100040,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 32,
                 "data": 0,
+                "pos": 32,
+                "refPos": 100041,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 33,
-                "data": 0,
+                "refPos": 100042,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 34,
-                "data": 0,
+                "refPos": 100043,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 35,
-                "data": 1,
+                "refPos": 100044,
                 "ref": "C",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 36,
                 "data": 2,
+                "pos": 36,
+                "refPos": 100045,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 37,
-                "data": 0,
+                "refPos": 100046,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 38,
-                "data": 0,
+                "refPos": 100047,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 39,
-                "data": 1,
+                "refPos": 100048,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 40,
-                "data": 0,
+                "refPos": 100049,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 41,
-                "data": 1,
+                "refPos": 100050,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 42,
-                "data": 0,
+                "refPos": 100051,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 44,
-                "data": 2,
+                "refPos": 100053,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 45,
-                "data": 1,
+                "refPos": 100054,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 46,
-                "data": 0,
+                "refPos": 100055,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 48,
-                "data": 0,
+                "refPos": 100057,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 49,
-                "data": 2,
+                "refPos": 100058,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 50,
-                "data": 0,
+                "refPos": 100059,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 51,
-                "data": 0,
+                "refPos": 100060,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 53,
-                "data": 2,
+                "refPos": 100062,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 54,
-                "data": 0,
+                "refPos": 100063,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 57,
-                "data": 0,
+                "refPos": 100066,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 58,
-                "data": 0,
+                "refPos": 100067,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 59,
-                "data": 1,
+                "refPos": 100068,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 62,
-                "data": 2,
+                "refPos": 100071,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 64,
-                "data": 2,
+                "refPos": 100073,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 65,
-                "data": 0,
+                "refPos": 100074,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 66,
-                "data": 0,
+                "refPos": 100075,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 67,
-                "data": 0,
+                "refPos": 100076,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 69,
-                "data": 0,
+                "refPos": 100078,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 70,
-                "data": 0,
+                "refPos": 100079,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 72,
-                "data": 1,
+                "refPos": 100081,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 73,
-                "data": 1,
+                "refPos": 100082,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 74,
-                "data": 0,
+                "refPos": 100083,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 75,
-                "data": 1,
+                "refPos": 100084,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 76,
-                "data": 0,
+                "refPos": 100085,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 77,
-                "data": 0,
+                "refPos": 100086,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 78,
-                "data": 1,
+                "refPos": 100087,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 79,
-                "data": 0,
+                "refPos": 100088,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 81,
-                "data": 2,
+                "refPos": 100090,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 82,
-                "data": 2,
+                "refPos": 100091,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 83,
-                "data": 0,
+                "refPos": 100092,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 84,
-                "data": 0,
+                "refPos": 100093,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 85,
-                "data": 1,
+                "refPos": 100094,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 86,
-                "data": 2,
+                "refPos": 100095,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 89,
-                "data": 1,
+                "refPos": 100098,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 90,
-                "data": 2,
+                "refPos": 100099,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 93,
-                "data": 2,
+                "refPos": 100102,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 94,
-                "data": 2,
+                "refPos": 100103,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 95,
-                "data": 1,
+                "refPos": 100104,
                 "sub": "C"
               },
               {
                 "code": "X",
-                "pos": 99,
                 "data": 2,
+                "pos": 99,
+                "refPos": 100108,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 100,
                 "data": 1,
+                "pos": 100,
+                "refPos": 100109,
                 "sub": "C"
               },
               {
                 "code": "X",
-                "pos": 101,
                 "data": 1,
+                "pos": 101,
+                "refPos": 100110,
                 "sub": "C"
               }
             ],
@@ -3945,271 +4242,345 @@
             "readFeatures": [
               {
                 "code": "S",
+                "data": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTAC",
                 "pos": 1,
-                "data": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTAC"
+                "refPos": 100011
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 46,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100012,
+                "ref": "T",
+                "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 47,
-                "data": 1,
+                "refPos": 100013,
+                "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 48,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100014,
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 49,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100015,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 50,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100016,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 51,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100017,
+                "ref": "T",
+                "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 54,
-                "data": 2,
+                "refPos": 100020,
+                "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 55,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100021,
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 59,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100025,
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 60,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100026,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 61,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100027,
+                "ref": "C",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 62,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100028,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 63,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100029,
+                "ref": "T",
+                "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 64,
-                "data": 1,
-                "sub": "C"
+                "refPos": 100030,
+                "ref": "T",
+                "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 65,
-                "data": 1,
-                "sub": "C"
+                "refPos": 100031,
+                "ref": "T",
+                "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 66,
-                "data": 1,
+                "refPos": 100032,
+                "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 67,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100033,
+                "ref": "C",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 68,
-                "data": 2,
-                "sub": "G"
+                "refPos": 100034,
+                "ref": "T",
+                "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 70,
-                "data": 1,
-                "sub": "C"
+                "refPos": 100036,
+                "ref": "T",
+                "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 72,
-                "data": 1,
-                "sub": "C"
+                "refPos": 100038,
+                "ref": "T",
+                "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 73,
-                "data": 2,
+                "refPos": 100039,
+                "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 74,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100040,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 75,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100041,
+                "ref": "T",
+                "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 76,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100042,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 77,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100043,
+                "ref": "A",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 78,
-                "data": 1,
-                "sub": "C"
+                "refPos": 100044,
+                "ref": "C",
+                "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 79,
-                "data": 2,
+                "refPos": 100045,
+                "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 80,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100046,
+                "ref": "C",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 81,
-                "data": 0,
-                "sub": "A"
+                "refPos": 100047,
+                "ref": "C",
+                "sub": "T"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 82,
-                "data": 1,
+                "refPos": 100048,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 83,
-                "data": 0,
+                "refPos": 100049,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 84,
-                "data": 1,
+                "refPos": 100050,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 85,
-                "data": 0,
+                "refPos": 100051,
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 87,
                 "data": 2,
+                "pos": 87,
+                "refPos": 100053,
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 88,
                 "data": 1,
+                "pos": 88,
+                "refPos": 100054,
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 89,
-                "data": 0,
+                "refPos": 100055,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 91,
-                "data": 0,
+                "refPos": 100057,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 92,
-                "data": 2,
+                "refPos": 100058,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 93,
-                "data": 0,
+                "refPos": 100059,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 94,
-                "data": 0,
+                "refPos": 100060,
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 96,
                 "data": 2,
+                "pos": 96,
+                "refPos": 100062,
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 97,
-                "data": 0,
+                "refPos": 100063,
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 100,
-                "data": 0,
+                "refPos": 100066,
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 101,
                 "data": 0,
+                "pos": 101,
+                "refPos": 100067,
                 "sub": "A"
               }
             ],
@@ -4464,197 +4835,225 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 1,
-                "data": 1,
+                "refPos": 100013,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 2,
-                "data": 0,
+                "refPos": 100014,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 3,
-                "data": 0,
+                "refPos": 100015,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 4,
-                "data": 0,
+                "refPos": 100016,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 5,
-                "data": 0,
+                "refPos": 100017,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 8,
-                "data": 2,
+                "refPos": 100020,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 9,
-                "data": 0,
+                "refPos": 100021,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 13,
-                "data": 0,
+                "refPos": 100025,
                 "ref": "G",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 14,
-                "data": 0,
+                "refPos": 100026,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 15,
-                "data": 0,
+                "refPos": 100027,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 16,
-                "data": 0,
+                "refPos": 100028,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 17,
-                "data": 0,
+                "refPos": 100029,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 18,
-                "data": 1,
+                "refPos": 100030,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 19,
-                "data": 1,
+                "refPos": 100031,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 20,
-                "data": 1,
+                "refPos": 100032,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 21,
-                "data": 0,
+                "refPos": 100033,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 22,
                 "data": 2,
+                "pos": 22,
+                "refPos": 100034,
                 "ref": "T",
                 "sub": "C"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 24,
-                "data": 1,
+                "refPos": 100036,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 26,
-                "data": 1,
+                "refPos": 100038,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
+                "data": 2,
                 "pos": 27,
-                "data": 2,
+                "refPos": 100039,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 29,
                 "data": 0,
+                "pos": 29,
+                "refPos": 100041,
                 "ref": "T",
                 "sub": "G"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 30,
-                "data": 0,
+                "refPos": 100042,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 31,
-                "data": 0,
+                "refPos": 100043,
                 "ref": "A",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 32,
                 "data": 1,
+                "pos": 32,
+                "refPos": 100044,
                 "ref": "C",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "pos": 33,
                 "data": 2,
+                "pos": 33,
+                "refPos": 100045,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "pos": 34,
                 "data": 0,
+                "pos": 34,
+                "refPos": 100046,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 35,
                 "data": 0,
+                "pos": 35,
+                "refPos": 100047,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "S",
+                "data": "CTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA",
                 "pos": 36,
-                "data": "CTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
+                "refPos": 100048
               }
             ],
             "mappingQuality": 37,

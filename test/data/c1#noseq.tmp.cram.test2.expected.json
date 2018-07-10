@@ -125,8 +125,9 @@
     "readFeatures": [
       {
         "code": "D",
+        "data": 1,
         "pos": 5,
-        "data": 1
+        "refPos": 5
       }
     ],
     "mappingQuality": 0,
@@ -156,8 +157,9 @@
     "readFeatures": [
       {
         "code": "D",
+        "data": 1,
         "pos": 5,
-        "data": 1
+        "refPos": 5
       }
     ],
     "mappingQuality": 0,
@@ -187,8 +189,9 @@
     "readFeatures": [
       {
         "code": "D",
+        "data": 1,
         "pos": 5,
-        "data": 1
+        "refPos": 5
       }
     ],
     "mappingQuality": 0,

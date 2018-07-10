@@ -729,33 +729,39 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 5,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 7
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 12,
-                "data": 1
+                "refPos": 13
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 18,
-                "data": 1
+                "refPos": 19
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 24,
-                "data": 1
+                "refPos": 25
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 28,
-                "data": 1
+                "refPos": 29
               }
             ],
             "mappingQuality": 1,
@@ -1501,33 +1507,39 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 1,
                 "pos": 5,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 7
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 12,
-                "data": 1
+                "refPos": 13
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 18,
-                "data": 1
+                "refPos": 19
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 24,
-                "data": 1
+                "refPos": 25
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 28,
-                "data": 1
+                "refPos": 29
               }
             ],
             "mappingQuality": 1,

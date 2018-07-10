@@ -1716,18 +1716,21 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 3,
                 "pos": 7,
-                "data": 3
+                "refPos": 7
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 8,
-                "data": 1
+                "refPos": 8
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 9,
-                "data": 0
+                "refPos": 9
               }
             ],
             "mappingQuality": 86,
@@ -1795,13 +1798,15 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 0,
                 "pos": 2,
-                "data": 0
+                "refPos": 12
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 3,
-                "data": 0
+                "refPos": 13
               }
             ],
             "mappingQuality": 11,
@@ -3384,18 +3389,21 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 3,
                 "pos": 7,
-                "data": 3
+                "refPos": 7
               },
               {
                 "code": "X",
+                "data": 1,
                 "pos": 8,
-                "data": 1
+                "refPos": 8
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 9,
-                "data": 0
+                "refPos": 9
               }
             ],
             "mappingQuality": 86,
@@ -3463,13 +3471,15 @@
             "readFeatures": [
               {
                 "code": "X",
+                "data": 0,
                 "pos": 2,
-                "data": 0
+                "refPos": 12
               },
               {
                 "code": "X",
+                "data": 0,
                 "pos": 3,
-                "data": 0
+                "refPos": 13
               }
             ],
             "mappingQuality": 11,

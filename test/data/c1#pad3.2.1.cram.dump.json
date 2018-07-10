@@ -549,13 +549,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -586,13 +588,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -623,13 +627,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -660,13 +666,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -697,8 +705,9 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCGGTTAAC",
                 "pos": 1,
-                "data": "AACCGGTTAAC"
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -735,23 +744,27 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "TTAA",
                 "pos": 6,
-                "data": "TTAA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 10,
-                "data": 1
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -786,13 +799,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCGGTT",
                 "pos": 1,
-                "data": "AACCGGTT"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 9,
-                "data": 3
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -826,18 +841,21 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 6,
-                "data": 3
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "AAC",
                 "pos": 6,
-                "data": "AAC"
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -871,28 +889,33 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACC",
                 "pos": 1,
-                "data": "AACC"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 5,
-                "data": 3
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "TA",
                 "pos": 5,
-                "data": "TA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 2,
                 "pos": 7,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 7,
-                "data": 1
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -923,23 +946,27 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AA",
                 "pos": 1,
-                "data": "AA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 3,
-                "data": 3
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "GTTAAC",
                 "pos": 3,
-                "data": "GTTAAC"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 3,
                 "pos": 9,
-                "data": 3
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -970,18 +997,21 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACC",
                 "pos": 1,
-                "data": "AACC"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 7,
                 "pos": 5,
-                "data": 7
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 5,
-                "data": 1
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1010,18 +1040,21 @@
             "readFeatures": [
               {
                 "code": "P",
+                "data": 7,
                 "pos": 1,
-                "data": 7
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "TA",
                 "pos": 1,
-                "data": "TA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1501,13 +1534,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1538,13 +1573,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1575,13 +1612,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1612,13 +1651,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 6,
                 "pos": 6,
-                "data": 6
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1649,8 +1690,9 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCGGTTAAC",
                 "pos": 1,
-                "data": "AACCGGTTAAC"
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1687,23 +1729,27 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "TTAA",
                 "pos": 6,
-                "data": "TTAA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 10,
-                "data": 1
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1738,13 +1784,15 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCGGTT",
                 "pos": 1,
-                "data": "AACCGGTT"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 9,
-                "data": 3
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1778,18 +1826,21 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACCG",
                 "pos": 1,
-                "data": "AACCG"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 6,
-                "data": 3
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "AAC",
                 "pos": 6,
-                "data": "AAC"
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1823,28 +1874,33 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACC",
                 "pos": 1,
-                "data": "AACC"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 5,
-                "data": 3
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "TA",
                 "pos": 5,
-                "data": "TA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 2,
                 "pos": 7,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 7,
-                "data": 1
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1875,23 +1931,27 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AA",
                 "pos": 1,
-                "data": "AA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 3,
                 "pos": 3,
-                "data": 3
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "GTTAAC",
                 "pos": 3,
-                "data": "GTTAAC"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 3,
                 "pos": 9,
-                "data": 3
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1922,18 +1982,21 @@
             "readFeatures": [
               {
                 "code": "I",
+                "data": "AACC",
                 "pos": 1,
-                "data": "AACC"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 7,
                 "pos": 5,
-                "data": 7
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 5,
-                "data": 1
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,
@@ -1962,18 +2025,21 @@
             "readFeatures": [
               {
                 "code": "P",
+                "data": 7,
                 "pos": 1,
-                "data": 7
+                "refPos": 6
               },
               {
                 "code": "I",
+                "data": "TA",
                 "pos": 1,
-                "data": "TA"
+                "refPos": 6
               },
               {
                 "code": "P",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 6
               }
             ],
             "mappingQuality": 0,

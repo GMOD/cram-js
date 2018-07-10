@@ -580,8 +580,9 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 10,
                 "pos": 1,
-                "data": 10
+                "refPos": 4
               }
             ],
             "mappingQuality": 1,
@@ -604,8 +605,9 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 10,
                 "pos": 1,
-                "data": 10
+                "refPos": 4
               }
             ],
             "mappingQuality": 1,
@@ -625,13 +627,15 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 5,
                 "pos": 1,
-                "data": 5
+                "refPos": 4
               },
               {
                 "code": "H",
+                "data": 5,
                 "pos": 11,
-                "data": 5
+                "refPos": 9
               }
             ],
             "mappingQuality": 1,

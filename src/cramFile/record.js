@@ -9,8 +9,7 @@ function decodeBaseSubstitution(
   if (!refRegion) return
 
   // decode base substitution code using the substitution matrix
-  const refCoord =
-    cramRecord.alignmentStart + (readFeature.pos - 1) - refRegion.start
+  const refCoord = readFeature.refPos - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
   if (refBase) readFeature.ref = refBase
   let baseNumber = {

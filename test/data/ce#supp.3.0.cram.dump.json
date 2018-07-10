@@ -565,8 +565,9 @@
             "readFeatures": [
               {
                 "code": "S",
+                "data": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC",
                 "pos": 51,
-                "data": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
+                "refPos": 150
               }
             ],
             "mappingQuality": 1,
@@ -692,8 +693,9 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 50,
                 "pos": 1,
-                "data": 50
+                "refPos": 200
               }
             ],
             "mappingQuality": 1,
@@ -764,8 +766,9 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 50,
                 "pos": 51,
-                "data": 50
+                "refPos": 550
               }
             ],
             "mappingQuality": 1,
@@ -836,8 +839,9 @@
             "readFeatures": [
               {
                 "code": "S",
+                "data": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC",
                 "pos": 1,
-                "data": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
+                "refPos": 600
               }
             ],
             "mappingQuality": 1,
@@ -1403,8 +1407,9 @@
             "readFeatures": [
               {
                 "code": "S",
+                "data": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC",
                 "pos": 51,
-                "data": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
+                "refPos": 150
               }
             ],
             "mappingQuality": 1,
@@ -1530,8 +1535,9 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 50,
                 "pos": 1,
-                "data": 50
+                "refPos": 200
               }
             ],
             "mappingQuality": 1,
@@ -1602,8 +1608,9 @@
             "readFeatures": [
               {
                 "code": "H",
+                "data": 50,
                 "pos": 51,
-                "data": 50
+                "refPos": 550
               }
             ],
             "mappingQuality": 1,
@@ -1674,8 +1681,9 @@
             "readFeatures": [
               {
                 "code": "S",
+                "data": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC",
                 "pos": 1,
-                "data": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
+                "refPos": 600
               }
             ],
             "mappingQuality": 1,

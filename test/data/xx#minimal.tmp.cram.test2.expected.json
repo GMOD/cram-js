@@ -12,13 +12,15 @@
     "readFeatures": [
       {
         "code": "H",
+        "data": 5,
         "pos": 1,
-        "data": 5
+        "refPos": 4
       },
       {
         "code": "H",
+        "data": 5,
         "pos": 11,
-        "data": 5
+        "refPos": 9
       }
     ],
     "mappingQuality": 1,

@@ -804,15 +804,17 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 8,
                 "data": 2,
+                "pos": 8,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -844,26 +846,30 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 4,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 4,
                 "data": 2,
-                "ref": "A",
+                "pos": 4,
+                "refPos": 8,
+                "ref": "C",
                 "sub": "T"
               }
             ],
@@ -890,42 +896,49 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 3,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 4,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 5,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 5,
                 "data": 2,
-                "ref": "T",
-                "sub": "G"
+                "pos": 5,
+                "refPos": 8,
+                "ref": "C",
+                "sub": "T"
               }
             ],
             "mappingQuality": 0,
@@ -952,52 +965,61 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 3,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 4,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 5,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 5,
                 "data": 2,
-                "ref": "T",
-                "sub": "G"
+                "pos": 5,
+                "refPos": 8,
+                "ref": "C",
+                "sub": "T"
               }
             ],
             "mappingQuality": 0,
@@ -1024,41 +1046,48 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 3,
-                "data": "GG"
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 5,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 5,
-                "data": "GG"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 7,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 7,
                 "data": 2,
-                "ref": "A",
+                "pos": 7,
+                "refPos": 8,
+                "ref": "C",
                 "sub": "T"
               }
             ],
@@ -1088,57 +1117,67 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 3,
-                "data": 1
+                "refPos": 3
               },
               {
                 "code": "X",
-                "pos": 3,
                 "data": 0,
+                "pos": 3,
+                "refPos": 4,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 4,
-                "data": "GG"
+                "refPos": 5
               },
               {
                 "code": "X",
-                "pos": 6,
                 "data": 1,
-                "ref": "A",
-                "sub": "G"
+                "pos": 6,
+                "refPos": 5,
+                "ref": "T",
+                "sub": "C"
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 7,
-                "data": "GG"
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 0,
-                "ref": "C",
-                "sub": "A"
+                "pos": 9,
+                "refPos": 6,
+                "ref": "A",
+                "sub": "C"
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 10,
-                "data": 1
+                "refPos": 7
               },
               {
                 "code": "X",
-                "pos": 10,
                 "data": 2,
-                "sub": "G"
+                "pos": 10,
+                "refPos": 8,
+                "ref": "C",
+                "sub": "T"
               }
             ],
             "mappingQuality": 0,
@@ -1170,30 +1209,35 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 5,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 6,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 2,
+                "pos": 9,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -1226,40 +1270,47 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 5,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 6,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 2,
+                "pos": 9,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -1292,30 +1343,35 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "I",
+                "data": "GGG",
                 "pos": 3,
-                "data": "GGG"
+                "refPos": 3
               },
               {
                 "code": "D",
+                "data": 5,
                 "pos": 6,
-                "data": 5
+                "refPos": 3
               },
               {
                 "code": "I",
+                "data": "GGG",
                 "pos": 6,
-                "data": "GGG"
+                "refPos": 8
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 2,
+                "pos": 9,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -1854,15 +1910,17 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "X",
-                "pos": 8,
                 "data": 2,
+                "pos": 8,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -1894,26 +1952,30 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 4,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 4,
                 "data": 2,
-                "ref": "A",
+                "pos": 4,
+                "refPos": 8,
+                "ref": "C",
                 "sub": "T"
               }
             ],
@@ -1940,42 +2002,49 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 3,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 4,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 5,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 5,
                 "data": 2,
-                "ref": "T",
-                "sub": "G"
+                "pos": 5,
+                "refPos": 8,
+                "ref": "C",
+                "sub": "T"
               }
             ],
             "mappingQuality": 0,
@@ -2002,52 +2071,61 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 3,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 4,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 4,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 5,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 5,
                 "data": 2,
-                "ref": "T",
-                "sub": "G"
+                "pos": 5,
+                "refPos": 8,
+                "ref": "C",
+                "sub": "T"
               }
             ],
             "mappingQuality": 0,
@@ -2074,41 +2152,48 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 3,
-                "data": 2
+                "refPos": 3
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 3,
-                "data": "GG"
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 5,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 5,
-                "data": "GG"
+                "refPos": 6
               },
               {
                 "code": "D",
+                "data": 2,
                 "pos": 7,
-                "data": 2
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 7,
                 "data": 2,
-                "ref": "A",
+                "pos": 7,
+                "refPos": 8,
+                "ref": "C",
                 "sub": "T"
               }
             ],
@@ -2138,57 +2223,67 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 3,
-                "data": 1
+                "refPos": 3
               },
               {
                 "code": "X",
-                "pos": 3,
                 "data": 0,
+                "pos": 3,
+                "refPos": 4,
                 "ref": "A",
                 "sub": "C"
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 4,
-                "data": "GG"
+                "refPos": 5
               },
               {
                 "code": "X",
-                "pos": 6,
                 "data": 1,
-                "ref": "A",
-                "sub": "G"
+                "pos": 6,
+                "refPos": 5,
+                "ref": "T",
+                "sub": "C"
               },
               {
                 "code": "I",
+                "data": "GG",
                 "pos": 7,
-                "data": "GG"
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 0,
-                "ref": "C",
-                "sub": "A"
+                "pos": 9,
+                "refPos": 6,
+                "ref": "A",
+                "sub": "C"
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 10,
-                "data": 1
+                "refPos": 7
               },
               {
                 "code": "X",
-                "pos": 10,
                 "data": 2,
-                "sub": "G"
+                "pos": 10,
+                "refPos": 8,
+                "ref": "C",
+                "sub": "T"
               }
             ],
             "mappingQuality": 0,
@@ -2220,30 +2315,35 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 5,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 6,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 2,
+                "pos": 9,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -2276,40 +2376,47 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 5,
-                "data": "G"
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "D",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 5
               },
               {
                 "code": "P",
+                "data": 1,
                 "pos": 6,
-                "data": 1
+                "refPos": 6
               },
               {
                 "code": "i",
+                "data": "G",
                 "pos": 6,
-                "data": "G"
+                "refPos": 6
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 2,
+                "pos": 9,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
@@ -2342,30 +2449,35 @@
             "readFeatures": [
               {
                 "code": "X",
-                "pos": 2,
                 "data": 2,
+                "pos": 2,
+                "refPos": 2,
                 "ref": "C",
                 "sub": "T"
               },
               {
                 "code": "I",
+                "data": "GGG",
                 "pos": 3,
-                "data": "GGG"
+                "refPos": 3
               },
               {
                 "code": "D",
+                "data": 5,
                 "pos": 6,
-                "data": 5
+                "refPos": 3
               },
               {
                 "code": "I",
+                "data": "GGG",
                 "pos": 6,
-                "data": "GGG"
+                "refPos": 8
               },
               {
                 "code": "X",
-                "pos": 9,
                 "data": 2,
+                "pos": 9,
+                "refPos": 8,
                 "ref": "C",
                 "sub": "T"
               }
