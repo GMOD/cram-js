@@ -31,7 +31,7 @@ function decodeBaseSubstitution(
 }
 
 /**
- * Class of each CRAM record/feature.
+ * Class of each CRAM record returned by this API.
  */
 class CramRecord {
   constructor() {
@@ -39,89 +39,90 @@ class CramRecord {
   }
 
   /**
-   * the read is paired in sequencing, no matter whether it is mapped in a pair
+   * @returns {boolean} true if the read is paired, regardless of whether both segments are mapped
    */
   isPaired() {
     return !!(this.flags & Constants.BAM_FPAIRED)
   }
 
-  //  the read is mapped in a proper pair
+  /** @returns {boolean} true if the read is paired, and both segments are mapped */
   isProperlyPaired() {
     return !!(this.flags & Constants.BAM_FPROPER_PAIR)
   }
 
-  /** the read itself is unmapped; conflictive with isProperlyPaired */
+  /** @returns {boolean} true if the read itself is unmapped; conflictive with isProperlyPaired */
   isSegmentUnmapped() {
     return !!(this.flags & Constants.BAM_FUNMAP)
   }
 
-  /** the read itself is unmapped; conflictive with isProperlyPaired */
+  /** @returns {boolean} true if the read itself is unmapped; conflictive with isProperlyPaired */
   isMateUnmapped() {
     return !!(this.flags & Constants.BAM_FMUNMAP)
   }
 
-  /** the read is mapped to the reverse strand */
+  /** @returns {boolean} true if the read is mapped to the reverse strand */
   isReverseComplemented() {
     return !!(this.flags & Constants.BAM_FREVERSE)
   }
 
-  /** the mate is mapped to the reverse strand */
+  /** @returns {boolean} true if the mate is mapped to the reverse strand */
   isMateReverseComplemented() {
     return !!(this.flags & Constants.BAM_FMREVERSE)
   }
 
-  /** */
+  /** @returns {boolean} true if */
   isRead1() {
     return !!(this.flags & Constants.BAM_FREAD1)
   }
 
-  /** */
+  /** @returns {boolean} true if */
   isRead2() {
     return !!(this.flags & Constants.BAM_FREAD2)
   }
 
-  /** */
+  /** @returns {boolean} true if */
   isSecondary() {
     return !!(this.flags & Constants.BAM_FSECONDARY)
   }
 
-  /** */
+  /** @returns {boolean} true if */
   isFailedQc() {
     return !!(this.flags & Constants.BAM_FQCFAIL)
   }
 
-  /** optical or PCR duplicate */
+  /** @returns {boolean} true if the read is an optical or PCR duplicate */
   isDuplicate() {
     return !!(this.flags & Constants.BAM_FDUP)
   }
 
-  /** */
+  /** @returns {boolean} true if */
   isSupplementary() {
     return !!(this.flags & Constants.BAM_FSUPPLEMENTARY)
   }
 
   /**
-   *
+   * @returns {boolean} true if the read is detached
    */
   isDetached() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_DETACHED)
   }
 
-  /** */
+  /** @returns {boolean} true if the read has a mate in this same CRAM segment */
   hasMateDownStream() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM)
   }
 
-  /** */
+  /** @returns {boolean} true if the read contains qual scores */
   isPreservingQualityScores() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES)
   }
 
-  /** */
+  /** @returns {boolean} true if the read has no sequence bases */
   isUnknownBases() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_NO_SEQ)
   }
 
+  /** @returns {number} the number of bases spanned by the read on the reference sequence */
   lengthOnRef() {
     if (!('_lengthOnRef' in this)) {
       let lengthOnRef = this.readLength
