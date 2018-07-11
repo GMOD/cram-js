@@ -1,44 +1,6 @@
 [
   {
     "tags": {},
-    "flags": 4,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 9,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "sQ3",
-    "templateSize": 0,
-    "readBases": "AACCCGGTT",
-    "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 7
-  },
-  {
-    "tags": {},
-    "flags": 4,
-    "cramFlags": 11,
-    "sequenceId": 0,
-    "readLength": 0,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "SQ3",
-    "templateSize": 0,
-    "readBases": null,
-    "qualityScores": null,
-    "uniqueId": 8
-  },
-  {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
     "sequenceId": 0,
@@ -47,6 +9,7 @@
     "readGroupId": -1,
     "readName": "sq1",
     "templateSize": 0,
+    "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
       9,
@@ -72,6 +35,7 @@
     "readGroupId": -1,
     "readName": "sQ1",
     "templateSize": 0,
+    "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
       255,
@@ -97,6 +61,7 @@
     "readGroupId": -1,
     "readName": "SQ1",
     "templateSize": 0,
+    "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
       255,
@@ -130,6 +95,7 @@
         "refPos": 5
       }
     ],
+    "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
       9,
@@ -162,6 +128,7 @@
         "refPos": 5
       }
     ],
+    "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
       255,
@@ -194,6 +161,7 @@
         "refPos": 5
       }
     ],
+    "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
       255,
@@ -207,29 +175,5 @@
       255
     ],
     "uniqueId": 5
-  },
-  {
-    "tags": {},
-    "flags": 4,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 9,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "sq3",
-    "templateSize": 0,
-    "readBases": "AACCCGGTT",
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 6
   }
 ]

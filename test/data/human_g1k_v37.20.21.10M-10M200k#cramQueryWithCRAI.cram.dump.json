@@ -2654,6 +2654,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 60,
             "qualityScores": [
               32,
@@ -3337,6 +3338,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 60,
             "qualityScores": [
               32,
@@ -4019,6 +4021,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 60,
             "qualityScores": [
               35,
@@ -4709,6 +4712,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 60,
             "qualityScores": [
               34,
@@ -5187,6 +5191,7 @@
                 "sub": "G"
               }
             ],
+            "lengthOnRef": 57,
             "mappingQuality": 60,
             "qualityScores": [
               2,
@@ -5668,6 +5673,7 @@
                 "refPos": 100048
               }
             ],
+            "lengthOnRef": 35,
             "mappingQuality": 37,
             "qualityScores": [
               2,

@@ -1620,6 +1620,7 @@
             "readGroupId": 0,
             "readName": "70,114,101,100",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 86,
             "qualityScores": [
               9,
@@ -1682,6 +1683,7 @@
             "readGroupId": 0,
             "readName": "74,105,109",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 11,
             "qualityScores": [
               30,
@@ -3229,6 +3231,7 @@
             "readGroupId": 0,
             "readName": "70,114,101,100",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 86,
             "qualityScores": [
               9,
@@ -3291,6 +3294,7 @@
             "readGroupId": 0,
             "readName": "74,105,109",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 11,
             "qualityScores": [
               30,

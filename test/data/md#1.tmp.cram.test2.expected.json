@@ -12,6 +12,7 @@
     "readGroupId": -1,
     "readName": "x",
     "templateSize": 0,
+    "lengthOnRef": 40,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -96,6 +97,7 @@
         "refPos": 40
       }
     ],
+    "lengthOnRef": 40,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -219,6 +221,7 @@
         "refPos": 41
       }
     ],
+    "lengthOnRef": 40,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -374,6 +377,7 @@
         "refPos": 41
       }
     ],
+    "lengthOnRef": 40,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -475,6 +479,7 @@
         "refPos": 28
       }
     ],
+    "lengthOnRef": 36,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -582,6 +587,7 @@
         "refPos": 36
       }
     ],
+    "lengthOnRef": 36,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -635,6 +641,7 @@
         "refPos": 11
       }
     ],
+    "lengthOnRef": 40,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -714,6 +721,7 @@
         "refPos": 40
       }
     ],
+    "lengthOnRef": 40,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -778,6 +786,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 10,
     "mappingQuality": 255,
     "qualityScores": [
       255,
@@ -862,6 +871,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 10,
     "mappingQuality": 255,
     "qualityScores": [
       255,

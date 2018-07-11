@@ -571,6 +571,7 @@
             "readGroupId": -1,
             "readName": "s0a",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -596,6 +597,7 @@
             "readGroupId": -1,
             "readName": "s0b",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -621,6 +623,7 @@
             "readGroupId": -1,
             "readName": "s0c",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -654,6 +657,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -705,6 +709,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -748,6 +753,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -790,6 +796,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -850,6 +857,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -895,6 +903,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1390,6 +1399,7 @@
             "readGroupId": -1,
             "readName": "s0a",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1415,6 +1425,7 @@
             "readGroupId": -1,
             "readName": "s0b",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1440,6 +1451,7 @@
             "readGroupId": -1,
             "readName": "s0c",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1473,6 +1485,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1524,6 +1537,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1567,6 +1581,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1609,6 +1624,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1669,6 +1685,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1714,6 +1731,7 @@
                 "refPos": 6
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,

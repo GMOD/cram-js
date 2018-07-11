@@ -472,6 +472,7 @@
         "refPos": 100109
       }
     ],
+    "lengthOnRef": 101,
     "mappingQuality": 60,
     "qualityScores": [
       32,
@@ -1051,6 +1052,7 @@
         "refPos": 100109
       }
     ],
+    "lengthOnRef": 101,
     "mappingQuality": 60,
     "qualityScores": [
       32,
@@ -1629,6 +1631,7 @@
         "refPos": 100109
       }
     ],
+    "lengthOnRef": 101,
     "mappingQuality": 60,
     "qualityScores": [
       35,
@@ -2214,6 +2217,7 @@
         "refPos": 100110
       }
     ],
+    "lengthOnRef": 101,
     "mappingQuality": 60,
     "qualityScores": [
       34,
@@ -2619,6 +2623,7 @@
         "refPos": 100067
       }
     ],
+    "lengthOnRef": 57,
     "mappingQuality": 60,
     "qualityScores": [
       2,
@@ -2724,130 +2729,6 @@
       22
     ],
     "uniqueId": 4
-  },
-  {
-    "tags": {
-      "XC": 35,
-      "OQ": "#####################################################################################################"
-    },
-    "flags": 69,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 101,
-    "alignmentStart": 100013,
-    "readGroupId": 4,
-    "readName": "f",
-    "mate": {
-      "flags": 0,
-      "sequenceID": 0,
-      "alignmentStart": 100013
-    },
-    "templateSize": 0,
-    "readBases": "AAAAAGTTTAACAAAACTGATGAAAAATTTGCCAAAAGACACTACAAACATCTCATTACAGAGATTGTGGAAGACCAAATAAATGATAAGCTATTGCAGGT",
-    "qualityScores": [
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2,
-      2
-    ],
-    "uniqueId": 5
   },
   {
     "tags": {
@@ -3046,6 +2927,7 @@
         "refPos": 100048
       }
     ],
+    "lengthOnRef": 35,
     "mappingQuality": 37,
     "qualityScores": [
       2,

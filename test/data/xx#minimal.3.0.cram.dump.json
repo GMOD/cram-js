@@ -603,6 +603,7 @@
                 "refPos": 4
               }
             ],
+            "lengthOnRef": -10,
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 0
@@ -631,6 +632,7 @@
                 "refPos": -1
               }
             ],
+            "lengthOnRef": -10,
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 1
@@ -671,6 +673,7 @@
                 "refPos": 9
               }
             ],
+            "lengthOnRef": 0,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -1161,6 +1164,7 @@
                 "refPos": 4
               }
             ],
+            "lengthOnRef": -10,
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 0
@@ -1189,6 +1193,7 @@
                 "refPos": -1
               }
             ],
+            "lengthOnRef": -10,
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 1
@@ -1229,6 +1234,7 @@
                 "refPos": 9
               }
             ],
+            "lengthOnRef": 0,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -1719,6 +1725,7 @@
                 "refPos": 4
               }
             ],
+            "lengthOnRef": -10,
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 0
@@ -1747,6 +1754,7 @@
                 "refPos": -1
               }
             ],
+            "lengthOnRef": -10,
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 1
@@ -1787,6 +1795,7 @@
                 "refPos": 9
               }
             ],
+            "lengthOnRef": 0,
             "mappingQuality": 1,
             "qualityScores": [
               255,

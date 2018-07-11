@@ -11,6 +11,7 @@
     "readGroupId": -1,
     "readName": "a1",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -30,6 +31,7 @@
     "readGroupId": -1,
     "readName": "a2",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -50,6 +52,7 @@
     "readGroupId": -1,
     "readName": "a3",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -71,6 +74,7 @@
     "readGroupId": -1,
     "readName": "a4",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -93,6 +97,7 @@
     "readGroupId": -1,
     "readName": "a5",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -116,6 +121,7 @@
     "readGroupId": -1,
     "readName": "a6",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -140,6 +146,7 @@
     "readGroupId": -1,
     "readName": "a7",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -165,6 +172,7 @@
     "readGroupId": -1,
     "readName": "a8",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -191,6 +199,7 @@
     "readGroupId": -1,
     "readName": "a9",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2
@@ -218,6 +227,7 @@
     "readGroupId": -1,
     "readName": "aA",
     "templateSize": 0,
+    "lengthOnRef": 1,
     "mappingQuality": 1,
     "qualityScores": [
       2

@@ -444,6 +444,7 @@
             "readGroupId": -1,
             "readName": "a1",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -469,6 +470,7 @@
             "readGroupId": -1,
             "readName": "b1",
             "recordsToNextFragment": 4,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -494,6 +496,7 @@
             "readGroupId": -1,
             "readName": "c1",
             "recordsToNextFragment": 5,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -518,6 +521,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "a1",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -542,6 +546,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -566,6 +571,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "c1",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -934,6 +940,7 @@
             "readGroupId": -1,
             "readName": "a1",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -959,6 +966,7 @@
             "readGroupId": -1,
             "readName": "b1",
             "recordsToNextFragment": 4,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -984,6 +992,7 @@
             "readGroupId": -1,
             "readName": "c1",
             "recordsToNextFragment": 5,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1008,6 +1017,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "a1",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1032,6 +1042,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "b1",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1056,6 +1067,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "c1",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,

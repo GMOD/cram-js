@@ -789,6 +789,7 @@
                 "refPos": 29
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -1592,6 +1593,7 @@
                 "refPos": 29
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,

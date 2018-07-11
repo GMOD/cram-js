@@ -1675,6 +1675,7 @@
             "readGroupId": 0,
             "readName": "Fred",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 86,
             "qualityScores": [
               9,
@@ -1737,6 +1738,7 @@
             "readGroupId": -1,
             "readName": "Jim",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 11,
             "qualityScores": [
               255,
@@ -3284,6 +3286,7 @@
             "readGroupId": 0,
             "readName": "Fred",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 86,
             "qualityScores": [
               9,
@@ -3346,6 +3349,7 @@
             "readGroupId": -1,
             "readName": "Jim",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 11,
             "qualityScores": [
               255,

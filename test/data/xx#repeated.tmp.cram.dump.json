@@ -420,6 +420,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 1,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -445,6 +446,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 2,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -470,6 +472,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -495,6 +498,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 4,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -520,6 +524,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 5,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -544,6 +549,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "S",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -888,6 +894,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 1,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -913,6 +920,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 2,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -938,6 +946,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -963,6 +972,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 4,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -988,6 +998,7 @@
             "readGroupId": -1,
             "readName": "S",
             "recordsToNextFragment": 5,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1012,6 +1023,7 @@
             "alignmentStart": 11,
             "readGroupId": -1,
             "readName": "S",
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,

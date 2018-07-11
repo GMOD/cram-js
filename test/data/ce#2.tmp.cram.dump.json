@@ -762,6 +762,7 @@
                 "refPos": 29
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -911,6 +912,7 @@
                 "sub": "C"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 12,
             "qualityScores": [
               2,
@@ -1687,6 +1689,7 @@
                 "refPos": 29
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -1836,6 +1839,7 @@
                 "sub": "C"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 12,
             "qualityScores": [
               2,

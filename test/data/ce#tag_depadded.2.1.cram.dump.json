@@ -978,6 +978,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -1521,6 +1522,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -2070,6 +2072,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -2612,6 +2615,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -3153,6 +3157,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -3270,6 +3275,7 @@
             "readGroupId": -1,
             "readName": "*",
             "templateSize": 0,
+            "lengthOnRef": 1,
             "mappingQuality": 255,
             "qualityScores": [
               255
@@ -3288,6 +3294,7 @@
             "readGroupId": -1,
             "readName": "*",
             "templateSize": 0,
+            "lengthOnRef": 2,
             "mappingQuality": 255,
             "qualityScores": [
               255,
@@ -3307,6 +3314,7 @@
             "readGroupId": -1,
             "readName": "*",
             "templateSize": 0,
+            "lengthOnRef": 1,
             "mappingQuality": 255,
             "qualityScores": [
               255
@@ -4199,6 +4207,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -4742,6 +4751,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -5291,6 +5301,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -5833,6 +5844,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -6374,6 +6386,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 100,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -6491,6 +6504,7 @@
             "readGroupId": -1,
             "readName": "*",
             "templateSize": 0,
+            "lengthOnRef": 1,
             "mappingQuality": 255,
             "qualityScores": [
               255
@@ -6509,6 +6523,7 @@
             "readGroupId": -1,
             "readName": "*",
             "templateSize": 0,
+            "lengthOnRef": 2,
             "mappingQuality": 255,
             "qualityScores": [
               255,
@@ -6528,6 +6543,7 @@
             "readGroupId": -1,
             "readName": "*",
             "templateSize": 0,
+            "lengthOnRef": 1,
             "mappingQuality": 255,
             "qualityScores": [
               255

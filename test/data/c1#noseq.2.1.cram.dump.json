@@ -546,6 +546,7 @@
             "readGroupId": -1,
             "readName": "sq1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -571,6 +572,7 @@
             "readGroupId": -1,
             "readName": "sQ1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -599,6 +601,7 @@
             "readGroupId": -1,
             "readName": "SQ1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -632,6 +635,7 @@
                 "refPos": 5
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -664,6 +668,7 @@
                 "refPos": 5
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -699,6 +704,7 @@
                 "refPos": 5
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1259,6 +1265,7 @@
             "readGroupId": -1,
             "readName": "sq1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -1284,6 +1291,7 @@
             "readGroupId": -1,
             "readName": "sQ1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1312,6 +1320,7 @@
             "readGroupId": -1,
             "readName": "SQ1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1345,6 +1354,7 @@
                 "refPos": 5
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -1377,6 +1387,7 @@
                 "refPos": 5
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1412,6 +1423,7 @@
                 "refPos": 5
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,

@@ -122,34 +122,6 @@ class CramRecord {
     return !!(this.cramFlags & Constants.CRAM_FLAG_NO_SEQ)
   }
 
-  /** @returns {number} the number of bases spanned by the read on the reference sequence */
-  lengthOnRef() {
-    if (!('_lengthOnRef' in this)) {
-      let lengthOnRef = this.readLength
-
-      if (this.readFeatures)
-        this.readFeatures.forEach(({ code, data }) => {
-          if (code === 'D' || code === 'N') lengthOnRef += data
-          else if (code === 'H') lengthOnRef -= data
-          else if (code === 'I' || code === 'S') lengthOnRef -= data.length
-          else if (code === 'i') lengthOnRef -= 1
-        })
-      if (Number.isNaN(lengthOnRef)) {
-        console.warn(
-          `${this.readName ||
-            `${this.sequenceID}:${
-              this.alignmentStart
-            }`} feature has invalid read features`,
-        )
-        lengthOnRef = 0
-      }
-
-      this._lengthOnRef = lengthOnRef
-    }
-
-    return this._lengthOnRef
-  }
-
   /**
    * annotates this feature with the given reference region.
    * right now, this only uses the reference sequence to decode

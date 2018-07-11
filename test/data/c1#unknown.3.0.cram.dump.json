@@ -675,6 +675,7 @@
                 "refPos": 7
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               40,
@@ -721,6 +722,7 @@
                 "refPos": 7
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -763,6 +765,7 @@
                 "refPos": 7
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1394,6 +1397,7 @@
                 "refPos": 7
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               40,
@@ -1440,6 +1444,7 @@
                 "refPos": 7
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,
@@ -1482,6 +1487,7 @@
                 "refPos": 7
               }
             ],
+            "lengthOnRef": 10,
             "mappingQuality": 0,
             "qualityScores": [
               255,

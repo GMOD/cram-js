@@ -658,6 +658,7 @@
             "readGroupId": 0,
             "readName": "a1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -683,6 +684,7 @@
             "readGroupId": 1,
             "readName": "b1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -708,6 +710,7 @@
             "readGroupId": -1,
             "readName": "c1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -733,6 +736,7 @@
             "readGroupId": 0,
             "readName": "a2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -758,6 +762,7 @@
             "readGroupId": 1,
             "readName": "b2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -783,6 +788,7 @@
             "readGroupId": -1,
             "readName": "c2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1175,6 +1181,7 @@
             "readGroupId": 0,
             "readName": "a1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1200,6 +1207,7 @@
             "readGroupId": 1,
             "readName": "b1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1225,6 +1233,7 @@
             "readGroupId": -1,
             "readName": "c1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1250,6 +1259,7 @@
             "readGroupId": 0,
             "readName": "a2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1275,6 +1285,7 @@
             "readGroupId": 1,
             "readName": "b2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1300,6 +1311,7 @@
             "readGroupId": -1,
             "readName": "c2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               9,

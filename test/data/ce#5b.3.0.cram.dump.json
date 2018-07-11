@@ -957,6 +957,7 @@
                 "refPos": 29
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -2222,6 +2223,7 @@
                 "sub": "A"
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -3347,6 +3349,7 @@
                 "refPos": 102
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -3850,6 +3853,7 @@
                 "refPos": 102
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -4551,6 +4555,7 @@
                 "refPos": 102
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -4992,6 +4997,7 @@
                 "refPos": 84
               }
             ],
+            "lengthOnRef": 74,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -5133,6 +5139,7 @@
                 "refPos": 84
               }
             ],
+            "lengthOnRef": 74,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -6258,6 +6265,7 @@
                 "refPos": 102
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -6761,6 +6769,7 @@
                 "refPos": 102
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -7462,6 +7471,7 @@
                 "refPos": 102
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 1,
             "qualityScores": [
               2,
@@ -7903,6 +7913,7 @@
                 "refPos": 84
               }
             ],
+            "lengthOnRef": 74,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -8044,6 +8055,7 @@
                 "refPos": 84
               }
             ],
+            "lengthOnRef": 74,
             "mappingQuality": 1,
             "qualityScores": [
               255,

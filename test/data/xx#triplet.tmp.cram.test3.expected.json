@@ -9,6 +9,7 @@
     "readGroupId": -1,
     "readName": "a1",
     "recordsToNextFragment": 1,
+    "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
       9,
@@ -33,6 +34,7 @@
     "alignmentStart": 6,
     "readGroupId": -1,
     "readName": "a1",
+    "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
       9,

@@ -1213,6 +1213,7 @@
                 "refPos": 121
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               8,
@@ -1828,6 +1829,7 @@
                 "refPos": 116
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               8,
@@ -2077,6 +2079,7 @@
                 "refPos": 101
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               8,
@@ -2650,6 +2653,7 @@
                 "refPos": 401
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               5,
@@ -2899,6 +2903,7 @@
                 "refPos": 101
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               8,
@@ -4080,6 +4085,7 @@
                 "refPos": 101
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               8,
@@ -4689,6 +4695,7 @@
                 "refPos": 398
               }
             ],
+            "lengthOnRef": 97,
             "mappingQuality": 255,
             "qualityScores": [
               5,
@@ -5385,6 +5392,7 @@
                 "refPos": 101
               }
             ],
+            "lengthOnRef": 101,
             "mappingQuality": 255,
             "qualityScores": [
               8,
@@ -5994,6 +6002,7 @@
                 "refPos": 398
               }
             ],
+            "lengthOnRef": 97,
             "mappingQuality": 255,
             "qualityScores": [
               5,

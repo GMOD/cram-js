@@ -241,6 +241,26 @@ function decodeRecord(
       )
     }
 
+    // compute the read's true span on the reference sequence
+    let lengthOnRef = cramRecord.readLength
+    if (cramRecord.readFeatures)
+      cramRecord.readFeatures.forEach(({ code, data }) => {
+        if (code === 'D' || code === 'N') lengthOnRef += data
+        else if (code === 'H') lengthOnRef -= data
+        else if (code === 'I' || code === 'S') lengthOnRef -= data.length
+        else if (code === 'i') lengthOnRef -= 1
+      })
+    if (Number.isNaN(lengthOnRef)) {
+      console.warn(
+        `${cramRecord.readName ||
+          `${cramRecord.sequenceID}:${
+            cramRecord.alignmentStart
+          }`} record has invalid read features`,
+      )
+      lengthOnRef = cramRecord.readLength
+    }
+    cramRecord.lengthOnRef = lengthOnRef
+
     // mapping quality:
     cramRecord.mappingQuality = decodeDataSeries('MQ')
     if (cramRecord.isPreservingQualityScores()) {

@@ -714,6 +714,7 @@
             "readGroupId": -1,
             "readName": "x1",
             "recordsToNextFragment": 1,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -733,6 +734,7 @@
             "alignmentStart": 16,
             "readGroupId": -1,
             "readName": "x1",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -753,6 +755,7 @@
             "readGroupId": -1,
             "readName": "x2",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -772,6 +775,7 @@
             "alignmentStart": 10,
             "readGroupId": -1,
             "readName": "x2",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -792,6 +796,7 @@
             "readGroupId": -1,
             "readName": "x3",
             "recordsToNextFragment": 5,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -811,6 +816,7 @@
             "alignmentStart": 10,
             "readGroupId": -1,
             "readName": "x3",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -831,6 +837,7 @@
             "readGroupId": -1,
             "readName": "x4",
             "recordsToNextFragment": 7,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -850,6 +857,7 @@
             "alignmentStart": 16,
             "readGroupId": -1,
             "readName": "x4",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1277,6 +1285,7 @@
             "readGroupId": -1,
             "readName": "y1",
             "recordsToNextFragment": 1,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1296,6 +1305,7 @@
             "alignmentStart": 16,
             "readGroupId": -1,
             "readName": "y1",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1316,6 +1326,7 @@
             "readGroupId": -1,
             "readName": "y2",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1335,6 +1346,7 @@
             "alignmentStart": 10,
             "readGroupId": -1,
             "readName": "y2",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1360,6 +1372,7 @@
               "alignmentStart": 10
             },
             "templateSize": -2,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1385,6 +1398,7 @@
               "alignmentStart": 7
             },
             "templateSize": 2,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1410,6 +1424,7 @@
               "alignmentStart": 16
             },
             "templateSize": 10,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1435,6 +1450,7 @@
               "alignmentStart": 1
             },
             "templateSize": -10,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1862,6 +1878,7 @@
             "readGroupId": -1,
             "readName": "y1",
             "recordsToNextFragment": 1,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1881,6 +1898,7 @@
             "alignmentStart": 16,
             "readGroupId": -1,
             "readName": "y1",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1901,6 +1919,7 @@
             "readGroupId": -1,
             "readName": "y2",
             "recordsToNextFragment": 3,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1920,6 +1939,7 @@
             "alignmentStart": 10,
             "readGroupId": -1,
             "readName": "y2",
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1945,6 +1965,7 @@
               "alignmentStart": 10
             },
             "templateSize": -2,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1970,6 +1991,7 @@
               "alignmentStart": 7
             },
             "templateSize": 2,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -1995,6 +2017,7 @@
               "alignmentStart": 16
             },
             "templateSize": 10,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,
@@ -2020,6 +2043,7 @@
               "alignmentStart": 1
             },
             "templateSize": -10,
+            "lengthOnRef": 5,
             "mappingQuality": 1,
             "qualityScores": [
               9,

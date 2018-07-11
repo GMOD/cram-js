@@ -55,6 +55,7 @@
         "refPos": 29
       }
     ],
+    "lengthOnRef": 101,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -198,6 +199,7 @@
         "refPos": 25
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 12,
     "qualityScores": [
       2,
@@ -321,6 +323,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1871511",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       27,
@@ -444,6 +447,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3743423",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -567,6 +571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4251890",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -690,6 +695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5238868",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -833,6 +839,7 @@
         "refPos": 102
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -956,6 +963,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6815812",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1079,6 +1087,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6905811",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1202,6 +1211,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8289592",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1325,6 +1335,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14497557",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1448,6 +1459,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15617929",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       35,
@@ -1571,6 +1583,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16049575",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1694,6 +1707,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17838261",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1817,6 +1831,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22711273",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -1940,6 +1955,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22922978",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2063,6 +2079,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23087186",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2186,6 +2203,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23506653",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2347,6 +2365,7 @@
         "refPos": 23
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2470,6 +2489,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25911768",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2593,6 +2613,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26055380",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2716,6 +2737,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26121674",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -2871,6 +2893,7 @@
         "refPos": 55
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 7,
     "qualityScores": [
       2,
@@ -2994,6 +3017,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31341126",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -3137,6 +3161,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -3304,6 +3329,7 @@
         "refPos": 13
       }
     ],
+    "lengthOnRef": 99,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -3441,6 +3467,7 @@
         "refPos": 19
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -3564,6 +3591,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1364843",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -3687,6 +3715,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10190875",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -3810,6 +3839,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12815224",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -4085,6 +4115,7 @@
         "refPos": 107
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -4208,6 +4239,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20524775",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -4331,6 +4363,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20580336",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -4454,6 +4487,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22573273",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -4577,6 +4611,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4110503",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -4700,6 +4735,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -4843,6 +4879,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -5034,6 +5071,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -5183,6 +5221,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -5320,6 +5359,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -5469,6 +5509,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -5606,6 +5647,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -5743,6 +5785,7 @@
         "refPos": 23
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -5880,6 +5923,7 @@
         "refPos": 25
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -6017,6 +6061,7 @@
         "refPos": 19
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -6148,6 +6193,7 @@
         "refPos": 113
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -6279,6 +6325,7 @@
         "refPos": 109
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -6434,6 +6481,7 @@
         "refPos": 47
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -6557,6 +6605,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1843941",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -6680,6 +6729,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1866654",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -6803,6 +6853,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2940592",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -6926,6 +6977,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3916542",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -7049,6 +7101,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9532073",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -7172,6 +7225,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22616746",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -7295,6 +7349,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26956496",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -7492,6 +7547,7 @@
         "refPos": 85
       }
     ],
+    "lengthOnRef": 99,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -7707,6 +7763,7 @@
         "refPos": 86
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -7868,6 +7925,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -7991,6 +8049,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1909715",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -8114,6 +8173,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7382123",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -8237,6 +8297,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14804141",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       26,
@@ -8360,6 +8421,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20171655",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -8483,6 +8545,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20593989",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -8606,6 +8669,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25363430",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -8729,6 +8793,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32419676",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -8860,6 +8925,7 @@
         "refPos": 106
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -9009,6 +9075,7 @@
         "refPos": 113
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -9152,6 +9219,7 @@
         "refPos": 119
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -9283,6 +9351,7 @@
         "refPos": 65
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -9406,6 +9475,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1370038",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -9529,6 +9599,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -9652,6 +9723,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -9775,6 +9847,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -9906,6 +9979,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -10029,6 +10103,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -10152,6 +10227,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -10275,6 +10351,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -10398,6 +10475,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15309776",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -10521,6 +10599,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15350539",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -10644,6 +10723,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17241271",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -10767,6 +10847,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19687248",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -10890,6 +10971,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20362361",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -11013,6 +11095,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28067938",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -11136,6 +11219,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28676889",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -11259,6 +11343,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31914072",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -11402,6 +11487,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -11525,6 +11611,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2215027",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -11648,6 +11735,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2347049",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -11771,6 +11859,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3130808",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -11894,6 +11983,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3686675",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12017,6 +12107,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4139123",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12140,6 +12231,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5087657",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12263,6 +12355,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7633308",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12386,6 +12479,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10185722",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12509,6 +12603,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14268858",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12632,6 +12727,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14318056",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12755,6 +12851,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16702871",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -12878,6 +12975,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18871990",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -13001,6 +13099,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23185275",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -13124,6 +13223,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26311247",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -13247,6 +13347,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31584477",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -13370,6 +13471,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33157605",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -13493,6 +13595,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.242608",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -13616,6 +13719,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1667132",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -13739,6 +13843,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5496550",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -13862,6 +13967,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -13985,6 +14091,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -14152,6 +14259,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -14301,6 +14409,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -14486,6 +14595,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -14695,6 +14805,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -14910,6 +15021,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -15033,6 +15145,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12176045",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15156,6 +15269,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12322670",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15279,6 +15393,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14671547",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15402,6 +15517,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15954948",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15525,6 +15641,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17314912",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15648,6 +15765,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17408783",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15771,6 +15889,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17920847",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -15894,6 +16013,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7812",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -16017,6 +16137,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2602713",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       22,
@@ -16140,6 +16261,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2770334",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -16263,6 +16385,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5038515",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -16386,6 +16509,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5869665",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -16509,6 +16633,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8368880",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       27,
@@ -16632,6 +16757,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11712874",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       29,
@@ -16755,6 +16881,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18484794",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -16878,6 +17005,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19979752",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -17001,6 +17129,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20318652",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -17124,6 +17253,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20730275",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -17247,6 +17377,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24048983",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       24,
@@ -17370,6 +17501,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26914314",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -17493,6 +17625,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29129737",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -17616,6 +17749,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30130221",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -17739,6 +17873,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30619064",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -17862,6 +17997,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31338027",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -18005,6 +18141,7 @@
         "refPos": 125
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -18142,6 +18279,7 @@
         "refPos": 127
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -18303,6 +18441,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -18500,6 +18639,7 @@
         "refPos": 125
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -18623,6 +18763,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -18746,6 +18887,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -18869,6 +19011,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -19000,6 +19143,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -19123,6 +19267,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -19246,6 +19391,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -19369,6 +19515,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -19500,6 +19647,7 @@
         "refPos": 127
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -19623,6 +19771,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27070077",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -19754,6 +19903,7 @@
         "refPos": 122
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -19877,6 +20027,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32563299",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -20014,6 +20165,7 @@
         "refPos": 128
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20137,6 +20289,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.639284",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20260,6 +20413,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1105550",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20383,6 +20537,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8156389",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20526,6 +20681,7 @@
         "refPos": 130
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20649,6 +20805,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17298969",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20772,6 +20929,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19566661",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -20939,6 +21097,7 @@
         "refPos": 130
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21106,6 +21265,7 @@
         "refPos": 130
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21229,6 +21389,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32636364",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21360,6 +21521,7 @@
         "refPos": 125
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21491,6 +21653,7 @@
         "refPos": 120
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       15,
@@ -21614,6 +21777,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.641561",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21737,6 +21901,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4398044",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21860,6 +22025,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6433854",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -21983,6 +22149,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9917822",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22106,6 +22273,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13766985",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22229,6 +22397,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13985245",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22352,6 +22521,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15076148",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22475,6 +22645,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16049660",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22598,6 +22769,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22701424",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22721,6 +22893,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32125404",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -22844,6 +23017,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7546701",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -22967,6 +23141,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10989112",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       20,
@@ -23090,6 +23265,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -23233,6 +23409,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -23424,6 +23601,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -23573,6 +23751,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -23710,6 +23889,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -23859,6 +24039,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -23996,6 +24177,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -24127,6 +24309,7 @@
         "refPos": 118
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -24264,6 +24447,7 @@
         "refPos": 133
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -24395,6 +24579,7 @@
         "refPos": 134
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -24526,6 +24711,7 @@
         "refPos": 126
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -24657,6 +24843,7 @@
         "refPos": 133
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -24788,6 +24975,7 @@
         "refPos": 92
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -24925,6 +25113,7 @@
         "refPos": 126
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -25080,6 +25269,7 @@
         "refPos": 77
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -25217,6 +25407,7 @@
         "refPos": 106
       }
     ],
+    "lengthOnRef": 99,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -25348,6 +25539,7 @@
         "refPos": 138
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -25485,6 +25677,7 @@
         "refPos": 136
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -25616,6 +25809,7 @@
         "refPos": 126
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -25747,6 +25941,7 @@
         "refPos": 134
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -25878,6 +26073,7 @@
         "refPos": 106
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -26015,6 +26211,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -26158,6 +26355,7 @@
         "refPos": 125
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -26367,6 +26565,7 @@
         "refPos": 83
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -26558,6 +26757,7 @@
         "refPos": 142
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       25,
@@ -26681,6 +26881,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1979342",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -26836,6 +27037,7 @@
         "refPos": 66
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -26959,6 +27161,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3034972",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       29,
@@ -27082,6 +27285,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5390013",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -27205,6 +27409,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7030032",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       28,
@@ -27328,6 +27533,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10370271",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -27451,6 +27657,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11422655",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -27594,6 +27801,7 @@
         "refPos": 55
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -27717,6 +27925,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20235987",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -27840,6 +28049,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21015579",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -27963,6 +28173,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -28106,6 +28317,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -28297,6 +28509,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -28446,6 +28659,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -28583,6 +28797,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -28732,6 +28947,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -28869,6 +29085,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -29036,6 +29253,7 @@
         "refPos": 143
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -29179,6 +29397,7 @@
         "refPos": 83
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -29316,6 +29535,7 @@
         "refPos": 60
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -29465,6 +29685,7 @@
         "refPos": 143
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -29588,6 +29809,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2292661",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -29711,6 +29933,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4943586",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -29834,6 +30057,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5569754",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -29957,6 +30181,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8043944",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -30080,6 +30305,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12047482",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -30203,6 +30429,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15172405",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -30352,6 +30579,7 @@
         "refPos": 141
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       32,
@@ -30475,6 +30703,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17957775",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -30630,6 +30859,7 @@
         "refPos": 144
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -30785,6 +31015,7 @@
         "refPos": 142
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -30908,6 +31139,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22905722",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -31031,6 +31263,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23066210",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -31154,6 +31387,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24301313",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -31321,6 +31555,7 @@
         "refPos": 140
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -31444,6 +31679,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32874751",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -31581,6 +31817,7 @@
         "refPos": 63
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -31820,6 +32057,7 @@
         "refPos": 97
       }
     ],
+    "lengthOnRef": 99,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -31981,6 +32219,7 @@
         "refPos": 64
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -32178,6 +32417,7 @@
         "refPos": 77
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -32315,6 +32555,7 @@
         "refPos": 62
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -32446,6 +32687,7 @@
         "refPos": 144
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -32569,6 +32811,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4627990",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -32692,6 +32935,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16715324",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -32823,6 +33067,7 @@
         "refPos": 144
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -32946,6 +33191,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -33069,6 +33315,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -33236,6 +33483,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -33385,6 +33633,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -33570,6 +33819,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -33779,6 +34029,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -33994,6 +34245,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -34125,6 +34377,7 @@
         "refPos": 127
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -34248,6 +34501,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27070077",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -34379,6 +34633,7 @@
         "refPos": 122
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -34502,6 +34757,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32563299",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -34639,6 +34895,7 @@
         "refPos": 128
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -34762,6 +35019,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.639284",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -34885,6 +35143,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1105550",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -35008,6 +35267,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4546346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -35131,6 +35391,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8944828",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -35340,6 +35601,7 @@
         "refPos": 70
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -35463,6 +35725,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10327745",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -35618,6 +35881,7 @@
         "refPos": 76
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -35741,6 +36005,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11441245",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -35864,6 +36129,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12629337",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       26,
@@ -35987,6 +36253,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13640483",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       28,
@@ -36110,6 +36377,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18076115",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -36233,6 +36501,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19077035",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -36356,6 +36625,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19648646",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -36479,6 +36749,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21827347",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -36640,6 +36911,7 @@
         "refPos": 79
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -36763,6 +37035,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24633504",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -36886,6 +37159,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25213815",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -37009,6 +37283,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30385823",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -37132,6 +37407,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.159947",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       27,
@@ -37255,6 +37531,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1796988",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -37398,6 +37675,7 @@
         "refPos": 61
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -37521,6 +37799,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12418490",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -37644,6 +37923,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14521060",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -37767,6 +38047,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -37910,6 +38191,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -38101,6 +38383,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -38250,6 +38533,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -38387,6 +38671,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -38536,6 +38821,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -38673,6 +38959,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -38846,6 +39133,7 @@
         "refPos": 97
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -38969,6 +39257,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29699086",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -39092,6 +39381,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30602381",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -39215,6 +39505,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30661211",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -39338,6 +39629,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32807761",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       23,
@@ -39461,6 +39753,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1865058",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -39584,6 +39877,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3486883",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       15,
@@ -39733,6 +40027,7 @@
         "refPos": 156
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -39856,6 +40151,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7153981",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -39979,6 +40275,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9722947",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -40116,6 +40413,7 @@
         "refPos": 155
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -40239,6 +40537,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15007214",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -40362,6 +40661,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15298967",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -40499,6 +40799,7 @@
         "refPos": 155
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -40636,6 +40937,7 @@
         "refPos": 148
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -40759,6 +41061,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17897057",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -40882,6 +41185,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19083188",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41005,6 +41309,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19427372",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41128,6 +41433,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19483941",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41251,6 +41557,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23214436",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41388,6 +41695,7 @@
         "refPos": 156
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41511,6 +41819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29491496",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41648,6 +41957,7 @@
         "refPos": 151
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -41863,6 +42173,7 @@
         "refPos": 103
       }
     ],
+    "lengthOnRef": 99,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -41986,6 +42297,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23932205",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -42109,6 +42421,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24149813",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -42240,6 +42553,7 @@
         "refPos": 151
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -42371,6 +42685,7 @@
         "refPos": 134
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       28,
@@ -42494,6 +42809,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -42617,6 +42933,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -42784,6 +43101,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -42933,6 +43251,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -43118,6 +43437,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -43327,6 +43647,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -43542,6 +43863,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -43665,6 +43987,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15309776",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -43788,6 +44111,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15350539",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -43911,6 +44235,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17241271",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44034,6 +44359,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19687248",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44157,6 +44483,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20362361",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44280,6 +44607,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28067938",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44403,6 +44731,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28676889",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44546,6 +44875,7 @@
         "refPos": 73
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44695,6 +45025,7 @@
         "refPos": 90
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -44856,6 +45187,7 @@
         "refPos": 89
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -45023,6 +45355,7 @@
         "refPos": 109
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -45146,6 +45479,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1636136",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -45269,6 +45603,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3278371",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -45392,6 +45727,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3392236",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -45515,6 +45851,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6690334",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -45646,6 +45983,7 @@
         "refPos": 84
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -45769,6 +46107,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13772093",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -45900,6 +46239,7 @@
         "refPos": 162
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -46023,6 +46363,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15577802",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -46154,6 +46495,7 @@
         "refPos": 158
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -46285,6 +46627,7 @@
         "refPos": 162
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -46408,6 +46751,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16241777",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -46531,6 +46875,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22359834",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -46654,6 +46999,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25076320",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -46777,6 +47123,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26013356",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -46900,6 +47247,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29257811",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -47023,6 +47371,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29430375",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47146,6 +47495,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30148213",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47277,6 +47627,7 @@
         "refPos": 162
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47400,6 +47751,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18662066",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47523,6 +47875,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20134040",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47654,6 +48007,7 @@
         "refPos": 157
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47777,6 +48131,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22192818",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -47900,6 +48255,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23362845",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -48031,6 +48387,7 @@
         "refPos": 160
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -48154,6 +48511,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -48277,6 +48635,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -48400,6 +48759,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -48531,6 +48891,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -48654,6 +49015,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -48777,6 +49139,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -48900,6 +49263,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -49023,6 +49387,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30863885",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -49146,6 +49511,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31415192",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -49269,6 +49635,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6076202",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -49392,6 +49759,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6192585",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -49515,6 +49883,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9007991",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -49638,6 +50007,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12321086",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -49761,6 +50131,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20771747",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -49884,6 +50255,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21858348",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -50007,6 +50379,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22848365",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -50130,6 +50503,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25705771",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -50253,6 +50627,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12439940",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -50376,6 +50751,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14000986",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -50499,6 +50875,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16839733",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -50622,6 +50999,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17727634",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -50745,6 +51123,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19208569",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -50868,6 +51247,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22372328",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -50991,6 +51371,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23208723",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -51114,6 +51495,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24356433",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -51237,6 +51619,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33542765",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -51360,6 +51743,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2289739",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -51491,6 +51875,7 @@
         "refPos": 161
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -51614,6 +51999,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -51737,6 +52123,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -51860,6 +52247,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -51991,6 +52379,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -52114,6 +52503,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -52237,6 +52627,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -52360,6 +52751,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -52491,6 +52883,7 @@
         "refPos": 161
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -52622,6 +53015,7 @@
         "refPos": 161
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -52753,6 +53147,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -52884,6 +53279,7 @@
         "refPos": 164
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53015,6 +53411,7 @@
         "refPos": 166
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53188,6 +53585,7 @@
         "refPos": 127
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -53311,6 +53709,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2141529",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53434,6 +53833,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2320480",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53557,6 +53957,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4714421",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53680,6 +54081,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6640654",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53803,6 +54205,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7630109",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -53926,6 +54329,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9514930",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54049,6 +54453,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10004235",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54172,6 +54577,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10865454",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54295,6 +54701,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18372281",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54418,6 +54825,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25838513",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54541,6 +54949,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31254323",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54664,6 +55073,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32224907",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -54801,6 +55211,7 @@
         "refPos": 76
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -54924,6 +55335,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11752838",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55047,6 +55459,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11823969",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55170,6 +55583,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12673297",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55293,6 +55707,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12772245",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55416,6 +55831,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12968529",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55539,6 +55955,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13667706",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55662,6 +56079,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13723113",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55785,6 +56203,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17659493",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -55908,6 +56327,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18370296",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -56031,6 +56451,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -56174,6 +56595,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -56365,6 +56787,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -56514,6 +56937,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -56651,6 +57075,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -56800,6 +57225,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -56937,6 +57363,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -57104,6 +57531,7 @@
         "refPos": 143
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -57247,6 +57675,7 @@
         "refPos": 83
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -57384,6 +57813,7 @@
         "refPos": 60
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -57533,6 +57963,7 @@
         "refPos": 143
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -57656,6 +58087,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2292661",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -57779,6 +58211,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4943586",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -57902,6 +58335,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5569754",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -58033,6 +58467,7 @@
         "refPos": 168
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -58164,6 +58599,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -58295,6 +58731,7 @@
         "refPos": 160
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -58426,6 +58863,7 @@
         "refPos": 163
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -58611,6 +59049,7 @@
         "refPos": 175
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -58760,6 +59199,7 @@
         "refPos": 175
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -58891,6 +59331,7 @@
         "refPos": 166
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -59034,6 +59475,7 @@
         "refPos": 172
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -59165,6 +59607,7 @@
         "refPos": 174
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -59296,6 +59739,7 @@
         "refPos": 172
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       35,
@@ -59439,6 +59883,7 @@
         "refPos": 80
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -59570,6 +60015,7 @@
         "refPos": 170
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -59701,6 +60147,7 @@
         "refPos": 162
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -59832,6 +60279,7 @@
         "refPos": 172
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -59969,6 +60417,7 @@
         "refPos": 99
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -60118,6 +60567,7 @@
         "refPos": 86
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -60309,6 +60759,7 @@
         "refPos": 133
       }
     ],
+    "lengthOnRef": 97,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -60452,6 +60903,7 @@
         "refPos": 176
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -60631,6 +61083,7 @@
         "refPos": 178
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -60768,6 +61221,7 @@
         "refPos": 178
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -60899,6 +61353,7 @@
         "refPos": 174
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -61022,6 +61477,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -61145,6 +61601,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -61268,6 +61725,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -61399,6 +61857,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -61522,6 +61981,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -61645,6 +62105,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -61768,6 +62229,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -61905,6 +62367,7 @@
         "refPos": 97
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -62028,6 +62491,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2121410",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -62151,6 +62615,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6166783",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -62274,6 +62739,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7495357",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -62397,6 +62863,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11353312",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -62520,6 +62987,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15848524",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       22,
@@ -62643,6 +63111,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15965869",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -62766,6 +63235,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17210890",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       35,
@@ -62889,6 +63359,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17578845",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -63012,6 +63483,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21562505",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -63135,6 +63607,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30807379",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -63258,6 +63731,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32276242",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -63381,6 +63855,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33628207",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -63524,6 +63999,7 @@
         "refPos": 183
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -63691,6 +64167,7 @@
         "refPos": 141
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -63834,6 +64311,7 @@
         "refPos": 108
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -63977,6 +64455,7 @@
         "refPos": 127
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -64100,6 +64579,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3148788",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64223,6 +64703,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3974764",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64346,6 +64827,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5570044",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64469,6 +64951,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8437156",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64592,6 +65075,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12974063",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64715,6 +65199,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17247283",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64838,6 +65323,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17845387",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -64961,6 +65447,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19019558",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -65084,6 +65571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20644304",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -65207,6 +65695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29723571",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -65330,6 +65819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30710022",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -65453,6 +65943,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -65576,6 +66067,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -65699,6 +66191,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -65830,6 +66323,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -65953,6 +66447,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -66076,6 +66571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -66199,6 +66695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -66322,6 +66819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23419512",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -66471,6 +66969,7 @@
         "refPos": 186
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       28,
@@ -66594,6 +67093,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.256433",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -66749,6 +67249,7 @@
         "refPos": 189
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -66872,6 +67373,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4365613",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -66995,6 +67497,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6263627",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -67138,6 +67641,7 @@
         "refPos": 188
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -67261,6 +67765,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7161425",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -67384,6 +67889,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10403193",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       22,
@@ -67507,6 +68013,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14326039",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -67630,6 +68137,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16063981",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       22,
@@ -67753,6 +68261,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20404151",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -67876,6 +68385,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24289923",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -68007,6 +68517,7 @@
         "refPos": 189
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -68144,6 +68655,7 @@
         "refPos": 192
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -68267,6 +68779,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1294162",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -68390,6 +68903,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3687468",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -68513,6 +69027,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6194634",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -68636,6 +69151,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6316515",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -68759,6 +69275,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7638809",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -68882,6 +69399,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12817194",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -69005,6 +69523,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16588016",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -69128,6 +69647,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21115573",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -69251,6 +69771,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22487510",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -69374,6 +69895,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9644932",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       22,
@@ -69497,6 +70019,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12890063",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -69620,6 +70143,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16020961",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -69743,6 +70267,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28179307",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -69866,6 +70391,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -70009,6 +70535,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -70200,6 +70727,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -70349,6 +70877,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -70486,6 +71015,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -70635,6 +71165,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -70772,6 +71303,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -70915,6 +71447,7 @@
         "refPos": 192
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       24,
@@ -71038,6 +71571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14825713",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -71161,6 +71695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15608785",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -71284,6 +71819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29977405",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -71451,6 +71987,7 @@
         "refPos": 194
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -71588,6 +72125,7 @@
         "refPos": 198
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -71737,6 +72275,7 @@
         "refPos": 199
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       15,
@@ -71874,6 +72413,7 @@
         "refPos": 197
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -72029,6 +72569,7 @@
         "refPos": 190
       }
     ],
+    "lengthOnRef": 97,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -72166,6 +72707,7 @@
         "refPos": 104
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -72303,6 +72845,7 @@
         "refPos": 190
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -72446,6 +72989,7 @@
         "refPos": 143
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 12,
     "qualityScores": [
       2,
@@ -72625,6 +73169,7 @@
         "refPos": 165
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -72810,6 +73355,7 @@
         "refPos": 204
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       29,
@@ -72953,6 +73499,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -73108,6 +73655,7 @@
         "refPos": 137
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -73251,6 +73799,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -73424,6 +73973,7 @@
         "refPos": 137
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -73555,6 +74105,7 @@
         "refPos": 203
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -73686,6 +74237,7 @@
         "refPos": 191
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -73817,6 +74369,7 @@
         "refPos": 208
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -73948,6 +74501,7 @@
         "refPos": 210
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74079,6 +74633,7 @@
         "refPos": 209
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74210,6 +74765,7 @@
         "refPos": 167
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74341,6 +74897,7 @@
         "refPos": 169
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74508,6 +75065,7 @@
         "refPos": 210
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74639,6 +75197,7 @@
         "refPos": 117
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74806,6 +75365,7 @@
         "refPos": 208
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -74929,6 +75489,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -75052,6 +75613,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -75175,6 +75737,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -75306,6 +75869,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -75429,6 +75993,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -75552,6 +76117,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -75675,6 +76241,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -75798,6 +76365,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24595212",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -75921,6 +76489,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.802879",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76044,6 +76613,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9215590",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76167,6 +76737,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11995134",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76290,6 +76861,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12896561",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76413,6 +76985,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13357175",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -76536,6 +77109,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13460510",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76659,6 +77233,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21906116",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76782,6 +77357,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24138882",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -76905,6 +77481,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29591166",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -77028,6 +77605,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29698542",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -77151,6 +77729,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30439372",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -77294,6 +77873,7 @@
         "refPos": 212
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -77443,6 +78023,7 @@
         "refPos": 214
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -77580,6 +78161,7 @@
         "refPos": 207
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -77723,6 +78305,7 @@
         "refPos": 210
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -77854,6 +78437,7 @@
         "refPos": 216
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       33,
@@ -77985,6 +78569,7 @@
         "refPos": 215
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -78108,6 +78693,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.130110",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -78231,6 +78817,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.517273",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -78354,6 +78941,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2710794",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -78485,6 +79073,7 @@
         "refPos": 204
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -78616,6 +79205,7 @@
         "refPos": 191
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -78739,6 +79329,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16909890",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       32,
@@ -78862,6 +79453,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17985359",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -78985,6 +79577,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19193839",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       29,
@@ -79134,6 +79727,7 @@
         "refPos": 164
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -79257,6 +79851,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25333072",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -79388,6 +79983,7 @@
         "refPos": 214
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -79511,6 +80107,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4690010",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       26,
@@ -79654,6 +80251,7 @@
         "refPos": 212
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -79791,6 +80389,7 @@
         "refPos": 211
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -79914,6 +80513,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7269481",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -80037,6 +80637,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10010220",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -80160,6 +80761,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10563492",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -80283,6 +80885,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -80406,6 +81009,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -80573,6 +81177,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -80722,6 +81327,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -80907,6 +81513,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -81116,6 +81723,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -81331,6 +81939,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -81454,6 +82063,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26734455",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -81577,6 +82187,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26915421",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -81700,6 +82311,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32410121",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       25,
@@ -81855,6 +82467,7 @@
         "refPos": 151
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -81978,6 +82591,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33077092",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -82115,6 +82729,7 @@
         "refPos": 218
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -82276,6 +82891,7 @@
         "refPos": 215
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -82413,6 +83029,7 @@
         "refPos": 216
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -82574,6 +83191,7 @@
         "refPos": 214
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -82711,6 +83329,7 @@
         "refPos": 139
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -82834,6 +83453,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.473388",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -82957,6 +83577,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2502286",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83080,6 +83701,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5212583",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83203,6 +83825,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6106911",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83326,6 +83949,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7281918",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83449,6 +84073,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14025609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83572,6 +84197,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19641253",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83695,6 +84321,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20334733",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83818,6 +84445,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22745112",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -83941,6 +84569,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25556189",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -84150,6 +84779,7 @@
         "refPos": 223
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       23,
@@ -84273,6 +84903,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -84396,6 +85027,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -84563,6 +85195,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -84712,6 +85345,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -84897,6 +85531,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -85106,6 +85741,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -85321,6 +85957,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -85444,6 +86081,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15769247",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -85567,6 +86205,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16538618",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -85690,6 +86329,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18630353",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -85813,6 +86453,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21703645",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -85936,6 +86577,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24795092",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86059,6 +86701,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25084965",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86182,6 +86825,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30934637",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86305,6 +86949,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2924612",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86428,6 +87073,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3825439",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86551,6 +87197,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6176897",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86674,6 +87321,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6179290",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86797,6 +87445,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9176327",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -86920,6 +87569,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10096114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -87043,6 +87693,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12408086",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -87166,6 +87817,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6537766",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -87289,6 +87941,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7401229",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -87412,6 +88065,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8055414",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -87535,6 +88189,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11449581",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       22,
@@ -87658,6 +88313,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11762556",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -87781,6 +88437,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11780901",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -87904,6 +88561,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12246013",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -88027,6 +88685,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -88150,6 +88809,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -88273,6 +88933,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -88404,6 +89065,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -88527,6 +89189,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -88650,6 +89313,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -88773,6 +89437,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -88896,6 +89561,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23838269",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -89019,6 +89685,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24259901",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -89142,6 +89809,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26950543",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -89265,6 +89933,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28049981",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -89388,6 +90057,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28919001",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -89511,6 +90181,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29600181",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -89634,6 +90305,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29907490",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -89757,6 +90429,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31111380",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -89880,6 +90553,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1774013",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -90003,6 +90677,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1966631",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -90126,6 +90801,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3893380",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -90249,6 +90925,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4975116",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -90372,6 +91049,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5530338",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -90495,6 +91173,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6465879",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -90618,6 +91297,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30476269",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -90755,6 +91435,7 @@
         "refPos": 149
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -90886,6 +91567,7 @@
         "refPos": 208
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -91059,6 +91741,7 @@
         "refPos": 162
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -91220,6 +91903,7 @@
         "refPos": 157
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -91343,6 +92027,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3937302",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -91466,6 +92151,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4086234",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -91645,6 +92331,7 @@
         "refPos": 229
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -91768,6 +92455,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8295829",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -91891,6 +92579,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.10871940",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92034,6 +92723,7 @@
         "refPos": 229
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92157,6 +92847,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13775982",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92280,6 +92971,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15558825",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92403,6 +93095,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16058509",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92526,6 +93219,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19900294",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92649,6 +93343,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19995334",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92772,6 +93467,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21017432",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -92895,6 +93591,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21103370",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -93018,6 +93715,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23568099",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -93141,6 +93839,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24833775",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -93264,6 +93963,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24981819",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -93449,6 +94149,7 @@
         "refPos": 228
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -93572,6 +94273,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27660620",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -93695,6 +94397,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28071689",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -93910,6 +94613,7 @@
         "refPos": 229
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -94033,6 +94737,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29809470",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -94156,6 +94861,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32683144",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -94293,6 +94999,7 @@
         "refPos": 137
       }
     ],
+    "lengthOnRef": 93,
     "mappingQuality": 0,
     "qualityScores": [
       31,
@@ -94416,6 +95123,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24464037",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -94547,6 +95255,7 @@
         "refPos": 203
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -94678,6 +95387,7 @@
         "refPos": 220
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -94809,6 +95519,7 @@
         "refPos": 186
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -94940,6 +95651,7 @@
         "refPos": 141
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -95071,6 +95783,7 @@
         "refPos": 210
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -95202,6 +95915,7 @@
         "refPos": 228
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -95339,6 +96053,7 @@
         "refPos": 226
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -95462,6 +96177,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5258355",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -95585,6 +96301,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8335531",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -95708,6 +96425,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8716276",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -95831,6 +96549,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12206123",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -95954,6 +96673,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12489919",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96077,6 +96797,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13431089",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96200,6 +96921,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14308521",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -96323,6 +97045,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17911869",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96446,6 +97169,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20279099",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96569,6 +97293,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23138089",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96692,6 +97417,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26803411",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96815,6 +97541,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29004521",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -96938,6 +97665,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32891184",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -97069,6 +97797,7 @@
         "refPos": 207
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -97206,6 +97935,7 @@
         "refPos": 144
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -97373,6 +98103,7 @@
         "refPos": 172
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -97522,6 +98253,7 @@
         "refPos": 154
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -97671,6 +98403,7 @@
         "refPos": 157
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -97826,6 +98559,7 @@
         "refPos": 174
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -97949,6 +98683,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5592165",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -98072,6 +98807,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -98195,6 +98931,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -98318,6 +99055,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -98449,6 +99187,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -98572,6 +99311,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -98695,6 +99435,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -98818,6 +99559,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -98991,6 +99733,7 @@
         "refPos": 231
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99114,6 +99857,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18815469",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99237,6 +99981,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27796237",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99360,6 +100105,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.28919583",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99483,6 +100229,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33072912",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99606,6 +100353,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4862525",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99729,6 +100477,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5774599",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99852,6 +100601,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13990332",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -99975,6 +100725,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17419760",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100098,6 +100849,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18859867",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100221,6 +100973,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.21031614",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100370,6 +101123,7 @@
         "refPos": 227
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100493,6 +101247,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27352984",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100616,6 +101371,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29049315",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100739,6 +101495,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29523788",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100862,6 +101619,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29752320",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -100985,6 +101743,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.32757960",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -101108,6 +101867,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1606697",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -101231,6 +101991,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8349937",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       28,
@@ -101354,6 +102115,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9584086",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -101477,6 +102239,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11776349",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       29,
@@ -101600,6 +102363,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13993215",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -101723,6 +102487,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15429543",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -101846,6 +102611,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16332923",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -101969,6 +102735,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19312133",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -102092,6 +102859,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19757045",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -102215,6 +102983,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22962457",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -102338,6 +103107,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23337581",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -102461,6 +103231,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -102584,6 +103355,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -102751,6 +103523,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -102900,6 +103673,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -103085,6 +103859,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -103294,6 +104069,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -103509,6 +104285,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -103640,6 +104417,7 @@
         "refPos": 235
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -103771,6 +104549,7 @@
         "refPos": 238
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -103902,6 +104681,7 @@
         "refPos": 175
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -104033,6 +104813,7 @@
         "refPos": 232
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -104164,6 +104945,7 @@
         "refPos": 194
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -104325,6 +105107,7 @@
         "refPos": 238
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -104540,6 +105323,7 @@
         "refPos": 240
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       27,
@@ -104663,6 +105447,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2772417",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       26,
@@ -104786,6 +105571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5292931",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -104923,6 +105709,7 @@
         "refPos": 160
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105046,6 +105833,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9438236",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105169,6 +105957,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12004249",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105330,6 +106119,7 @@
         "refPos": 167
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105479,6 +106269,7 @@
         "refPos": 150
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105628,6 +106419,7 @@
         "refPos": 153
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105751,6 +106543,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30379033",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -105888,6 +106681,7 @@
         "refPos": 164
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -106011,6 +106805,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.24902099",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -106134,6 +106929,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.26130664",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -106265,6 +107061,7 @@
         "refPos": 212
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -106420,6 +107217,7 @@
         "refPos": 180
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -106557,6 +107355,7 @@
         "refPos": 157
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -106688,6 +107487,7 @@
         "refPos": 234
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -106819,6 +107619,7 @@
         "refPos": 245
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -106942,6 +107743,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.407652",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       28,
@@ -107065,6 +107867,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.688364",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -107188,6 +107991,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2431093",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       32,
@@ -107311,6 +108115,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5178538",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -107434,6 +108239,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -107557,6 +108363,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -107724,6 +108531,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -107873,6 +108681,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -108058,6 +108867,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -108267,6 +109077,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -108482,6 +109293,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -108605,6 +109417,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12944530",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -108728,6 +109541,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16589531",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -108851,6 +109665,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18257016",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -108974,6 +109789,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18782999",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -109097,6 +109913,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20251224",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -109220,6 +110037,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22643473",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -109343,6 +110161,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25014137",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -109466,6 +110285,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.31537660",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -109597,6 +110417,7 @@
         "refPos": 246
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -109728,6 +110549,7 @@
         "refPos": 246
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -109859,6 +110681,7 @@
         "refPos": 236
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -109990,6 +110813,7 @@
         "refPos": 238
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -110121,6 +110945,7 @@
         "refPos": 246
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -110244,6 +111069,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.48058",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -110489,6 +111315,7 @@
         "refPos": 243
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -110612,6 +111439,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3150532",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -110743,6 +111571,7 @@
         "refPos": 241
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -110866,6 +111695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11019398",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -110989,6 +111819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17181327",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -111112,6 +111943,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25129514",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       20,
@@ -111235,6 +112067,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25458268",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -111366,6 +112199,7 @@
         "refPos": 246
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -111489,6 +112323,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.30860653",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -111612,6 +112447,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33188453",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -111735,6 +112571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.165033",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -111858,6 +112695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.428236",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -111981,6 +112819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1914256",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -112104,6 +112943,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4115644",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -112227,6 +113067,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -112350,6 +113191,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -112473,6 +113315,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -112604,6 +113447,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -112727,6 +113571,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -112850,6 +113695,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -112973,6 +113819,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -113096,6 +113943,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11799834",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113219,6 +114067,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12271991",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113342,6 +114191,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13100135",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113465,6 +114315,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13252530",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113588,6 +114439,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14011507",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113711,6 +114563,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14302244",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113834,6 +114687,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14496699",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -113957,6 +114811,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15166843",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114080,6 +114935,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15822909",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114203,6 +115059,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16263688",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114326,6 +115183,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18384187",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114449,6 +115307,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18577103",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114572,6 +115431,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19188617",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114695,6 +115555,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.19522689",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114818,6 +115679,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22784325",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -114941,6 +115803,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23133897",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -115064,6 +115927,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23202943",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -115187,6 +116051,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25064051",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -115310,6 +116175,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29443750",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -115433,6 +116299,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.29935780",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -115556,6 +116423,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1999503",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -115679,6 +116547,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2979717",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -115802,6 +116671,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3631589",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -115925,6 +116795,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3971739",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -116048,6 +116919,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4002088",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -116171,6 +117043,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4609375",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -116344,6 +117217,7 @@
         "refPos": 193
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -116467,6 +117341,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.5504153",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -116590,6 +117465,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20870114",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -116733,6 +117609,7 @@
         "refPos": 24
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -116924,6 +117801,7 @@
         "refPos": 112
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -117073,6 +117951,7 @@
         "refPos": 26
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -117210,6 +118089,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -117359,6 +118239,7 @@
         "refPos": 30
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -117496,6 +118377,7 @@
         "refPos": 22
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 17,
     "qualityScores": [
       2,
@@ -117619,6 +118501,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18015619",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -117798,6 +118681,7 @@
         "refPos": 246
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -117921,6 +118805,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20590323",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -118044,6 +118929,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20608417",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -118167,6 +119053,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22033859",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -118316,6 +119203,7 @@
         "refPos": 205
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -118439,6 +119327,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33177643",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -118562,6 +119451,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.33572049",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -118711,6 +119601,7 @@
         "refPos": 250
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -118872,6 +119763,7 @@
         "refPos": 160
       }
     ],
+    "lengthOnRef": 97,
     "mappingQuality": 0,
     "qualityScores": [
       33,
@@ -119015,6 +119907,7 @@
         "refPos": 167
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -119170,6 +120063,7 @@
         "refPos": 201
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -119319,6 +120213,7 @@
         "refPos": 163
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -119474,6 +120369,7 @@
         "refPos": 174
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -119605,6 +120501,7 @@
         "refPos": 232
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -119736,6 +120633,7 @@
         "refPos": 241
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -119873,6 +120771,7 @@
         "refPos": 251
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -120034,6 +120933,7 @@
         "refPos": 163
       }
     ],
+    "lengthOnRef": 95,
     "mappingQuality": 0,
     "qualityScores": [
       31,
@@ -120177,6 +121077,7 @@
         "refPos": 163
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -120308,6 +121209,7 @@
         "refPos": 160
       }
     ],
+    "lengthOnRef": 101,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -120457,6 +121359,7 @@
         "refPos": 254
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 6,
     "qualityScores": [
       34,
@@ -120600,6 +121503,7 @@
         "refPos": 251
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 6,
     "qualityScores": [
       34,
@@ -120785,6 +121689,7 @@
         "refPos": 193
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -120940,6 +121845,7 @@
         "refPos": 169
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -121089,6 +121995,7 @@
         "refPos": 173
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -121292,6 +122199,7 @@
         "refPos": 202
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -121495,6 +122403,7 @@
         "refPos": 170
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -121638,6 +122547,7 @@
         "refPos": 255
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -121761,6 +122671,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -121884,6 +122795,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -122051,6 +122963,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -122200,6 +123113,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -122385,6 +123299,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -122594,6 +123509,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -122809,6 +123725,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -122932,6 +123849,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.12944530",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -123055,6 +123973,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16589531",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -123178,6 +124097,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18257016",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -123301,6 +124221,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18782999",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -123424,6 +124345,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20251224",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -123547,6 +124469,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.22643473",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -123670,6 +124593,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.25014137",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       30,
@@ -123801,6 +124725,7 @@
         "refPos": 250
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -123932,6 +124857,7 @@
         "refPos": 162
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       0,
@@ -124055,6 +124981,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.16420564",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -124178,6 +125105,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23326095",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -124301,6 +125229,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.2175236",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -124424,6 +125353,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4460513",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -124547,6 +125477,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4608863",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       32,
@@ -124684,6 +125615,7 @@
         "refPos": 172
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -124807,6 +125739,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11454800",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -124930,6 +125863,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13165871",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       31,
@@ -125053,6 +125987,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.13431202",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -125176,6 +126111,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27063479",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -125307,6 +126243,7 @@
         "refPos": 245
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -125438,6 +126375,7 @@
         "refPos": 239
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -125575,6 +126513,7 @@
         "refPos": 262
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -125706,6 +126645,7 @@
         "refPos": 252
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -125843,6 +126783,7 @@
         "refPos": 262
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -125986,6 +126927,7 @@
         "refPos": 196
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -126231,6 +127173,7 @@
         "refPos": 223
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -126368,6 +127311,7 @@
         "refPos": 264
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -126505,6 +127449,7 @@
         "refPos": 264
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -126628,6 +127573,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.17740346",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -126751,6 +127697,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.20174994",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -126918,6 +127865,7 @@
         "refPos": 116
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -127067,6 +128015,7 @@
         "refPos": 34
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -127252,6 +128201,7 @@
         "refPos": 124
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -127461,6 +128411,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -127676,6 +128627,7 @@
         "refPos": 123
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       34,
@@ -127819,6 +128771,7 @@
         "refPos": 180
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -127942,6 +128895,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7918028",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -128073,6 +129027,7 @@
         "refPos": 266
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -128196,6 +129151,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23263331",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -128319,6 +129275,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1428659",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -128442,6 +129399,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9270489",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -128565,6 +129523,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9538669",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -128688,6 +129647,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14022899",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -128811,6 +129771,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.15525407",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -128934,6 +129895,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18387934",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -129057,6 +130019,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.27778447",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -129200,6 +130163,7 @@
         "refPos": 268
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -129349,6 +130313,7 @@
         "refPos": 268
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -129498,6 +130463,7 @@
         "refPos": 267
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       23,
@@ -129665,6 +130631,7 @@
         "refPos": 268
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -129814,6 +130781,7 @@
         "refPos": 269
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -129993,6 +130961,7 @@
         "refPos": 269
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -130172,6 +131141,7 @@
         "refPos": 268
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -130309,6 +131279,7 @@
         "refPos": 264
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -130446,6 +131417,7 @@
         "refPos": 266
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -130679,6 +131651,7 @@
         "refPos": 260
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 0,
     "qualityScores": [
       2,
@@ -130840,6 +131813,7 @@
         "refPos": 214
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -130963,6 +131937,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.1242089",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       32,
@@ -131086,6 +132061,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.3872193",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -131209,6 +132185,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.14566073",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -131332,6 +132309,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18391952",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -131455,6 +132433,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.18719419",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -131578,6 +132557,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.23668023",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -131701,6 +132681,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4643729",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -131824,6 +132805,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6133344",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -131947,6 +132929,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6927609",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -132078,6 +133061,7 @@
         "refPos": 68
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -132201,6 +133185,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8362231",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       18,
@@ -132324,6 +133309,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.9016128",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -132447,6 +133433,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.11434451",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -132626,6 +133613,7 @@
         "refPos": 273
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -132763,6 +133751,7 @@
         "refPos": 271
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -132900,6 +133889,7 @@
         "refPos": 184
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -133067,6 +134057,7 @@
         "refPos": 203
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -133246,6 +134237,7 @@
         "refPos": 264
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -133395,6 +134387,7 @@
         "refPos": 187
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       2,
@@ -133532,6 +134525,7 @@
         "refPos": 274
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -133655,6 +134649,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.4089390",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -133778,6 +134773,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6149508",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -133901,6 +134897,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.6618950",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -134024,6 +135021,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.7246333",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -134179,6 +135177,7 @@
         "refPos": 276
       }
     ],
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,
@@ -134302,6 +135301,7 @@
     "readGroupId": -1,
     "readName": "SRR065390.8986893",
     "templateSize": 0,
+    "lengthOnRef": 100,
     "mappingQuality": 1,
     "qualityScores": [
       34,

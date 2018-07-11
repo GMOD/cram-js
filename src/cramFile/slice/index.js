@@ -253,7 +253,7 @@ class CramSlice {
         const compressionScheme = await this.container.getCompressionScheme()
         const refStart = records[0].alignmentStart
         const lastRecord = records[records.length - 1]
-        const refEnd = lastRecord.alignmentStart + lastRecord.lengthOnRef() - 1
+        const refEnd = lastRecord.alignmentStart + lastRecord.lengthOnRef - 1
         const seq = await this.file.fetchReferenceSequenceCallback(
           sliceHeader.content.refSeqId,
           refStart,

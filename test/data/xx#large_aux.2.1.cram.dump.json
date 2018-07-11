@@ -16011,6 +16011,7 @@
             "readGroupId": -1,
             "readName": "a1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -16547,6 +16548,7 @@
             "readGroupId": -1,
             "readName": "a2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -16574,6 +16576,7 @@
             "readGroupId": -1,
             "readName": "b1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -32538,6 +32541,7 @@
             "readGroupId": -1,
             "readName": "a1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -33074,6 +33078,7 @@
             "readGroupId": -1,
             "readName": "a2",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               255,
@@ -33101,6 +33106,7 @@
             "readGroupId": -1,
             "readName": "b1",
             "templateSize": 0,
+            "lengthOnRef": 10,
             "mappingQuality": 1,
             "qualityScores": [
               255,

@@ -12,6 +12,7 @@
     "readGroupId": -1,
     "readName": "A0",
     "templateSize": 0,
+    "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
     "uniqueId": 3
@@ -29,6 +30,7 @@
     "readGroupId": -1,
     "readName": "A1",
     "templateSize": 0,
+    "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
     "uniqueId": 4
@@ -46,6 +48,7 @@
     "readGroupId": -1,
     "readName": "A2",
     "templateSize": 0,
+    "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
     "uniqueId": 5
@@ -63,6 +66,7 @@
     "readGroupId": -1,
     "readName": "A3",
     "templateSize": 0,
+    "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
     "uniqueId": 6
@@ -80,6 +84,7 @@
     "readGroupId": -1,
     "readName": "A4",
     "templateSize": 0,
+    "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
     "uniqueId": 7
