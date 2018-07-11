@@ -5,7 +5,7 @@ const CramFile = require('./cramFile')
 class IndexedCramFile {
   /**
    *
-   * @param {*} args
+   * @param {object} args
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
    * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
@@ -38,9 +38,10 @@ class IndexedCramFile {
 
   /**
    *
-   * @param {string|number} seq string or numeric ID of the reference sequence
-   * @param {number} start
-   * @param {number} end
+   * @param {number} seq numeric ID of the reference sequence
+   * @param {number} start start of the range of interest. 1-based closed coordinates.
+   * @param {number} end end of the range of interest. 1-based closed coordinates.
+   * @returns {Promise[Array[CramRecord]]}
    */
   async getFeaturesForRange(seq, start, end) {
     if (typeof seq === 'string')
@@ -55,11 +56,6 @@ class IndexedCramFile {
       throw new CramSizeLimitError(
         `data size of ${totalSize.toLocaleString()} bytes exceeded fetch size limit of ${this.fetchSizeLimit.toLocaleString()} bytes`,
       )
-    // console.log(
-    //   `fetching ${
-    //     slices.length
-    //   } slices for ${seq}:${start}..${end}, total size ${totalSize}`,
-    // )
 
     // TODO: do we need to merge or de-duplicate the blocks?
 
@@ -90,7 +86,7 @@ class IndexedCramFile {
   /**
    *
    * @param {number} seqId
-   * @returns {Promise[boolean]} true if the CRAM file contains data for the given
+   * @returns {Promise} true if the CRAM file contains data for the given
    * reference sequence numerical ID
    */
   hasDataForReferenceSequence(seqId) {

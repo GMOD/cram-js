@@ -8,7 +8,7 @@ const {
 } = require('./lib/util')
 const { IndexedCramFile } = require('../src/index')
 const IndexedFastaFile = require('./lib/fasta/indexedFasta')
-const CramIndex = require('../src/cramIndex')
+const CraiIndex = require('../src/craiIndex')
 
 const REWRITE_EXPECTED_DATA = false
 
@@ -16,7 +16,7 @@ describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('ce#tag_padded.tmp.cram'),
-      index: new CramIndex({
+      index: new CraiIndex({
         filehandle: testDataFile('ce#tag_padded.tmp.cram.crai'),
       }),
     })
@@ -43,7 +43,7 @@ describe('.crai indexed cram file', () => {
   it('can read ce#unmap2.tmp.cram', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('ce#unmap2.tmp.cram'),
-      index: new CramIndex({
+      index: new CraiIndex({
         filehandle: testDataFile('ce#unmap2.tmp.cram.crai'),
       }),
     })
@@ -64,7 +64,7 @@ describe('.crai indexed cram file', () => {
   it('can read ce#1000.tmp.cram', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('ce#1000.tmp.cram'),
-      index: new CramIndex({
+      index: new CraiIndex({
         filehandle: testDataFile('ce#1000.tmp.cram.crai'),
       }),
     })
@@ -86,7 +86,7 @@ describe('.crai indexed cram file', () => {
       cramFilehandle: testDataFile(
         'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram',
       ),
-      index: new CramIndex({
+      index: new CraiIndex({
         filehandle: testDataFile(
           'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
         ),
@@ -158,7 +158,7 @@ describe('.crai indexed cram file', () => {
     it(`can read the first chrom of ${filename} without error`, async () => {
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile(filename),
-        index: new CramIndex({ filehandle: testDataFile(`${filename}.crai`) }),
+        index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
       })
 
       const features = await cram.getFeaturesForRange(0, 0, Infinity)
@@ -176,7 +176,7 @@ describe('.crai indexed cram file', () => {
     it(`can read the second chrom of ${filename} without error`, async () => {
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile(filename),
-        index: new CramIndex({ filehandle: testDataFile(`${filename}.crai`) }),
+        index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
       })
 
       const features = await cram.getFeaturesForRange(1, 0, Infinity)
@@ -202,7 +202,7 @@ describe('.crai indexed cram file', () => {
       })
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile('extended/RNAseq_mapping_def.cram'),
-        index: new CramIndex({
+        index: new CraiIndex({
           filehandle: testDataFile('extended/RNAseq_mapping_def.cram.crai'),
         }),
         // seqFetch: fasta.fetch.bind(fasta),

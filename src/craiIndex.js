@@ -6,7 +6,7 @@ const gunzip = promisify(zlib.gunzip)
 const { open } = require('./io')
 const { CramMalformedError } = require('./errors')
 
-class CramIndex {
+class CraiIndex {
   // A CRAM index (.crai) is a gzipped tab delimited file containing the following columns:
   // 1. Sequence id
   // 2. Alignment start
@@ -148,4 +148,4 @@ class CramIndex {
   }
 }
 
-module.exports = CramIndex
+module.exports = CraiIndex

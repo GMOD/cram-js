@@ -126,10 +126,13 @@ class CramRecord {
    * annotates this feature with the given reference region.
    * right now, this only uses the reference sequence to decode
    * which bases are being substituted in base substitution features.
+   *
+   * @param {object} refRegion
    * @param {number} refRegion.start
    * @param {number} refRegion.end
    * @param {string} refRegion.seq
    * @param {CramContainerCompressionScheme} compressionScheme
+   * @returns nothing
    */
   addReferenceSequence(refRegion, compressionScheme) {
     if (this.readFeatures) {

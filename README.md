@@ -146,8 +146,13 @@ which bases are being substituted in base substitution features.
 
 **Parameters**
 
--   `refRegion`  
+-   `refRegion` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+    -   `refRegion.start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+    -   `refRegion.end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+    -   `refRegion.seq` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `compressionScheme` **CramContainerCompressionScheme** 
+
+Returns **any** nothing
 
 ### IndexedCramFile
 
@@ -163,7 +168,7 @@ which bases are being substituted in base substitution features.
 
 **Parameters**
 
--   `args` **any** 
+-   `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
     -   `args.cram` **CramFile** 
     -   `args.index` **Index-like** object that supports getEntriesForRange(seqId,start,end) -> Promise\[Array[index entries]]
     -   `args.cacheSize` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of CRAM records to cache.  default 20,000
@@ -175,15 +180,18 @@ which bases are being substituted in base substitution features.
 
 **Parameters**
 
--   `seq` **([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String) \| [number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number))** string or numeric ID of the reference sequence
--   `start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
--   `end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+-   `seq` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** numeric ID of the reference sequence
+-   `start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** start of the range of interest. 1-based closed coordinates.
+-   `end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** end of the range of interest. 1-based closed coordinates.
 
 #### hasDataForReferenceSequence
 
 **Parameters**
 
 -   `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
+
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** true if the CRAM file contains data for the given
+reference sequence numerical ID
 
 ### CramFile
 
