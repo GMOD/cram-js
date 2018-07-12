@@ -33,10 +33,17 @@ try {
   )
 }
 
+const REWRITE_EXPECTED_DATA =
+  typeof process !== 'undefined' &&
+  process.env.CRAMJS_REWRITE_EXPECTED_DATA &&
+  process.env.CRAMJS_REWRITE_EXPECTED_DATA !== '0' &&
+  process.env.CRAMJS_REWRITE_EXPECTED_DATA !== 'false'
+
 module.exports = {
   testDataUrl,
   testDataFile,
   loadTestJSON,
   extended,
   JsonClone,
+  REWRITE_EXPECTED_DATA,
 }

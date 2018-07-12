@@ -115,8 +115,7 @@ xx#unsorted.tmp.cram
 `
   .split(/\s+/)
   .filter(f => !!f)
-  //.filter(f => /cram_with_crai_index.cram/.test(f))
-// .filter(f => /ce#1.2.1.cram/.test(f))
+  //.filter(f => /xx#repeated/.test(f))
 
 module.exports = {
   allFiles,

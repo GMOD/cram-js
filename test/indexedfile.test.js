@@ -5,12 +5,11 @@ const {
   loadTestJSON,
   extended,
   JsonClone,
+  REWRITE_EXPECTED_DATA,
 } = require('./lib/util')
 const { IndexedCramFile } = require('../src/index')
 const IndexedFastaFile = require('./lib/fasta/indexedFasta')
 const CraiIndex = require('../src/craiIndex')
-
-const REWRITE_EXPECTED_DATA = false
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {

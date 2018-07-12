@@ -1,11 +1,13 @@
 const { expect } = require('chai')
 const { fullFiles: testFileList } = require('./lib/testFileList')
-const { testDataFile, loadTestJSON } = require('./lib/util')
+const {
+  testDataFile,
+  loadTestJSON,
+  REWRITE_EXPECTED_DATA,
+} = require('./lib/util')
 const { dumpWholeFile } = require('./lib/dumpFile')
 const { CramFile } = require('../src/index')
 const { FetchableSmallFasta } = require('./lib/fasta')
-
-const REWRITE_EXPECTED_DATA = false
 
 describe('dumping cram files', () => {
   testFileList.forEach(filename => {
