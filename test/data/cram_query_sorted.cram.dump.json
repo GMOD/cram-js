@@ -679,7 +679,7 @@
             "readName": "both_reads_align_clip_adapter",
             "mate": {
               "flags": 1,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 16
             },
             "templateSize": 96,
@@ -1331,7 +1331,7 @@
             "readName": "both_reads_align_clip_adapter",
             "mate": {
               "flags": 0,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 21
             },
             "templateSize": -96,
@@ -1947,7 +1947,7 @@
             "readName": "both_reads_align_clip_marked",
             "mate": {
               "flags": 0,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 302
             },
             "templateSize": 201,
@@ -2197,7 +2197,7 @@
             "readName": "both_reads_align_clip_marked",
             "mate": {
               "flags": 1,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 1
             },
             "templateSize": -201,
@@ -2771,7 +2771,7 @@
             "readName": "both_reads_present_only_first_aligns",
             "mate": {
               "flags": 2,
-              "sequenceID": -1,
+              "sequenceId": -1,
               "alignmentStart": 0
             },
             "templateSize": 0,
@@ -3385,7 +3385,7 @@
             "readName": "both_reads_present_only_first_aligns",
             "mate": {
               "flags": 1,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 1
             },
             "templateSize": 0,
@@ -3953,7 +3953,7 @@
             "readName": "read_2_too_many_gaps",
             "mate": {
               "flags": 0,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 302
             },
             "templateSize": 201,
@@ -4203,7 +4203,7 @@
             "readName": "read_2_too_many_gaps",
             "mate": {
               "flags": 1,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 1
             },
             "templateSize": -201,
@@ -5260,7 +5260,7 @@
             "readName": "read_2_too_many_gaps",
             "mate": {
               "flags": 0,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 302
             },
             "templateSize": 201,
@@ -5510,7 +5510,7 @@
             "readName": "read_2_too_many_gaps",
             "mate": {
               "flags": 1,
-              "sequenceID": 6,
+              "sequenceId": 6,
               "alignmentStart": 1
             },
             "templateSize": -201,

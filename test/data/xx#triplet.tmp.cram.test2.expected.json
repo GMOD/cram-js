@@ -10,7 +10,7 @@
     "readName": "a1",
     "mate": {
       "flags": 0,
-      "sequenceID": 0,
+      "sequenceId": 0,
       "alignmentStart": 6
     },
     "templateSize": 20,
@@ -41,7 +41,7 @@
     "readName": "a1",
     "mate": {
       "flags": 1,
-      "sequenceID": 0,
+      "sequenceId": 0,
       "alignmentStart": 11
     },
     "templateSize": -20,
@@ -72,7 +72,7 @@
     "readName": "a1",
     "mate": {
       "flags": 0,
-      "sequenceID": 0,
+      "sequenceId": 0,
       "alignmentStart": 1
     },
     "templateSize": -20,

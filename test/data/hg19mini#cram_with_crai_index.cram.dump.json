@@ -642,7 +642,7 @@
             "readName": "97",
             "mate": {
               "flags": 1,
-              "sequenceID": 0,
+              "sequenceId": 0,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -1349,7 +1349,7 @@
             "readName": "98",
             "mate": {
               "flags": 1,
-              "sequenceID": 0,
+              "sequenceId": 0,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -2056,7 +2056,7 @@
             "readName": "99",
             "mate": {
               "flags": 1,
-              "sequenceID": 0,
+              "sequenceId": 0,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -2763,7 +2763,7 @@
             "readName": "100",
             "mate": {
               "flags": 1,
-              "sequenceID": 0,
+              "sequenceId": 0,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -3470,7 +3470,7 @@
             "readName": "101",
             "mate": {
               "flags": 1,
-              "sequenceID": 0,
+              "sequenceId": 0,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -4666,7 +4666,7 @@
             "readName": "102",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -5373,7 +5373,7 @@
             "readName": "103",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -6080,7 +6080,7 @@
             "readName": "104",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -7274,7 +7274,7 @@
             "readName": "105",
             "mate": {
               "flags": 1,
-              "sequenceID": 2,
+              "sequenceId": 2,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -7981,7 +7981,7 @@
             "readName": "106",
             "mate": {
               "flags": 1,
-              "sequenceID": 2,
+              "sequenceId": 2,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -9173,7 +9173,7 @@
             "readName": "107",
             "mate": {
               "flags": 1,
-              "sequenceID": 3,
+              "sequenceId": 3,
               "alignmentStart": 255
             },
             "templateSize": -130,
@@ -10365,7 +10365,7 @@
             "readName": "107",
             "mate": {
               "flags": 1,
-              "sequenceID": 3,
+              "sequenceId": 3,
               "alignmentStart": 255
             },
             "templateSize": -130,

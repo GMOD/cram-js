@@ -189,9 +189,9 @@ function decodeRecord(
     mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded)
       cramRecord.mate.readName = decodeDataSeries('RN') // new String(readNameCodec.readData(), charset)
-    mate.sequenceID = decodeDataSeries('NS')
+    mate.sequenceId = decodeDataSeries('NS')
     mate.alignmentStart = decodeDataSeries('NP')
-    if (mate.flags || mate.sequenceID > -1) cramRecord.mate = mate
+    if (mate.flags || mate.sequenceId > -1) cramRecord.mate = mate
     cramRecord.templateSize = decodeDataSeries('TS')
     // detachedCount++
   } else if (cramRecord.hasMateDownStream()) {
@@ -253,7 +253,7 @@ function decodeRecord(
     if (Number.isNaN(lengthOnRef)) {
       console.warn(
         `${cramRecord.readName ||
-          `${cramRecord.sequenceID}:${
+          `${cramRecord.sequenceId}:${
             cramRecord.alignmentStart
           }`} record has invalid read features`,
       )

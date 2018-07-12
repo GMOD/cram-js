@@ -504,7 +504,7 @@
             "readName": "supp",
             "mate": {
               "flags": 1,
-              "sequenceID": -1,
+              "sequenceId": -1,
               "alignmentStart": 0
             },
             "templateSize": 0,
@@ -633,7 +633,7 @@
             "readName": "supp",
             "mate": {
               "flags": 1,
-              "sequenceID": -1,
+              "sequenceId": -1,
               "alignmentStart": 0
             },
             "templateSize": 0,
@@ -1296,7 +1296,7 @@
             "readName": "supp",
             "mate": {
               "flags": 1,
-              "sequenceID": -1,
+              "sequenceId": -1,
               "alignmentStart": 0
             },
             "templateSize": 0,
@@ -1425,7 +1425,7 @@
             "readName": "supp",
             "mate": {
               "flags": 1,
-              "sequenceID": -1,
+              "sequenceId": -1,
               "alignmentStart": 0
             },
             "templateSize": 0,

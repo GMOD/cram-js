@@ -1368,7 +1368,7 @@
             "readName": "y3",
             "mate": {
               "flags": 0,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 10
             },
             "templateSize": -2,
@@ -1394,7 +1394,7 @@
             "readName": "y3",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 7
             },
             "templateSize": 2,
@@ -1420,7 +1420,7 @@
             "readName": "y4",
             "mate": {
               "flags": 0,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 16
             },
             "templateSize": 10,
@@ -1446,7 +1446,7 @@
             "readName": "y4",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 1
             },
             "templateSize": -10,
@@ -1961,7 +1961,7 @@
             "readName": "y3",
             "mate": {
               "flags": 0,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 10
             },
             "templateSize": -2,
@@ -1987,7 +1987,7 @@
             "readName": "y3",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 7
             },
             "templateSize": 2,
@@ -2013,7 +2013,7 @@
             "readName": "y4",
             "mate": {
               "flags": 0,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 16
             },
             "templateSize": 10,
@@ -2039,7 +2039,7 @@
             "readName": "y4",
             "mate": {
               "flags": 1,
-              "sequenceID": 1,
+              "sequenceId": 1,
               "alignmentStart": 1
             },
             "templateSize": -10,
