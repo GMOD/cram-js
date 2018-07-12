@@ -9,7 +9,7 @@ class IndexedCramFile {
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
    * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
-   * @param {number} [args.fetchSizeLimit] optional maximum number of bytes to fetch in a single getFeaturesForRange call.  Default 3 MiB.
+   * @param {number} [args.fetchSizeLimit] optional maximum number of bytes to fetch in a single getRecordsForRange call.  Default 3 MiB.
    * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
    * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
    */
@@ -43,7 +43,7 @@ class IndexedCramFile {
    * @param {number} end end of the range of interest. 1-based closed coordinates.
    * @returns {Promise[Array[CramRecord]]}
    */
-  async getFeaturesForRange(seq, start, end) {
+  async getRecordsForRange(seq, start, end) {
     if (typeof seq === 'string')
       // TODO: support string reference sequence names somehow
       throw new CramUnimplementedError(
@@ -68,13 +68,13 @@ class IndexedCramFile {
       )
     }
     const sliceResults = await Promise.all(
-      slices.map(slice => this.getFeaturesInSlice(slice, filter)),
+      slices.map(slice => this.getRecordsInSlice(slice, filter)),
     )
 
     return Array.prototype.concat(...sliceResults)
   }
 
-  getFeaturesInSlice(
+  getRecordsInSlice(
     { containerStart, sliceStart, sliceBytes },
     filterFunction,
   ) {

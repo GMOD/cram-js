@@ -70,22 +70,22 @@ class CramRecord {
     return !!(this.flags & Constants.BAM_FMREVERSE)
   }
 
-  /** @returns {boolean} true if */
+  /** @returns {boolean} true if this is read number 1 in a pair */
   isRead1() {
     return !!(this.flags & Constants.BAM_FREAD1)
   }
 
-  /** @returns {boolean} true if */
+  /** @returns {boolean} true if this is read number 2 in a pair */
   isRead2() {
     return !!(this.flags & Constants.BAM_FREAD2)
   }
 
-  /** @returns {boolean} true if */
+  /** @returns {boolean} true if this is a secondary alignment */
   isSecondary() {
     return !!(this.flags & Constants.BAM_FSECONDARY)
   }
 
-  /** @returns {boolean} true if */
+  /** @returns {boolean} true if this read has failed QC checks */
   isFailedQc() {
     return !!(this.flags & Constants.BAM_FQCFAIL)
   }
@@ -95,7 +95,7 @@ class CramRecord {
     return !!(this.flags & Constants.BAM_FDUP)
   }
 
-  /** @returns {boolean} true if */
+  /** @returns {boolean} true if this is a supplementary alignment */
   isSupplementary() {
     return !!(this.flags & Constants.BAM_FSUPPLEMENTARY)
   }

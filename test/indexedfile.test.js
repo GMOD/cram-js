@@ -21,7 +21,7 @@ describe('.crai indexed cram file', () => {
       }),
     })
 
-    const features = await cram.getFeaturesForRange(0, 2, 200)
+    const features = await cram.getRecordsForRange(0, 2, 200)
     if (REWRITE_EXPECTED_DATA)
       require('fs').writeFileSync(
         'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
@@ -35,7 +35,7 @@ describe('.crai indexed cram file', () => {
     expect(features.length).to.equal(8)
     expect(JsonClone(features)).to.deep.equal(await expectedFeatures1)
 
-    expect(await cram.getFeaturesForRange(1, 2, 200)).to.deep.equal([])
+    expect(await cram.getRecordsForRange(1, 2, 200)).to.deep.equal([])
     expect(await cram.hasDataForReferenceSequence(1)).to.equal(false)
     expect(await cram.hasDataForReferenceSequence(0)).to.equal(true)
   })
@@ -48,7 +48,7 @@ describe('.crai indexed cram file', () => {
       }),
     })
 
-    const features = await cram.getFeaturesForRange(0, 2, 200)
+    const features = await cram.getRecordsForRange(0, 2, 200)
     if (REWRITE_EXPECTED_DATA)
       require('fs').writeFileSync(
         'test/data/ce#unmap2.tmp.cram.test1.expected.json',
@@ -69,7 +69,7 @@ describe('.crai indexed cram file', () => {
       }),
     })
 
-    const features = await cram.getFeaturesForRange(0, 2, 200)
+    const features = await cram.getRecordsForRange(0, 2, 200)
     if (REWRITE_EXPECTED_DATA)
       require('fs').writeFileSync(
         'test/data/ce#1000.tmp.cram.test1.expected.json',
@@ -93,7 +93,7 @@ describe('.crai indexed cram file', () => {
       }),
     })
 
-    const features = await cram.getFeaturesForRange(0, 0, Infinity)
+    const features = await cram.getRecordsForRange(0, 0, Infinity)
     if (REWRITE_EXPECTED_DATA)
       require('fs').writeFileSync(
         'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
@@ -104,7 +104,7 @@ describe('.crai indexed cram file', () => {
     )
     expect(JsonClone(features)).to.deep.equal(await expectedFeatures4)
 
-    const features2 = await cram.getFeaturesForRange(-1, 0, Infinity)
+    const features2 = await cram.getRecordsForRange(-1, 0, Infinity)
 
     if (REWRITE_EXPECTED_DATA)
       require('fs').writeFileSync(
@@ -161,7 +161,7 @@ describe('.crai indexed cram file', () => {
         index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
       })
 
-      const features = await cram.getFeaturesForRange(0, 0, Infinity)
+      const features = await cram.getRecordsForRange(0, 0, Infinity)
       if (REWRITE_EXPECTED_DATA)
         require('fs').writeFileSync(
           `test/data/${filename}.test2.expected.json`,
@@ -179,7 +179,7 @@ describe('.crai indexed cram file', () => {
         index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
       })
 
-      const features = await cram.getFeaturesForRange(1, 0, Infinity)
+      const features = await cram.getRecordsForRange(1, 0, Infinity)
       if (REWRITE_EXPECTED_DATA)
         require('fs').writeFileSync(
           `test/data/${filename}.test3.expected.json`,
@@ -208,7 +208,7 @@ describe('.crai indexed cram file', () => {
         // seqFetch: fasta.fetch.bind(fasta),
       })
 
-      const features = await cram.getFeaturesForRange(1, 20000, 30000)
+      const features = await cram.getRecordsForRange(1, 20000, 30000)
       if (REWRITE_EXPECTED_DATA)
         require('fs').writeFileSync(
           `test/data/extended/RNAseq_mapping_def.cram.test1.expected.json`,
@@ -221,7 +221,7 @@ describe('.crai indexed cram file', () => {
 
       expect(JsonClone(features)).to.deep.equal(expectedFeatures)
 
-      const moreFeatures = await cram.getFeaturesForRange(6, 12437859, 12437959)
+      const moreFeatures = await cram.getRecordsForRange(6, 12437859, 12437959)
       if (REWRITE_EXPECTED_DATA)
         require('fs').writeFileSync(
           `test/data/extended/RNAseq_mapping_def.cram.test2.expected.json`,
@@ -232,7 +232,7 @@ describe('.crai indexed cram file', () => {
       //   'extended/RNAseq_mapping_def.cram.test2.expected.json',
       // )
 
-      const moreFeatures2 = await cram.getFeaturesForRange(6, 4765916, 4768415)
+      const moreFeatures2 = await cram.getRecordsForRange(6, 4765916, 4768415)
       expect(moreFeatures2.length).to.equal(1)
       expect(moreFeatures2[0].readName).to.equal('7033952-2')
       expect(moreFeatures2[0].alignmentStart).to.equal(4767144)
