@@ -6,6 +6,23 @@ const gunzip = promisify(zlib.gunzip)
 const { open } = require('./io')
 const { CramMalformedError } = require('./errors')
 
+function addRecordToIndex(index, record) {
+  if (record.some(el => el === undefined)) {
+    throw new CramMalformedError('invalid .crai index file')
+  }
+
+  const [seqId, start, span, containerStart, sliceStart, sliceBytes] = record
+
+  if (!index[seqId]) index[seqId] = []
+
+  index[seqId].push({
+    start,
+    span,
+    containerStart,
+    sliceStart,
+    sliceBytes,
+  })
+}
 class CraiIndex {
   // A CRAM index (.crai) is a gzipped tab delimited file containing the following columns:
   // 1. Sequence id
@@ -37,37 +54,42 @@ class CraiIndex {
         return data
       })
       .then(uncompressedBuffer => {
-        uncompressedBuffer
-          .toString('utf8')
-          .split(/\r?\n/)
-          .map(line => line.split('\t').map(s => parseInt(s, 10)))
-          .filter(
-            line => line && line[0] !== undefined && !Number.isNaN(line[0]),
-          )
-          .forEach(
-            ([seqId, start, span, containerStart, sliceStart, sliceBytes]) => {
-              if (
-                [
-                  seqId,
-                  start,
-                  span,
-                  containerStart,
-                  sliceStart,
-                  sliceBytes,
-                ].some(el => el === undefined)
-              )
-                throw new CramMalformedError('invalid .crai index file')
-              if (!index[seqId]) index[seqId] = []
+        // interpret the text as regular ascii, since it is
+        // supposed to be only digits and whitespace characters
+        // this is written in a deliberately low-level fashion for performance,
+        // because some .crai files can be pretty large.
+        let currentRecord = []
+        let currentString = ''
+        for (let i = 0; i < uncompressedBuffer.length; i += 1) {
+          const charCode = uncompressedBuffer[i]
+          if (
+            (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
+            (!currentString && charCode === 45) /* leading - */
+          ) {
+            currentString += String.fromCharCode(charCode)
+          } else if (charCode === 9 /* \t */) {
+            currentRecord.push(Number.parseInt(currentString, 10))
+            currentString = ''
+          } else if (charCode === 10 /* \n */) {
+            currentRecord.push(Number.parseInt(currentString, 10))
+            currentString = ''
+            addRecordToIndex(index, currentRecord)
+            currentRecord = []
+          } else if (charCode !== 13 /* \r */ && charCode !== 32 /* space */) {
+            // if there are other characters in the file besides
+            // space and \r, something is wrong.
+            throw new CramMalformedError('invalid .crai index file')
+          }
+        }
 
-              index[seqId].push({
-                start,
-                span,
-                containerStart,
-                sliceStart,
-                sliceBytes,
-              })
-            },
-          )
+        // if the file ends without a \n, we need to flush our buffers
+        if (currentString) {
+          currentRecord.push(Number.parseInt(currentString, 10))
+        }
+        if (currentRecord.length === 6) {
+          addRecordToIndex(index, currentRecord)
+        }
+
         // sort each of them by start
         Object.entries(index).forEach(([seqId, entries]) => {
           index[seqId] = entries.sort(
