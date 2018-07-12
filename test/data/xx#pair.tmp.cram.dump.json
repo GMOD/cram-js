@@ -438,7 +438,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "a1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -468,7 +469,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "b1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -498,7 +500,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "c1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -528,7 +531,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "a1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -558,7 +562,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "b1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -588,7 +593,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "c1"
-            }
+            },
+            "templateLength": 20
           }
         ]
       }
@@ -937,7 +943,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "a1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -967,7 +974,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "b1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -997,7 +1005,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "c1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -1027,7 +1036,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "a1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -1057,7 +1067,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "b1"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -1087,7 +1098,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "c1"
-            }
+            },
+            "templateLength": 20
           }
         ]
       }

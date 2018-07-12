@@ -438,7 +438,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -464,6 +465,7 @@
               9
             ],
             "uniqueId": 1,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
@@ -494,6 +496,7 @@
               9
             ],
             "uniqueId": 2,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
@@ -524,6 +527,7 @@
               9
             ],
             "uniqueId": 3,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
@@ -554,6 +558,7 @@
               9
             ],
             "uniqueId": 4,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
@@ -584,6 +589,7 @@
               9
             ],
             "uniqueId": 5,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
@@ -937,7 +943,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -963,6 +970,7 @@
               9
             ],
             "uniqueId": 1,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
@@ -993,6 +1001,7 @@
               9
             ],
             "uniqueId": 2,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
@@ -1023,6 +1032,7 @@
               9
             ],
             "uniqueId": 3,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
@@ -1053,6 +1063,7 @@
               9
             ],
             "uniqueId": 4,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
@@ -1083,6 +1094,7 @@
               9
             ],
             "uniqueId": 5,
+            "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,

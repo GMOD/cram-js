@@ -4816,7 +4816,8 @@
               "sequenceId": 0,
               "alignmentStart": 100013,
               "readName": "f"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -5175,7 +5176,8 @@
               "sequenceId": 0,
               "alignmentStart": 100013,
               "readName": "f"
-            }
+            },
+            "templateLength": 101
           }
         ]
       }
@@ -5856,7 +5858,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "h"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -5979,7 +5982,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "h"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -6102,7 +6106,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "i"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -6225,7 +6230,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "i"
-            }
+            },
+            "templateLength": 101
           }
         ]
       }
@@ -6906,7 +6912,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "h"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -7029,7 +7036,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "h"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -7152,7 +7160,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "i"
-            }
+            },
+            "templateLength": 101
           },
           {
             "tags": {
@@ -7275,7 +7284,8 @@
               "sequenceId": -1,
               "alignmentStart": 0,
               "readName": "i"
-            }
+            },
+            "templateLength": 101
           }
         ]
       }

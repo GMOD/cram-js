@@ -241,7 +241,7 @@ function decodeRecord(
       )
     }
 
-    // compute the read's true span on the reference sequence
+    // compute the read's true span on the reference sequence, and the end coordinate of the alignment on the reference
     let lengthOnRef = cramRecord.readLength
     if (cramRecord.readFeatures)
       cramRecord.readFeatures.forEach(({ code, data }) => {

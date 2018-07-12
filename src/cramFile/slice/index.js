@@ -9,26 +9,102 @@ const Constants = require('../constants')
 const decodeRecord = require('./decodeRecord')
 
 /**
+ * @private
+ * Try to estimate the template length from a bunch of interrelated multi-segment reads.
+ * @param {Array[CramRecord]} allRecords
+ * @param {number} currentRecordNumber
+ * @param {CramRecord} thisRecord
+ */
+function calculateMultiSegmentMatedTemplateLength(
+  allRecords,
+  currentRecordNumber,
+  thisRecord,
+) {
+  function getAllMatedRecords(startRecord) {
+    const records = [startRecord]
+    if (startRecord.mateRecordNumber >= 0) {
+      const mateRecord = allRecords[startRecord.mateRecordNumber]
+      if (!mateRecord)
+        throw new CramMalformedError(
+          'intra-slice mate record not found, this file seems malformed',
+        )
+      records.push(...getAllMatedRecords(mateRecord))
+    }
+    return records
+  }
+
+  const matedRecords = getAllMatedRecords(thisRecord)
+  const starts = matedRecords.map(r => r.alignmentStart)
+  const ends = matedRecords.map(r => r.alignmentStart + r.readLength - 1)
+  const estimatedTemplateLength = Math.max(...ends) - Math.min(...starts) + 1
+  if (estimatedTemplateLength >= 0)
+    matedRecords.forEach(r => {
+      if (r.templateLength !== undefined)
+        throw new CramMalformedError(
+          'mate pair group has some members that have template lengths already, this file seems malformed',
+        )
+      r.templateLength = estimatedTemplateLength
+    })
+}
+
+/**
+ * @private
+ * Attempt to calculate the `templateLength` for a pair of intra-slice paired reads.
+ * Ported from htslib. Algorithm is imperfect.
+ * @param {CramRecord} thisRecord
+ * @param {CramRecord} mateRecord
+ */
+function calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord) {
+  // this just estimates the template length by using the simple (non-gapped) end coordinate of each
+  // read, because gapping in the alignment doesn't mean the template is longer or shorter
+  const start = Math.min(thisRecord.alignmentStart, mateRecord.alignmentStart)
+  const end = Math.max(
+    thisRecord.alignmentStart + thisRecord.readLength - 1,
+    mateRecord.alignmentStart + mateRecord.readLength - 1,
+  )
+  const lengthEstimate = end - start + 1
+  thisRecord.templateLength = lengthEstimate
+  mateRecord.templateLength = lengthEstimate
+}
+
+/**
  * @private establishes a mate-pair relationship between two records in the same slice.
  * CRAM compresses mate-pair relationships between records in the same slice down into
  * just one record having the index in the slice of its mate
  */
-function associateIntraSliceMatePair(thisRecord, mateRecord) {
+function associateIntraSliceMate(
+  allRecords,
+  currentRecordNumber,
+  thisRecord,
+  mateRecord,
+) {
   if (!mateRecord)
     throw new CramMalformedError(
       'could not resolve intra-slice mate pairs, file seems truncated or malformed',
     )
-  mateRecord.mate = {
-    sequenceId: thisRecord.sequenceId,
-    alignmentStart: thisRecord.alignmentStart,
-  }
-  if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
+
+  const complicatedMultiSegment = !!(
+    mateRecord.mate ||
+    (mateRecord.mateRecordNumber !== undefined &&
+      mateRecord.mateRecordNumber !== currentRecordNumber)
+  )
+
   thisRecord.mate = {
     sequenceId: mateRecord.sequenceId,
     alignmentStart: mateRecord.alignmentStart,
   }
   if (mateRecord.readName) thisRecord.mate.readName = mateRecord.readName
-  delete thisRecord.mateRecordNumber
+
+  // the mate record might have its own mate pointer, if this is some kind of
+  // multi-segment (more than paired) scheme, so only relate that one back to this one
+  // if it does not have any other relationship
+  if (!mateRecord.mate && mateRecord.mateRecordNumber === undefined) {
+    mateRecord.mate = {
+      sequenceId: thisRecord.sequenceId,
+      alignmentStart: thisRecord.alignmentStart,
+    }
+    if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
+  }
 
   // make sure the proper flags and cramFlags are set on both records
   // paired
@@ -46,6 +122,20 @@ function associateIntraSliceMatePair(thisRecord, mateRecord) {
   // set mate reversed if needed
   if (mateRecord.flags & Constants.BAM_FREVERSE)
     thisRecord.flags |= Constants.BAM_FMREVERSE
+
+  if (thisRecord.templateLength === undefined) {
+    if (complicatedMultiSegment)
+      calculateMultiSegmentMatedTemplateLength(
+        allRecords,
+        currentRecordNumber,
+        thisRecord,
+      )
+    else calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord)
+  }
+
+  // delete this last because it's used by the
+  // complicated template length estimation
+  delete thisRecord.mateRecordNumber
 }
 
 class CramSlice {
@@ -234,7 +324,7 @@ class CramSlice {
         },
       },
     }
-    // const lastAPos = sliceHeader.content.refSeqStart // < used for delta-encoded `apos` in records
+
     const decodeDataSeries = dataSeriesName => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec)
@@ -274,7 +364,12 @@ class CramSlice {
     for (let i = 0; i < records.length; i += 1) {
       const { mateRecordNumber } = records[i]
       if (mateRecordNumber >= 0)
-        associateIntraSliceMatePair(records[i], records[mateRecordNumber])
+        associateIntraSliceMate(
+          records,
+          i,
+          records[i],
+          records[mateRecordNumber],
+        )
     }
 
     return records
