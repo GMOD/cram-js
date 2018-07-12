@@ -238,10 +238,11 @@ class CramSlice {
 
   async getRecords(filterFunction) {
     // fetch the features if necessary, using the file-level feature cache
-    let recordsPromise = this.file.featureCache.get(this.containerPosition)
+    const cacheKey = this.container.filePosition + this.containerPosition
+    let recordsPromise = this.file.featureCache.get(cacheKey)
     if (!recordsPromise) {
       recordsPromise = this._fetchRecords()
-      this.file.featureCache.set(this.containerPosition, recordsPromise)
+      this.file.featureCache.set(cacheKey, recordsPromise)
     }
 
     const records = (await recordsPromise).filter(filterFunction)
