@@ -5,7 +5,48 @@ const {
 } = require('../../errors')
 const { parseItem, tinyMemoize, sequenceMD5 } = require('../util')
 
+const Constants = require('../constants')
 const decodeRecord = require('./decodeRecord')
+
+/**
+ * @private establishes a mate-pair relationship between two records in the same slice.
+ * CRAM compresses mate-pair relationships between records in the same slice down into
+ * just one record having the index in the slice of its mate
+ */
+function associateIntraSliceMatePair(thisRecord, mateRecord) {
+  if (!mateRecord)
+    throw new CramMalformedError(
+      'could not resolve intra-slice mate pairs, file seems truncated or malformed',
+    )
+  mateRecord.mate = {
+    sequenceId: thisRecord.sequenceId,
+    alignmentStart: thisRecord.alignmentStart,
+  }
+  if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
+  thisRecord.mate = {
+    sequenceId: mateRecord.sequenceId,
+    alignmentStart: mateRecord.alignmentStart,
+  }
+  if (mateRecord.readName) thisRecord.mate.readName = mateRecord.readName
+  delete thisRecord.mateRecordNumber
+
+  // make sure the proper flags and cramFlags are set on both records
+  // paired
+  thisRecord.flags |= Constants.BAM_FPAIRED
+
+  // set mate unmapped if needed
+  if (mateRecord.flags & Constants.BAM_FUNMAP) {
+    thisRecord.flags |= Constants.BAM_FMUNMAP
+    // thisRecord.templateLength = 0
+  }
+  if (thisRecord.flags & Constants.BAM_FUNMAP) {
+    // thisRecord.templateLength = 0
+  }
+
+  // set mate reversed if needed
+  if (mateRecord.flags & Constants.BAM_FREVERSE)
+    thisRecord.flags |= Constants.BAM_FMREVERSE
+}
 
 class CramSlice {
   constructor(container, position) {
@@ -232,25 +273,8 @@ class CramSlice {
     // Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
       const { mateRecordNumber } = records[i]
-      if (mateRecordNumber >= 0) {
-        const thisRecord = records[i]
-        const mateRecord = records[mateRecordNumber]
-        if (!mateRecord)
-          throw new CramMalformedError(
-            'could not resolve intra-slice mate pairs, file seems truncated or malformed',
-          )
-        mateRecord.mate = {
-          sequenceId: thisRecord.sequenceId,
-          alignmentStart: thisRecord.alignmentStart,
-        }
-        if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
-        thisRecord.mate = {
-          sequenceId: mateRecord.sequenceId,
-          alignmentStart: mateRecord.alignmentStart,
-        }
-        if (mateRecord.readName) thisRecord.mate.readName = mateRecord.readName
-        delete thisRecord.mateRecordNumber
-      }
+      if (mateRecordNumber >= 0)
+        associateIntraSliceMatePair(records[i], records[mateRecordNumber])
     }
 
     return records
