@@ -8,7 +8,6 @@
     "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "y1",
-    "recordsToNextFragment": 1,
     "lengthOnRef": 5,
     "mappingQuality": 1,
     "qualityScores": [
@@ -18,7 +17,12 @@
       9,
       9
     ],
-    "uniqueId": 8
+    "uniqueId": 8,
+    "mate": {
+      "sequenceId": 1,
+      "alignmentStart": 16,
+      "readName": "y1"
+    }
   },
   {
     "tags": {},
@@ -38,7 +42,12 @@
       9,
       9
     ],
-    "uniqueId": 9
+    "uniqueId": 9,
+    "mate": {
+      "sequenceId": 1,
+      "alignmentStart": 1,
+      "readName": "y1"
+    }
   },
   {
     "tags": {},
@@ -49,7 +58,6 @@
     "alignmentStart": 7,
     "readGroupId": -1,
     "readName": "y2",
-    "recordsToNextFragment": 3,
     "lengthOnRef": 5,
     "mappingQuality": 1,
     "qualityScores": [
@@ -59,7 +67,12 @@
       9,
       9
     ],
-    "uniqueId": 10
+    "uniqueId": 10,
+    "mate": {
+      "sequenceId": 1,
+      "alignmentStart": 10,
+      "readName": "y2"
+    }
   },
   {
     "tags": {},
@@ -79,7 +92,12 @@
       9,
       9
     ],
-    "uniqueId": 11
+    "uniqueId": 11,
+    "mate": {
+      "sequenceId": 1,
+      "alignmentStart": 7,
+      "readName": "y2"
+    }
   },
   {
     "tags": {},

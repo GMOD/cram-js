@@ -5,8 +5,6 @@ const {
 } = require('../../errors')
 const { parseItem, tinyMemoize, sequenceMD5 } = require('../util')
 
-// const decodeSeqAndQual = require('./decodeSeqAndQual')
-const decodeSliceXref = require('./decodeSliceXref')
 const decodeRecord = require('./decodeRecord')
 
 class CramSlice {
@@ -230,8 +228,30 @@ class CramSlice {
       }
     }
 
+    // interpret `recordsToNextFragment` attributes to make standard `mate` objects
     // Resolve mate pair cross-references between records in this slice
-    decodeSliceXref(this, records)
+    for (let i = 0; i < records.length; i += 1) {
+      const { mateRecordNumber } = records[i]
+      if (mateRecordNumber >= 0) {
+        const thisRecord = records[i]
+        const mateRecord = records[mateRecordNumber]
+        if (!mateRecord)
+          throw new CramMalformedError(
+            'could not resolve intra-slice mate pairs, file seems truncated or malformed',
+          )
+        mateRecord.mate = {
+          sequenceId: thisRecord.sequenceId,
+          alignmentStart: thisRecord.alignmentStart,
+        }
+        if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
+        thisRecord.mate = {
+          sequenceId: mateRecord.sequenceId,
+          alignmentStart: mateRecord.alignmentStart,
+        }
+        if (mateRecord.readName) thisRecord.mate.readName = mateRecord.readName
+        delete thisRecord.mateRecordNumber
+      }
+    }
 
     return records
   }

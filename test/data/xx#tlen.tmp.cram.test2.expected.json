@@ -8,7 +8,6 @@
     "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "x1",
-    "recordsToNextFragment": 1,
     "lengthOnRef": 5,
     "mappingQuality": 1,
     "qualityScores": [
@@ -18,7 +17,12 @@
       9,
       9
     ],
-    "uniqueId": 0
+    "uniqueId": 0,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 16,
+      "readName": "x1"
+    }
   },
   {
     "tags": {},
@@ -38,7 +42,12 @@
       9,
       9
     ],
-    "uniqueId": 1
+    "uniqueId": 1,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 1,
+      "readName": "x1"
+    }
   },
   {
     "tags": {},
@@ -49,7 +58,6 @@
     "alignmentStart": 7,
     "readGroupId": -1,
     "readName": "x2",
-    "recordsToNextFragment": 3,
     "lengthOnRef": 5,
     "mappingQuality": 1,
     "qualityScores": [
@@ -59,7 +67,12 @@
       9,
       9
     ],
-    "uniqueId": 2
+    "uniqueId": 2,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 10,
+      "readName": "x2"
+    }
   },
   {
     "tags": {},
@@ -79,7 +92,12 @@
       9,
       9
     ],
-    "uniqueId": 3
+    "uniqueId": 3,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 7,
+      "readName": "x2"
+    }
   },
   {
     "tags": {},
@@ -90,7 +108,6 @@
     "alignmentStart": 7,
     "readGroupId": -1,
     "readName": "x3",
-    "recordsToNextFragment": 5,
     "lengthOnRef": 5,
     "mappingQuality": 1,
     "qualityScores": [
@@ -100,7 +117,12 @@
       9,
       9
     ],
-    "uniqueId": 4
+    "uniqueId": 4,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 10,
+      "readName": "x3"
+    }
   },
   {
     "tags": {},
@@ -120,7 +142,12 @@
       9,
       9
     ],
-    "uniqueId": 5
+    "uniqueId": 5,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 7,
+      "readName": "x3"
+    }
   },
   {
     "tags": {},

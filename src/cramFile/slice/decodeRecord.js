@@ -195,7 +195,7 @@ function decodeRecord(
     cramRecord.templateSize = decodeDataSeries('TS')
     // detachedCount++
   } else if (cramRecord.hasMateDownStream()) {
-    cramRecord.recordsToNextFragment = decodeDataSeries('NF') + recordNumber + 1
+    cramRecord.mateRecordNumber = decodeDataSeries('NF') + recordNumber + 1
   }
 
   // TODO: the aux tag parsing will have to be refactored if we want to support

@@ -8,7 +8,6 @@
     "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "S",
-    "recordsToNextFragment": 1,
     "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
@@ -23,7 +22,12 @@
       9,
       9
     ],
-    "uniqueId": 0
+    "uniqueId": 0,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 11,
+      "readName": "S"
+    }
   },
   {
     "tags": {},
@@ -34,7 +38,6 @@
     "alignmentStart": 11,
     "readGroupId": -1,
     "readName": "S",
-    "recordsToNextFragment": 2,
     "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
@@ -49,7 +52,12 @@
       9,
       9
     ],
-    "uniqueId": 1
+    "uniqueId": 1,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 1,
+      "readName": "S"
+    }
   },
   {
     "tags": {},
@@ -60,7 +68,6 @@
     "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "S",
-    "recordsToNextFragment": 3,
     "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
@@ -75,7 +82,12 @@
       9,
       9
     ],
-    "uniqueId": 2
+    "uniqueId": 2,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 11,
+      "readName": "S"
+    }
   },
   {
     "tags": {},
@@ -86,7 +98,6 @@
     "alignmentStart": 11,
     "readGroupId": -1,
     "readName": "S",
-    "recordsToNextFragment": 4,
     "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
@@ -101,7 +112,12 @@
       9,
       9
     ],
-    "uniqueId": 3
+    "uniqueId": 3,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 1,
+      "readName": "S"
+    }
   },
   {
     "tags": {},
@@ -112,7 +128,6 @@
     "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "S",
-    "recordsToNextFragment": 5,
     "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
@@ -127,7 +142,12 @@
       9,
       9
     ],
-    "uniqueId": 4
+    "uniqueId": 4,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 11,
+      "readName": "S"
+    }
   },
   {
     "tags": {},
@@ -152,6 +172,11 @@
       9,
       9
     ],
-    "uniqueId": 5
+    "uniqueId": 5,
+    "mate": {
+      "sequenceId": 0,
+      "alignmentStart": 1,
+      "readName": "S"
+    }
   }
 ]

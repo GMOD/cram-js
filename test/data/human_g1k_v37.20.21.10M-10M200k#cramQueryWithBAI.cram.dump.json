@@ -4707,7 +4707,6 @@
             "alignmentStart": 100013,
             "readGroupId": 4,
             "readName": "f",
-            "recordsToNextFragment": 6,
             "readBases": "AAAAAGTTTAACAAAACTGATGAAAAATTTGCCAAAAGACACTACAAACATCTCATTACAGAGATTGTGGAAGACCAAATAAATGATAAGCTATTGCAGGT",
             "qualityScores": [
               2,
@@ -4812,7 +4811,12 @@
               2,
               2
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "mate": {
+              "sequenceId": 0,
+              "alignmentStart": 100013,
+              "readName": "f"
+            }
           },
           {
             "tags": {
@@ -5166,7 +5170,12 @@
               2,
               2
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "mate": {
+              "sequenceId": 0,
+              "alignmentStart": 100013,
+              "readName": "f"
+            }
           }
         ]
       }
@@ -5738,7 +5747,6 @@
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "recordsToNextFragment": 2,
             "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             "qualityScores": [
               2,
@@ -5843,7 +5851,12 @@
               2,
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "h"
+            }
           },
           {
             "tags": {
@@ -5961,7 +5974,12 @@
               2,
               2
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "h"
+            }
           },
           {
             "tags": {
@@ -5975,7 +5993,6 @@
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "recordsToNextFragment": 4,
             "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             "qualityScores": [
               2,
@@ -6080,7 +6097,12 @@
               2,
               2
             ],
-            "uniqueId": 10
+            "uniqueId": 10,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "i"
+            }
           },
           {
             "tags": {
@@ -6198,7 +6220,12 @@
               2,
               2
             ],
-            "uniqueId": 11
+            "uniqueId": 11,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "i"
+            }
           }
         ]
       }
@@ -6770,7 +6797,6 @@
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "recordsToNextFragment": 2,
             "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             "qualityScores": [
               2,
@@ -6875,7 +6901,12 @@
               2,
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "h"
+            }
           },
           {
             "tags": {
@@ -6993,7 +7024,12 @@
               2,
               2
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "h"
+            }
           },
           {
             "tags": {
@@ -7007,7 +7043,6 @@
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "recordsToNextFragment": 4,
             "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             "qualityScores": [
               2,
@@ -7112,7 +7147,12 @@
               2,
               2
             ],
-            "uniqueId": 10
+            "uniqueId": 10,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "i"
+            }
           },
           {
             "tags": {
@@ -7230,7 +7270,12 @@
               2,
               2
             ],
-            "uniqueId": 11
+            "uniqueId": 11,
+            "mate": {
+              "sequenceId": -1,
+              "alignmentStart": 0,
+              "readName": "i"
+            }
           }
         ]
       }
