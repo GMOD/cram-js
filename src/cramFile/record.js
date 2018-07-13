@@ -132,7 +132,7 @@ class CramRecord {
    * @param {number} refRegion.end
    * @param {string} refRegion.seq
    * @param {CramContainerCompressionScheme} compressionScheme
-   * @returns nothing
+   * @returns {undefined} nothing
    */
   addReferenceSequence(refRegion, compressionScheme) {
     if (this.readFeatures) {

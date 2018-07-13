@@ -8,7 +8,7 @@ Read CRAM files (indexed or unindexed) in node or in the browser.
 
 -   Reads CRAM 3.x and 2.x
 -   Does not read CRAM 1.x
--   Can use .crai indexes out of the box, for efficient sequence fetching, but also has an index API that would allow you to use it with other index types
+-   Can use .crai indexes out of the box, for efficient sequence fetching, but also has an [index API](#craiindex) that would allow use with other index types
 
 ## Install
 
@@ -67,6 +67,7 @@ records.forEach(record => {
 -   [IndexedCramFile](#indexedcramfile) - indexed access into a CRAM file
 -   [CramFile](#cramfile) - .cram API
 -   [CraiIndex](#craiindex) - .crai index API
+-   [Error Classes](#errorclasses) - special error classes thrown by this API
 
 ### CramRecord
 
@@ -177,7 +178,7 @@ which bases are being substituted in base substitution features.
     -   `refRegion.seq` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
 -   `compressionScheme` **CramContainerCompressionScheme** 
 
-Returns **any** nothing
+Returns **[undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined)** nothing
 
 ### ReadFeatures
 
@@ -286,6 +287,9 @@ Represents a .crai index.
 
 -   `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** true if the index contains entries for
+the given reference sequence ID, false otherwise
+
 #### getEntriesForRange
 
 fetch index entries for the given range
@@ -296,7 +300,11 @@ fetch index entries for the given range
 -   `queryStart` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 -   `queryEnd` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
 
-### Exception Classes
+Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** promise for
+an array of objects of the form
+`{start, span, containerStart, sliceStart, sliceBytes }`
+
+#### Error Classes
 
 `@gmod/cram/errors` contains some special error classes thrown by cram-js. A list of the error classes is below.
 

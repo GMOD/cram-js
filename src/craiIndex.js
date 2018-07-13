@@ -106,7 +106,7 @@ class CraiIndex {
 
   /**
    * @param {number} seqId
-   * @returns {Promise[boolean]} true if the index contains entries for
+   * @returns {Promise} true if the index contains entries for
    * the given reference sequence ID, false otherwise
    */
   async hasDataForReferenceSequence(seqId) {
@@ -119,6 +119,10 @@ class CraiIndex {
    * @param {number} seqId
    * @param {number} queryStart
    * @param {number} queryEnd
+   *
+   * @returns {Promise} promise for
+   * an array of objects of the form
+   * `{start, span, containerStart, sliceStart, sliceBytes }`
    */
   async getEntriesForRange(seqId, queryStart, queryEnd) {
     const seqEntries = (await this.index)[seqId]

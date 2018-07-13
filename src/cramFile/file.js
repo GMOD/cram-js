@@ -150,7 +150,7 @@ class CramFile {
   }
 
   /**
-   * @returns {number} the number of containers in the file
+   * @returns {Promise[number]} the number of containers in the file
    */
   async containerCount() {
     const sectionParsers = await this.getSectionParsers()
