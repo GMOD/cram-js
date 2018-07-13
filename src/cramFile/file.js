@@ -84,7 +84,7 @@ class CramFile {
 
     const { content } = await firstContainer.getFirstBlock()
     // find the end of the trailing zeros in the header text
-    const headerLength = content.readInt32LE()
+    const headerLength = content.readInt32LE(0)
     const textStart = 4
     // let textEnd = content.length - 1
     // while (textEnd >= textStart && !content[textEnd]) textEnd -= 1
