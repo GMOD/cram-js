@@ -11,14 +11,14 @@
     "url": "https://github.com/rbuels"
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=8.3.0"
   },
   "bin": {},
   "directories": {
-    "lib": "dist"
+    "lib": "src"
   },
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
     "test": "mocha",
@@ -28,13 +28,11 @@
     "lint": "eslint src test",
     "docs": "documentation readme --shallow src/indexedCramFile.js --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/craiIndex.js --section=CraiIndex;  documentation readme --shallow src/errors.js '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramFile/record.js --section=CramRecord",
     "clean": "rimraf dist",
-    "prebuild": "npm run clean",
-    "build": "babel src -d dist",
     "watch": "npm-watch",
     "patch": "npm version patch && npm publish",
     "minor": "npm version minor && npm publish",
     "major": "npm version major && npm publish",
-    "prepublishOnly": "npm test && npm run build",
+    "prepublishOnly": "npm test",
     "postpublish": "git push origin master --follow-tags"
   },
   "watch": {
@@ -49,7 +47,6 @@
     "biojs"
   ],
   "dependencies": {
-    "babel-runtime": "^6.26.0",
     "buffer-crc32": "^0.2.13",
     "cross-fetch": "^2.1.0",
     "es6-promisify": "^6.0.0",
@@ -58,13 +55,6 @@
     "md5": "^2.2.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "6",
-    "babel-eslint": "^8.0.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.1.8",
-    "babel-preset-stage-2": "^6.18.0",
     "chai": "^4.1.2",
     "documentation": "^5.3.2",
     "eslint": "^4.17.0",
