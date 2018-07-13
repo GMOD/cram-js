@@ -89,18 +89,8 @@ class HuffmanIntCodec extends CramCodec {
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1)
-      throw new CramUnimplementedError(
-        'only 1 decoded item supported right now',
-      )
-    const items = this._decode(
-      slice,
-      coreDataBlock,
-      cursors.coreBlock,
-      numItems,
-    )
-    return items[0]
+  decode(slice, coreDataBlock, blocksByContentId, cursors) {
+    return this._decode(slice, coreDataBlock, cursors.coreBlock)
   }
 
   // _decodeNull() {
@@ -108,18 +98,11 @@ class HuffmanIntCodec extends CramCodec {
   // }
 
   // the special case for zero-length codes
-  _decodeZeroLengthCode(slice, coreDataBlock, coreCursor, numItems) {
-    const { sortedCodes } = this
-    const output = Array(numItems)
-    for (let i = 0; i < numItems; i += 1) {
-      output[i] = sortedCodes[0].value
-    }
-    return output
+  _decodeZeroLengthCode(slice, coreDataBlock, coreCursor) {
+    return this.sortedCodes[0].value
   }
 
-  _decode(slice, coreDataBlock, coreCursor, numBytes = 1) {
-    if (numBytes !== 1)
-      throw new CramUnimplementedError('numBytes > 1 not yet supported')
+  _decode(slice, coreDataBlock, coreCursor) {
     const input = coreDataBlock.content
 
     let prevLen = 0
@@ -132,7 +115,7 @@ class HuffmanIntCodec extends CramCodec {
       {
         const index = this.bitCodeToValue[bits]
         if (index > -1 && this.sortedBitLengthsByBitCode[index] === length)
-          return [this.sortedValuesByBitCode[index]]
+          return this.sortedValuesByBitCode[index]
 
         for (
           let j = i;

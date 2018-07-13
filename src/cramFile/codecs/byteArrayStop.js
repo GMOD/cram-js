@@ -11,8 +11,6 @@ class ByteArrayStopCodec extends CramCodec {
     super(parameters, dataType)
     if (dataType === 'byteArray') {
       this._decode = this._decodeByteArray
-    } else if (dataType === 'byteArrayBlock') {
-      this._decode = this._decodeByteArrayBlock
     } else {
       throw new TypeError(
         `byteArrayStop codec does not support data type ${dataType}`,
@@ -20,10 +18,7 @@ class ByteArrayStopCodec extends CramCodec {
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1)
-      throw new TypeError('decoding multiple items not supported')
-
+  decode(slice, coreDataBlock, blocksByContentId, cursors) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
     if (!contentBlock)
@@ -54,12 +49,6 @@ class ByteArrayStopCodec extends CramCodec {
     cursor.bytePosition = stopPosition + 1
     const data = dataBuffer.slice(startPosition, stopPosition)
     return data
-  }
-
-  _decodeByteArrayBlock(/* contentBlock, cursor */) {
-    throw new CramUnimplementedError(
-      'BYTE_ARRAY_BLOCK decoding not implemented',
-    )
   }
 }
 

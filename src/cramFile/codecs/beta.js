@@ -11,12 +11,7 @@ class BetaCodec extends CramCodec {
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1)
-      throw new CramUnimplementedError(
-        'only 1 decoded item supported right now',
-      )
-
+  decode(slice, coreDataBlock, blocksByContentId, cursors) {
     const data =
       this._getBits(
         coreDataBlock.content,

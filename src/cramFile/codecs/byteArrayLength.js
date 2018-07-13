@@ -13,10 +13,7 @@ class ByteArrayStopCodec extends CramCodec {
       )
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors, numItems = 1) {
-    if (numItems !== 1)
-      throw new CramUnimplementedError('decoding multiple items not supported')
-
+  decode(slice, coreDataBlock, blocksByContentId, cursors) {
     const lengthCodec = this._getLengthCodec()
     const arrayLength = lengthCodec.decode(
       slice,
