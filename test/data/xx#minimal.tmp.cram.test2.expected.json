@@ -1,5 +1,57 @@
 [
   {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 0,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "a0",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "code": "H",
+        "data": 10,
+        "pos": 1,
+        "refPos": 4
+      }
+    ],
+    "lengthOnRef": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 0
+  },
+  {
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    },
+    "flags": 16,
+    "cramFlags": 11,
+    "sequenceId": 0,
+    "readLength": 0,
+    "alignmentStart": 4,
+    "readGroupId": -1,
+    "readName": "a1",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "code": "H",
+        "data": 10,
+        "pos": 1,
+        "refPos": 4
+      }
+    ],
+    "lengthOnRef": 0,
+    "mappingQuality": 1,
+    "qualityScores": [],
+    "uniqueId": 1
+  },
+  {
     "tags": {},
     "flags": 16,
     "cramFlags": 3,
@@ -23,7 +75,7 @@
         "refPos": 9
       }
     ],
-    "lengthOnRef": 0,
+    "lengthOnRef": 10,
     "mappingQuality": 1,
     "qualityScores": [
       255,

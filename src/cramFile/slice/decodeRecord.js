@@ -246,7 +246,6 @@ function decodeRecord(
     if (cramRecord.readFeatures)
       cramRecord.readFeatures.forEach(({ code, data }) => {
         if (code === 'D' || code === 'N') lengthOnRef += data
-        else if (code === 'H') lengthOnRef -= data
         else if (code === 'I' || code === 'S') lengthOnRef -= data.length
         else if (code === 'i') lengthOnRef -= 1
       })

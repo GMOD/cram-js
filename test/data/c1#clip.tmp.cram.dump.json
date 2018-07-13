@@ -612,7 +612,7 @@
                 "refPos": 9
               }
             ],
-            "lengthOnRef": 6,
+            "lengthOnRef": 8,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -738,7 +738,7 @@
                 "refPos": 7
               }
             ],
-            "lengthOnRef": 2,
+            "lengthOnRef": 6,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -1271,7 +1271,7 @@
                 "refPos": 9
               }
             ],
-            "lengthOnRef": 6,
+            "lengthOnRef": 8,
             "mappingQuality": 0,
             "qualityScores": [
               9,
@@ -1397,7 +1397,7 @@
                 "refPos": 7
               }
             ],
-            "lengthOnRef": 2,
+            "lengthOnRef": 6,
             "mappingQuality": 0,
             "qualityScores": [
               9,

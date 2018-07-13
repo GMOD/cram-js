@@ -151,7 +151,7 @@
         "refPos": 200
       }
     ],
-    "lengthOnRef": 0,
+    "lengthOnRef": 50,
     "mappingQuality": 1,
     "qualityScores": [
       255,
@@ -225,7 +225,7 @@
         "refPos": 550
       }
     ],
-    "lengthOnRef": 0,
+    "lengthOnRef": 50,
     "mappingQuality": 1,
     "qualityScores": [
       255,
