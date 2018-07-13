@@ -4,7 +4,7 @@
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 [![Build Status](https://img.shields.io/travis/GMOD/cram-js/master.svg?style=flat-square)](https://travis-ci.org/GMOD/cram-js) [![Coverage Status](https://img.shields.io/codecov/c/github/GMOD/cram-js/master.svg?style=flat-square)](https://codecov.io/gh/GMOD/cram-js/branch/master)
 
-Read CRAM files (indexed or unindexed) in node or in the browser.
+Read CRAM files (indexed or unindexed) with pure JS, works in node or in the browser.
 
 -   Reads CRAM 3.x and 2.x
 -   Does not read CRAM 1.x
@@ -67,7 +67,7 @@ records.forEach(record => {
 -   [IndexedCramFile](#indexedcramfile) - indexed access into a CRAM file
 -   [CramFile](#cramfile) - .cram API
 -   [CraiIndex](#craiindex) - .crai index API
--   [Error Classes](#errorclasses) - special error classes thrown by this API
+-   [Error Classes](#error-classes) - special error classes thrown by this API
 
 ### CramRecord
 
