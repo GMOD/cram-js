@@ -1,5 +1,18 @@
 const Constants = require('./constants')
 
+const baseNumbers = {
+  a: 0,
+  A: 0,
+  c: 1,
+  C: 1,
+  g: 2,
+  G: 2,
+  t: 3,
+  T: 3,
+  n: 4,
+  N: 4,
+}
+
 function decodeBaseSubstitution(
   cramRecord,
   refRegion,
@@ -12,18 +25,7 @@ function decodeBaseSubstitution(
   const refCoord = readFeature.refPos - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
   if (refBase) readFeature.ref = refBase
-  let baseNumber = {
-    a: 0,
-    A: 0,
-    c: 1,
-    C: 1,
-    g: 2,
-    G: 2,
-    t: 3,
-    T: 3,
-    n: 4,
-    N: 4,
-  }[refBase]
+  let baseNumber = baseNumbers[refBase]
   if (baseNumber === undefined) baseNumber = 4
   const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]
   const base = substitutionScheme[readFeature.data]
