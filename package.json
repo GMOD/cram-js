@@ -18,7 +18,8 @@
     "lib": "src"
   },
   "files": [
-    "src"
+    "src",
+    "errors.js"
   ],
   "scripts": {
     "test": "mocha",
