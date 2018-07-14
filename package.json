@@ -28,9 +28,9 @@
     "lint": "eslint src test",
     "docs": "documentation readme --shallow src/indexedCramFile.js --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/craiIndex.js --section=CraiIndex;  documentation readme --shallow src/errors.js '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramFile/record.js --section=CramRecord",
     "watch": "npm-watch",
-    "patch": "npm version patch && npm publish",
-    "minor": "npm version minor && npm publish",
-    "major": "npm version major && npm publish",
+    "patch": "npm version patch && npm publish --access public",
+    "minor": "npm version minor && npm publish --access public",
+    "major": "npm version major && npm publish --access public",
     "prepublishOnly": "npm test",
     "postpublish": "git push origin master --follow-tags"
   },
