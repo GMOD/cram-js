@@ -2,7 +2,7 @@ const {
   CramUnimplementedError,
   CramMalformedError,
   CramBufferOverrunError,
-} = require('../../errors')
+} = require('../../../errors')
 const CramCodec = require('./_base')
 const { parseItf8 } = require('../util')
 

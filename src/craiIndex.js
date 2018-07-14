@@ -4,7 +4,7 @@ const zlib = require('zlib')
 const gunzip = promisify(zlib.gunzip)
 
 const { open } = require('./io')
-const { CramMalformedError } = require('./errors')
+const { CramMalformedError } = require('../errors')
 
 function addRecordToIndex(index, record) {
   if (record.some(el => el === undefined)) {

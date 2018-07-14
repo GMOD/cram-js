@@ -1,4 +1,4 @@
-const { CramMalformedError } = require('../../errors')
+const { CramMalformedError } = require('../../../errors')
 const { instantiateCodec } = require('../codecs')
 
 // the hardcoded data type to be decoded for each core

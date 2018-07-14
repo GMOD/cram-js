@@ -1,5 +1,5 @@
 const md5 = require('md5')
-const { CramBufferOverrunError } = require('../errors')
+const { CramBufferOverrunError } = require('../../errors')
 
 module.exports = {
   itf8Size(v) {

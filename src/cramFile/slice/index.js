@@ -2,7 +2,7 @@ const {
   CramMalformedError,
   CramBufferOverrunError,
   CramArgumentError,
-} = require('../../errors')
+} = require('../../../errors')
 const { parseItem, tinyMemoize, sequenceMD5 } = require('../util')
 
 const Constants = require('../constants')

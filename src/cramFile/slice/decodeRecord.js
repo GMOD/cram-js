@@ -1,4 +1,4 @@
-const { CramMalformedError, CramUnimplementedError } = require('../../errors')
+const { CramMalformedError, CramUnimplementedError } = require('../../../errors')
 
 const Long = require('long')
 

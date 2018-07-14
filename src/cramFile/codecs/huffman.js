@@ -1,4 +1,4 @@
-const { CramMalformedError } = require('../../errors')
+const { CramMalformedError } = require('../../../errors')
 const CramCodec = require('./_base')
 
 function numberOfSetBits(ii) {
