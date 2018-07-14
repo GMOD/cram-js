@@ -23,7 +23,7 @@ class IndexedCramFile {
         filehandle: args.cramFilehandle,
         seqFetch: args.seqFetch,
         checkSequenceMD5: args.checkSequenceMD5,
-        cacheSize: args.cacheSize
+        cacheSize: args.cacheSize,
       })
 
     if (!(this.cram instanceof CramFile))
@@ -60,13 +60,10 @@ class IndexedCramFile {
     // TODO: do we need to merge or de-duplicate the blocks?
 
     // fetch all the slices and parse the feature data
-    const filter = feature => {
-      return (
-        feature.sequenceId === seq &&
-        feature.alignmentStart <= end &&
-        feature.alignmentStart + feature.lengthOnRef >= start
-      )
-    }
+    const filter = feature =>
+      feature.sequenceId === seq &&
+      feature.alignmentStart <= end &&
+      feature.alignmentStart + feature.lengthOnRef >= start
     const sliceResults = await Promise.all(
       slices.map(slice => this.getRecordsInSlice(slice, filter)),
     )

@@ -4,6 +4,7 @@ const {
   testDataFile,
   loadTestJSON,
   REWRITE_EXPECTED_DATA,
+  fs,
 } = require('./lib/util')
 const { dumpWholeFile } = require('./lib/dumpFile')
 const { CramFile } = require('../src/index')
@@ -25,7 +26,7 @@ describe('dumping cram files', () => {
       const fileData = await dumpWholeFile(file)
       // console.log(JSON.stringify(fileData, null, '  '))
       if (REWRITE_EXPECTED_DATA)
-        require('fs').writeFileSync(
+        fs.writeFileSync(
           `test/data/${filename}.dump.json`,
           JSON.stringify(fileData, null, '  '),
         )

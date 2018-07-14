@@ -1,4 +1,4 @@
-const { CramMalformedError, CramUnimplementedError } = require('../../errors')
+const { CramMalformedError } = require('../../errors')
 const CramCodec = require('./_base')
 
 function numberOfSetBits(ii) {
@@ -98,7 +98,7 @@ class HuffmanIntCodec extends CramCodec {
   // }
 
   // the special case for zero-length codes
-  _decodeZeroLengthCode(slice, coreDataBlock, coreCursor) {
+  _decodeZeroLengthCode() {
     return this.sortedCodes[0].value
   }
 

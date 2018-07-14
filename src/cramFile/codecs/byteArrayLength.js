@@ -1,4 +1,3 @@
-const { CramUnimplementedError } = require('../../errors')
 const { tinyMemoize } = require('../util')
 
 const CramCodec = require('./_base')

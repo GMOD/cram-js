@@ -46,4 +46,5 @@ module.exports = {
   extended,
   JsonClone,
   REWRITE_EXPECTED_DATA,
+  fs,
 }

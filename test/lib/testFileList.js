@@ -115,7 +115,7 @@ xx#unsorted.tmp.cram
 `
   .split(/\s+/)
   .filter(f => !!f)
-  //.filter(f => /xx#repeated/.test(f))
+// .filter(f => /xx#repeated/.test(f))
 
 module.exports = {
   allFiles,

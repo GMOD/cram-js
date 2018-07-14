@@ -6,9 +6,9 @@ const {
   extended,
   JsonClone,
   REWRITE_EXPECTED_DATA,
+  fs,
 } = require('./lib/util')
 const { IndexedCramFile } = require('../src/index')
-const IndexedFastaFile = require('./lib/fasta/indexedFasta')
 const CraiIndex = require('../src/craiIndex')
 
 describe('.crai indexed cram file', () => {
@@ -22,7 +22,7 @@ describe('.crai indexed cram file', () => {
 
     const features = await cram.getRecordsForRange(0, 2, 200)
     if (REWRITE_EXPECTED_DATA)
-      require('fs').writeFileSync(
+      fs.writeFileSync(
         'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
@@ -49,7 +49,7 @@ describe('.crai indexed cram file', () => {
 
     const features = await cram.getRecordsForRange(0, 2, 200)
     if (REWRITE_EXPECTED_DATA)
-      require('fs').writeFileSync(
+      fs.writeFileSync(
         'test/data/ce#unmap2.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
@@ -70,7 +70,7 @@ describe('.crai indexed cram file', () => {
 
     const features = await cram.getRecordsForRange(0, 2, 200)
     if (REWRITE_EXPECTED_DATA)
-      require('fs').writeFileSync(
+      fs.writeFileSync(
         'test/data/ce#1000.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
@@ -94,7 +94,7 @@ describe('.crai indexed cram file', () => {
 
     const features = await cram.getRecordsForRange(0, 0, Infinity)
     if (REWRITE_EXPECTED_DATA)
-      require('fs').writeFileSync(
+      fs.writeFileSync(
         'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
@@ -106,7 +106,7 @@ describe('.crai indexed cram file', () => {
     const features2 = await cram.getRecordsForRange(-1, 0, Infinity)
 
     if (REWRITE_EXPECTED_DATA)
-      require('fs').writeFileSync(
+      fs.writeFileSync(
         'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
         JSON.stringify(features2, null, '  '),
       )
@@ -162,7 +162,7 @@ describe('.crai indexed cram file', () => {
 
       const features = await cram.getRecordsForRange(0, 0, Infinity)
       if (REWRITE_EXPECTED_DATA)
-        require('fs').writeFileSync(
+        fs.writeFileSync(
           `test/data/${filename}.test2.expected.json`,
           JSON.stringify(features, null, '  '),
         )
@@ -180,7 +180,7 @@ describe('.crai indexed cram file', () => {
 
       const features = await cram.getRecordsForRange(1, 0, Infinity)
       if (REWRITE_EXPECTED_DATA)
-        require('fs').writeFileSync(
+        fs.writeFileSync(
           `test/data/${filename}.test3.expected.json`,
           JSON.stringify(features, null, '  '),
         )
@@ -195,10 +195,10 @@ describe('.crai indexed cram file', () => {
   extended(
     'can fetch some regions of tomato example data correctly',
     async () => {
-      const fasta = new IndexedFastaFile({
-        fasta: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa'),
-        fai: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa.fai'),
-      })
+      // const fasta = new IndexedFastaFile({
+      //   fasta: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa'),
+      //   fai: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa.fai'),
+      // })
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile('extended/RNAseq_mapping_def.cram'),
         index: new CraiIndex({
@@ -209,7 +209,7 @@ describe('.crai indexed cram file', () => {
 
       const features = await cram.getRecordsForRange(1, 20000, 30000)
       if (REWRITE_EXPECTED_DATA)
-        require('fs').writeFileSync(
+        fs.writeFileSync(
           `test/data/extended/RNAseq_mapping_def.cram.test1.expected.json`,
           JSON.stringify(features, null, '  '),
         )
@@ -222,7 +222,7 @@ describe('.crai indexed cram file', () => {
 
       const moreFeatures = await cram.getRecordsForRange(6, 12437859, 12437959)
       if (REWRITE_EXPECTED_DATA)
-        require('fs').writeFileSync(
+        fs.writeFileSync(
           `test/data/extended/RNAseq_mapping_def.cram.test2.expected.json`,
           JSON.stringify(moreFeatures, null, '  '),
         )
