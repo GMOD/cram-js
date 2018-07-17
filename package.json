@@ -83,5 +83,8 @@
     "rimraf": "^2.6.1",
     "webpack": "4",
     "webpack-cli": "^2.0.15"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
