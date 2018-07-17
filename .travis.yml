@@ -11,7 +11,7 @@ script:
   - if [ "x$BACKCOMPAT" = "x" ]; then npm run coverage; fi
   - rm -rf src
   - mv dist src
-  - npm run test
+  - if [ $BACKCOMPAT = "true" ]; then npm run built-tests; else npm run test; fi
 cache:
   - node_modules
 after_success:

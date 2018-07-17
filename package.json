@@ -27,6 +27,7 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "babel src -d dist",
+    "built-tests": "rm -rf built-tests; babel test -d built-tests; ln -s ../test/data built-tests/data; mocha built-tests",
     "watch": "npm-watch",
     "prepublishOnly": "npm test && npm run build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js && git push origin master --follow-tags"
