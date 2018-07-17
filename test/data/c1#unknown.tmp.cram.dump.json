@@ -552,7 +552,8 @@
                 "data": 2,
                 "pos": 6,
                 "refPos": 5,
-                "sub": "G"
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "D",
@@ -599,7 +600,8 @@
                 "data": 2,
                 "pos": 6,
                 "refPos": 5,
-                "sub": "G"
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "D",
@@ -1157,7 +1159,8 @@
                 "data": 2,
                 "pos": 6,
                 "refPos": 5,
-                "sub": "G"
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "D",
@@ -1204,7 +1207,8 @@
                 "data": 2,
                 "pos": 6,
                 "refPos": 5,
-                "sub": "G"
+                "ref": "G",
+                "sub": "T"
               },
               {
                 "code": "D",

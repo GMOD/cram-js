@@ -392,17 +392,25 @@ class CramSlice {
       if (sliceHeader.content.refSeqId >= 0) {
         const compressionScheme = await this.container.getCompressionScheme()
         const refStart = records[0].alignmentStart
-        const lastRecord = records[records.length - 1]
-        const refEnd = lastRecord.alignmentStart + lastRecord.lengthOnRef - 1
-        const seq = await this.file.fetchReferenceSequenceCallback(
-          sliceHeader.content.refSeqId,
-          refStart,
-          refEnd,
-        )
-        const refRegion = { seq, start: refStart, end: refEnd }
-        records.forEach(r => {
-          r.addReferenceSequence(refRegion, compressionScheme)
-        })
+
+        // need to iterate over the records to find the right end of the span
+        let refEnd = -Infinity
+        for (let i = 0; i < records.length; i += 1) {
+          const end = records[i].alignmentStart + records[i].lengthOnRef - 1
+          if (end > refEnd) refEnd = end
+        }
+
+        if (refStart <= refEnd) {
+          const seq = await this.file.fetchReferenceSequenceCallback(
+            sliceHeader.content.refSeqId,
+            refStart,
+            refEnd,
+          )
+          const refRegion = { seq, start: refStart, end: refEnd }
+          records.forEach(r => {
+            r.addReferenceSequence(refRegion, compressionScheme)
+          })
+        }
       }
     }
 
