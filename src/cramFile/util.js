@@ -79,7 +79,7 @@ module.exports = {
   //     offset += 4
   //   } else if (countFlags < 0xf8) {
   //     result =
-  //       ((buffer[offset] & 15) * 2 ** 32 + (buffer[offset + 1] << 24)) |
+  //       ((buffer[offset] & 15) * Math.pow(2,32) + (buffer[offset + 1] << 24)) |
   //       ((buffer[offset + 2] << 16) |
   //         (buffer[offset + 3] << 8) |
   //         buffer[offset + 4])
@@ -87,7 +87,7 @@ module.exports = {
   //     offset += 5
   //   } else if (countFlags < 0xfc) {
   //     result =
-  //       ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * 2 ** 32 +
+  //       ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * Math.pow(2,32) +
   //         (buffer[offset + 2] << 24)) |
   //       ((buffer[offset + 3] << 16) |
   //         (buffer[offset + 4] << 8) |
@@ -98,7 +98,7 @@ module.exports = {
   //       ((((buffer[offset] & 3) << 16) |
   //         (buffer[offset + 1] << 8) |
   //         buffer[offset + 2]) *
-  //         2 ** 32 +
+  //         Math.pow(2,32) +
   //         (buffer[offset + 3] << 24)) |
   //       ((buffer[offset + 4] << 16) |
   //         (buffer[offset + 5] << 8) |

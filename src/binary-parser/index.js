@@ -806,16 +806,16 @@ Parser.prototype.generateLtf8 = function(ctx) {
     ${name} = ((buffer[offset]<<24) | (buffer[offset+1]<<16) | (buffer[offset+2]<<8) | buffer[offset+3]) & 0x0fffffff;
     offset += 4;
   } else if (${countFlags} < 0xf8) {
-    ${name} = (((buffer[offset] & 15) * 2**32)) +
+    ${name} = (((buffer[offset] & 15) * Math.pow(2,32))) +
       (buffer[offset+1]<<24) | (buffer[offset+2]<<16 | buffer[offset+3]<<8 | buffer[offset+4])
     // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
     offset += 5;
   } else if (${countFlags} < 0xfc) {
-    ${name} = ((((buffer[offset] & 7) << 8) | buffer[offset+1] )) * 2**32 +
+    ${name} = ((((buffer[offset] & 7) << 8) | buffer[offset+1] )) * Math.pow(2,32) +
       (buffer[offset+2]<<24) | (buffer[offset+3]<<16 | buffer[offset+4]<<8 | buffer[offset+5])
     offset += 6;
   } else if (${countFlags} < 0xfe) {
-    ${name} = ((((buffer[offset] & 3) << 16) | buffer[offset+1]<<8 | buffer[offset+2])) * 2**32 +
+    ${name} = ((((buffer[offset] & 3) << 16) | buffer[offset+1]<<8 | buffer[offset+2])) * Math.pow(2,32) +
       (buffer[offset+3]<<24) | (buffer[offset+4]<<16 | buffer[offset+5]<<8 | buffer[offset+6])
     offset += 7;
   } else if (${countFlags} < 0xff) {
