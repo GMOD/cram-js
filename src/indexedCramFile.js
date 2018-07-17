@@ -1,4 +1,4 @@
-const { CramUnimplementedError, CramSizeLimitError } = require('../errors')
+const { CramUnimplementedError, CramSizeLimitError } = require('./errors')
 
 const CramFile = require('./cramFile')
 

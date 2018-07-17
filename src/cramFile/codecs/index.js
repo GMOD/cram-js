@@ -1,4 +1,4 @@
-const { CramUnimplementedError } = require('../../../errors')
+const { CramUnimplementedError } = require('../../errors')
 
 const HuffmanIntCodec = require('./huffman')
 const ExternalCodec = require('./external')

@@ -1,4 +1,4 @@
-const { CramBufferOverrunError, CramMalformedError } = require('../../../errors')
+const { CramBufferOverrunError, CramMalformedError } = require('../../errors')
 
 const CramCodec = require('./_base')
 

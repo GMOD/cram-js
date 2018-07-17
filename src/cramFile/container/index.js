@@ -1,4 +1,4 @@
-const { CramMalformedError } = require('../../../errors')
+const { CramMalformedError } = require('../../errors')
 
 const { itf8Size, parseItem, tinyMemoize } = require('../util')
 const CramSlice = require('../slice')

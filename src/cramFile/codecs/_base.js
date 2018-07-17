@@ -1,4 +1,4 @@
-const { CramBufferOverrunError } = require('../../../errors')
+const { CramBufferOverrunError } = require('../../errors')
 
 const validDataTypes = {
   int: true,

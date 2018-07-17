@@ -2,7 +2,7 @@ const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
 const LRU = require('lru-cache')
 
-const { CramUnimplementedError, CramMalformedError } = require('../../errors')
+const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const rans = require('../rans')
 const {
   cramFileDefinition: cramFileDefinitionParser,

@@ -1,4 +1,4 @@
-const { CramUnimplementedError } = require('../../../errors')
+const { CramUnimplementedError } = require('../../errors')
 const CramCodec = require('./_base')
 
 class BetaCodec extends CramCodec {

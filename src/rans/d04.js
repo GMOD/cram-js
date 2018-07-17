@@ -1,4 +1,4 @@
-const { CramMalformedError } = require('../../errors')
+const { CramMalformedError } = require('../errors')
 
 const Constants = require('./constants')
 const Decoding = require('./decoding')
