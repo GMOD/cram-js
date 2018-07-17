@@ -171,7 +171,7 @@ describe('.crai indexed cram file', () => {
       expect(JsonClone(features)).to.deep.equal(
         await loadTestJSON(`${filename}.test2.expected.json`),
       )
-    })
+    }).timeout(4000)
     it(`can read the second chrom of ${filename} without error`, async () => {
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile(filename),
