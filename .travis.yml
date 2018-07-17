@@ -1,11 +1,14 @@
 language: node_js
-node_js:
-  - stable
+matrix:
+  include:
+  - node_js: stable
+  - node_js: v6
+    env: BACKCOMPAT=true
 script:
   - set -e
   - npm run build
-  - npm run test
-  - npm run coverage
+  - if [ "x$BACKCOMPAT" = "x" ]; then npm run test; fi
+  - if [ "x$BACKCOMPAT" = "x" ]; then npm run coverage; fi
   - rm -rf src
   - mv dist src
   - npm run test
