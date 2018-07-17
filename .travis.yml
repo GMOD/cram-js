@@ -6,6 +6,9 @@ script:
   - npm run build
   - npm run test
   - npm run coverage
+  - rm -rf src
+  - mv dist src
+  - npm run test
 cache:
   - node_modules
 after_success:
