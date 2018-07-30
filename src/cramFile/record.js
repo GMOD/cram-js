@@ -3,7 +3,9 @@ const Constants = require('./constants')
 function decodeReadSequence(cramRecord, refRegion) {
   // remember: all coordinates are 1-based closed
   const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
-  let seqBases = refRegion.seq.substr(regionSeqOffset, cramRecord.lengthOnRef)
+  let seqBases = refRegion.seq
+    .substr(regionSeqOffset, cramRecord.lengthOnRef)
+    .toUpperCase()
 
   // now go through the read features and mutate the sequence according to them
   if (!cramRecord.readFeatures) return seqBases
@@ -18,6 +20,10 @@ function decodeReadSequence(cramRecord, refRegion) {
     if (feature.code === 'b') {
       // specify a base pair for some reason
       seqBases[feature.pos - 1] = feature.data
+    } else if (feature.code === 'B') {
+      // base pair and associated quality
+      // TODO: do we need to set the quality in the qual scores?
+      seqBases[feature.pos - 1] = feature.data[0]
     } else if (feature.code === 'X') {
       // base substitution
       seqBases[feature.pos - 1] = feature.sub

@@ -621,7 +621,7 @@
               40
             ],
             "uniqueId": 0,
-            "readBases": "AACCGTGTT"
+            "readBases": "AACCCTCGTT"
           },
           {
             "tags": {},
@@ -670,7 +670,7 @@
               255
             ],
             "uniqueId": 1,
-            "readBases": "AACCGTGTT"
+            "readBases": "AACCCTCGTT"
           },
           {
             "tags": {
@@ -714,7 +714,7 @@
               255
             ],
             "uniqueId": 2,
-            "readBases": "AACCGCGTT"
+            "readBases": "AANCCGCGTT"
           },
           {
             "tags": {},
@@ -776,7 +776,7 @@
             "readGroupId": -1,
             "readName": "_u",
             "templateSize": 0,
-            "readBases": "AACCGCGGTT",
+            "readBases": "*",
             "qualityScores": [],
             "uniqueId": 5
           }
@@ -1323,7 +1323,7 @@
               40
             ],
             "uniqueId": 0,
-            "readBases": "AACCGTGTT"
+            "readBases": "AACCCTCGTT"
           },
           {
             "tags": {},
@@ -1372,7 +1372,7 @@
               255
             ],
             "uniqueId": 1,
-            "readBases": "AACCGTGTT"
+            "readBases": "AACCCTCGTT"
           },
           {
             "tags": {
@@ -1416,7 +1416,7 @@
               255
             ],
             "uniqueId": 2,
-            "readBases": "AACCGCGTT"
+            "readBases": "AANCCGCGTT"
           },
           {
             "tags": {},
@@ -1478,7 +1478,7 @@
             "readGroupId": -1,
             "readName": "_u",
             "templateSize": 0,
-            "readBases": "AACCGCGGTT",
+            "readBases": "*",
             "qualityScores": [],
             "uniqueId": 5
           }

@@ -951,7 +951,7 @@
               "readName": "a1"
             },
             "templateLength": 20,
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -983,7 +983,7 @@
               "readName": "b1"
             },
             "templateLength": 20,
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1015,7 +1015,7 @@
               "readName": "c1"
             },
             "templateLength": 20,
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},

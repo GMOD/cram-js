@@ -1502,7 +1502,7 @@
               255
             ],
             "uniqueId": 5,
-            "readBases": "C"
+            "readBases": "*"
           },
           {
             "tags": {
@@ -1524,7 +1524,7 @@
               255
             ],
             "uniqueId": 6,
-            "readBases": "TAA"
+            "readBases": "*"
           },
           {
             "tags": {
@@ -1544,7 +1544,7 @@
               255
             ],
             "uniqueId": 7,
-            "readBases": "A"
+            "readBases": "*"
           }
         ]
       }
@@ -2897,7 +2897,7 @@
               255
             ],
             "uniqueId": 5,
-            "readBases": "C"
+            "readBases": "*"
           },
           {
             "tags": {
@@ -2919,7 +2919,7 @@
               255
             ],
             "uniqueId": 6,
-            "readBases": "TAA"
+            "readBases": "*"
           },
           {
             "tags": {
@@ -2939,7 +2939,7 @@
               255
             ],
             "uniqueId": 7,
-            "readBases": "A"
+            "readBases": "*"
           }
         ]
       }

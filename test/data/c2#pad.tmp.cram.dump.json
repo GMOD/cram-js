@@ -880,7 +880,7 @@
               255
             ],
             "uniqueId": 2,
-            "readBases": "CTTAT"
+            "readBases": "CTGGTC"
           },
           {
             "tags": {},
@@ -963,7 +963,7 @@
               255
             ],
             "uniqueId": 3,
-            "readBases": "CTTAT"
+            "readBases": "CTGGTC"
           },
           {
             "tags": {},
@@ -1193,7 +1193,7 @@
               255
             ],
             "uniqueId": 6,
-            "readBases": "CTAATACCT"
+            "readBases": "CTAAGGAATC"
           }
         ]
       },
@@ -1725,7 +1725,7 @@
               255
             ],
             "uniqueId": 7,
-            "readBases": "CTAATACCT"
+            "readBases": "CTAAGGAATC"
           },
           {
             "tags": {},
@@ -2385,7 +2385,7 @@
               255
             ],
             "uniqueId": 2,
-            "readBases": "CTTAT"
+            "readBases": "CTGGTC"
           },
           {
             "tags": {},
@@ -2468,7 +2468,7 @@
               255
             ],
             "uniqueId": 3,
-            "readBases": "CTTAT"
+            "readBases": "CTGGTC"
           },
           {
             "tags": {},
@@ -2698,7 +2698,7 @@
               255
             ],
             "uniqueId": 6,
-            "readBases": "CTAATACCT"
+            "readBases": "CTAAGGAATC"
           }
         ]
       },
@@ -3230,7 +3230,7 @@
               255
             ],
             "uniqueId": 7,
-            "readBases": "CTAATACCT"
+            "readBases": "CTAAGGAATC"
           },
           {
             "tags": {},

@@ -576,7 +576,7 @@
               9
             ],
             "uniqueId": 2,
-            "readBases": "TTTTTTTTTT"
+            "readBases": "AAAAATTTTT"
           }
         ]
       }
@@ -927,7 +927,7 @@
               "readName": "a1"
             },
             "templateLength": 15,
-            "readBases": "AAAAAAAAAA"
+            "readBases": "AAAAATTTTT"
           },
           {
             "tags": {},
@@ -1310,7 +1310,7 @@
               "readName": "a1"
             },
             "templateLength": 15,
-            "readBases": "AAAAAAAAAA"
+            "readBases": "AAAAATTTTT"
           },
           {
             "tags": {},

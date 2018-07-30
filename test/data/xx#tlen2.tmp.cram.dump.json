@@ -811,7 +811,8 @@
               "alignmentStart": 16,
               "readName": "x1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -837,7 +838,8 @@
               "alignmentStart": 7,
               "readName": "x2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -863,7 +865,8 @@
               "alignmentStart": 10,
               "readName": "x2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -889,7 +892,8 @@
               "alignmentStart": 7,
               "readName": "x3"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -915,7 +919,8 @@
               "alignmentStart": 10,
               "readName": "x3"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1637,7 +1642,8 @@
               "alignmentStart": 1,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -1663,7 +1669,8 @@
               "alignmentStart": 16,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -1689,7 +1696,8 @@
               "alignmentStart": 7,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -1715,7 +1723,8 @@
               "alignmentStart": 10,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1741,7 +1750,8 @@
               9,
               9
             ],
-            "uniqueId": 12
+            "uniqueId": 12,
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -1767,7 +1777,8 @@
               9,
               9
             ],
-            "uniqueId": 13
+            "uniqueId": 13,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1793,7 +1804,8 @@
               9,
               9
             ],
-            "uniqueId": 14
+            "uniqueId": 14,
+            "readBases": "TTTTT"
           }
         ]
       },
@@ -2112,7 +2124,8 @@
               9,
               9
             ],
-            "uniqueId": 15
+            "uniqueId": 15,
+            "readBases": "AAAAA"
           }
         ]
       }
@@ -2497,7 +2510,8 @@
               "alignmentStart": 1,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -2523,7 +2537,8 @@
               "alignmentStart": 16,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -2549,7 +2564,8 @@
               "alignmentStart": 7,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -2575,7 +2591,8 @@
               "alignmentStart": 10,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -2601,7 +2618,8 @@
               9,
               9
             ],
-            "uniqueId": 12
+            "uniqueId": 12,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -2627,7 +2645,8 @@
               9,
               9
             ],
-            "uniqueId": 13
+            "uniqueId": 13,
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -2653,7 +2672,8 @@
               9,
               9
             ],
-            "uniqueId": 14
+            "uniqueId": 14,
+            "readBases": "AAAAA"
           }
         ]
       },
@@ -2972,7 +2992,8 @@
               9,
               9
             ],
-            "uniqueId": 15
+            "uniqueId": 15,
+            "readBases": "AAAAA"
           }
         ]
       }

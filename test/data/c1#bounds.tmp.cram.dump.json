@@ -594,7 +594,7 @@
               9
             ],
             "uniqueId": 1,
-            "readBases": "ACCGCGGTT"
+            "readBases": "ACCGCGGTTC"
           },
           {
             "tags": {
@@ -644,7 +644,7 @@
               9
             ],
             "uniqueId": 2,
-            "readBases": "CCGCGGTT"
+            "readBases": "CCGCGGTTCG"
           }
         ]
       }
@@ -1149,7 +1149,7 @@
               9
             ],
             "uniqueId": 1,
-            "readBases": "ACCGCGGTT"
+            "readBases": "ACCGCGGTTC"
           },
           {
             "tags": {
@@ -1199,7 +1199,7 @@
               9
             ],
             "uniqueId": 2,
-            "readBases": "CCGCGGTT"
+            "readBases": "CCGCGGTTCG"
           }
         ]
       }

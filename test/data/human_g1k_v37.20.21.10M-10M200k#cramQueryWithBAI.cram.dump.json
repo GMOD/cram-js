@@ -7001,7 +7001,7 @@
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "h",
-            "readBases": "ANNCCNNNNTTTGATGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             "qualityScores": [
               2,
               2,
@@ -7249,7 +7249,7 @@
             "alignmentStart": 0,
             "readGroupId": 0,
             "readName": "i",
-            "readBases": "ANNCANNNNGCTGAGGNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
             "qualityScores": [
               2,
               2,

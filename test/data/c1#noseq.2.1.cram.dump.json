@@ -783,7 +783,7 @@
             "readGroupId": -1,
             "readName": "SQ3",
             "templateSize": 0,
-            "readBases": "AACCGCGGTT",
+            "readBases": "*",
             "qualityScores": [],
             "uniqueId": 8
           }
@@ -1508,7 +1508,7 @@
             "readGroupId": -1,
             "readName": "SQ3",
             "templateSize": 0,
-            "readBases": "AACCGCGGTT",
+            "readBases": "*",
             "qualityScores": [],
             "uniqueId": 8
           }

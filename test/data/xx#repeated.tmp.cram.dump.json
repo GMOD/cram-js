@@ -504,7 +504,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -568,7 +568,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -951,7 +951,7 @@
               "readName": "S"
             },
             "templateLength": 20,
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1015,7 +1015,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1079,7 +1079,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "readBases": "AAAAAAAAAA"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
