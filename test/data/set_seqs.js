@@ -18,6 +18,7 @@ function getFeatures(data) {
 
 fs.readdirSync('.')
   .filter(f => /dump.json/.test(f))
+  //.filter(f => /clip/.test(f))
   .forEach(filename => {
     const data = require(`./${filename}`)
     const features = getFeatures(data)
@@ -38,13 +39,26 @@ fs.readdirSync('.')
           sequences[name].push(seq)
         })
 
+      // if (sequences.s0c) {
+      //   console.log(sequences.s0c)
+      // }
+
       let replaced = false
       features.forEach(feature => {
         const samSeq = sequences[feature.readName] && sequences[feature.readName][0]
-        if (samSeq && samSeq !== feature.readBases) {
-          feature.readBases = samSeq
-          sequences[feature.readName].shift()
+        if( feature.readBases === '*' ) {
+          delete feature.readBases
           replaced = true
+        }
+        if (samSeq) {
+          if (samSeq !== feature.readBases) replaced = true
+          if (samSeq === '*') {
+            delete feature.readBases
+          } else {
+            feature.readBases = samSeq
+          }
+          //console.log(`${feature.readName} = ${samSeq}`)
+          sequences[feature.readName].shift()
         }
       })
       if (replaced) {

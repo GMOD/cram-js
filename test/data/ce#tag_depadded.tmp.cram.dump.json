@@ -1107,7 +1107,8 @@
               34,
               34
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {
@@ -1651,7 +1652,8 @@
               34,
               34
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {
@@ -2202,7 +2204,8 @@
               34,
               34
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTCAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {},
@@ -2744,7 +2747,8 @@
               34,
               34
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {},
@@ -3286,7 +3290,8 @@
               34,
               34
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {
@@ -3305,7 +3310,8 @@
             "qualityScores": [
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "readBases": "C"
           },
           {
             "tags": {
@@ -3325,7 +3331,8 @@
               255,
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "readBases": "TA"
           }
         ]
       },

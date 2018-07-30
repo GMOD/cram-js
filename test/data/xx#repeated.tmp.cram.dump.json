@@ -439,7 +439,8 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -470,7 +471,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -501,7 +503,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -532,7 +535,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -563,7 +567,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -594,7 +599,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }

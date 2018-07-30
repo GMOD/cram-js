@@ -1336,7 +1336,8 @@
               18,
               25
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -2043,7 +2044,8 @@
               18,
               25
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -2750,7 +2752,8 @@
               18,
               25
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -3457,7 +3460,8 @@
               18,
               25
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -4164,7 +4168,8 @@
               18,
               25
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
       }
@@ -5360,7 +5365,8 @@
               18,
               25
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -6067,7 +6073,8 @@
               18,
               25
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -6774,7 +6781,8 @@
               18,
               25
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
       }
@@ -7968,7 +7976,8 @@
               18,
               25
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
             "tags": {},
@@ -8675,7 +8684,8 @@
               18,
               25
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
       }
@@ -9867,7 +9877,8 @@
               18,
               25
             ],
-            "uniqueId": 10
+            "uniqueId": 10,
+            "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
       }

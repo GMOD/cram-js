@@ -873,7 +873,8 @@
               34,
               34
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {
@@ -1023,7 +1024,8 @@
               15,
               15
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "CTAAGCCTAAATCTAAGCCTAACCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]
       }

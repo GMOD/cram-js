@@ -576,7 +576,8 @@
               40,
               40
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "AACCCTCGTT"
           },
           {
             "tags": {},
@@ -624,7 +625,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "AACCCTCGTT"
           },
           {
             "tags": {},
@@ -664,7 +666,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "AANCCGCGTT"
           },
           {
             "tags": {},
@@ -726,7 +729,6 @@
             "readGroupId": -1,
             "readName": "_u",
             "templateSize": 0,
-            "readBases": null,
             "qualityScores": null,
             "uniqueId": 5
           }

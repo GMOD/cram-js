@@ -672,7 +672,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -698,7 +699,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -724,7 +726,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -750,7 +753,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -776,7 +780,8 @@
               9,
               9
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -802,7 +807,8 @@
               9,
               9
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }

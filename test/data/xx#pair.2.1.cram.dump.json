@@ -411,7 +411,8 @@
               "alignmentStart": 11,
               "readName": "a1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -442,7 +443,8 @@
               "alignmentStart": 11,
               "readName": "b1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -473,7 +475,8 @@
               "alignmentStart": 11,
               "readName": "c1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -504,7 +507,8 @@
               "alignmentStart": 1,
               "readName": "a1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -535,7 +539,8 @@
               "alignmentStart": 1,
               "readName": "b1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -566,7 +571,8 @@
               "alignmentStart": 1,
               "readName": "c1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }

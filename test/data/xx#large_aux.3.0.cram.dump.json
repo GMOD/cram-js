@@ -16077,7 +16077,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {
@@ -16614,7 +16615,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {
@@ -16642,7 +16644,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "AAAAAAAAAA"
           }
         ]
       }

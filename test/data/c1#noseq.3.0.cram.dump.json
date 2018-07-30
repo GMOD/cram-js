@@ -614,7 +614,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -640,7 +641,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {
@@ -702,7 +704,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -735,7 +738,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {
@@ -831,7 +835,6 @@
             "readGroupId": -1,
             "readName": "SQ3",
             "templateSize": 0,
-            "readBases": null,
             "qualityScores": null,
             "uniqueId": 8
           }

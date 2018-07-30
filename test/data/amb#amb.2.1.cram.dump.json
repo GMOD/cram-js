@@ -756,7 +756,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1056,7 +1057,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
           },
           {
             "tags": {},
@@ -1328,7 +1330,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
             "tags": {},
@@ -1628,7 +1631,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "readBases": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
           },
           {
             "tags": {},
@@ -1965,7 +1969,8 @@
               9,
               9
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -2237,7 +2242,8 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "readBases": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
           },
           {
             "tags": {},
@@ -2537,7 +2543,8 @@
               9,
               9
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "readBases": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
           },
           {
             "tags": {},
@@ -2829,7 +2836,8 @@
               9,
               9
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -3121,7 +3129,8 @@
               9,
               9
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -3421,7 +3430,8 @@
               9,
               9
             ],
-            "uniqueId": 10
+            "uniqueId": 10,
+            "readBases": "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
           },
           {
             "tags": {},
@@ -3713,7 +3723,8 @@
               9,
               9
             ],
-            "uniqueId": 11
+            "uniqueId": 11,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -4013,7 +4024,8 @@
               9,
               9
             ],
-            "uniqueId": 12
+            "uniqueId": 12,
+            "readBases": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
           },
           {
             "tags": {},
@@ -4305,7 +4317,8 @@
               9,
               9
             ],
-            "uniqueId": 13
+            "uniqueId": 13,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -4597,7 +4610,8 @@
               9,
               9
             ],
-            "uniqueId": 14
+            "uniqueId": 14,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -4889,7 +4903,8 @@
               9,
               9
             ],
-            "uniqueId": 15
+            "uniqueId": 15,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -5181,7 +5196,8 @@
               9,
               9
             ],
-            "uniqueId": 16
+            "uniqueId": 16,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -5481,7 +5497,8 @@
               9,
               9
             ],
-            "uniqueId": 17
+            "uniqueId": 17,
+            "readBases": "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
           },
           {
             "tags": {},
@@ -5781,7 +5798,8 @@
               9,
               9
             ],
-            "uniqueId": 18
+            "uniqueId": 18,
+            "readBases": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
           },
           {
             "tags": {},
@@ -6053,7 +6071,8 @@
               9,
               9
             ],
-            "uniqueId": 19
+            "uniqueId": 19,
+            "readBases": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
           },
           {
             "tags": {},
@@ -6345,7 +6364,8 @@
               9,
               9
             ],
-            "uniqueId": 20
+            "uniqueId": 20,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -6645,7 +6665,8 @@
               9,
               9
             ],
-            "uniqueId": 21
+            "uniqueId": 21,
+            "readBases": "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"
           },
           {
             "tags": {},
@@ -6945,7 +6966,8 @@
               9,
               9
             ],
-            "uniqueId": 22
+            "uniqueId": 22,
+            "readBases": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
           },
           {
             "tags": {},
@@ -7237,7 +7259,8 @@
               9,
               9
             ],
-            "uniqueId": 23
+            "uniqueId": 23,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -7546,7 +7569,8 @@
               9,
               9
             ],
-            "uniqueId": 24
+            "uniqueId": 24,
+            "readBases": "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
           },
           {
             "tags": {},
@@ -7838,7 +7862,8 @@
               9,
               9
             ],
-            "uniqueId": 25
+            "uniqueId": 25,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -8110,7 +8135,8 @@
               9,
               9
             ],
-            "uniqueId": 26
+            "uniqueId": 26,
+            "readBases": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
             "tags": {},
@@ -8410,7 +8436,8 @@
               9,
               9
             ],
-            "uniqueId": 27
+            "uniqueId": 27,
+            "readBases": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
           },
           {
             "tags": {},
@@ -8682,7 +8709,8 @@
               9,
               9
             ],
-            "uniqueId": 28
+            "uniqueId": 28,
+            "readBases": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
             "tags": {},
@@ -8982,7 +9010,8 @@
               9,
               9
             ],
-            "uniqueId": 29
+            "uniqueId": 29,
+            "readBases": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
           },
           {
             "tags": {},
@@ -9274,7 +9303,8 @@
               9,
               9
             ],
-            "uniqueId": 30
+            "uniqueId": 30,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -9566,7 +9596,8 @@
               9,
               9
             ],
-            "uniqueId": 31
+            "uniqueId": 31,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -9838,7 +9869,8 @@
               9,
               9
             ],
-            "uniqueId": 32
+            "uniqueId": 32,
+            "readBases": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
           },
           {
             "tags": {},
@@ -10138,7 +10170,8 @@
               9,
               9
             ],
-            "uniqueId": 33
+            "uniqueId": 33,
+            "readBases": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
           },
           {
             "tags": {},
@@ -10430,7 +10463,8 @@
               9,
               9
             ],
-            "uniqueId": 34
+            "uniqueId": 34,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -10722,7 +10756,8 @@
               9,
               9
             ],
-            "uniqueId": 35
+            "uniqueId": 35,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -11022,7 +11057,8 @@
               9,
               9
             ],
-            "uniqueId": 36
+            "uniqueId": 36,
+            "readBases": "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
           },
           {
             "tags": {},
@@ -11314,7 +11350,8 @@
               9,
               9
             ],
-            "uniqueId": 37
+            "uniqueId": 37,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -11614,7 +11651,8 @@
               9,
               9
             ],
-            "uniqueId": 38
+            "uniqueId": 38,
+            "readBases": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
           },
           {
             "tags": {},
@@ -11906,7 +11944,8 @@
               9,
               9
             ],
-            "uniqueId": 39
+            "uniqueId": 39,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -12198,7 +12237,8 @@
               9,
               9
             ],
-            "uniqueId": 40
+            "uniqueId": 40,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -12490,7 +12530,8 @@
               9,
               9
             ],
-            "uniqueId": 41
+            "uniqueId": 41,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -12782,7 +12823,8 @@
               9,
               9
             ],
-            "uniqueId": 42
+            "uniqueId": 42,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -13082,7 +13124,8 @@
               9,
               9
             ],
-            "uniqueId": 43
+            "uniqueId": 43,
+            "readBases": "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
           },
           {
             "tags": {},
@@ -13382,7 +13425,8 @@
               9,
               9
             ],
-            "uniqueId": 44
+            "uniqueId": 44,
+            "readBases": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
           },
           {
             "tags": {},
@@ -13654,7 +13698,8 @@
               9,
               9
             ],
-            "uniqueId": 45
+            "uniqueId": 45,
+            "readBases": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
           },
           {
             "tags": {},
@@ -13946,7 +13991,8 @@
               9,
               9
             ],
-            "uniqueId": 46
+            "uniqueId": 46,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -14246,7 +14292,8 @@
               9,
               9
             ],
-            "uniqueId": 47
+            "uniqueId": 47,
+            "readBases": "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"
           },
           {
             "tags": {},
@@ -14546,7 +14593,8 @@
               9,
               9
             ],
-            "uniqueId": 48
+            "uniqueId": 48,
+            "readBases": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
           },
           {
             "tags": {},
@@ -14838,7 +14886,8 @@
               9,
               9
             ],
-            "uniqueId": 49
+            "uniqueId": 49,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -15147,7 +15196,8 @@
               9,
               9
             ],
-            "uniqueId": 50
+            "uniqueId": 50,
+            "readBases": "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
           },
           {
             "tags": {},
@@ -15439,7 +15489,8 @@
               9,
               9
             ],
-            "uniqueId": 51
+            "uniqueId": 51,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -15731,7 +15782,8 @@
               9,
               9
             ],
-            "uniqueId": 52
+            "uniqueId": 52,
+            "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
             "tags": {},
@@ -16049,7 +16101,8 @@
               9,
               9
             ],
-            "uniqueId": 53
+            "uniqueId": 53,
+            "readBases": "=============================="
           }
         ]
       }

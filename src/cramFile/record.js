@@ -1,6 +1,11 @@
 const Constants = require('./constants')
 
 function decodeReadSequence(cramRecord, refRegion) {
+  // if it has no length, it has no sequence
+  if (!cramRecord.lengthOnRef && !cramRecord.readLength) return undefined
+
+  if (cramRecord.isUnknownBases()) return undefined
+
   // remember: all coordinates are 1-based closed
   const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
   let seqBases = refRegion.seq
@@ -35,7 +40,7 @@ function decodeReadSequence(cramRecord, refRegion) {
       seqBases.splice(feature.pos - 1, feature.data)
     } else if (feature.code === 'i') {
       // insert single base
-      seqBases.splice(feature.pos - 1, feature.data)
+      seqBases.splice(feature.pos - 1, 0, feature.data)
     } else if (feature.code === 'N') {
       // reference skip. delete some bases
       seqBases.splice(feature.pos - 1, feature.data)

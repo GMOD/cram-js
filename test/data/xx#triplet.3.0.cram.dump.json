@@ -555,7 +555,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -586,7 +587,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "AAAAATTTTT"
           },
           {
             "tags": {},
@@ -617,7 +619,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }
@@ -991,7 +994,8 @@
               "alignmentStart": 6,
               "readName": "a1"
             },
-            "templateLength": 15
+            "templateLength": 15,
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1022,7 +1026,8 @@
               "alignmentStart": 1,
               "readName": "a1"
             },
-            "templateLength": 15
+            "templateLength": 15,
+            "readBases": "AAAAATTTTT"
           }
         ]
       }

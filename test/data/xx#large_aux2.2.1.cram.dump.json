@@ -873,7 +873,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -893,7 +894,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -914,7 +916,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -936,7 +939,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -959,7 +963,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -983,7 +988,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1008,7 +1014,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1034,7 +1041,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1061,7 +1069,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1089,7 +1098,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "readBases": "A"
           }
         ]
       }
