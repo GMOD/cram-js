@@ -2803,7 +2803,8 @@
               34,
               27
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
             "tags": {
@@ -3531,7 +3532,8 @@
               34,
               2
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
             "tags": {
@@ -4258,7 +4260,8 @@
               37,
               35
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
             "tags": {
@@ -4994,7 +4997,8 @@
               36,
               33
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "CAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCCA"
           },
           {
             "tags": {
@@ -5488,7 +5492,8 @@
               28,
               22
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTT"
           },
           {
             "tags": {
@@ -5612,7 +5617,8 @@
               2,
               2
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "GGAATTAAGAAAGACATTTACTTTATAATAACACCAAAAAGAATAAAATACTTAGGAAAAAATGTAAGCAAAGAAGTGTGTGGTCATTTATTTTTTAT"
           },
           {
             "tags": {
@@ -5970,7 +5976,8 @@
               2,
               2
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "CTTTGTAGTAAATTTTGAACTCTAAAGAGTTAGTTCTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
           }
         ]
       }

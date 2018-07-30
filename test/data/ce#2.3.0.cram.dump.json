@@ -925,7 +925,8 @@
               34,
               34
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {
@@ -1075,7 +1076,8 @@
               15,
               15
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "CTAAGCCTAAATCTAAGCCTAACCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]
       }
@@ -1911,7 +1913,8 @@
               34,
               34
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
             "tags": {
@@ -2061,7 +2064,8 @@
               15,
               15
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "CTAAGCCTAAATCTAAGCCTAACCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]
       }

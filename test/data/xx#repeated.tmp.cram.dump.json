@@ -439,7 +439,8 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -470,7 +471,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "seq": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -501,7 +503,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "seq": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -532,7 +535,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "seq": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -563,7 +567,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "seq": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -594,7 +599,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "seq": "TTTTTTTTTT"
           }
         ]
       }
@@ -944,7 +950,8 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -975,7 +982,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "seq": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1006,7 +1014,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "seq": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1037,7 +1046,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "seq": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1068,7 +1078,8 @@
               "sequenceId": 0,
               "alignmentStart": 11,
               "readName": "S"
-            }
+            },
+            "seq": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1099,7 +1110,8 @@
               "sequenceId": 0,
               "alignmentStart": 1,
               "readName": "S"
-            }
+            },
+            "seq": "TTTTTTTTTT"
           }
         ]
       }

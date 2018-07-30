@@ -606,7 +606,8 @@
             "lengthOnRef": 0,
             "mappingQuality": 1,
             "qualityScores": [],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": ""
           },
           {
             "tags": {},
@@ -635,7 +636,8 @@
             "lengthOnRef": 0,
             "mappingQuality": 1,
             "qualityScores": [],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": ""
           },
           {
             "tags": {},
@@ -687,7 +689,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AAAAAAATTT"
           }
         ]
       }

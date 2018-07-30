@@ -1,5 +1,50 @@
 const Constants = require('./constants')
 
+function decodeReadSequence(cramRecord, refRegion) {
+  // remember: all coordinates are 1-based closed
+  const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
+  let seqBases = refRegion.seq.substr(regionSeqOffset, cramRecord.lengthOnRef)
+
+  // now go through the read features and mutate the sequence according to them
+  if (!cramRecord.readFeatures) return seqBases
+
+  // split the bases into an array so we can munge them more easily
+  seqBases = seqBases.split('')
+
+  // go through and apply all the read features to the sequence
+  for (let i = 0; i < cramRecord.readFeatures.length; i += 1) {
+    const feature = cramRecord.readFeatures[i]
+    // 'bqBXIDiQNSPH'
+    if (feature.code === 'b') {
+      // specify a base pair for some reason
+      seqBases[feature.pos - 1] = feature.data
+    } else if (feature.code === 'X') {
+      // base substitution
+      seqBases[feature.pos - 1] = feature.sub
+    } else if (feature.code === 'I') {
+      // insertion
+      seqBases.splice(feature.pos - 1, 0, ...feature.data.split(''))
+    } else if (feature.code === 'D') {
+      // deletion
+      seqBases.splice(feature.pos - 1, feature.data)
+    } else if (feature.code === 'i') {
+      // insert single base
+      seqBases.splice(feature.pos - 1, feature.data)
+    } else if (feature.code === 'N') {
+      // reference skip. delete some bases
+      seqBases.splice(feature.pos - 1, feature.data)
+    } else if (feature.code === 'S') {
+      // soft clipped bases that should be present in the read seq
+      seqBases.splice(feature.pos - 1, 0, ...feature.data.split(''))
+    } else if (feature.code === 'P') {
+      // padding, do nothing
+    } else if (feature.code === 'H') {
+      // hard clip, do nothing
+    }
+  }
+  return seqBases.join('')
+}
+
 const baseNumbers = {
   a: 0,
   A: 0,
@@ -125,9 +170,10 @@ class CramRecord {
   }
 
   /**
-   * annotates this feature with the given reference region.
-   * right now, this only uses the reference sequence to decode
-   * which bases are being substituted in base substitution features.
+   * Annotates this feature with the given reference sequence basepair
+   * information. Right now, this only uses the reference sequence to
+   * decode which bases are being substituted in base substitution
+   * features.
    *
    * @param {object} refRegion
    * @param {number} refRegion.start
@@ -138,8 +184,8 @@ class CramRecord {
    */
   addReferenceSequence(refRegion, compressionScheme) {
     if (this.readFeatures) {
-      // decode the base substituted in a base substitution,
-      // if we can fetch the reference sequence
+      // use the reference bases to decode the bases
+      // substituted in each base substitution
       this.readFeatures.forEach(readFeature => {
         if (readFeature.code === 'X')
           decodeBaseSubstitution(
@@ -150,6 +196,8 @@ class CramRecord {
           )
       })
     }
+
+    this.seq = decodeReadSequence(this, refRegion)
   }
 
   toJSON() {

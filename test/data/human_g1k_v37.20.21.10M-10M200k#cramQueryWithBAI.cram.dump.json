@@ -2192,7 +2192,8 @@
               34,
               27
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
             "tags": {
@@ -2922,7 +2923,8 @@
               34,
               2
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
             "tags": {
@@ -3651,7 +3653,8 @@
               37,
               35
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
             "tags": {
@@ -4389,7 +4392,8 @@
               36,
               33
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "CAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCCA"
           },
           {
             "tags": {
@@ -4885,7 +4889,8 @@
               28,
               22
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTT"
           },
           {
             "tags": {
@@ -5009,7 +5014,8 @@
               "alignmentStart": 100013,
               "readName": "f"
             },
-            "templateLength": 101
+            "templateLength": 101,
+            "seq": "GGAATTAAGAAAGACATTTACTTTATAATAACACCAAAAAGAATAAAATACTTAGGAAAAAATGTAAGCAAAGAAGTGTGTGGTCATTTATTTTTTAT"
           },
           {
             "tags": {
@@ -5369,7 +5375,8 @@
               "alignmentStart": 100013,
               "readName": "f"
             },
-            "templateLength": 101
+            "templateLength": 101,
+            "seq": "CTTTGTAGTAAATTTTGAACTCTAAAGAGTTAGTTCTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
           }
         ]
       }

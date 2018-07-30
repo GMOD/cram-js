@@ -537,7 +537,8 @@
               "alignmentStart": 16,
               "readName": "x1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "AAAAA"
           },
           {
             "tags": {},
@@ -563,7 +564,8 @@
               "alignmentStart": 1,
               "readName": "x1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -589,7 +591,8 @@
               "alignmentStart": 10,
               "readName": "x2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "AAAAT"
           },
           {
             "tags": {},
@@ -615,7 +618,8 @@
               "alignmentStart": 7,
               "readName": "x2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "ATTTT"
           },
           {
             "tags": {},
@@ -641,7 +645,8 @@
               "alignmentStart": 10,
               "readName": "x3"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "AAAAT"
           },
           {
             "tags": {},
@@ -667,7 +672,8 @@
               "alignmentStart": 7,
               "readName": "x3"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "ATTTT"
           },
           {
             "tags": {},
@@ -693,7 +699,8 @@
               "alignmentStart": 16,
               "readName": "x4"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "AAAAA"
           },
           {
             "tags": {},
@@ -719,7 +726,8 @@
               "alignmentStart": 1,
               "readName": "x4"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "TTTTT"
           }
         ]
       }
@@ -1129,7 +1137,8 @@
               "alignmentStart": 16,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "AAAAA"
           },
           {
             "tags": {},
@@ -1155,7 +1164,8 @@
               "alignmentStart": 1,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -1181,7 +1191,8 @@
               "alignmentStart": 10,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "AAAAT"
           },
           {
             "tags": {},
@@ -1207,7 +1218,8 @@
               "alignmentStart": 7,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "ATTTT"
           },
           {
             "tags": {},
@@ -1233,7 +1245,8 @@
               9,
               9
             ],
-            "uniqueId": 12
+            "uniqueId": 12,
+            "seq": "AAAAT"
           },
           {
             "tags": {},
@@ -1259,7 +1272,8 @@
               9,
               9
             ],
-            "uniqueId": 13
+            "uniqueId": 13,
+            "seq": "ATTTT"
           },
           {
             "tags": {},
@@ -1285,7 +1299,8 @@
               9,
               9
             ],
-            "uniqueId": 14
+            "uniqueId": 14,
+            "seq": "AAAAA"
           },
           {
             "tags": {},
@@ -1311,7 +1326,8 @@
               9,
               9
             ],
-            "uniqueId": 15
+            "uniqueId": 15,
+            "seq": "TTTTT"
           }
         ]
       }
@@ -1721,7 +1737,8 @@
               "alignmentStart": 16,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "AAAAA"
           },
           {
             "tags": {},
@@ -1747,7 +1764,8 @@
               "alignmentStart": 1,
               "readName": "y1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -1773,7 +1791,8 @@
               "alignmentStart": 10,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "AAAAT"
           },
           {
             "tags": {},
@@ -1799,7 +1818,8 @@
               "alignmentStart": 7,
               "readName": "y2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "ATTTT"
           },
           {
             "tags": {},
@@ -1825,7 +1845,8 @@
               9,
               9
             ],
-            "uniqueId": 12
+            "uniqueId": 12,
+            "seq": "AAAAT"
           },
           {
             "tags": {},
@@ -1851,7 +1872,8 @@
               9,
               9
             ],
-            "uniqueId": 13
+            "uniqueId": 13,
+            "seq": "ATTTT"
           },
           {
             "tags": {},
@@ -1877,7 +1899,8 @@
               9,
               9
             ],
-            "uniqueId": 14
+            "uniqueId": 14,
+            "seq": "AAAAA"
           },
           {
             "tags": {},
@@ -1903,7 +1926,8 @@
               9,
               9
             ],
-            "uniqueId": 15
+            "uniqueId": 15,
+            "seq": "TTTTT"
           }
         ]
       }

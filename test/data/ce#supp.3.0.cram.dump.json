@@ -674,7 +674,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "TAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTACCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
           },
           {
             "tags": {},
@@ -753,7 +754,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
           },
           {
             "tags": {},
@@ -827,7 +829,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
           },
           {
             "tags": {},
@@ -951,7 +954,8 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCAGCCTAATACTAAGCCTAAGCCTAAGACTAAGCCTAATACTAAGCCTAAG"
           }
         ]
       }
@@ -1520,7 +1524,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "TAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTACCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
           },
           {
             "tags": {},
@@ -1599,7 +1604,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
           },
           {
             "tags": {},
@@ -1673,7 +1679,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
           },
           {
             "tags": {},
@@ -1797,7 +1804,8 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCAGCCTAATACTAAGCCTAAGCCTAAGACTAAGCCTAATACTAAGCCTAAG"
           }
         ]
       }

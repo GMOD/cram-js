@@ -614,7 +614,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -640,7 +641,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {
@@ -669,7 +671,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -702,7 +705,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -735,7 +739,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AACCCGGTT"
           },
           {
             "tags": {
@@ -771,7 +776,8 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -795,7 +801,8 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -819,7 +826,8 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -833,7 +841,8 @@
             "templateSize": 0,
             "readBases": null,
             "qualityScores": null,
-            "uniqueId": 8
+            "uniqueId": 8,
+            "seq": "AACCGCGGTT"
           }
         ]
       }
@@ -1358,7 +1367,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1384,7 +1394,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {
@@ -1413,7 +1424,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1446,7 +1458,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -1479,7 +1492,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AACCCGGTT"
           },
           {
             "tags": {
@@ -1515,7 +1529,8 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -1539,7 +1554,8 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1563,7 +1579,8 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1577,7 +1594,8 @@
             "templateSize": 0,
             "readBases": null,
             "qualityScores": null,
-            "uniqueId": 8
+            "uniqueId": 8,
+            "seq": "AACCGCGGTT"
           }
         ]
       }

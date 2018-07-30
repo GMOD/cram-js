@@ -496,7 +496,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -533,7 +534,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "ACCGCGGTT"
           },
           {
             "tags": {},
@@ -579,7 +581,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "CCGCGGTT"
           }
         ]
       }
@@ -1015,7 +1018,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1052,7 +1056,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "ACCGCGGTT"
           },
           {
             "tags": {},
@@ -1098,7 +1103,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "CCGCGGTT"
           }
         ]
       }

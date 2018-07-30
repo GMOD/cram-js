@@ -925,7 +925,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "A"
           },
           {
             "tags": {
@@ -945,7 +946,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "A"
           },
           {
             "tags": {
@@ -966,7 +968,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "A"
           },
           {
             "tags": {
@@ -988,7 +991,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1011,7 +1015,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1035,7 +1040,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1060,7 +1066,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1086,7 +1093,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1113,7 +1121,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1141,7 +1150,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "seq": "A"
           }
         ]
       }
@@ -1977,7 +1987,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "A"
           },
           {
             "tags": {
@@ -1997,7 +2008,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2018,7 +2030,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2040,7 +2053,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2063,7 +2077,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2087,7 +2102,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2112,7 +2128,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2138,7 +2155,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2165,7 +2183,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "seq": "A"
           },
           {
             "tags": {
@@ -2193,7 +2212,8 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 9
+            "uniqueId": 9,
+            "seq": "A"
           }
         ]
       }

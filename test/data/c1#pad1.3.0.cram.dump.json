@@ -585,7 +585,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -611,7 +612,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -637,7 +639,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -677,7 +680,8 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "AACCGGTTAACCGGTT"
           },
           {
             "tags": {},
@@ -727,7 +731,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AACCGTTAACGGTT"
           },
           {
             "tags": {},
@@ -770,7 +775,8 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "AACCGGTTCGGTT"
           },
           {
             "tags": {},
@@ -813,7 +819,8 @@
               255,
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "AACCGAACCGGTT"
           },
           {
             "tags": {},
@@ -871,7 +878,8 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "AACCTAGGTT"
           },
           {
             "tags": {},
@@ -917,7 +925,8 @@
               255,
               255
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "seq": "AAGTTAACTT"
           }
         ]
       }
@@ -1413,7 +1422,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1439,7 +1449,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1465,7 +1476,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1505,7 +1517,8 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "AACCGGTTAACCGGTT"
           },
           {
             "tags": {},
@@ -1555,7 +1568,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AACCGTTAACGGTT"
           },
           {
             "tags": {},
@@ -1598,7 +1612,8 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "AACCGGTTCGGTT"
           },
           {
             "tags": {},
@@ -1641,7 +1656,8 @@
               255,
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "AACCGAACCGGTT"
           },
           {
             "tags": {},
@@ -1699,7 +1715,8 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "AACCTAGGTT"
           },
           {
             "tags": {},
@@ -1745,7 +1762,8 @@
               255,
               255
             ],
-            "uniqueId": 8
+            "uniqueId": 8,
+            "seq": "AAGTTAACTT"
           }
         ]
       }

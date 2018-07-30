@@ -516,7 +516,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -546,7 +547,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AACGTT"
           },
           {
             "tags": {},
@@ -586,7 +588,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -624,7 +627,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "ACCGCGGT"
           },
           {
             "tags": {},
@@ -664,7 +668,8 @@
               9,
               9
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -712,7 +717,8 @@
               9,
               9
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "AACCGNNCGGTT"
           },
           {
             "tags": {},
@@ -748,7 +754,8 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "CCGCGG"
           }
         ]
       }
@@ -1175,7 +1182,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1205,7 +1213,8 @@
               9,
               9
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AACGTT"
           },
           {
             "tags": {},
@@ -1245,7 +1254,8 @@
               9,
               9
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1283,7 +1293,8 @@
               9,
               9
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "ACCGCGGT"
           },
           {
             "tags": {},
@@ -1323,7 +1334,8 @@
               9,
               9
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1371,7 +1383,8 @@
               9,
               9
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "AACCGNNCGGTT"
           },
           {
             "tags": {},
@@ -1407,7 +1420,8 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "CCGCGG"
           }
         ]
       }

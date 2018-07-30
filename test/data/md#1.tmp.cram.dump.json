@@ -660,7 +660,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AAAAAAAAAACCCCCCCCYNNRGGGGGGGGTTTTTTTTTT"
           },
           {
             "tags": {
@@ -753,7 +754,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "CAAAAAAAANNCCCCCCCYNNRGGGGGGGGTTTTTTTTTC"
           },
           {
             "tags": {},
@@ -893,7 +895,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AAAAAAAAAACCCCCCCCYNCCAAGGGGGGGGTTCCCTTTTTTTT"
           },
           {
             "tags": {},
@@ -1065,7 +1068,8 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "ACAAAAAAAACCCCCCCCYNCCAAGGGGGGGGTACCCATTTTTTTC"
           },
           {
             "tags": {
@@ -1151,7 +1155,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AAAAAAAAACCCCCCCNNRGGGGGTTTTTT"
           },
           {
             "tags": {},
@@ -1273,7 +1278,8 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "CAAAAAAANNCCCCCCTTGGGGGGTTTTTA"
           },
           {
             "tags": {},
@@ -1317,7 +1323,8 @@
               255,
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "AAAAAAAAAATTTTTTTTTT"
           }
         ]
       },
@@ -2611,7 +2618,8 @@
               255,
               255
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "AAAAAAAAAACCCCCCCCYNNRGGGGGGGGTTTTTTTTTT"
           },
           {
             "tags": {
@@ -2704,7 +2712,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "CAAAAAAAANNCCCCCCCYNNRGGGGGGGGTTTTTTTTTC"
           },
           {
             "tags": {},
@@ -2844,7 +2853,8 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 2,
+            "seq": "AAAAAAAAAACCCCCCCCYNCCAAGGGGGGGGTTCCCTTTTTTTT"
           },
           {
             "tags": {},
@@ -3016,7 +3026,8 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 3,
+            "seq": "ACAAAAAAAACCCCCCCCYNCCAAGGGGGGGGTACCCATTTTTTTC"
           },
           {
             "tags": {
@@ -3102,7 +3113,8 @@
               255,
               255
             ],
-            "uniqueId": 4
+            "uniqueId": 4,
+            "seq": "AAAAAAAAACCCCCCCNNRGGGGGTTTTTT"
           },
           {
             "tags": {},
@@ -3224,7 +3236,8 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 5,
+            "seq": "CAAAAAAANNCCCCCCTTGGGGGGTTTTTA"
           },
           {
             "tags": {},
@@ -3268,7 +3281,8 @@
               255,
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "AAAAAAAAAATTTTTTTTTT"
           }
         ]
       },

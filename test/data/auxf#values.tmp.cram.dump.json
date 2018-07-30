@@ -1724,7 +1724,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "GCTAGCTCAG"
           },
           {
             "tags": {
@@ -1789,7 +1790,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AAAAAAAAAA"
           }
         ]
       }
@@ -3372,7 +3374,8 @@
               9,
               9
             ],
-            "uniqueId": 0
+            "uniqueId": 0,
+            "seq": "GCTAGCTCAG"
           },
           {
             "tags": {
@@ -3437,7 +3440,8 @@
               255,
               255
             ],
-            "uniqueId": 1
+            "uniqueId": 1,
+            "seq": "AAAAAAAAAA"
           }
         ]
       }

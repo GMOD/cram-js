@@ -784,7 +784,8 @@
               "alignmentStart": 1,
               "readName": "x1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -810,7 +811,8 @@
               "alignmentStart": 16,
               "readName": "x1"
             },
-            "templateLength": 20
+            "templateLength": 20,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -836,7 +838,8 @@
               "alignmentStart": 7,
               "readName": "x2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -862,7 +865,8 @@
               "alignmentStart": 10,
               "readName": "x2"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -888,7 +892,8 @@
               "alignmentStart": 7,
               "readName": "x3"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -914,7 +919,8 @@
               "alignmentStart": 10,
               "readName": "x3"
             },
-            "templateLength": 8
+            "templateLength": 8,
+            "seq": "TTTTT"
           },
           {
             "tags": {},
@@ -940,7 +946,8 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 6,
+            "seq": "TTTTT"
           }
         ]
       },
@@ -1249,7 +1256,8 @@
               9,
               9
             ],
-            "uniqueId": 7
+            "uniqueId": 7,
+            "seq": "AAAAA"
           }
         ]
       }
