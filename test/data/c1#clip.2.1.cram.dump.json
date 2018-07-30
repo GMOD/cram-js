@@ -533,7 +533,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -564,7 +564,7 @@
               9
             ],
             "uniqueId": 1,
-            "seq": "AACGTT"
+            "readBases": "AACGTT"
           },
           {
             "tags": {},
@@ -605,7 +605,7 @@
               9
             ],
             "uniqueId": 2,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -644,7 +644,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": "ACCGCGGT"
+            "readBases": "ACCGCGGT"
           },
           {
             "tags": {},
@@ -685,7 +685,7 @@
               9
             ],
             "uniqueId": 4,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -734,7 +734,7 @@
               9
             ],
             "uniqueId": 5,
-            "seq": "AACCGNNCGGTT"
+            "readBases": "AACCGNNCGGTT"
           },
           {
             "tags": {},
@@ -771,7 +771,7 @@
               9
             ],
             "uniqueId": 6,
-            "seq": "CCGCGG"
+            "readBases": "CCGCGG"
           }
         ]
       }
@@ -1244,7 +1244,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1275,7 +1275,7 @@
               9
             ],
             "uniqueId": 1,
-            "seq": "AACGTT"
+            "readBases": "AACGTT"
           },
           {
             "tags": {},
@@ -1316,7 +1316,7 @@
               9
             ],
             "uniqueId": 2,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1355,7 +1355,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": "ACCGCGGT"
+            "readBases": "ACCGCGGT"
           },
           {
             "tags": {},
@@ -1396,7 +1396,7 @@
               9
             ],
             "uniqueId": 4,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1445,7 +1445,7 @@
               9
             ],
             "uniqueId": 5,
-            "seq": "AACCGNNCGGTT"
+            "readBases": "AACCGNNCGGTT"
           },
           {
             "tags": {},
@@ -1482,7 +1482,7 @@
               9
             ],
             "uniqueId": 6,
-            "seq": "CCGCGG"
+            "readBases": "CCGCGG"
           }
         ]
       }

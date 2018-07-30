@@ -396,7 +396,10 @@ class CramSlice {
         // need to iterate over the records to find the right end of the span
         let refEnd = -Infinity
         for (let i = 0; i < records.length; i += 1) {
-          const end = records[i].alignmentStart + records[i].lengthOnRef - 1
+          const end =
+            records[i].alignmentStart +
+            (records[i].lengthOnRef || records[i].readLength) -
+            1
           if (end > refEnd) refEnd = end
         }
 

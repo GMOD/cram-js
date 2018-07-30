@@ -170,10 +170,21 @@ class CramRecord {
   }
 
   /**
+   * Get the original sequence of this read.
+   * @returns {String} sequence basepairs
+   */
+  getReadBases() {
+    if (!this.readBases && this._refRegion) {
+      this.readBases = decodeReadSequence(this, this._refRegion)
+    }
+    return this.readBases
+  }
+
+  /**
    * Annotates this feature with the given reference sequence basepair
-   * information. Right now, this only uses the reference sequence to
-   * decode which bases are being substituted in base substitution
-   * features.
+   * information. This will add a `sub` and a `ref` item to base
+   * subsitution read features given the actual substituted and reference
+   * base pairs, and will make the `getReadSequence()` method work.
    *
    * @param {object} refRegion
    * @param {number} refRegion.start
@@ -197,7 +208,16 @@ class CramRecord {
       })
     }
 
-    this.seq = decodeReadSequence(this, refRegion)
+    // if this region completely covers this read,
+    // keep a reference to it
+    if (
+      !this.readBases &&
+      refRegion.start <= this.alignmentStart &&
+      refRegion.end >=
+        this.alignmentStart + (this.lengthOnRef || this.readLength) - 1
+    ) {
+      this._refRegion = refRegion
+    }
   }
 
   toJSON() {
@@ -206,6 +226,8 @@ class CramRecord {
       if (k.charAt(0) === '_') return
       data[k] = this[k]
     })
+
+    data.readBases = this.getReadBases()
 
     return data
   }

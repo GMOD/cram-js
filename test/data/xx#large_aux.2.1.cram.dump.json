@@ -16026,7 +16026,7 @@
               255
             ],
             "uniqueId": 0,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {
@@ -16564,7 +16564,7 @@
               255
             ],
             "uniqueId": 1,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {
@@ -16593,7 +16593,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           }
         ]
       }
@@ -32559,7 +32559,7 @@
               255
             ],
             "uniqueId": 0,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {
@@ -33097,7 +33097,7 @@
               255
             ],
             "uniqueId": 1,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {
@@ -33126,7 +33126,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           }
         ]
       }

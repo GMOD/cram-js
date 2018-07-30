@@ -586,7 +586,7 @@
               255
             ],
             "uniqueId": 0,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -613,7 +613,7 @@
               255
             ],
             "uniqueId": 1,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -640,7 +640,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -681,7 +681,7 @@
               255
             ],
             "uniqueId": 3,
-            "seq": "AACCGGTTAACCGGTT"
+            "readBases": "AACCGGTTAACCGGTT"
           },
           {
             "tags": {},
@@ -732,7 +732,7 @@
               255
             ],
             "uniqueId": 4,
-            "seq": "AACCGTTAACGGTT"
+            "readBases": "AACCGTTAACGGTT"
           },
           {
             "tags": {},
@@ -776,7 +776,7 @@
               255
             ],
             "uniqueId": 5,
-            "seq": "AACCGGTTCGGTT"
+            "readBases": "AACCGGTTCGGTT"
           },
           {
             "tags": {},
@@ -820,7 +820,7 @@
               255
             ],
             "uniqueId": 6,
-            "seq": "AACCGAACCGGTT"
+            "readBases": "AACCGAACCGGTT"
           },
           {
             "tags": {},
@@ -879,7 +879,7 @@
               255
             ],
             "uniqueId": 7,
-            "seq": "AACCTAGGTT"
+            "readBases": "AACCTAGGTT"
           },
           {
             "tags": {},
@@ -926,7 +926,7 @@
               255
             ],
             "uniqueId": 8,
-            "seq": "AAGTTAACTT"
+            "readBases": "AAGTTAACTT"
           }
         ]
       }
@@ -1423,7 +1423,7 @@
               255
             ],
             "uniqueId": 0,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1450,7 +1450,7 @@
               255
             ],
             "uniqueId": 1,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1477,7 +1477,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1518,7 +1518,7 @@
               255
             ],
             "uniqueId": 3,
-            "seq": "AACCGGTTAACCGGTT"
+            "readBases": "AACCGGTTAACCGGTT"
           },
           {
             "tags": {},
@@ -1569,7 +1569,7 @@
               255
             ],
             "uniqueId": 4,
-            "seq": "AACCGTTAACGGTT"
+            "readBases": "AACCGTTAACGGTT"
           },
           {
             "tags": {},
@@ -1613,7 +1613,7 @@
               255
             ],
             "uniqueId": 5,
-            "seq": "AACCGGTTCGGTT"
+            "readBases": "AACCGGTTCGGTT"
           },
           {
             "tags": {},
@@ -1657,7 +1657,7 @@
               255
             ],
             "uniqueId": 6,
-            "seq": "AACCGAACCGGTT"
+            "readBases": "AACCGAACCGGTT"
           },
           {
             "tags": {},
@@ -1716,7 +1716,7 @@
               255
             ],
             "uniqueId": 7,
-            "seq": "AACCTAGGTT"
+            "readBases": "AACCTAGGTT"
           },
           {
             "tags": {},
@@ -1763,7 +1763,7 @@
               255
             ],
             "uniqueId": 8,
-            "seq": "AAGTTAACTT"
+            "readBases": "AAGTTAACTT"
           }
         ]
       }

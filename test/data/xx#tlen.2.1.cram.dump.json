@@ -538,7 +538,7 @@
               "readName": "x1"
             },
             "templateLength": 20,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -565,7 +565,7 @@
               "readName": "x1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -592,7 +592,7 @@
               "readName": "x2"
             },
             "templateLength": 8,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -619,7 +619,7 @@
               "readName": "x2"
             },
             "templateLength": 8,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -646,7 +646,7 @@
               "readName": "x3"
             },
             "templateLength": 8,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -673,7 +673,7 @@
               "readName": "x3"
             },
             "templateLength": 8,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -700,7 +700,7 @@
               "readName": "x4"
             },
             "templateLength": 20,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -727,7 +727,7 @@
               "readName": "x4"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           }
         ]
       }
@@ -1138,7 +1138,7 @@
               "readName": "y1"
             },
             "templateLength": 20,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -1165,7 +1165,7 @@
               "readName": "y1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -1192,7 +1192,7 @@
               "readName": "y2"
             },
             "templateLength": 8,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1219,7 +1219,7 @@
               "readName": "y2"
             },
             "templateLength": 8,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -1246,7 +1246,7 @@
               9
             ],
             "uniqueId": 12,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1273,7 +1273,7 @@
               9
             ],
             "uniqueId": 13,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -1300,7 +1300,7 @@
               9
             ],
             "uniqueId": 14,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -1327,7 +1327,7 @@
               9
             ],
             "uniqueId": 15,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           }
         ]
       }
@@ -1738,7 +1738,7 @@
               "readName": "y1"
             },
             "templateLength": 20,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -1765,7 +1765,7 @@
               "readName": "y1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -1792,7 +1792,7 @@
               "readName": "y2"
             },
             "templateLength": 8,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1819,7 +1819,7 @@
               "readName": "y2"
             },
             "templateLength": 8,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -1846,7 +1846,7 @@
               9
             ],
             "uniqueId": 12,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -1873,7 +1873,7 @@
               9
             ],
             "uniqueId": 13,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -1900,7 +1900,7 @@
               9
             ],
             "uniqueId": 14,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -1927,7 +1927,7 @@
               9
             ],
             "uniqueId": 15,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           }
         ]
       }

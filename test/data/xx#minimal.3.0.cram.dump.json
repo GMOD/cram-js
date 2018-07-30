@@ -607,7 +607,7 @@
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 0,
-            "seq": ""
+            "readBases": ""
           },
           {
             "tags": {},
@@ -637,7 +637,7 @@
             "mappingQuality": 1,
             "qualityScores": [],
             "uniqueId": 1,
-            "seq": ""
+            "readBases": ""
           },
           {
             "tags": {},
@@ -690,7 +690,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AAAAAAATTT"
+            "readBases": "AAAAAAATTT"
           }
         ]
       }

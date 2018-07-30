@@ -761,7 +761,7 @@
               "readName": "x1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -787,8 +787,7 @@
               "alignmentStart": 16,
               "readName": "x1"
             },
-            "templateLength": 20,
-            "seq": "TTTTT"
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -814,8 +813,7 @@
               "alignmentStart": 7,
               "readName": "x2"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -841,8 +839,7 @@
               "alignmentStart": 10,
               "readName": "x2"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -868,8 +865,7 @@
               "alignmentStart": 7,
               "readName": "x3"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -895,8 +891,7 @@
               "alignmentStart": 10,
               "readName": "x3"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -923,7 +918,7 @@
               "readName": "x4"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -949,8 +944,7 @@
               "alignmentStart": 16,
               "readName": "x4"
             },
-            "templateLength": 20,
-            "seq": "TTTTT"
+            "templateLength": 20
           }
         ]
       }
@@ -1384,7 +1378,7 @@
               "readName": "y1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -1410,8 +1404,7 @@
               "alignmentStart": 16,
               "readName": "y1"
             },
-            "templateLength": 20,
-            "seq": "TTTTT"
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -1437,8 +1430,7 @@
               "alignmentStart": 7,
               "readName": "y2"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -1464,8 +1456,7 @@
               "alignmentStart": 10,
               "readName": "y2"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -1491,8 +1482,7 @@
               9,
               9
             ],
-            "uniqueId": 12,
-            "seq": "TTTTT"
+            "uniqueId": 12
           },
           {
             "tags": {},
@@ -1518,8 +1508,7 @@
               9,
               9
             ],
-            "uniqueId": 13,
-            "seq": "TTTTT"
+            "uniqueId": 13
           },
           {
             "tags": {},
@@ -1546,7 +1535,7 @@
               9
             ],
             "uniqueId": 14,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -1572,8 +1561,7 @@
               9,
               9
             ],
-            "uniqueId": 15,
-            "seq": "TTTTT"
+            "uniqueId": 15
           }
         ]
       }
@@ -2007,7 +1995,7 @@
               "readName": "y1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -2033,8 +2021,7 @@
               "alignmentStart": 16,
               "readName": "y1"
             },
-            "templateLength": 20,
-            "seq": "TTTTT"
+            "templateLength": 20
           },
           {
             "tags": {},
@@ -2060,8 +2047,7 @@
               "alignmentStart": 7,
               "readName": "y2"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -2087,8 +2073,7 @@
               "alignmentStart": 10,
               "readName": "y2"
             },
-            "templateLength": 8,
-            "seq": "TTTTT"
+            "templateLength": 8
           },
           {
             "tags": {},
@@ -2114,8 +2099,7 @@
               9,
               9
             ],
-            "uniqueId": 12,
-            "seq": "TTTTT"
+            "uniqueId": 12
           },
           {
             "tags": {},
@@ -2141,8 +2125,7 @@
               9,
               9
             ],
-            "uniqueId": 13,
-            "seq": "TTTTT"
+            "uniqueId": 13
           },
           {
             "tags": {},
@@ -2169,7 +2152,7 @@
               9
             ],
             "uniqueId": 14,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -2195,8 +2178,7 @@
               9,
               9
             ],
-            "uniqueId": 15,
-            "seq": "TTTTT"
+            "uniqueId": 15
           }
         ]
       }

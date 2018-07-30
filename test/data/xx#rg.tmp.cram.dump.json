@@ -673,7 +673,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -700,7 +700,7 @@
               9
             ],
             "uniqueId": 1,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -727,7 +727,7 @@
               9
             ],
             "uniqueId": 2,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -754,7 +754,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -781,7 +781,7 @@
               9
             ],
             "uniqueId": 4,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -808,7 +808,7 @@
               9
             ],
             "uniqueId": 5,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }
@@ -1202,7 +1202,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1229,7 +1229,7 @@
               9
             ],
             "uniqueId": 1,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1256,7 +1256,7 @@
               9
             ],
             "uniqueId": 2,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1283,7 +1283,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1310,7 +1310,7 @@
               9
             ],
             "uniqueId": 4,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1337,7 +1337,7 @@
               9
             ],
             "uniqueId": 5,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }

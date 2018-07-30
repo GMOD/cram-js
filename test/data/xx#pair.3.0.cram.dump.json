@@ -464,7 +464,7 @@
               "readName": "a1"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -496,7 +496,7 @@
               "readName": "b1"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -528,7 +528,7 @@
               "readName": "c1"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -560,7 +560,7 @@
               "readName": "a1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -592,7 +592,7 @@
               "readName": "b1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -624,7 +624,7 @@
               "readName": "c1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }
@@ -999,7 +999,7 @@
               "readName": "a1"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1031,7 +1031,7 @@
               "readName": "b1"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1063,7 +1063,7 @@
               "readName": "c1"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1095,7 +1095,7 @@
               "readName": "a1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1127,7 +1127,7 @@
               "readName": "b1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1159,7 +1159,7 @@
               "readName": "c1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }

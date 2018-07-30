@@ -910,7 +910,7 @@
               2
             ],
             "uniqueId": 0,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -931,7 +931,7 @@
               2
             ],
             "uniqueId": 1,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -953,7 +953,7 @@
               2
             ],
             "uniqueId": 2,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -976,7 +976,7 @@
               2
             ],
             "uniqueId": 3,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1000,7 +1000,7 @@
               2
             ],
             "uniqueId": 4,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1025,7 +1025,7 @@
               2
             ],
             "uniqueId": 5,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1051,7 +1051,7 @@
               2
             ],
             "uniqueId": 6,
-            "seq": "A"
+            "readBases": "A"
           }
         ]
       },
@@ -1398,7 +1398,7 @@
               2
             ],
             "uniqueId": 7,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1426,7 +1426,7 @@
               2
             ],
             "uniqueId": 8,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -1455,7 +1455,7 @@
               2
             ],
             "uniqueId": 9,
-            "seq": "A"
+            "readBases": "A"
           }
         ]
       }
@@ -2276,7 +2276,7 @@
               2
             ],
             "uniqueId": 0,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2297,7 +2297,7 @@
               2
             ],
             "uniqueId": 1,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2319,7 +2319,7 @@
               2
             ],
             "uniqueId": 2,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2342,7 +2342,7 @@
               2
             ],
             "uniqueId": 3,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2366,7 +2366,7 @@
               2
             ],
             "uniqueId": 4,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2391,7 +2391,7 @@
               2
             ],
             "uniqueId": 5,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2417,7 +2417,7 @@
               2
             ],
             "uniqueId": 6,
-            "seq": "A"
+            "readBases": "A"
           }
         ]
       },
@@ -2764,7 +2764,7 @@
               2
             ],
             "uniqueId": 7,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2792,7 +2792,7 @@
               2
             ],
             "uniqueId": 8,
-            "seq": "A"
+            "readBases": "A"
           },
           {
             "tags": {
@@ -2821,7 +2821,7 @@
               2
             ],
             "uniqueId": 9,
-            "seq": "A"
+            "readBases": "A"
           }
         ]
       }

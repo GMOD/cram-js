@@ -440,7 +440,7 @@
               "readName": "S"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -472,7 +472,7 @@
               "alignmentStart": 1,
               "readName": "S"
             },
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -504,7 +504,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -536,7 +536,7 @@
               "alignmentStart": 1,
               "readName": "S"
             },
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -568,7 +568,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -600,7 +600,7 @@
               "alignmentStart": 1,
               "readName": "S"
             },
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }
@@ -951,7 +951,7 @@
               "readName": "S"
             },
             "templateLength": 20,
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -983,7 +983,7 @@
               "alignmentStart": 1,
               "readName": "S"
             },
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1015,7 +1015,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1047,7 +1047,7 @@
               "alignmentStart": 1,
               "readName": "S"
             },
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -1079,7 +1079,7 @@
               "alignmentStart": 11,
               "readName": "S"
             },
-            "seq": "AAAAAAAAAA"
+            "readBases": "AAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1111,7 +1111,7 @@
               "alignmentStart": 1,
               "readName": "S"
             },
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }

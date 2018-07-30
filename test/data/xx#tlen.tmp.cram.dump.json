@@ -753,7 +753,7 @@
               "readName": "x1"
             },
             "templateLength": 20,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           },
           {
             "tags": {},
@@ -780,7 +780,7 @@
               "readName": "x1"
             },
             "templateLength": 20,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           },
           {
             "tags": {},
@@ -807,7 +807,7 @@
               "readName": "x2"
             },
             "templateLength": 8,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -834,7 +834,7 @@
               "readName": "x2"
             },
             "templateLength": 8,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -861,7 +861,7 @@
               "readName": "x3"
             },
             "templateLength": 8,
-            "seq": "AAAAT"
+            "readBases": "AAAAT"
           },
           {
             "tags": {},
@@ -888,7 +888,7 @@
               "readName": "x3"
             },
             "templateLength": 8,
-            "seq": "ATTTT"
+            "readBases": "ATTTT"
           },
           {
             "tags": {},
@@ -915,7 +915,7 @@
               9
             ],
             "uniqueId": 6,
-            "seq": "AAAAA"
+            "readBases": "AAAAA"
           }
         ]
       },
@@ -1222,7 +1222,7 @@
               9
             ],
             "uniqueId": 7,
-            "seq": "TTTTT"
+            "readBases": "TTTTT"
           }
         ]
       }

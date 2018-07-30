@@ -542,7 +542,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           }
         ]
       }
@@ -893,7 +893,7 @@
               "readName": "a1"
             },
             "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "readBases": "TTTTTTTTTT"
           },
           {
             "tags": {},
@@ -924,8 +924,7 @@
               "alignmentStart": 11,
               "readName": "a1"
             },
-            "templateLength": 20,
-            "seq": "TTTTTTTTTT"
+            "templateLength": 20
           }
         ]
       }

@@ -561,7 +561,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -588,7 +588,7 @@
               255
             ],
             "uniqueId": 1,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {
@@ -618,7 +618,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -652,7 +652,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": "AACCCGGTT"
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -686,7 +686,7 @@
               255
             ],
             "uniqueId": 4,
-            "seq": "AACCCGGTT"
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {
@@ -723,7 +723,7 @@
               255
             ],
             "uniqueId": 5,
-            "seq": "AACCCGGTT"
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -747,8 +747,7 @@
               9,
               9
             ],
-            "uniqueId": 6,
-            "seq": "AACCGCGGTT"
+            "uniqueId": 6
           },
           {
             "tags": {},
@@ -772,8 +771,7 @@
               255,
               255
             ],
-            "uniqueId": 7,
-            "seq": "AACCGCGGTT"
+            "uniqueId": 7
           },
           {
             "tags": {},
@@ -785,10 +783,9 @@
             "readGroupId": -1,
             "readName": "SQ3",
             "templateSize": 0,
-            "readBases": "",
+            "readBases": "AACCGCGGTT",
             "qualityScores": [],
-            "uniqueId": 8,
-            "seq": "AACCGCGGTT"
+            "uniqueId": 8
           }
         ]
       }
@@ -1289,7 +1286,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1316,7 +1313,7 @@
               255
             ],
             "uniqueId": 1,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {
@@ -1346,7 +1343,7 @@
               255
             ],
             "uniqueId": 2,
-            "seq": "AACCGCGGTT"
+            "readBases": "AACCGCGGTT"
           },
           {
             "tags": {},
@@ -1380,7 +1377,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": "AACCCGGTT"
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -1414,7 +1411,7 @@
               255
             ],
             "uniqueId": 4,
-            "seq": "AACCCGGTT"
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {
@@ -1451,7 +1448,7 @@
               255
             ],
             "uniqueId": 5,
-            "seq": "AACCCGGTT"
+            "readBases": "AACCCGGTT"
           },
           {
             "tags": {},
@@ -1475,8 +1472,7 @@
               9,
               9
             ],
-            "uniqueId": 6,
-            "seq": "AACCGCGGTT"
+            "uniqueId": 6
           },
           {
             "tags": {},
@@ -1500,8 +1496,7 @@
               255,
               255
             ],
-            "uniqueId": 7,
-            "seq": "AACCGCGGTT"
+            "uniqueId": 7
           },
           {
             "tags": {},
@@ -1513,10 +1508,9 @@
             "readGroupId": -1,
             "readName": "SQ3",
             "templateSize": 0,
-            "readBases": "",
+            "readBases": "AACCGCGGTT",
             "qualityScores": [],
-            "uniqueId": 8,
-            "seq": "AACCGCGGTT"
+            "uniqueId": 8
           }
         ]
       }

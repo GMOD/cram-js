@@ -757,7 +757,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "readBases": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
             "tags": {},
@@ -1058,7 +1058,7 @@
               9
             ],
             "uniqueId": 1,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -1331,7 +1331,7 @@
               9
             ],
             "uniqueId": 2,
-            "seq": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
+            "readBases": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
             "tags": {},
@@ -1632,7 +1632,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -1677,8 +1677,7 @@
               9,
               9
             ],
-            "uniqueId": 4,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "uniqueId": 4
           },
           {
             "tags": {},
@@ -1971,7 +1970,7 @@
               9
             ],
             "uniqueId": 5,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -2244,7 +2243,7 @@
               9
             ],
             "uniqueId": 6,
-            "seq": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
+            "readBases": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
           },
           {
             "tags": {},
@@ -2545,7 +2544,7 @@
               9
             ],
             "uniqueId": 7,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -2838,7 +2837,7 @@
               9
             ],
             "uniqueId": 8,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -3131,7 +3130,7 @@
               9
             ],
             "uniqueId": 9,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -3432,7 +3431,7 @@
               9
             ],
             "uniqueId": 10,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -3725,7 +3724,7 @@
               9
             ],
             "uniqueId": 11,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -4026,7 +4025,7 @@
               9
             ],
             "uniqueId": 12,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -4319,7 +4318,7 @@
               9
             ],
             "uniqueId": 13,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -4612,7 +4611,7 @@
               9
             ],
             "uniqueId": 14,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -4905,7 +4904,7 @@
               9
             ],
             "uniqueId": 15,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -5198,7 +5197,7 @@
               9
             ],
             "uniqueId": 16,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -5499,7 +5498,7 @@
               9
             ],
             "uniqueId": 17,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -5800,7 +5799,7 @@
               9
             ],
             "uniqueId": 18,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -6073,7 +6072,7 @@
               9
             ],
             "uniqueId": 19,
-            "seq": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
+            "readBases": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
           },
           {
             "tags": {},
@@ -6366,7 +6365,7 @@
               9
             ],
             "uniqueId": 20,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -6667,7 +6666,7 @@
               9
             ],
             "uniqueId": 21,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -6968,7 +6967,7 @@
               9
             ],
             "uniqueId": 22,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -7261,7 +7260,7 @@
               9
             ],
             "uniqueId": 23,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -7571,7 +7570,7 @@
               9
             ],
             "uniqueId": 24,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -7864,7 +7863,7 @@
               9
             ],
             "uniqueId": 25,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -8137,7 +8136,7 @@
               9
             ],
             "uniqueId": 26,
-            "seq": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "readBases": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
             "tags": {},
@@ -8438,7 +8437,7 @@
               9
             ],
             "uniqueId": 27,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -8711,7 +8710,7 @@
               9
             ],
             "uniqueId": 28,
-            "seq": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
+            "readBases": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
             "tags": {},
@@ -9012,7 +9011,7 @@
               9
             ],
             "uniqueId": 29,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -9305,7 +9304,7 @@
               9
             ],
             "uniqueId": 30,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -9598,7 +9597,7 @@
               9
             ],
             "uniqueId": 31,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -9871,7 +9870,7 @@
               9
             ],
             "uniqueId": 32,
-            "seq": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
+            "readBases": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
           },
           {
             "tags": {},
@@ -10172,7 +10171,7 @@
               9
             ],
             "uniqueId": 33,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -10465,7 +10464,7 @@
               9
             ],
             "uniqueId": 34,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -10758,7 +10757,7 @@
               9
             ],
             "uniqueId": 35,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -11059,7 +11058,7 @@
               9
             ],
             "uniqueId": 36,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -11352,7 +11351,7 @@
               9
             ],
             "uniqueId": 37,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -11653,7 +11652,7 @@
               9
             ],
             "uniqueId": 38,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -11946,7 +11945,7 @@
               9
             ],
             "uniqueId": 39,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -12239,7 +12238,7 @@
               9
             ],
             "uniqueId": 40,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -12532,7 +12531,7 @@
               9
             ],
             "uniqueId": 41,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -12825,7 +12824,7 @@
               9
             ],
             "uniqueId": 42,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -13126,7 +13125,7 @@
               9
             ],
             "uniqueId": 43,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -13427,7 +13426,7 @@
               9
             ],
             "uniqueId": 44,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -13700,7 +13699,7 @@
               9
             ],
             "uniqueId": 45,
-            "seq": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
+            "readBases": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
           },
           {
             "tags": {},
@@ -13993,7 +13992,7 @@
               9
             ],
             "uniqueId": 46,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -14294,7 +14293,7 @@
               9
             ],
             "uniqueId": 47,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -14595,7 +14594,7 @@
               9
             ],
             "uniqueId": 48,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -14888,7 +14887,7 @@
               9
             ],
             "uniqueId": 49,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -15198,7 +15197,7 @@
               9
             ],
             "uniqueId": 50,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -15491,7 +15490,7 @@
               9
             ],
             "uniqueId": 51,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -15784,7 +15783,7 @@
               9
             ],
             "uniqueId": 52,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -16103,7 +16102,7 @@
               9
             ],
             "uniqueId": 53,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           }
         ]
       }
@@ -16770,7 +16769,7 @@
               9
             ],
             "uniqueId": 0,
-            "seq": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "readBases": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
             "tags": {},
@@ -17071,7 +17070,7 @@
               9
             ],
             "uniqueId": 1,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -17344,7 +17343,7 @@
               9
             ],
             "uniqueId": 2,
-            "seq": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
+            "readBases": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
             "tags": {},
@@ -17645,7 +17644,7 @@
               9
             ],
             "uniqueId": 3,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -17690,8 +17689,7 @@
               9,
               9
             ],
-            "uniqueId": 4,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "uniqueId": 4
           },
           {
             "tags": {},
@@ -17984,7 +17982,7 @@
               9
             ],
             "uniqueId": 5,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -18257,7 +18255,7 @@
               9
             ],
             "uniqueId": 6,
-            "seq": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
+            "readBases": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
           },
           {
             "tags": {},
@@ -18558,7 +18556,7 @@
               9
             ],
             "uniqueId": 7,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -18851,7 +18849,7 @@
               9
             ],
             "uniqueId": 8,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -19144,7 +19142,7 @@
               9
             ],
             "uniqueId": 9,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -19445,7 +19443,7 @@
               9
             ],
             "uniqueId": 10,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -19738,7 +19736,7 @@
               9
             ],
             "uniqueId": 11,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -20039,7 +20037,7 @@
               9
             ],
             "uniqueId": 12,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -20332,7 +20330,7 @@
               9
             ],
             "uniqueId": 13,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -20625,7 +20623,7 @@
               9
             ],
             "uniqueId": 14,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -20918,7 +20916,7 @@
               9
             ],
             "uniqueId": 15,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -21211,7 +21209,7 @@
               9
             ],
             "uniqueId": 16,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -21512,7 +21510,7 @@
               9
             ],
             "uniqueId": 17,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -21813,7 +21811,7 @@
               9
             ],
             "uniqueId": 18,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -22086,7 +22084,7 @@
               9
             ],
             "uniqueId": 19,
-            "seq": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
+            "readBases": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
           },
           {
             "tags": {},
@@ -22379,7 +22377,7 @@
               9
             ],
             "uniqueId": 20,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -22680,7 +22678,7 @@
               9
             ],
             "uniqueId": 21,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -22981,7 +22979,7 @@
               9
             ],
             "uniqueId": 22,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -23274,7 +23272,7 @@
               9
             ],
             "uniqueId": 23,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -23584,7 +23582,7 @@
               9
             ],
             "uniqueId": 24,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -23877,7 +23875,7 @@
               9
             ],
             "uniqueId": 25,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -24150,7 +24148,7 @@
               9
             ],
             "uniqueId": 26,
-            "seq": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            "readBases": "AaAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
             "tags": {},
@@ -24451,7 +24449,7 @@
               9
             ],
             "uniqueId": 27,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -24724,7 +24722,7 @@
               9
             ],
             "uniqueId": 28,
-            "seq": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
+            "readBases": "CCCCCcCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
             "tags": {},
@@ -25025,7 +25023,7 @@
               9
             ],
             "uniqueId": 29,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -25318,7 +25316,7 @@
               9
             ],
             "uniqueId": 30,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -25611,7 +25609,7 @@
               9
             ],
             "uniqueId": 31,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -25884,7 +25882,7 @@
               9
             ],
             "uniqueId": 32,
-            "seq": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
+            "readBases": "GGGGGGGGGgGGGGGGGGGGGGGGGGGGGG"
           },
           {
             "tags": {},
@@ -26185,7 +26183,7 @@
               9
             ],
             "uniqueId": 33,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -26478,7 +26476,7 @@
               9
             ],
             "uniqueId": 34,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -26771,7 +26769,7 @@
               9
             ],
             "uniqueId": 35,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -27072,7 +27070,7 @@
               9
             ],
             "uniqueId": 36,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -27365,7 +27363,7 @@
               9
             ],
             "uniqueId": 37,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -27666,7 +27664,7 @@
               9
             ],
             "uniqueId": 38,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -27959,7 +27957,7 @@
               9
             ],
             "uniqueId": 39,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -28252,7 +28250,7 @@
               9
             ],
             "uniqueId": 40,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -28545,7 +28543,7 @@
               9
             ],
             "uniqueId": 41,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -28838,7 +28836,7 @@
               9
             ],
             "uniqueId": 42,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -29139,7 +29137,7 @@
               9
             ],
             "uniqueId": 43,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -29440,7 +29438,7 @@
               9
             ],
             "uniqueId": 44,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -29713,7 +29711,7 @@
               9
             ],
             "uniqueId": 45,
-            "seq": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
+            "readBases": "TTTTTTTTTTTTTTTTTTTTTTTtTTTTTT"
           },
           {
             "tags": {},
@@ -30006,7 +30004,7 @@
               9
             ],
             "uniqueId": 46,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -30307,7 +30305,7 @@
               9
             ],
             "uniqueId": 47,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -30608,7 +30606,7 @@
               9
             ],
             "uniqueId": 48,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -30901,7 +30899,7 @@
               9
             ],
             "uniqueId": 49,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -31211,7 +31209,7 @@
               9
             ],
             "uniqueId": 50,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           },
           {
             "tags": {},
@@ -31504,7 +31502,7 @@
               9
             ],
             "uniqueId": 51,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -31797,7 +31795,7 @@
               9
             ],
             "uniqueId": 52,
-            "seq": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
+            "readBases": ".NNbBNNdDNNhHkKmMnNrRsSNNvVwWy"
           },
           {
             "tags": {},
@@ -32116,7 +32114,7 @@
               9
             ],
             "uniqueId": 53,
-            "seq": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
+            "readBases": ".aAbBcCdDgGhHkKmMnNrRsStTvVwWy"
           }
         ]
       }
