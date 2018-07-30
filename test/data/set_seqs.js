@@ -18,7 +18,7 @@ function getFeatures(data) {
 
 fs.readdirSync('.')
   .filter(f => /dump.json/.test(f))
-  //.filter(f => /clip/.test(f))
+  //.filter(f => /ce#1000/.test(f))
   .forEach(filename => {
     const data = require(`./${filename}`)
     const features = getFeatures(data)
@@ -45,8 +45,9 @@ fs.readdirSync('.')
 
       let replaced = false
       features.forEach(feature => {
-        const samSeq = sequences[feature.readName] && sequences[feature.readName][0]
-        if( feature.readBases === '*' ) {
+        const samSeq =
+          sequences[feature.readName] && sequences[feature.readName][0]
+        if (feature.readBases === '*') {
           delete feature.readBases
           replaced = true
         }
@@ -57,7 +58,7 @@ fs.readdirSync('.')
           } else {
             feature.readBases = samSeq
           }
-          //console.log(`${feature.readName} = ${samSeq}`)
+          // console.log(`${feature.readName} = ${samSeq}`)
           sequences[feature.readName].shift()
         }
       })

@@ -389,30 +389,59 @@ class CramSlice {
     // if we can fetch reference sequence, add the reference sequence to the records
     if (records.length && this.file.fetchReferenceSequenceCallback) {
       const sliceHeader = await this.getHeader()
-      if (sliceHeader.content.refSeqId >= 0) {
+      if (
+        sliceHeader.content.refSeqId >= 0 || // single-ref slice
+        sliceHeader.content.refSeqId === -2 // multi-ref slice
+      ) {
+        const singleRefId =
+          sliceHeader.content.refSeqId >= 0
+            ? sliceHeader.content.refSeqId
+            : undefined
         const compressionScheme = await this.container.getCompressionScheme()
-        const refStart = records[0].alignmentStart
+        const refRegions = {} // seqId => { start, end, seq }
 
-        // need to iterate over the records to find the right end of the span
-        let refEnd = -Infinity
+        // iterate over the records to find the spans of the reference sequences we need to fetch
         for (let i = 0; i < records.length; i += 1) {
+          const seqId =
+            singleRefId !== undefined ? singleRefId : records[i].sequenceId
+          let refRegion = refRegions[seqId]
+          if (!refRegion) {
+            refRegion = {
+              id: seqId,
+              start: records[i].alignmentStart,
+              end: -Infinity,
+            }
+            refRegions[seqId] = refRegion
+          }
+
           const end =
             records[i].alignmentStart +
             (records[i].lengthOnRef || records[i].readLength) -
             1
-          if (end > refEnd) refEnd = end
+          if (end > refRegion.end) refRegion.end = end
         }
 
-        if (refStart <= refEnd) {
-          const seq = await this.file.fetchReferenceSequenceCallback(
-            sliceHeader.content.refSeqId,
-            refStart,
-            refEnd,
-          )
-          const refRegion = { seq, start: refStart, end: refEnd }
-          records.forEach(r => {
-            r.addReferenceSequence(refRegion, compressionScheme)
-          })
+        // fetch the `seq` for all of the ref regions
+        await Promise.all(
+          Object.values(refRegions).map(async refRegion => {
+            if (refRegion.id !== -1 && refRegion.start <= refRegion.end) {
+              refRegion.seq = await this.file.fetchReferenceSequenceCallback(
+                refRegion.id,
+                refRegion.start,
+                refRegion.end,
+              )
+            }
+          }),
+        )
+
+        // now decorate all the records with them
+        for (let i = 0; i < records.length; i += 1) {
+          const seqId =
+            singleRefId !== undefined ? singleRefId : records[i].sequenceId
+          const refRegion = refRegions[seqId]
+          if (refRegion && refRegion.seq) {
+            records[i].addReferenceSequence(refRegion, compressionScheme)
+          }
         }
       }
     }
