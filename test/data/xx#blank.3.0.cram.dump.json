@@ -50,51 +50,5 @@
         "samHeader": []
       }
     ]
-  },
-  {
-    "containerHeader": {
-      "length": 58,
-      "refSeqId": 0,
-      "refSeqStart": 0,
-      "alignmentSpan": 0,
-      "numRecords": 0,
-      "recordCounter": 0,
-      "numBases": 0,
-      "numBlocks": 2,
-      "numLandmarks": 2,
-      "_endPosition": 44,
-      "_size": 18,
-      "landmarks": [
-        0,
-        33
-      ],
-      "crc32": 1304357715
-    },
-    "data": [
-      {
-        "length": 58,
-        "refSeqId": 0,
-        "refSeqStart": 0,
-        "alignmentSpan": 0,
-        "numRecords": 0,
-        "recordCounter": 0,
-        "numBases": 0,
-        "numBlocks": 2,
-        "numLandmarks": 2,
-        "_endPosition": 44,
-        "_size": 18,
-        "landmarks": [
-          0,
-          33
-        ],
-        "crc32": 1304357715
-      },
-      {
-        "samHeader": []
-      },
-      {
-        "samHeader": []
-      }
-    ]
   }
 ]

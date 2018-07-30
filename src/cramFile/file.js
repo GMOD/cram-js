@@ -107,12 +107,13 @@ class CramFile {
 
     // skip with a series of reads to the proper container
     let currentContainer
-    for (
-      let i = 0;
-      i <= containerNumber &&
-      position + cramContainerHeader1.maxLength + 8 < fileSize;
-      i += 1
-    ) {
+    for (let i = 0; i <= containerNumber; i += 1) {
+      // if we are about to go off the end of the file
+      // and have not found that container, it does not exist
+      if (position + cramContainerHeader1.maxLength + 8 >= fileSize) {
+        return undefined
+      }
+
       currentContainer = this.getContainerAtPosition(position)
       const currentHeader = await currentContainer.getHeader()
       if (!currentHeader)
@@ -154,26 +155,22 @@ class CramFile {
    */
   async containerCount() {
     const sectionParsers = await this.getSectionParsers()
-    let position = sectionParsers.cramFileDefinition.maxLength
     const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
 
-    let i
-    for (
-      i = 0;
-      position + cramContainerHeader1.maxLength + 8 < fileSize;
-      i += 1
-    ) {
+    let containerCount = 0
+    let position = sectionParsers.cramFileDefinition.maxLength
+    while (position + cramContainerHeader1.maxLength + 8 < fileSize) {
       const currentHeader = await this.getContainerAtPosition(
         position,
       ).getHeader()
       if (!currentHeader) {
-        return i
+        break
       }
       // if this is the first container, read all the blocks in the
       // container, because we cannot trust the container
       // header's given length due to a bug somewhere in htslib
-      if (i === 0) {
+      if (containerCount === 0) {
         position = currentHeader._endPosition
         for (let j = 0; j < currentHeader.numBlocks; j += 1) {
           const block = await this.readBlock(position)
@@ -183,9 +180,10 @@ class CramFile {
         // otherwise, just traverse to the next container using the container's length
         position += currentHeader._size + currentHeader.length
       }
+      containerCount += 1
     }
 
-    return i + 1
+    return containerCount
   }
 
   getContainerAtPosition(position) {
