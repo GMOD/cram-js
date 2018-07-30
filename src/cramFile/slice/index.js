@@ -419,6 +419,8 @@ class CramSlice {
             (records[i].lengthOnRef || records[i].readLength) -
             1
           if (end > refRegion.end) refRegion.end = end
+          if (records[i].alignmentStart < refRegion.start)
+            refRegion.start = records[i].alignmentStart
         }
 
         // fetch the `seq` for all of the ref regions
