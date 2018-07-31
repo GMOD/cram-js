@@ -92,6 +92,7 @@ function associateIntraSliceMate(
   thisRecord.mate = {
     sequenceId: mateRecord.sequenceId,
     alignmentStart: mateRecord.alignmentStart,
+    uniqueId: mateRecord.uniqueId,
   }
   if (mateRecord.readName) thisRecord.mate.readName = mateRecord.readName
 
@@ -102,6 +103,7 @@ function associateIntraSliceMate(
     mateRecord.mate = {
       sequenceId: thisRecord.sequenceId,
       alignmentStart: thisRecord.alignmentStart,
+      uniqueId: thisRecord.uniqueId,
     }
     if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
   }
@@ -331,6 +333,7 @@ class CramSlice {
         throw new CramMalformedError(
           `no codec defined for ${dataSeriesName} data series`,
         )
+      // console.log(dataSeriesName, Object.getPrototypeOf(codec))
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
     let records = new Array(sliceHeader.content.numRecords)
