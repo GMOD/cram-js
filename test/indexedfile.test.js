@@ -78,7 +78,7 @@ describe('.crai indexed cram file', () => {
       'ce#1000.tmp.cram.test1.expected.json',
     )
     expect(JsonClone(features)).to.deep.equal(await expectedFeatures3)
-  })
+  }).timeout(4000)
 
   it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
     const cram = new IndexedCramFile({
