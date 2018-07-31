@@ -164,11 +164,18 @@ Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/
 
 Returns **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** true if the read has no sequence bases
 
+##### getReadBases
+
+Get the original sequence of this read.
+
+Returns **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** sequence basepairs
+
 ##### addReferenceSequence
 
-annotates this feature with the given reference region.
-right now, this only uses the reference sequence to decode
-which bases are being substituted in base substitution features.
+Annotates this feature with the given reference sequence basepair
+information. This will add a `sub` and a `ref` item to base
+subsitution read features given the actual substituted and reference
+base pairs, and will make the `getReadSequence()` method work.
 
 **Parameters**
 
