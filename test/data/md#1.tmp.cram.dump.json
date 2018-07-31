@@ -660,7 +660,7 @@
               255,
               255
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AAAAAAAAAACCCCCCCCYNNRGGGGGGGGTTTTTTTTTT"
           },
           {
@@ -754,7 +754,7 @@
               255,
               255
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "CAAAAAAAANNCCCCCCCYNNRGGGGGGGGTTTTTTTTTC"
           },
           {
@@ -895,7 +895,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "NAAAAAAAAAAGCCCCCCCCCCAAGGGGGGGGGGCCCTTTTTTTTTTN"
           },
           {
@@ -1068,7 +1068,7 @@
               255,
               255
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "NCAAAAAAAAAGCCCCCCCCCCAAGGGGGGGGGACCCATTTTTTTTCN"
           },
           {
@@ -1155,7 +1155,7 @@
               255,
               255
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "AAAAAAAAACCCCCCYNNRGGGGGTTTTTT"
           },
           {
@@ -1278,7 +1278,7 @@
               255,
               255
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "CAAAAAAANNCCCCCCTTGGGGGGTTTTTA"
           },
           {
@@ -1323,7 +1323,7 @@
               255,
               255
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "AAAAAAAAAATTTTTTTTTT"
           }
         ]

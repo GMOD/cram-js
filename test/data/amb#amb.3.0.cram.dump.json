@@ -838,7 +838,7 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
@@ -1139,7 +1139,7 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
           },
           {
@@ -1412,7 +1412,7 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
@@ -1713,7 +1713,7 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
           },
           {
@@ -1759,7 +1759,7 @@
               9,
               9
             ],
-            "uniqueId": 4
+            "uniqueId": 5
           },
           {
             "tags": {},
@@ -2051,7 +2051,7 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -2324,7 +2324,7 @@
               9,
               9
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
           },
           {
@@ -2625,7 +2625,7 @@
               9,
               9
             ],
-            "uniqueId": 7,
+            "uniqueId": 8,
             "readBases": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
           },
           {
@@ -2918,7 +2918,7 @@
               9,
               9
             ],
-            "uniqueId": 8,
+            "uniqueId": 9,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -3211,7 +3211,7 @@
               9,
               9
             ],
-            "uniqueId": 9,
+            "uniqueId": 10,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -3512,7 +3512,7 @@
               9,
               9
             ],
-            "uniqueId": 10,
+            "uniqueId": 11,
             "readBases": "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
           },
           {
@@ -3805,7 +3805,7 @@
               9,
               9
             ],
-            "uniqueId": 11,
+            "uniqueId": 12,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -4106,7 +4106,7 @@
               9,
               9
             ],
-            "uniqueId": 12,
+            "uniqueId": 13,
             "readBases": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
           },
           {
@@ -4399,7 +4399,7 @@
               9,
               9
             ],
-            "uniqueId": 13,
+            "uniqueId": 14,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -4692,7 +4692,7 @@
               9,
               9
             ],
-            "uniqueId": 14,
+            "uniqueId": 15,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -4985,7 +4985,7 @@
               9,
               9
             ],
-            "uniqueId": 15,
+            "uniqueId": 16,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -5278,7 +5278,7 @@
               9,
               9
             ],
-            "uniqueId": 16,
+            "uniqueId": 17,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -5579,7 +5579,7 @@
               9,
               9
             ],
-            "uniqueId": 17,
+            "uniqueId": 18,
             "readBases": "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
           },
           {
@@ -5880,7 +5880,7 @@
               9,
               9
             ],
-            "uniqueId": 18,
+            "uniqueId": 19,
             "readBases": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
           },
           {
@@ -6153,7 +6153,7 @@
               9,
               9
             ],
-            "uniqueId": 19,
+            "uniqueId": 20,
             "readBases": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
           },
           {
@@ -6446,7 +6446,7 @@
               9,
               9
             ],
-            "uniqueId": 20,
+            "uniqueId": 21,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -6747,7 +6747,7 @@
               9,
               9
             ],
-            "uniqueId": 21,
+            "uniqueId": 22,
             "readBases": "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"
           },
           {
@@ -7048,7 +7048,7 @@
               9,
               9
             ],
-            "uniqueId": 22,
+            "uniqueId": 23,
             "readBases": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
           },
           {
@@ -7341,7 +7341,7 @@
               9,
               9
             ],
-            "uniqueId": 23,
+            "uniqueId": 24,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -7651,7 +7651,7 @@
               9,
               9
             ],
-            "uniqueId": 24,
+            "uniqueId": 25,
             "readBases": "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
           },
           {
@@ -7944,7 +7944,7 @@
               9,
               9
             ],
-            "uniqueId": 25,
+            "uniqueId": 26,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -8217,7 +8217,7 @@
               9,
               9
             ],
-            "uniqueId": 26,
+            "uniqueId": 27,
             "readBases": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
@@ -8518,7 +8518,7 @@
               9,
               9
             ],
-            "uniqueId": 27,
+            "uniqueId": 28,
             "readBases": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
           },
           {
@@ -8791,7 +8791,7 @@
               9,
               9
             ],
-            "uniqueId": 28,
+            "uniqueId": 29,
             "readBases": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
           },
           {
@@ -9092,7 +9092,7 @@
               9,
               9
             ],
-            "uniqueId": 29,
+            "uniqueId": 30,
             "readBases": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
           },
           {
@@ -9385,7 +9385,7 @@
               9,
               9
             ],
-            "uniqueId": 30,
+            "uniqueId": 31,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -9678,7 +9678,7 @@
               9,
               9
             ],
-            "uniqueId": 31,
+            "uniqueId": 32,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -9951,7 +9951,7 @@
               9,
               9
             ],
-            "uniqueId": 32,
+            "uniqueId": 33,
             "readBases": "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
           },
           {
@@ -10252,7 +10252,7 @@
               9,
               9
             ],
-            "uniqueId": 33,
+            "uniqueId": 34,
             "readBases": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
           },
           {
@@ -10545,7 +10545,7 @@
               9,
               9
             ],
-            "uniqueId": 34,
+            "uniqueId": 35,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -10838,7 +10838,7 @@
               9,
               9
             ],
-            "uniqueId": 35,
+            "uniqueId": 36,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -11139,7 +11139,7 @@
               9,
               9
             ],
-            "uniqueId": 36,
+            "uniqueId": 37,
             "readBases": "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
           },
           {
@@ -11432,7 +11432,7 @@
               9,
               9
             ],
-            "uniqueId": 37,
+            "uniqueId": 38,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -11733,7 +11733,7 @@
               9,
               9
             ],
-            "uniqueId": 38,
+            "uniqueId": 39,
             "readBases": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
           },
           {
@@ -12026,7 +12026,7 @@
               9,
               9
             ],
-            "uniqueId": 39,
+            "uniqueId": 40,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -12319,7 +12319,7 @@
               9,
               9
             ],
-            "uniqueId": 40,
+            "uniqueId": 41,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -12612,7 +12612,7 @@
               9,
               9
             ],
-            "uniqueId": 41,
+            "uniqueId": 42,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -12905,7 +12905,7 @@
               9,
               9
             ],
-            "uniqueId": 42,
+            "uniqueId": 43,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -13206,7 +13206,7 @@
               9,
               9
             ],
-            "uniqueId": 43,
+            "uniqueId": 44,
             "readBases": "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR"
           },
           {
@@ -13507,7 +13507,7 @@
               9,
               9
             ],
-            "uniqueId": 44,
+            "uniqueId": 45,
             "readBases": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
           },
           {
@@ -13780,7 +13780,7 @@
               9,
               9
             ],
-            "uniqueId": 45,
+            "uniqueId": 46,
             "readBases": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
           },
           {
@@ -14073,7 +14073,7 @@
               9,
               9
             ],
-            "uniqueId": 46,
+            "uniqueId": 47,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -14374,7 +14374,7 @@
               9,
               9
             ],
-            "uniqueId": 47,
+            "uniqueId": 48,
             "readBases": "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV"
           },
           {
@@ -14675,7 +14675,7 @@
               9,
               9
             ],
-            "uniqueId": 48,
+            "uniqueId": 49,
             "readBases": "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
           },
           {
@@ -14968,7 +14968,7 @@
               9,
               9
             ],
-            "uniqueId": 49,
+            "uniqueId": 50,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -15278,7 +15278,7 @@
               9,
               9
             ],
-            "uniqueId": 50,
+            "uniqueId": 51,
             "readBases": "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
           },
           {
@@ -15571,7 +15571,7 @@
               9,
               9
             ],
-            "uniqueId": 51,
+            "uniqueId": 52,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -15864,7 +15864,7 @@
               9,
               9
             ],
-            "uniqueId": 52,
+            "uniqueId": 53,
             "readBases": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNN"
           },
           {
@@ -16183,7 +16183,7 @@
               9,
               9
             ],
-            "uniqueId": 53,
+            "uniqueId": 54,
             "readBases": "=============================="
           }
         ]

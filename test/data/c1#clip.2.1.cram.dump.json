@@ -532,7 +532,7 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -563,7 +563,7 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "AACGTT"
           },
           {
@@ -604,7 +604,7 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -643,7 +643,7 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "ACCGCGGT"
           },
           {
@@ -684,7 +684,7 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -733,7 +733,7 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "AACCGNNCGGTT"
           },
           {
@@ -770,7 +770,7 @@
               9,
               9
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "CCGCGG"
           }
         ]

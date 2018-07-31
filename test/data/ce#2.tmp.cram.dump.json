@@ -866,7 +866,7 @@
               34,
               34
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1017,7 +1017,7 @@
               15,
               15
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "CTAAGCCTAAATCTAAGCCTAACCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]

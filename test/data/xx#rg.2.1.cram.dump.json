@@ -543,7 +543,7 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AAAAAAAAAA"
           },
           {
@@ -570,7 +570,7 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "AAAAAAAAAA"
           },
           {
@@ -597,7 +597,7 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "AAAAAAAAAA"
           },
           {
@@ -624,7 +624,7 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "TTTTTTTTTT"
           },
           {
@@ -651,7 +651,7 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "TTTTTTTTTT"
           },
           {
@@ -678,7 +678,7 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "TTTTTTTTTT"
           }
         ]

@@ -22,10 +22,11 @@
       9,
       9
     ],
-    "uniqueId": 3,
+    "uniqueId": 4,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 6,
+      "uniqueId": 5,
       "readName": "a1"
     },
     "templateLength": 15
@@ -53,10 +54,11 @@
       9,
       9
     ],
-    "uniqueId": 4,
+    "uniqueId": 5,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 1,
+      "uniqueId": 4,
       "readName": "a1"
     },
     "templateLength": 15

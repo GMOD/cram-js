@@ -16576,7 +16576,7 @@
               255,
               255
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AAAAAAAAAA"
           },
           {
@@ -17114,7 +17114,7 @@
               255,
               255
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "AAAAAAAAAA"
           },
           {
@@ -17143,7 +17143,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "AAAAAAAAAA"
           }
         ]

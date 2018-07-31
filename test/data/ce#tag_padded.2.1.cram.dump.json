@@ -730,7 +730,7 @@
               34,
               34
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -897,7 +897,7 @@
               34,
               34
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1067,7 +1067,7 @@
               34,
               34
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTCAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1232,7 +1232,7 @@
               34,
               34
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1397,7 +1397,7 @@
               34,
               34
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1417,7 +1417,7 @@
             "qualityScores": [
               255
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "C"
           },
           {
@@ -1439,7 +1439,7 @@
               255,
               255
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "TAA"
           },
           {
@@ -1459,7 +1459,7 @@
             "qualityScores": [
               255
             ],
-            "uniqueId": 7,
+            "uniqueId": 8,
             "readBases": "A"
           }
         ]

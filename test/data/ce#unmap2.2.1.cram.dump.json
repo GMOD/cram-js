@@ -1102,7 +1102,7 @@
               34,
               34
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1253,7 +1253,7 @@
               15,
               15
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "CTAAGCCTAAATCTAAGCCTAACCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1378,7 +1378,7 @@
               34,
               34
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1503,7 +1503,7 @@
               34,
               34
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1628,7 +1628,7 @@
               34,
               34
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1753,7 +1753,7 @@
               34,
               34
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1904,7 +1904,7 @@
               2,
               2
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAAGCTAC"
           },
           {
@@ -2029,7 +2029,7 @@
               34,
               34
             ],
-            "uniqueId": 7,
+            "uniqueId": 8,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -2154,7 +2154,7 @@
               34,
               34
             ],
-            "uniqueId": 8,
+            "uniqueId": 9,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -2279,7 +2279,7 @@
               34,
               34
             ],
-            "uniqueId": 9,
+            "uniqueId": 10,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]
@@ -2761,7 +2761,7 @@
               28,
               19
             ],
-            "uniqueId": 10
+            "uniqueId": 11
           },
           {
             "tags": {
@@ -2878,7 +2878,7 @@
               2,
               2
             ],
-            "uniqueId": 11
+            "uniqueId": 12
           },
           {
             "tags": {
@@ -2995,7 +2995,7 @@
               2,
               2
             ],
-            "uniqueId": 12
+            "uniqueId": 13
           },
           {
             "tags": {
@@ -3112,7 +3112,7 @@
               2,
               2
             ],
-            "uniqueId": 13
+            "uniqueId": 14
           },
           {
             "tags": {
@@ -3229,7 +3229,7 @@
               2,
               2
             ],
-            "uniqueId": 14
+            "uniqueId": 15
           },
           {
             "tags": {
@@ -3346,7 +3346,7 @@
               2,
               2
             ],
-            "uniqueId": 15
+            "uniqueId": 16
           },
           {
             "tags": {
@@ -3463,7 +3463,7 @@
               2,
               2
             ],
-            "uniqueId": 16
+            "uniqueId": 17
           },
           {
             "tags": {
@@ -3580,7 +3580,7 @@
               2,
               2
             ],
-            "uniqueId": 17
+            "uniqueId": 18
           },
           {
             "tags": {
@@ -3697,7 +3697,7 @@
               2,
               2
             ],
-            "uniqueId": 18
+            "uniqueId": 19
           }
         ]
       }

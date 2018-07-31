@@ -614,7 +614,7 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -641,7 +641,7 @@
               255,
               255
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -671,7 +671,7 @@
               255,
               255
             ],
-            "uniqueId": 2
+            "uniqueId": 3
           },
           {
             "tags": {},
@@ -704,7 +704,7 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "AACCCGGTT"
           },
           {
@@ -738,7 +738,7 @@
               255,
               255
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "AACCCGGTT"
           },
           {
@@ -775,7 +775,7 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 6
           },
           {
             "tags": {},
@@ -799,7 +799,7 @@
               9,
               9
             ],
-            "uniqueId": 6
+            "uniqueId": 7
           },
           {
             "tags": {},
@@ -823,7 +823,7 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 8
           },
           {
             "tags": {},
@@ -836,7 +836,7 @@
             "readName": "SQ3",
             "templateSize": 0,
             "qualityScores": null,
-            "uniqueId": 8
+            "uniqueId": 9
           }
         ]
       }

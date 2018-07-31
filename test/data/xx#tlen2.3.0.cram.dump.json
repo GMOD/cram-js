@@ -754,10 +754,11 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
+              "uniqueId": 2,
               "readName": "x1"
             },
             "templateLength": 20,
@@ -781,10 +782,11 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 16,
+              "uniqueId": 1,
               "readName": "x1"
             },
             "templateLength": 20,
@@ -808,10 +810,11 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 7,
+              "uniqueId": 4,
               "readName": "x2"
             },
             "templateLength": 8,
@@ -835,10 +838,11 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 10,
+              "uniqueId": 3,
               "readName": "x2"
             },
             "templateLength": 8,
@@ -862,10 +866,11 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 7,
+              "uniqueId": 6,
               "readName": "x3"
             },
             "templateLength": 8,
@@ -889,10 +894,11 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 10,
+              "uniqueId": 5,
               "readName": "x3"
             },
             "templateLength": 8,
@@ -916,10 +922,11 @@
               9,
               9
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
+              "uniqueId": 8,
               "readName": "x4"
             },
             "templateLength": 20,
@@ -943,10 +950,11 @@
               9,
               9
             ],
-            "uniqueId": 7,
+            "uniqueId": 8,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 16,
+              "uniqueId": 7,
               "readName": "x4"
             },
             "templateLength": 20,
@@ -1377,10 +1385,11 @@
               9,
               9
             ],
-            "uniqueId": 8,
+            "uniqueId": 9,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 1,
+              "uniqueId": 10,
               "readName": "y1"
             },
             "templateLength": 20,
@@ -1404,10 +1413,11 @@
               9,
               9
             ],
-            "uniqueId": 9,
+            "uniqueId": 10,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 16,
+              "uniqueId": 9,
               "readName": "y1"
             },
             "templateLength": 20,
@@ -1431,10 +1441,11 @@
               9,
               9
             ],
-            "uniqueId": 10,
+            "uniqueId": 11,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 7,
+              "uniqueId": 12,
               "readName": "y2"
             },
             "templateLength": 8,
@@ -1458,10 +1469,11 @@
               9,
               9
             ],
-            "uniqueId": 11,
+            "uniqueId": 12,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 10,
+              "uniqueId": 11,
               "readName": "y2"
             },
             "templateLength": 8,
@@ -1491,7 +1503,7 @@
               9,
               9
             ],
-            "uniqueId": 12,
+            "uniqueId": 13,
             "readBases": "ATTTT"
           },
           {
@@ -1518,7 +1530,7 @@
               9,
               9
             ],
-            "uniqueId": 13,
+            "uniqueId": 14,
             "readBases": "AAAAT"
           },
           {
@@ -1545,7 +1557,7 @@
               9,
               9
             ],
-            "uniqueId": 14,
+            "uniqueId": 15,
             "readBases": "TTTTT"
           },
           {
@@ -1572,7 +1584,7 @@
               9,
               9
             ],
-            "uniqueId": 15,
+            "uniqueId": 16,
             "readBases": "AAAAA"
           }
         ]

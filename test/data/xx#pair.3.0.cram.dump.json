@@ -457,10 +457,11 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
+              "uniqueId": 4,
               "readName": "a1"
             },
             "templateLength": 20,
@@ -489,10 +490,11 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
+              "uniqueId": 5,
               "readName": "b1"
             },
             "templateLength": 20,
@@ -521,10 +523,11 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
+              "uniqueId": 6,
               "readName": "c1"
             },
             "templateLength": 20,
@@ -553,10 +556,11 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
+              "uniqueId": 1,
               "readName": "a1"
             },
             "templateLength": 20,
@@ -585,10 +589,11 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
+              "uniqueId": 2,
               "readName": "b1"
             },
             "templateLength": 20,
@@ -617,10 +622,11 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
+              "uniqueId": 3,
               "readName": "c1"
             },
             "templateLength": 20,

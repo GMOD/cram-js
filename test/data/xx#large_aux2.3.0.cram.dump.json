@@ -925,7 +925,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "A"
           },
           {
@@ -946,7 +946,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "A"
           },
           {
@@ -968,7 +968,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "A"
           },
           {
@@ -991,7 +991,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "A"
           },
           {
@@ -1015,7 +1015,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "A"
           },
           {
@@ -1040,7 +1040,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "A"
           },
           {
@@ -1066,7 +1066,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "A"
           },
           {
@@ -1093,7 +1093,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 7,
+            "uniqueId": 8,
             "readBases": "A"
           },
           {
@@ -1121,7 +1121,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 8,
+            "uniqueId": 9,
             "readBases": "A"
           },
           {
@@ -1150,7 +1150,7 @@
             "qualityScores": [
               2
             ],
-            "uniqueId": 9,
+            "uniqueId": 10,
             "readBases": "A"
           }
         ]

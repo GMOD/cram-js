@@ -23,7 +23,7 @@
       9,
       9
     ],
-    "uniqueId": 7
+    "uniqueId": 8
   },
   {
     "tags": {},
@@ -43,10 +43,11 @@
       9,
       9
     ],
-    "uniqueId": 0,
+    "uniqueId": 1,
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 1,
+      "uniqueId": 2,
       "readName": "x1"
     },
     "templateLength": 20
@@ -69,10 +70,11 @@
       9,
       9
     ],
-    "uniqueId": 1,
+    "uniqueId": 2,
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 16,
+      "uniqueId": 1,
       "readName": "x1"
     },
     "templateLength": 20
@@ -95,10 +97,11 @@
       9,
       9
     ],
-    "uniqueId": 2,
+    "uniqueId": 3,
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 7,
+      "uniqueId": 4,
       "readName": "x2"
     },
     "templateLength": 8
@@ -121,10 +124,11 @@
       9,
       9
     ],
-    "uniqueId": 3,
+    "uniqueId": 4,
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 10,
+      "uniqueId": 3,
       "readName": "x2"
     },
     "templateLength": 8
@@ -147,10 +151,11 @@
       9,
       9
     ],
-    "uniqueId": 4,
+    "uniqueId": 5,
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 7,
+      "uniqueId": 6,
       "readName": "x3"
     },
     "templateLength": 8
@@ -173,10 +178,11 @@
       9,
       9
     ],
-    "uniqueId": 5,
+    "uniqueId": 6,
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 10,
+      "uniqueId": 5,
       "readName": "x3"
     },
     "templateLength": 8
@@ -205,6 +211,6 @@
       9,
       9
     ],
-    "uniqueId": 6
+    "uniqueId": 7
   }
 ]

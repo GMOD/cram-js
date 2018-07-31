@@ -639,7 +639,7 @@
             "readLength": 76,
             "alignmentStart": 200,
             "readGroupId": 0,
-            "readName": "97",
+            "readName": "a",
             "mate": {
               "flags": 1,
               "sequenceId": 0,
@@ -1336,7 +1336,7 @@
               18,
               25
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -1347,7 +1347,7 @@
             "readLength": 76,
             "alignmentStart": 205,
             "readGroupId": 0,
-            "readName": "98",
+            "readName": "b",
             "mate": {
               "flags": 1,
               "sequenceId": 0,
@@ -2044,7 +2044,7 @@
               18,
               25
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -2055,7 +2055,7 @@
             "readLength": 76,
             "alignmentStart": 210,
             "readGroupId": 0,
-            "readName": "99",
+            "readName": "c",
             "mate": {
               "flags": 1,
               "sequenceId": 0,
@@ -2752,7 +2752,7 @@
               18,
               25
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -2763,7 +2763,7 @@
             "readLength": 76,
             "alignmentStart": 1000,
             "readGroupId": 0,
-            "readName": "100",
+            "readName": "d",
             "mate": {
               "flags": 1,
               "sequenceId": 0,
@@ -3460,7 +3460,7 @@
               18,
               25
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -3471,7 +3471,7 @@
             "readLength": 76,
             "alignmentStart": 1100,
             "readGroupId": 0,
-            "readName": "101",
+            "readName": "e",
             "mate": {
               "flags": 1,
               "sequenceId": 0,
@@ -4168,7 +4168,7 @@
               18,
               25
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
@@ -4668,7 +4668,7 @@
             "readLength": 76,
             "alignmentStart": 500,
             "readGroupId": 0,
-            "readName": "102",
+            "readName": "f",
             "mate": {
               "flags": 1,
               "sequenceId": 1,
@@ -5365,7 +5365,7 @@
               18,
               25
             ],
-            "uniqueId": 5,
+            "uniqueId": 6,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -5376,7 +5376,7 @@
             "readLength": 76,
             "alignmentStart": 550,
             "readGroupId": 0,
-            "readName": "103",
+            "readName": "g",
             "mate": {
               "flags": 1,
               "sequenceId": 1,
@@ -6073,7 +6073,7 @@
               18,
               25
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -6084,7 +6084,7 @@
             "readLength": 76,
             "alignmentStart": 650,
             "readGroupId": 0,
-            "readName": "104",
+            "readName": "h",
             "mate": {
               "flags": 1,
               "sequenceId": 1,
@@ -6781,7 +6781,7 @@
               18,
               25
             ],
-            "uniqueId": 7,
+            "uniqueId": 8,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
@@ -7279,7 +7279,7 @@
             "readLength": 76,
             "alignmentStart": 300,
             "readGroupId": 0,
-            "readName": "105",
+            "readName": "i",
             "mate": {
               "flags": 1,
               "sequenceId": 2,
@@ -7976,7 +7976,7 @@
               18,
               25
             ],
-            "uniqueId": 8,
+            "uniqueId": 9,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           },
           {
@@ -7987,7 +7987,7 @@
             "readLength": 76,
             "alignmentStart": 400,
             "readGroupId": 0,
-            "readName": "106",
+            "readName": "j",
             "mate": {
               "flags": 1,
               "sequenceId": 2,
@@ -8684,7 +8684,7 @@
               18,
               25
             ],
-            "uniqueId": 9,
+            "uniqueId": 10,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]
@@ -9180,7 +9180,7 @@
             "readLength": 76,
             "alignmentStart": 700,
             "readGroupId": 0,
-            "readName": "107",
+            "readName": "k",
             "mate": {
               "flags": 1,
               "sequenceId": 3,
@@ -9877,7 +9877,7 @@
               18,
               25
             ],
-            "uniqueId": 10,
+            "uniqueId": 11,
             "readBases": "ACCCTAACCCTAACCCTAACCCTAACCATAACCCTAAGACTAACCCTAAACCTAACCCTCATAATCGAAATACAAC"
           }
         ]

@@ -23,7 +23,7 @@
       9,
       9
     ],
-    "uniqueId": 15
+    "uniqueId": 16
   },
   {
     "tags": {},
@@ -43,10 +43,11 @@
       9,
       9
     ],
-    "uniqueId": 8,
+    "uniqueId": 9,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 1,
+      "uniqueId": 10,
       "readName": "y1"
     },
     "templateLength": 20
@@ -69,10 +70,11 @@
       9,
       9
     ],
-    "uniqueId": 9,
+    "uniqueId": 10,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 16,
+      "uniqueId": 9,
       "readName": "y1"
     },
     "templateLength": 20
@@ -95,10 +97,11 @@
       9,
       9
     ],
-    "uniqueId": 10,
+    "uniqueId": 11,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 7,
+      "uniqueId": 12,
       "readName": "y2"
     },
     "templateLength": 8
@@ -121,10 +124,11 @@
       9,
       9
     ],
-    "uniqueId": 11,
+    "uniqueId": 12,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 10,
+      "uniqueId": 11,
       "readName": "y2"
     },
     "templateLength": 8
@@ -153,7 +157,7 @@
       9,
       9
     ],
-    "uniqueId": 12
+    "uniqueId": 13
   },
   {
     "tags": {},
@@ -179,7 +183,7 @@
       9,
       9
     ],
-    "uniqueId": 13
+    "uniqueId": 14
   },
   {
     "tags": {},
@@ -205,6 +209,6 @@
       9,
       9
     ],
-    "uniqueId": 14
+    "uniqueId": 15
   }
 ]

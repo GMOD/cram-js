@@ -500,7 +500,7 @@
               9,
               9
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -541,7 +541,7 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "ACCGCGGTTC"
           },
           {
@@ -591,7 +591,7 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "CCGCGGTTCG"
           }
         ]

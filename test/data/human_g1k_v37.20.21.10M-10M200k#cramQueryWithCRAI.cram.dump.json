@@ -2803,7 +2803,7 @@
               34,
               27
             ],
-            "uniqueId": 0,
+            "uniqueId": 1,
             "readBases": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
@@ -3532,7 +3532,7 @@
               34,
               2
             ],
-            "uniqueId": 1,
+            "uniqueId": 2,
             "readBases": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
@@ -4260,7 +4260,7 @@
               37,
               35
             ],
-            "uniqueId": 2,
+            "uniqueId": 3,
             "readBases": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
@@ -4997,7 +4997,7 @@
               36,
               33
             ],
-            "uniqueId": 3,
+            "uniqueId": 4,
             "readBases": "CAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCCA"
           },
           {
@@ -5492,7 +5492,7 @@
               28,
               22
             ],
-            "uniqueId": 4,
+            "uniqueId": 5,
             "readBases": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTT"
           },
           {
@@ -5617,7 +5617,7 @@
               2,
               2
             ],
-            "uniqueId": 5
+            "uniqueId": 6
           },
           {
             "tags": {
@@ -5975,7 +5975,7 @@
               2,
               2
             ],
-            "uniqueId": 6,
+            "uniqueId": 7,
             "readBases": "CTTTGTAGTAAATTTTGAACTCTAAAGAGTTAGTTCTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
           }
         ]
@@ -6519,7 +6519,7 @@
               2,
               2
             ],
-            "uniqueId": 7
+            "uniqueId": 8
           },
           {
             "tags": {
@@ -6643,7 +6643,7 @@
               2,
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 9
           },
           {
             "tags": {
@@ -6767,7 +6767,7 @@
               2,
               2
             ],
-            "uniqueId": 9
+            "uniqueId": 10
           },
           {
             "tags": {
@@ -6891,7 +6891,7 @@
               2,
               2
             ],
-            "uniqueId": 10
+            "uniqueId": 11
           },
           {
             "tags": {
@@ -7015,7 +7015,7 @@
               2,
               2
             ],
-            "uniqueId": 11
+            "uniqueId": 12
           }
         ]
       }
