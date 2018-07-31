@@ -8,52 +8,79 @@ function decodeReadSequence(cramRecord, refRegion) {
 
   // remember: all coordinates are 1-based closed
   const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
-  let seqBases = refRegion.seq
-    .substr(regionSeqOffset, cramRecord.lengthOnRef)
-    .toUpperCase()
 
-  // now go through the read features and mutate the sequence according to them
-  if (!cramRecord.readFeatures) return seqBases
+  if (!cramRecord.readFeatures)
+    return refRegion.seq
+      .substr(regionSeqOffset, cramRecord.lengthOnRef)
+      .toUpperCase()
 
-  // split the bases into an array so we can munge them more easily
-  seqBases = seqBases.split('')
-
-  // go through and apply all the read features to the sequence
-  for (let i = 0; i < cramRecord.readFeatures.length; i += 1) {
-    const feature = cramRecord.readFeatures[i]
-    // 'bqBXIDiQNSPH'
-    if (feature.code === 'b') {
-      // specify a base pair for some reason
-      seqBases[feature.pos - 1] = feature.data
-    } else if (feature.code === 'B') {
-      // base pair and associated quality
-      // TODO: do we need to set the quality in the qual scores?
-      seqBases[feature.pos - 1] = feature.data[0]
-    } else if (feature.code === 'X') {
-      // base substitution
-      seqBases[feature.pos - 1] = feature.sub
-    } else if (feature.code === 'I') {
-      // insertion
-      seqBases.splice(feature.pos - 1, 0, ...feature.data.split(''))
-    } else if (feature.code === 'D') {
-      // deletion
-      seqBases.splice(feature.pos - 1, feature.data)
-    } else if (feature.code === 'i') {
-      // insert single base
-      seqBases.splice(feature.pos - 1, 0, feature.data)
-    } else if (feature.code === 'N') {
-      // reference skip. delete some bases
-      seqBases.splice(feature.pos - 1, feature.data)
-    } else if (feature.code === 'S') {
-      // soft clipped bases that should be present in the read seq
-      seqBases.splice(feature.pos - 1, 0, ...feature.data.split(''))
-    } else if (feature.code === 'P') {
-      // padding, do nothing
-    } else if (feature.code === 'H') {
-      // hard clip, do nothing
+  let bases = ''
+  let regionPos = regionSeqOffset
+  let currentReadFeature = 0
+  while (bases.length < cramRecord.readLength) {
+    if (
+      currentReadFeature < cramRecord.readFeatures.length &&
+      cramRecord.readFeatures[currentReadFeature].pos === bases.length + 1
+    ) {
+      // process the read feature
+      const feature = cramRecord.readFeatures[currentReadFeature]
+      currentReadFeature += 1
+      if (feature.code === 'b') {
+        // specify a base pair for some reason
+        bases += feature.data
+        regionPos += 1
+      } else if (feature.code === 'B') {
+        // base pair and associated quality
+        // TODO: do we need to set the quality in the qual scores?
+        bases += feature.data[0]
+        regionPos += 1
+      } else if (feature.code === 'X') {
+        // base substitution
+        bases += feature.sub
+        regionPos += 1
+      } else if (feature.code === 'I') {
+        // insertion
+        bases += feature.data
+      } else if (feature.code === 'D') {
+        // deletion
+        regionPos += feature.data
+      } else if (feature.code === 'i') {
+        // insert single base
+        bases += feature.data
+      } else if (feature.code === 'N') {
+        // reference skip. delete some bases
+        // do nothing
+        // seqBases.splice(feature.pos - 1, feature.data)
+        regionPos += feature.data
+      } else if (feature.code === 'S') {
+        // soft clipped bases that should be present in the read seq
+        // seqBases.splice(feature.pos - 1, 0, ...feature.data.split(''))
+        bases += feature.data
+      } else if (feature.code === 'P') {
+        // padding, do nothing
+      } else if (feature.code === 'H') {
+        // hard clip, do nothing
+      }
+    } else if (currentReadFeature < cramRecord.readFeatures.length) {
+      // put down a chunk of sequence up to the next read feature
+      const chunk = refRegion.seq.substr(
+        regionPos,
+        cramRecord.readFeatures[currentReadFeature].pos - bases.length - 1,
+      )
+      bases += chunk
+      regionPos += chunk.length
+    } else {
+      // put down a chunk of reference up to the full read length
+      const chunk = refRegion.seq.substr(
+        regionPos,
+        cramRecord.readLength - bases.length,
+      )
+      bases += chunk
+      regionPos += chunk.length
     }
   }
-  return seqBases.join('')
+
+  return bases.toUpperCase()
 }
 
 const baseNumbers = {
