@@ -147,6 +147,21 @@ function decodeReadFeatures(
   return readFeatures
 }
 
+function thingToString(thing) {
+  if (thing instanceof Buffer) {
+    return readNullTerminatedStringFromBuffer(thing)
+  } else if (thing.length && thing.indexOf) {
+    // array-like
+    if (!thing[thing.length - 1]) {
+      // trim zeroes off the end if necessary
+      const termIndex = thing.indexOf(0)
+      return String.fromCharCode(...thing.slice(0, termIndex))
+    }
+    return String.fromCharCode(...thing)
+  }
+  return String(thing)
+}
+
 function decodeRecord(
   slice,
   decodeDataSeries,
@@ -180,15 +195,16 @@ function decodeRecord(
   cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded)
-    cramRecord.readName = decodeDataSeries('RN').toString('utf8') // new String(readNameCodec.readData(), charset)
+    cramRecord.readName = thingToString(decodeDataSeries('RN'))
 
   // mate record
   if (cramRecord.isDetached()) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't matter for javascript
     const mate = {}
     mate.flags = decodeDataSeries('MF')
-    if (!compressionScheme.readNamesIncluded)
-      cramRecord.mate.readName = decodeDataSeries('RN') // new String(readNameCodec.readData(), charset)
+    if (!compressionScheme.readNamesIncluded) {
+      mate.readName = thingToString(decodeDataSeries('RN'))
+    }
     mate.sequenceId = decodeDataSeries('NS')
     mate.alignmentStart = decodeDataSeries('NP')
     if (mate.flags || mate.sequenceId > -1) cramRecord.mate = mate

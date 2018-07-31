@@ -34,6 +34,6 @@ describe('dumping cram files', () => {
       expect(JSON.parse(JSON.stringify(fileData))).to.deep.equal(
         expectedFeatures,
       )
-    }).timeout(6000)
+    }).timeout(10000)
   })
 })

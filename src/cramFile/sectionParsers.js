@@ -238,7 +238,7 @@ const versionedParsers = {
             .uint8('stopByte')
             [majorVersion > 1 ? 'itf8' : 'int']('blockContentId'),
           6: new Parser().itf8('offset').itf8('length'), // BETA
-          7: new Parser().itf8('offset').itf8('K'),
+          7: new Parser().itf8('offset').itf8('K'), // SUBEXP
           8: new Parser().itf8('offset').itf8('log2m'), // GOLOMB_RICE
           9: new Parser().itf8('offset'), // GAMMA
         },

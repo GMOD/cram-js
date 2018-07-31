@@ -112,6 +112,7 @@ xx#triplet.tmp.cram
 xx#unsorted.2.1.cram
 xx#unsorted.3.0.cram
 xx#unsorted.tmp.cram
+grc37-1#HG03297.mapped.ILLUMINA.bwa.ESN.low_coverage.20130415.bam.cram
 `
   .split(/\s+/)
   .filter(f => !!f)

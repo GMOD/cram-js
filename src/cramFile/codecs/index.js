@@ -5,13 +5,8 @@ const ExternalCodec = require('./external')
 const ByteArrayStopCodec = require('./byteArrayStop')
 const ByteArrayLengthCodec = require('./byteArrayLength')
 const BetaCodec = require('./beta')
-
-// class GolombCodec extends CramCodec {}
-// class ByteArrayLengthCodec extends CramCodec {}
-// class BetaCodec extends CramCodec {}
-// class SubexpCodec extends CramCodec {}
-// class GolombRiceCodec extends CramCodec {}
-// class GammaCodec extends CramCodec {}
+const GammaCodec = require('./gamma')
+const SubexpCodec = require('./subexp')
 
 const codecClasses = {
   1: ExternalCodec,
@@ -20,9 +15,9 @@ const codecClasses = {
   4: ByteArrayLengthCodec,
   5: ByteArrayStopCodec,
   6: BetaCodec,
-  // 7: SubexpCodec,
+  7: SubexpCodec,
   // 8: GolombRiceCodec,
-  // 9: GammaCodec,
+  9: GammaCodec,
 }
 
 function getCodecClassWithId(id) {
