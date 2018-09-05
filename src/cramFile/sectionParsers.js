@@ -1,4 +1,4 @@
-const { Parser } = require('../binary-parser')
+const { Parser } = require('binary-parser')
 
 const singleItf8 = new Parser().itf8()
 
