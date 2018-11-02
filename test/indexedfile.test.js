@@ -240,3 +240,28 @@ describe('.crai indexed cram file', () => {
     },
   )
 })
+
+
+describe('paired read test', () => {
+  it('can read paired.cram', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('paired.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('paired.cram.crai'),
+      }),
+    })
+    const cramResult = new IndexedCramFile({
+      cramFilehandle: testDataFile('paired-region.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('paired-region.cram.crai'),
+      }),
+    })
+    const features = await cram.getRecordsForRange(19, 62501, 64500, {
+      viewAsPairs: true,
+    })
+    const features2 = await cramResult.getRecordsForRange(0, 1, 70000)
+    expect(features.map(f => f.readName).sort()).to.deep.equal(
+      features2.map(f => f.readName).sort(),
+    )
+  })
+})
