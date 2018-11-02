@@ -1,6 +1,65 @@
 [
   {
     "tags": {
+      "CT": "+;STOP"
+    },
+    "flags": 768,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 1,
+    "alignmentStart": 2,
+    "readGroupId": -1,
+    "readName": "*",
+    "templateSize": 0,
+    "lengthOnRef": 1,
+    "mappingQuality": 255,
+    "qualityScores": [
+      255
+    ],
+    "uniqueId": 6
+  },
+  {
+    "tags": {
+      "CT": "+;COMM;Note=consensus%0Amulti%09line%0Atag%0A!\"#$%25^&*()_+<>?:@~{}%7C%0A1234567890-=[]'%3B#,./\\"
+    },
+    "flags": 768,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 3,
+    "alignmentStart": 28,
+    "readGroupId": -1,
+    "readName": "*",
+    "templateSize": 0,
+    "lengthOnRef": 3,
+    "mappingQuality": 255,
+    "qualityScores": [
+      255,
+      255,
+      255
+    ],
+    "uniqueId": 7
+  },
+  {
+    "tags": {
+      "CT": "+;STOP"
+    },
+    "flags": 768,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 1,
+    "alignmentStart": 102,
+    "readGroupId": -1,
+    "readName": "*",
+    "templateSize": 0,
+    "lengthOnRef": 1,
+    "mappingQuality": 255,
+    "qualityScores": [
+      255
+    ],
+    "uniqueId": 8
+  },
+  {
+    "tags": {
       "PT": "27;29;+;STOP;Note=tag1"
     },
     "flags": 16,
@@ -775,64 +834,5 @@
       34
     ],
     "uniqueId": 5
-  },
-  {
-    "tags": {
-      "CT": "+;STOP"
-    },
-    "flags": 768,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 1,
-    "alignmentStart": 2,
-    "readGroupId": -1,
-    "readName": "*",
-    "templateSize": 0,
-    "lengthOnRef": 1,
-    "mappingQuality": 255,
-    "qualityScores": [
-      255
-    ],
-    "uniqueId": 6
-  },
-  {
-    "tags": {
-      "CT": "+;COMM;Note=consensus%0Amulti%09line%0Atag%0A!\"#$%25^&*()_+<>?:@~{}%7C%0A1234567890-=[]'%3B#,./\\"
-    },
-    "flags": 768,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 3,
-    "alignmentStart": 28,
-    "readGroupId": -1,
-    "readName": "*",
-    "templateSize": 0,
-    "lengthOnRef": 3,
-    "mappingQuality": 255,
-    "qualityScores": [
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 7
-  },
-  {
-    "tags": {
-      "CT": "+;STOP"
-    },
-    "flags": 768,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 1,
-    "alignmentStart": 102,
-    "readGroupId": -1,
-    "readName": "*",
-    "templateSize": 0,
-    "lengthOnRef": 1,
-    "mappingQuality": 255,
-    "qualityScores": [
-      255
-    ],
-    "uniqueId": 8
   }
 ]

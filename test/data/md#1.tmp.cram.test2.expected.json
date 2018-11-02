@@ -144,6 +144,198 @@
     "uniqueId": 2
   },
   {
+    "tags": {
+      "NM": 9,
+      "MD": "9^A6C0C0^YN0N6^GGG6"
+    },
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 30,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "xD",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "code": "D",
+        "data": 1,
+        "pos": 10,
+        "refPos": 10
+      },
+      {
+        "code": "B",
+        "data": [
+          "Y",
+          255
+        ],
+        "pos": 16,
+        "refPos": 17
+      },
+      {
+        "code": "X",
+        "data": 3,
+        "pos": 17,
+        "refPos": 18
+      },
+      {
+        "code": "D",
+        "data": 2,
+        "pos": 18,
+        "refPos": 19
+      },
+      {
+        "code": "D",
+        "data": 3,
+        "pos": 25,
+        "refPos": 28
+      }
+    ],
+    "lengthOnRef": 36,
+    "mappingQuality": 255,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
+    "uniqueId": 5
+  },
+  {
+    "tags": {},
+    "flags": 0,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 30,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "xD*",
+    "templateSize": 0,
+    "readFeatures": [
+      {
+        "code": "X",
+        "data": 0,
+        "pos": 1,
+        "refPos": 1
+      },
+      {
+        "code": "X",
+        "data": 3,
+        "pos": 9,
+        "refPos": 9
+      },
+      {
+        "code": "D",
+        "data": 1,
+        "pos": 10,
+        "refPos": 10
+      },
+      {
+        "code": "X",
+        "data": 3,
+        "pos": 10,
+        "refPos": 11
+      },
+      {
+        "code": "X",
+        "data": 2,
+        "pos": 17,
+        "refPos": 18
+      },
+      {
+        "code": "D",
+        "data": 2,
+        "pos": 18,
+        "refPos": 19
+      },
+      {
+        "code": "X",
+        "data": 3,
+        "pos": 18,
+        "refPos": 21
+      },
+      {
+        "code": "X",
+        "data": 2,
+        "pos": 19,
+        "refPos": 22
+      },
+      {
+        "code": "D",
+        "data": 3,
+        "pos": 25,
+        "refPos": 28
+      },
+      {
+        "code": "X",
+        "data": 0,
+        "pos": 30,
+        "refPos": 36
+      }
+    ],
+    "lengthOnRef": 36,
+    "mappingQuality": 255,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
+    "uniqueId": 6
+  },
+  {
     "tags": {},
     "flags": 0,
     "cramFlags": 3,
@@ -430,198 +622,6 @@
       255
     ],
     "uniqueId": 4
-  },
-  {
-    "tags": {
-      "NM": 9,
-      "MD": "9^A6C0C0^YN0N6^GGG6"
-    },
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 30,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "xD",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "D",
-        "data": 1,
-        "pos": 10,
-        "refPos": 10
-      },
-      {
-        "code": "B",
-        "data": [
-          "Y",
-          255
-        ],
-        "pos": 16,
-        "refPos": 17
-      },
-      {
-        "code": "X",
-        "data": 3,
-        "pos": 17,
-        "refPos": 18
-      },
-      {
-        "code": "D",
-        "data": 2,
-        "pos": 18,
-        "refPos": 19
-      },
-      {
-        "code": "D",
-        "data": 3,
-        "pos": 25,
-        "refPos": 28
-      }
-    ],
-    "lengthOnRef": 36,
-    "mappingQuality": 255,
-    "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 5
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 30,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "xD*",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 1,
-        "refPos": 1
-      },
-      {
-        "code": "X",
-        "data": 3,
-        "pos": 9,
-        "refPos": 9
-      },
-      {
-        "code": "D",
-        "data": 1,
-        "pos": 10,
-        "refPos": 10
-      },
-      {
-        "code": "X",
-        "data": 3,
-        "pos": 10,
-        "refPos": 11
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 17,
-        "refPos": 18
-      },
-      {
-        "code": "D",
-        "data": 2,
-        "pos": 18,
-        "refPos": 19
-      },
-      {
-        "code": "X",
-        "data": 3,
-        "pos": 18,
-        "refPos": 21
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 19,
-        "refPos": 22
-      },
-      {
-        "code": "D",
-        "data": 3,
-        "pos": 25,
-        "refPos": 28
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 30,
-        "refPos": 36
-      }
-    ],
-    "lengthOnRef": 36,
-    "mappingQuality": 255,
-    "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 6
   },
   {
     "tags": {},
