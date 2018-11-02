@@ -225,6 +225,7 @@ class CramRecord {
   getPairOrientation() {
     if (
       !this.isSegmentUnmapped() &&
+      this.isPaired() &&
       !this.isMateUnmapped() &&
       this.sequenceId === this.mate.sequenceId
     ) {
