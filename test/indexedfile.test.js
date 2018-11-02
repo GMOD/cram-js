@@ -69,6 +69,7 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 2, 200)
+    features.sort((a, b) => a.readName.localeCompare(b.readName))
     if (REWRITE_EXPECTED_DATA)
       fs.writeFileSync(
         'test/data/ce#1000.tmp.cram.test1.expected.json',
