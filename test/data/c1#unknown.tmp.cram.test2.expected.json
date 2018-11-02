@@ -7,20 +7,14 @@
     "readLength": 10,
     "alignmentStart": 1,
     "readGroupId": -1,
-    "readName": "_sqm",
+    "readName": "_m",
     "templateSize": 0,
     "readFeatures": [
       {
         "code": "i",
-        "data": "C",
+        "data": "N",
         "pos": 3,
         "refPos": 3
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 6,
-        "refPos": 5
       },
       {
         "code": "D",
@@ -32,18 +26,18 @@
     "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40,
-      40
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
     ],
-    "uniqueId": 1
+    "uniqueId": 3
   },
   {
     "tags": {},
@@ -99,14 +93,20 @@
     "readLength": 10,
     "alignmentStart": 1,
     "readGroupId": -1,
-    "readName": "_m",
+    "readName": "_sqm",
     "templateSize": 0,
     "readFeatures": [
       {
         "code": "i",
-        "data": "N",
+        "data": "C",
         "pos": 3,
         "refPos": 3
+      },
+      {
+        "code": "X",
+        "data": 2,
+        "pos": 6,
+        "refPos": 5
       },
       {
         "code": "D",
@@ -118,17 +118,17 @@
     "lengthOnRef": 10,
     "mappingQuality": 0,
     "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40
     ],
-    "uniqueId": 3
+    "uniqueId": 1
   }
 ]

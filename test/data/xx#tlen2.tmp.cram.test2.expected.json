@@ -2,32 +2,6 @@
   {
     "tags": {},
     "flags": 147,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 5,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "x4",
-    "mate": {
-      "flags": 0,
-      "sequenceId": 0,
-      "alignmentStart": 16
-    },
-    "templateSize": 20,
-    "lengthOnRef": 5,
-    "mappingQuality": 1,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 8
-  },
-  {
-    "tags": {},
-    "flags": 147,
     "cramFlags": 5,
     "sequenceId": 0,
     "readLength": 5,
@@ -186,6 +160,32 @@
       "readName": "x3"
     },
     "templateLength": 8
+  },
+  {
+    "tags": {},
+    "flags": 147,
+    "cramFlags": 3,
+    "sequenceId": 0,
+    "readLength": 5,
+    "alignmentStart": 1,
+    "readGroupId": -1,
+    "readName": "x4",
+    "mate": {
+      "flags": 0,
+      "sequenceId": 0,
+      "alignmentStart": 16
+    },
+    "templateSize": 20,
+    "lengthOnRef": 5,
+    "mappingQuality": 1,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
+    "uniqueId": 8
   },
   {
     "tags": {},
