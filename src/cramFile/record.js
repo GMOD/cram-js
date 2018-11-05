@@ -242,7 +242,10 @@ class CramRecord {
       }
 
       const tmp = []
-      const isize = this.templateLength||0
+      let isize = this.templateLength||this.templateSize
+      if(this.isRead2() && this.templateLength) {
+        isize = -isize
+      }
       if (isize > 0) {
         tmp[0] = s1
         tmp[1] = o1
