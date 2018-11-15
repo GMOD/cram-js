@@ -43,7 +43,7 @@ class IndexedCramFile {
    * @param {number} end end of the range of interest. 1-based closed coordinates.
    * @returns {Promise[Array[CramRecord]]}
    */
-  async getRecordsForRange(seq, start, end) {
+  async getRecordsForRange(seq, start, end, opts = {}) {
     if (typeof seq === 'string')
       // TODO: support string reference sequence names somehow
       throw new CramUnimplementedError(
@@ -68,7 +68,80 @@ class IndexedCramFile {
       slices.map(slice => this.getRecordsInSlice(slice, filter)),
     )
 
-    return Array.prototype.concat(...sliceResults)
+    let ret = Array.prototype.concat(...sliceResults)
+    if (opts.viewAsPairs) {
+      const readNames = {}
+      const readIds = {}
+      for (let i = 0; i < ret.length; i += 1) {
+        const name = ret[i].readName
+        const id = ret[i].uniqueId
+        if (!readNames[name]) readNames[name] = 0
+        readNames[name] += 1
+        readIds[id] = 1
+      }
+      const unmatedPairs = {}
+      Object.entries(readNames).forEach(([k, v]) => {
+        if (v === 1) unmatedPairs[k] = true
+      })
+      const matePromises = []
+      for (let i = 0; i < ret.length; i += 1) {
+        const name = ret[i].readName
+        if (unmatedPairs[name] && (ret[i].mate.sequenceId == seqId || opts.pairAcrossChr)) {
+          const mateSlices = this.index.getEntriesForRange(
+            ret[i].mate.sequenceId,
+            ret[i].mate.alignmentStart,
+            ret[i].mate.alignmentStart + 1,
+          )
+          matePromises.push(mateSlices)
+        }
+      }
+      const mateBlocks = await Promise.all(matePromises)
+      let mateChunks = []
+      for(var i = 0; i < mateBlocks.length; i++) {
+        mateChunks.push(...mateBlocks[i])
+      }
+      // filter out duplicates
+      mateChunks = mateChunks
+        .sort((a, b) => a.toString().localeCompare(b.toString()))
+        .filter(
+          (item, pos, ary) =>
+            !pos || item.toString() !== ary[pos - 1].toString(),
+        )
+
+      const mateRecordPromises = []
+      const mateFeatPromises = []
+
+      mateChunks.forEach(c => {
+        let recordPromise = this.cram.featureCache.get(c.toString())
+        if (!recordPromise) {
+          recordPromise = this.getRecordsInSlice(c, () => true)
+          this.cram.featureCache.set(c.toString(), recordPromise)
+        }
+        mateRecordPromises.push(recordPromise)
+        const featPromise = recordPromise.then(feats => {
+          const mateRecs = []
+          for (let i = 0; i < feats.length; i += 1) {
+            const feature = feats[i]
+            if (
+              unmatedPairs[feature.readName] &&
+              !readIds[feature.uniqueId]
+            ) {
+              mateRecs.push(feature)
+            }
+          }
+          return mateRecs
+        })
+        mateFeatPromises.push(featPromise)
+      })
+      const newMateFeats = await Promise.all(mateFeatPromises)
+      if (newMateFeats.length) {
+        const newMates = newMateFeats.reduce((result, current) =>
+          result.concat(current),
+        )
+        ret = ret.concat(newMates)
+      }
+    }
+    return ret
   }
 
   getRecordsInSlice(

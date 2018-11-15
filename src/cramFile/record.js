@@ -219,6 +219,49 @@ class CramRecord {
   }
 
   /**
+   * Get the pair orientation of a paired read. Adapted from igv.js
+   * @returns {String} of paired orientatin
+   */
+  getPairOrientation() {
+    if (
+      !this.isSegmentUnmapped() &&
+      this.isPaired() &&
+      !this.isMateUnmapped() &&
+      this.sequenceId === this.mate.sequenceId
+    ) {
+      const s1 = this.isReverseComplemented() ? 'R' : 'F'
+      const s2 = this.isMateReverseComplemented() ? 'R' : 'F'
+      let o1 = ' '
+      let o2 = ' '
+      if (this.isRead1()) {
+        o1 = '1'
+        o2 = '2'
+      } else if (this.isRead2()) {
+        o1 = '2'
+        o2 = '1'
+      }
+
+      const tmp = []
+      let isize = this.templateLength || this.templateSize
+      if(this.alignmentStart > this.mate.alignmentStart && isize > 0) {
+        isize = -isize
+      }
+      if (isize > 0) {
+        tmp[0] = s1
+        tmp[1] = o1
+        tmp[2] = s2
+        tmp[3] = o2
+      } else {
+        tmp[2] = s1
+        tmp[3] = o1
+        tmp[0] = s2
+        tmp[1] = o2
+      }
+      return tmp.join('')
+    }
+    return null
+  }
+  /**
    * Annotates this feature with the given reference sequence basepair
    * information. This will add a `sub` and a `ref` item to base
    * subsitution read features given the actual substituted and reference

@@ -6,6 +6,15 @@ const gunzip = promisify(zlib.gunzip)
 const { open } = require('./io')
 const { CramMalformedError } = require('./errors')
 
+class Slice {
+  constructor(args) {
+    Object.assign(this, args)
+  }
+  toString() {
+    return this.start+':'+this.span+':'+this.containerStart+':'+this.sliceStart+':'+this.sliceBytes
+  }
+}
+
 function addRecordToIndex(index, record) {
   if (record.some(el => el === undefined)) {
     throw new CramMalformedError('invalid .crai index file')
@@ -15,13 +24,13 @@ function addRecordToIndex(index, record) {
 
   if (!index[seqId]) index[seqId] = []
 
-  index[seqId].push({
+  index[seqId].push(new Slice({
     start,
     span,
     containerStart,
     sliceStart,
     sliceBytes,
-  })
+  }))
 }
 class CraiIndex {
   // A CRAM index (.crai) is a gzipped tab delimited file containing the following columns:

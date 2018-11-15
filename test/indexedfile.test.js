@@ -240,3 +240,61 @@ describe('.crai indexed cram file', () => {
     },
   )
 })
+
+
+describe('paired read test', () => {
+  it('can read paired.cram', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('paired.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('paired.cram.crai'),
+      }),
+    })
+    const cramResult = new IndexedCramFile({
+      cramFilehandle: testDataFile('paired-region.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('paired-region.cram.crai'),
+      }),
+    })
+    const features = await cram.getRecordsForRange(19, 62501, 64500, {
+      viewAsPairs: true,
+    })
+    const features2 = await cramResult.getRecordsForRange(0, 1, 70000)
+    expect(features.map(f => f.readName).sort()).to.deep.equal(
+      features2.map(f => f.readName).sort(),
+    )
+  })
+})
+
+
+describe('paired orientation test', () => {
+  it('can read long_pair.cram', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('long_pair.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('long_pair.cram.crai'),
+      }),
+    })
+    const cramResult = new IndexedCramFile({
+      cramFilehandle: testDataFile('paired-region.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('paired-region.cram.crai'),
+      }),
+    })
+    const features = await cram.getRecordsForRange(0, 15767, 28287, {
+      viewAsPairs: true,
+    })
+    let feat1, feat2
+    for(let i = 0; i < features.length; i++) {
+      if(features[i].readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0') {
+        if(features[i].isRead1()) {
+          feat1 = features[i]
+        } else if(features[i].isRead2()) {
+          feat2 = features[i]
+        }
+      }
+    }
+    expect(feat1.getPairOrientation()).to.equal('R2F1')
+    expect(feat2.getPairOrientation()).to.equal('R2F1')
+  })
+})
