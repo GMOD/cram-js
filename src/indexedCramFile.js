@@ -115,6 +115,15 @@ class IndexedCramFile {
       const mateRecordPromises = []
       const mateFeatPromises = []
 
+      const mateTotalSize = mateChunks
+        .map(s => s.sliceBytes)
+        .reduce((a, b) => a + b, 0)
+      if (mateTotalSize > this.fetchSizeLimit) {
+        throw new Error(
+          `mate data size of ${mateTotalSize.toLocaleString()} bytes exceeded fetch size limit of ${this.fetchSizeLimit.toLocaleString()} bytes`,
+        )
+      }
+
       mateChunks.forEach(c => {
         let recordPromise = this.cram.featureCache.get(c.toString())
         if (!recordPromise) {
