@@ -44,6 +44,10 @@ class IndexedCramFile {
    * @returns {Promise[Array[CramRecord]]}
    */
   async getRecordsForRange(seq, start, end, opts = {}) {
+    opts.viewAsPairs = opts.viewAsPairs || false
+    opts.pairAcrossChr = opts.pairAcrossChr || false
+    opts.maxInsertSize = opts.maxInsertSize || 200000
+
     if (typeof seq === 'string')
       // TODO: support string reference sequence names somehow
       throw new CramUnimplementedError(
@@ -86,7 +90,7 @@ class IndexedCramFile {
       const matePromises = []
       for (let i = 0; i < ret.length; i += 1) {
         const name = ret[i].readName
-        if (unmatedPairs[name] && (ret[i].mate.sequenceId == seqId || opts.pairAcrossChr)) {
+        if (unmatedPairs[name] && (ret[i].mate.sequenceId == seqId || opts.pairAcrossChr) && (Math.abs(ret[i].alignmentStart - ret[i].mate.alignmentStart) < opts.maxInsertSize)) {
           const mateSlices = this.index.getEntriesForRange(
             ret[i].mate.sequenceId,
             ret[i].mate.alignmentStart,
