@@ -1,4 +1,4 @@
-const promisify = require('util.promisify')
+const {promisify} = require('es6-promisify')
 const zlib = require('zlib')
 
 const gunzip = promisify(zlib.gunzip)
