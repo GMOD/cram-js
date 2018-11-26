@@ -90,7 +90,7 @@ class IndexedCramFile {
       const matePromises = []
       for (let i = 0; i < ret.length; i += 1) {
         const name = ret[i].readName
-        if (unmatedPairs[name] && (ret[i].mate.sequenceId == seqId || opts.pairAcrossChr) && (Math.abs(ret[i].alignmentStart - ret[i].mate.alignmentStart) < opts.maxInsertSize)) {
+        if (unmatedPairs[name] && ret[i].mate && (ret[i].mate.sequenceId == seqId || opts.pairAcrossChr) && (Math.abs(ret[i].alignmentStart - ret[i].mate.alignmentStart) < opts.maxInsertSize)) {
           const mateSlices = this.index.getEntriesForRange(
             ret[i].mate.sequenceId,
             ret[i].mate.alignmentStart,
