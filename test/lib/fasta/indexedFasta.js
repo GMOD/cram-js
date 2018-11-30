@@ -7,7 +7,7 @@ class IndexedFasta {
   }
 
   async _getIndexes() {
-    if( ! this.indexes ) this.indexes = await this._readFAI()
+    if (!this.indexes) this.indexes = await this._readFAI()
     return this.indexes
   }
 

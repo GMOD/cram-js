@@ -1,4 +1,4 @@
-const {promisify} = require('es6-promisify')
+const { promisify } = require('es6-promisify')
 const zlib = require('zlib')
 
 const gunzip = promisify(zlib.gunzip)
@@ -11,7 +11,9 @@ class Slice {
     Object.assign(this, args)
   }
   toString() {
-    return this.start+':'+this.span+':'+this.containerStart+':'+this.sliceStart+':'+this.sliceBytes
+    return `${this.start}:${this.span}:${this.containerStart}:${
+      this.sliceStart
+    }:${this.sliceBytes}`
   }
 }
 
@@ -24,13 +26,15 @@ function addRecordToIndex(index, record) {
 
   if (!index[seqId]) index[seqId] = []
 
-  index[seqId].push(new Slice({
-    start,
-    span,
-    containerStart,
-    sliceStart,
-    sliceBytes,
-  }))
+  index[seqId].push(
+    new Slice({
+      start,
+      span,
+      containerStart,
+      sliceStart,
+      sliceBytes,
+    }),
+  )
 }
 class CraiIndex {
   // A CRAM index (.crai) is a gzipped tab delimited file containing the following columns:
