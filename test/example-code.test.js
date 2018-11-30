@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const { IndexedCramFile, CramFile, CraiIndex } = require('../src')
+const { IndexedCramFile, CraiIndex } = require('../src')
 
 console.log(process.cwd())
 
@@ -34,7 +34,7 @@ describe('code examples', () => {
       const records = await indexedFile2.getRecordsForRange(0, 10000, 20000)
       records.forEach(record => {
         console.log(`got a record named ${record.readName}`)
-        record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+        record.readFeatures.forEach(({ code, refPos, ref, sub }) => {
           if (code === 'X')
             console.log(
               `${

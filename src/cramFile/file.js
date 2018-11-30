@@ -42,7 +42,7 @@ class CramFile {
     // the cache is actually used by the slice object, it's just
     // kept here at the level of the file
     this.featureCache = new LRU({
-      maxSize: this.options.cacheSize
+      maxSize: this.options.cacheSize,
     })
   }
 
