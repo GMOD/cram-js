@@ -54,7 +54,6 @@ describe('.crai indexed cram file', () => {
         JSON.stringify(features, null, '  '),
       )
 
-
     const expectedFeatures2 = loadTestJSON(
       'ce#unmap2.tmp.cram.test1.expected.json',
     )
@@ -76,7 +75,6 @@ describe('.crai indexed cram file', () => {
         'test/data/ce#1000.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
-
 
     const expectedFeatures3 = loadTestJSON(
       'ce#1000.tmp.cram.test1.expected.json',
@@ -166,7 +164,6 @@ describe('.crai indexed cram file', () => {
 
       const features = await cram.getRecordsForRange(0, 0, Infinity)
 
-
       features.sort((a, b) => a.readName.localeCompare(b.readName))
       if (REWRITE_EXPECTED_DATA)
         fs.writeFileSync(
@@ -221,7 +218,6 @@ describe('.crai indexed cram file', () => {
           JSON.stringify(features, null, '  '),
         )
 
-
       const expectedFeatures = await loadTestJSON(
         'extended/RNAseq_mapping_def.cram.test1.expected.json',
       )
@@ -272,7 +268,7 @@ describe('paired read test', () => {
 })
 
 function hasDuplicates(array) {
-    return (new Set(array)).size !== array.length;
+  return new Set(array).size !== array.length
 }
 describe('paired orientation test', () => {
   it('can read long_pair.cram', async () => {
@@ -287,10 +283,13 @@ describe('paired orientation test', () => {
       viewAsPairs: true,
     })
 
-    let feat1, feat2
-    for(let i = 0; i < features.length; i++) {
-      if(features[i].readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0') {
-        if(features[i].isRead1()) {
+    let feat1
+    let feat2
+    for (let i = 0; i < features.length; i += 1) {
+      if (
+        features[i].readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0'
+      ) {
+        if (features[i].isRead1()) {
           feat1 = features[i]
         } else if (features[i].isRead2()) {
           feat2 = features[i]
@@ -302,7 +301,6 @@ describe('paired orientation test', () => {
   })
 })
 
-
 describe('duplicate IDs test', () => {
   it('duplicates from single request', async () => {
     const cram = new IndexedCramFile({
@@ -312,12 +310,11 @@ describe('duplicate IDs test', () => {
       }),
     })
 
-    const features = await cram.getRecordsForRange(0, 163504,175473)
-    var x = features.map(f => f.uniqueId)
+    const features = await cram.getRecordsForRange(0, 163504, 175473)
+    const x = features.map(f => f.uniqueId)
     expect(hasDuplicates(x)).to.equal(false)
   })
 })
-
 
 describe('not retrieving some coordinates', () => {
   it('empty query', async () => {
@@ -328,7 +325,7 @@ describe('not retrieving some coordinates', () => {
       }),
     })
 
-    const features = await cram.getRecordsForRange(0,  25999, 26499)
-    expect(features.length>0).to.equal(true)
+    const features = await cram.getRecordsForRange(0, 25999, 26499)
+    expect(features.length > 0).to.equal(true)
   })
 })
