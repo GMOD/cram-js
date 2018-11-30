@@ -27,7 +27,6 @@ describe('.crai indexed cram file', () => {
         JSON.stringify(features, null, '  '),
       )
 
-
     const expectedFeatures1 = loadTestJSON(
       'ce#tag_padded.tmp.cram.test1.expected.json',
     )
@@ -54,8 +53,6 @@ describe('.crai indexed cram file', () => {
         'test/data/ce#unmap2.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
-    var x = features.map(f => f.uniqueId)
-    expect(hasDuplicates(x)).equal(false)
 
 
     const expectedFeatures2 = loadTestJSON(
@@ -275,7 +272,7 @@ describe('paired read test', () => {
 })
 
 function hasDuplicates(array) {
-      return (new Set(array)).size !== array.length;
+    return (new Set(array)).size !== array.length;
 }
 describe('paired orientation test', () => {
   it('can read long_pair.cram', async () => {
@@ -285,11 +282,6 @@ describe('paired orientation test', () => {
         filehandle: testDataFile('long_pair.cram.crai'),
       }),
     })
-
-    const features = await cram.getRecordsForRange(0, 15767, 28287, {
-      viewAsPairs: true,
-    })
-
 
     const features = await cram.getRecordsForRange(0, 15767, 28287, {
       viewAsPairs: true,
