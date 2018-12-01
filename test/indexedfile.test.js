@@ -326,6 +326,6 @@ describe('not retrieving some coordinates', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 25999, 26499)
-    expect(features.length > 0).to.equal(true)
+    expect(features.length).to.equal(410)
   })
 })
