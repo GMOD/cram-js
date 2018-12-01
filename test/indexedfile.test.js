@@ -316,8 +316,8 @@ describe('duplicate IDs test', () => {
   })
 })
 
-describe('not retrieving some coordinates', () => {
-  it('empty query', async () => {
+describe('match samtools', () => {
+  it('matces names given from samtools', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('SRR396636.sorted.clip.cram'),
       index: new CraiIndex({
@@ -326,6 +326,9 @@ describe('not retrieving some coordinates', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 25999, 26499)
+
+    const featNames = await loadTestJSON('SRR396636.samtools.names.json')
+    expect(features.map(f => f.readName)).to.deep.equal(featNames)
     expect(features.length).to.equal(410)
   })
 })

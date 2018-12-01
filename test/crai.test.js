@@ -148,7 +148,14 @@ describe('.crai reader', () => {
         },
       ],
     })
-    expect(await index.getEntriesForRange(0,  25999, 26499)).to.deep.equal([])
-
+    expect(await index.getEntriesForRange(0, 25999, 26499)).to.deep.equal([
+      {
+        containerStart: 1076585,
+        sliceBytes: 167795,
+        sliceStart: 281,
+        span: 4414,
+        start: 25679,
+      },
+    ])
   })
 })

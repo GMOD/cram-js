@@ -155,23 +155,17 @@ class CraiIndex {
 
     let lowerBound = 0
     let upperBound = len - 1
-    let searchPosition = Math.floor(len / 2)
-
-    let lastSearchPosition = -1
-    let nextSearchDirection
-    for (;;) {
-      nextSearchDirection = compare(seqEntries[searchPosition])
+    let searchPosition
+    while (lowerBound <= upperBound) {
+      searchPosition = Math.round((upperBound + lowerBound) / 2)
+      const nextSearchDirection = compare(seqEntries[searchPosition])
       if (nextSearchDirection > 0) {
-        lowerBound = searchPosition
+        lowerBound = searchPosition + 1
       } else if (nextSearchDirection < 0) {
-        upperBound = searchPosition
+        upperBound = searchPosition - 1
       } else {
         break
       }
-
-      lastSearchPosition = searchPosition
-      searchPosition = Math.floor((upperBound + lowerBound) / 2)
-      if (lastSearchPosition === searchPosition) return []
     }
 
     // now extend backward
@@ -183,7 +177,14 @@ class CraiIndex {
     while (overlapEnd < len - 1 && !compare(seqEntries[overlapEnd + 1]))
       overlapEnd += 1
 
-    return seqEntries.slice(overlapStart, overlapEnd + 1)
+    const x1 = seqEntries[overlapStart].start
+    const x2 = seqEntries[overlapEnd].start + seqEntries[overlapEnd].span
+    const y1 = queryStart
+    const y2 = queryEnd
+    if (x2 >= y1 && y2 >= x1) {
+      return seqEntries.slice(overlapStart, overlapEnd + 1)
+    }
+    return []
   }
 }
 
