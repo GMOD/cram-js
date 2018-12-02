@@ -311,8 +311,22 @@ describe('duplicate IDs test', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 163504, 175473)
-    const x = features.map(f => f.uniqueId)
-    expect(hasDuplicates(x)).to.equal(false)
+    const totalMap = {}
+    let noCollisions = true
+    for (let i = 0; i < features.length; i++) {
+      const feature = features[i]
+      if (
+        totalMap[feature.uniqueId] &&
+        totalMap[feature.uniqueId] != feature.readName
+      ) {
+        noCollisions = false
+        console.log('collision', totalMap[feature.uniqueId], feature.readName)
+      } else {
+        totalMap[feature.uniqueId] = feature.readName
+      }
+    }
+
+    expect(noCollisions).to.equal(true)
   })
 })
 
