@@ -263,7 +263,7 @@ class CramRecord {
       }
       return tmp.join('')
     }
-    return tmp;
+    return null;
   }
   /**
    * Annotates this feature with the given reference sequence basepair

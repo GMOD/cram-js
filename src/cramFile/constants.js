@@ -8,7 +8,7 @@ module.exports = {
   // mate read is reversed
   CRAM_M_REVERSE: 1,
   // mated read is unmapped
-  CRAM_M_MAP: 2,
+  CRAM_M_UNMAP: 2,
 
   //  the read is paired in sequencing, no matter whether it is mapped in a pair
   BAM_FPAIRED: 1,
