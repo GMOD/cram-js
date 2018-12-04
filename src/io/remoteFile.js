@@ -30,7 +30,7 @@ class RemoteFile {
       const nodeBuffer = Buffer.from(await response.arrayBuffer())
 
       // try to parse out the size of the remote file
-      const sizeMatch = /\/(\d+)$/.exec(response.headers.map['content-range'])
+      const sizeMatch = /\/(\d+)$/.exec(response.headers.get('content-range'))
       if (sizeMatch[1]) this._stat = { size: parseInt(sizeMatch[1], 10) }
 
       return nodeBuffer
