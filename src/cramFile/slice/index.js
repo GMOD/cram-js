@@ -93,6 +93,7 @@ function associateIntraSliceMate(
     sequenceId: mateRecord.sequenceId,
     alignmentStart: mateRecord.alignmentStart,
     uniqueId: mateRecord.uniqueId,
+    reverseComplemented: mateRecord.isReverseComplemented()
   }
   if (mateRecord.readName) thisRecord.mate.readName = mateRecord.readName
 
@@ -104,6 +105,7 @@ function associateIntraSliceMate(
       sequenceId: thisRecord.sequenceId,
       alignmentStart: thisRecord.alignmentStart,
       uniqueId: thisRecord.uniqueId,
+      reverseComplemented: thisRecord.isReverseComplemented()
     }
     if (thisRecord.readName) mateRecord.mate.readName = thisRecord.readName
   }
