@@ -3,6 +3,8 @@ const { CramMalformedError, CramUnimplementedError } = require('../../errors')
 const Long = require('long')
 
 const CramRecord = require('../record')
+const Constants = require('../constants')
+
 
 /**
  * given a Buffer, read a string up to the first null character
@@ -207,7 +209,7 @@ function decodeRecord(
     }
     mate.sequenceId = decodeDataSeries('NS')
     mate.alignmentStart = decodeDataSeries('NP')
-    if(mate.flags) mate.reverseComplemented = !!(this.mate.flags && Constants.CRAM_M_REVERSE)
+    if(mate.flags) mate.reverseComplemented = !!(mate.flags && Constants.CRAM_M_REVERSE)
     if (mate.flags || mate.sequenceId > -1) cramRecord.mate = mate
     cramRecord.templateSize = decodeDataSeries('TS')
     // detachedCount++
