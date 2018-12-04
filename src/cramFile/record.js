@@ -142,7 +142,11 @@ class CramRecord {
 
   /** @returns {boolean} true if the read itself is unmapped; conflictive with isProperlyPaired */
   isMateUnmapped() {
-    return !!(this.flags & Constants.BAM_FMUNMAP)
+    if(this.mate && undefined !== this.mate.flags) {
+      return !(this.mate.flags && Constants.CRAM_M_MAP);
+    } else {
+      return !!(this.flags & Constants.BAM_FMUNMAP)
+    }
   }
 
   /** @returns {boolean} true if the read is mapped to the reverse strand */
@@ -152,7 +156,11 @@ class CramRecord {
 
   /** @returns {boolean} true if the mate is mapped to the reverse strand */
   isMateReverseComplemented() {
-    return !!(this.flags & Constants.BAM_FMREVERSE)
+    if(this.mate && undefined !== this.mate.flags) {
+      return !!(this.mate.flags && Constants.CRAM_M_REVERSE);
+    } else {
+      return !!(this.flags & Constants.BAM_FMREVERSE)
+    }
   }
 
   /** @returns {boolean} true if this is read number 1 in a pair */
