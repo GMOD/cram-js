@@ -1061,7 +1061,7 @@
               34,
               34
             ],
-            "uniqueId": 1,
+            "uniqueId": 784,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]
@@ -2328,7 +2328,7 @@
               34,
               34
             ],
-            "uniqueId": 2,
+            "uniqueId": 1378,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           }
         ]
@@ -3579,7 +3579,7 @@
               34,
               34
             ],
-            "uniqueId": 3,
+            "uniqueId": 1993,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -4208,7 +4208,7 @@
               34,
               34
             ],
-            "uniqueId": 4,
+            "uniqueId": 1994,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -5101,7 +5101,7 @@
               34,
               34
             ],
-            "uniqueId": 5,
+            "uniqueId": 1995,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -5644,7 +5644,7 @@
               255,
               255
             ],
-            "uniqueId": 6,
+            "uniqueId": 1996,
             "readBases": "AGCCTAAGCCTAAGCCTAAGCCTAAGCTAAGCCTAAGCCTAAGCCTAAGCTTTTTTTTTTCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -5787,7 +5787,7 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 1997
           }
         ]
       }

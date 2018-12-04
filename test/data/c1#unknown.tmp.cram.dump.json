@@ -576,7 +576,7 @@
               40,
               40
             ],
-            "uniqueId": 1,
+            "uniqueId": 599,
             "readBases": "AACCCTCGTT"
           },
           {
@@ -625,7 +625,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 600,
             "readBases": "AACCCTCGTT"
           },
           {
@@ -666,7 +666,7 @@
               255,
               255
             ],
-            "uniqueId": 3,
+            "uniqueId": 601,
             "readBases": "AANCCGCGTT"
           },
           {
@@ -692,7 +692,7 @@
               40,
               40
             ],
-            "uniqueId": 4
+            "uniqueId": 602
           },
           {
             "tags": {},
@@ -717,7 +717,7 @@
               255,
               255
             ],
-            "uniqueId": 5
+            "uniqueId": 603
           },
           {
             "tags": {},
@@ -730,7 +730,7 @@
             "readName": "_u",
             "templateSize": 0,
             "qualityScores": null,
-            "uniqueId": 6
+            "uniqueId": 604
           }
         ]
       }

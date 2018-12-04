@@ -433,11 +433,11 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 398,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
-              "uniqueId": 2,
+              "uniqueId": 399,
               "readName": "S"
             },
             "templateLength": 20,
@@ -466,12 +466,12 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 399,
             "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 3,
+              "uniqueId": 400,
               "readName": "S"
             },
             "readBases": "TTTTTTTTTT"
@@ -499,12 +499,12 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 400,
             "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
-              "uniqueId": 4,
+              "uniqueId": 401,
               "readName": "S"
             },
             "readBases": "AAAAAAAAAA"
@@ -532,12 +532,12 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 401,
             "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 5,
+              "uniqueId": 402,
               "readName": "S"
             },
             "readBases": "TTTTTTTTTT"
@@ -565,12 +565,12 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 402,
             "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
-              "uniqueId": 6,
+              "uniqueId": 403,
               "readName": "S"
             },
             "readBases": "AAAAAAAAAA"
@@ -598,12 +598,12 @@
               9,
               9
             ],
-            "uniqueId": 6,
+            "uniqueId": 403,
             "templateLength": 20,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 5,
+              "uniqueId": 402,
               "readName": "S"
             },
             "readBases": "TTTTTTTTTT"

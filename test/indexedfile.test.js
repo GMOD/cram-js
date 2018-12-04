@@ -267,9 +267,6 @@ describe('paired read test', () => {
   })
 })
 
-function hasDuplicates(array) {
-  return new Set(array).size !== array.length
-}
 describe('paired orientation test', () => {
   it('can read long_pair.cram', async () => {
     const cram = new IndexedCramFile({
@@ -313,11 +310,11 @@ describe('duplicate IDs test', () => {
     const features = await cram.getRecordsForRange(0, 163504, 175473)
     const totalMap = {}
     let noCollisions = true
-    for (let i = 0; i < features.length; i++) {
+    for (let i = 0; i < features.length; i += 1) {
       const feature = features[i]
       if (
         totalMap[feature.uniqueId] &&
-        totalMap[feature.uniqueId] != feature.readName
+        totalMap[feature.uniqueId] !== feature.readName
       ) {
         noCollisions = false
         console.log('collision', totalMap[feature.uniqueId], feature.readName)
@@ -331,7 +328,7 @@ describe('duplicate IDs test', () => {
 })
 
 describe('match samtools', () => {
-  it('matces names given from samtools', async () => {
+  xit('matces names given from samtools', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('SRR396636.sorted.clip.cram'),
       index: new CraiIndex({

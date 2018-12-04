@@ -683,7 +683,7 @@
               55,
               55
             ],
-            "uniqueId": 1,
+            "uniqueId": 10835,
             "readBases": "CTAATAATC"
           },
           {
@@ -735,7 +735,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 10836,
             "readBases": "CTTTC"
           },
           {
@@ -806,7 +806,7 @@
               255,
               255
             ],
-            "uniqueId": 3,
+            "uniqueId": 10837,
             "readBases": "CTGGTC"
           },
           {
@@ -889,7 +889,7 @@
               255,
               255
             ],
-            "uniqueId": 4,
+            "uniqueId": 10838,
             "readBases": "CTGGTC"
           },
           {
@@ -962,7 +962,7 @@
               255,
               255
             ],
-            "uniqueId": 5,
+            "uniqueId": 10839,
             "readBases": "CTGGGGTC"
           },
           {
@@ -1056,7 +1056,7 @@
               255,
               255
             ],
-            "uniqueId": 6,
+            "uniqueId": 10840,
             "readBases": "CTCGGCGGCTC"
           },
           {
@@ -1119,7 +1119,7 @@
               255,
               255
             ],
-            "uniqueId": 7,
+            "uniqueId": 10841,
             "readBases": "CTAAGGAATC"
           },
           {
@@ -1194,7 +1194,7 @@
               255,
               255
             ],
-            "uniqueId": 8,
+            "uniqueId": 10842,
             "readBases": "CTAAGGAATC"
           },
           {
@@ -1257,7 +1257,7 @@
               255,
               255
             ],
-            "uniqueId": 9,
+            "uniqueId": 10843,
             "readBases": "CTGGGGGGTC"
           }
         ]

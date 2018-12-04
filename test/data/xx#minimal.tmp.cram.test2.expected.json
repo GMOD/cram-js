@@ -23,7 +23,7 @@
     "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
-    "uniqueId": 1
+    "uniqueId": 498
   },
   {
     "tags": {
@@ -49,7 +49,7 @@
     "lengthOnRef": 0,
     "mappingQuality": 1,
     "qualityScores": [],
-    "uniqueId": 2
+    "uniqueId": 499
   },
   {
     "tags": {},
@@ -89,6 +89,6 @@
       255,
       255
     ],
-    "uniqueId": 3
+    "uniqueId": 500
   }
 ]

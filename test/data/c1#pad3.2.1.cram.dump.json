@@ -574,7 +574,7 @@
               255,
               255
             ],
-            "uniqueId": 1,
+            "uniqueId": 10430,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -615,7 +615,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 10431,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -656,7 +656,7 @@
               255,
               255
             ],
-            "uniqueId": 3,
+            "uniqueId": 10432,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -697,7 +697,7 @@
               255,
               255
             ],
-            "uniqueId": 4,
+            "uniqueId": 10433,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -738,7 +738,7 @@
               255,
               255
             ],
-            "uniqueId": 5,
+            "uniqueId": 10434,
             "readBases": "AACCGGTTAACCGGTT"
           },
           {
@@ -795,7 +795,7 @@
               255,
               255
             ],
-            "uniqueId": 6,
+            "uniqueId": 10435,
             "readBases": "AACCGTTAACGGTT"
           },
           {
@@ -839,7 +839,7 @@
               255,
               255
             ],
-            "uniqueId": 7,
+            "uniqueId": 10436,
             "readBases": "AACCGGTTCGGTT"
           },
           {
@@ -889,7 +889,7 @@
               255,
               255
             ],
-            "uniqueId": 8,
+            "uniqueId": 10437,
             "readBases": "AACCGAACCGGTT"
           },
           {
@@ -948,7 +948,7 @@
               255,
               255
             ],
-            "uniqueId": 9,
+            "uniqueId": 10438,
             "readBases": "AACCTAGGTT"
           },
           {
@@ -1001,7 +1001,7 @@
               255,
               255
             ],
-            "uniqueId": 10,
+            "uniqueId": 10439,
             "readBases": "AAGTTAACTT"
           },
           {
@@ -1046,7 +1046,7 @@
               255,
               255
             ],
-            "uniqueId": 11,
+            "uniqueId": 10440,
             "readBases": "AACCGGTT"
           },
           {
@@ -1085,7 +1085,7 @@
               0,
               0
             ],
-            "uniqueId": 12,
+            "uniqueId": 10441,
             "readBases": "TA"
           }
         ]

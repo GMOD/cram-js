@@ -1166,7 +1166,7 @@
               34,
               34
             ],
-            "uniqueId": 1,
+            "uniqueId": 607,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1711,7 +1711,7 @@
               34,
               34
             ],
-            "uniqueId": 2,
+            "uniqueId": 608,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -2263,7 +2263,7 @@
               34,
               34
             ],
-            "uniqueId": 3,
+            "uniqueId": 609,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTCAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -2806,7 +2806,7 @@
               34,
               34
             ],
-            "uniqueId": 4,
+            "uniqueId": 610,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -3349,7 +3349,7 @@
               34,
               34
             ],
-            "uniqueId": 5,
+            "uniqueId": 611,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -3369,7 +3369,7 @@
             "qualityScores": [
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 612
           },
           {
             "tags": {
@@ -3389,7 +3389,7 @@
               255,
               255
             ],
-            "uniqueId": 7
+            "uniqueId": 613
           },
           {
             "tags": {
@@ -3408,7 +3408,7 @@
             "qualityScores": [
               255
             ],
-            "uniqueId": 8
+            "uniqueId": 614
           }
         ]
       }

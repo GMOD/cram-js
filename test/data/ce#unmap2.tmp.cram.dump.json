@@ -1256,7 +1256,7 @@
               34,
               34
             ],
-            "uniqueId": 1,
+            "uniqueId": 1019,
             "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1407,7 +1407,7 @@
               15,
               15
             ],
-            "uniqueId": 2,
+            "uniqueId": 1020,
             "readBases": "CTAAGCCTAAATCTAAGCCTAACCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1532,7 +1532,7 @@
               34,
               34
             ],
-            "uniqueId": 3,
+            "uniqueId": 1021,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1657,7 +1657,7 @@
               34,
               34
             ],
-            "uniqueId": 4,
+            "uniqueId": 1022,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1782,7 +1782,7 @@
               34,
               34
             ],
-            "uniqueId": 5,
+            "uniqueId": 1023,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -1907,7 +1907,7 @@
               34,
               34
             ],
-            "uniqueId": 6,
+            "uniqueId": 1024,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
           },
           {
@@ -2058,7 +2058,7 @@
               2,
               2
             ],
-            "uniqueId": 7,
+            "uniqueId": 1025,
             "readBases": "CTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAAGCTAC"
           }
         ]
@@ -3770,7 +3770,7 @@
               28,
               19
             ],
-            "uniqueId": 11
+            "uniqueId": 2892
           },
           {
             "tags": {
@@ -3887,7 +3887,7 @@
               2,
               2
             ],
-            "uniqueId": 12
+            "uniqueId": 2893
           },
           {
             "tags": {
@@ -4004,7 +4004,7 @@
               2,
               2
             ],
-            "uniqueId": 13
+            "uniqueId": 2894
           },
           {
             "tags": {
@@ -4121,7 +4121,7 @@
               2,
               2
             ],
-            "uniqueId": 14
+            "uniqueId": 2895
           },
           {
             "tags": {
@@ -4238,7 +4238,7 @@
               2,
               2
             ],
-            "uniqueId": 15
+            "uniqueId": 2896
           },
           {
             "tags": {
@@ -4355,7 +4355,7 @@
               2,
               2
             ],
-            "uniqueId": 16
+            "uniqueId": 2897
           },
           {
             "tags": {
@@ -4472,7 +4472,7 @@
               2,
               2
             ],
-            "uniqueId": 17
+            "uniqueId": 2898
           }
         ]
       },
@@ -6290,7 +6290,7 @@
               2,
               2
             ],
-            "uniqueId": 18
+            "uniqueId": 3405
           },
           {
             "tags": {
@@ -6407,7 +6407,7 @@
               2,
               2
             ],
-            "uniqueId": 19
+            "uniqueId": 3406
           }
         ]
       }

@@ -23,7 +23,7 @@
       9,
       9
     ],
-    "uniqueId": 16
+    "uniqueId": 1957
   },
   {
     "tags": {},
@@ -43,11 +43,11 @@
       9,
       9
     ],
-    "uniqueId": 9,
+    "uniqueId": 1612,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 1,
-      "uniqueId": 10,
+      "uniqueId": 1613,
       "readName": "y1"
     },
     "templateLength": 20
@@ -70,11 +70,11 @@
       9,
       9
     ],
-    "uniqueId": 10,
+    "uniqueId": 1613,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 16,
-      "uniqueId": 9,
+      "uniqueId": 1612,
       "readName": "y1"
     },
     "templateLength": 20
@@ -97,11 +97,11 @@
       9,
       9
     ],
-    "uniqueId": 11,
+    "uniqueId": 1614,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 7,
-      "uniqueId": 12,
+      "uniqueId": 1615,
       "readName": "y2"
     },
     "templateLength": 8
@@ -124,11 +124,11 @@
       9,
       9
     ],
-    "uniqueId": 12,
+    "uniqueId": 1615,
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 10,
-      "uniqueId": 11,
+      "uniqueId": 1614,
       "readName": "y2"
     },
     "templateLength": 8
@@ -157,7 +157,7 @@
       9,
       9
     ],
-    "uniqueId": 13
+    "uniqueId": 1616
   },
   {
     "tags": {},
@@ -183,7 +183,7 @@
       9,
       9
     ],
-    "uniqueId": 14
+    "uniqueId": 1617
   },
   {
     "tags": {},
@@ -209,6 +209,6 @@
       9,
       9
     ],
-    "uniqueId": 15
+    "uniqueId": 1618
   }
 ]
