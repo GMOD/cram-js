@@ -119,11 +119,18 @@ function associateIntraSliceMate(
   }
   if (thisRecord.flags & Constants.BAM_FUNMAP) {
     // thisRecord.templateLength = 0
+    mateRecord.flags |= Constants.BAM_FMUNMAP
   }
 
   // set mate reversed if needed
-  if (mateRecord.flags & Constants.BAM_FREVERSE)
+  if (mateRecord.flags & Constants.BAM_FREVERSE) {
     thisRecord.flags |= Constants.BAM_FMREVERSE
+  }
+  if (thisRecord.flags & Constants.BAM_FREVERSE) {
+    mateRecord.flags |= Constants.BAM_FMREVERSE
+  }
+
+
 
   if (thisRecord.templateLength === undefined) {
     if (complicatedMultiSegment)
