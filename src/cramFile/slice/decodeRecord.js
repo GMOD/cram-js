@@ -4,6 +4,7 @@ const Long = require('long')
 
 const CramRecord = require('../record')
 
+const Constants = require('../constants')
 /**
  * given a Buffer, read a string up to the first null character
  * @private
@@ -209,6 +210,16 @@ function decodeRecord(
     mate.alignmentStart = decodeDataSeries('NP')
     if (mate.flags || mate.sequenceId > -1) cramRecord.mate = mate
     cramRecord.templateSize = decodeDataSeries('TS')
+
+    // set mate unmapped if needed
+    if (mate.flags & Constants.CRAM_M_MAP) {
+      cramRecord.flags |= Constants.BAM_FMUNMAP
+    }
+    // set mate reversed if needed
+    if (mate.flags & Constants.CRAM_M_REVERSE) {
+      cramRecord.flags |= Constants.BAM_FMREVERSE
+    }
+
     // detachedCount++
   } else if (cramRecord.hasMateDownStream()) {
     cramRecord.mateRecordNumber = decodeDataSeries('NF') + recordNumber + 1
