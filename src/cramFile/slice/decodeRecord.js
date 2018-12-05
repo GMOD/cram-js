@@ -212,7 +212,7 @@ function decodeRecord(
     cramRecord.templateSize = decodeDataSeries('TS')
 
     // set mate unmapped if needed
-    if (mate.flags & Constants.CRAM_M_MAP) {
+    if (mate.flags & Constants.CRAM_M_UNMAP) {
       cramRecord.flags |= Constants.BAM_FMUNMAP
     }
     // set mate reversed if needed
