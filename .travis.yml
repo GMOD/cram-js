@@ -6,6 +6,7 @@ matrix:
     env: BACKCOMPAT=true
 script:
   - set -e
+  - npm run lint
   - npm run build
   - if [ "x$BACKCOMPAT" = "x" ]; then npm run test; fi
   - if [ "x$BACKCOMPAT" = "x" ]; then npm run coverage; fi

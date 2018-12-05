@@ -251,7 +251,7 @@ class CramRecord {
 
       const tmp = []
       let isize = this.templateLength || this.templateSize
-      if(this.alignmentStart > this.mate.alignmentStart && isize > 0) {
+      if (this.alignmentStart > this.mate.alignmentStart && isize > 0) {
         isize = -isize
       }
       if (isize > 0) {

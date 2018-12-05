@@ -90,7 +90,13 @@ class IndexedCramFile {
       const matePromises = []
       for (let i = 0; i < ret.length; i += 1) {
         const name = ret[i].readName
-        if (unmatedPairs[name] && (ret[i].mate.sequenceId == seqId || opts.pairAcrossChr) && (Math.abs(ret[i].alignmentStart - ret[i].mate.alignmentStart) < opts.maxInsertSize)) {
+        if (
+          unmatedPairs[name] &&
+          ret[i].mate &&
+          (ret[i].mate.sequenceId === seqId || opts.pairAcrossChr) &&
+          Math.abs(ret[i].alignmentStart - ret[i].mate.alignmentStart) <
+            opts.maxInsertSize
+        ) {
           const mateSlices = this.index.getEntriesForRange(
             ret[i].mate.sequenceId,
             ret[i].mate.alignmentStart,
@@ -101,7 +107,7 @@ class IndexedCramFile {
       }
       const mateBlocks = await Promise.all(matePromises)
       let mateChunks = []
-      for(var i = 0; i < mateBlocks.length; i++) {
+      for (let i = 0; i < mateBlocks.length; i += 1) {
         mateChunks.push(...mateBlocks[i])
       }
       // filter out duplicates
@@ -135,10 +141,7 @@ class IndexedCramFile {
           const mateRecs = []
           for (let i = 0; i < feats.length; i += 1) {
             const feature = feats[i]
-            if (
-              unmatedPairs[feature.readName] &&
-              !readIds[feature.uniqueId]
-            ) {
+            if (unmatedPairs[feature.readName] && !readIds[feature.uniqueId]) {
               mateRecs.push(feature)
             }
           }

@@ -1,6 +1,6 @@
 const zlib = require('zlib')
 const crc32 = require('buffer-crc32')
-const LRU = require('lru-cache')
+const LRU = require('quick-lru')
 
 const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const rans = require('../rans')
@@ -41,9 +41,8 @@ class CramFile {
     // slice offset. caches all of the features in a slice, or none.
     // the cache is actually used by the slice object, it's just
     // kept here at the level of the file
-    this.featureCache = LRU({
-      max: this.options.cacheSize,
-      length: featureArray => featureArray.length,
+    this.featureCache = new LRU({
+      maxSize: this.options.cacheSize,
     })
   }
 
