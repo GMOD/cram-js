@@ -19,19 +19,29 @@ describe('1kg mate test', () => {
         checkSequenceMD5: false,
       })
 
-
-      // chr8:128,749,421-128,749,582
-      const records = await indexedCramFile.getRecordsForRange(
+      // Test lossy readnames (intra-slice pair)
+      const chr1Records = await indexedCramFile.getRecordsForRange(
         0,
         155140000,
         155160000,
       )
 
-      const firstInPair = records[0]
-      const secondInPair = records[1]
+      const firstMate = chr1Records[0]
+      const secondMate = chr1Records[1]
+      expect(firstMate.readName !== undefined).to.equal(true)
+      expect(firstMate.readName).to.equal(secondMate.readName)
 
-      expect(firstInPair.readName !== undefined).to.equal(true)
-      expect(firstInPair.readName).to.equal(secondInPair.readName)
-    }).timeout(10000)
+      // Test retained readnames (inter chr mates)
+      const chr16Records = await indexedCramFile.getRecordsForRange(
+        1,
+        12100200,
+        12100300,
+      )
+
+      const chr1mate = chr1Records[2]
+      const chr16mate = chr16Records[0]
+      expect(chr1mate.readName !== undefined).to.equal(true)
+      expect(chr1mate.readName).to.equal(chr16mate.readName)
+    })
   })
 })
