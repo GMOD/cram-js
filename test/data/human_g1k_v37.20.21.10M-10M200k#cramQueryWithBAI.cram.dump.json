@@ -2192,7 +2192,7 @@
               34,
               27
             ],
-            "uniqueId": 1,
+            "uniqueId": 5135,
             "readBases": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
@@ -2923,7 +2923,7 @@
               34,
               2
             ],
-            "uniqueId": 2,
+            "uniqueId": 5136,
             "readBases": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
@@ -3653,7 +3653,7 @@
               37,
               35
             ],
-            "uniqueId": 3,
+            "uniqueId": 5137,
             "readBases": "ACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCC"
           },
           {
@@ -4392,7 +4392,7 @@
               36,
               33
             ],
-            "uniqueId": 4,
+            "uniqueId": 5138,
             "readBases": "CAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTTCAAGAGTGTTTTGACTCTTCTTACTGCATCCCTTGCATTTCCA"
           },
           {
@@ -4889,7 +4889,7 @@
               28,
               22
             ],
-            "uniqueId": 5,
+            "uniqueId": 5139,
             "readBases": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTACAGCTTTGTAGTAAATTTTGAACTCTAAAGTGTTAGTTCTCTAACTTTGTTTGTTTTT"
           },
           {
@@ -5008,11 +5008,11 @@
               2,
               2
             ],
-            "uniqueId": 6,
+            "uniqueId": 5140,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 100013,
-              "uniqueId": 7,
+              "uniqueId": 5141,
               "readName": "f"
             },
             "templateLength": 101
@@ -5369,11 +5369,11 @@
               2,
               2
             ],
-            "uniqueId": 7,
+            "uniqueId": 5141,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 100013,
-              "uniqueId": 6,
+              "uniqueId": 5140,
               "readName": "f"
             },
             "templateLength": 101,
@@ -5935,7 +5935,7 @@
               2,
               2
             ],
-            "uniqueId": 8
+            "uniqueId": 7851
           },
           {
             "tags": {
@@ -6053,11 +6053,11 @@
               2,
               2
             ],
-            "uniqueId": 9,
+            "uniqueId": 7852,
             "mate": {
               "sequenceId": -1,
               "alignmentStart": 0,
-              "uniqueId": 10,
+              "uniqueId": 7853,
               "readName": "h"
             },
             "templateLength": 101
@@ -6178,11 +6178,11 @@
               2,
               2
             ],
-            "uniqueId": 10,
+            "uniqueId": 7853,
             "mate": {
               "sequenceId": -1,
               "alignmentStart": 0,
-              "uniqueId": 9,
+              "uniqueId": 7852,
               "readName": "h"
             },
             "templateLength": 101
@@ -6303,11 +6303,11 @@
               2,
               2
             ],
-            "uniqueId": 11,
+            "uniqueId": 7854,
             "mate": {
               "sequenceId": -1,
               "alignmentStart": 0,
-              "uniqueId": 12,
+              "uniqueId": 7855,
               "readName": "i"
             },
             "templateLength": 101
@@ -6428,11 +6428,11 @@
               2,
               2
             ],
-            "uniqueId": 12,
+            "uniqueId": 7855,
             "mate": {
               "sequenceId": -1,
               "alignmentStart": 0,
-              "uniqueId": 11,
+              "uniqueId": 7854,
               "readName": "i"
             },
             "templateLength": 101

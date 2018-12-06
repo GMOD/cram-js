@@ -754,11 +754,11 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 781,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 2,
+              "uniqueId": 782,
               "readName": "x1"
             },
             "templateLength": 20,
@@ -782,11 +782,11 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 782,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 16,
-              "uniqueId": 1,
+              "uniqueId": 781,
               "readName": "x1"
             },
             "templateLength": 20,
@@ -810,11 +810,11 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 783,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 7,
-              "uniqueId": 4,
+              "uniqueId": 784,
               "readName": "x2"
             },
             "templateLength": 8,
@@ -838,11 +838,11 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 784,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 10,
-              "uniqueId": 3,
+              "uniqueId": 783,
               "readName": "x2"
             },
             "templateLength": 8,
@@ -866,11 +866,11 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 785,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 7,
-              "uniqueId": 6,
+              "uniqueId": 786,
               "readName": "x3"
             },
             "templateLength": 8,
@@ -894,11 +894,11 @@
               9,
               9
             ],
-            "uniqueId": 6,
+            "uniqueId": 786,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 10,
-              "uniqueId": 5,
+              "uniqueId": 785,
               "readName": "x3"
             },
             "templateLength": 8,
@@ -922,11 +922,11 @@
               9,
               9
             ],
-            "uniqueId": 7,
+            "uniqueId": 787,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 8,
+              "uniqueId": 788,
               "readName": "x4"
             },
             "templateLength": 20,
@@ -950,11 +950,11 @@
               9,
               9
             ],
-            "uniqueId": 8,
+            "uniqueId": 788,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 16,
-              "uniqueId": 7,
+              "uniqueId": 787,
               "readName": "x4"
             },
             "templateLength": 20,
@@ -1385,11 +1385,11 @@
               9,
               9
             ],
-            "uniqueId": 9,
+            "uniqueId": 1175,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 1,
-              "uniqueId": 10,
+              "uniqueId": 1176,
               "readName": "y1"
             },
             "templateLength": 20,
@@ -1413,11 +1413,11 @@
               9,
               9
             ],
-            "uniqueId": 10,
+            "uniqueId": 1176,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 16,
-              "uniqueId": 9,
+              "uniqueId": 1175,
               "readName": "y1"
             },
             "templateLength": 20,
@@ -1441,11 +1441,11 @@
               9,
               9
             ],
-            "uniqueId": 11,
+            "uniqueId": 1177,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 7,
-              "uniqueId": 12,
+              "uniqueId": 1178,
               "readName": "y2"
             },
             "templateLength": 8,
@@ -1469,11 +1469,11 @@
               9,
               9
             ],
-            "uniqueId": 12,
+            "uniqueId": 1178,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 10,
-              "uniqueId": 11,
+              "uniqueId": 1177,
               "readName": "y2"
             },
             "templateLength": 8,
@@ -1503,7 +1503,7 @@
               9,
               9
             ],
-            "uniqueId": 13,
+            "uniqueId": 1179,
             "readBases": "ATTTT"
           },
           {
@@ -1530,7 +1530,7 @@
               9,
               9
             ],
-            "uniqueId": 14,
+            "uniqueId": 1180,
             "readBases": "AAAAT"
           },
           {
@@ -1557,7 +1557,7 @@
               9,
               9
             ],
-            "uniqueId": 15,
+            "uniqueId": 1181,
             "readBases": "TTTTT"
           },
           {
@@ -1584,7 +1584,7 @@
               9,
               9
             ],
-            "uniqueId": 16,
+            "uniqueId": 1182,
             "readBases": "AAAAA"
           }
         ]

@@ -118,4 +118,44 @@ describe('.crai reader', () => {
       ],
     })
   })
+  it('can read small crai file', async () => {
+    const filehandle = testDataFile('SRR396636.sorted.clip.cram.crai')
+    const index = new CraiIndex({ filehandle })
+    const data = await index.getIndex()
+    console.log(data)
+    expect(data).to.deep.equal({
+      '0': [
+        {
+          start: 1,
+          span: 12495,
+          containerStart: 418,
+          sliceStart: 278,
+          sliceBytes: 537131,
+        },
+        {
+          start: 12405,
+          span: 13371,
+          containerStart: 537849,
+          sliceStart: 278,
+          sliceBytes: 538434,
+        },
+        {
+          start: 25679,
+          span: 4414,
+          containerStart: 1076585,
+          sliceStart: 281,
+          sliceBytes: 167795,
+        },
+      ],
+    })
+    expect(await index.getEntriesForRange(0, 25999, 26499)).to.deep.equal([
+      {
+        containerStart: 1076585,
+        sliceBytes: 167795,
+        sliceStart: 281,
+        span: 4414,
+        start: 25679,
+      },
+    ])
+  })
 })

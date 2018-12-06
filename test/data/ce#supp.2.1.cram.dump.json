@@ -614,7 +614,7 @@
               255,
               255
             ],
-            "uniqueId": 1,
+            "uniqueId": 10427,
             "readBases": "TAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTACCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
           },
           {
@@ -694,7 +694,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 10428,
             "readBases": "CCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCC"
           },
           {
@@ -769,7 +769,7 @@
               255,
               255
             ],
-            "uniqueId": 3,
+            "uniqueId": 10429,
             "readBases": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCC"
           },
           {
@@ -894,7 +894,7 @@
               255,
               255
             ],
-            "uniqueId": 4,
+            "uniqueId": 10430,
             "readBases": "TTTTAGTGAAGCTTCTAGATATTTGGCGGGTACCTCTAATTTTGCCTGCCAGCCTAATACTAAGCCTAAGCCTAAGACTAAGCCTAATACTAAGCCTAAG"
           }
         ]

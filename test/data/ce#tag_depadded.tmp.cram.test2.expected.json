@@ -16,7 +16,7 @@
     "qualityScores": [
       255
     ],
-    "uniqueId": 6
+    "uniqueId": 575
   },
   {
     "tags": {
@@ -36,7 +36,7 @@
       255,
       255
     ],
-    "uniqueId": 7
+    "uniqueId": 576
   },
   {
     "tags": {
@@ -55,7 +55,7 @@
     "qualityScores": [
       255
     ],
-    "uniqueId": 8
+    "uniqueId": 1436
   },
   {
     "tags": {
@@ -493,7 +493,7 @@
       34,
       34
     ],
-    "uniqueId": 1
+    "uniqueId": 570
   },
   {
     "tags": {
@@ -931,7 +931,7 @@
       34,
       34
     ],
-    "uniqueId": 2
+    "uniqueId": 571
   },
   {
     "tags": {
@@ -1376,7 +1376,7 @@
       34,
       34
     ],
-    "uniqueId": 3
+    "uniqueId": 572
   },
   {
     "tags": {},
@@ -1812,7 +1812,7 @@
       34,
       34
     ],
-    "uniqueId": 4
+    "uniqueId": 573
   },
   {
     "tags": {},
@@ -2248,6 +2248,6 @@
       34,
       34
     ],
-    "uniqueId": 5
+    "uniqueId": 574
   }
 ]

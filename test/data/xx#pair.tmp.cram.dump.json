@@ -433,11 +433,11 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 397,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
-              "uniqueId": 4,
+              "uniqueId": 400,
               "readName": "a1"
             },
             "templateLength": 20,
@@ -466,11 +466,11 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 398,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
-              "uniqueId": 5,
+              "uniqueId": 401,
               "readName": "b1"
             },
             "templateLength": 20,
@@ -499,11 +499,11 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 399,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 11,
-              "uniqueId": 6,
+              "uniqueId": 402,
               "readName": "c1"
             },
             "templateLength": 20,
@@ -532,11 +532,11 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 400,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 1,
+              "uniqueId": 397,
               "readName": "a1"
             },
             "templateLength": 20,
@@ -565,11 +565,11 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 401,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 2,
+              "uniqueId": 398,
               "readName": "b1"
             },
             "templateLength": 20,
@@ -598,11 +598,11 @@
               9,
               9
             ],
-            "uniqueId": 6,
+            "uniqueId": 402,
             "mate": {
               "sequenceId": 0,
               "alignmentStart": 1,
-              "uniqueId": 3,
+              "uniqueId": 399,
               "readName": "c1"
             },
             "templateLength": 20,

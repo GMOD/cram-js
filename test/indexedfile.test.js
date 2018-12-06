@@ -75,6 +75,7 @@ describe('.crai indexed cram file', () => {
         'test/data/ce#1000.tmp.cram.test1.expected.json',
         JSON.stringify(features, null, '  '),
       )
+
     const expectedFeatures3 = loadTestJSON(
       'ce#1000.tmp.cram.test1.expected.json',
     )
@@ -162,6 +163,7 @@ describe('.crai indexed cram file', () => {
       })
 
       const features = await cram.getRecordsForRange(0, 0, Infinity)
+
       features.sort((a, b) => a.readName.localeCompare(b.readName))
       if (REWRITE_EXPECTED_DATA)
         fs.writeFileSync(
@@ -273,15 +275,11 @@ describe('paired orientation test', () => {
         filehandle: testDataFile('long_pair.cram.crai'),
       }),
     })
-    // const cramResult = new IndexedCramFile({
-    //   cramFilehandle: testDataFile('paired-region.cram'),
-    //   index: new CraiIndex({
-    //     filehandle: testDataFile('paired-region.cram.crai'),
-    //   }),
-    // })
+
     const features = await cram.getRecordsForRange(0, 15767, 28287, {
       viewAsPairs: true,
     })
+
     let feat1
     let feat2
     for (let i = 0; i < features.length; i += 1) {
@@ -297,5 +295,51 @@ describe('paired orientation test', () => {
     }
     expect(feat1.getPairOrientation()).to.equal('R2F1')
     expect(feat2.getPairOrientation()).to.equal('R2F1')
+  })
+})
+
+describe('duplicate IDs test', () => {
+  it('duplicates from single request', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('SRR396637.sorted.clip.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('SRR396637.sorted.clip.cram.crai'),
+      }),
+    })
+
+    const features = await cram.getRecordsForRange(0, 163504, 175473)
+    const totalMap = {}
+    let noCollisions = true
+    for (let i = 0; i < features.length; i += 1) {
+      const feature = features[i]
+      if (
+        totalMap[feature.uniqueId] &&
+        totalMap[feature.uniqueId] !== feature.readName
+      ) {
+        noCollisions = false
+        console.log('collision', totalMap[feature.uniqueId], feature.readName)
+      } else {
+        totalMap[feature.uniqueId] = feature.readName
+      }
+    }
+
+    expect(noCollisions).to.equal(true)
+  })
+})
+
+describe('match samtools', () => {
+  xit('matces names given from samtools', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('SRR396636.sorted.clip.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
+      }),
+    })
+
+    const features = await cram.getRecordsForRange(0, 25999, 26499)
+
+    const featNames = await loadTestJSON('SRR396636.expected.names.json')
+    expect(features.map(f => f.readName)).to.deep.equal(featNames)
+    expect(features.length).to.equal(410)
   })
 })

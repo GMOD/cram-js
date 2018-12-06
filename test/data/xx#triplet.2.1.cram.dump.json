@@ -482,7 +482,7 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 10429,
             "readBases": "AAAAAAAAAA"
           },
           {
@@ -514,7 +514,7 @@
               9,
               9
             ],
-            "uniqueId": 2,
+            "uniqueId": 10430,
             "readBases": "AAAAATTTTT"
           },
           {
@@ -546,7 +546,7 @@
               9,
               9
             ],
-            "uniqueId": 3,
+            "uniqueId": 10431,
             "readBases": "TTTTTTTTTT"
           }
         ]
@@ -892,11 +892,11 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 10713,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 6,
-              "uniqueId": 5,
+              "uniqueId": 10714,
               "readName": "a1"
             },
             "templateLength": 15,
@@ -925,11 +925,11 @@
               9,
               9
             ],
-            "uniqueId": 5,
+            "uniqueId": 10714,
             "mate": {
               "sequenceId": 1,
               "alignmentStart": 1,
-              "uniqueId": 4,
+              "uniqueId": 10713,
               "readName": "a1"
             },
             "templateLength": 15,

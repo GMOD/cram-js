@@ -614,7 +614,7 @@
               9,
               9
             ],
-            "uniqueId": 1,
+            "uniqueId": 515,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -641,7 +641,7 @@
               255,
               255
             ],
-            "uniqueId": 2,
+            "uniqueId": 516,
             "readBases": "AACCGCGGTT"
           },
           {
@@ -671,7 +671,7 @@
               255,
               255
             ],
-            "uniqueId": 3
+            "uniqueId": 517
           },
           {
             "tags": {},
@@ -704,7 +704,7 @@
               9,
               9
             ],
-            "uniqueId": 4,
+            "uniqueId": 518,
             "readBases": "AACCCGGTT"
           },
           {
@@ -738,7 +738,7 @@
               255,
               255
             ],
-            "uniqueId": 5,
+            "uniqueId": 519,
             "readBases": "AACCCGGTT"
           },
           {
@@ -775,7 +775,7 @@
               255,
               255
             ],
-            "uniqueId": 6
+            "uniqueId": 520
           },
           {
             "tags": {},
@@ -799,7 +799,7 @@
               9,
               9
             ],
-            "uniqueId": 7
+            "uniqueId": 521
           },
           {
             "tags": {},
@@ -823,7 +823,7 @@
               255,
               255
             ],
-            "uniqueId": 8
+            "uniqueId": 522
           },
           {
             "tags": {},
@@ -836,7 +836,7 @@
             "readName": "SQ3",
             "templateSize": 0,
             "qualityScores": null,
-            "uniqueId": 9
+            "uniqueId": 523
           }
         ]
       }
