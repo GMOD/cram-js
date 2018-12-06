@@ -205,6 +205,7 @@ function decodeRecord(
     mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded) {
       mate.readName = thingToString(decodeDataSeries('RN'))
+      cramRecord.readName = mate.readName
     }
     mate.sequenceId = decodeDataSeries('NS')
     mate.alignmentStart = decodeDataSeries('NP')
