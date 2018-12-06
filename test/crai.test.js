@@ -122,7 +122,7 @@ describe('.crai reader', () => {
     const filehandle = testDataFile('SRR396636.sorted.clip.cram.crai')
     const index = new CraiIndex({ filehandle })
     const data = await index.getIndex()
-    console.log(data)
+    // console.log(data)
     expect(data).to.deep.equal({
       '0': [
         {
