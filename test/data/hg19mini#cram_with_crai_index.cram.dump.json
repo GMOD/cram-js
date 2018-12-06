@@ -633,7 +633,7 @@
         "features": [
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
@@ -1341,7 +1341,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
@@ -2049,7 +2049,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
@@ -2757,7 +2757,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
@@ -3465,7 +3465,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 0,
             "readLength": 76,
@@ -4662,7 +4662,7 @@
         "features": [
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
@@ -5370,7 +5370,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
@@ -6078,7 +6078,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 1,
             "readLength": 76,
@@ -7273,7 +7273,7 @@
         "features": [
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
@@ -7981,7 +7981,7 @@
           },
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 2,
             "readLength": 76,
@@ -9174,7 +9174,7 @@
         "features": [
           {
             "tags": {},
-            "flags": 67,
+            "flags": 99,
             "cramFlags": 3,
             "sequenceId": 3,
             "readLength": 76,
