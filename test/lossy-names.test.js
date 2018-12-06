@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const { IndexedCramFile, CramFile, CraiIndex } = require('../src')
+const { IndexedCramFile, CraiIndex } = require('../src')
 
 describe('1kg mate test', () => {
   describe('readme 1', () => {
