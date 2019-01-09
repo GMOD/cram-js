@@ -227,6 +227,7 @@ class CramRecord {
       !this.isSegmentUnmapped() &&
       this.isPaired() &&
       !this.isMateUnmapped() &&
+      this.mate &&
       this.sequenceId === this.mate.sequenceId
     ) {
       const s1 = this.isReverseComplemented() ? 'R' : 'F'
