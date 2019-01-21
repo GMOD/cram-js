@@ -10,6 +10,7 @@ class Slice {
   constructor(args) {
     Object.assign(this, args)
   }
+
   toString() {
     return `${this.start}:${this.span}:${this.containerStart}:${
       this.sliceStart
