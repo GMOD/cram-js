@@ -1,9 +1,6 @@
-const { CramMalformedError, CramUnimplementedError } = require('../../errors')
-
 const Long = require('long')
-
+const { CramMalformedError, CramUnimplementedError } = require('../../errors')
 const CramRecord = require('../record')
-
 const Constants = require('../constants')
 /**
  * given a Buffer, read a string up to the first null character
@@ -48,8 +45,8 @@ function parseTagValueArray(buffer) {
 function parseTagData(tagType, buffer) {
   if (!buffer.readInt32LE) buffer = Buffer.from(buffer)
   if (tagType === 'Z') return readNullTerminatedStringFromBuffer(buffer)
-  else if (tagType === 'A') return String.fromCharCode(buffer[0])
-  else if (tagType === 'I') {
+  if (tagType === 'A') return String.fromCharCode(buffer[0])
+  if (tagType === 'I') {
     const val = Long.fromBytesLE(buffer)
     if (
       val.greaterThan(Number.MAX_SAFE_INTEGER) ||
@@ -57,12 +54,13 @@ function parseTagData(tagType, buffer) {
     )
       throw new CramUnimplementedError('integer overflow')
     return val.toNumber()
-  } else if (tagType === 'i') return buffer.readInt32LE(0)
-  else if (tagType === 's') return buffer.readInt16LE(0)
-  else if (tagType === 'S') return buffer.readUInt16LE(0)
-  else if (tagType === 'c') return buffer.readInt8(0)
-  else if (tagType === 'C') return buffer.readUInt8(0)
-  else if (tagType === 'f') return buffer.readFloatLE(0)
+  }
+  if (tagType === 'i') return buffer.readInt32LE(0)
+  if (tagType === 's') return buffer.readInt16LE(0)
+  if (tagType === 'S') return buffer.readUInt16LE(0)
+  if (tagType === 'c') return buffer.readInt8(0)
+  if (tagType === 'C') return buffer.readUInt8(0)
+  if (tagType === 'f') return buffer.readFloatLE(0)
   if (tagType === 'H') {
     const hex = readNullTerminatedStringFromBuffer(buffer)
     return Number.parseInt(hex.replace(/^0x/, ''), 16)
@@ -87,9 +85,11 @@ function decodeReadFeatures(
     const data = decodeDataSeries(dataSeriesName)
     if (type === 'character') {
       return String.fromCharCode(data)
-    } else if (type === 'string') {
+    }
+    if (type === 'string') {
       return data.toString('utf8')
-    } else if (type === 'numArray') {
+    }
+    if (type === 'numArray') {
       return data.toArray()
     }
     // else if (type === 'number') {
@@ -151,7 +151,8 @@ function decodeReadFeatures(
 function thingToString(thing) {
   if (thing instanceof Buffer) {
     return readNullTerminatedStringFromBuffer(thing)
-  } else if (thing.length && thing.indexOf) {
+  }
+  if (thing.length && thing.indexOf) {
     // array-like
     if (!thing[thing.length - 1]) {
       // trim zeroes off the end if necessary

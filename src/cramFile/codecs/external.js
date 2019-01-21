@@ -19,6 +19,7 @@ class ExternalCodec extends CramCodec {
       )
     }
   }
+
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
@@ -29,6 +30,7 @@ class ExternalCodec extends CramCodec {
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return this._decodeData(contentBlock, cursor)
   }
+
   _decodeInt(contentBlock, cursor) {
     const [result, bytesRead] = parseItf8(
       contentBlock.content,

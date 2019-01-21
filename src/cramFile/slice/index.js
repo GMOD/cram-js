@@ -255,7 +255,8 @@ class CramSlice {
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
       }
-    } else if (
+    }
+    if (
       compressionScheme.referenceRequired ||
       this.file.fetchReferenceSequenceCallback
     ) {

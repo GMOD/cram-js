@@ -262,6 +262,7 @@ class CramRecord {
     }
     return null
   }
+
   /**
    * Annotates this feature with the given reference sequence basepair
    * information. This will add a `sub` and a `ref` item to base
