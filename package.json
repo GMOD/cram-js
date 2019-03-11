@@ -67,7 +67,7 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "get-stream": "^4.1.0",
+    "get-stream": "^5.0.0",
     "glob": "^7.1.2",
     "imports-loader": "^0.8.0",
     "istanbul": "^0.4.5",
