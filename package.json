@@ -25,7 +25,7 @@
     "docs": "documentation readme --shallow src/indexedCramFile.js --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/craiIndex.js --section=CraiIndex;  documentation readme --shallow errors.js '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramFile/record.js --section=CramRecord",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build": "babel src -d dist",
+    "build": "babel src -d dist && webpack",
     "built-tests": "rm -rf built-tests; mkdir built-tests; ln -s ../test/data built-tests/data; babel test -d built-tests; mocha built-tests",
     "watch": "npm-watch",
     "prepublishOnly": "npm test && npm run build && cp dist/errors.js errors.js",
