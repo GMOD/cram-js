@@ -18,9 +18,8 @@
     "dist"
   ],
   "scripts": {
-    "test": "mocha",
-    "test-browser": "karma start --single-run",
-    "coverage": "rm -rf coverage; nyc mocha; nyc report --reporter=lcov",
+    "test": "node ./node_modules/.bin/mocha",
+    "coverage": "rm -rf coverage; nyc ./node_modules/.bin/mocha; nyc report --reporter=lcov",
     "lint": "eslint src test",
     "docs": "documentation readme --shallow src/indexedCramFile.js --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/craiIndex.js --section=CraiIndex;  documentation readme --shallow errors.js '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramFile/record.js --section=CramRecord",
     "clean": "rimraf dist",
@@ -70,11 +69,6 @@
     "get-stream": "^4.1.0",
     "glob": "^7.1.2",
     "imports-loader": "^0.8.0",
-    "istanbul": "^0.4.5",
-    "karma": "^3.1.4",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-mocha": "^1.3.0",
-    "karma-webpack": "^3.0.0",
     "mocha": "^6.0.0",
     "npm-watch": "^0.5.0",
     "nyc": "^13.0.0",
