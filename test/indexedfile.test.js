@@ -328,7 +328,7 @@ describe('duplicate IDs test', () => {
 })
 
 describe('match samtools', () => {
-  xit('matces names given from samtools', async () => {
+  it('matches names given from samtools', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('SRR396636.sorted.clip.cram'),
       index: new CraiIndex({
@@ -340,6 +340,6 @@ describe('match samtools', () => {
 
     const featNames = await loadTestJSON('SRR396636.expected.names.json')
     expect(features.map(f => f.readName)).to.deep.equal(featNames)
-    expect(features.length).to.equal(410)
+    expect(features.length).to.equal(406)
   })
 })

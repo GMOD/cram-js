@@ -67,7 +67,7 @@ class IndexedCramFile {
     const filter = feature =>
       feature.sequenceId === seq &&
       feature.alignmentStart <= end &&
-      feature.alignmentStart + feature.lengthOnRef >= start
+      feature.alignmentStart + feature.lengthOnRef - 1 >= start
     const sliceResults = await Promise.all(
       slices.map(slice => this.getRecordsInSlice(slice, filter)),
     )
