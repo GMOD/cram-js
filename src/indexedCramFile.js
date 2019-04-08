@@ -1,3 +1,4 @@
+const entries = require('object.entries-ponyfill')
 const { CramUnimplementedError, CramSizeLimitError } = require('./errors')
 
 const CramFile = require('./cramFile')
@@ -84,7 +85,7 @@ class IndexedCramFile {
         readIds[id] = 1
       }
       const unmatedPairs = {}
-      Object.entries(readNames).forEach(([k, v]) => {
+      entries(readNames).forEach(([k, v]) => {
         if (v === 1) unmatedPairs[k] = true
       })
       const matePromises = []

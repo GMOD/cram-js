@@ -1,3 +1,4 @@
+const entries = require('object.entries-ponyfill')
 const { CramMalformedError } = require('../../errors')
 const CramCodec = require('./_base')
 
@@ -50,7 +51,7 @@ class HuffmanIntCodec extends CramCodec {
     this.codes = {} /*  new TreeMap<Integer, HuffmanBitCode>(); */
     let codeLength = 0
     let codeValue = -1
-    Object.entries(this.codeBook).forEach(([bitLength, symbols]) => {
+    entries(this.codeBook).forEach(([bitLength, symbols]) => {
       bitLength = parseInt(bitLength, 10)
       symbols.forEach(symbol => {
         const code = { bitLength, value: symbol }

@@ -49,6 +49,7 @@
     "es6-promisify": "^6.0.1",
     "long": "^4.0.0",
     "md5": "^2.2.1",
+    "object.entries-ponyfill": "^1.0.1",
     "quick-lru": "^2.0.0"
   },
   "devDependencies": {

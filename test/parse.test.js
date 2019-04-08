@@ -1,3 +1,4 @@
+const entries = require('object.entries-ponyfill')
 const { expect } = require('chai')
 const { CramFile } = require('../src')
 
@@ -115,7 +116,7 @@ describe('CRAM reader', () => {
     })
   })
 
-  Object.entries({
+  entries({
     'auxf#values.tmp.cram': 2,
     'c1#bounds.tmp.cram': 2,
     'c1#clip.tmp.cram': 2,

@@ -1,3 +1,4 @@
+const entries = require('object.entries-ponyfill')
 const { promisify } = require('es6-promisify')
 const zlib = require('zlib')
 
@@ -105,7 +106,7 @@ class CraiIndex {
         }
 
         // sort each of them by start
-        Object.entries(index).forEach(([seqId, entries]) => {
+        entries(index).forEach(([seqId, entries]) => {
           index[seqId] = entries.sort(
             (a, b) => a.start - b.start || a.span - b.span,
           )
