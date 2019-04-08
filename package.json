@@ -25,7 +25,7 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "babel src -d dist && webpack",
-    "built-tests": "rm -rf built-tests; mkdir built-tests; ln -s ../test/data built-tests/data; babel test -d built-tests; node ./node_modules/.bin/mocha built-tests",
+    "built-tests": "rm -rf built-tests; mkdir built-tests; ln -s ../test/data built-tests/data; babel test/*.js -d built-tests; babel test/lib/*.js -d built-tests/lib;babel test/lib/fasta/*.js -d built-tests/lib/fasta;node ./node_modules/.bin/mocha built-tests",
     "watch": "npm-watch",
     "prepublishOnly": "npm test && npm run build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js && git push origin master --follow-tags"
