@@ -444,15 +444,17 @@ class CramSlice {
 
         // fetch the `seq` for all of the ref regions
         await Promise.all(
-          Object.values(refRegions).map(async refRegion => {
-            if (refRegion.id !== -1 && refRegion.start <= refRegion.end) {
-              refRegion.seq = await this.file.fetchReferenceSequenceCallback(
-                refRegion.id,
-                refRegion.start,
-                refRegion.end,
-              )
-            }
-          }),
+          Object.keys(refRegions)
+            .map(k => refRegions[k])
+            .map(async refRegion => {
+              if (refRegion.id !== -1 && refRegion.start <= refRegion.end) {
+                refRegion.seq = await this.file.fetchReferenceSequenceCallback(
+                  refRegion.id,
+                  refRegion.start,
+                  refRegion.end,
+                )
+              }
+            }),
         )
 
         // now decorate all the records with them

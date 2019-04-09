@@ -70,14 +70,12 @@ class HuffmanIntCodec extends CramCodec {
   }
 
   buildCaches() {
-    this.sortedCodes = Object.values(this.codes).sort(
+    const codes = Object.keys(this.codes).map(k => this.codes[k])
+    this.sortedCodes = codes.sort(
       (a, b) => a.bitLength - b.bitLength || a.bitCode - b.bitCode,
     )
 
-    // this.sortedValues = this.parameters.values.sort((a,b) => a-b)
-    this.sortedByValue = Object.values(this.codes).sort(
-      (a, b) => a.value - b.value,
-    )
+    this.sortedByValue = codes.sort((a, b) => a.value - b.value)
 
     this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
     this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
