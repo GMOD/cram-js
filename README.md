@@ -24,6 +24,16 @@ $ yarn add @gmod/cram
 ```js
 const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 
+//Use indexedfasta library for seqFetch, if using local file (see below)
+const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta') 
+
+
+const t = new IndexedFasta({
+  path: 'Path_to_your_fasta_file',
+  faiPath: 'Path_to_your_fasta_fai',
+});
+
+
 // open local files
 const indexedFile = new IndexedCramFile({
   cramPath: require.resolve(`./data/ce#5.tmp.cram`),
@@ -31,7 +41,8 @@ const indexedFile = new IndexedCramFile({
     path: require.resolve(`./data/ce#5.tmp.cram.crai`),
   }),
   seqFetch: async (seqId, start, end) => {
-    // seqFetch should return a promise for a string.
+    // seqFetch should return a promise for a string. e.g, using the IndexedFasta above:
+    // let seq = await t.getSequence(seqId, start, end);
     // this one just returns a fake sequence of all A's of the proper length
     let fakeSeq = ''
     for (let i = start; i <= end; i += 1) {
@@ -43,7 +54,8 @@ const indexedFile = new IndexedCramFile({
 })
 
 // example of fetching records from an indexed CRAM file.
-// NOTE: only numeric IDs for the reference sequence are accepted
+// NOTE: only numeric IDs for the reference sequence are accepted. 
+// For indexedfasta the numeric ID is the order in which the sequence names appear in the header
 const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
 records.forEach(record => {
   console.log(`got a record named ${record.readName}`)
