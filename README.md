@@ -36,19 +36,14 @@ const t = new IndexedFasta({
 
 // open local files
 const indexedFile = new IndexedCramFile({
-  cramPath: require.resolve(`./data/ce#5.tmp.cram`),
+  cramPath: require.resolve(`Path_to_your_cram_file`),
   index: new CraiIndex({
-    path: require.resolve(`./data/ce#5.tmp.cram.crai`),
+    path: require.resolve(`Path_to_your_cram_crai`),
   }),
   seqFetch: async (seqId, start, end) => {
-    // seqFetch should return a promise for a string. e.g, using the IndexedFasta above:
-    // let seq = await t.getSequence(seqId, start, end);
-    // this one just returns a fake sequence of all A's of the proper length
-    let fakeSeq = ''
-    for (let i = start; i <= end; i += 1) {
-      fakeSeq += 'A'
+    // seqFetch should return a promise for a string. Using the IndexedFasta above:
+    return seq = await t.getSequence(seqId, start-1, end) // start-1 because seqFetch uses 1-based coordinates whereas IndexedFasta uses 0-based coordinates
     }
-    return fakeSeq
   },
   checkSequenceMD5: false,
 })
@@ -56,18 +51,24 @@ const indexedFile = new IndexedCramFile({
 // example of fetching records from an indexed CRAM file.
 // NOTE: only numeric IDs for the reference sequence are accepted. 
 // For indexedfasta the numeric ID is the order in which the sequence names appear in the header
-const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
-records.forEach(record => {
-  console.log(`got a record named ${record.readName}`)
-  record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
-    if (code === 'X')
-      console.log(
-        `${
-          record.readName
-        } shows a base substitution of ${ref}->${sub} at ${refPos}`,
-      )
+
+// Wrap in an async and then run
+run = async() => {
+  const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
+  records.forEach(record => {
+    console.log(`got a record named ${record.readName}`)
+    record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+      if (code === 'X')
+        console.log(
+          `${
+            record.readName
+          } shows a base substitution of ${ref}->${sub} at ${refPos}`,
+        )
+    })
   })
-})
+}
+
+run()
 
 
 // can also pass `cramUrl`, and `url` params to open remote URLs
