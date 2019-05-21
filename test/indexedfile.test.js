@@ -374,7 +374,13 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replace(/\n/g, '')
     })
 
     const features = await cram.getRecordsForRange(0, 0, 500)
-    console.log(features)
-    console.log(features.map(f => f.getReadBases()))
+    let feat
+    features.forEach(f => {
+      if (f.readName === 'NB500904:194:H3HNVBGXB:1:21110:9045:16767') feat = f
+    })
+
+    expect(feat.getReadBases()).to.equal(
+      'ATTACAGGCGAACATACTTAATAAAGTGTGTTAATTAATTAATGCTTGTAGTAAATAATAATAACAATTTAATGTCTGCTCAGCCGCTTTCCACACAGACATCATAACAAAAAATTTCCACCAAACCCCCCCCTCCCCCCGCTTCTGGC',
+    )
   })
 })
