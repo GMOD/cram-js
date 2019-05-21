@@ -27,7 +27,7 @@ function decodeReadSequence(cramRecord, refRegion) {
       currentReadFeature += 1
       if (feature.code === 'b') {
         // specify a base pair for some reason
-        bases += feature.data
+        bases += String.fromCharCode(...feature.data)
         regionPos += 1
       } else if (feature.code === 'B') {
         // base pair and associated quality
