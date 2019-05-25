@@ -9,12 +9,12 @@
         ]
       }
     }],
-    "stage-2"
   ],
   "plugins": [
     ["@babel/transform-runtime", {
       "helpers": true,
       "regenerator": true,
+      "corejs": 3
     }]
   ]
 }
