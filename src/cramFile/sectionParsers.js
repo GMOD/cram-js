@@ -123,10 +123,11 @@ const cramPreservationMap = new Parser()
 /* istanbul ignore next */
 function formatMap(data) {
   const map = {}
-  data.ents.forEach(({ key, value }) => {
+  for (let i = 0; i < data.ents.length; i += 1) {
+    const { key, value } = data.ents[i]
     if (map[key]) console.warn(`duplicate key ${key} in map`)
     map[key] = value
-  })
+  }
   return map
 }
 
