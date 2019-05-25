@@ -63,9 +63,6 @@ run = async() => {
     record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
       // process the "read features". this can be used similar to
       // CIGAR/MD strings in SAM. see CRAM specs for more details.
-      // currently no convenience operations exist for the read featres
-      // in a higher level form as this library is "bare metal" cram parsing
-      // but jbrowse and igv.js implement higher level processing on this
       if (code === 'X')
         console.log(
           `${
