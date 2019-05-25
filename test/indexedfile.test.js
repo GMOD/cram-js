@@ -324,7 +324,7 @@ describe('duplicate IDs test', () => {
     }
 
     expect(noCollisions).to.equal(true)
-  })
+  }).timeout(4000)
 })
 
 describe('match samtools', () => {
