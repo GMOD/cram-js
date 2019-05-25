@@ -105,8 +105,8 @@ class CraiIndex {
         }
 
         // sort each of them by start
-        Object.entries(index).forEach(([seqId, entries]) => {
-          index[seqId] = entries.sort(
+        Object.entries(index).forEach(([seqId, ent]) => {
+          index[seqId] = ent.sort(
             (a, b) => a.start - b.start || a.span - b.span,
           )
         })

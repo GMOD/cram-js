@@ -1,6 +1,6 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": 6,
         "browsers": [
@@ -9,14 +9,12 @@
         ]
       }
     }],
-    "stage-2"
   ],
   "plugins": [
-    ["transform-runtime", {
+    ["@babel/transform-runtime", {
       "helpers": true,
-      "polyfill": true,
       "regenerator": true,
-      "moduleName": "babel-runtime"
+      "corejs": 3
     }]
   ]
 }

@@ -59,7 +59,7 @@ const cramBlockCrc32 = {
 //   'GAMMA', // 9
 // ]
 
-const cramTagDictionary = new Parser().itf8('size').buffer('entries', {
+const cramTagDictionary = new Parser().itf8('size').buffer('ents', {
   length: 'size',
   formatter: /* istanbul ignore next */ buffer => {
     function makeTagSet(stringStart, stringEnd) {
@@ -94,7 +94,7 @@ const parseByteAsBool = new Parser().uint8(null, {
 const cramPreservationMap = new Parser()
   .itf8('mapSize')
   .itf8('mapCount')
-  .array('entries', {
+  .array('ents', {
     length: 'mapCount',
     type: new Parser()
       .string('key', {
@@ -114,7 +114,7 @@ const cramPreservationMap = new Parser()
           SM: new Parser().array(null, { type: 'uint8', length: 5 }),
           TD: new Parser().nest(null, {
             type: cramTagDictionary,
-            formatter: /* istanbul ignore next */ data => data.entries,
+            formatter: /* istanbul ignore next */ data => data.ents,
           }),
         },
       }),
@@ -123,10 +123,11 @@ const cramPreservationMap = new Parser()
 /* istanbul ignore next */
 function formatMap(data) {
   const map = {}
-  data.entries.forEach(({ key, value }) => {
+  for (let i = 0; i < data.ents.length; i += 1) {
+    const { key, value } = data.ents[i]
     if (map[key]) console.warn(`duplicate key ${key} in map`)
     map[key] = value
-  })
+  }
   return map
 }
 
@@ -251,7 +252,7 @@ const versionedParsers = {
     return new Parser()
       .itf8('mapSize')
       .itf8('mapCount')
-      .array('entries', {
+      .array('ents', {
         length: 'mapCount',
         type: new Parser()
           .string('key', { length: 2, stripNull: false })
@@ -263,7 +264,7 @@ const versionedParsers = {
     return new Parser()
       .itf8('mapSize')
       .itf8('mapCount')
-      .array('entries', {
+      .array('ents', {
         length: 'mapCount',
         type: new Parser()
           .itf8('key', {
