@@ -29,20 +29,23 @@ const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
 
 const t = new IndexedFasta({
-  path: 'Path_to_your_fasta_file',
-  faiPath: 'Path_to_your_fasta_fai',
+  path: '/filesystem/yourfile.fa',
+  faiPath: '/filesystem/yourfile.fa.fai',
 });
 
 
 // open local files
 const indexedFile = new IndexedCramFile({
-  cramPath: require.resolve(`Path_to_your_cram_file`),
+  cramPath: '/filesystem/yourfile.cram',
   index: new CraiIndex({
-    path: require.resolve(`Path_to_your_cram_crai`),
+    path: '/filesystem/yourfile.cram.crai'),
   }),
   seqFetch: async (seqId, start, end) => {
-    // seqFetch should return a promise for a string. Using the IndexedFasta above:
-    return seq = await t.getSequence(seqId, start-1, end) // start-1 because seqFetch uses 1-based coordinates whereas IndexedFasta uses 0-based coordinates
+    // note: 
+    // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
+    // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
+    // * the seqId is a numeric identifier
+    return seq = await t.getSequence(seqId, start-1, end)
     }
   },
   checkSequenceMD5: false,
@@ -58,6 +61,11 @@ run = async() => {
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
     record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+      // process the "read features". this can be used similar to
+      // CIGAR/MD strings in SAM. see CRAM specs for more details.
+      // currently no convenience operations exist for the read featres
+      // in a higher level form as this library is "bare metal" cram parsing
+      // but jbrowse and igv.js implement higher level processing on this
       if (code === 'X')
         console.log(
           `${
@@ -71,7 +79,8 @@ run = async() => {
 run()
 
 
-// can also pass `cramUrl`, and `url` params to open remote URLs
+// can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for the CraiIndex) params to open remote URLs
+// alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle
 ```
 
 ## API (auto-generated)
