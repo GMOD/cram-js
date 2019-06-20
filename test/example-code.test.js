@@ -37,9 +37,7 @@ describe('code examples', () => {
         record.readFeatures.forEach(({ code, refPos, ref, sub }) => {
           if (code === 'X')
             console.log(
-              `${
-                record.readName
-              } shows a base substitution of ${ref}->${sub} at ${refPos}`,
+              `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
             )
         })
       })

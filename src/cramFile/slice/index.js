@@ -182,9 +182,7 @@ class CramSlice {
       )
     } else {
       throw new CramMalformedError(
-        `error reading slice header block, invalid content type ${
-          header._contentType
-        }`,
+        `error reading slice header block, invalid content type ${header._contentType}`,
       )
     }
     return header
@@ -316,9 +314,7 @@ class CramSlice {
           .join('')
         if (seqMd5 !== storedMd5)
           throw new CramMalformedError(
-            `MD5 checksum reference mismatch for ref ${
-              sliceHeader.content.refSeqId
-            } pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
+            `MD5 checksum reference mismatch for ref ${sliceHeader.content.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
           )
       }
     }

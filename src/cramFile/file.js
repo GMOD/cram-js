@@ -219,9 +219,7 @@ class CramFile {
     const data = parseItem(buffer, section.parser, 0, position)
     if (data._size !== size)
       throw new CramMalformedError(
-        `section read error: requested size ${size} does not equal parsed size ${
-          data._size
-        }`,
+        `section read error: requested size ${size} does not equal parsed size ${data._size}`,
       )
     return data
   }

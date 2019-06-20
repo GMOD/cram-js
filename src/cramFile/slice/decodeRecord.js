@@ -281,9 +281,7 @@ function decodeRecord(
     if (Number.isNaN(lengthOnRef)) {
       console.warn(
         `${cramRecord.readName ||
-          `${cramRecord.sequenceId}:${
-            cramRecord.alignmentStart
-          }`} record has invalid read features`,
+          `${cramRecord.sequenceId}:${cramRecord.alignmentStart}`} record has invalid read features`,
       )
       lengthOnRef = cramRecord.readLength
     }

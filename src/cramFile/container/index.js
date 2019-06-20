@@ -30,9 +30,7 @@ class CramContainer {
     const block = await this.getFirstBlock()
     if (block.contentType !== 'COMPRESSION_HEADER')
       throw new CramMalformedError(
-        `invalid content type ${
-          block.contentType
-        } in what is supposed to be the compression header block`,
+        `invalid content type ${block.contentType} in what is supposed to be the compression header block`,
       )
     const content = parseItem(
       block.content,
@@ -78,11 +76,7 @@ class CramContainer {
     const numLandmarksSize = itf8Size(header1.numLandmarks)
     if (position + header1.length >= fileSize) {
       console.warn(
-        `${
-          this.file
-        }: container header at ${position} indicates that the container has length ${
-          header1.length
-        }, which extends beyond the length of the file. Skipping this container.`,
+        `${this.file}: container header at ${position} indicates that the container has length ${header1.length}, which extends beyond the length of the file. Skipping this container.`,
       )
       return undefined
     }

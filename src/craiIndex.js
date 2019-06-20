@@ -12,9 +12,7 @@ class Slice {
   }
 
   toString() {
-    return `${this.start}:${this.span}:${this.containerStart}:${
-      this.sliceStart
-    }:${this.sliceBytes}`
+    return `${this.start}:${this.span}:${this.containerStart}:${this.sliceStart}:${this.sliceBytes}`
   }
 }
 
