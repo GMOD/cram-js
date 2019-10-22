@@ -138,7 +138,6 @@ function decodeReadFeatures(
 
     // for gapping features, adjust the reference position for read features that follow
     if (code === 'D' || code === 'N') currentRefPos += readFeature.data
-    else if (code === 'H') currentRefPos -= readFeature.data
     else if (code === 'I' || code === 'S')
       currentRefPos -= readFeature.data.length
     else if (code === 'i') currentRefPos -= 1

@@ -771,19 +771,19 @@
         "code": "S",
         "data": "AAAAAAAAAA",
         "pos": 1,
-        "refPos": 6
+        "refPos": 11
       },
       {
         "code": "S",
         "data": "TTTTTTTTTT",
         "pos": 31,
-        "refPos": 26
+        "refPos": 31
       },
       {
         "code": "H",
         "data": 5,
         "pos": 41,
-        "refPos": 26
+        "refPos": 31
       }
     ],
     "lengthOnRef": 20,
@@ -856,19 +856,19 @@
         "code": "S",
         "data": "CAAAATAAAA",
         "pos": 1,
-        "refPos": 6
+        "refPos": 11
       },
       {
         "code": "S",
         "data": "TTTTATTTTC",
         "pos": 31,
-        "refPos": 26
+        "refPos": 31
       },
       {
         "code": "H",
         "data": 5,
         "pos": 41,
-        "refPos": 26
+        "refPos": 31
       }
     ],
     "lengthOnRef": 20,

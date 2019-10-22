@@ -612,7 +612,7 @@
                 "code": "H",
                 "data": 1,
                 "pos": 9,
-                "refPos": 9
+                "refPos": 10
               }
             ],
             "lengthOnRef": 8,
@@ -741,7 +741,7 @@
                 "code": "H",
                 "data": 2,
                 "pos": 7,
-                "refPos": 7
+                "refPos": 9
               }
             ],
             "lengthOnRef": 6,

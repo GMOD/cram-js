@@ -37,3 +37,19 @@ describe('dumping cram files', () => {
     }).timeout(10000)
   })
 })
+
+describe('works with hard clipping', () => {
+  it('hard clipped volvox data file', async () => {
+    const fasta = new FetchableSmallFasta(testDataFile('volvox.fa'))
+    const seqFetch = fasta.fetch.bind(fasta)
+    const file = new CramFile({
+      filehandle: testDataFile('hard_clipping.cram'),
+      seqFetch,
+    })
+    const fileData = await dumpWholeFile(file)
+    const hardClip = fileData[2].data[1].features[0].readFeatures[0]
+    expect(hardClip.refPos).to.equal(737)
+    expect(hardClip.pos).to.equal(1)
+    expect(hardClip.data).to.equal(803)
+  })
+})
