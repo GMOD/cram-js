@@ -6,6 +6,8 @@ const gunzip = promisify(zlib.gunzip)
 const { open } = require('./io')
 const { CramMalformedError } = require('./errors')
 
+const BAI_MAGIC = 21578050 // BAI\1
+
 class Slice {
   constructor(args) {
     Object.assign(this, args)
@@ -66,6 +68,11 @@ class CraiIndex {
         return data
       })
       .then(uncompressedBuffer => {
+        if (uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC) {
+          throw new Error(
+            'BAI index not supported from CRAM, please use CRAI. If needed, open new github issue',
+          )
+        }
         // interpret the text as regular ascii, since it is
         // supposed to be only digits and whitespace characters
         // this is written in a deliberately low-level fashion for performance,

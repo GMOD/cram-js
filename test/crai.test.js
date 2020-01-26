@@ -159,3 +159,11 @@ describe('.crai reader', () => {
     ])
   })
 })
+
+describe('reading a BAI file instead', () => {
+  it('test a BAI', () => {
+    const filehandle = testDataFile('volvox-sorted.bam.bai')
+    const index = new CraiIndex({ filehandle })
+    console.log('here')
+  })
+})
