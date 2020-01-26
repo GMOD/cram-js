@@ -68,9 +68,12 @@ class CraiIndex {
         return data
       })
       .then(uncompressedBuffer => {
-        if (uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC) {
-          throw new Error(
-            'BAI index not supported from CRAM, please use CRAI. If needed, open new github issue',
+        if (
+          uncompressedBuffer.length > 4 &&
+          uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
+        ) {
+          throw new CramMalformedError(
+            'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
           )
         }
         // interpret the text as regular ascii, since it is

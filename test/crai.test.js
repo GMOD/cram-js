@@ -161,9 +161,16 @@ describe('.crai reader', () => {
 })
 
 describe('reading a BAI file instead', () => {
-  it('test a BAI', () => {
+  it('test a BAI', async () => {
     const filehandle = testDataFile('volvox-sorted.bam.bai')
     const index = new CraiIndex({ filehandle })
-    console.log('here')
+    return index.getIndex().then(
+      () => {
+        throw new Error('the getIndex call should have failed')
+      },
+      err => {
+        expect(err).to.match(/bai/)
+      },
+    )
   })
 })
