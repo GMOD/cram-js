@@ -11,7 +11,6 @@ describe('retry nonexist file', () => {
   it('file moves', async () => {
     let cram
     mock({})
-    console.log(LocalFile)
     try {
       cram = new IndexedCramFile({
         cramFilehandle: new LocalFile('./test/data/ce#tag_padded.tmp.cram'),
