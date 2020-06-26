@@ -18,7 +18,7 @@ class LocalFile {
       readPosition = this.position
       this.position += length
     }
-    return fsRead(fsOpen(this.filename), buffer, offset, length, position)
+    return fsRead(fsOpen(this.filename, 'r'), buffer, offset, length, position)
   }
 
   async readFile() {
