@@ -1,7 +1,6 @@
 const { expect } = require('chai')
 
 const mock = require('mock-fs')
-const { testDataFile, fs } = require('./lib/util')
 const LocalFile = require('./lib/syncLocalFile')
 
 const { IndexedCramFile } = require('../src/index')
