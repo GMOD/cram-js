@@ -141,7 +141,14 @@ module.exports = {
     const method = _class.prototype[methodName]
     const memoAttrName = `_memo_${methodName}`
     _class.prototype[methodName] = function _tinyMemoized() {
-      if (!(memoAttrName in this)) this[memoAttrName] = method.call(this)
+      if (!(memoAttrName in this)) {
+        const res = method.call(this)
+        this[memoAttrName] = res
+        Promise.resolve(res).catch(err => {
+          delete this[memoAttrName]
+          throw err
+        })
+      }
       return this[memoAttrName]
     }
   },

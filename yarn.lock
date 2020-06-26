@@ -4386,6 +4386,11 @@ mocha@^6.0.0:
     yargs-parser "13.1.1"
     yargs-unparser "1.6.0"
 
+mock-fs@^4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.12.0.tgz#a5d50b12d2d75e5bec9dac3b67ffe3c41d31ade4"
+  integrity sha512-/P/HtrlvBxY4o/PzXY9cCNBrdylDNxg7gnrv2sMNxj+UJ2m8jSpl0/A6fuJeNAWr99ZvGWH8XCbE0vmnM5KupQ==
+
 module-deps-sortable@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/module-deps-sortable/-/module-deps-sortable-5.0.0.tgz#99db5bb08f7eab55e4c31f6b7c722c6a2144ba74"
