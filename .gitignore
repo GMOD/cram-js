@@ -10,3 +10,4 @@ test/data/*.fai
 errors.js
 built-tests/
 *.swp
+.eslintcache
