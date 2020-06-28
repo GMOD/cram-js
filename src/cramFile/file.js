@@ -1,9 +1,11 @@
 const zlib = require('zlib')
+const bzip2 = require('bzip2');
 const crc32 = require('buffer-crc32')
 const LRU = require('quick-lru')
 
 const { CramUnimplementedError, CramMalformedError } = require('../errors')
 const rans = require('../rans')
+const htscodecs = require('@jkbonfield/htscodecs');
 const {
   cramFileDefinition: cramFileDefinitionParser,
   getSectionParsers,
@@ -228,8 +230,30 @@ class CramFile {
     if (compressionMethod === 'gzip') {
       const result = zlib.gunzipSync(inputBuffer)
       result.copy(outputBuffer)
+    } else if (compressionMethod === 'bzip2') {
+      var bits = bzip2.array(inputBuffer)
+      var size = bzip2.header(bits)
+      var j = 0
+      do {
+        var chunk = bzip2.decompress(bits, size)
+        if (chunk != -1) {
+          Buffer.from(chunk).copy(outputBuffer, j)
+          j    += chunk.length
+          size -= chunk.length
+        }
+      } while (chunk != -1)
     } else if (compressionMethod === 'rans') {
       rans.uncompress(inputBuffer, outputBuffer)
+      //htscodecs r4x8 is slower, but compatible.
+      //htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
+    } else if (compressionMethod === 'rans4x16') {
+      htscodecs.r4x16_uncompress(inputBuffer, outputBuffer);
+    } else if (compressionMethod === 'arith') {
+      htscodecs.arith_uncompress(inputBuffer, outputBuffer);
+    } else if (compressionMethod === 'fqzcomp') {
+      htscodecs.fqzcomp_uncompress(inputBuffer, outputBuffer);
+    } else if (compressionMethod === 'tok3') {
+      htscodecs.tok3_uncompress(inputBuffer, outputBuffer);
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,
