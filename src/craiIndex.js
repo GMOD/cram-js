@@ -57,73 +57,78 @@ class CraiIndex {
   constructor(args) {
     const filehandle = open(args.url, args.path, args.filehandle)
     this.readFile = filehandle.readFile.bind(filehandle)
-    this.index = this.parseIndex()
   }
 
   parseIndex() {
     const index = {}
-    return this.readFile()
-      .then(data => {
-        if (data[0] === 31 && data[1] === 139) return gunzip(data)
-        return data
-      })
-      .then(uncompressedBuffer => {
-        if (
-          uncompressedBuffer.length > 4 &&
-          uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
-        ) {
-          throw new CramMalformedError(
-            'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
-          )
-        }
-        // interpret the text as regular ascii, since it is
-        // supposed to be only digits and whitespace characters
-        // this is written in a deliberately low-level fashion for performance,
-        // because some .crai files can be pretty large.
-        let currentRecord = []
-        let currentString = ''
-        for (let i = 0; i < uncompressedBuffer.length; i += 1) {
-          const charCode = uncompressedBuffer[i]
-          if (
-            (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
-            (!currentString && charCode === 45) /* leading - */
-          ) {
-            currentString += String.fromCharCode(charCode)
-          } else if (charCode === 9 /* \t */) {
-            currentRecord.push(Number.parseInt(currentString, 10))
-            currentString = ''
-          } else if (charCode === 10 /* \n */) {
-            currentRecord.push(Number.parseInt(currentString, 10))
-            currentString = ''
-            addRecordToIndex(index, currentRecord)
-            currentRecord = []
-          } else if (charCode !== 13 /* \r */ && charCode !== 32 /* space */) {
-            // if there are other characters in the file besides
-            // space and \r, something is wrong.
-            throw new CramMalformedError('invalid .crai index file')
-          }
-        }
-
-        // if the file ends without a \n, we need to flush our buffers
-        if (currentString) {
-          currentRecord.push(Number.parseInt(currentString, 10))
-        }
-        if (currentRecord.length === 6) {
-          addRecordToIndex(index, currentRecord)
-        }
-
-        // sort each of them by start
-        Object.entries(index).forEach(([seqId, ent]) => {
-          index[seqId] = ent.sort(
-            (a, b) => a.start - b.start || a.span - b.span,
-          )
+    if (!this.index) {
+      this.index = this.readFile()
+        .then(data => {
+          if (data[0] === 31 && data[1] === 139) return gunzip(data)
+          return data
         })
-        return index
-      })
+        .then(uncompressedBuffer => {
+          if (
+            uncompressedBuffer.length > 4 &&
+            uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
+          ) {
+            throw new CramMalformedError(
+              'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
+            )
+          }
+          // interpret the text as regular ascii, since it is
+          // supposed to be only digits and whitespace characters
+          // this is written in a deliberately low-level fashion for performance,
+          // because some .crai files can be pretty large.
+          let currentRecord = []
+          let currentString = ''
+          for (let i = 0; i < uncompressedBuffer.length; i += 1) {
+            const charCode = uncompressedBuffer[i]
+            if (
+              (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
+              (!currentString && charCode === 45) /* leading - */
+            ) {
+              currentString += String.fromCharCode(charCode)
+            } else if (charCode === 9 /* \t */) {
+              currentRecord.push(Number.parseInt(currentString, 10))
+              currentString = ''
+            } else if (charCode === 10 /* \n */) {
+              currentRecord.push(Number.parseInt(currentString, 10))
+              currentString = ''
+              addRecordToIndex(index, currentRecord)
+              currentRecord = []
+            } else if (
+              charCode !== 13 /* \r */ &&
+              charCode !== 32 /* space */
+            ) {
+              // if there are other characters in the file besides
+              // space and \r, something is wrong.
+              throw new CramMalformedError('invalid .crai index file')
+            }
+          }
+
+          // if the file ends without a \n, we need to flush our buffers
+          if (currentString) {
+            currentRecord.push(Number.parseInt(currentString, 10))
+          }
+          if (currentRecord.length === 6) {
+            addRecordToIndex(index, currentRecord)
+          }
+
+          // sort each of them by start
+          Object.entries(index).forEach(([seqId, ent]) => {
+            index[seqId] = ent.sort(
+              (a, b) => a.start - b.start || a.span - b.span,
+            )
+          })
+          return index
+        })
+    }
+    return this.index
   }
 
   getIndex() {
-    return this.index
+    return this.parseIndex()
   }
 
   /**
