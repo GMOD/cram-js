@@ -144,9 +144,8 @@ module.exports = {
       if (!(memoAttrName in this)) {
         const res = method.call(this)
         this[memoAttrName] = res
-        Promise.resolve(res).catch(err => {
+        Promise.resolve(res).catch(() => {
           delete this[memoAttrName]
-          throw err
         })
       }
       return this[memoAttrName]
