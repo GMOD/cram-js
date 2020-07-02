@@ -51,28 +51,6 @@ describe('.crai reader', () => {
     expect(await index.getEntriesForRange(0, 0, 20)).to.deep.equal(data[0])
     expect(await index.getEntriesForRange(0, 1, 21)).to.deep.equal(data[0])
     expect(await index.getEntriesForRange(1, 0, 20)).to.deep.equal(data[1])
-
-    // data = {
-    //   '0': [
-    //     { start: 1, span: 1 },
-    //     { start: 100, span: 1 },
-    //     { start: 101, span: 1 },
-    //     { start: 102, span: 1 },
-    //     { start: 300, span: 1 },
-    //     { start: 400, span: 10 },
-    //     { start: 404, span: 1 },
-    //     { start: 410, span: 1 },
-    //   ],
-    // }
-    // index.index = Promise.resolve(data)
-    // console.log(index.index)
-    // expect(await index.getEntriesForRange(0, 1, 2)).to.deep.equal([data[0][0]])
-    // expect(await index.getEntriesForRange(0, 1, 100)).to.deep.equal([
-    //   data[0][0],
-    // ])
-    // expect(await index.getEntriesForRange(0, 100, 101)).to.deep.equal([
-    //   data[0][1],
-    // ])
   })
 
   it('throws an error if you try to read cramQueryWithCRAI.cram as a .crai', () => {
