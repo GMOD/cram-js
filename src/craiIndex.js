@@ -1,3 +1,6 @@
+const AbortablePromiseCache = require('abortable-promise-cache').default
+const QuickLRU = require('quick-lru')
+
 const { promisify } = require('es6-promisify')
 const zlib = require('zlib')
 
@@ -56,8 +59,11 @@ class CraiIndex {
    */
   constructor(args) {
     const filehandle = open(args.url, args.path, args.filehandle)
+    this._parseCache = new AbortablePromiseCache({
+      cache: new QuickLRU({ maxSize: 1 }),
+      fill: (data, signal) => this.parseIndex({ signal }),
+    })
     this.readFile = filehandle.readFile.bind(filehandle)
-    this.index = this.parseIndex()
   }
 
   parseIndex() {
@@ -122,8 +128,8 @@ class CraiIndex {
       })
   }
 
-  getIndex() {
-    return this.index
+  getIndex(opts = {}) {
+    return this._parseCache.get('index', null, opts.signal)
   }
 
   /**
@@ -132,7 +138,7 @@ class CraiIndex {
    * the given reference sequence ID, false otherwise
    */
   async hasDataForReferenceSequence(seqId) {
-    return !!(await this.index)[seqId]
+    return !!(await this.getIndex())[seqId]
   }
 
   /**
@@ -147,7 +153,7 @@ class CraiIndex {
    * `{start, span, containerStart, sliceStart, sliceBytes }`
    */
   async getEntriesForRange(seqId, queryStart, queryEnd) {
-    const seqEntries = (await this.index)[seqId]
+    const seqEntries = (await this.getIndex())[seqId]
     if (!seqEntries) return []
     const len = seqEntries.length
 
