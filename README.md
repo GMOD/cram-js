@@ -38,7 +38,7 @@ const t = new IndexedFasta({
 const indexedFile = new IndexedCramFile({
   cramPath: '/filesystem/yourfile.cram',
   index: new CraiIndex({
-    path: '/filesystem/yourfile.cram.crai'),
+    path: '/filesystem/yourfile.cram.crai',
   }),
   seqFetch: async (seqId, start, end) => {
     // note: 
@@ -46,7 +46,6 @@ const indexedFile = new IndexedCramFile({
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
     return seq = await t.getSequence(seqId, start-1, end)
-    }
   },
   checkSequenceMD5: false,
 })
@@ -60,16 +59,19 @@ run = async() => {
   const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
-    record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
-      // process the "read features". this can be used similar to
-      // CIGAR/MD strings in SAM. see CRAM specs for more details.
-      if (code === 'X')
-        console.log(
-          `${
-            record.readName
-          } shows a base substitution of ${ref}->${sub} at ${refPos}`,
-        )
-    })
+    if(record.readFeatures != undefined) {
+      record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+        // process the read features. this can be used similar to
+        // CIGAR/MD strings in SAM. see CRAM specs for more details.
+        if (code === 'X') {
+          console.log(
+            `${
+              record.readName
+            } shows a base substitution of ${ref}->${sub} at ${refPos}`,
+          )
+        }
+      })
+    }
   })
 }
 
