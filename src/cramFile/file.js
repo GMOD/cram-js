@@ -89,7 +89,13 @@ class CramFile {
     // while (textEnd >= textStart && !content[textEnd]) textEnd -= 1
     // trim off the trailing zeros
     const text = content.toString('utf8', textStart, textStart + headerLength)
+    this.header = text
     return parseHeaderText(text)
+  }
+
+  async getRawHeader() {
+    await this.getSamHeader()
+    return this.header
   }
 
   // memoize
