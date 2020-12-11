@@ -344,6 +344,20 @@ describe('match samtools', () => {
   })
 })
 
+describe('getHeaderText', () => {
+  it('matches names given from samtools', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('SRR396636.sorted.clip.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
+      }),
+    })
+
+    const header = await cram.cram.getHeaderText()
+    expect(header.startsWith('@HD')).to.equal(true)
+  })
+})
+
 describe('troublesome file', () => {
   it('returns the correct sequence', async () => {
     const seq = `GATCACAGGTCTATCACCCTATTAACCACTCACGGGAGCTCTCCATGCATTTGGTATTTT
