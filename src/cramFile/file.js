@@ -93,7 +93,7 @@ class CramFile {
     return parseHeaderText(text)
   }
 
-  async getRawHeader() {
+  async getHeaderText() {
     await this.getSamHeader()
     return this.header
   }
