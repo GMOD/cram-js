@@ -25,7 +25,7 @@ $ yarn add @gmod/cram
 const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 
 //Use indexedfasta library for seqFetch, if using local file (see below)
-const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta') 
+const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
 
 const t = new IndexedFasta({
@@ -41,18 +41,18 @@ const indexedFile = new IndexedCramFile({
     path: '/filesystem/yourfile.cram.crai'),
   }),
   seqFetch: async (seqId, start, end) => {
-    // note: 
+    // note:
     // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
-    return seq = await t.getSequence(seqId, start-1, end)
+    return t.getSequence(seqId, start-1, end)
     }
   },
   checkSequenceMD5: false,
 })
 
 // example of fetching records from an indexed CRAM file.
-// NOTE: only numeric IDs for the reference sequence are accepted. 
+// NOTE: only numeric IDs for the reference sequence are accepted.
 // For indexedfasta the numeric ID is the order in which the sequence names appear in the header
 
 // Wrap in an async and then run
