@@ -172,7 +172,7 @@ class CraiIndex {
     let upperBound = len - 1
     let searchPosition
     while (lowerBound <= upperBound) {
-      searchPosition = Math.round((upperBound + lowerBound) / 2)
+      searchPosition = Math.floor((upperBound + lowerBound) / 2)
       const nextSearchDirection = compare(seqEntries[searchPosition])
       if (nextSearchDirection > 0) {
         lowerBound = searchPosition + 1
