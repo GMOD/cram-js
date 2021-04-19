@@ -45,6 +45,7 @@ const indexedFile = new IndexedCramFile({
     // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
+    // * you can return an empty string for testing if you want, but you may not get proper interpretation of record.readFeatures
     return t.getSequence(seqId, start-1, end)
   },
   checkSequenceMD5: false,
