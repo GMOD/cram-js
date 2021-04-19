@@ -38,7 +38,7 @@ const t = new IndexedFasta({
 const indexedFile = new IndexedCramFile({
   cramPath: '/filesystem/yourfile.cram',
   index: new CraiIndex({
-    path: '/filesystem/yourfile.cram.crai'),
+    path: '/filesystem/yourfile.cram.crai',
   }),
   seqFetch: async (seqId, start, end) => {
     // note:
@@ -46,7 +46,6 @@ const indexedFile = new IndexedCramFile({
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
     return t.getSequence(seqId, start-1, end)
-    }
   },
   checkSequenceMD5: false,
 })
