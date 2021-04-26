@@ -32,43 +32,63 @@ const t = new IndexedFasta({
   faiPath: '/filesystem/yourfile.fa.fai',
 })
 
-// open local files
-const indexedFile = new IndexedCramFile({
-  cramPath: '/filesystem/yourfile.cram',
-  index: new CraiIndex({
-    path: '/filesystem/yourfile.cram.crai',
-  }),
-  seqFetch: async (seqId, start, end) => {
-    // note:
-    // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
-    // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
-    // * the seqId is a numeric identifier
-    // * you can return an empty string for testing if you want, but you may not get proper interpretation of record.readFeatures
-    return t.getSequence(seqId, start - 1, end)
-  },
-  checkSequenceMD5: false,
-})
-
 // example of fetching records from an indexed CRAM file.
 // NOTE: only numeric IDs for the reference sequence are accepted.
 // For indexedfasta the numeric ID is the order in which the sequence names appear in the header
 
 // Wrap in an async and then run
 run = async () => {
-  const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
+  const idToName = []
+  const nameToId = {}
+
+  // open local files
+  const indexedFile = new IndexedCramFile({
+    cramPath: '/filesystem/yourfile.cram',
+    index: new CraiIndex({
+      path: '/filesystem/yourfile.cram.crai',
+    }),
+    seqFetch: async (seqId, start, end) => {
+      // note:
+      // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
+      // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
+      // * the seqId is a numeric identifier, so we convert it back to a name with idToName
+      // * you can return an empty string from this function for testing if you want, but you may not get proper interpretation of record.readFeatures
+      return t.getSequence(idToName[seqId], start - 1, end)
+    },
+    checkSequenceMD5: false,
+  })
+  const samHeader = await indexedFile.cram.getSamHeader()
+
+  // use the @SQ lines in the header to figure out the
+  // mapping between ref ref ID numbers and names
+
+  const sqLines = samHeader.filter(l => l.tag === 'SQ')
+  sqLines.forEach((sqLine, refId) => {
+    sqLine.data.forEach(item => {
+      if (item.tag === 'SN') {
+        // this is the ref name
+        const refName = item.value
+        nameToId[refName] = refId
+        idToName[refId] = refName
+      }
+    })
+  })
+
+  const records = await indexedFile.getRecordsForRange(
+    nameToId['chr1'],
+    10000,
+    20000,
+  )
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
-    if (record.readFeatures != undefined) {
-      record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
-        // process the read features. this can be used similar to
-        // CIGAR/MD strings in SAM. see CRAM specs for more details.
-        if (code === 'X') {
-          console.log(
-            `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
-          )
-        }
-      })
-    }
+    record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+      // process the "read features". this can be used similar to
+      // CIGAR/MD strings in SAM. see CRAM specs for more details.
+      if (code === 'X')
+        console.log(
+          `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
+        )
+    })
   })
 }
 
