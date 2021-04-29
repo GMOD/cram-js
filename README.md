@@ -24,9 +24,12 @@ $ yarn add @gmod/cram
 ```js
 const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 
-//Use indexedfasta library for seqFetch, if using local file (see below)
+// Use indexedfasta library for seqFetch, if using local file (see below)
 const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
+// this uses local file paths for node.js for IndexedFasta, for usages using
+// remote URLs see indexedfasta docs for filehandles and
+// https://github.com/gmod/generic-filehandle
 const t = new IndexedFasta({
   path: '/filesystem/yourfile.fa',
   faiPath: '/filesystem/yourfile.fa.fai',
@@ -34,14 +37,17 @@ const t = new IndexedFasta({
 
 // example of fetching records from an indexed CRAM file.
 // NOTE: only numeric IDs for the reference sequence are accepted.
-// For indexedfasta the numeric ID is the order in which the sequence names appear in the header
+// For indexedfasta the numeric ID is the order in which the sequence names
+// appear in the header
 
 // Wrap in an async and then run
 run = async () => {
   const idToName = []
   const nameToId = {}
 
-  // open local files
+  // example opening local files on node.js
+  // can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for the CraiIndex) params to open remote URLs
+  // alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle
   const indexedFile = new IndexedCramFile({
     cramPath: '/filesystem/yourfile.cram',
     index: new CraiIndex({
@@ -81,14 +87,17 @@ run = async () => {
   )
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
-    record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
-      // process the "read features". this can be used similar to
-      // CIGAR/MD strings in SAM. see CRAM specs for more details.
-      if (code === 'X')
-        console.log(
-          `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
-        )
-    })
+    if (record.readFeatures != undefined) {
+      record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+        // process the read features. this can be used similar to
+        // CIGAR/MD strings in SAM. see CRAM specs for more details.
+        if (code === 'X') {
+          console.log(
+            `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
+          )
+        }
+      })
+    }
   })
 }
 
