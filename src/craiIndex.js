@@ -154,12 +154,10 @@ class CraiIndex {
    */
   async getEntriesForRange(seqId, queryStart, queryEnd) {
     const seqEntries = (await this.getIndex())[seqId]
-    if (!seqEntries) return []
-    const len = seqEntries.length
+    if (!seqEntries) {
+      return []
+    }
 
-    // binary search to find an entry that
-    // overlaps the range, then extend backward
-    // and forward from that
     const compare = entry => {
       const entryStart = entry.start
       const entryEnd = entry.start + entry.span
@@ -167,39 +165,13 @@ class CraiIndex {
       if (entryEnd <= queryStart) return 1 // entry is behind query
       return 0 // entry overlaps query
     }
-
-    let lowerBound = 0
-    let upperBound = len - 1
-    let searchPosition
-    while (lowerBound <= upperBound) {
-      searchPosition = Math.round((upperBound + lowerBound) / 2)
-      const nextSearchDirection = compare(seqEntries[searchPosition])
-      if (nextSearchDirection > 0) {
-        lowerBound = searchPosition + 1
-      } else if (nextSearchDirection < 0) {
-        upperBound = searchPosition - 1
-      } else {
-        break
+    const bins = []
+    for (let i = 0; i < seqEntries.length; i += 1) {
+      if (compare(seqEntries[i]) === 0) {
+        bins.push(seqEntries[i])
       }
     }
-
-    // now extend backward
-    let overlapStart = searchPosition
-    while (overlapStart && !compare(seqEntries[overlapStart - 1]))
-      overlapStart -= 1
-    // and then extend forward
-    let overlapEnd = searchPosition
-    while (overlapEnd < len - 1 && !compare(seqEntries[overlapEnd + 1]))
-      overlapEnd += 1
-
-    const x1 = seqEntries[overlapStart].start
-    const x2 = seqEntries[overlapEnd].start + seqEntries[overlapEnd].span
-    const y1 = queryStart
-    const y2 = queryEnd
-    if (x2 >= y1 && y2 >= x1) {
-      return seqEntries.slice(overlapStart, overlapEnd + 1)
-    }
-    return []
+    return bins
   }
 }
 

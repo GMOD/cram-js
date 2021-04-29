@@ -2,7 +2,7 @@
 
 [![Generated with nod](https://img.shields.io/badge/generator-nod-2196F3.svg?style=flat-square)](https://github.com/diegohaz/nod)
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
-[![Build Status](https://img.shields.io/travis/GMOD/cram-js/master.svg?style=flat-square)](https://travis-ci.org/GMOD/cram-js) [![Coverage Status](https://img.shields.io/codecov/c/github/GMOD/cram-js/master.svg?style=flat-square)](https://codecov.io/gh/GMOD/cram-js/branch/master) [![Greenkeeper badge](https://badges.greenkeeper.io/GMOD/cram-js.svg)](https://greenkeeper.io/)
+[![Build Status](https://img.shields.io/travis/GMOD/cram-js/master.svg?style=flat-square)](https://travis-ci.org/GMOD/cram-js) [![Coverage Status](https://img.shields.io/codecov/c/github/GMOD/cram-js/master.svg?style=flat-square)](https://codecov.io/gh/GMOD/cram-js/branch/master)
 
 Read CRAM files (indexed or unindexed) with pure JS, works in node or in the browser.
 
@@ -25,7 +25,7 @@ $ yarn add @gmod/cram
 const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 
 //Use indexedfasta library for seqFetch, if using local file (see below)
-const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta') 
+const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
 
 const t = new IndexedFasta({
@@ -41,17 +41,18 @@ const indexedFile = new IndexedCramFile({
     path: '/filesystem/yourfile.cram.crai',
   }),
   seqFetch: async (seqId, start, end) => {
-    // note: 
+    // note:
     // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
-    return seq = await t.getSequence(seqId, start-1, end)
+    // * you can return an empty string for testing if you want, but you may not get proper interpretation of record.readFeatures
+    return t.getSequence(seqId, start-1, end)
   },
   checkSequenceMD5: false,
 })
 
 // example of fetching records from an indexed CRAM file.
-// NOTE: only numeric IDs for the reference sequence are accepted. 
+// NOTE: only numeric IDs for the reference sequence are accepted.
 // For indexedfasta the numeric ID is the order in which the sequence names appear in the header
 
 // Wrap in an async and then run
