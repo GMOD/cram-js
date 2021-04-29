@@ -80,17 +80,22 @@ run = async () => {
     20000
   );
   records.forEach(record => {
-    console.log(`got a record named ${record.readName}`);
-    record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
-      // process the "read features". this can be used similar to
-      // CIGAR/MD strings in SAM. see CRAM specs for more details.
-      if (code === "X")
-        console.log(
-          `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`
-        );
-    });
-  });
-};
+    console.log(`got a record named ${record.readName}`)
+    if(record.readFeatures != undefined) {
+      record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
+        // process the read features. this can be used similar to
+        // CIGAR/MD strings in SAM. see CRAM specs for more details.
+        if (code === 'X') {
+          console.log(
+            `${
+              record.readName
+            } shows a base substitution of ${ref}->${sub} at ${refPos}`,
+          )
+        }
+      })
+    }
+  })
+}
 
 run();
 
