@@ -1,8 +1,8 @@
-const { CramUnimplementedError, CramSizeLimitError } = require('./errors')
+import { CramUnimplementedError, CramSizeLimitError } from './errors'
 
-const CramFile = require('./cramFile')
+import CramFile from './cramFile'
 
-class IndexedCramFile {
+export default class IndexedCramFile {
   /**
    *
    * @param {object} args
@@ -15,8 +15,9 @@ class IndexedCramFile {
    */
   constructor(args) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
-    if (args.cram) this.cram = args.cram
-    else
+    if (args.cram) {
+      this.cram = args.cram
+    } else {
       this.cram = new CramFile({
         url: args.cramUrl,
         path: args.cramPath,
@@ -25,13 +26,16 @@ class IndexedCramFile {
         checkSequenceMD5: args.checkSequenceMD5,
         cacheSize: args.cacheSize,
       })
+    }
 
-    if (!(this.cram instanceof CramFile))
+    if (!(this.cram instanceof CramFile)) {
       throw new Error('invalid arguments: no cramfile')
+    }
 
     this.index = args.index
-    if (!this.index.getEntriesForRange)
+    if (!this.index.getEntriesForRange) {
       throw new Error('invalid arguments: not an index')
+    }
 
     this.fetchSizeLimit = args.fetchSizeLimit || 3000000
   }
@@ -48,18 +52,20 @@ class IndexedCramFile {
     opts.pairAcrossChr = opts.pairAcrossChr || false
     opts.maxInsertSize = opts.maxInsertSize || 200000
 
-    if (typeof seq === 'string')
+    if (typeof seq === 'string') {
       // TODO: support string reference sequence names somehow
       throw new CramUnimplementedError(
         'string sequence names not yet supported',
       )
+    }
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
     const totalSize = slices.map(s => s.sliceBytes).reduce((a, b) => a + b, 0)
-    if (totalSize > this.fetchSizeLimit)
+    if (totalSize > this.fetchSizeLimit) {
       throw new CramSizeLimitError(
         `data size of ${totalSize.toLocaleString()} bytes exceeded fetch size limit of ${this.fetchSizeLimit.toLocaleString()} bytes`,
       )
+    }
 
     // TODO: do we need to merge or de-duplicate the blocks?
 
@@ -79,13 +85,17 @@ class IndexedCramFile {
       for (let i = 0; i < ret.length; i += 1) {
         const name = ret[i].readName
         const id = ret[i].uniqueId
-        if (!readNames[name]) readNames[name] = 0
+        if (!readNames[name]) {
+          readNames[name] = 0
+        }
         readNames[name] += 1
         readIds[id] = 1
       }
       const unmatedPairs = {}
       Object.entries(readNames).forEach(([k, v]) => {
-        if (v === 1) unmatedPairs[k] = true
+        if (v === 1) {
+          unmatedPairs[k] = true
+        }
       })
       const matePromises = []
       for (let i = 0; i < ret.length; i += 1) {
@@ -179,5 +189,3 @@ class IndexedCramFile {
     return this.index.hasDataForReferenceSequence(seqId)
   }
 }
-
-module.exports = IndexedCramFile

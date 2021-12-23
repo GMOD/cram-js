@@ -1,8 +1,8 @@
-const { CramBufferOverrunError, CramMalformedError } = require('../../errors')
+import { CramBufferOverrunError, CramMalformedError } from '../../errors'
 
-const CramCodec = require('./_base')
+import CramCodec from './_base'
 
-class ByteArrayStopCodec extends CramCodec {
+export default class ByteArrayStopCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
     if (dataType === 'byteArray') {
@@ -17,10 +17,11 @@ class ByteArrayStopCodec extends CramCodec {
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
-    if (!contentBlock)
+    if (!contentBlock) {
       throw new CramMalformedError(
         `no block found with content ID ${blockContentId}`,
       )
+    }
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return this._decode(contentBlock, cursor)
   }
@@ -47,5 +48,3 @@ class ByteArrayStopCodec extends CramCodec {
     return data
   }
 }
-
-module.exports = ByteArrayStopCodec

@@ -1,7 +1,7 @@
-const Constants = require('./constants')
-const Decoding = require('./decoding')
+import Constants from './constants'
+import Decoding from './decoding'
 
-function uncompress(
+export function uncompress(
   /* ByteBuffer */ input,
   /* ByteBuffer */ output,
   /* Decoding.AriDecoder[] */ D,
@@ -62,5 +62,3 @@ function uncompress(
     l7 = c7
   }
 }
-
-module.exports = { uncompress }

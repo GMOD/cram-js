@@ -1,7 +1,7 @@
-const { CramUnimplementedError } = require('../../errors')
-const CramCodec = require('./_base')
+import { CramUnimplementedError } from '../../errors'
+import CramCodec from './_base'
 
-class BetaCodec extends CramCodec {
+export default class BetaCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
     if (this.dataType !== 'int') {
@@ -21,5 +21,3 @@ class BetaCodec extends CramCodec {
     return data
   }
 }
-
-module.exports = BetaCodec

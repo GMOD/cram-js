@@ -34,10 +34,11 @@ describe('code examples', () => {
       records.forEach(record => {
         console.log(`got a record named ${record.readName}`)
         record.readFeatures.forEach(({ code, refPos, ref, sub }) => {
-          if (code === 'X')
+          if (code === 'X') {
             console.log(
               `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
             )
+          }
         })
       })
 

@@ -1,5 +1,5 @@
-const CramFile = require('./cramFile')
-const IndexedCramFile = require('./indexedCramFile')
-const CraiIndex = require('./craiIndex')
+import CramFile from './cramFile'
+import IndexedCramFile from './indexedCramFile'
+import CraiIndex from './craiIndex'
 
-module.exports = { CramFile, IndexedCramFile, CraiIndex }
+export { CramFile, IndexedCramFile, CraiIndex }

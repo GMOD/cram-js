@@ -1,18 +1,23 @@
-const Constants = require('./constants')
+import Constants from './constants'
 
 function decodeReadSequence(cramRecord, refRegion) {
   // if it has no length, it has no sequence
-  if (!cramRecord.lengthOnRef && !cramRecord.readLength) return undefined
+  if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
+    return undefined
+  }
 
-  if (cramRecord.isUnknownBases()) return undefined
+  if (cramRecord.isUnknownBases()) {
+    return undefined
+  }
 
   // remember: all coordinates are 1-based closed
   const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
 
-  if (!cramRecord.readFeatures)
+  if (!cramRecord.readFeatures) {
     return refRegion.seq
       .substr(regionSeqOffset, cramRecord.lengthOnRef)
       .toUpperCase()
+  }
 
   let bases = ''
   let regionPos = regionSeqOffset
@@ -106,23 +111,31 @@ function decodeBaseSubstitution(
   compressionScheme,
   readFeature,
 ) {
-  if (!refRegion) return
+  if (!refRegion) {
+    return
+  }
 
   // decode base substitution code using the substitution matrix
   const refCoord = readFeature.refPos - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
-  if (refBase) readFeature.ref = refBase
+  if (refBase) {
+    readFeature.ref = refBase
+  }
   let baseNumber = baseNumbers[refBase]
-  if (baseNumber === undefined) baseNumber = 4
+  if (baseNumber === undefined) {
+    baseNumber = 4
+  }
   const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]
   const base = substitutionScheme[readFeature.data]
-  if (base) readFeature.sub = base
+  if (base) {
+    readFeature.sub = base
+  }
 }
 
 /**
  * Class of each CRAM record returned by this API.
  */
-class CramRecord {
+export default class CramRecord {
   constructor() {
     this.tags = {}
   }
@@ -285,13 +298,14 @@ class CramRecord {
       // use the reference bases to decode the bases
       // substituted in each base substitution
       this.readFeatures.forEach(readFeature => {
-        if (readFeature.code === 'X')
+        if (readFeature.code === 'X') {
           decodeBaseSubstitution(
             this,
             refRegion,
             compressionScheme,
             readFeature,
           )
+        }
       })
     }
 
@@ -310,7 +324,9 @@ class CramRecord {
   toJSON() {
     const data = {}
     Object.keys(this).forEach(k => {
-      if (k.charAt(0) === '_') return
+      if (k.charAt(0) === '_') {
+        return
+      }
       data[k] = this[k]
     })
 
@@ -319,5 +335,3 @@ class CramRecord {
     return data
   }
 }
-
-module.exports = CramRecord

@@ -1,13 +1,11 @@
-const AbortablePromiseCache = require('abortable-promise-cache').default
-const QuickLRU = require('quick-lru')
-
-const { promisify } = require('es6-promisify')
-const zlib = require('zlib')
+import AbortablePromiseCache from 'abortable-promise-cache'
+import QuickLRU from 'quick-lru'
+import { promisify } from 'es6-promisify'
+import zlib from 'zlib'
+import { open } from './io'
+import { CramMalformedError } from './errors'
 
 const gunzip = promisify(zlib.gunzip)
-
-const { open } = require('./io')
-const { CramMalformedError } = require('./errors')
 
 const BAI_MAGIC = 21578050 // BAI\1
 
@@ -28,7 +26,9 @@ function addRecordToIndex(index, record) {
 
   const [seqId, start, span, containerStart, sliceStart, sliceBytes] = record
 
-  if (!index[seqId]) index[seqId] = []
+  if (!index[seqId]) {
+    index[seqId] = []
+  }
 
   index[seqId].push(
     new Slice({
@@ -40,7 +40,8 @@ function addRecordToIndex(index, record) {
     }),
   )
 }
-class CraiIndex {
+
+export default class CraiIndex {
   // A CRAM index (.crai) is a gzipped tab delimited file containing the following columns:
   // 1. Sequence id
   // 2. Alignment start
@@ -70,7 +71,9 @@ class CraiIndex {
     const index = {}
     return this.readFile()
       .then(data => {
-        if (data[0] === 31 && data[1] === 139) return gunzip(data)
+        if (data[0] === 31 && data[1] === 139) {
+          return gunzip(data)
+        }
         return data
       })
       .then(uncompressedBuffer => {
@@ -161,8 +164,12 @@ class CraiIndex {
     const compare = entry => {
       const entryStart = entry.start
       const entryEnd = entry.start + entry.span
-      if (entryStart >= queryEnd) return -1 // entry is ahead of query
-      if (entryEnd <= queryStart) return 1 // entry is behind query
+      if (entryStart >= queryEnd) {
+        return -1
+      } // entry is ahead of query
+      if (entryEnd <= queryStart) {
+        return 1
+      } // entry is behind query
       return 0 // entry overlaps query
     }
     const bins = []
@@ -174,5 +181,3 @@ class CraiIndex {
     return bins
   }
 }
-
-module.exports = CraiIndex

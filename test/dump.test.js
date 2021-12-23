@@ -24,11 +24,12 @@ describe('dumping cram files', () => {
       const file = new CramFile({ filehandle, seqFetch })
       const fileData = await dumpWholeFile(file)
       // console.log(JSON.stringify(fileData, null, '  '))
-      if (REWRITE_EXPECTED_DATA)
+      if (REWRITE_EXPECTED_DATA) {
         fs.writeFileSync(
           `test/data/${filename}.dump.json`,
           JSON.stringify(fileData, null, '  '),
         )
+      }
       const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
       expect(JSON.parse(JSON.stringify(fileData))).toEqual(expectedFeatures)
     }, 10000)

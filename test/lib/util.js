@@ -27,8 +27,9 @@ function JsonClone(obj) {
 
 let extended = xit
 try {
-  if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`)))
+  if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`))) {
     extended = it
+  }
 } catch (e) {
   // ignore
   console.log(

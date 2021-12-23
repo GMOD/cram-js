@@ -17,9 +17,15 @@ module.exports = {
   fromUrl,
 
   open(maybeUrl, maybePath, maybeFilehandle) {
-    if (maybeFilehandle) return maybeFilehandle
-    if (maybeUrl) return fromUrl(maybeUrl)
-    if (maybePath) return new LocalFile(maybePath)
+    if (maybeFilehandle) {
+      return maybeFilehandle
+    }
+    if (maybeUrl) {
+      return fromUrl(maybeUrl)
+    }
+    if (maybePath) {
+      return new LocalFile(maybePath)
+    }
     throw new Error('no url, path, or filehandle provided, cannot open')
   },
 }

@@ -1,9 +1,9 @@
-const { CramMalformedError } = require('../errors')
+import { CramMalformedError } from '../errors'
 
-const Constants = require('./constants')
-const Decoding = require('./decoding')
+import Constants from './constants'
+import Decoding from './decoding'
 
-function uncompress(
+export function uncompress(
   /* ByteBuffer */ input,
   /* Decoding.AriDecoder */ D,
   /* Decoding.Symbol[] */ syms,
@@ -97,5 +97,3 @@ function uncompress(
 
   out.setPosition(0)
 }
-
-module.exports = { uncompress }

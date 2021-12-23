@@ -1,4 +1,4 @@
-function parseHeaderText(text) {
+export function parseHeaderText(text) {
   const lines = text.split(/\r?\n/)
   const data = []
   lines.forEach(line => {
@@ -7,9 +7,9 @@ function parseHeaderText(text) {
       const [fieldTag, value] = f.split(':', 2)
       return { tag: fieldTag, value }
     })
-    if (tag) data.push({ tag: tag.substr(1), data: parsedFields })
+    if (tag) {
+      data.push({ tag: tag.substr(1), data: parsedFields })
+    }
   })
   return data
 }
-
-module.exports = { parseHeaderText }

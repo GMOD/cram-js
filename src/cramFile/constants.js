@@ -1,4 +1,4 @@
-module.exports = {
+const Constants = {
   CRAM_FLAG_PRESERVE_QUAL_SCORES: 1 << 0,
   CRAM_FLAG_DETACHED: 1 << 1,
   CRAM_FLAG_MATE_DOWNSTREAM: 1 << 2,
@@ -51,3 +51,5 @@ module.exports = {
   BAM_CIGAR_MASK: 0xf,
   BAM_CIGAR_TYPE: 0x3c1a7,
 }
+
+export default Constants
