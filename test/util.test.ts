@@ -1,4 +1,5 @@
-const { sequenceMD5 } = require('../src/cramFile/util')
+//@ts-nocheck
+import { sequenceMD5 } from '../src/cramFile/util'
 
 describe('util.sequenceMD5', () => {
   ;[

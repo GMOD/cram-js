@@ -1,8 +1,9 @@
-const mock = require('mock-fs')
-const LocalFile = require('./lib/syncLocalFile')
+//@ts-nocheck
+import mock from 'mock-fs'
+import LocalFile from './lib/syncLocalFile'
 
-const { IndexedCramFile } = require('../src/index')
-const CraiIndex = require('../src/craiIndex')
+import { IndexedCramFile } from '../src/index'
+import CraiIndex from '../src/craiIndex'
 
 describe('retry nonexist file', () => {
   it('file moves', async () => {

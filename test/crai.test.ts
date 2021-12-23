@@ -1,6 +1,7 @@
-const { testDataFile } = require('./lib/util')
+//@ts-nocheck
+import { testDataFile } from './lib/util'
 
-const CraiIndex = require('../src/craiIndex')
+import CraiIndex from '../src/craiIndex'
 
 describe('.crai reader', () => {
   it('can read xx#unsorted.tmp.cram.crai', async () => {

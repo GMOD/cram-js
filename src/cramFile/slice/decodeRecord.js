@@ -94,7 +94,7 @@ function parseTagData(tagType, buffer) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-export default function decodeReadFeatures(
+function decodeReadFeatures(
   cramRecord,
   readFeatureCount,
   decodeDataSeries,
@@ -192,7 +192,7 @@ function thingToString(thing) {
   return String(thing)
 }
 
-function decodeRecord(
+export default function decodeRecord(
   slice,
   decodeDataSeries,
   compressionScheme,
@@ -321,8 +321,10 @@ function decodeRecord(
     }
     if (Number.isNaN(lengthOnRef)) {
       console.warn(
-        `${cramRecord.readName ||
-          `${cramRecord.sequenceId}:${cramRecord.alignmentStart}`} record has invalid read features`,
+        `${
+          cramRecord.readName ||
+          `${cramRecord.sequenceId}:${cramRecord.alignmentStart}`
+        } record has invalid read features`,
       )
       lengthOnRef = cramRecord.readLength
     }

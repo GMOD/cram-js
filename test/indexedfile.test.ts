@@ -1,13 +1,14 @@
-const {
+//@ts-nocheck
+import {
   testDataFile,
   loadTestJSON,
   extended,
   JsonClone,
   REWRITE_EXPECTED_DATA,
   fs,
-} = require('./lib/util')
-const { IndexedCramFile } = require('../src/index')
-const CraiIndex = require('../src/craiIndex')
+} from './lib/util'
+import { IndexedCramFile } from '../src/index'
+import CraiIndex from '../src/craiIndex'
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {

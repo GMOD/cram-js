@@ -1,13 +1,14 @@
-const { fullFiles: testFileList } = require('./lib/testFileList')
-const {
+//@ts-nocheck
+import { fullFiles as testFileList } from './lib/testFileList'
+import {
   testDataFile,
   loadTestJSON,
   REWRITE_EXPECTED_DATA,
   fs,
-} = require('./lib/util')
-const { dumpWholeFile } = require('./lib/dumpFile')
-const { CramFile } = require('../src/index')
-const { FetchableSmallFasta } = require('./lib/fasta')
+} from './lib/util'
+import { dumpWholeFile } from './lib/dumpFile'
+import { CramFile } from '../src/index'
+import { FetchableSmallFasta } from './lib/fasta'
 
 describe('dumping cram files', () => {
   testFileList.forEach(filename => {

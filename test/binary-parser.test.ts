@@ -1,6 +1,7 @@
-const { Parser } = require('@gmod/binary-parser')
+//@ts-nocheck
+import { Parser } from '@gmod/binary-parser'
 
-const { parseItf8 } = require('../src/cramFile/util')
+import { parseItf8 } from '../src/cramFile/util'
 
 describe('binary-parser fork', () => {
   describe('itf8', () => {
@@ -23,10 +24,7 @@ describe('binary-parser fork', () => {
       })
     })
     it('can parse several itf8 numbers in a row', () => {
-      const p = new Parser()
-        .itf8('val1')
-        .itf8('val2')
-        .itf8('val3')
+      const p = new Parser().itf8('val1').itf8('val2').itf8('val3')
       const data = [0x80, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0f, 0]
       expect(p.parse(Buffer.from(data))).toEqual({
         offset: 8,

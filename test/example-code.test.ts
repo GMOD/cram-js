@@ -1,4 +1,5 @@
-const { IndexedCramFile, CraiIndex } = require('../src')
+//@ts-nocheck
+import { IndexedCramFile, CraiIndex } from '../src'
 
 console.log(process.cwd())
 
