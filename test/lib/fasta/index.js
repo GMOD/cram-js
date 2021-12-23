@@ -1,4 +1,4 @@
-const IndexedFasta = require('./indexedFasta')
+import IndexedFasta from './indexedFasta'
 
 function parseSmallFasta(text) {
   return text
@@ -38,4 +38,4 @@ class FetchableSmallFasta {
   }
 }
 
-module.exports = { parseSmallFasta, FetchableSmallFasta, IndexedFasta }
+export { parseSmallFasta, FetchableSmallFasta, IndexedFasta }

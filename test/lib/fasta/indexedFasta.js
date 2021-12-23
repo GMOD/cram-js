@@ -1,4 +1,4 @@
-class IndexedFasta {
+export default class IndexedFasta {
   constructor({ fasta, fai, chunkSizeLimit = 50000 }) {
     this.fasta = fasta
     this.fai = fai
@@ -118,5 +118,3 @@ class IndexedFasta {
     )
   }
 }
-
-module.exports = IndexedFasta

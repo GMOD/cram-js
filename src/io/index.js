@@ -1,6 +1,6 @@
-const url = require('url')
-const RemoteFile = require('./remoteFile')
-const LocalFile = require('./localFile')
+import url from 'url'
+import RemoteFile from './remoteFile'
+import LocalFile from './localFile'
 
 function fromUrl(source) {
   const { protocol, pathname } = url.parse(source)
@@ -10,22 +10,17 @@ function fromUrl(source) {
   return new RemoteFile(source)
 }
 
-module.exports = {
-  LocalFile,
-  RemoteFile,
-
-  fromUrl,
-
-  open(maybeUrl, maybePath, maybeFilehandle) {
-    if (maybeFilehandle) {
-      return maybeFilehandle
-    }
-    if (maybeUrl) {
-      return fromUrl(maybeUrl)
-    }
-    if (maybePath) {
-      return new LocalFile(maybePath)
-    }
-    throw new Error('no url, path, or filehandle provided, cannot open')
-  },
+function open(maybeUrl, maybePath, maybeFilehandle) {
+  if (maybeFilehandle) {
+    return maybeFilehandle
+  }
+  if (maybeUrl) {
+    return fromUrl(maybeUrl)
+  }
+  if (maybePath) {
+    return new LocalFile(maybePath)
+  }
+  throw new Error('no url, path, or filehandle provided, cannot open')
 }
+
+export { LocalFile, RemoteFile, fromUrl, open }

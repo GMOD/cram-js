@@ -24,10 +24,7 @@ describe('binary-parser fork', () => {
       })
     })
     it('can parse several itf8 numbers in a row', () => {
-      const p = new Parser()
-        .itf8('val1')
-        .itf8('val2')
-        .itf8('val3')
+      const p = new Parser().itf8('val1').itf8('val2').itf8('val3')
       const data = [0x80, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0f, 0]
       expect(p.parse(Buffer.from(data))).toEqual({
         offset: 8,

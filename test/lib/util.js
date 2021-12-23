@@ -1,6 +1,6 @@
 const path = typeof __webpack_require__ !== 'function' ? require('path') : null // eslint-disable-line camelcase
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
-const { fromUrl } = require('../../src/io')
+import { fromUrl } from '../../src/io'
 
 const dataDir =
   path &&

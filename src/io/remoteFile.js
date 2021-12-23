@@ -1,7 +1,7 @@
-const fetch = require('cross-fetch')
-const BufferCache = require('./bufferCache')
+import fetch from 'cross-fetch'
+import BufferCache from './bufferCache'
 
-class RemoteFile {
+export default class RemoteFile {
   constructor(source) {
     this.position = 0
     this.url = source
@@ -69,5 +69,3 @@ class RemoteFile {
     return this._stat
   }
 }
-
-module.exports = RemoteFile
