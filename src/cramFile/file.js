@@ -3,7 +3,7 @@ import crc32 from 'buffer-crc32'
 import LRU from 'quick-lru'
 
 import { CramUnimplementedError, CramMalformedError } from '../errors'
-import rans from '../rans'
+import ransuncompress from '../rans'
 import {
   cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
@@ -247,7 +247,7 @@ export default class CramFile {
       const result = zlib.gunzipSync(inputBuffer)
       result.copy(outputBuffer)
     } else if (compressionMethod === 'rans') {
-      rans.uncompress(inputBuffer, outputBuffer)
+      ransuncompress(inputBuffer, outputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,

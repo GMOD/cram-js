@@ -1,6 +1,6 @@
 import { CramMalformedError } from '../errors'
 
-import Constants from './constants'
+import { TOTFREQ } from './constants'
 import Decoding from './decoding'
 
 function assert(result) {
@@ -33,7 +33,7 @@ export function readStatsO0(
 
     /* Build reverse lookup table */
     if (!decoder.R) {
-      decoder.R = new Array(Constants.TOTFREQ)
+      decoder.R = new Array(TOTFREQ)
     }
     decoder.R.fill(j, x, x + decoder.fc[j].F)
 
@@ -50,7 +50,7 @@ export function readStatsO0(
     }
   } while (j !== 0)
 
-  assert(x < Constants.TOTFREQ)
+  assert(x < TOTFREQ)
 }
 
 export function readStatsO1(
@@ -79,7 +79,7 @@ export function readStatsO1(
       D[i].fc[j].C = x
 
       if (D[i].fc[j].F === 0) {
-        D[i].fc[j].F = Constants.TOTFREQ
+        D[i].fc[j].F = TOTFREQ
       }
 
       if (syms[i][j] == null) {
@@ -90,12 +90,12 @@ export function readStatsO1(
 
       /* Build reverse lookup table */
       if (D[i].R == null) {
-        D[i].R = new Array(Constants.TOTFREQ)
+        D[i].R = new Array(TOTFREQ)
       }
       D[i].R.fill(j, x, x + D[i].fc[j].F)
 
       x += D[i].fc[j].F
-      assert(x <= Constants.TOTFREQ)
+      assert(x <= TOTFREQ)
 
       if (rlej === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
         j = 0xff & cp.get()

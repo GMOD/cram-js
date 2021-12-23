@@ -1,6 +1,6 @@
 import { CramMalformedError } from '../errors'
 
-import Constants from './constants'
+import { RANS_BYTE_L } from './constants'
 
 class FC {
   // int F, C;
@@ -91,11 +91,11 @@ function symbolInit(sym, start, freq) {
   r = freq * (r >> scaleBits) + (r & mask) - start
 
   // re-normalize
-  if (r < Constants.RANS_BYTE_L) {
+  if (r < RANS_BYTE_L) {
     do {
       /* final int */ const b = 0xff & pptr.get()
       r = (r << 8) | b
-    } while (r < Constants.RANS_BYTE_L)
+    } while (r < RANS_BYTE_L)
   }
 
   return r
@@ -117,10 +117,10 @@ function symbolInit(sym, start, freq) {
   /* final ByteBuffer */ pptr,
 ) {
   // re-normalize
-  if (r < Constants.RANS_BYTE_L) {
+  if (r < RANS_BYTE_L) {
     do {
       r = (r << 8) | (0xff & pptr.get())
-    } while (r < Constants.RANS_BYTE_L)
+    } while (r < RANS_BYTE_L)
   }
 
   return r

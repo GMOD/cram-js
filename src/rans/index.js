@@ -1,7 +1,7 @@
 import { CramMalformedError } from '../errors'
 
 import Decoding from './decoding'
-import Frequencies from './frequencies'
+import { readStatsO0, readStatsO1 } from './frequencies'
 
 import D04 from './d04'
 import D14 from './d14'
@@ -120,9 +120,9 @@ function /* static ByteBuffer */ uncompressOrder0Way4(
     syms[i] = new Decoding.Symbol()
   }
 
-  Frequencies.readStatsO0(input, D, syms)
+  readStatsO0(input, D, syms)
 
-  D04.uncompress(input, D, syms, out)
+  D04(input, D, syms, out)
 
   return out
 }
@@ -142,9 +142,9 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
       syms[i][j] = new Decoding.Symbol()
     }
   }
-  Frequencies.readStatsO1(input, D, syms)
+  readStatsO1(input, D, syms)
 
-  D14.uncompress(input, output, D, syms)
+  D14(input, output, D, syms)
 
   return output
 }
@@ -203,7 +203,7 @@ class ByteBuffer {
 }
 
 // static /* const */ ByteBuffer EMPTY_BUFFER = ByteBuffer.allocate(0);
-export function uncompress(
+export default function uncompress(
   inputBuffer,
   outputBuffer,
   initialInputPosition = 0,

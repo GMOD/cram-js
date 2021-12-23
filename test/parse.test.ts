@@ -179,8 +179,10 @@ describe('CRAM reader', () => {
       refSeqId: -2,
       refSeqStart: 0,
     })
-    const { content: compressionBlockData, ...compressionBlock } =
-      await container.getCompressionHeaderBlock()
+    const {
+      content: compressionBlockData,
+      ...compressionBlock
+    } = await container.getCompressionHeaderBlock()
     expect(compressionBlock).toEqual({
       _size: 376,
       _endPosition: 108658,
