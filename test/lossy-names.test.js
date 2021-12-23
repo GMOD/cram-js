@@ -27,8 +27,8 @@ describe('1kg mate test', () => {
 
       const firstMate = chr1Records[0]
       const secondMate = chr1Records[1]
-      expect(firstMate.readName !== undefined).to.equal(true)
-      expect(firstMate.readName).to.equal(secondMate.readName)
+      expect(firstMate.readName !== undefined).toEqual(true)
+      expect(firstMate.readName).toEqual(secondMate.readName)
 
       // Test retained readnames (inter chr mates)
       const chr16Records = await indexedCramFile.getRecordsForRange(
@@ -39,8 +39,8 @@ describe('1kg mate test', () => {
 
       const chr1mate = chr1Records[2]
       const chr16mate = chr16Records[0]
-      expect(chr1mate.readName !== undefined).to.equal(true)
-      expect(chr1mate.readName).to.equal(chr16mate.readName)
+      expect(chr1mate.readName !== undefined).toEqual(true)
+      expect(chr1mate.readName).toEqual(chr16mate.readName)
     })
   })
 })

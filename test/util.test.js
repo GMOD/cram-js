@@ -13,7 +13,7 @@ describe('util.sequenceMD5', () => {
     ],
   ].forEach(([input, output]) => {
     it(`can calculate MD5 of ${input} correctly`, () => {
-      expect(sequenceMD5(input)).to.equal(output)
+      expect(sequenceMD5(input)).toEqual(output)
     })
   })
 })

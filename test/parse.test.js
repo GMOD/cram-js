@@ -155,7 +155,7 @@ describe('CRAM reader', () => {
     it(`can count ${containerCount} containers in ${filename}`, async () => {
       const file = new CramFile({ filehandle: testDataFile(filename) })
       const count = await file.containerCount()
-      expect(count).to.equal(containerCount)
+      expect(count).toEqual(containerCount)
     })
   })
 
@@ -191,11 +191,11 @@ describe('CRAM reader', () => {
       uncompressedSize: 372,
       crc32: 1246026486,
     })
-    expect(compressionBlockData).to.haveOwnProperty('tagEncoding')
-    expect(compressionBlockData).to.haveOwnProperty('preservation')
-    expect(compressionBlockData).to.haveOwnProperty('dataSeriesEncoding')
-    expect(compressionBlockData).to.haveOwnProperty('_size')
-    expect(compressionBlockData).to.haveOwnProperty('_endPosition')
+    expect(Object.keys(compressionBlockData).includes(['tagEncoding']))
+    expect(Object.keys(compressionBlockData).includes(['preservation']))
+    expect(Object.keys(compressionBlockData).includes(['dataSeriesEncoding']))
+    expect(Object.keys(compressionBlockData).includes(['_size']))
+    expect(Object.keys(compressionBlockData).includes(['_endPosition']))
     // console.log(JSON.stringify(compressionBlockData.preservation, null, '  '))
     expect(compressionBlockData.preservation).toEqual({
       TD: [
@@ -206,12 +206,12 @@ describe('CRAM reader', () => {
       RN: true,
       AP: false,
     })
-    expect(Object.keys(compressionBlockData.tagEncoding).length).to.equal(9)
+    expect(Object.keys(compressionBlockData.tagEncoding).length).toEqual(9)
     // console.log(JSON.stringify(compressionBlockData.tagEncoding, null, '  '))
 
-    expect(
-      Object.keys(compressionBlockData.dataSeriesEncoding).length,
-    ).to.equal(21)
+    expect(Object.keys(compressionBlockData.dataSeriesEncoding).length).toEqual(
+      21,
+    )
 
     // console.log(
     //   JSON.stringify(compressionBlockData.dataSeriesEncoding, null, '  '),

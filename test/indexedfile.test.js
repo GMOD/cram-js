@@ -29,12 +29,12 @@ describe('.crai indexed cram file', () => {
       'ce#tag_padded.tmp.cram.test1.expected.json',
     )
 
-    expect(features.length).to.equal(8)
+    expect(features.length).toEqual(8)
     expect(JsonClone(features)).toEqual(await expectedFeatures1)
 
     expect(await cram.getRecordsForRange(1, 2, 200)).toEqual([])
-    expect(await cram.hasDataForReferenceSequence(1)).to.equal(false)
-    expect(await cram.hasDataForReferenceSequence(0)).to.equal(true)
+    expect(await cram.hasDataForReferenceSequence(1)).toEqual(false)
+    expect(await cram.hasDataForReferenceSequence(0)).toEqual(true)
   })
 
   it('can read ce#unmap2.tmp.cram', async () => {
@@ -78,7 +78,7 @@ describe('.crai indexed cram file', () => {
       'ce#1000.tmp.cram.test1.expected.json',
     )
     expect(JsonClone(features)).toEqual(await expectedFeatures3)
-  }).timeout(4000)
+  })
 
   it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
     const cram = new IndexedCramFile({
@@ -169,11 +169,12 @@ describe('.crai indexed cram file', () => {
           JSON.stringify(features, null, '  '),
         )
       // console.log(`${filename} first ref got ${features.length} features`)
-      expect(features.length).to.be.greaterThan(-1)
+      expect(features.length).toBeGreaterThan(-1)
       expect(JsonClone(features)).toEqual(
         await loadTestJSON(`${filename}.test2.expected.json`),
       )
-    }).timeout(4000)
+    })
+
     it(`can read the second chrom of ${filename} without error`, async () => {
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile(filename),
@@ -187,7 +188,7 @@ describe('.crai indexed cram file', () => {
           JSON.stringify(features, null, '  '),
         )
       // console.log(`${filename} second ref got ${features.length} features`)
-      expect(features.length).to.be.greaterThan(-1)
+      expect(features.length).toBeGreaterThan(-1)
       expect(JsonClone(features)).toEqual(
         await loadTestJSON(`${filename}.test3.expected.json`),
       )
@@ -234,9 +235,9 @@ describe('.crai indexed cram file', () => {
       // )
 
       const moreFeatures2 = await cram.getRecordsForRange(6, 4765916, 4768415)
-      expect(moreFeatures2.length).to.equal(1)
-      expect(moreFeatures2[0].readName).to.equal('7033952-2')
-      expect(moreFeatures2[0].alignmentStart).to.equal(4767144)
+      expect(moreFeatures2.length).toEqual(1)
+      expect(moreFeatures2[0].readName).toEqual('7033952-2')
+      expect(moreFeatures2[0].alignmentStart).toEqual(4767144)
     },
   )
 })
@@ -291,8 +292,8 @@ describe('paired orientation test', () => {
         }
       }
     }
-    expect(feat1.getPairOrientation()).to.equal('R2F1')
-    expect(feat2.getPairOrientation()).to.equal('R2F1')
+    expect(feat1.getPairOrientation()).toEqual('R2F1')
+    expect(feat2.getPairOrientation()).toEqual('R2F1')
   })
 })
 
@@ -321,8 +322,8 @@ describe('duplicate IDs test', () => {
       }
     }
 
-    expect(noCollisions).to.equal(true)
-  }).timeout(4000)
+    expect(noCollisions).toEqual(true)
+  })
 })
 
 describe('match samtools', () => {
@@ -338,7 +339,7 @@ describe('match samtools', () => {
 
     const featNames = await loadTestJSON('SRR396636.expected.names.json')
     expect(features.map(f => f.readName)).toEqual(featNames)
-    expect(features.length).to.equal(406)
+    expect(features.length).toEqual(406)
   })
 })
 
@@ -352,7 +353,7 @@ describe('getHeaderText', () => {
     })
 
     const header = await cram.cram.getHeaderText()
-    expect(header.startsWith('@HD')).to.equal(true)
+    expect(header.startsWith('@HD')).toEqual(true)
   })
 })
 
@@ -366,9 +367,9 @@ describe('region not downloading enough records', () => {
       ),
     })
     const entries = await index.getEntriesForRange(0, 75100635, 75125544)
-    expect(entries.length).to.equal(2)
-    expect(entries[0].start).to.equal(74378949)
-    expect(entries[1].start).to.equal(74945118)
+    expect(entries.length).toEqual(2)
+    expect(entries[0].start).toEqual(74378949)
+    expect(entries[1].start).toEqual(74945118)
   })
 })
 
@@ -407,7 +408,7 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replace(/\n/g, '')
       if (f.readName === 'NB500904:194:H3HNVBGXB:1:21110:9045:16767') feat = f
     })
 
-    expect(feat.getReadBases()).to.equal(
+    expect(feat.getReadBases()).toEqual(
       'ATTACAGGCGAACATACTTAATAAAGTGTGTTAATTAATTAATGCTTGTAGTAAATAATAATAACAATTTAATGTCTGCTCAGCCGCTTTCCACACAGACATCATAACAAAAAATTTCCACCAAACCCCCCCCTCCCCCCGCTTCTGGC',
     )
   })

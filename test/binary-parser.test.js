@@ -18,8 +18,8 @@ describe('binary-parser fork', () => {
         expect(ip.parse(Buffer.from(input))).toEqual(output)
 
         const otherParseResult = parseItf8(Buffer.from(input), 0)
-        expect(otherParseResult[0]).equal(output.result.val)
-        expect(otherParseResult[1]).equal(output.offset)
+        expect(otherParseResult[0]).toEqual(output.result.val)
+        expect(otherParseResult[1]).toEqual(output.offset)
       })
     })
     it('can parse several itf8 numbers in a row', () => {
