@@ -1,4 +1,3 @@
-const { expect } = require('chai')
 const { sequenceMD5 } = require('../src/cramFile/util')
 
 describe('util.sequenceMD5', () => {

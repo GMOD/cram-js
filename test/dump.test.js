@@ -1,4 +1,3 @@
-const { expect } = require('chai')
 const { fullFiles: testFileList } = require('./lib/testFileList')
 const {
   testDataFile,
@@ -31,10 +30,8 @@ describe('dumping cram files', () => {
           JSON.stringify(fileData, null, '  '),
         )
       const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
-      expect(JSON.parse(JSON.stringify(fileData))).to.deep.equal(
-        expectedFeatures,
-      )
-    }).timeout(10000)
+      expect(JSON.parse(JSON.stringify(fileData))).toEqual(expectedFeatures)
+    }, 10000)
   })
 })
 

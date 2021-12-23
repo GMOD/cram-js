@@ -1,5 +1,3 @@
-const { expect } = require('chai')
-
 const mock = require('mock-fs')
 const LocalFile = require('./lib/syncLocalFile')
 

@@ -1,4 +1,3 @@
-const { expect } = require('chai')
 const { IndexedCramFile, CraiIndex } = require('../src')
 
 console.log(process.cwd())
@@ -42,7 +41,7 @@ describe('code examples', () => {
         })
       })
 
-      expect(messages).to.deep.equal([
+      expect(messages).toEqual([
         'got a record named VI',
         'VI shows a base substitution of A->C at 2',
         'VI shows a base substitution of A->C at 28',

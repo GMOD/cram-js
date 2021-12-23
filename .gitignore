@@ -11,3 +11,4 @@ errors.js
 built-tests/
 .eslintcache
 *.swp
+esm

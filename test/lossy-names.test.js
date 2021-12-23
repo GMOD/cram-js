@@ -1,4 +1,3 @@
-const { expect } = require('chai')
 const { IndexedCramFile, CraiIndex } = require('../src')
 
 describe('1kg mate test', () => {

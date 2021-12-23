@@ -7,9 +7,7 @@ const dataDir =
   path.dirname(require.resolve('../data/xx#unsorted.tmp.cram.dump.json'))
 
 function testDataUrl(filename) {
-  return typeof window === 'undefined'
-    ? `file://${dataDir}/${filename}`.replace('#', '%23')
-    : `http://localhost:9876/base/test/data/${filename.replace('#', '%23')}`
+  return `file://${dataDir}/${filename}`.replace('#', '%23')
 }
 
 function testDataFile(filename) {

@@ -6,13 +6,6 @@
   "plugins": [
     "prettier"
   ],
-  "globals": {
-    "window": true,
-    "__webpack_require__": true
-  },
-  "env": {
-    "mocha": true
-  },
   "rules": {
     "no-underscore-dangle": 0,
     "no-bitwise": 0,

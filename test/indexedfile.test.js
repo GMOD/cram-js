@@ -1,5 +1,3 @@
-const { expect } = require('chai')
-
 const {
   testDataFile,
   loadTestJSON,
@@ -32,9 +30,9 @@ describe('.crai indexed cram file', () => {
     )
 
     expect(features.length).to.equal(8)
-    expect(JsonClone(features)).to.deep.equal(await expectedFeatures1)
+    expect(JsonClone(features)).toEqual(await expectedFeatures1)
 
-    expect(await cram.getRecordsForRange(1, 2, 200)).to.deep.equal([])
+    expect(await cram.getRecordsForRange(1, 2, 200)).toEqual([])
     expect(await cram.hasDataForReferenceSequence(1)).to.equal(false)
     expect(await cram.hasDataForReferenceSequence(0)).to.equal(true)
   })
@@ -57,7 +55,7 @@ describe('.crai indexed cram file', () => {
     const expectedFeatures2 = loadTestJSON(
       'ce#unmap2.tmp.cram.test1.expected.json',
     )
-    expect(JsonClone(features)).to.deep.equal(await expectedFeatures2)
+    expect(JsonClone(features)).toEqual(await expectedFeatures2)
   })
 
   it('can read ce#1000.tmp.cram', async () => {
@@ -79,7 +77,7 @@ describe('.crai indexed cram file', () => {
     const expectedFeatures3 = loadTestJSON(
       'ce#1000.tmp.cram.test1.expected.json',
     )
-    expect(JsonClone(features)).to.deep.equal(await expectedFeatures3)
+    expect(JsonClone(features)).toEqual(await expectedFeatures3)
   }).timeout(4000)
 
   it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
@@ -103,7 +101,7 @@ describe('.crai indexed cram file', () => {
     const expectedFeatures4 = loadTestJSON(
       'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
     )
-    expect(JsonClone(features)).to.deep.equal(await expectedFeatures4)
+    expect(JsonClone(features)).toEqual(await expectedFeatures4)
 
     const features2 = await cram.getRecordsForRange(-1, 0, Infinity)
 
@@ -117,7 +115,7 @@ describe('.crai indexed cram file', () => {
       'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
     )
 
-    expect(JsonClone(features2)).to.deep.equal(await expectedFeatures5)
+    expect(JsonClone(features2)).toEqual(await expectedFeatures5)
   })
   ;[
     'auxf#values.tmp.cram',
@@ -172,7 +170,7 @@ describe('.crai indexed cram file', () => {
         )
       // console.log(`${filename} first ref got ${features.length} features`)
       expect(features.length).to.be.greaterThan(-1)
-      expect(JsonClone(features)).to.deep.equal(
+      expect(JsonClone(features)).toEqual(
         await loadTestJSON(`${filename}.test2.expected.json`),
       )
     }).timeout(4000)
@@ -190,7 +188,7 @@ describe('.crai indexed cram file', () => {
         )
       // console.log(`${filename} second ref got ${features.length} features`)
       expect(features.length).to.be.greaterThan(-1)
-      expect(JsonClone(features)).to.deep.equal(
+      expect(JsonClone(features)).toEqual(
         await loadTestJSON(`${filename}.test3.expected.json`),
       )
     })
@@ -222,7 +220,7 @@ describe('.crai indexed cram file', () => {
         'extended/RNAseq_mapping_def.cram.test1.expected.json',
       )
 
-      expect(JsonClone(features)).to.deep.equal(expectedFeatures)
+      expect(JsonClone(features)).toEqual(expectedFeatures)
 
       const moreFeatures = await cram.getRecordsForRange(6, 12437859, 12437959)
       if (REWRITE_EXPECTED_DATA)
@@ -261,7 +259,7 @@ describe('paired read test', () => {
       viewAsPairs: true,
     })
     const features2 = await cramResult.getRecordsForRange(0, 1, 70000)
-    expect(features.map(f => f.readName).sort()).to.deep.equal(
+    expect(features.map(f => f.readName).sort()).toEqual(
       features2.map(f => f.readName).sort(),
     )
   })
@@ -339,7 +337,7 @@ describe('match samtools', () => {
     const features = await cram.getRecordsForRange(0, 25999, 26499)
 
     const featNames = await loadTestJSON('SRR396636.expected.names.json')
-    expect(features.map(f => f.readName)).to.deep.equal(featNames)
+    expect(features.map(f => f.readName)).toEqual(featNames)
     expect(features.length).to.equal(406)
   })
 })
