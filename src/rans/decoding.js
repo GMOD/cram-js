@@ -1,6 +1,6 @@
-const { CramMalformedError } = require('../errors')
+import { CramMalformedError } from '../errors'
 
-const Constants = require('./constants')
+import { RANS_BYTE_L } from './constants'
 
 class FC {
   // int F, C;
@@ -16,7 +16,9 @@ class AriDecoder {
 
   constructor() {
     this.fc = new Array(256)
-    for (let i = 0; i < this.fc.length; i += 1) this.fc[i] = new FC()
+    for (let i = 0; i < this.fc.length; i += 1) {
+      this.fc[i] = new FC()
+    }
     this.R = null
   }
 }
@@ -32,10 +34,12 @@ class Symbol {
 
 // Initialize a decoder symbol to start "start" and frequency "freq"
 function symbolInit(sym, start, freq) {
-  if (!(start <= 1 << 16))
+  if (!(start <= 1 << 16)) {
     throw new CramMalformedError(`assertion failed: start <= 1<<16`)
-  if (!(freq <= (1 << 16) - start))
+  }
+  if (!(freq <= (1 << 16) - start)) {
     throw new CramMalformedError(`assertion failed: freq <= 1<<16`)
+  }
   sym.start = start
   sym.freq = freq
 }
@@ -87,11 +91,11 @@ function symbolInit(sym, start, freq) {
   r = freq * (r >> scaleBits) + (r & mask) - start
 
   // re-normalize
-  if (r < Constants.RANS_BYTE_L) {
+  if (r < RANS_BYTE_L) {
     do {
       /* final int */ const b = 0xff & pptr.get()
       r = (r << 8) | b
-    } while (r < Constants.RANS_BYTE_L)
+    } while (r < RANS_BYTE_L)
   }
 
   return r
@@ -113,9 +117,10 @@ function symbolInit(sym, start, freq) {
   /* final ByteBuffer */ pptr,
 ) {
   // re-normalize
-  if (r < Constants.RANS_BYTE_L) {
-    do r = (r << 8) | (0xff & pptr.get())
-    while (r < Constants.RANS_BYTE_L)
+  if (r < RANS_BYTE_L) {
+    do {
+      r = (r << 8) | (0xff & pptr.get())
+    } while (r < RANS_BYTE_L)
   }
 
   return r
@@ -132,4 +137,5 @@ const Decode = {
   advanceSymbol,
   renormalize,
 }
-module.exports = Decode
+
+export default Decode

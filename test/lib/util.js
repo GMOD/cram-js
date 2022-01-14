@@ -1,15 +1,13 @@
 const path = typeof __webpack_require__ !== 'function' ? require('path') : null // eslint-disable-line camelcase
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
-const { fromUrl } = require('../../src/io')
+import { fromUrl } from '../../src/io'
 
 const dataDir =
   path &&
   path.dirname(require.resolve('../data/xx#unsorted.tmp.cram.dump.json'))
 
 function testDataUrl(filename) {
-  return typeof window === 'undefined'
-    ? `file://${dataDir}/${filename}`.replace('#', '%23')
-    : `http://localhost:9876/base/test/data/${filename.replace('#', '%23')}`
+  return `file://${dataDir}/${filename}`.replace('#', '%23')
 }
 
 function testDataFile(filename) {
@@ -29,8 +27,9 @@ function JsonClone(obj) {
 
 let extended = xit
 try {
-  if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`)))
+  if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`))) {
     extended = it
+  }
 } catch (e) {
   // ignore
   console.log(

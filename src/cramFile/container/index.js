@@ -1,10 +1,10 @@
-const { CramMalformedError } = require('../../errors')
+import { CramMalformedError } from '../../errors'
 
-const { itf8Size, parseItem, tinyMemoize } = require('../util')
-const CramSlice = require('../slice')
-const CramContainerCompressionScheme = require('./compressionScheme')
+import { itf8Size, parseItem, tinyMemoize } from '../util'
+import CramSlice from '../slice'
+import CramContainerCompressionScheme from './compressionScheme'
 
-class CramContainer {
+export default class CramContainer {
   constructor(cramFile, position) {
     // cram file this container comes from
     this.file = cramFile
@@ -28,10 +28,11 @@ class CramContainer {
     }
     const sectionParsers = await this.file.getSectionParsers()
     const block = await this.getFirstBlock()
-    if (block.contentType !== 'COMPRESSION_HEADER')
+    if (block.contentType !== 'COMPRESSION_HEADER') {
       throw new CramMalformedError(
         `invalid content type ${block.contentType} in what is supposed to be the compression header block`,
       )
+    }
     const content = parseItem(
       block.content,
       sectionParsers.cramCompressionHeader.parser,
@@ -51,7 +52,9 @@ class CramContainer {
   // memoize
   async getCompressionScheme() {
     const header = await this.getCompressionHeaderBlock()
-    if (!header) return undefined
+    if (!header) {
+      return undefined
+    }
     return new CramContainerCompressionScheme(header.content)
   }
 
@@ -66,7 +69,9 @@ class CramContainer {
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
     const { size: fileSize } = await this.file.stat()
 
-    if (position >= fileSize) return undefined
+    if (position >= fileSize) {
+      return undefined
+    }
 
     // parse the container header. do it in 2 pieces because you cannot tell
     // how much to buffer until you read numLandmarks
@@ -112,5 +117,3 @@ class CramContainer {
 'getHeader getCompressionHeaderBlock getCompressionScheme'
   .split(' ')
   .forEach(method => tinyMemoize(CramContainer, method))
-
-module.exports = CramContainer

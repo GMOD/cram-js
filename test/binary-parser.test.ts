@@ -1,8 +1,7 @@
-const { expect } = require('chai')
+//@ts-nocheck
+import { Parser } from '@gmod/binary-parser'
 
-const { Parser } = require('@gmod/binary-parser')
-
-const { parseItf8 } = require('../src/cramFile/util')
+import { parseItf8 } from '../src/cramFile/util'
 
 describe('binary-parser fork', () => {
   describe('itf8', () => {
@@ -17,20 +16,17 @@ describe('binary-parser fork', () => {
     ].forEach(([input, output]) => {
       it(`can parse itf8 [${input.map(n => `0x${n.toString(16)}`)}]
        -> ${output.result.val}`, () => {
-        expect(ip.parse(Buffer.from(input))).deep.equal(output)
+        expect(ip.parse(Buffer.from(input))).toEqual(output)
 
         const otherParseResult = parseItf8(Buffer.from(input), 0)
-        expect(otherParseResult[0]).equal(output.result.val)
-        expect(otherParseResult[1]).equal(output.offset)
+        expect(otherParseResult[0]).toEqual(output.result.val)
+        expect(otherParseResult[1]).toEqual(output.offset)
       })
     })
     it('can parse several itf8 numbers in a row', () => {
-      const p = new Parser()
-        .itf8('val1')
-        .itf8('val2')
-        .itf8('val3')
+      const p = new Parser().itf8('val1').itf8('val2').itf8('val3')
       const data = [0x80, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0f, 0]
-      expect(p.parse(Buffer.from(data))).to.deep.equal({
+      expect(p.parse(Buffer.from(data))).toEqual({
         offset: 8,
         result: { val1: 255, val2: -1, val3: 0 },
       })
@@ -52,7 +48,7 @@ describe('binary-parser fork', () => {
     ].forEach(([input, output]) => {
       it(`can parse ltf8 [${input.map(n => `0x${n.toString(16)}`)}]
        -> ${output.result.val}`, () => {
-        expect(lp.parse(Buffer.from(input))).deep.equal(output)
+        expect(lp.parse(Buffer.from(input))).toEqual(output)
       })
     })
   })

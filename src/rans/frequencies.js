@@ -1,13 +1,15 @@
-const { CramMalformedError } = require('../errors')
+import { CramMalformedError } from '../errors'
 
-const Constants = require('./constants')
-const Decoding = require('./decoding')
+import { TOTFREQ } from './constants'
+import Decoding from './decoding'
 
 function assert(result) {
-  if (!result) throw new CramMalformedError('assertion failed')
+  if (!result) {
+    throw new CramMalformedError('assertion failed')
+  }
 }
 
-function readStatsO0(
+export function readStatsO0(
   /* ByteBuffer */ cp,
   /* Decoding.AriDecoder */ decoder,
   /* Decoding.RansDecSymbol[] */ syms,
@@ -17,7 +19,9 @@ function readStatsO0(
   let x = 0
   let j = cp.get() & 0xff
   do {
-    if (decoder.fc[j] == null) decoder.fc[j] = new Decoding.FC()
+    if (decoder.fc[j] == null) {
+      decoder.fc[j] = new Decoding.FC()
+    }
     decoder.fc[j].F = cp.get() & 0xff
     if (decoder.fc[j].F >= 128) {
       decoder.fc[j].F &= ~128
@@ -28,7 +32,9 @@ function readStatsO0(
     Decoding.symbolInit(syms[j], decoder.fc[j].C, decoder.fc[j].F)
 
     /* Build reverse lookup table */
-    if (!decoder.R) decoder.R = new Array(Constants.TOTFREQ)
+    if (!decoder.R) {
+      decoder.R = new Array(TOTFREQ)
+    }
     decoder.R.fill(j, x, x + decoder.fc[j].F)
 
     x += decoder.fc[j].F
@@ -44,10 +50,10 @@ function readStatsO0(
     }
   } while (j !== 0)
 
-  assert(x < Constants.TOTFREQ)
+  assert(x < TOTFREQ)
 }
 
-function readStatsO1(
+export function readStatsO1(
   /* ByteBuffer */ cp,
   /*  Decoding.AriDecoder[] */ D,
   /* Decoding.RansDecSymbol[][] */ syms,
@@ -58,9 +64,13 @@ function readStatsO1(
     let rlej = 0
     let x = 0
     let j = 0xff & cp.get()
-    if (D[i] == null) D[i] = new Decoding.AriDecoder()
+    if (D[i] == null) {
+      D[i] = new Decoding.AriDecoder()
+    }
     do {
-      if (D[i].fc[j] == null) D[i].fc[j] = new Decoding.FC()
+      if (D[i].fc[j] == null) {
+        D[i].fc[j] = new Decoding.FC()
+      }
       D[i].fc[j].F = 0xff & cp.get()
       if (D[i].fc[j].F >= 128) {
         D[i].fc[j].F &= ~128
@@ -68,18 +78,24 @@ function readStatsO1(
       }
       D[i].fc[j].C = x
 
-      if (D[i].fc[j].F === 0) D[i].fc[j].F = Constants.TOTFREQ
+      if (D[i].fc[j].F === 0) {
+        D[i].fc[j].F = TOTFREQ
+      }
 
-      if (syms[i][j] == null) syms[i][j] = new Decoding.RansDecSymbol()
+      if (syms[i][j] == null) {
+        syms[i][j] = new Decoding.RansDecSymbol()
+      }
 
       Decoding.symbolInit(syms[i][j], D[i].fc[j].C, D[i].fc[j].F)
 
       /* Build reverse lookup table */
-      if (D[i].R == null) D[i].R = new Array(Constants.TOTFREQ)
+      if (D[i].R == null) {
+        D[i].R = new Array(TOTFREQ)
+      }
       D[i].R.fill(j, x, x + D[i].fc[j].F)
 
       x += D[i].fc[j].F
-      assert(x <= Constants.TOTFREQ)
+      assert(x <= TOTFREQ)
 
       if (rlej === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
         j = 0xff & cp.get()
@@ -103,5 +119,3 @@ function readStatsO1(
     }
   } while (i !== 0)
 }
-
-module.exports = { readStatsO0, readStatsO1 }

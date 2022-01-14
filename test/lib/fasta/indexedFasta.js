@@ -1,4 +1,4 @@
-class IndexedFasta {
+export default class IndexedFasta {
   constructor({ fasta, fai, chunkSizeLimit = 50000 }) {
     this.fasta = fasta
     this.fai = fai
@@ -7,7 +7,9 @@ class IndexedFasta {
   }
 
   async _getIndexes() {
-    if (!this.indexes) this.indexes = await this._readFAI()
+    if (!this.indexes) {
+      this.indexes = await this._readFAI()
+    }
     return this.indexes
   }
 
@@ -15,8 +17,9 @@ class IndexedFasta {
     const indexByName = {}
     const indexById = {}
     const text = await this.fai.readFile()
-    if (!(text && text.length))
+    if (!(text && text.length)) {
       throw new Error('No data read from FASTA index (FAI) file')
+    }
 
     let idCounter = 0
     let currSeq
@@ -26,7 +29,9 @@ class IndexedFasta {
       .filter(line => /\S/.test(line))
       .forEach(line => {
         const row = line.split('\t')
-        if (row[0] === '') return
+        if (row[0] === '') {
+          return
+        }
 
         if (!currSeq || currSeq.name !== row[0]) {
           currSeq = { name: row[0], id: idCounter }
@@ -94,8 +99,9 @@ class IndexedFasta {
     const position = this._faiOffset(indexEntry, start)
     const readlen = this._faiOffset(indexEntry, max) - position
 
-    if (readlen > this.chunkSizeLimit)
+    if (readlen > this.chunkSizeLimit) {
       throw new Error('chunkSizeLimit exceeded')
+    }
 
     let residues = Buffer.allocUnsafe(readlen)
     await this.data.read(residues, 0, readlen, position)
@@ -112,5 +118,3 @@ class IndexedFasta {
     )
   }
 }
-
-module.exports = IndexedFasta

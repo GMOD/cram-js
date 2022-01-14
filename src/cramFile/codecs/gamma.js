@@ -1,7 +1,7 @@
-const { CramUnimplementedError } = require('../../errors')
-const CramCodec = require('./_base')
+import { CramUnimplementedError } from '../../errors'
+import CramCodec from './_base'
 
-class GammaCodec extends CramCodec {
+export default class GammaCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
     if (this.dataType !== 'int') {
@@ -14,8 +14,9 @@ class GammaCodec extends CramCodec {
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
     let length = 1
 
-    while (this._getBits(coreDataBlock.content, cursors.coreBlock, 1) === 0)
+    while (this._getBits(coreDataBlock.content, cursors.coreBlock, 1) === 0) {
       length += 1
+    }
 
     const readBits = this._getBits(
       coreDataBlock.content,
@@ -27,5 +28,3 @@ class GammaCodec extends CramCodec {
     return value - this.parameters.offset
   }
 }
-
-module.exports = GammaCodec

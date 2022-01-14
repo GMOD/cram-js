@@ -1,5 +1,5 @@
-const { expect } = require('chai')
-const { IndexedCramFile, CraiIndex } = require('../src')
+//@ts-nocheck
+import { IndexedCramFile, CraiIndex } from '../src'
 
 console.log(process.cwd())
 
@@ -35,14 +35,15 @@ describe('code examples', () => {
       records.forEach(record => {
         console.log(`got a record named ${record.readName}`)
         record.readFeatures.forEach(({ code, refPos, ref, sub }) => {
-          if (code === 'X')
+          if (code === 'X') {
             console.log(
               `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
             )
+          }
         })
       })
 
-      expect(messages).to.deep.equal([
+      expect(messages).toEqual([
         'got a record named VI',
         'VI shows a base substitution of A->C at 2',
         'VI shows a base substitution of A->C at 28',

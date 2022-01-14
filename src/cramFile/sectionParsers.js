@@ -1,4 +1,4 @@
-const { Parser } = require('@gmod/binary-parser')
+import { Parser } from '@gmod/binary-parser'
 
 const singleItf8 = new Parser().itf8()
 
@@ -16,8 +16,9 @@ const cramBlockHeader = {
     .uint8('compressionMethod', {
       formatter: /* istanbul ignore next */ b => {
         const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans'][b]
-        if (!method)
+        if (!method) {
           throw new Error(`compression method number ${b} not implemented`)
+        }
         return method
       },
     })
@@ -31,7 +32,9 @@ const cramBlockHeader = {
           'EXTERNAL_DATA',
           'CORE_DATA',
         ][b]
-        if (!type) throw new Error(`invalid block content type id ${b}`)
+        if (!type) {
+          throw new Error(`invalid block content type id ${b}`)
+        }
         return type
       },
     })
@@ -81,7 +84,9 @@ const cramTagDictionary = new Parser().itf8('size').buffer('ents', {
         stringStart = i + 1
       }
     }
-    if (i > stringStart) tagSets.push(makeTagSet(stringStart, i))
+    if (i > stringStart) {
+      tagSets.push(makeTagSet(stringStart, i))
+    }
     return tagSets
   },
 })
@@ -125,7 +130,9 @@ function formatMap(data) {
   const map = {}
   for (let i = 0; i < data.ents.length; i += 1) {
     const { key, value } = data.ents[i]
-    if (map[key]) console.warn(`duplicate key ${key} in map`)
+    if (map[key]) {
+      console.warn(`duplicate key ${key} in map`)
+    }
     map[key] = value
   }
   return map
@@ -359,4 +366,4 @@ function getSectionParsers(majorVersion) {
   return parsers
 }
 
-module.exports = { cramFileDefinition, getSectionParsers }
+export { cramFileDefinition, getSectionParsers }

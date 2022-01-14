@@ -1,10 +1,9 @@
-const { expect } = require('chai')
+//@ts-nocheck
+import mock from 'mock-fs'
+import LocalFile from './lib/syncLocalFile'
 
-const mock = require('mock-fs')
-const LocalFile = require('./lib/syncLocalFile')
-
-const { IndexedCramFile } = require('../src/index')
-const CraiIndex = require('../src/craiIndex')
+import { IndexedCramFile } from '../src/index'
+import CraiIndex from '../src/craiIndex'
 
 describe('retry nonexist file', () => {
   it('file moves', async () => {
@@ -24,12 +23,12 @@ describe('retry nonexist file', () => {
       /* console.error('initial error', e) */
       exception = 1
     }
-    expect(exception).to.equal(1)
+    expect(exception).toEqual(1)
 
     mock.restore()
     const ret = await cram.cram.getSamHeader()
 
-    expect(ret[0].tag).to.equal('HD')
+    expect(ret[0].tag).toEqual('HD')
   })
   it('index moves', async () => {
     let cram
@@ -47,10 +46,10 @@ describe('retry nonexist file', () => {
     } catch (e) {
       exception = 1
     }
-    expect(exception).to.equal(1)
+    expect(exception).toEqual(1)
 
     mock.restore()
     const features = await cram.getRecordsForRange(0, 2, 200)
-    expect(features.length).to.equal(8)
+    expect(features.length).toEqual(8)
   })
 })

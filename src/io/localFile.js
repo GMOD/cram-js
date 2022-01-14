@@ -1,4 +1,4 @@
-const { promisify } = require('es6-promisify')
+import { promisify } from 'es6-promisify'
 
 // don't load fs native module if running in webpacked code
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
@@ -8,7 +8,7 @@ const fsRead = fs && promisify(fs.read)
 const fsFStat = fs && promisify(fs.fstat)
 const fsReadFile = fs && promisify(fs.readFile)
 
-class LocalFile {
+export default class LocalFile {
   constructor(source) {
     this.position = 0
     this.filename = source
@@ -35,5 +35,3 @@ class LocalFile {
     return this._stat
   }
 }
-
-module.exports = LocalFile

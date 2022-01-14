@@ -1,21 +1,21 @@
-const zlib = require('zlib')
-const crc32 = require('buffer-crc32')
-const LRU = require('quick-lru')
+import zlib from 'zlib'
+import crc32 from 'buffer-crc32'
+import LRU from 'quick-lru'
 
-const { CramUnimplementedError, CramMalformedError } = require('../errors')
-const rans = require('../rans')
-const {
-  cramFileDefinition: cramFileDefinitionParser,
+import { CramUnimplementedError, CramMalformedError } from '../errors'
+import ransuncompress from '../rans'
+import {
+  cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
-} = require('./sectionParsers')
+} from './sectionParsers'
 
-const CramContainer = require('./container')
+import CramContainer from './container'
 
-const { open } = require('../io')
-const { parseItem, tinyMemoize } = require('./util')
-const { parseHeaderText } = require('../sam')
+import { open } from '../io'
+import { parseItem, tinyMemoize } from './util'
+import { parseHeaderText } from '../sam'
 
-class CramFile {
+export default class CramFile {
   /**
    * @param {object} args
    * @param {object} [args.filehandle] - a filehandle that implements the stat() and
@@ -47,8 +47,12 @@ class CramFile {
   }
 
   toString() {
-    if (this.file.filename) return this.file.filename
-    if (this.file.url) return this.file.url
+    if (this.file.filename) {
+      return this.file.filename
+    }
+    if (this.file.url) {
+      return this.file.url
+    }
 
     return '(cram file)'
   }
@@ -68,18 +72,20 @@ class CramFile {
     const headbytes = Buffer.allocUnsafe(cramFileDefinitionParser.maxLength)
     await this.file.read(headbytes, 0, cramFileDefinitionParser.maxLength, 0)
     const definition = cramFileDefinitionParser.parser.parse(headbytes).result
-    if (definition.majorVersion !== 2 && definition.majorVersion !== 3)
+    if (definition.majorVersion !== 2 && definition.majorVersion !== 3) {
       throw new CramUnimplementedError(
         `CRAM version ${definition.majorVersion} not supported`,
       )
+    }
     return definition
   }
 
   // memoize
   async getSamHeader() {
     const firstContainer = await this.getContainerById(0)
-    if (!firstContainer)
+    if (!firstContainer) {
       throw new CramMalformedError('file contains no containers')
+    }
 
     const { content } = await firstContainer.getFirstBlock()
     // find the end of the trailing zeros in the header text
@@ -121,10 +127,11 @@ class CramFile {
 
       currentContainer = this.getContainerAtPosition(position)
       const currentHeader = await currentContainer.getHeader()
-      if (!currentHeader)
+      if (!currentHeader) {
         throw new CramMalformedError(
           `container ${containerNumber} not found in file`,
         )
+      }
       // if this is the first container, read all the blocks in the
       // container to determine its length, because we cannot trust
       // the container header's given length due to a bug somewhere
@@ -200,7 +207,9 @@ class CramFile {
     const { cramBlockHeader } = sectionParsers
     const { size: fileSize } = await this.file.stat()
 
-    if (position + cramBlockHeader.maxLength >= fileSize) return undefined
+    if (position + cramBlockHeader.maxLength >= fileSize) {
+      return undefined
+    }
 
     const buffer = Buffer.allocUnsafe(cramBlockHeader.maxLength)
     await this.file.read(buffer, 0, cramBlockHeader.maxLength, position)
@@ -218,15 +227,18 @@ class CramFile {
       buffer = preReadBuffer
     } else {
       const { size: fileSize } = await this.file.stat()
-      if (position + size >= fileSize) return undefined
+      if (position + size >= fileSize) {
+        return undefined
+      }
       buffer = Buffer.allocUnsafe(size)
       await this.file.read(buffer, 0, size, position)
     }
     const data = parseItem(buffer, section.parser, 0, position)
-    if (data._size !== size)
+    if (data._size !== size) {
       throw new CramMalformedError(
         `section read error: requested size ${size} does not equal parsed size ${data._size}`,
       )
+    }
     return data
   }
 
@@ -235,7 +247,7 @@ class CramFile {
       const result = zlib.gunzipSync(inputBuffer)
       result.copy(outputBuffer)
     } else if (compressionMethod === 'rans') {
-      rans.uncompress(inputBuffer, outputBuffer)
+      ransuncompress(inputBuffer, outputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,
@@ -311,5 +323,3 @@ class CramFile {
 'getDefinition getSectionParsers getSamHeader'
   .split(' ')
   .forEach(method => tinyMemoize(CramFile, method))
-
-module.exports = CramFile

@@ -1,10 +1,10 @@
-const { CramMalformedError } = require('../errors')
+import { CramMalformedError } from '../errors'
 
-const Decoding = require('./decoding')
-const Frequencies = require('./frequencies')
+import Decoding from './decoding'
+import { readStatsO0, readStatsO1 } from './frequencies'
 
-const D04 = require('./d04')
-const D14 = require('./d14')
+import D04 from './d04'
+import D14 from './d14'
 
 // const /* int */ ORDER_BYTE_LENGTH = 1
 // const /* int */ COMPRESSED_BYTE_LENGTH = 4
@@ -116,11 +116,13 @@ function /* static ByteBuffer */ uncompressOrder0Way4(
   // input.order(ByteOrder.LITTLE_ENDIAN);
   const D = new Decoding.AriDecoder()
   const syms = new Array(256)
-  for (let i = 0; i < syms.length; i += 1) syms[i] = new Decoding.Symbol()
+  for (let i = 0; i < syms.length; i += 1) {
+    syms[i] = new Decoding.Symbol()
+  }
 
-  Frequencies.readStatsO0(input, D, syms)
+  readStatsO0(input, D, syms)
 
-  D04.uncompress(input, D, syms, out)
+  D04(input, D, syms, out)
 
   return out
 }
@@ -130,16 +132,19 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
   /* const ByteBuffer */ output,
 ) {
   const D = new Array(256)
-  for (let i = 0; i < D.length; i += 1) D[i] = new Decoding.AriDecoder()
+  for (let i = 0; i < D.length; i += 1) {
+    D[i] = new Decoding.AriDecoder()
+  }
   const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
   for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Array(256)
-    for (let j = 0; j < syms[i].length; j += 1)
+    for (let j = 0; j < syms[i].length; j += 1) {
       syms[i][j] = new Decoding.Symbol()
+    }
   }
-  Frequencies.readStatsO1(input, D, syms)
+  readStatsO1(input, D, syms)
 
-  D14.uncompress(input, output, D, syms)
+  D14(input, output, D, syms)
 
   return output
 }
@@ -198,7 +203,11 @@ class ByteBuffer {
 }
 
 // static /* const */ ByteBuffer EMPTY_BUFFER = ByteBuffer.allocate(0);
-function uncompress(inputBuffer, outputBuffer, initialInputPosition = 0) {
+export default function uncompress(
+  inputBuffer,
+  outputBuffer,
+  initialInputPosition = 0,
+) {
   if (inputBuffer.length === 0) {
     outputBuffer.fill(0)
     return outputBuffer
@@ -208,21 +217,24 @@ function uncompress(inputBuffer, outputBuffer, initialInputPosition = 0) {
   // input.order(ByteOrder.LITTLE_ENDIAN);
 
   const order = input.get()
-  if (order !== 0 && order !== 1)
+  if (order !== 0 && order !== 1) {
     throw new CramMalformedError(`Invalid rANS order ${order}`)
+  }
 
   const /* int */ inputSize = input.getInt()
-  if (inputSize !== input.remaining() - RAW_BYTE_LENGTH)
+  if (inputSize !== input.remaining() - RAW_BYTE_LENGTH) {
     throw new CramMalformedError('Incorrect input length.')
+  }
 
   const /* int */ outputSize = input.getInt()
   const output = new ByteBuffer(outputBuffer || Buffer.allocUnsafe(outputSize))
   // TODO output.limit(outputSize)
 
-  if (output.length < outputSize)
+  if (output.length < outputSize) {
     throw new CramMalformedError(
       `Output buffer too small to fit ${outputSize} bytes.`,
     )
+  }
 
   switch (order) {
     case 0:
@@ -235,5 +247,3 @@ function uncompress(inputBuffer, outputBuffer, initialInputPosition = 0) {
       throw new CramMalformedError(`Invalid rANS order: ${order}`)
   }
 }
-
-module.exports = { uncompress }
