@@ -15,7 +15,17 @@ const cramBlockHeader = {
   parser: new Parser()
     .uint8('compressionMethod', {
       formatter: /* istanbul ignore next */ b => {
-        const method = ['raw', 'gzip', 'bzip2', 'lzma', 'rans', 'rans4x16', 'arith', 'fqzcomp', 'tok3'][b];
+        const method = [
+          'raw',
+          'gzip',
+          'bzip2',
+          'lzma',
+          'rans',
+          'rans4x16',
+          'arith',
+          'fqzcomp',
+          'tok3',
+        ][b]
         if (!method) {
           throw new Error(`compression method number ${b} not implemented`)
         }
