@@ -46,12 +46,23 @@ run = async () => {
   const nameToId = {}
 
   // example opening local files on node.js
-  // can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for the CraiIndex) params to open remote URLs
-  // alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle
+  // can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for
+  // the CraiIndex) params to open remote URLs
+  //
+  // alternatively `cramFilehandle` (for the IndexedCramFile class) and
+  // `filehandle` (for the CraiIndex) can be used,  see for examples
+  // https://github.com/gmod/generic-filehandle
+
   const indexedFile = new IndexedCramFile({
     cramPath: '/filesystem/yourfile.cram',
+    //or
+    //cramUrl: 'url/to/file.cram'
+    //cramFilehandle: a generic-filehandle or similar filehandle
     index: new CraiIndex({
       path: '/filesystem/yourfile.cram.crai',
+      // or
+      // url: 'url/to/file.cram.crai'
+      // filehandle: a generic-filehandle or similar filehandle
     }),
     seqFetch: async (seqId, start, end) => {
       // note:
