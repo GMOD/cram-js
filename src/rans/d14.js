@@ -1,7 +1,7 @@
-const Constants = require('./constants')
-const Decoding = require('./decoding')
+import { TF_SHIFT } from './constants'
+import Decoding from './decoding'
 
-function uncompress(
+export default function uncompress(
   /* ByteBuffer */ input,
   /* ByteBuffer */ output,
   /* Decoding.AriDecoder[] */ D,
@@ -23,20 +23,20 @@ function uncompress(
   let /* int */ l2 = 0
   let /* int */ l7 = 0
   for (; i0 < isz4; i0 += 1, i1 += 1, i2 += 1, i7 += 1) {
-    const /* int */ c0 = 0xff & D[l0].R[Decoding.get(rans0, Constants.TF_SHIFT)]
-    const /* int */ c1 = 0xff & D[l1].R[Decoding.get(rans1, Constants.TF_SHIFT)]
-    const /* int */ c2 = 0xff & D[l2].R[Decoding.get(rans2, Constants.TF_SHIFT)]
-    const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, Constants.TF_SHIFT)]
+    const /* int */ c0 = 0xff & D[l0].R[Decoding.get(rans0, TF_SHIFT)]
+    const /* int */ c1 = 0xff & D[l1].R[Decoding.get(rans1, TF_SHIFT)]
+    const /* int */ c2 = 0xff & D[l2].R[Decoding.get(rans2, TF_SHIFT)]
+    const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, TF_SHIFT)]
 
     output.putAt(i0, c0)
     output.putAt(i1, c1)
     output.putAt(i2, c2)
     output.putAt(i7, c7)
 
-    rans0 = Decoding.advanceSymbolStep(rans0, syms[l0][c0], Constants.TF_SHIFT)
-    rans1 = Decoding.advanceSymbolStep(rans1, syms[l1][c1], Constants.TF_SHIFT)
-    rans2 = Decoding.advanceSymbolStep(rans2, syms[l2][c2], Constants.TF_SHIFT)
-    rans7 = Decoding.advanceSymbolStep(rans7, syms[l7][c7], Constants.TF_SHIFT)
+    rans0 = Decoding.advanceSymbolStep(rans0, syms[l0][c0], TF_SHIFT)
+    rans1 = Decoding.advanceSymbolStep(rans1, syms[l1][c1], TF_SHIFT)
+    rans2 = Decoding.advanceSymbolStep(rans2, syms[l2][c2], TF_SHIFT)
+    rans7 = Decoding.advanceSymbolStep(rans7, syms[l7][c7], TF_SHIFT)
 
     rans0 = Decoding.renormalize(rans0, input)
     rans1 = Decoding.renormalize(rans1, input)
@@ -51,16 +51,9 @@ function uncompress(
 
   // Remainder
   for (; i7 < outputSize; i7 += 1) {
-    const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, Constants.TF_SHIFT)]
+    const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, TF_SHIFT)]
     output.putAt(i7, c7)
-    rans7 = Decoding.advanceSymbol(
-      rans7,
-      input,
-      syms[l7][c7],
-      Constants.TF_SHIFT,
-    )
+    rans7 = Decoding.advanceSymbol(rans7, input, syms[l7][c7], TF_SHIFT)
     l7 = c7
   }
 }
-
-module.exports = { uncompress }

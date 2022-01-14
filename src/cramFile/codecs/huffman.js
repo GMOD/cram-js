@@ -1,5 +1,5 @@
-const { CramMalformedError } = require('../../errors')
-const CramCodec = require('./_base')
+import { CramMalformedError } from '../../errors'
+import CramCodec from './_base'
 
 function numberOfSetBits(ii) {
   let i = (ii - (ii >> 1)) & 0x55555555
@@ -7,7 +7,7 @@ function numberOfSetBits(ii) {
   return (((i + (i >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
 }
 
-class HuffmanIntCodec extends CramCodec {
+export default class HuffmanIntCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
     if (!['byte', 'int'].includes(this.dataType)) {
@@ -21,8 +21,9 @@ class HuffmanIntCodec extends CramCodec {
     this.buildCaches()
 
     // if this is a degenerate zero-length huffman code, special-case the decoding
-    if (this.sortedCodes[0].bitLength === 0)
+    if (this.sortedCodes[0].bitLength === 0) {
       this._decode = this._decodeZeroLengthCode
+    }
   }
 
   buildCodeBook() {
@@ -41,7 +42,9 @@ class HuffmanIntCodec extends CramCodec {
 
     this.codeBook = {}
     codes.forEach(code => {
-      if (!this.codeBook[code.bitLength]) this.codeBook[code.bitLength] = []
+      if (!this.codeBook[code.bitLength]) {
+        this.codeBook[code.bitLength] = []
+      }
       this.codeBook[code.bitLength].push(code.symbol)
     })
   }
@@ -60,8 +63,9 @@ class HuffmanIntCodec extends CramCodec {
         code.bitCode = codeValue // calculated: huffman code
         codeLength += delta // adjust current code length
 
-        if (numberOfSetBits(codeValue) > bitLength)
+        if (numberOfSetBits(codeValue) > bitLength) {
           throw new CramMalformedError('Symbol out of range')
+        }
 
         this.codes[symbol] = code
       })
@@ -114,20 +118,20 @@ class HuffmanIntCodec extends CramCodec {
       prevLen = length
       {
         const index = this.bitCodeToValue[bits]
-        if (index > -1 && this.sortedBitLengthsByBitCode[index] === length)
+        if (index > -1 && this.sortedBitLengthsByBitCode[index] === length) {
           return this.sortedValuesByBitCode[index]
+        }
 
         for (
           let j = i;
           this.sortedCodes[j + 1].bitLength === length &&
           j < this.sortedCodes.length;
           j += 1
-        )
+        ) {
           i += 1
+        }
       }
     }
     throw new CramMalformedError('Huffman symbol not found.')
   }
 }
-
-module.exports = HuffmanIntCodec

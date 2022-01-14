@@ -1,12 +1,12 @@
-const { CramUnimplementedError } = require('../../errors')
+import { CramUnimplementedError } from '../../errors'
 
-const HuffmanIntCodec = require('./huffman')
-const ExternalCodec = require('./external')
-const ByteArrayStopCodec = require('./byteArrayStop')
-const ByteArrayLengthCodec = require('./byteArrayLength')
-const BetaCodec = require('./beta')
-const GammaCodec = require('./gamma')
-const SubexpCodec = require('./subexp')
+import HuffmanIntCodec from './huffman'
+import ExternalCodec from './external'
+import ByteArrayStopCodec from './byteArrayStop'
+import ByteArrayLengthCodec from './byteArrayLength'
+import BetaCodec from './beta'
+import GammaCodec from './gamma'
+import SubexpCodec from './subexp'
 
 const codecClasses = {
   1: ExternalCodec,
@@ -20,23 +20,19 @@ const codecClasses = {
   9: GammaCodec,
 }
 
-function getCodecClassWithId(id) {
+export function getCodecClassWithId(id) {
   return codecClasses[id]
 }
 
-function instantiateCodec(encodingData, dataType) {
+export function instantiateCodec(encodingData, dataType) {
   const CodecClass = getCodecClassWithId(
     dataType === 'ignore' ? 0 : encodingData.codecId,
   )
-  if (!CodecClass)
+  if (!CodecClass) {
     throw new CramUnimplementedError(
       `no codec implemented for codec ID ${encodingData.codecId}`,
     )
+  }
 
   return new CodecClass(encodingData.parameters, dataType, instantiateCodec)
-}
-
-module.exports = {
-  getCodecClassWithId,
-  instantiateCodec,
 }

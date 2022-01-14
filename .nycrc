@@ -1,9 +1,0 @@
-{
-  "exclude": [
-    "src/binary-parser/**", "test/**"
-  ],
-  "reporter": [
-    "text",
-    "html"
-  ]
-}

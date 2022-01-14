@@ -1,14 +1,14 @@
-const { expect } = require('chai')
-const { fullFiles: testFileList } = require('./lib/testFileList')
-const {
+//@ts-nocheck
+import { fullFiles as testFileList } from './lib/testFileList'
+import {
   testDataFile,
   loadTestJSON,
   REWRITE_EXPECTED_DATA,
   fs,
-} = require('./lib/util')
-const { dumpWholeFile } = require('./lib/dumpFile')
-const { CramFile } = require('../src/index')
-const { FetchableSmallFasta } = require('./lib/fasta')
+} from './lib/util'
+import { dumpWholeFile } from './lib/dumpFile'
+import { CramFile } from '../src/index'
+import { FetchableSmallFasta } from './lib/fasta'
 
 describe('dumping cram files', () => {
   testFileList.forEach(filename => {
@@ -25,16 +25,15 @@ describe('dumping cram files', () => {
       const file = new CramFile({ filehandle, seqFetch })
       const fileData = await dumpWholeFile(file)
       // console.log(JSON.stringify(fileData, null, '  '))
-      if (REWRITE_EXPECTED_DATA)
+      if (REWRITE_EXPECTED_DATA) {
         fs.writeFileSync(
           `test/data/${filename}.dump.json`,
           JSON.stringify(fileData, null, '  '),
         )
+      }
       const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
-      expect(JSON.parse(JSON.stringify(fileData))).to.deep.equal(
-        expectedFeatures,
-      )
-    }).timeout(10000)
+      expect(JSON.parse(JSON.stringify(fileData))).toEqual(expectedFeatures)
+    }, 10000)
   })
 })
 
@@ -50,10 +49,10 @@ describe('works with hard clipping', () => {
     const feat = fileData[2].data[1].features[0]
     const hardClip = feat.readFeatures[0]
     const nextReadFeature = feat.readFeatures[0]
-    expect(hardClip.refPos).to.equal(737)
-    expect(nextReadFeature.refPos).to.equal(737)
-    expect(hardClip.refPos).to.equal(feat.alignmentStart)
-    expect(hardClip.pos).to.equal(1)
-    expect(hardClip.data).to.equal(803)
+    expect(hardClip.refPos).toEqual(737)
+    expect(nextReadFeature.refPos).toEqual(737)
+    expect(hardClip.refPos).toEqual(feat.alignmentStart)
+    expect(hardClip.pos).toEqual(1)
+    expect(hardClip.data).toEqual(803)
   })
 })

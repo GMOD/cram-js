@@ -1,16 +1,19 @@
-const LRU = require('quick-lru')
+import LRU from 'quick-lru'
 
-class BufferCache {
+export default class BufferCache {
   constructor({ fetch, size = 10000000, chunkSize = 32768 }) {
-    if (!fetch) throw new Error('fetch function required')
+    if (!fetch) {
+      throw new Error('fetch function required')
+    }
     this.fetch = fetch
     this.chunkSize = chunkSize
     this.lruCache = new LRU({ maxSize: Math.floor(size / chunkSize) })
   }
 
   async get(outputBuffer, offset, length, position) {
-    if (outputBuffer.length < offset + length)
+    if (outputBuffer.length < offset + length) {
       throw new Error('output buffer not big enough for request')
+    }
 
     // calculate the list of chunks involved in this fetch
     const firstChunk = Math.floor(position / this.chunkSize)
@@ -49,7 +52,9 @@ class BufferCache {
 
   _getChunk(chunkNumber) {
     const cachedPromise = this.lruCache.get(chunkNumber)
-    if (cachedPromise) return cachedPromise
+    if (cachedPromise) {
+      return cachedPromise
+    }
 
     const freshPromise = this.fetch(
       chunkNumber * this.chunkSize,
@@ -59,4 +64,3 @@ class BufferCache {
     return freshPromise
   }
 }
-module.exports = BufferCache

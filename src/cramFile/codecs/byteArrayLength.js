@@ -1,15 +1,16 @@
-const { tinyMemoize } = require('../util')
+import { tinyMemoize } from '../util'
 
-const CramCodec = require('./_base')
+import CramCodec from './_base'
 
-class ByteArrayStopCodec extends CramCodec {
+export default class ByteArrayStopCodec extends CramCodec {
   constructor(parameters = {}, dataType, instantiateCodec) {
     super(parameters, dataType)
     this.instantiateCodec = instantiateCodec
-    if (dataType !== 'byteArray')
+    if (dataType !== 'byteArray') {
       throw new TypeError(
         `byteArrayLength does not support data type ${dataType}`,
       )
+    }
   }
 
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
@@ -52,5 +53,3 @@ class ByteArrayStopCodec extends CramCodec {
 '_getLengthCodec _getDataCodec'
   .split(' ')
   .forEach(method => tinyMemoize(ByteArrayStopCodec, method))
-
-module.exports = ByteArrayStopCodec

@@ -1,12 +1,12 @@
-const {
+import {
   CramUnimplementedError,
   CramMalformedError,
   CramBufferOverrunError,
-} = require('../../errors')
-const CramCodec = require('./_base')
-const { parseItf8 } = require('../util')
+} from '../../errors'
+import CramCodec from './_base'
+import { parseItf8 } from '../util'
 
-class ExternalCodec extends CramCodec {
+export default class ExternalCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
     super(parameters, dataType)
     if (this.dataType === 'int') {
@@ -23,10 +23,11 @@ class ExternalCodec extends CramCodec {
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
-    if (!contentBlock)
+    if (!contentBlock) {
       throw new CramMalformedError(
         `no block found with content ID ${blockContentId}`,
       )
+    }
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return this._decodeData(contentBlock, cursor)
   }
@@ -41,14 +42,13 @@ class ExternalCodec extends CramCodec {
   }
 
   _decodeByte(contentBlock, cursor) {
-    if (cursor.bytePosition >= contentBlock.content.length)
+    if (cursor.bytePosition >= contentBlock.content.length) {
       throw new CramBufferOverrunError(
         'attempted to read beyond end of block. this file seems truncated.',
       )
+    }
     const result = contentBlock.content[cursor.bytePosition]
     cursor.bytePosition += 1
     return result
   }
 }
-
-module.exports = ExternalCodec

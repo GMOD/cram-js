@@ -1,5 +1,5 @@
-const { CramMalformedError } = require('../../errors')
-const { instantiateCodec } = require('../codecs')
+import { CramMalformedError } from '../../errors'
+import { instantiateCodec } from '../codecs'
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -40,7 +40,9 @@ const dataSeriesTypes = {
 
 function parseSubstitutionMatrix(byteArray) {
   const matrix = new Array(5)
-  for (let i = 0; i < 5; i += 1) matrix[i] = new Array(4)
+  for (let i = 0; i < 5; i += 1) {
+    matrix[i] = new Array(4)
+  }
 
   matrix[0][(byteArray[0] >> 6) & 3] = 'C'
   matrix[0][(byteArray[0] >> 4) & 3] = 'G'
@@ -70,7 +72,7 @@ function parseSubstitutionMatrix(byteArray) {
   return matrix
 }
 
-class CramContainerCompressionScheme {
+export default class CramContainerCompressionScheme {
   constructor(content) {
     Object.assign(this, content)
     // interpret some of the preservation map tags for convenient use
@@ -115,10 +117,11 @@ class CramContainerCompressionScheme {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
       if (encodingData) {
         const dataType = dataSeriesTypes[dataSeriesName]
-        if (!dataType)
+        if (!dataType) {
           throw new CramMalformedError(
             `data series name ${dataSeriesName} not defined in file compression header`,
           )
+        }
         this.dataSeriesCodecCache[dataSeriesName] = instantiateCodec(
           encodingData,
           dataType,
@@ -131,11 +134,11 @@ class CramContainerCompressionScheme {
   toJSON() {
     const data = {}
     Object.keys(this).forEach(k => {
-      if (/Cache$/.test(k)) return
+      if (/Cache$/.test(k)) {
+        return
+      }
       data[k] = this[k]
     })
     return data
   }
 }
-
-module.exports = CramContainerCompressionScheme

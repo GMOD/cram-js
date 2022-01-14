@@ -1,5 +1,5 @@
-const { expect } = require('chai')
-const { sequenceMD5 } = require('../src/cramFile/util')
+//@ts-nocheck
+import { sequenceMD5 } from '../src/cramFile/util'
 
 describe('util.sequenceMD5', () => {
   ;[
@@ -14,7 +14,7 @@ describe('util.sequenceMD5', () => {
     ],
   ].forEach(([input, output]) => {
     it(`can calculate MD5 of ${input} correctly`, () => {
-      expect(sequenceMD5(input)).to.equal(output)
+      expect(sequenceMD5(input)).toEqual(output)
     })
   })
 })

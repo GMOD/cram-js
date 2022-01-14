@@ -9,5 +9,6 @@ test/data/*.sam
 test/data/*.fai
 errors.js
 built-tests/
-*.swp
 .eslintcache
+*.swp
+esm

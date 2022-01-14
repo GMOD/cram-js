@@ -1,3 +1,3 @@
-const CramFile = require('./file')
+import CramFile from './file'
 
-module.exports = CramFile
+export default CramFile

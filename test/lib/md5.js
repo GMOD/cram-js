@@ -1,5 +1,5 @@
-const fs = require('fs')
-const { sequenceMD5 } = require('../../src/cramFile/util')
+import fs from 'fs'
+import { sequenceMD5 } from '../../src/cramFile/util'
 
 const seq = fs.readFileSync(process.argv[2]).toString()
 
