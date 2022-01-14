@@ -254,22 +254,22 @@ export default class CramFile {
         var chunk = bzip2.decompress(bits, size)
         if (chunk != -1) {
           Buffer.from(chunk).copy(outputBuffer, j)
-          j    += chunk.length
+          j += chunk.length
           size -= chunk.length
         }
       } while (chunk != -1)
     } else if (compressionMethod === 'rans') {
-      rans.uncompress(inputBuffer, outputBuffer)
+      ransuncompress(inputBuffer, outputBuffer)
       //htscodecs r4x8 is slower, but compatible.
       //htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
     } else if (compressionMethod === 'rans4x16') {
-      htscodecs.r4x16_uncompress(inputBuffer, outputBuffer);
+      htscodecs.r4x16_uncompress(inputBuffer, outputBuffer)
     } else if (compressionMethod === 'arith') {
-      htscodecs.arith_uncompress(inputBuffer, outputBuffer);
+      htscodecs.arith_uncompress(inputBuffer, outputBuffer)
     } else if (compressionMethod === 'fqzcomp') {
-      htscodecs.fqzcomp_uncompress(inputBuffer, outputBuffer);
+      htscodecs.fqzcomp_uncompress(inputBuffer, outputBuffer)
     } else if (compressionMethod === 'tok3') {
-      htscodecs.tok3_uncompress(inputBuffer, outputBuffer);
+      htscodecs.tok3_uncompress(inputBuffer, outputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,
