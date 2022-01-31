@@ -1,7 +1,5 @@
 import { promisify } from 'es6-promisify'
-
-// don't load fs native module if running in webpacked code
-const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
+import fs from 'fs'
 
 const fsOpen = fs && promisify(fs.open)
 const fsRead = fs && promisify(fs.read)
