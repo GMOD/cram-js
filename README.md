@@ -2,14 +2,14 @@
 
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 [![Coverage Status](https://img.shields.io/codecov/c/github/GMOD/cram-js/master.svg?style=flat-square)](https://codecov.io/gh/GMOD/cram-js/branch/master)
-[![Build Status](https://img.shields.io/github/workflow/status/GMOD/cram-js/Push/master?logo=github\&style=flat-query)](https://github.com/GMOD/cram-js/actions?query=branch%3Amaster+workflow%3APush+)
+[![Build Status](https://img.shields.io/github/workflow/status/GMOD/cram-js/Push/master?logo=github&style=flat-query)](https://github.com/GMOD/cram-js/actions?query=branch%3Amaster+workflow%3APush+)
 
 Read CRAM files (indexed or unindexed) with pure JS, works in node or in the browser.
 
-*   Reads CRAM 3.x and 2.x (3.1 included)
-*   Does not read CRAM 1.x
-*   Can use .crai indexes out of the box, for efficient sequence fetching, but also has an [index API](#craiindex) that would allow use with other index types
-*   Does not implement bzip2 or lzma codecs (yet), as these are rarely used in-the-wild; if this is important to your use case, please file an issue
+- Reads CRAM 3.x and 2.x (3.1 added in v1.6.0)
+- Does not read CRAM 1.x
+- Can use .crai indexes out of the box, for efficient sequence fetching, but also has an [index API](#craiindex) that would allow use with other index types
+- Does implement bzip2 but not lzma codecs (yet); if this is important to your use case, please file an issue
 
 ## Install
 
@@ -27,12 +27,10 @@ const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 //Use indexedfasta library for seqFetch, if using local file (see below)
 const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
-
 const t = new IndexedFasta({
   path: '/filesystem/yourfile.fa',
   faiPath: '/filesystem/yourfile.fa.fai',
-});
-
+})
 
 // open local files
 const indexedFile = new IndexedCramFile({
@@ -46,7 +44,7 @@ const indexedFile = new IndexedCramFile({
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
     // * you can return an empty string for testing if you want, but you may not get proper interpretation of record.readFeatures
-    return t.getSequence(seqId, start-1, end)
+    return t.getSequence(seqId, start - 1, end)
   },
   checkSequenceMD5: false,
 })
@@ -56,19 +54,17 @@ const indexedFile = new IndexedCramFile({
 // For indexedfasta the numeric ID is the order in which the sequence names appear in the header
 
 // Wrap in an async and then run
-run = async() => {
+run = async () => {
   const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
-    if(record.readFeatures != undefined) {
+    if (record.readFeatures != undefined) {
       record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
         // process the read features. this can be used similar to
         // CIGAR/MD strings in SAM. see CRAM specs for more details.
         if (code === 'X') {
           console.log(
-            `${
-              record.readName
-            } shows a base substitution of ${ref}->${sub} at ${refPos}`,
+            `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
           )
         }
       })
@@ -78,22 +74,20 @@ run = async() => {
 
 run()
 
-
 // can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for the CraiIndex) params to open remote URLs
 // alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle
 ```
-
 
 You can use cram-js without NPM also with the cram-bundle.js. See the example directory for usage with script tag
 
 ## API (auto-generated)
 
-*   [CramRecord](#cramrecord) - format of CRAM records returned by this API
-    *   [ReadFeatures](#readfeatures) - format of read features on records
-*   [IndexedCramFile](#indexedcramfile) - indexed access into a CRAM file
-*   [CramFile](#cramfile) - .cram API
-*   [CraiIndex](#craiindex) - .crai index API
-*   [Error Classes](#error-classes) - special error classes thrown by this API
+- [CramRecord](#cramrecord) - format of CRAM records returned by this API
+  - [ReadFeatures](#readfeatures) - format of read features on records
+- [IndexedCramFile](#indexedcramfile) - indexed access into a CRAM file
+- [CramFile](#cramfile) - .cram API
+- [CraiIndex](#craiindex) - .crai index API
+- [Error Classes](#error-classes) - special error classes thrown by this API
 
 ### CramRecord
 
@@ -101,27 +95,27 @@ You can use cram-js without NPM also with the cram-bundle.js. See the example di
 
 ##### Table of Contents
 
-*   [CramRecord](#cramrecord)
-    *   [isPaired](#ispaired)
-    *   [isProperlyPaired](#isproperlypaired)
-    *   [isSegmentUnmapped](#issegmentunmapped)
-    *   [isMateUnmapped](#ismateunmapped)
-    *   [isReverseComplemented](#isreversecomplemented)
-    *   [isMateReverseComplemented](#ismatereversecomplemented)
-    *   [isRead1](#isread1)
-    *   [isRead2](#isread2)
-    *   [isSecondary](#issecondary)
-    *   [isFailedQc](#isfailedqc)
-    *   [isDuplicate](#isduplicate)
-    *   [isSupplementary](#issupplementary)
-    *   [isDetached](#isdetached)
-    *   [hasMateDownStream](#hasmatedownstream)
-    *   [isPreservingQualityScores](#ispreservingqualityscores)
-    *   [isUnknownBases](#isunknownbases)
-    *   [getReadBases](#getreadbases)
-    *   [getPairOrientation](#getpairorientation)
-    *   [addReferenceSequence](#addreferencesequence)
-        *   [Parameters](#parameters)
+- [CramRecord](#cramrecord)
+  - [isPaired](#ispaired)
+  - [isProperlyPaired](#isproperlypaired)
+  - [isSegmentUnmapped](#issegmentunmapped)
+  - [isMateUnmapped](#ismateunmapped)
+  - [isReverseComplemented](#isreversecomplemented)
+  - [isMateReverseComplemented](#ismatereversecomplemented)
+  - [isRead1](#isread1)
+  - [isRead2](#isread2)
+  - [isSecondary](#issecondary)
+  - [isFailedQc](#isfailedqc)
+  - [isDuplicate](#isduplicate)
+  - [isSupplementary](#issupplementary)
+  - [isDetached](#isdetached)
+  - [hasMateDownStream](#hasmatedownstream)
+  - [isPreservingQualityScores](#ispreservingqualityscores)
+  - [isUnknownBases](#isunknownbases)
+  - [getReadBases](#getreadbases)
+  - [getPairOrientation](#getpairorientation)
+  - [addReferenceSequence](#addreferencesequence)
+    - [Parameters](#parameters)
 
 #### CramRecord
 
@@ -212,12 +206,13 @@ base pairs, and will make the `getReadSequence()` method work.
 
 ###### Parameters
 
-*   `refRegion` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)** 
+- `refRegion` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
 
-    *   `refRegion.start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-    *   `refRegion.end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** 
-    *   `refRegion.seq` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** 
-*   `compressionScheme` **CramContainerCompressionScheme** 
+  - `refRegion.start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+  - `refRegion.end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+  - `refRegion.seq` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
+
+- `compressionScheme` **CramContainerCompressionScheme**
 
 Returns **[undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined)** nothing
 
@@ -227,10 +222,10 @@ The feature objects appearing in the `readFeatures` member of CramRecord objects
 
 #### Static fields
 
-*   **code** (`character`): One of "bqBXIDiQNSPH". See page 15 of the CRAM v3 spec for their meanings.
-*   **data** (`any`): the data associated with the feature. The format of this varies depending on the feature code.
-*   **pos** (`number`): location relative to the read (1-based)
-*   **refPos** (`number`): location relative to the reference (1-based)
+- **code** (`character`): One of "bqBXIDiQNSPH". See page 15 of the CRAM v3 spec for their meanings.
+- **data** (`any`): the data associated with the feature. The format of this varies depending on the feature code.
+- **pos** (`number`): location relative to the read (1-based)
+- **refPos** (`number`): location relative to the reference (1-based)
 
 ### IndexedCramFile
 
@@ -238,40 +233,40 @@ The feature objects appearing in the `readFeatures` member of CramRecord objects
 
 ##### Table of Contents
 
-*   [constructor](#constructor)
-    *   [Parameters](#parameters)
-*   [getRecordsForRange](#getrecordsforrange)
-    *   [Parameters](#parameters-1)
-*   [hasDataForReferenceSequence](#hasdataforreferencesequence)
-    *   [Parameters](#parameters-2)
+- [constructor](#constructor)
+  - [Parameters](#parameters)
+- [getRecordsForRange](#getrecordsforrange)
+  - [Parameters](#parameters-1)
+- [hasDataForReferenceSequence](#hasdataforreferencesequence)
+  - [Parameters](#parameters-2)
 
 #### constructor
 
 ##### Parameters
 
-*   `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+- `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
 
-    *   `args.cram` **CramFile**
-    *   `args.index` **Index-like** object that supports getEntriesForRange(seqId,start,end) -> Promise\[Array\[index entries]]
-    *   `args.cacheSize` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of CRAM records to cache.  default 20,000
-    *   `args.fetchSizeLimit` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of bytes to fetch in a single getRecordsForRange call.  Default 3 MiB.
-    *   `args.checkSequenceMD5` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** default true. if false, disables verifying the MD5
-        checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
+  - `args.cram` **CramFile**
+  - `args.index` **Index-like** object that supports getEntriesForRange(seqId,start,end) -> Promise\[Array\[index entries]]
+  - `args.cacheSize` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of CRAM records to cache. default 20,000
+  - `args.fetchSizeLimit` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of bytes to fetch in a single getRecordsForRange call. Default 3 MiB.
+  - `args.checkSequenceMD5` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** default true. if false, disables verifying the MD5
+    checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
 
 #### getRecordsForRange
 
 ##### Parameters
 
-*   `seq` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** numeric ID of the reference sequence
-*   `start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** start of the range of interest. 1-based closed coordinates.
-*   `end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** end of the range of interest. 1-based closed coordinates.
-*   `opts`   (optional, default `{}`)
+- `seq` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** numeric ID of the reference sequence
+- `start` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** start of the range of interest. 1-based closed coordinates.
+- `end` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** end of the range of interest. 1-based closed coordinates.
+- `opts` (optional, default `{}`)
 
 #### hasDataForReferenceSequence
 
 ##### Parameters
 
-*   `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+- `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** true if the CRAM file contains data for the given
 reference sequence numerical ID
@@ -282,25 +277,25 @@ reference sequence numerical ID
 
 ##### Table of Contents
 
-*   [constructor](#constructor)
-    *   [Parameters](#parameters)
-*   [containerCount](#containercount)
+- [constructor](#constructor)
+  - [Parameters](#parameters)
+- [containerCount](#containercount)
 
 #### constructor
 
 ##### Parameters
 
-*   `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+- `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
 
-    *   `args.filehandle` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** a filehandle that implements the stat() and
-        read() methods of the Node filehandle API <https://nodejs.org/api/fs.html#fs_class_filehandle>
-    *   `args.path` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** path to the cram file
-    *   `args.url` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** url for the cram file.  also supports file:// urls for local files
-    *   `args.seqFetch` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)?** a function with signature
-        `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
-    *   `args.cacheSize` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of CRAM records to cache.  default 20,000
-    *   `args.checkSequenceMD5` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** default true. if false, disables verifying the MD5
-        checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
+  - `args.filehandle` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** a filehandle that implements the stat() and
+    read() methods of the Node filehandle API <https://nodejs.org/api/fs.html#fs_class_filehandle>
+  - `args.path` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** path to the cram file
+  - `args.url` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)?** url for the cram file. also supports file:// urls for local files
+  - `args.seqFetch` **[function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function)?** a function with signature
+    `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
+  - `args.cacheSize` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?** optional maximum number of CRAM records to cache. default 20,000
+  - `args.checkSequenceMD5` **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?** default true. if false, disables verifying the MD5
+    checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
 
 #### containerCount
 
@@ -310,28 +305,28 @@ reference sequence numerical ID
 
 ##### Table of Contents
 
-*   [constructor](#constructor)
-    *   [Parameters](#parameters)
-*   [hasDataForReferenceSequence](#hasdataforreferencesequence)
-    *   [Parameters](#parameters-1)
-*   [getEntriesForRange](#getentriesforrange)
-    *   [Parameters](#parameters-2)
+- [constructor](#constructor)
+  - [Parameters](#parameters)
+- [hasDataForReferenceSequence](#hasdataforreferencesequence)
+  - [Parameters](#parameters-1)
+- [getEntriesForRange](#getentriesforrange)
+  - [Parameters](#parameters-2)
 
 #### constructor
 
 ##### Parameters
 
-*   `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
+- `args` **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**
 
-    *   `args.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**
-    *   `args.url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**
-    *   `args.filehandle` **FileHandle?**
+  - `args.path` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**
+  - `args.url` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**
+  - `args.filehandle` **FileHandle?**
 
 #### hasDataForReferenceSequence
 
 ##### Parameters
 
-*   `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+- `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** true if the index contains entries for
 the given reference sequence ID, false otherwise
@@ -342,9 +337,9 @@ fetch index entries for the given range
 
 ##### Parameters
 
-*   `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
-*   `queryStart` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
-*   `queryEnd` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+- `seqId` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+- `queryStart` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
+- `queryEnd` **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**
 
 Returns **[Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)** promise for
 an array of objects of the form
