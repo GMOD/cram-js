@@ -83,6 +83,9 @@ run()
 // alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle
 ```
 
+
+You can use cram-js without NPM also with the cram-bundle.js. See the example directory for usage with script tag
+
 ## API (auto-generated)
 
 *   [CramRecord](#cramrecord) - format of CRAM records returned by this API
