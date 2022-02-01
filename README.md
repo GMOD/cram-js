@@ -6,7 +6,7 @@
 
 Read CRAM files (indexed or unindexed) with pure JS, works in node or in the browser.
 
-*   Reads CRAM 3.x and 2.x
+*   Reads CRAM 3.x and 2.x (3.1 included)
 *   Does not read CRAM 1.x
 *   Can use .crai indexes out of the box, for efficient sequence fetching, but also has an [index API](#craiindex) that would allow use with other index types
 *   Does not implement bzip2 or lzma codecs (yet), as these are rarely used in-the-wild; if this is important to your use case, please file an issue
