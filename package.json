@@ -70,5 +70,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "browser": {
+    "./dist/io/localFile.js": false,
+    "./esm/io/localFile.js": false
   }
 }
