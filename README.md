@@ -24,38 +24,78 @@ $ yarn add @gmod/cram
 ```js
 const { IndexedCramFile, CramFile, CraiIndex } = require('@gmod/cram')
 
-//Use indexedfasta library for seqFetch, if using local file (see below)
+// Use indexedfasta library for seqFetch, if using local file (see below)
 const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
+// this uses local file paths for node.js for IndexedFasta, for usages using
+// remote URLs see indexedfasta docs for filehandles and
+// https://github.com/gmod/generic-filehandle
 const t = new IndexedFasta({
   path: '/filesystem/yourfile.fa',
   faiPath: '/filesystem/yourfile.fa.fai',
 })
 
-// open local files
-const indexedFile = new IndexedCramFile({
-  cramPath: '/filesystem/yourfile.cram',
-  index: new CraiIndex({
-    path: '/filesystem/yourfile.cram.crai',
-  }),
-  seqFetch: async (seqId, start, end) => {
-    // note:
-    // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
-    // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
-    // * the seqId is a numeric identifier
-    // * you can return an empty string for testing if you want, but you may not get proper interpretation of record.readFeatures
-    return t.getSequence(seqId, start - 1, end)
-  },
-  checkSequenceMD5: false,
-})
-
 // example of fetching records from an indexed CRAM file.
 // NOTE: only numeric IDs for the reference sequence are accepted.
-// For indexedfasta the numeric ID is the order in which the sequence names appear in the header
+// For indexedfasta the numeric ID is the order in which the sequence names
+// appear in the header
 
 // Wrap in an async and then run
 run = async () => {
-  const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
+  const idToName = []
+  const nameToId = {}
+
+  // example opening local files on node.js
+  // can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for
+  // the CraiIndex) params to open remote URLs
+  //
+  // alternatively `cramFilehandle` (for the IndexedCramFile class) and
+  // `filehandle` (for the CraiIndex) can be used,  see for examples
+  // https://github.com/gmod/generic-filehandle
+
+  const indexedFile = new IndexedCramFile({
+    cramPath: '/filesystem/yourfile.cram',
+    //or
+    //cramUrl: 'url/to/file.cram'
+    //cramFilehandle: a generic-filehandle or similar filehandle
+    index: new CraiIndex({
+      path: '/filesystem/yourfile.cram.crai',
+      // or
+      // url: 'url/to/file.cram.crai'
+      // filehandle: a generic-filehandle or similar filehandle
+    }),
+    seqFetch: async (seqId, start, end) => {
+      // note:
+      // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
+      // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
+      // * the seqId is a numeric identifier, so we convert it back to a name with idToName
+      // * you can return an empty string from this function for testing if you want, but you may not get proper interpretation of record.readFeatures
+      return t.getSequence(idToName[seqId], start - 1, end)
+    },
+    checkSequenceMD5: false,
+  })
+  const samHeader = await indexedFile.cram.getSamHeader()
+
+  // use the @SQ lines in the header to figure out the
+  // mapping between ref ref ID numbers and names
+
+  const sqLines = samHeader.filter(l => l.tag === 'SQ')
+  sqLines.forEach((sqLine, refId) => {
+    sqLine.data.forEach(item => {
+      if (item.tag === 'SN') {
+        // this is the ref name
+        const refName = item.value
+        nameToId[refName] = refId
+        idToName[refId] = refName
+      }
+    })
+  })
+
+  const records = await indexedFile.getRecordsForRange(
+    nameToId['chr1'],
+    10000,
+    20000,
+  )
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
     if (record.readFeatures != undefined) {
