@@ -1,7 +1,7 @@
 # v1.6.0
 
-- Support CRAMv3.1
-- Support bzip codex
+- Support CRAMv3.1 (thanks to @jkbonfield for contributing!)
+- Support bzip codec
 - Remove localFile from the browser bundle using "browser" package.json field
 - Add esm module field in package.json
 
