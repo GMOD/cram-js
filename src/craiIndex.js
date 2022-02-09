@@ -1,11 +1,8 @@
 import AbortablePromiseCache from 'abortable-promise-cache'
 import QuickLRU from 'quick-lru'
-import { promisify } from 'es6-promisify'
-import zlib from 'zlib'
+import { inflate } from 'pako'
 import { open } from './io'
 import { CramMalformedError } from './errors'
-
-const gunzip = promisify(zlib.gunzip)
 
 const BAI_MAGIC = 21578050 // BAI\1
 
@@ -72,7 +69,7 @@ export default class CraiIndex {
     return this.readFile()
       .then(data => {
         if (data[0] === 31 && data[1] === 139) {
-          return gunzip(data)
+          return Buffer.from(inflate(data))
         }
         return data
       })
