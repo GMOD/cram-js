@@ -55,6 +55,7 @@
   "devDependencies": {
     "@gmod/indexedfasta": "^2.0.2",
     "@types/jest": "^27.4.0",
+    "@types/pako": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
     "documentation": "^13.2.5",
@@ -77,6 +78,8 @@
   },
   "browser": {
     "./dist/io/localFile.js": false,
-    "./esm/io/localFile.js": false
+    "./esm/io/localFile.js": false,
+    "./esm/unzip.js": "./esm/unzip-pako.js",
+    "./dist/unzip.js": "./dist/unzip-pako.js"
   }
 }

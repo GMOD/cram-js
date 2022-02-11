@@ -1,6 +1,6 @@
 import AbortablePromiseCache from 'abortable-promise-cache'
 import QuickLRU from 'quick-lru'
-import { inflate } from 'pako'
+import { unzip } from './unzip'
 import { open } from './io'
 import { CramMalformedError } from './errors'
 
@@ -69,7 +69,7 @@ export default class CraiIndex {
     return this.readFile()
       .then(data => {
         if (data[0] === 31 && data[1] === 139) {
-          return Buffer.from(inflate(data))
+          return unzip(data)
         }
         return data
       })

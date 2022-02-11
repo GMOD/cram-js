@@ -1,4 +1,4 @@
-import { inflate } from 'pako'
+import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
 import LRU from 'quick-lru'
 
@@ -244,7 +244,7 @@ export default class CramFile {
 
   _uncompress(compressionMethod, inputBuffer, outputBuffer) {
     if (compressionMethod === 'gzip') {
-      const result = Buffer.from(inflate(inputBuffer))
+      const result = unzip(inputBuffer)
       result.copy(outputBuffer)
     } else if (compressionMethod === 'bzip2') {
       var bits = bzip2.array(inputBuffer)
