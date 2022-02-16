@@ -1,3 +1,7 @@
+# v1.6.1
+
+- Explicitly use pako for browser bundle to help avoid buggy zlib polyfills
+
 # v1.6.0
 
 - Support CRAMv3.1 (thanks to @jkbonfield for contributing!)
