@@ -6,12 +6,12 @@ import Constants from '../constants'
  * given a Buffer, read a string up to the first null character
  * @private
  */
-function readNullTerminatedStringFromBuffer(buffer) {
-  const zeroOffset = buffer.indexOf(0)
-  if (zeroOffset === -1) {
-    return buffer.toString('utf8')
+function readNullTerminatedString(buffer) {
+  let r = ''
+  for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
+    r += String.fromCharCode(buffer[i])
   }
-  return buffer.toString('utf8', 0, zeroOffset)
+  return r
 }
 
 /**
@@ -45,12 +45,13 @@ function parseTagValueArray(buffer) {
   return array
 }
 
+function bufferIfNeeded(buffer) {
+  return !buffer.readInt32LE ? Buffer.from(buffer) : buffer
+}
+
 function parseTagData(tagType, buffer) {
-  if (!buffer.readInt32LE) {
-    buffer = Buffer.from(buffer)
-  }
   if (tagType === 'Z') {
-    return readNullTerminatedStringFromBuffer(buffer)
+    return readNullTerminatedString(buffer)
   }
   if (tagType === 'A') {
     return String.fromCharCode(buffer[0])
@@ -66,29 +67,31 @@ function parseTagData(tagType, buffer) {
     return val.toNumber()
   }
   if (tagType === 'i') {
-    return buffer.readInt32LE(0)
+    // return int32Array(buffer)[0]
+    return new Int32Array(new Uint8Array(buffer).buffer)[0]
   }
   if (tagType === 's') {
-    return buffer.readInt16LE(0)
+    return new Int16Array(new Uint8Array(buffer).buffer)[0]
   }
   if (tagType === 'S') {
-    return buffer.readUInt16LE(0)
+    return new Uint16Array(new Uint8Array(buffer).buffer)[0]
   }
   if (tagType === 'c') {
-    return buffer.readInt8(0)
+    // return bufferIfNeeded(buffer).readInt8(0)
+    return new Int8Array(buffer)[0]
   }
   if (tagType === 'C') {
-    return buffer.readUInt8(0)
+    return new Uint8Array(buffer)[0]
   }
   if (tagType === 'f') {
-    return buffer.readFloatLE(0)
+    return new Float32Array(new Uint8Array(buffer).buffer)[0]
   }
   if (tagType === 'H') {
-    const hex = readNullTerminatedStringFromBuffer(buffer)
+    const hex = readNullTerminatedString(buffer)
     return Number.parseInt(hex.replace(/^0x/, ''), 16)
   }
   if (tagType === 'B') {
-    return parseTagValueArray(buffer)
+    return parseTagValueArray(bufferIfNeeded(buffer))
   }
 
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
@@ -150,7 +153,8 @@ function decodeReadFeatures(
 
     readFeature.data = decodeRFData(data1Schema)
 
-    // if this is a tag with two data items, make the data an array and add the second item
+    // if this is a tag with two data items, make the data an array and add the
+    // second item
     const data2Schema = { B: ['number', 'QS'] }[code]
     if (data2Schema) {
       readFeature.data = [readFeature.data, decodeRFData(data2Schema)]
@@ -162,7 +166,8 @@ function decodeReadFeatures(
     currentRefPos += readPosDelta
     readFeature.refPos = currentRefPos
 
-    // for gapping features, adjust the reference position for read features that follow
+    // for gapping features, adjust the reference position for read features
+    // that follow
     if (code === 'D' || code === 'N') {
       currentRefPos += readFeature.data
     } else if (code === 'I' || code === 'S') {
@@ -174,22 +179,6 @@ function decodeReadFeatures(
     readFeatures[i] = readFeature
   }
   return readFeatures
-}
-
-function thingToString(thing) {
-  if (thing instanceof Buffer) {
-    return readNullTerminatedStringFromBuffer(thing)
-  }
-  if (thing.length && thing.indexOf) {
-    // array-like
-    if (!thing[thing.length - 1]) {
-      // trim zeroes off the end if necessary
-      const termIndex = thing.indexOf(0)
-      return String.fromCharCode(...thing.slice(0, termIndex))
-    }
-    return String.fromCharCode(...thing)
-  }
-  return String(thing)
 }
 
 export default function decodeRecord(
@@ -228,7 +217,7 @@ export default function decodeRecord(
   cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded) {
-    cramRecord.readName = thingToString(decodeDataSeries('RN'))
+    cramRecord.readName = readNullTerminatedString(decodeDataSeries('RN'))
   }
 
   // mate record
@@ -237,7 +226,7 @@ export default function decodeRecord(
     const mate = {}
     mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded) {
-      mate.readName = thingToString(decodeDataSeries('RN'))
+      mate.readName = readNullTerminatedString(decodeDataSeries('RN'))
       cramRecord.readName = mate.readName
     }
     mate.sequenceId = decodeDataSeries('NS')
