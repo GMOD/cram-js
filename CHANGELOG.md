@@ -1,3 +1,7 @@
+# v1.6.2
+
+- Publish src directory for better source maps
+
 # v1.6.1
 
 - Explicitly use pako for browser bundle to help avoid buggy zlib polyfills
