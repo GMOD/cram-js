@@ -21,6 +21,7 @@ function readNullTerminatedString(buffer) {
 function parseTagValueArray(buffer) {
   const arrayType = String.fromCharCode(buffer[0])
   const length = buffer.readInt32LE(1)
+  console.log('here',buffer,'k1');
 
   const schema = {
     c: ['readInt8', 1],
@@ -57,17 +58,9 @@ function parseTagData(tagType, buffer) {
     return String.fromCharCode(buffer[0])
   }
   if (tagType === 'I') {
-    const val = Long.fromBytesLE(buffer)
-    if (
-      val.greaterThan(Number.MAX_SAFE_INTEGER) ||
-      val.lessThan(Number.MIN_SAFE_INTEGER)
-    ) {
-      throw new CramUnimplementedError('integer overflow')
-    }
-    return val.toNumber()
+    return Long.fromBytesLE(buffer).toNumber()
   }
   if (tagType === 'i') {
-    // return int32Array(buffer)[0]
     return new Int32Array(new Uint8Array(buffer).buffer)[0]
   }
   if (tagType === 's') {
@@ -77,7 +70,6 @@ function parseTagData(tagType, buffer) {
     return new Uint16Array(new Uint8Array(buffer).buffer)[0]
   }
   if (tagType === 'c') {
-    // return bufferIfNeeded(buffer).readInt8(0)
     return new Int8Array(buffer)[0]
   }
   if (tagType === 'C') {
