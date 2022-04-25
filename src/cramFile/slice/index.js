@@ -394,8 +394,8 @@ export default class CramSlice {
       }
     }
 
-    // interpret `recordsToNextFragment` attributes to make standard `mate` objects
-    // Resolve mate pair cross-references between records in this slice
+    // interpret `recordsToNextFragment` attributes to make standard `mate`
+    // objects Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
       const { mateRecordNumber } = records[i]
       if (mateRecordNumber >= 0) {

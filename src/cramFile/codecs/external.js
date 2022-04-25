@@ -42,11 +42,11 @@ export default class ExternalCodec extends CramCodec {
   }
 
   _decodeByte(contentBlock, cursor) {
-    if (cursor.bytePosition >= contentBlock.content.length) {
-      throw new CramBufferOverrunError(
-        'attempted to read beyond end of block. this file seems truncated.',
-      )
-    }
+    // if (cursor.bytePosition >= contentBlock.content.length) {
+    //   throw new CramBufferOverrunError(
+    //     'attempted to read beyond end of block. this file seems truncated.',
+    //   )
+    // }
     const result = contentBlock.content[cursor.bytePosition]
     cursor.bytePosition += 1
     return result

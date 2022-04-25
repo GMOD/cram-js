@@ -1,5 +1,5 @@
 import Long from 'long'
-import { CramMalformedError, CramUnimplementedError } from '../../errors'
+import { CramMalformedError } from '../../errors'
 import CramRecord from '../record'
 import Constants from '../constants'
 /**
@@ -18,36 +18,55 @@ function readNullTerminatedString(buffer) {
  * parse a BAM tag's array value from a binary buffer
  * @private
  */
-function parseTagValueArray(buffer) {
-  const arrayType = String.fromCharCode(buffer[0])
-  const length = buffer.readInt32LE(1)
-  console.log('here',buffer,'k1');
 
-  const schema = {
-    c: ['readInt8', 1],
-    C: ['readUInt8', 1],
-    s: ['readInt16LE', 2],
-    S: ['readUInt16LE', 2],
-    i: ['readInt32LE', 4],
-    I: ['readUInt32LE', 4],
-    f: ['readFloatLE', 4],
-  }[arrayType]
-  if (!schema) {
-    throw new CramMalformedError(`invalid tag value array type '${arrayType}'`)
-  }
-
-  const [getMethod, itemSize] = schema
-  const array = new Array(length)
-  let offset = 5
-  for (let i = 0; i < length; i += 1) {
-    array[i] = buffer[getMethod](offset)
-    offset += itemSize
-  }
-  return array
+function typedArrayToBuffer(array) {
+  return array.buffer.slice(
+    array.byteOffset,
+    array.byteLength + array.byteOffset,
+  )
 }
+function parseTagValueArray(buffer) {
+  const r = new Uint8Array(buffer.slice(5))
+  const r0 = new Uint8Array(buffer.slice(1))
+  const dv0 = new DataView(typedArrayToBuffer(r0))
+  const arrayType = String.fromCharCode(buffer[0])
+  const length = dv0.getUint32(0, true)
+  const dv = new DataView(typedArrayToBuffer(r))
+  const array = new Array(length)
 
-function bufferIfNeeded(buffer) {
-  return !buffer.readInt32LE ? Buffer.from(buffer) : buffer
+  if (arrayType === 'c') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getInt8(i)
+    }
+  } else if (arrayType === 'C') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getUint8(i)
+    }
+  } else if (arrayType === 's') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getInt16(i * 2, true)
+    }
+  } else if (arrayType === 'S') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getUint16(i * 2, true)
+    }
+  } else if (arrayType === 'i') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getInt32(i * 4, true)
+    }
+  } else if (arrayType === 'I') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getUint32(i * 4, true)
+    }
+  } else if (arrayType === 'f') {
+    for (let i = 0; i < length; i += 1) {
+      array[i] = dv.getFloat32(i * 4, true)
+    }
+  } else {
+    throw new Error('unknown type: ' + arrayType)
+  }
+
+  return array
 }
 
 function parseTagData(tagType, buffer) {
@@ -83,7 +102,7 @@ function parseTagData(tagType, buffer) {
     return Number.parseInt(hex.replace(/^0x/, ''), 16)
   }
   if (tagType === 'B') {
-    return parseTagValueArray(bufferIfNeeded(buffer))
+    return parseTagValueArray(buffer)
   }
 
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
