@@ -109,32 +109,32 @@ const /* int */ RAW_BYTE_LENGTH = 4
 //     out_buf.rewind();
 // }
 
+const D0Way4 = new Decoding.AriDecoder()
+
 function /* static ByteBuffer */ uncompressOrder0Way4(
   /* const ByteBuffer  */ input,
   /* const ByteBuffer  */ out,
 ) {
   // input.order(ByteOrder.LITTLE_ENDIAN);
-  const D = new Decoding.AriDecoder()
   const syms = new Array(256)
   for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Decoding.Symbol()
   }
 
-  readStatsO0(input, D, syms)
+  readStatsO0(input, D0Way4, syms)
 
-  D04(input, D, syms, out)
+  D04(input, D0Way4, syms, out)
 
   return out
 }
-
+const D1Way4 = new Array(256)
+for (let i = 0; i < D.length; i += 1) {
+  D1Way4[i] = new Decoding.AriDecoder()
+}
 function /* static ByteBuffer */ uncompressOrder1Way4(
   /* const ByteBuffer */ input,
   /* const ByteBuffer */ output,
 ) {
-  const D = new Array(256)
-  for (let i = 0; i < D.length; i += 1) {
-    D[i] = new Decoding.AriDecoder()
-  }
   const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
   for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Array(256)
@@ -142,9 +142,9 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
       syms[i][j] = new Decoding.Symbol()
     }
   }
-  readStatsO1(input, D, syms)
+  readStatsO1(input, D1Way4, syms)
 
-  D14(input, output, D, syms)
+  D14(input, output, D1Way4, syms)
 
   return output
 }
