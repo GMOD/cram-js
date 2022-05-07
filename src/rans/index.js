@@ -128,7 +128,7 @@ function /* static ByteBuffer */ uncompressOrder0Way4(
   return out
 }
 const D1Way4 = new Array(256)
-for (let i = 0; i < D.length; i += 1) {
+for (let i = 0; i < D1Way4.length; i += 1) {
   D1Way4[i] = new Decoding.AriDecoder()
 }
 function /* static ByteBuffer */ uncompressOrder1Way4(
