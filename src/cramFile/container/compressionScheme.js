@@ -82,7 +82,7 @@ export default class CramContainerCompressionScheme {
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
 
-    this.dataSeriesCodecCache = {}
+    this.dataSeriesCodecCache = new Map()
     this.tagCodecCache = {}
   }
 
@@ -113,7 +113,8 @@ export default class CramContainerCompressionScheme {
   }
 
   getCodecForDataSeries(dataSeriesName) {
-    if (!this.dataSeriesCodecCache[dataSeriesName]) {
+    let r = this.dataSeriesCodecCache.get(dataSeriesName)
+    if (r === undefined) {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
       if (encodingData) {
         const dataType = dataSeriesTypes[dataSeriesName]
@@ -122,23 +123,10 @@ export default class CramContainerCompressionScheme {
             `data series name ${dataSeriesName} not defined in file compression header`,
           )
         }
-        this.dataSeriesCodecCache[dataSeriesName] = instantiateCodec(
-          encodingData,
-          dataType,
-        )
+        r = instantiateCodec(encodingData, dataType)
+        this.dataSeriesCodecCache.set(dataSeriesName, r)
       }
     }
-    return this.dataSeriesCodecCache[dataSeriesName]
-  }
-
-  toJSON() {
-    const data = {}
-    Object.keys(this).forEach(k => {
-      if (/Cache$/.test(k)) {
-        return
-      }
-      data[k] = this[k]
-    })
-    return data
+    return r
   }
 }

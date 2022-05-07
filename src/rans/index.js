@@ -111,19 +111,18 @@ const /* int */ RAW_BYTE_LENGTH = 4
 
 const D0Way4 = new Decoding.AriDecoder()
 
+const syms0 = new Array(256)
+for (let i = 0; i < syms0.length; i += 1) {
+  syms0[i] = new Decoding.Symbol()
+}
+
 function /* static ByteBuffer */ uncompressOrder0Way4(
   /* const ByteBuffer  */ input,
   /* const ByteBuffer  */ out,
 ) {
-  // input.order(ByteOrder.LITTLE_ENDIAN);
-  const syms = new Array(256)
-  for (let i = 0; i < syms.length; i += 1) {
-    syms[i] = new Decoding.Symbol()
-  }
+  readStatsO0(input, D0Way4, syms0)
 
-  readStatsO0(input, D0Way4, syms)
-
-  D04(input, D0Way4, syms, out)
+  D04(input, D0Way4, syms0, out)
 
   return out
 }
@@ -131,17 +130,19 @@ const D1Way4 = new Array(256)
 for (let i = 0; i < D1Way4.length; i += 1) {
   D1Way4[i] = new Decoding.AriDecoder()
 }
+
+const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
+for (let i = 0; i < syms.length; i += 1) {
+  syms[i] = new Array(256)
+  for (let j = 0; j < syms[i].length; j += 1) {
+    syms[i][j] = new Decoding.Symbol()
+  }
+}
+
 function /* static ByteBuffer */ uncompressOrder1Way4(
   /* const ByteBuffer */ input,
   /* const ByteBuffer */ output,
 ) {
-  const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
-  for (let i = 0; i < syms.length; i += 1) {
-    syms[i] = new Array(256)
-    for (let j = 0; j < syms[i].length; j += 1) {
-      syms[i][j] = new Decoding.Symbol()
-    }
-  }
   readStatsO1(input, D1Way4, syms)
 
   D14(input, output, D1Way4, syms)
