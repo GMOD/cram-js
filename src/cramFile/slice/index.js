@@ -336,18 +336,22 @@ export default class CramSlice {
     }
 
     // tracks the read position within the block. codec.decode() methods
-    // advance the byte and bit positions in the cursor as they decode data
-    // note that we are only decoding a single block here, the core data block
+    // advance the byte and bit positions in the cursor as they decode
+    // data note that we are only decoding a single block here, the core
+    // data block
     const coreDataBlock = await this.getCoreDataBlock()
     const cursors = {
       lastAlignmentStart: sliceHeader.content.refSeqStart || 0,
       coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
+        map: new Map(),
         getCursor(contentId) {
-          if (!this[contentId]) {
-            this[contentId] = { bitPosition: 7, bytePosition: 0 }
+          let r = this.map.get(contentId)
+          if (r === undefined) {
+            r = { bitPosition: 7, bytePosition: 0 }
+            this.map.set(contentId, r)
           }
-          return this[contentId]
+          return r
         },
       },
     }
@@ -394,8 +398,8 @@ export default class CramSlice {
       }
     }
 
-    // interpret `recordsToNextFragment` attributes to make standard `mate` objects
-    // Resolve mate pair cross-references between records in this slice
+    // interpret `recordsToNextFragment` attributes to make standard `mate`
+    // objects Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
       const { mateRecordNumber } = records[i]
       if (mateRecordNumber >= 0) {

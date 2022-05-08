@@ -44,7 +44,6 @@ export default class ByteArrayStopCodec extends CramCodec {
       stopPosition += 1
     }
     cursor.bytePosition = stopPosition + 1
-    const data = dataBuffer.slice(startPosition, stopPosition)
-    return data
+    return dataBuffer.slice(startPosition, stopPosition)
   }
 }
