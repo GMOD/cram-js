@@ -1,12 +1,12 @@
 import Long from 'long'
-import { CramMalformedError, CramUnimplementedError } from '../../errors'
+import { CramMalformedError } from '../../errors'
 import CramRecord from '../record'
 import Constants from '../constants'
 /**
  * given a Buffer, read a string up to the first null character
  * @private
  */
-function readString(buffer) {
+function readNullTerminatedString(buffer) {
   let r = ''
   for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
     r += String.fromCharCode(buffer[i])
@@ -68,7 +68,7 @@ function parseTagValueArray(buffer) {
 }
 function parseTagData(tagType, buffer) {
   if (tagType === 'Z') {
-    return readString(buffer)
+    return readNullTerminatedString(buffer)
   }
   if (tagType === 'A') {
     return String.fromCharCode(buffer[0])
@@ -95,7 +95,10 @@ function parseTagData(tagType, buffer) {
     return new Float32Array(buffer.buffer)[0]
   }
   if (tagType === 'H') {
-    return Number.parseInt(readString(buffer).replace(/^0x/, ''), 16)
+    return Number.parseInt(
+      readNullTerminatedString(buffer).replace(/^0x/, ''),
+      16,
+    )
   }
   if (tagType === 'B') {
     return parseTagValueArray(buffer)
@@ -222,7 +225,7 @@ export default function decodeRecord(
   cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded) {
-    cramRecord.readName = readString(decodeDataSeries('RN'))
+    cramRecord.readName = readNullTerminatedString(decodeDataSeries('RN'))
   }
 
   // mate record
@@ -231,7 +234,7 @@ export default function decodeRecord(
     const mate = {}
     mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded) {
-      mate.readName = readString(decodeDataSeries('RN'))
+      mate.readName = readNullTerminatedString(decodeDataSeries('RN'))
       cramRecord.readName = mate.readName
     }
     mate.sequenceId = decodeDataSeries('NS')

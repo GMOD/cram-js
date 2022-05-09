@@ -58,7 +58,7 @@ export default class CramFile {
       maxSize: this.options.cacheSize,
     })
     if (getEndianness() > 0) {
-      console.warn('Detected big-endian machine, may not be able to run')
+      throw new Error('Detected big-endian machine, may be unable to run')
     }
   }
 
