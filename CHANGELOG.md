@@ -1,6 +1,7 @@
 # v1.6.3
 
-- Optimize CRAM parsing slightly (15% improvement on many short reads)
+- Optimize CRAM parsing slightly (15% improvement on many short reads). This removes support for big endian machines
+- Publish src directory for sourceMap
 
 # v1.6.2
 
