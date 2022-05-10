@@ -1,3 +1,7 @@
+# v1.6.3
+
+- Optimize CRAM parsing slightly (15% improvement on many short reads)
+
 # v1.6.2
 
 - Publish src directory for better source maps
