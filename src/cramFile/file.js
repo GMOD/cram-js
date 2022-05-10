@@ -14,6 +14,19 @@ import CramContainer from './container'
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
+//source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
+function getEndianness() {
+  let uInt32 = new Uint32Array([0x11223344])
+  let uInt8 = new Uint8Array(uInt32.buffer)
+
+  if (uInt8[0] === 0x44) {
+    return 0 //little-endian
+  } else if (uInt8[0] === 0x11) {
+    return 1 //big-endian
+  } else {
+    return 2 //mixed-endian?
+  }
+}
 
 export default class CramFile {
   /**
@@ -44,6 +57,9 @@ export default class CramFile {
     this.featureCache = new LRU({
       maxSize: this.options.cacheSize,
     })
+    if (getEndianness() > 0) {
+      throw new Error('Detected big-endian machine, may be unable to run')
+    }
   }
 
   toString() {

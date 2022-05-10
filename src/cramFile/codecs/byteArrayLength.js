@@ -23,7 +23,7 @@ export default class ByteArrayStopCodec extends CramCodec {
     )
 
     const dataCodec = this._getDataCodec()
-    const data = new Array(arrayLength)
+    const data = new Uint8Array(arrayLength)
     for (let i = 0; i < arrayLength; i += 1) {
       data[i] = dataCodec.decode(
         slice,

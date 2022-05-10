@@ -1,17 +1,17 @@
 import Long from 'long'
-import { CramMalformedError, CramUnimplementedError } from '../../errors'
+import { CramMalformedError } from '../../errors'
 import CramRecord from '../record'
 import Constants from '../constants'
 /**
  * given a Buffer, read a string up to the first null character
  * @private
  */
-function readNullTerminatedStringFromBuffer(buffer) {
-  const zeroOffset = buffer.indexOf(0)
-  if (zeroOffset === -1) {
-    return buffer.toString('utf8')
+function readNullTerminatedString(buffer) {
+  let r = ''
+  for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
+    r += String.fromCharCode(buffer[i])
   }
-  return buffer.toString('utf8', 0, zeroOffset)
+  return r
 }
 
 /**
@@ -20,72 +20,85 @@ function readNullTerminatedStringFromBuffer(buffer) {
  */
 function parseTagValueArray(buffer) {
   const arrayType = String.fromCharCode(buffer[0])
-  const length = buffer.readInt32LE(1)
+  const length = Int32Array.from(buffer.slice(1))[0]
 
-  const schema = {
-    c: ['readInt8', 1],
-    C: ['readUInt8', 1],
-    s: ['readInt16LE', 2],
-    S: ['readUInt16LE', 2],
-    i: ['readInt32LE', 4],
-    I: ['readUInt32LE', 4],
-    f: ['readFloatLE', 4],
-  }[arrayType]
-  if (!schema) {
-    throw new CramMalformedError(`invalid tag value array type '${arrayType}'`)
-  }
-
-  const [getMethod, itemSize] = schema
   const array = new Array(length)
-  let offset = 5
-  for (let i = 0; i < length; i += 1) {
-    array[i] = buffer[getMethod](offset)
-    offset += itemSize
+  buffer = buffer.slice(5)
+
+  if (arrayType === 'c') {
+    const arr = new Int8Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else if (arrayType === 'C') {
+    const arr = new Uint8Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else if (arrayType === 's') {
+    const arr = new Int16Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else if (arrayType === 'S') {
+    const arr = new Uint16Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else if (arrayType === 'i') {
+    const arr = new Int32Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else if (arrayType === 'I') {
+    const arr = new Uint32Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else if (arrayType === 'f') {
+    const arr = new Float32Array(buffer.buffer)
+    for (let i = 0; i < length; i += 1) {
+      array[i] = arr[i]
+    }
+  } else {
+    throw new Error('unknown type: ' + arrayType)
   }
+
   return array
 }
-
 function parseTagData(tagType, buffer) {
-  if (!buffer.readInt32LE) {
-    buffer = Buffer.from(buffer)
-  }
   if (tagType === 'Z') {
-    return readNullTerminatedStringFromBuffer(buffer)
+    return readNullTerminatedString(buffer)
   }
   if (tagType === 'A') {
     return String.fromCharCode(buffer[0])
   }
   if (tagType === 'I') {
-    const val = Long.fromBytesLE(buffer)
-    if (
-      val.greaterThan(Number.MAX_SAFE_INTEGER) ||
-      val.lessThan(Number.MIN_SAFE_INTEGER)
-    ) {
-      throw new CramUnimplementedError('integer overflow')
-    }
-    return val.toNumber()
+    return Long.fromBytesLE(buffer).toNumber()
   }
   if (tagType === 'i') {
-    return buffer.readInt32LE(0)
+    return new Int32Array(buffer.buffer)[0]
   }
   if (tagType === 's') {
-    return buffer.readInt16LE(0)
+    return new Int16Array(buffer.buffer)[0]
   }
   if (tagType === 'S') {
-    return buffer.readUInt16LE(0)
+    return new Uint16Array(buffer.buffer)[0]
   }
   if (tagType === 'c') {
-    return buffer.readInt8(0)
+    return new Int8Array(buffer.buffer)[0]
   }
   if (tagType === 'C') {
-    return buffer.readUInt8(0)
+    return buffer[0]
   }
   if (tagType === 'f') {
-    return buffer.readFloatLE(0)
+    return new Float32Array(buffer.buffer)[0]
   }
   if (tagType === 'H') {
-    const hex = readNullTerminatedStringFromBuffer(buffer)
-    return Number.parseInt(hex.replace(/^0x/, ''), 16)
+    return Number.parseInt(
+      readNullTerminatedString(buffer).replace(/^0x/, ''),
+      16,
+    )
   }
   if (tagType === 'B') {
     return parseTagValueArray(buffer)
@@ -176,22 +189,6 @@ function decodeReadFeatures(
   return readFeatures
 }
 
-function thingToString(thing) {
-  if (thing instanceof Buffer) {
-    return readNullTerminatedStringFromBuffer(thing)
-  }
-  if (thing.length && thing.indexOf) {
-    // array-like
-    if (!thing[thing.length - 1]) {
-      // trim zeroes off the end if necessary
-      const termIndex = thing.indexOf(0)
-      return String.fromCharCode(...thing.slice(0, termIndex))
-    }
-    return String.fromCharCode(...thing)
-  }
-  return String(thing)
-}
-
 export default function decodeRecord(
   slice,
   decodeDataSeries,
@@ -228,7 +225,7 @@ export default function decodeRecord(
   cramRecord.readGroupId = decodeDataSeries('RG')
 
   if (compressionScheme.readNamesIncluded) {
-    cramRecord.readName = thingToString(decodeDataSeries('RN'))
+    cramRecord.readName = readNullTerminatedString(decodeDataSeries('RN'))
   }
 
   // mate record
@@ -237,7 +234,7 @@ export default function decodeRecord(
     const mate = {}
     mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded) {
-      mate.readName = thingToString(decodeDataSeries('RN'))
+      mate.readName = readNullTerminatedString(decodeDataSeries('RN'))
       cramRecord.readName = mate.readName
     }
     mate.sequenceId = decodeDataSeries('NS')

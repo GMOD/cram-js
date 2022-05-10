@@ -47,8 +47,6 @@ export default class ExternalCodec extends CramCodec {
         'attempted to read beyond end of block. this file seems truncated.',
       )
     }
-    const result = contentBlock.content[cursor.bytePosition]
-    cursor.bytePosition += 1
-    return result
+    return contentBlock.content[cursor.bytePosition++]
   }
 }
