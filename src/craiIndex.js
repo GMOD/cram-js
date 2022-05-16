@@ -161,7 +161,7 @@ export default class CraiIndex {
     const compare = entry => {
       const entryStart = entry.start
       const entryEnd = entry.start + entry.span
-      if (entryStart >= queryEnd) {
+      if (entryStart > queryEnd) {
         return -1
       } // entry is ahead of query
       if (entryEnd <= queryStart) {
