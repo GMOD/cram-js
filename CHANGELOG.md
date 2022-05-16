@@ -1,3 +1,7 @@
+# v1.6.4
+
+- Fix off by one in returning features from getRecordsFromRange
+
 # v1.6.3
 
 - Optimize CRAM parsing slightly (15% improvement on many short reads). This removes support for big endian machines
