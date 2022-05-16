@@ -23,18 +23,20 @@
       // Wrap in an async and then run
       run = async () => {
         const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
+        const r = []
         records.forEach(record => {
           console.log(`got a record named ${record.readName}`)
           if (record.readFeatures != undefined) {
             record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
               if (code === 'X') {
-                console.log(
-                  `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
+                r.push(
+                  `${record.readName} shows a base substitution at ${refPos}`,
                 )
               }
             })
           }
         })
+        document.getElementById('output').innerHTML = r.join('\n')
       }
 
       run()
@@ -42,5 +44,6 @@
   </head>
   <body>
     <h1>Hello world</h1>
+    <pre id="output"></div>
   </body>
 </html>
