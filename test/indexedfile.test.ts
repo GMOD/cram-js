@@ -440,3 +440,15 @@ describe('cram31', () => {
     expect(feature).toMatchSnapshot()
   })
 })
+
+test('start of chr', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('volvox-long-reads-sv.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('volvox-long-reads-sv.cram.crai'),
+    }),
+  })
+
+  const feats = await cram.getRecordsForRange(0, 0, 1)
+  expect(feats.length).toBe(13)
+})
