@@ -31,6 +31,7 @@
     "build": "npm run build:esm && npm run build:es5",
     "postbuild": "webpack",
     "prepublishOnly": "npm test && npm run build && cp dist/errors.js errors.js",
+    "prepack": "npm test && npm run build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js",
     "postversion": "git push --follow-tags"
   },
