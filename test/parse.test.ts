@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { CramFile } from '../src'
 
-import { testDataFile, extended } from './lib/util'
+import { testDataFile } from './lib/util'
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {
@@ -36,59 +36,6 @@ describe('CRAM reader', () => {
       _endPosition: 45,
       refSeqId: 0,
       refSeqStart: 0,
-    })
-  })
-
-  extended('can read a bigger cram file', async () => {
-    const file = new CramFile({
-      filehandle: testDataFile('extended/insilico_21.cram'),
-    })
-    expect(await file.getDefinition()).toEqual({
-      fileId: '21_1mil.cram',
-      magic: 'CRAM',
-      majorVersion: 3,
-      minorVersion: 0,
-    })
-    expect(await (await file.getContainerById(0)).getHeader()).toEqual({
-      alignmentSpan: 0,
-      crc32: 2977905791,
-      _endPosition: 45,
-      _size: 19,
-      landmarks: [0, 3927],
-      length: 5901,
-      numBases: 0,
-      numBlocks: 2,
-      numLandmarks: 2,
-      numRecords: 0,
-      recordCounter: 0,
-      refSeqId: 0,
-      refSeqStart: 0,
-    })
-  })
-  extended('can read an even bigger cram file', async () => {
-    const file = new CramFile({
-      filehandle: testDataFile('extended/RNAseq_mapping_def.cram'),
-    })
-    expect(await file.getDefinition()).toEqual({
-      fileId: '-',
-      magic: 'CRAM',
-      majorVersion: 3,
-      minorVersion: 0,
-    })
-    expect(await (await file.getContainerById(1)).getHeader()).toEqual({
-      alignmentSpan: 574995,
-      crc32: 2139737710,
-      _size: 24,
-      _endPosition: 1178,
-      landmarks: [990],
-      length: 84878,
-      numBases: 651833,
-      numBlocks: 34,
-      numLandmarks: 1,
-      numRecords: 10000,
-      recordCounter: 0,
-      refSeqId: 0,
-      refSeqStart: 300,
     })
   })
 
