@@ -1,12 +1,25 @@
 import {
-  CramMalformedError,
-  CramBufferOverrunError,
   CramArgumentError,
+  CramBufferOverrunError,
+  CramMalformedError,
 } from '../../errors'
-import { parseItem, tinyMemoize, sequenceMD5 } from '../util'
+import { ParsedItem, parseItem, sequenceMD5, tinyMemoize } from '../util'
 
 import Constants from '../constants'
 import decodeRecord from './decodeRecord'
+import CramRecord from '../record'
+import CramContainer from '../container'
+import CramFile, { CramFileBlock } from '../file'
+import {
+  BlockHeader,
+  isMappedSliceHeader,
+  MappedSliceHeader,
+  UnmappedSliceHeader,
+} from '../sectionParsers'
+
+export type SliceHeader = ParsedItem<BlockHeader> & {
+  parsedContent: MappedSliceHeader | UnmappedSliceHeader
+}
 
 /**
  * @private
@@ -16,13 +29,16 @@ import decodeRecord from './decodeRecord'
  * @param {CramRecord} thisRecord
  */
 function calculateMultiSegmentMatedTemplateLength(
-  allRecords,
-  currentRecordNumber,
-  thisRecord,
+  allRecords: CramRecord[],
+  currentRecordNumber: number,
+  thisRecord: CramRecord,
 ) {
-  function getAllMatedRecords(startRecord) {
+  function getAllMatedRecords(startRecord: CramRecord) {
     const records = [startRecord]
-    if (startRecord.mateRecordNumber >= 0) {
+    if (
+      startRecord.mateRecordNumber !== undefined &&
+      startRecord.mateRecordNumber >= 0
+    ) {
       const mateRecord = allRecords[startRecord.mateRecordNumber]
       if (!mateRecord) {
         throw new CramMalformedError(
@@ -57,7 +73,10 @@ function calculateMultiSegmentMatedTemplateLength(
  * @param {CramRecord} thisRecord
  * @param {CramRecord} mateRecord
  */
-function calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord) {
+function calculateIntraSliceMatePairTemplateLength(
+  thisRecord: CramRecord,
+  mateRecord: CramRecord,
+) {
   // this just estimates the template length by using the simple (non-gapped) end coordinate of each
   // read, because gapping in the alignment doesn't mean the template is longer or shorter
   const start = Math.min(thisRecord.alignmentStart, mateRecord.alignmentStart)
@@ -76,10 +95,10 @@ function calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord) {
  * just one record having the index in the slice of its mate
  */
 function associateIntraSliceMate(
-  allRecords,
-  currentRecordNumber,
-  thisRecord,
-  mateRecord,
+  allRecords: CramRecord[],
+  currentRecordNumber: number,
+  thisRecord: CramRecord,
+  mateRecord: CramRecord,
 ) {
   if (!mateRecord) {
     throw new CramMalformedError(
@@ -162,40 +181,48 @@ function associateIntraSliceMate(
 }
 
 export default class CramSlice {
-  constructor(container, position) {
-    this.container = container
+  private file: CramFile
+
+  constructor(
+    public container: CramContainer,
+    public containerPosition: number,
+    _unused: number,
+  ) {
     this.file = container.file
-    this.containerPosition = position
   }
 
   // memoize
-  async getHeader() {
+  async getHeader(): Promise<SliceHeader> {
     // fetch and parse the slice header
     const sectionParsers = await this.file.getSectionParsers()
     const containerHeader = await this.container.getHeader()
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
     )
+    if (header === undefined) {
+      throw new Error()
+    }
     if (header.contentType === 'MAPPED_SLICE_HEADER') {
-      header.content = parseItem(
+      const content = parseItem(
         header.content,
         sectionParsers.cramMappedSliceHeader.parser,
         0,
         containerHeader._endPosition,
       )
+      return { ...header, parsedContent: content }
     } else if (header.contentType === 'UNMAPPED_SLICE_HEADER') {
-      header.content = parseItem(
+      const content = parseItem(
         header.content,
         sectionParsers.cramUnmappedSliceHeader.parser,
         0,
         containerHeader._endPosition,
       )
+      return { ...header, parsedContent: content }
     } else {
       throw new CramMalformedError(
-        `error reading slice header block, invalid content type ${header._contentType}`,
+        `error reading slice header block, invalid content type ${header.contentType}`,
       )
     }
-    return header
   }
 
   // memoize
@@ -203,9 +230,13 @@ export default class CramSlice {
     const header = await this.getHeader()
     // read all the blocks into memory and store them
     let blockPosition = header._endPosition
-    const blocks = new Array(header.content.numBlocks)
+    const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i += 1) {
-      blocks[i] = await this.file.readBlock(blockPosition)
+      const block = await this.file.readBlock(blockPosition)
+      if (block === undefined) {
+        throw new Error()
+      }
+      blocks[i] = block
       blockPosition = blocks[i]._endPosition
     }
 
@@ -220,9 +251,9 @@ export default class CramSlice {
   }
 
   // memoize
-  async _getBlocksContentIdIndex() {
+  async _getBlocksContentIdIndex(): Promise<Record<number, CramFileBlock>> {
     const blocks = await this.getBlocks()
-    const blocksByContentId = {}
+    const blocksByContentId: Record<number, CramFileBlock> = {}
     blocks.forEach(block => {
       if (block.contentType === 'EXTERNAL_DATA') {
         blocksByContentId[block.contentId] = block
@@ -231,14 +262,17 @@ export default class CramSlice {
     return blocksByContentId
   }
 
-  async getBlockByContentId(id) {
+  async getBlockByContentId(id: number) {
     const blocksByContentId = await this._getBlocksContentIdIndex()
     return blocksByContentId[id]
   }
 
   async getReferenceRegion() {
     // read the slice header
-    const sliceHeader = (await this.getHeader()).content
+    const sliceHeader = (await this.getHeader()).parsedContent
+    if (!isMappedSliceHeader(sliceHeader)) {
+      throw new Error()
+    }
 
     if (sliceHeader.refSeqId < 0) {
       return undefined
@@ -249,7 +283,9 @@ export default class CramSlice {
     // console.log(JSON.stringify(sliceHeader, null, '  '))
 
     if (sliceHeader.refBaseBlockId >= 0) {
-      const refBlock = this.getBlockByContentId(sliceHeader.refBaseBlockId)
+      const refBlock = await this.getBlockByContentId(
+        sliceHeader.refBaseBlockId,
+      )
       if (!refBlock) {
         throw new CramMalformedError(
           'embedded reference specified, but reference block does not exist',
@@ -308,8 +344,14 @@ export default class CramSlice {
     const { majorVersion } = await this.file.getDefinition()
 
     const compressionScheme = await this.container.getCompressionScheme()
+    if (compressionScheme === undefined) {
+      throw new Error()
+    }
 
     const sliceHeader = await this.getHeader()
+    if (sliceHeader === undefined) {
+      throw new Error()
+    }
 
     const blocksByContentId = await this._getBlocksContentIdIndex()
 
@@ -317,8 +359,8 @@ export default class CramSlice {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
-      sliceHeader.content.refSeqId >= 0 &&
-      sliceHeader.content.md5.join('') !== '0000000000000000'
+      sliceHeader.parsedContent.refSeqId >= 0 &&
+      sliceHeader.parsedContent.md5.join('') !== '0000000000000000'
     ) {
       const refRegion = await this.getReferenceRegion()
       if (refRegion) {
@@ -356,7 +398,7 @@ export default class CramSlice {
       },
     }
 
-    const decodeDataSeries = dataSeriesName => {
+    const decodeDataSeries = (dataSeriesName: string) => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec) {
         throw new CramMalformedError(

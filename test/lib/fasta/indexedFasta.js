@@ -104,7 +104,7 @@ export default class IndexedFasta {
     }
 
     let residues = Buffer.allocUnsafe(readlen)
-    await this.data.read(residues, 0, readlen, position)
+    await this.data.read(headbytes, 0, cramFileDefinitionParser.maxLength, 0)
     residues = residues.toString('utf8').replace(/\s+/g, '')
 
     return residues

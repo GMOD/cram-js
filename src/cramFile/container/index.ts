@@ -3,15 +3,10 @@ import { CramMalformedError } from '../../errors'
 import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramSlice from '../slice'
 import CramContainerCompressionScheme from './compressionScheme'
+import CramFile from '../file'
 
 export default class CramContainer {
-  constructor(cramFile, position) {
-    // cram file this container comes from
-    this.file = cramFile
-    // position of this container in the file
-    this.filePosition = position
-    // console.log(`container: ${this.filePosition}`)
-  }
+  constructor(public file: CramFile, private filePosition: number) {}
 
   // memoize
   getHeader() {
@@ -28,6 +23,9 @@ export default class CramContainer {
     }
     const sectionParsers = await this.file.getSectionParsers()
     const block = await this.getFirstBlock()
+    if (block === undefined) {
+      return undefined
+    }
     if (block.contentType !== 'COMPRESSION_HEADER') {
       throw new CramMalformedError(
         `invalid content type ${block.contentType} in what is supposed to be the compression header block`,
@@ -39,8 +37,10 @@ export default class CramContainer {
       0,
       block.contentPosition,
     )
-    block.content = content
-    return block
+    return {
+      ...block,
+      parsedContent: content,
+    }
   }
 
   async getFirstBlock() {
@@ -55,16 +55,16 @@ export default class CramContainer {
     if (!header) {
       return undefined
     }
-    return new CramContainerCompressionScheme(header.content)
+    return new CramContainerCompressionScheme(header.parsedContent)
   }
 
-  getSlice(slicePosition, sliceSize) {
+  getSlice(slicePosition: number, sliceSize: number) {
     // note: slicePosition is relative to the end of the container header
     // TODO: perhaps we should cache slices?
     return new CramSlice(this, slicePosition, sliceSize)
   }
 
-  async _readContainerHeader(position) {
+  async _readContainerHeader(position: number) {
     const sectionParsers = await this.file.getSectionParsers()
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
     const { size: fileSize } = await this.file.stat()
@@ -77,7 +77,7 @@ export default class CramContainer {
     // how much to buffer until you read numLandmarks
     const bytes1 = Buffer.allocUnsafe(cramContainerHeader1.maxLength)
     await this.file.read(bytes1, 0, cramContainerHeader1.maxLength, position)
-    const header1 = parseItem(bytes1, cramContainerHeader1.parser)
+    const header1 = parseItem(bytes1, cramContainerHeader1.parser) as any
     const numLandmarksSize = itf8Size(header1.numLandmarks)
     if (position + header1.length >= fileSize) {
       console.warn(

@@ -1,7 +1,9 @@
 import md5 from 'md5'
 import { CramBufferOverrunError } from '../errors'
+import { assertInt32, Int32 } from './int32'
+import { Parser } from '@gmod/binary-parser'
 
-export function itf8Size(v) {
+export function itf8Size(v: number) {
   if (!(v & ~0x7f)) {
     return 1
   }
@@ -17,21 +19,21 @@ export function itf8Size(v) {
   return 5
 }
 
-export function parseItf8(buffer, initialOffset) {
+export function parseItf8(buffer: Int32Array, initialOffset: Int32) {
   let offset = initialOffset
   const countFlags = buffer[offset]
   let result
   if (countFlags < 0x80) {
     result = countFlags
-    offset += 1
+    offset = assertInt32(offset + 1)
   } else if (countFlags < 0xc0) {
     result = ((countFlags << 8) | buffer[offset + 1]) & 0x3fff
-    offset += 2
+    offset = assertInt32(offset + 2)
   } else if (countFlags < 0xe0) {
     result =
       ((countFlags << 16) | (buffer[offset + 1] << 8) | buffer[offset + 2]) &
       0x1fffff
-    offset += 3
+    offset = assertInt32(offset + 3)
   } else if (countFlags < 0xf0) {
     result =
       ((countFlags << 24) |
@@ -39,7 +41,7 @@ export function parseItf8(buffer, initialOffset) {
         (buffer[offset + 2] << 8) |
         buffer[offset + 3]) &
       0x0fffffff
-    offset += 4
+    offset = assertInt32(offset + 4)
   } else {
     result =
       ((countFlags & 0x0f) << 28) |
@@ -49,7 +51,7 @@ export function parseItf8(buffer, initialOffset) {
       (buffer[offset + 4] & 0x0f)
     // x=((0xff & 0x0f)<<28) | (0xff<<20) | (0xff<<12) | (0xff<<4) | (0x0f & 0x0f);
     // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
-    offset += 5
+    offset = assertInt32(offset + 5)
   }
   if (offset > buffer.length) {
     throw new CramBufferOverrunError(
@@ -133,16 +135,23 @@ export function parseItf8(buffer, initialOffset) {
 //   return [result, offset - initialOffset]
 // },
 
-export function parseItem(
-  buffer,
-  parser,
+export type ParsedItem<T> = T & {
+  _endPosition: number
+  _size: number
+}
+
+export function parseItem<T>(
+  buffer: Buffer,
+  parser: Parser<T>,
   startBufferPosition = 0,
   startFilePosition = 0,
-) {
+): ParsedItem<T> {
   const { offset, result } = parser.parse(buffer)
-  result._endPosition = offset + startFilePosition
-  result._size = offset - startBufferPosition
-  return result
+  return {
+    ...result,
+    _endPosition: offset + startFilePosition,
+    _size: offset - startBufferPosition,
+  }
 }
 
 // this would be nice as a decorator, but i'm a little worried about
@@ -164,6 +173,6 @@ export function tinyMemoize(_class, methodName) {
   }
 }
 
-export function sequenceMD5(seq) {
+export function sequenceMD5(seq: string) {
   return md5(seq.toUpperCase().replace(/[^\x21-\x7e]/g, ''))
 }

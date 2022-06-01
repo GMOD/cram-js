@@ -2,6 +2,8 @@ import Long from 'long'
 import { CramMalformedError } from '../../errors'
 import CramRecord from '../record'
 import Constants from '../constants'
+import CramSlice from './index'
+
 /**
  * given a Buffer, read a string up to the first null character
  * @private
@@ -66,7 +68,7 @@ function parseTagValueArray(buffer) {
 
   return array
 }
-function parseTagData(tagType, buffer) {
+function parseTagData(tagType: string, buffer) {
   if (tagType === 'Z') {
     return readNullTerminatedString(buffer)
   }
@@ -108,8 +110,8 @@ function parseTagData(tagType, buffer) {
 }
 
 function decodeReadFeatures(
-  cramRecord,
-  readFeatureCount,
+  cramRecord: CramRecord,
+  readFeatureCount: number,
   decodeDataSeries,
   compressionScheme,
   majorVersion,
@@ -190,7 +192,7 @@ function decodeReadFeatures(
 }
 
 export default function decodeRecord(
-  slice,
+  slice: CramSlice,
   decodeDataSeries,
   compressionScheme,
   sliceHeader,
@@ -199,7 +201,7 @@ export default function decodeRecord(
   cursors,
   majorVersion,
   recordNumber,
-) {
+): CramRecord {
   const cramRecord = new CramRecord()
 
   cramRecord.flags = decodeDataSeries('BF')
@@ -231,7 +233,7 @@ export default function decodeRecord(
   // mate record
   if (cramRecord.isDetached()) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't matter for javascript
-    const mate = {}
+    const mate: any = {}
     mate.flags = decodeDataSeries('MF')
     if (!compressionScheme.readNamesIncluded) {
       mate.readName = readNullTerminatedString(decodeDataSeries('RN'))

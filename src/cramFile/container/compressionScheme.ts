@@ -1,5 +1,7 @@
 import { CramMalformedError } from '../../errors'
 import { instantiateCodec } from '../codecs'
+import CramCodec from '../codecs/_base'
+import { CramCompressionHeader } from '../sectionParsers'
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -38,8 +40,8 @@ const dataSeriesTypes = {
   TV: 'ignore',
 }
 
-function parseSubstitutionMatrix(byteArray) {
-  const matrix = new Array(5)
+function parseSubstitutionMatrix(byteArray: number[]) {
+  const matrix: string[][] = new Array(5)
   for (let i = 0; i < 5; i += 1) {
     matrix[i] = new Array(4)
   }
@@ -73,7 +75,15 @@ function parseSubstitutionMatrix(byteArray) {
 }
 
 export default class CramContainerCompressionScheme {
-  constructor(content) {
+  private readNamesIncluded: boolean
+  private APdelta: boolean
+  private referenceRequired: boolean
+  private tagIdsDictionary: any
+  public substitutionMatrix: string[][]
+  private dataSeriesCodecCache = new Map()
+  private tagCodecCache: any = {}
+  private tagEncoding: any
+  constructor(content: CramCompressionHeader) {
     Object.assign(this, content)
     // interpret some of the preservation map tags for convenient use
     this.readNamesIncluded = content.preservation.RN
@@ -81,16 +91,13 @@ export default class CramContainerCompressionScheme {
     this.referenceRequired = !!content.preservation.RR
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
-
-    this.dataSeriesCodecCache = new Map()
-    this.tagCodecCache = {}
   }
 
   /**
    * @param {string} tagName three-character tag name
    * @private
    */
-  getCodecForTag(tagName) {
+  getCodecForTag(tagName: string): CramCodec {
     if (!this.tagCodecCache[tagName]) {
       const encodingData = this.tagEncoding[tagName]
       if (encodingData) {
@@ -108,7 +115,7 @@ export default class CramContainerCompressionScheme {
    * @param {number} tagListId ID of the tag list to fetch from the tag dictionary
    * @private
    */
-  getTagNames(tagListId) {
+  getTagNames(tagListId: string) {
     return this.tagIdsDictionary[tagListId]
   }
 

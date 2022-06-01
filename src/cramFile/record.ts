@@ -1,6 +1,25 @@
 import Constants from './constants'
+import CramContainerCompressionScheme from './container/compressionScheme'
 
-function decodeReadSequence(cramRecord, refRegion) {
+export type RefRegion = {
+  start: number
+  end: number
+  seq: string
+}
+
+export type ReadFeature = {
+  ref: string
+  refPos: number
+  sub: string
+  data: any
+  pos: number
+  code: string
+}
+
+function decodeReadSequence(
+  cramRecord: CramRecord,
+  refRegion: RefRegion,
+): string | undefined {
   // if it has no length, it has no sequence
   if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
     return undefined
@@ -106,10 +125,10 @@ const baseNumbers = {
 }
 
 function decodeBaseSubstitution(
-  cramRecord,
-  refRegion,
-  compressionScheme,
-  readFeature,
+  cramRecord: CramRecord,
+  refRegion: RefRegion,
+  compressionScheme: CramContainerCompressionScheme,
+  readFeature: ReadFeature,
 ) {
   if (!refRegion) {
     return
@@ -121,7 +140,7 @@ function decodeBaseSubstitution(
   if (refBase) {
     readFeature.ref = refBase
   }
-  let baseNumber = baseNumbers[refBase]
+  let baseNumber = (baseNumbers as any)[refBase]
   if (baseNumber === undefined) {
     baseNumber = 4
   }
@@ -132,10 +151,34 @@ function decodeBaseSubstitution(
   }
 }
 
+export type MateRecord = {
+  readName?: string
+  sequenceId: string
+  alignmentStart: number
+  uniqueId: string
+}
+
 /**
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
+  public tags: {}
+  public flags: number
+  public cramFlags: number
+  public readBases: string | undefined
+  public _refRegion: RefRegion
+  public readFeatures: ReadFeature[]
+  public alignmentStart: number
+  public lengthOnRef: number
+  public readLength: number
+  public templateLength: number
+  public templateSize: number
+  public readName: string
+  public mateRecordNumber?: number
+  public mate: MateRecord
+  public uniqueId: string
+  public sequenceId: string
+
   constructor() {
     this.tags = {}
   }
@@ -293,7 +336,10 @@ export default class CramRecord {
    * @param {CramContainerCompressionScheme} compressionScheme
    * @returns {undefined} nothing
    */
-  addReferenceSequence(refRegion, compressionScheme) {
+  addReferenceSequence(
+    refRegion: RefRegion,
+    compressionScheme: CramContainerCompressionScheme,
+  ) {
     if (this.readFeatures) {
       // use the reference bases to decode the bases
       // substituted in each base substitution
@@ -322,12 +368,12 @@ export default class CramRecord {
   }
 
   toJSON() {
-    const data = {}
+    const data: any = {}
     Object.keys(this).forEach(k => {
       if (k.charAt(0) === '_') {
         return
       }
-      data[k] = this[k]
+      data[k] = (this as any)[k]
     })
 
     data.readBases = this.getReadBases()

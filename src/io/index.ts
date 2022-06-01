@@ -1,16 +1,22 @@
 import url from 'url'
 import RemoteFile from './remoteFile'
 import LocalFile from './localFile'
+import { ensureNotNullish } from '../typescript'
+import { Filehandle } from '../cramFile/filehandle'
 
-function fromUrl(source) {
+function fromUrl(source: string) {
   const { protocol, pathname } = url.parse(source)
   if (protocol === 'file:') {
-    return new LocalFile(unescape(pathname))
+    return new LocalFile(unescape(ensureNotNullish(pathname)))
   }
   return new RemoteFile(source)
 }
 
-function open(maybeUrl, maybePath, maybeFilehandle) {
+function open(
+  maybeUrl?: string,
+  maybePath?: string,
+  maybeFilehandle?: Filehandle,
+): Filehandle {
   if (maybeFilehandle) {
     return maybeFilehandle
   }

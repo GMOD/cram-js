@@ -1,10 +1,14 @@
 import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
 import LRU from 'quick-lru'
+import QuickLRU from 'quick-lru'
 
-import { CramUnimplementedError, CramMalformedError } from '../errors'
+import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
 import {
+  BlockHeader,
+  CompressionMethod,
+  CramCompressionHeader,
   cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
 } from './sectionParsers'
@@ -14,10 +18,14 @@ import CramContainer from './container'
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
+import { Filehandle } from './filehandle'
+import { Int32 } from './int32'
+import { Parser } from '@gmod/binary-parser'
+
 //source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
-  let uInt32 = new Uint32Array([0x11223344])
-  let uInt8 = new Uint8Array(uInt32.buffer)
+  const uInt32 = new Uint32Array([0x11223344])
+  const uInt8 = new Uint8Array(uInt32.buffer)
 
   if (uInt8[0] === 0x44) {
     return 0 //little-endian
@@ -28,26 +36,52 @@ function getEndianness() {
   }
 }
 
-export default class CramFile {
-  /**
-   * @param {object} args
-   * @param {object} [args.filehandle] - a filehandle that implements the stat() and
-   * read() methods of the Node filehandle API https://nodejs.org/api/fs.html#fs_class_filehandle
-   * @param {object} [args.path] - path to the cram file
-   * @param {object} [args.url] - url for the cram file.  also supports file:// urls for local files
-   * @param {function} [args.seqFetch] - a function with signature
-   * `(seqId, startCoordinate, endCoordinate)` that returns a promise for a string of sequence bases
-   * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
-   * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
-   * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
-   */
-  constructor(args) {
+type CramFileSource =
+  | { url: string; path?: undefined; filehandle?: undefined }
+  | { path: string; url?: undefined; filehandle?: undefined }
+  | { filehandle: Filehandle; url?: undefined; path?: undefined }
+
+type SeqFetch = (seqId: string, start: number, end: number) => Promise<string>
+
+export type CramFileArgs = CramFileSource & {
+  checkSequenceMD5: boolean
+  cacheSize?: number
+  seqFetch: SeqFetch
+}
+
+export type CramFileBlock = BlockHeader & {
+  _endPosition: number
+  contentPosition: number
+  _size: number
+  content: Buffer
+}
+
+export type ParsedCompressionHeaderCramFileBlock = CramFileBlock & {
+  parsedContent: CramCompressionHeader
+}
+
+export type ParsedCompressionHeaderCramFileBlock = CramFileBlock & {
+  parsedContent: CramCompressionHeader
+}
+
+export default class CramFile implements Filehandle {
+  private file: Filehandle
+  public validateChecksums: boolean
+  private fetchReferenceSequenceCallback: SeqFetch
+  public options: {
+    checkSequenceMD5: boolean
+    cacheSize: number
+  }
+  private featureCache: QuickLRU<unknown, unknown>
+  private header: string | undefined
+
+  constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
     this.validateChecksums = true
     this.fetchReferenceSequenceCallback = args.seqFetch
     this.options = {
-      checkSequenceMD5: args.checkSequenceMD5 !== false,
-      cacheSize: args.cacheSize !== undefined ? args.cacheSize : 20000,
+      checkSequenceMD5: args.checkSequenceMD5,
+      cacheSize: args.cacheSize ?? 20000,
     }
 
     // cache of features in a slice, keyed by the
@@ -62,20 +96,25 @@ export default class CramFile {
     }
   }
 
-  toString() {
-    if (this.file.filename) {
-      return this.file.filename
-    }
-    if (this.file.url) {
-      return this.file.url
-    }
-
-    return '(cram file)'
-  }
+  // toString() {
+  //   if (this.file.filename) {
+  //     return this.file.filename
+  //   }
+  //   if (this.file.url) {
+  //     return this.file.url
+  //   }
+  //
+  //   return '(cram file)'
+  // }
 
   // can just read this object like a filehandle
-  read(buffer, offset, length, position) {
-    return this.file.read(buffer, offset, length, position)
+  read<T extends ArrayBufferView>(
+    buffer: T,
+    offset: number,
+    length: number,
+    position: number | bigint | null,
+  ): Promise<{ bytesRead: Int32; buffer: T }> {
+    return this.file.read<T>(buffer, offset, length, position)
   }
 
   // can just stat this object like a filehandle
@@ -87,7 +126,8 @@ export default class CramFile {
   async getDefinition() {
     const headbytes = Buffer.allocUnsafe(cramFileDefinitionParser.maxLength)
     await this.file.read(headbytes, 0, cramFileDefinitionParser.maxLength, 0)
-    const definition = cramFileDefinitionParser.parser.parse(headbytes).result
+    const definition = cramFileDefinitionParser.parser.parse(headbytes)
+      .result as any
     if (definition.majorVersion !== 2 && definition.majorVersion !== 3) {
       throw new CramUnimplementedError(
         `CRAM version ${definition.majorVersion} not supported`,
@@ -103,7 +143,11 @@ export default class CramFile {
       throw new CramMalformedError('file contains no containers')
     }
 
-    const { content } = await firstContainer.getFirstBlock()
+    const firstBlock = await firstContainer.getFirstBlock()
+    if (firstBlock === undefined) {
+      return undefined
+    }
+    const content = firstBlock.content
     // find the end of the trailing zeros in the header text
     const headerLength = content.readInt32LE(0)
     const textStart = 4
@@ -126,7 +170,7 @@ export default class CramFile {
     return getSectionParsers(majorVersion)
   }
 
-  async getContainerById(containerNumber) {
+  async getContainerById(containerNumber: number) {
     const sectionParsers = await this.getSectionParsers()
     let position = sectionParsers.cramFileDefinition.maxLength
     const { size: fileSize } = await this.file.stat()
@@ -156,6 +200,9 @@ export default class CramFile {
         position = currentHeader._endPosition
         for (let j = 0; j < currentHeader.numBlocks; j += 1) {
           const block = await this.readBlock(position)
+          if (block === undefined) {
+            return undefined
+          }
           position = block._endPosition
         }
       } else {
@@ -167,9 +214,14 @@ export default class CramFile {
     return currentContainer
   }
 
-  async checkCrc32(position, length, recordedCrc32, description) {
+  async checkCrc32(
+    position: number,
+    length: number,
+    recordedCrc32: number,
+    description: string,
+  ) {
     const b = Buffer.allocUnsafe(length)
-    await this.file.read(b, 0, length, position)
+    await this.file.read(b, 0, cramFileDefinitionParser.maxLength, 0)
     const calculatedCrc32 = crc32.unsigned(b)
     if (calculatedCrc32 !== recordedCrc32) {
       throw new CramMalformedError(
@@ -181,7 +233,7 @@ export default class CramFile {
   /**
    * @returns {Promise[number]} the number of containers in the file
    */
-  async containerCount() {
+  async containerCount(): Promise<number | undefined> {
     const sectionParsers = await this.getSectionParsers()
     const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
@@ -202,6 +254,9 @@ export default class CramFile {
         position = currentHeader._endPosition
         for (let j = 0; j < currentHeader.numBlocks; j += 1) {
           const block = await this.readBlock(position)
+          if (block === undefined) {
+            return undefined
+          }
           position = block._endPosition
         }
       } else {
@@ -214,11 +269,11 @@ export default class CramFile {
     return containerCount
   }
 
-  getContainerAtPosition(position) {
+  getContainerAtPosition(position: number) {
     return new CramContainer(this, position)
   }
 
-  async readBlockHeader(position) {
+  async readBlockHeader(position: number) {
     const sectionParsers = await this.getSectionParsers()
     const { cramBlockHeader } = sectionParsers
     const { size: fileSize } = await this.file.stat()
@@ -228,15 +283,15 @@ export default class CramFile {
     }
 
     const buffer = Buffer.allocUnsafe(cramBlockHeader.maxLength)
-    await this.file.read(buffer, 0, cramBlockHeader.maxLength, position)
+    await this.file.read(buffer, 0, cramFileDefinitionParser.maxLength, 0)
     return parseItem(buffer, cramBlockHeader.parser, 0, position)
   }
 
-  async _parseSection(
-    section,
-    position,
+  async _parseSection<T>(
+    section: { parser: Parser<T>; maxLength: number },
+    position: number,
     size = section.maxLength,
-    preReadBuffer,
+    preReadBuffer = undefined,
   ) {
     let buffer
     if (preReadBuffer) {
@@ -258,16 +313,21 @@ export default class CramFile {
     return data
   }
 
-  _uncompress(compressionMethod, inputBuffer, outputBuffer) {
+  _uncompress(
+    compressionMethod: CompressionMethod,
+    inputBuffer: Buffer,
+    outputBuffer: Buffer,
+  ) {
     if (compressionMethod === 'gzip') {
       const result = unzip(inputBuffer)
       result.copy(outputBuffer)
     } else if (compressionMethod === 'bzip2') {
-      var bits = bzip2.array(inputBuffer)
-      var size = bzip2.header(bits)
-      var j = 0
+      const bits = bzip2.array(inputBuffer)
+      let size = bzip2.header(bits)
+      let j = 0
+      let chunk
       do {
-        var chunk = bzip2.decompress(bits, size)
+        chunk = bzip2.decompress(bits, size)
         if (chunk != -1) {
           Buffer.from(chunk).copy(outputBuffer, j)
           j += chunk.length
@@ -293,26 +353,35 @@ export default class CramFile {
     }
   }
 
-  async readBlock(position) {
+  async readBlock(position: number): Promise<CramFileBlock | undefined> {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = await this.getSectionParsers()
-    const block = await this.readBlockHeader(position)
-    const blockContentPosition = block._endPosition
-    block.contentPosition = block._endPosition
+    const blockHeader = await this.readBlockHeader(position)
+    if (blockHeader === undefined) {
+      return undefined
+    }
+    const blockContentPosition = blockHeader._endPosition
 
-    const uncompressedData = Buffer.allocUnsafe(block.uncompressedSize)
+    const uncompressedData = Buffer.allocUnsafe(blockHeader.uncompressedSize)
 
-    if (block.compressionMethod !== 'raw') {
-      const compressedData = Buffer.allocUnsafe(block.compressedSize)
+    const block: CramFileBlock = {
+      ...blockHeader,
+      _endPosition: blockContentPosition,
+      contentPosition: blockContentPosition,
+      content: uncompressedData,
+    }
+
+    if (blockHeader.compressionMethod !== 'raw') {
+      const compressedData = Buffer.allocUnsafe(blockHeader.compressedSize)
       await this.read(
         compressedData,
         0,
-        block.compressedSize,
+        blockHeader.compressedSize,
         blockContentPosition,
       )
 
       this._uncompress(
-        block.compressionMethod,
+        blockHeader.compressionMethod,
         compressedData,
         uncompressedData,
       )
@@ -320,27 +389,27 @@ export default class CramFile {
       await this.read(
         uncompressedData,
         0,
-        block.uncompressedSize,
+        blockHeader.uncompressedSize,
         blockContentPosition,
       )
     }
-
-    block.content = uncompressedData
 
     if (majorVersion >= 3) {
       // parse the crc32
       const crc = await this._parseSection(
         sectionParsers.cramBlockCrc32,
-        blockContentPosition + block.compressedSize,
+        blockContentPosition + blockHeader.compressedSize,
       )
-      block.crc32 = crc.crc32
+      if (crc === undefined) {
+        return undefined
+      }
 
       // check the block data crc32
       if (this.validateChecksums) {
         await this.checkCrc32(
           position,
-          block._size + block.compressedSize,
-          block.crc32,
+          blockHeader._size + blockHeader.compressedSize,
+          crc.crc32,
           'block data',
         )
       }

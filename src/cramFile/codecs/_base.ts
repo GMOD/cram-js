@@ -1,30 +1,21 @@
 import { CramBufferOverrunError } from '../../errors'
 
-const validDataTypes = {
-  int: true,
-  byte: true,
-  long: true,
-  byteArray: true,
-  byteArrayBlock: true,
-}
+type DataType = 'int' | 'byte' | 'long' | 'byteArray' | 'byteArrayBlock'
 
 // codec base class
 export default class CramCodec {
-  constructor(parameters = {}, dataType) {
+  public parameters: any
+  public dataType: DataType
+
+  constructor(parameters = {}, dataType: DataType) {
     this.parameters = parameters
     this.dataType = dataType
-    if (!dataType) {
-      throw new TypeError('must provide a data type to codec constructor')
-    }
-    if (!validDataTypes[dataType]) {
-      throw new TypeError(`invalid data type ${dataType}`)
-    }
   }
 
   // decode(slice, coreDataBlock, blocksByContentId, cursors) {
   // }
 
-  _getBits(data, cursor, numBits) {
+  _getBits(data: any, cursor: any, numBits: any) {
     let val = 0
     if (
       cursor.bytePosition + (7 - cursor.bitPosition + numBits) / 8 >

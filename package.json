@@ -52,11 +52,14 @@
     "long": "^4.0.0",
     "md5": "^2.2.1",
     "pako": "^1.0.4",
-    "quick-lru": "^2.0.0"
+    "quick-lru": "^6.1.1"
   },
   "devDependencies": {
     "@gmod/indexedfasta": "^2.0.2",
+    "@types/buffer-crc32": "^0.2.0",
     "@types/jest": "^27.4.0",
+    "@types/long": "^4.0.2",
+    "@types/md5": "^2.3.2",
     "@types/pako": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
