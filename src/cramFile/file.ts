@@ -52,6 +52,7 @@ export type CramFileBlock = BlockHeader & {
   contentPosition: number
   _size: number
   content: Buffer
+  crc32?: number
 }
 
 export default class CramFile implements Filehandle {
@@ -211,7 +212,7 @@ export default class CramFile implements Filehandle {
     description: string,
   ) {
     const b = Buffer.allocUnsafe(length)
-    await this.file.read(b, 0, length, 0)
+    await this.file.read(b, 0, length, position)
     const calculatedCrc32 = crc32.unsigned(b)
     if (calculatedCrc32 !== recordedCrc32) {
       throw new CramMalformedError(
@@ -273,7 +274,7 @@ export default class CramFile implements Filehandle {
     }
 
     const buffer = Buffer.allocUnsafe(cramBlockHeader.maxLength)
-    await this.file.read(buffer, 0, cramFileDefinitionParser.maxLength, 0)
+    await this.file.read(buffer, 0, cramBlockHeader.maxLength, position)
     return parseItem(buffer, cramBlockHeader.parser, 0, position)
   }
 
@@ -393,6 +394,7 @@ export default class CramFile implements Filehandle {
       if (crc === undefined) {
         return undefined
       }
+      block.crc32 = crc.crc32
 
       // check the block data crc32
       if (this.validateChecksums) {

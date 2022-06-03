@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { CramFile } from '../src'
 
-import { testDataFile, extended } from './lib/util'
+import { extended, testDataFile } from './lib/util'
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {
@@ -179,8 +179,11 @@ describe('CRAM reader', () => {
       refSeqId: -2,
       refSeqStart: 0,
     })
-    const { content: compressionBlockData, ...compressionBlock } =
-      await container.getCompressionHeaderBlock()
+    const {
+      content,
+      parsedContent: compressionBlockData,
+      ...compressionBlock
+    } = await container.getCompressionHeaderBlock()
     expect(compressionBlock).toEqual({
       _size: 376,
       _endPosition: 108658,
