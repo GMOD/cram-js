@@ -211,7 +211,7 @@ export default class CramFile implements Filehandle {
     description: string,
   ) {
     const b = Buffer.allocUnsafe(length)
-    await this.file.read(b, 0, cramFileDefinitionParser.maxLength, 0)
+    await this.file.read(b, 0, length, 0)
     const calculatedCrc32 = crc32.unsigned(b)
     if (calculatedCrc32 !== recordedCrc32) {
       throw new CramMalformedError(
