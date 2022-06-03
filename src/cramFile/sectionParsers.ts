@@ -1,5 +1,6 @@
 import { Parser } from '@gmod/binary-parser'
 import { TupleOf } from '../typescript'
+import { ParsedItem } from './util'
 
 const singleItf8 = new Parser().itf8()
 
@@ -310,7 +311,7 @@ export type UnmappedSliceHeader = {
 export function isMappedSliceHeader(
   header: MappedSliceHeader | UnmappedSliceHeader,
 ): header is MappedSliceHeader {
-  return !!(header as any).refSeqId
+  return typeof (header as any).refSeqId === 'number'
 }
 
 // each of these is a function of the major and minor version
@@ -552,11 +553,11 @@ export type BlockHeader = {
   uncompressedSize: number
 }
 
-export type CramCompressionHeader = {
+export type CramCompressionHeader = ParsedItem<{
   preservation: CramPreservationMap
   dataSeriesEncoding: DataSeriesEncodingMap
   tagEncoding: any
-}
+}>
 
 function getSectionParsers(majorVersion: number): {
   cramFileDefinition: {

@@ -154,7 +154,6 @@ function decodeReadFeatures(
 
     const readPosDelta = decodeDataSeries('FP')
 
-    const readFeature = { code }
     // map of operator name -> data series name
     const data1Schema = {
       B: ['character', 'BA'] as const,
@@ -323,7 +322,7 @@ export default function decodeRecord(
   let lengthOnRef
   let mappingQuality
   let qualityScores
-  let readBases = null
+  let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
     const readFeatureCount = decodeDataSeries('FN') as number
@@ -361,7 +360,7 @@ export default function decodeRecord(
 
     // mapping quality
     mappingQuality = decodeDataSeries('MQ') as number
-    if (CramFlagsDecoder.isPreservingQualityScores(flags)) {
+    if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       const bases = new Array(readLength)
       for (let i = 0; i < bases.length; i++) {
         bases[i] = decodeDataSeries('QS')

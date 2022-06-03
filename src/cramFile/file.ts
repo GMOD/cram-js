@@ -34,12 +34,22 @@ function getEndianness() {
   }
 }
 
-type CramFileSource =
-  | { url: string; path?: undefined; filehandle?: undefined }
-  | { path: string; url?: undefined; filehandle?: undefined }
-  | { filehandle: Filehandle; url?: undefined; path?: undefined }
+// export type CramFileSource =
+//   | { url: string; path?: undefined; filehandle?: undefined }
+//   | { path: string; url?: undefined; filehandle?: undefined }
+//   | { filehandle: Filehandle; url?: undefined; path?: undefined }
 
-type SeqFetch = (seqId: number, start: number, end: number) => Promise<string>
+export type CramFileSource = {
+  filehandle?: Filehandle
+  url?: string
+  path?: string
+}
+
+export type SeqFetch = (
+  seqId: number,
+  start: number,
+  end: number,
+) => Promise<string>
 
 export type CramFileArgs = CramFileSource & {
   checkSequenceMD5: boolean

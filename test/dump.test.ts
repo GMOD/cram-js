@@ -1,10 +1,11 @@
 //@ts-nocheck
 import { fullFiles as testFileList } from './lib/testFileList'
 import {
-  testDataFile,
+  fs,
+  JsonClone,
   loadTestJSON,
   REWRITE_EXPECTED_DATA,
-  fs,
+  testDataFile,
 } from './lib/util'
 import { dumpWholeFile } from './lib/dumpFile'
 import { CramFile } from '../src/index'
@@ -32,7 +33,13 @@ describe('dumping cram files', () => {
         )
       }
       const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
-      expect(JSON.parse(JSON.stringify(fileData))).toEqual(expectedFeatures)
+      const data: any[] = JsonClone(fileData)
+      for (let i = 0; i < data.length; i++) {
+        const datum = data[i]
+        const expectedDatum = expectedFeatures[i]
+        expect(datum).toEqual(expectedDatum)
+      }
+      expect(data).toEqual(expectedFeatures)
     }, 10000)
   })
 })

@@ -468,7 +468,7 @@ export default class CramSlice {
     return records
   }
 
-  async getRecords(filterFunction: any) {
+  async getRecords(filterFunction: (r: CramRecord) => boolean) {
     // fetch the features if necessary, using the file-level feature cache
     const cacheKey = this.container.filePosition + this.containerPosition
     let recordsPromise = this.file.featureCache.get(cacheKey)
@@ -477,7 +477,8 @@ export default class CramSlice {
       this.file.featureCache.set(cacheKey, recordsPromise)
     }
 
-    const records: CramRecord[] = (await recordsPromise).filter(filterFunction)
+    const unfiltered = await recordsPromise
+    const records = unfiltered.filter(filterFunction)
 
     // if we can fetch reference sequence, add the reference sequence to the records
     if (records.length && this.file.fetchReferenceSequenceCallback) {

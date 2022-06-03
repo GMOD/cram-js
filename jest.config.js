@@ -5,5 +5,5 @@ module.exports = {
     '^.+\\.(ts|js)x?$': 'ts-jest',
   },
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\](?!quick-lru/).+\\.js$'],
-  testTimeout: 1000000,
+  testTimeout: 1000,
 }

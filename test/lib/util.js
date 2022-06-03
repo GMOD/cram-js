@@ -21,7 +21,7 @@ async function loadTestJSON(filename) {
   return JSON.parse(text)
 }
 
-function JsonClone(obj) {
+export function JsonClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 

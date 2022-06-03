@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { IndexedCramFile, CraiIndex } from '../src'
+import { CraiIndex, IndexedCramFile } from '../src'
 
 describe('1kg mate test', () => {
   it('runs without error', async () => {
@@ -27,7 +27,7 @@ describe('1kg mate test', () => {
 
     const firstMate = chr1Records[0]
     const secondMate = chr1Records[1]
-    expect(firstMate.readName !== undefined).toEqual(true)
+    expect(firstMate.readName).toBeUndefined()
     expect(firstMate.readName).toEqual(secondMate.readName)
 
     // Test retained readnames (inter chr mates)

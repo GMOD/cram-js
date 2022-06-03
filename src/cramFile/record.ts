@@ -157,6 +157,7 @@ export type MateRecord = {
   readName?: string
   sequenceId: number
   alignmentStart: number
+  flags?: number
 
   uniqueId?: number
 }
@@ -211,7 +212,7 @@ function makeFlagsHelper<T>(
   x: ReadonlyArray<readonly [number, T]>,
 ): FlagsDecoder<T> & FlagsEncoder<T> {
   const r: any = {}
-  for (const [code, name] of BamFlags) {
+  for (const [code, name] of x) {
     r['is' + name] = (flags: number) => !!(flags & code)
     r['set' + name] = (flags: number) => flags | code
   }
@@ -230,7 +231,7 @@ export default class CramRecord {
   public tags: Record<string, string>
   public flags: number
   public cramFlags: number
-  public readBases: string | null
+  public readBases?: string | null
   public _refRegion?: RefRegion
   public readFeatures?: ReadFeature[]
   public alignmentStart: number
@@ -279,6 +280,7 @@ export default class CramRecord {
       mateToUse === undefined
         ? undefined
         : {
+            flags: mateToUse.mateFlags,
             readName: mateToUse.mateReadName,
             sequenceId: mateToUse.mateSequenceId,
             alignmentStart: mateToUse.mateAlignmentStart,
