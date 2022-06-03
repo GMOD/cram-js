@@ -1,9 +1,23 @@
 import { CramBufferOverrunError } from '../../errors'
+import CramSlice from '../slice'
+import { CramFileBlock } from '../file'
 
-type DataType = 'int' | 'byte' | 'long' | 'byteArray' | 'byteArrayBlock'
+export type DataType = 'int' | 'byte' | 'long' | 'byteArray' | 'byteArrayBlock'
+
+export type Cursors = {
+  lastAlignmentStart: number
+  coreBlock: { bitPosition: number; bytePosition: number }
+  externalBlocks: {
+    map: Map<any, any>
+    getCursor: (contentId: number) => {
+      bitPosition: number
+      bytePosition: number
+    }
+  }
+}
 
 // codec base class
-export default class CramCodec {
+export default abstract class CramCodec {
   public parameters: any
   public dataType: DataType
 
@@ -37,4 +51,11 @@ export default class CramCodec {
     }
     return val
   }
+
+  abstract decode(
+    slice: CramSlice,
+    coreDataBlock: CramFileBlock,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ): any
 }

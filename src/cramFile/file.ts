@@ -1,6 +1,5 @@
 import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
-import LRU from 'quick-lru'
 import QuickLRU from 'quick-lru'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
@@ -8,7 +7,6 @@ import ransuncompress from '../rans'
 import {
   BlockHeader,
   CompressionMethod,
-  CramCompressionHeader,
   cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
 } from './sectionParsers'
@@ -19,8 +17,8 @@ import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
 import { Filehandle } from './filehandle'
-import { Int32 } from './int32'
 import { Parser } from '@gmod/binary-parser'
+import CramRecord from './record'
 
 //source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
@@ -41,7 +39,7 @@ type CramFileSource =
   | { path: string; url?: undefined; filehandle?: undefined }
   | { filehandle: Filehandle; url?: undefined; path?: undefined }
 
-type SeqFetch = (seqId: string, start: number, end: number) => Promise<string>
+type SeqFetch = (seqId: number, start: number, end: number) => Promise<string>
 
 export type CramFileArgs = CramFileSource & {
   checkSequenceMD5: boolean
@@ -56,23 +54,15 @@ export type CramFileBlock = BlockHeader & {
   content: Buffer
 }
 
-export type ParsedCompressionHeaderCramFileBlock = CramFileBlock & {
-  parsedContent: CramCompressionHeader
-}
-
-export type ParsedCompressionHeaderCramFileBlock = CramFileBlock & {
-  parsedContent: CramCompressionHeader
-}
-
 export default class CramFile implements Filehandle {
   private file: Filehandle
   public validateChecksums: boolean
-  private fetchReferenceSequenceCallback: SeqFetch
+  public fetchReferenceSequenceCallback: SeqFetch
   public options: {
     checkSequenceMD5: boolean
     cacheSize: number
   }
-  private featureCache: QuickLRU<unknown, unknown>
+  public featureCache: QuickLRU<number, Promise<CramRecord[]>>
   private header: string | undefined
 
   constructor(args: CramFileArgs) {
@@ -88,7 +78,7 @@ export default class CramFile implements Filehandle {
     // slice offset. caches all of the features in a slice, or none.
     // the cache is actually used by the slice object, it's just
     // kept here at the level of the file
-    this.featureCache = new LRU({
+    this.featureCache = new QuickLRU({
       maxSize: this.options.cacheSize,
     })
     if (getEndianness() > 0) {
@@ -108,13 +98,13 @@ export default class CramFile implements Filehandle {
   // }
 
   // can just read this object like a filehandle
-  read<T extends ArrayBufferView>(
-    buffer: T,
+  read(
+    buffer: Buffer,
     offset: number,
     length: number,
-    position: number | bigint | null,
-  ): Promise<{ bytesRead: Int32; buffer: T }> {
-    return this.file.read<T>(buffer, offset, length, position)
+    position: number | null,
+  ): Promise<void> {
+    return this.file.read(buffer, offset, length, position)
   }
 
   // can just stat this object like a filehandle

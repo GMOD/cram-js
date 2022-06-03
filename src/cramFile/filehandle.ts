@@ -1,5 +1,3 @@
-import { Int32 } from './int32'
-
 // type TypedArray =
 //   | Uint8Array
 //   | Uint8ClampedArray
@@ -17,10 +15,10 @@ import { Int32 } from './int32'
 
 export type Filehandle = {
   stat: () => Promise<{ size: number }>
-  read: <T extends ArrayBufferView>(
-    buffer: T,
+  read: (
+    buffer: Buffer,
     offset: number,
     length: number,
-    position: number | bigint | null,
-  ) => Promise<{ bytesRead: Int32; buffer: T }>
+    position: number | null,
+  ) => Promise<void>
 }

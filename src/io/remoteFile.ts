@@ -1,17 +1,21 @@
 import fetch from 'cross-fetch'
 import BufferCache from './bufferCache'
+import { Filehandle } from '../cramFile/filehandle'
 
-export default class RemoteFile {
-  constructor(source) {
+export default class RemoteFile implements Filehandle {
+  private _stat: { size: number } | undefined
+  private position: 0
+  private cache: BufferCache
+
+  constructor(private url: string) {
     this.position = 0
-    this.url = source
     this.cache = new BufferCache({
       fetch: (start, length) => this._fetch(start, length),
     })
   }
 
-  async _fetch(position, length) {
-    const headers = {}
+  async _fetch(position: number, length: number) {
+    const headers: Record<string, string> = {}
     if (length < Infinity) {
       headers.range = `bytes=${position}-${position + length}`
     } else if (length === Infinity && position !== 0) {
@@ -30,9 +34,9 @@ export default class RemoteFile {
       const nodeBuffer = Buffer.from(await response.arrayBuffer())
 
       // try to parse out the size of the remote file
-      const sizeMatch = /\/(\d+)$/.exec(response.headers.get('content-range'))
-      if (sizeMatch[1]) {
-        this._stat = { size: parseInt(sizeMatch[1], 10) }
+      const sizeMatch = /\/(\d+)$/.exec(response.headers.get('content-range')!)
+      if (sizeMatch![1]) {
+        this._stat = { size: parseInt(sizeMatch![1], 10) }
       }
 
       return nodeBuffer
@@ -40,13 +44,18 @@ export default class RemoteFile {
     throw new Error(`HTTP ${response.status} fetching ${this.url}`)
   }
 
-  read(buffer, offset = 0, length = Infinity, position = 0) {
+  read(
+    buffer: Buffer,
+    offset = 0,
+    length = Infinity,
+    position: number | null = 0,
+  ) {
     let readPosition = position
     if (readPosition === null) {
       readPosition = this.position
       this.position += length
     }
-    return this.cache.get(buffer, offset, length, position)
+    return this.cache.get(buffer, offset, length, position ?? 0)
   }
 
   async readFile() {

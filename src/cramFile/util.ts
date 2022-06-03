@@ -158,7 +158,7 @@ export function parseItem<T>(
 // babel support for it going away or changing.
 // memoizes a method in the stupidest possible way, with no regard for the
 // arguments.  actually, this only works on methods that take no arguments
-export function tinyMemoize(_class, methodName) {
+export function tinyMemoize(_class: any, methodName: any) {
   const method = _class.prototype[methodName]
   const memoAttrName = `_memo_${methodName}`
   _class.prototype[methodName] = function _tinyMemoized() {

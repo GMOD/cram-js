@@ -3,7 +3,7 @@ import {
   CramBufferOverrunError,
   CramMalformedError,
 } from '../../errors'
-import { ParsedItem, parseItem, sequenceMD5, tinyMemoize } from '../util'
+import { parseItem, sequenceMD5, tinyMemoize } from '../util'
 
 import Constants from '../constants'
 import decodeRecord from './decodeRecord'
@@ -11,13 +11,13 @@ import CramRecord from '../record'
 import CramContainer from '../container'
 import CramFile, { CramFileBlock } from '../file'
 import {
-  BlockHeader,
+  DataSeriesEncodingKey,
   isMappedSliceHeader,
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers'
 
-export type SliceHeader = ParsedItem<BlockHeader> & {
+export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
 }
 
@@ -279,6 +279,9 @@ export default class CramSlice {
     }
 
     const compressionScheme = await this.container.getCompressionScheme()
+    if (compressionScheme === undefined) {
+      throw new Error()
+    }
 
     // console.log(JSON.stringify(sliceHeader, null, '  '))
 
@@ -292,12 +295,14 @@ export default class CramSlice {
         )
       }
 
-      if (sliceHeader.span > refBlock.uncompressedSize) {
-        throw new CramMalformedError('Embedded reference is too small')
-      }
+      // TODO: we do not read anything named 'span'
+      // if (sliceHeader.span > refBlock.uncompressedSize) {
+      //   throw new CramMalformedError('Embedded reference is too small')
+      // }
 
+      // TODO verify
       return {
-        seq: refBlock.data.toString('utf8'),
+        seq: (refBlock as any).data.toString('utf8'),
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
@@ -359,6 +364,7 @@ export default class CramSlice {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
+      isMappedSliceHeader(sliceHeader.parsedContent) &&
       sliceHeader.parsedContent.refSeqId >= 0 &&
       sliceHeader.parsedContent.md5.join('') !== '0000000000000000'
     ) {
@@ -366,12 +372,12 @@ export default class CramSlice {
       if (refRegion) {
         const { seq, start, end } = refRegion
         const seqMd5 = sequenceMD5(seq)
-        const storedMd5 = sliceHeader.content.md5
+        const storedMd5 = sliceHeader.parsedContent.md5
           .map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
           .join('')
         if (seqMd5 !== storedMd5) {
           throw new CramMalformedError(
-            `MD5 checksum reference mismatch for ref ${sliceHeader.content.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
+            `MD5 checksum reference mismatch for ref ${sliceHeader.parsedContent.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
           )
         }
       }
@@ -383,11 +389,13 @@ export default class CramSlice {
     // data block
     const coreDataBlock = await this.getCoreDataBlock()
     const cursors = {
-      lastAlignmentStart: sliceHeader.content.refSeqStart || 0,
+      lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
+        ? sliceHeader.parsedContent.refSeqStart
+        : 0,
       coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
         map: new Map(),
-        getCursor(contentId) {
+        getCursor(contentId: number) {
           let r = this.map.get(contentId)
           if (r === undefined) {
             r = { bitPosition: 7, bytePosition: 0 }
@@ -398,7 +406,7 @@ export default class CramSlice {
       },
     }
 
-    const decodeDataSeries = (dataSeriesName: string) => {
+    const decodeDataSeries = (dataSeriesName: DataSeriesEncodingKey) => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec) {
         throw new CramMalformedError(
@@ -408,10 +416,10 @@ export default class CramSlice {
       // console.log(dataSeriesName, Object.getPrototypeOf(codec))
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
-    let records = new Array(sliceHeader.content.numRecords)
+    let records: CramRecord[] = new Array(sliceHeader.parsedContent.numRecords)
     for (let i = 0; i < records.length; i += 1) {
       try {
-        records[i] = decodeRecord(
+        const init = decodeRecord(
           this,
           decodeDataSeries,
           compressionScheme,
@@ -422,11 +430,14 @@ export default class CramSlice {
           majorVersion,
           i,
         )
-        records[i].uniqueId =
-          sliceHeader.contentPosition +
-          sliceHeader.content.recordCounter +
-          i +
-          1
+        records[i] = new CramRecord({
+          ...init,
+          uniqueId:
+            sliceHeader.contentPosition +
+            sliceHeader.parsedContent.recordCounter +
+            i +
+            1,
+        })
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
           console.warn(
@@ -444,7 +455,7 @@ export default class CramSlice {
     // objects Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
       const { mateRecordNumber } = records[i]
-      if (mateRecordNumber >= 0) {
+      if (mateRecordNumber !== undefined && mateRecordNumber >= 0) {
         associateIntraSliceMate(
           records,
           i,
@@ -457,7 +468,7 @@ export default class CramSlice {
     return records
   }
 
-  async getRecords(filterFunction) {
+  async getRecords(filterFunction: any) {
     // fetch the features if necessary, using the file-level feature cache
     const cacheKey = this.container.filePosition + this.containerPosition
     let recordsPromise = this.file.featureCache.get(cacheKey)
@@ -466,21 +477,28 @@ export default class CramSlice {
       this.file.featureCache.set(cacheKey, recordsPromise)
     }
 
-    const records = (await recordsPromise).filter(filterFunction)
+    const records: CramRecord[] = (await recordsPromise).filter(filterFunction)
 
     // if we can fetch reference sequence, add the reference sequence to the records
     if (records.length && this.file.fetchReferenceSequenceCallback) {
       const sliceHeader = await this.getHeader()
       if (
-        sliceHeader.content.refSeqId >= 0 || // single-ref slice
-        sliceHeader.content.refSeqId === -2 // multi-ref slice
+        isMappedSliceHeader(sliceHeader.parsedContent) &&
+        (sliceHeader.parsedContent.refSeqId >= 0 || // single-ref slice
+          sliceHeader.parsedContent.refSeqId === -2) // multi-ref slice
       ) {
         const singleRefId =
-          sliceHeader.content.refSeqId >= 0
-            ? sliceHeader.content.refSeqId
+          sliceHeader.parsedContent.refSeqId >= 0
+            ? sliceHeader.parsedContent.refSeqId
             : undefined
         const compressionScheme = await this.container.getCompressionScheme()
-        const refRegions = {} // seqId => { start, end, seq }
+        if (compressionScheme === undefined) {
+          throw new Error()
+        }
+        const refRegions: Record<
+          string,
+          { id: number; start: number; end: number; seq: string | null }
+        > = {} // seqId => { start, end, seq }
 
         // iterate over the records to find the spans of the reference sequences we need to fetch
         for (let i = 0; i < records.length; i += 1) {
@@ -492,6 +510,7 @@ export default class CramSlice {
               id: seqId,
               start: records[i].alignmentStart,
               end: -Infinity,
+              seq: null,
             }
             refRegions[seqId] = refRegion
           }
@@ -527,7 +546,11 @@ export default class CramSlice {
             singleRefId !== undefined ? singleRefId : records[i].sequenceId
           const refRegion = refRegions[seqId]
           if (refRegion && refRegion.seq) {
-            records[i].addReferenceSequence(refRegion, compressionScheme)
+            const seq = refRegion.seq
+            records[i].addReferenceSequence(
+              { ...refRegion, seq },
+              compressionScheme,
+            )
           }
         }
       }

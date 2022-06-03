@@ -1,5 +1,6 @@
 import Constants from './constants'
 import CramContainerCompressionScheme from './container/compressionScheme'
+import decodeRecord from './slice/decodeRecord'
 
 export type RefRegion = {
   start: number
@@ -8,25 +9,26 @@ export type RefRegion = {
 }
 
 export type ReadFeature = {
-  ref: string
-  refPos: number
-  sub: string
-  data: any
-  pos: number
   code: string
+  pos: number
+  refPos: number
+  data: any
+
+  ref?: string
+  sub?: string
 }
 
 function decodeReadSequence(
   cramRecord: CramRecord,
   refRegion: RefRegion,
-): string | undefined {
+): string | null {
   // if it has no length, it has no sequence
   if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
-    return undefined
+    return null
   }
 
   if (cramRecord.isUnknownBases()) {
-    return undefined
+    return null
   }
 
   // remember: all coordinates are 1-based closed
@@ -153,34 +155,141 @@ function decodeBaseSubstitution(
 
 export type MateRecord = {
   readName?: string
-  sequenceId: string
+  sequenceId: number
   alignmentStart: number
-  uniqueId: string
+
+  uniqueId?: number
 }
+
+export const BamFlags = [
+  [0x1, 'Paired'],
+  [0x2, 'ProperlyPaired'],
+  [0x4, 'SegmentUnmapped'],
+  [0x8, 'MateUnmapped'],
+  [0x10, 'ReverseComplemented'],
+  //  the mate is mapped to the reverse strand
+  [0x20, 'MateReverseComplemented'],
+  //  this is read1
+  [0x40, 'Read1'],
+  //  this is read2
+  [0x80, 'Read2'],
+  //  not primary alignment
+  [0x100, 'Secondary'],
+  //  QC failure
+  [0x200, 'FailedQc'],
+  //  optical or PCR duplicate
+  [0x400, 'Duplicate'],
+  //  supplementary alignment
+  [0x800, 'Supplementary'],
+] as const
+
+export const CramFlags = [
+  [0x1, 'PreservingQualityScores'],
+  [0x2, 'Detached'],
+  [0x4, 'WithMateDownstream'],
+  [0x8, 'DecodeSequenceAsStar'],
+] as const
+
+export const MateFlags = [
+  [0x1, 'OnNegativeStrand'],
+  [0x2, 'Unmapped'],
+] as const
+
+type FlagsDecoder<Type> = {
+  [Property in Type as `is${Capitalize<string & Property>}`]: (
+    flags: number,
+  ) => boolean
+}
+
+type FlagsEncoder<Type> = {
+  [Property in Type as `set${Capitalize<string & Property>}`]: (
+    flags: number,
+  ) => number
+}
+
+function makeFlagsHelper<T>(
+  x: ReadonlyArray<readonly [number, T]>,
+): FlagsDecoder<T> & FlagsEncoder<T> {
+  const r: any = {}
+  for (const [code, name] of BamFlags) {
+    r['is' + name] = (flags: number) => !!(flags & code)
+    r['set' + name] = (flags: number) => flags | code
+  }
+
+  return r
+}
+
+export const BamFlagsDecoder = makeFlagsHelper(BamFlags)
+export const CramFlagsDecoder = makeFlagsHelper(CramFlags)
+export const MateFlagsDecoder = makeFlagsHelper(MateFlags)
 
 /**
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
-  public tags: {}
+  public tags: Record<string, string>
   public flags: number
   public cramFlags: number
-  public readBases: string | undefined
-  public _refRegion: RefRegion
-  public readFeatures: ReadFeature[]
+  public readBases: string | null
+  public _refRegion?: RefRegion
+  public readFeatures?: ReadFeature[]
   public alignmentStart: number
-  public lengthOnRef: number
+  public lengthOnRef: number | undefined
   public readLength: number
-  public templateLength: number
+  public templateLength?: number
   public templateSize: number
-  public readName: string
+  public readName?: string
   public mateRecordNumber?: number
-  public mate: MateRecord
-  public uniqueId: string
-  public sequenceId: string
+  public mate?: MateRecord
+  public uniqueId: number
+  public sequenceId: number
+  public readGroupId: number
+  private mappingQuality: any
+  private qualityScores: any
 
-  constructor() {
-    this.tags = {}
+  constructor({
+    flags,
+    cramFlags,
+    readLength,
+    mappingQuality,
+    lengthOnRef,
+    qualityScores,
+    mateRecordNumber,
+    readBases,
+    readFeatures,
+    mateToUse,
+    readGroupId,
+    readName,
+    sequenceId,
+    uniqueId,
+    templateSize,
+    alignmentStart,
+    tags,
+  }: ReturnType<typeof decodeRecord> & { uniqueId: number }) {
+    this.flags = flags
+    this.cramFlags = cramFlags
+    this.readLength = readLength
+    this.mappingQuality = mappingQuality
+    this.lengthOnRef = lengthOnRef
+    this.qualityScores = qualityScores
+    this.mateRecordNumber = mateRecordNumber
+    this.readBases = readBases
+    this.readFeatures = readFeatures
+    this.mate =
+      mateToUse === undefined
+        ? undefined
+        : {
+            readName: mateToUse.mateReadName,
+            sequenceId: mateToUse.mateSequenceId,
+            alignmentStart: mateToUse.mateAlignmentStart,
+          }
+    this.readGroupId = readGroupId
+    this.readName = readName
+    this.sequenceId = sequenceId
+    this.uniqueId = uniqueId
+    this.templateSize = templateSize
+    this.alignmentStart = alignmentStart
+    this.tags = tags
   }
 
   /**

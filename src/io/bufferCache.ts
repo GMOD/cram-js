@@ -1,16 +1,33 @@
-import LRU from 'quick-lru'
+import QuickLRU from 'quick-lru'
 
 export default class BufferCache {
-  constructor({ fetch, size = 10000000, chunkSize = 32768 }) {
+  private chunkSize: number
+  private lruCache: QuickLRU<number, Promise<Buffer>>
+  private fetch: (offset: number, length: number) => Promise<Buffer>
+
+  constructor({
+    fetch,
+    size = 10000000,
+    chunkSize = 32768,
+  }: {
+    fetch: (offset: number, length: number) => Promise<Buffer>
+    size?: number
+    chunkSize?: number
+  }) {
     if (!fetch) {
       throw new Error('fetch function required')
     }
     this.fetch = fetch
     this.chunkSize = chunkSize
-    this.lruCache = new LRU({ maxSize: Math.floor(size / chunkSize) })
+    this.lruCache = new QuickLRU({ maxSize: Math.floor(size / chunkSize) })
   }
 
-  async get(outputBuffer, offset, length, position) {
+  async get(
+    outputBuffer: Buffer,
+    offset: number,
+    length: number,
+    position: number,
+  ) {
     if (outputBuffer.length < offset + length) {
       throw new Error('output buffer not big enough for request')
     }
@@ -20,7 +37,8 @@ export default class BufferCache {
     const lastChunk = Math.floor((position + length) / this.chunkSize)
 
     // fetch them all as necessary
-    const fetches = new Array(lastChunk - firstChunk + 1)
+    const fetches: Array<Promise<{ data: Buffer; chunkNumber: number }>> =
+      new Array(lastChunk - firstChunk + 1)
     for (let chunk = firstChunk; chunk <= lastChunk; chunk += 1) {
       fetches[chunk - firstChunk] = this._getChunk(chunk).then(data => ({
         data,
@@ -50,7 +68,7 @@ export default class BufferCache {
     })
   }
 
-  _getChunk(chunkNumber) {
+  _getChunk(chunkNumber: number) {
     const cachedPromise = this.lruCache.get(chunkNumber)
     if (cachedPromise) {
       return cachedPromise

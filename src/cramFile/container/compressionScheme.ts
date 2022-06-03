@@ -1,11 +1,15 @@
 import { CramMalformedError } from '../../errors'
 import { instantiateCodec } from '../codecs'
-import CramCodec from '../codecs/_base'
-import { CramCompressionHeader } from '../sectionParsers'
+import CramCodec, { DataType } from '../codecs/_base'
+import {
+  CramCompressionHeader,
+  DataSeriesEncodingKey,
+  DataSeriesEncodingMap,
+} from '../sectionParsers'
 
 // the hardcoded data type to be decoded for each core
 // data field
-const dataSeriesTypes = {
+const dataSeriesTypes: Record<DataSeriesEncodingKey, DataType | 'ignore'> = {
   BF: 'int',
   CF: 'int',
   RI: 'int',
@@ -75,22 +79,25 @@ function parseSubstitutionMatrix(byteArray: number[]) {
 }
 
 export default class CramContainerCompressionScheme {
-  private readNamesIncluded: boolean
-  private APdelta: boolean
-  private referenceRequired: boolean
-  private tagIdsDictionary: any
+  public readNamesIncluded: boolean
+  public APdelta: boolean
+  public referenceRequired: boolean
+  public tagIdsDictionary: any
   public substitutionMatrix: string[][]
-  private dataSeriesCodecCache = new Map()
-  private tagCodecCache: any = {}
-  private tagEncoding: any
+  public dataSeriesCodecCache = new Map<string, CramCodec>()
+  public tagCodecCache: any = {}
+  public tagEncoding: any
+  public dataSeriesEncoding: DataSeriesEncodingMap
+
   constructor(content: CramCompressionHeader) {
-    Object.assign(this, content)
+    // Object.assign(this, content)
     // interpret some of the preservation map tags for convenient use
     this.readNamesIncluded = content.preservation.RN
     this.APdelta = content.preservation.AP
     this.referenceRequired = !!content.preservation.RR
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
+    this.dataSeriesEncoding = content.dataSeriesEncoding
   }
 
   /**
@@ -119,7 +126,7 @@ export default class CramContainerCompressionScheme {
     return this.tagIdsDictionary[tagListId]
   }
 
-  getCodecForDataSeries(dataSeriesName) {
+  getCodecForDataSeries(dataSeriesName: DataSeriesEncodingKey) {
     let r = this.dataSeriesCodecCache.get(dataSeriesName)
     if (r === undefined) {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
@@ -138,12 +145,12 @@ export default class CramContainerCompressionScheme {
   }
 
   toJSON() {
-    const data = {}
+    const data: any = {}
     Object.keys(this).forEach(k => {
       if (/Cache$/.test(k)) {
         return
       }
-      data[k] = this[k]
+      data[k] = (this as any)[k]
     })
     return data
   }

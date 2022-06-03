@@ -110,7 +110,7 @@ const parseByteAsBool = new Parser().uint8(null, {
   formatter: /* istanbul ignore next */ val => !!val,
 })
 
-type CramPreservationMap = {
+export type CramPreservationMap = {
   MI: boolean
   UI: boolean
   PI: boolean
@@ -121,7 +121,7 @@ type CramPreservationMap = {
   TD: CramTagDictionary
 }
 
-type DataSeriesEncoding =
+export type DataSeriesEncodingKey =
   | 'BF'
   | 'CF'
   | 'RI'
@@ -152,8 +152,10 @@ type DataSeriesEncoding =
   | 'QS'
   | 'TC'
   | 'TN'
+  | 'TM'
+  | 'TV'
 
-type DataSeriesEncodingMap = Record<DataSeriesEncoding, CramEncoding>
+export type DataSeriesEncodingMap = Record<DataSeriesEncodingKey, CramEncoding>
 
 const cramPreservationMap = new Parser()
   .itf8('mapSize')
@@ -203,64 +205,84 @@ const unversionedParsers = {
   cramBlockCrc32,
 }
 
+export type ExternalCramEncoding = {
+  codecId: 1
+  parametersBytes: number
+  parameters: {
+    blockContentId: number
+  }
+}
+export type ByteArrayStopCramEncoding = {
+  codecId: 5
+  parametersBytes: number
+  parameters: {
+    stopByte: number
+    blockContentId: number
+  }
+}
+
 export type CramEncoding =
   | {
       codecId: 0
       parametersBytes: number
+      parameters: Record<string, never>
     }
-  | {
-      codecId: 1
-      parametersBytes: number
-      blockContentId: number
-    }
+  | ExternalCramEncoding
   | {
       codecId: 2
       parametersBytes: number
-      offset: number
-      M: number
+      parameters: {
+        offset: number
+        M: number
+      }
     }
   | {
       codecId: 3
       parametersBytes: number
-      numCodes: number
-      symbols: number[]
-      numLengths: number
-      bitLengths: number[]
+      parameters: {
+        numCodes: number
+        symbols: number[]
+        numLengths: number
+        bitLengths: number[]
+      }
     }
   | {
       codecId: 4
       parametersBytes: number
-      lengthsEncoding: CramEncoding
-      valuesEncoding: CramEncoding
+      parameters: {
+        lengthsEncoding: CramEncoding
+        valuesEncoding: CramEncoding
+      }
     }
-  | {
-      codecId: 5
-      parametersBytes: number
-      stopByte: number
-      blockContentId: number
-    }
+  | ByteArrayStopCramEncoding
   | {
       codecId: 6
       parametersBytes: number
-      offset: number
-      length: number
+      parameters: {
+        offset: number
+        length: number
+      }
     }
   | {
       codecId: 7
       parametersBytes: number
-      offset: number
-      K: number
+      parameters: {
+        offset: number
+        K: number
+      }
     }
   | {
       codecId: 8
       parametersBytes: number
-      offset: number
-      log2m: number
+      parameters: {
+        offset: number
+        log2m: number
+      }
     }
   | {
       codecId: 9
       parametersBytes: number
-      offset: number
+      parameters: { offset: number }
     }
 
 export type MappedSliceHeader = {
