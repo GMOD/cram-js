@@ -281,7 +281,7 @@ export default function decodeRecord(
     }
 
     // detachedCount++
-  } else if (CramFlagsDecoder.isWithMateDownstream(flags)) {
+  } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
     mateRecordNumber = (decodeDataSeries('NF') as number) + recordNumber + 1
   }
 
@@ -367,7 +367,7 @@ export default function decodeRecord(
       }
       qualityScores = bases
     }
-  } else if (CramFlagsDecoder.isDecodeSequenceAsStar(flags)) {
+  } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
     readBases = null
     qualityScores = null
   } else {
@@ -377,7 +377,7 @@ export default function decodeRecord(
     }
     readBases = String.fromCharCode(...bases)
 
-    if (CramFlagsDecoder.isPreservingQualityScores(flags)) {
+    if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       for (let i = 0; i < bases.length; i += 1) {
         bases[i] = decodeDataSeries('QS')
       }
