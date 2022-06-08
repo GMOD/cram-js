@@ -273,18 +273,8 @@ export default class CramRecord {
     this.mappingQuality = mappingQuality
     this.lengthOnRef = lengthOnRef
     this.qualityScores = qualityScores
-    this.mateRecordNumber = mateRecordNumber
     this.readBases = readBases
-    this.readFeatures = readFeatures
-    this.mate =
-      mateToUse === undefined
-        ? undefined
-        : {
-            flags: mateToUse.mateFlags,
-            readName: mateToUse.mateReadName,
-            sequenceId: mateToUse.mateSequenceId,
-            alignmentStart: mateToUse.mateAlignmentStart,
-          }
+
     this.readGroupId = readGroupId
     this.readName = readName
     this.sequenceId = sequenceId
@@ -292,6 +282,22 @@ export default class CramRecord {
     this.templateSize = templateSize
     this.alignmentStart = alignmentStart
     this.tags = tags
+
+    // backwards compatibility
+    if (readFeatures) {
+      this.readFeatures = readFeatures
+    }
+    if (mateToUse) {
+      this.mate = {
+        flags: mateToUse.mateFlags,
+        readName: mateToUse.mateReadName,
+        sequenceId: mateToUse.mateSequenceId,
+        alignmentStart: mateToUse.mateAlignmentStart,
+      }
+    }
+    if (mateRecordNumber) {
+      this.mateRecordNumber = mateRecordNumber
+    }
   }
 
   /**
