@@ -13,9 +13,9 @@ import { FetchableSmallFasta } from './lib/fasta'
 
 describe('dumping cram files', () => {
   testFileList.forEach(filename => {
-    if (filename !== 'c1#noseq.tmp.cram') {
-      return
-    }
+    // if (filename !== 'c1#noseq.tmp.cram') {
+    //   return
+    // }
     // ;['xx#unsorted.tmp.cram'].forEach(filename => {
     it(`can dump the whole ${filename} without error`, async () => {
       let seqFetch

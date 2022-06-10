@@ -28,7 +28,7 @@ function JSONstringifyOrder(obj, space) {
 }
 
 export function JsonClone(obj) {
-  return JSON.parse(JSONstringifyOrder(obj))
+  return JSON.parse(JSON.stringify(obj))
 }
 
 let extended = xit

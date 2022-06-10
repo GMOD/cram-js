@@ -1,6 +1,5 @@
 //@ts-nocheck
 import {
-  extended,
   fs,
   JsonClone,
   loadTestJSON,
@@ -209,54 +208,6 @@ describe('.crai indexed cram file', () => {
       )
     })
   })
-
-  extended(
-    'can fetch some regions of tomato example data correctly',
-    async () => {
-      // const fasta = new IndexedFastaFile({
-      //   fasta: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa'),
-      //   fai: testDataFile('extended/S_lycopersicum_chromosomes.2.50.fa.fai'),
-      // })
-      const cram = new IndexedCramFile({
-        cramFilehandle: testDataFile('extended/RNAseq_mapping_def.cram'),
-        index: new CraiIndex({
-          filehandle: testDataFile('extended/RNAseq_mapping_def.cram.crai'),
-        }),
-        // seqFetch: fasta.fetch.bind(fasta),
-      })
-
-      const features = await cram.getRecordsForRange(1, 20000, 30000)
-      if (REWRITE_EXPECTED_DATA) {
-        fs.writeFileSync(
-          `test/data/extended/RNAseq_mapping_def.cram.test1.expected.json`,
-          JSON.stringify(features, null, '  '),
-        )
-      }
-
-      const expectedFeatures = await loadTestJSON(
-        'extended/RNAseq_mapping_def.cram.test1.expected.json',
-      )
-
-      expect(JsonClone(features)).toEqual(expectedFeatures)
-
-      const moreFeatures = await cram.getRecordsForRange(6, 12437859, 12437959)
-      if (REWRITE_EXPECTED_DATA) {
-        fs.writeFileSync(
-          `test/data/extended/RNAseq_mapping_def.cram.test2.expected.json`,
-          JSON.stringify(moreFeatures, null, '  '),
-        )
-      }
-
-      // const moreExpectedFeatures = await loadTestJSON(
-      //   'extended/RNAseq_mapping_def.cram.test2.expected.json',
-      // )
-
-      const moreFeatures2 = await cram.getRecordsForRange(6, 4765916, 4768415)
-      expect(moreFeatures2.length).toEqual(1)
-      expect(moreFeatures2[0].readName).toEqual('7033952-2')
-      expect(moreFeatures2[0].alignmentStart).toEqual(4767144)
-    },
-  )
 })
 
 describe('paired read test', () => {

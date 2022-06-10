@@ -27,7 +27,7 @@ describe('1kg mate test', () => {
 
     const firstMate = chr1Records[0]
     const secondMate = chr1Records[1]
-    expect(firstMate.readName).toBeUndefined()
+    expect(firstMate.readName).not.toBeUndefined()
     expect(firstMate.readName).toEqual(secondMate.readName)
 
     // Test retained readnames (inter chr mates)
