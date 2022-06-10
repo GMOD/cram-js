@@ -16,9 +16,9 @@ import CramContainer from './container'
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
-import { Filehandle } from './filehandle'
 import { Parser } from '@gmod/binary-parser'
 import CramRecord from './record'
+import { Filehandle } from './filehandle'
 
 //source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
@@ -65,7 +65,7 @@ export type CramFileBlock = BlockHeader & {
   crc32?: number
 }
 
-export default class CramFile implements Filehandle {
+export default class CramFile {
   private file: Filehandle
   public validateChecksums: boolean
   public fetchReferenceSequenceCallback: SeqFetch
@@ -113,8 +113,11 @@ export default class CramFile implements Filehandle {
     buffer: Buffer,
     offset: number,
     length: number,
-    position: number | null,
-  ): Promise<void> {
+    position: number,
+  ): Promise<{
+    bytesRead: number
+    buffer: Buffer
+  }> {
     return this.file.read(buffer, offset, length, position)
   }
 

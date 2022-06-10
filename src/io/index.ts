@@ -1,8 +1,7 @@
 import url from 'url'
-import RemoteFile from './remoteFile'
-import LocalFile from './localFile'
 import { ensureNotNullish } from '../typescript'
 import { Filehandle } from '../cramFile/filehandle'
+import { LocalFile, RemoteFile } from 'generic-filehandle'
 
 function fromUrl(source: string) {
   const { protocol, pathname } = url.parse(source)
