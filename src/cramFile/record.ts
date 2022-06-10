@@ -273,7 +273,9 @@ export default class CramRecord {
     this.mappingQuality = mappingQuality
     this.lengthOnRef = lengthOnRef
     this.qualityScores = qualityScores
-    this.readBases = readBases
+    if (readBases) {
+      this.readBases = readBases
+    }
 
     this.readGroupId = readGroupId
     this.readName = readName
@@ -390,7 +392,10 @@ export default class CramRecord {
    */
   getReadBases() {
     if (!this.readBases && this._refRegion) {
-      this.readBases = decodeReadSequence(this, this._refRegion)
+      const decoded = decodeReadSequence(this, this._refRegion)
+      if (decoded) {
+        this.readBases = decoded
+      }
     }
     return this.readBases
   }

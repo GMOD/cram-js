@@ -13,6 +13,9 @@ import { FetchableSmallFasta } from './lib/fasta'
 
 describe('dumping cram files', () => {
   testFileList.forEach(filename => {
+    if (filename !== 'c1#noseq.tmp.cram') {
+      return
+    }
     // ;['xx#unsorted.tmp.cram'].forEach(filename => {
     it(`can dump the whole ${filename} without error`, async () => {
       let seqFetch
@@ -32,12 +35,27 @@ describe('dumping cram files', () => {
           JSON.stringify(fileData, null, '  '),
         )
       }
-      const expectedFeatures = await loadTestJSON(`${filename}.dump.json`)
+      const expectedFeatures = JsonClone(
+        await loadTestJSON(`${filename}.dump.json`),
+      )
       const data: any[] = JsonClone(fileData)
       for (let i = 0; i < data.length; i++) {
         const datum = data[i]
         const expectedDatum = expectedFeatures[i]
-        expect(datum).toEqual(expectedDatum)
+        try {
+          if (isIterable(datum.data)) {
+            for (const data2 of datum.data) {
+              if (data2.header && data2.header.parsedContent) {
+                data2.header.content = data2.header.parsedContent
+                delete data2.header.parsedContent
+              }
+            }
+          }
+
+          expect(datum).toEqual(expectedDatum)
+        } catch (e) {
+          throw e
+        }
       }
       expect(data).toEqual(expectedFeatures)
     }, 10000)
@@ -63,3 +81,11 @@ describe('works with hard clipping', () => {
     expect(hardClip.data).toEqual(803)
   })
 })
+
+function isIterable(input) {
+  if (input === null || input === undefined) {
+    return false
+  }
+
+  return typeof input[Symbol.iterator] === 'function'
+}
