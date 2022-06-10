@@ -5,10 +5,11 @@ import CramRecord from './cramFile/record'
 import { SeqFetch } from './cramFile/file'
 import { Filehandle } from './cramFile/filehandle'
 
-export type CramFileSource =
-  | { cramUrl: string; cramPath?: undefined; cramFilehandle?: undefined }
-  | { cramPath: string; cramUrl?: undefined; cramFilehandle?: undefined }
-  | { cramFilehandle: Filehandle; cramUrl?: undefined; cramPath?: undefined }
+export type CramFileSource = {
+  cramFilehandle?: Filehandle
+  cramUrl?: string
+  cramPath?: string
+}
 
 export type CramIndexLike = {
   getEntriesForRange: (
@@ -16,11 +17,11 @@ export type CramIndexLike = {
     start: number,
     end: number,
   ) => Promise<any[]>
-  hasDataForReferenceSequence: (seqId: number) => boolean
+  hasDataForReferenceSequence: (seqId: number) => Promise<boolean>
 }
 
 export default class IndexedCramFile {
-  private cram: CramFile
+  public cram: CramFile
   private index: CramIndexLike
   private fetchSizeLimit: number
 
@@ -41,7 +42,7 @@ export default class IndexedCramFile {
     } & (
       | { cram: CramFile }
       | ({
-          cram: undefined
+          cram?: undefined
           seqFetch: SeqFetch
           checkSequenceMD5: boolean
           cacheSize?: number

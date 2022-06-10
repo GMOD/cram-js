@@ -321,7 +321,7 @@ export default function decodeRecord(
   let readFeatures
   let lengthOnRef
   let mappingQuality
-  let qualityScores
+  let qualityScores: number[] | undefined | null
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
@@ -361,11 +361,10 @@ export default function decodeRecord(
     // mapping quality
     mappingQuality = decodeDataSeries('MQ') as number
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      const bases = new Array(readLength)
-      for (let i = 0; i < bases.length; i++) {
-        bases[i] = decodeDataSeries('QS')
+      qualityScores = new Array(readLength)
+      for (let i = 0; i < qualityScores.length; i++) {
+        qualityScores[i] = decodeDataSeries('QS')
       }
-      qualityScores = bases
     }
   } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
     readBases = null
@@ -378,11 +377,10 @@ export default function decodeRecord(
     readBases = String.fromCharCode(...bases)
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
+      qualityScores = new Array(readLength)
       for (let i = 0; i < bases.length; i += 1) {
-        bases[i] = decodeDataSeries('QS')
+        qualityScores[i] = decodeDataSeries('QS')
       }
-
-      qualityScores = bases
     }
   }
 

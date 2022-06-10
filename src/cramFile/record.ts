@@ -246,7 +246,7 @@ export default class CramRecord {
   public sequenceId: number
   public readGroupId: number
   private mappingQuality: any
-  private qualityScores: any
+  public qualityScores: any
 
   constructor({
     flags,
