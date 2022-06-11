@@ -13,8 +13,11 @@ if (process.argv.length != 7) {
 }
 
 const chr = process.argv[4]
-const start = process.argv[5]
-const end = process.argv[6]
+const startStr = process.argv[5]
+const endStr = process.argv[6]
+
+const start = parseInt(startStr)
+const end = parseInt(endStr)
 
 // Fasta
 const t = new IndexedFasta({
@@ -152,7 +155,7 @@ function decodeSeqCigar(record: CramRecord) {
   return [seq, cigar]
 }
 
-function tags2str(record, RG) {
+function tags2str(record: CramRecord, RG: string[]) {
   let str = ''
   for (const type in record.tags) {
     str += '\t'
@@ -183,8 +186,8 @@ function tags2str(record, RG) {
 // Wrap in an async and then run
 async function run() {
   // Turn chr into tid
-  const seqList = await t.getSequenceList()
-  let tid = chr // ie numeric or string form
+  const seqList = await t.getSequenceNames()
+  let tid: string | number = chr // ie numeric or string form
   seqList.forEach((name, id) => {
     if (name == chr) {
       tid = id
@@ -193,19 +196,25 @@ async function run() {
   })
 
   const hdr = await indexedFile.cram.getSamHeader()
-  const RG: any[] = []
+  if (!hdr) {
+    throw new Error()
+  }
+  const RG: string[] = []
   let nRG = 0
-  for (const line in hdr) {
-    if (hdr[line].tag === 'RG') {
-      for (const i in hdr[line].data) {
-        if (hdr[line].data[i].tag === 'ID') {
-          RG[nRG++] = hdr[line].data[i].value
+  for (const line of hdr) {
+    if (line.tag === 'RG') {
+      for (const i in line.data) {
+        if (line.data[i].tag === 'ID') {
+          RG[nRG++] = line.data[i].value
         }
       }
     }
   }
 
   // Region to query on.  NB gets mapped reads only
+  if (typeof tid === 'string') {
+    tid = parseInt(tid)
+  }
   const records = await indexedFile.getRecordsForRange(tid >>> 0, start, end)
 
   //return; // benchmark decoder only
@@ -225,13 +234,13 @@ async function run() {
     //  }
 
     let qual = ''
-    record.qualityScores.forEach(q => {
+    record.qualityScores!.forEach(q => {
       qual += String.fromCharCode(q + 33)
     })
 
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _rnext =
-      record.sequenceId == record.mate.sequenceId
+      record.sequenceId == record.mate!.sequenceId
         ? '='
         : seqList[record.sequenceId]
     //eslint-disable-next-line @typescript-eslint/no-unused-vars

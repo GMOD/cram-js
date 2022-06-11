@@ -1,13 +1,18 @@
-import {
-  CramUnimplementedError,
-  CramMalformedError,
-  CramBufferOverrunError,
-} from '../../errors'
-import CramCodec from './_base'
+import { CramMalformedError, CramUnimplementedError } from '../../errors'
+import CramCodec, { Cursor, Cursors, DataType, DecodedData } from './_base'
 import { parseItf8 } from '../util'
+import CramSlice from '../slice'
+import { CramFileBlock } from '../file'
+import { CramBufferOverrunError } from './getBits'
+import { addInt32, assertInt8, Int32, Int8 } from '../../branding'
 
-export default class ExternalCodec extends CramCodec {
-  constructor(parameters = {}, dataType) {
+export default class ExternalCodec extends CramCodec<Record<string, never>> {
+  private readonly _decodeData: (
+    contentBlock: CramFileBlock,
+    cursor: Cursor,
+  ) => Int8 | Int32
+
+  constructor(parameters: Record<string, never>, dataType: DataType) {
     super(parameters, dataType)
     if (this.dataType === 'int') {
       this._decodeData = this._decodeInt
@@ -20,7 +25,12 @@ export default class ExternalCodec extends CramCodec {
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors) {
+  decode(
+    slice: CramSlice,
+    coreDataBlock: CramFileBlock,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ): DecodedData {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
     if (!contentBlock) {
@@ -32,21 +42,21 @@ export default class ExternalCodec extends CramCodec {
     return this._decodeData(contentBlock, cursor)
   }
 
-  _decodeInt(contentBlock, cursor) {
+  _decodeInt(contentBlock: CramFileBlock, cursor: Cursor) {
     const [result, bytesRead] = parseItf8(
       contentBlock.content,
       cursor.bytePosition,
     )
-    cursor.bytePosition += bytesRead
+    cursor.bytePosition = addInt32(cursor.bytePosition, bytesRead)
     return result
   }
 
-  _decodeByte(contentBlock, cursor) {
+  _decodeByte(contentBlock: CramFileBlock, cursor: Cursor) {
     if (cursor.bytePosition >= contentBlock.content.length) {
       throw new CramBufferOverrunError(
         'attempted to read beyond end of block. this file seems truncated.',
       )
     }
-    return contentBlock.content[cursor.bytePosition++]
+    return assertInt8(contentBlock.content[cursor.bytePosition++])
   }
 }

@@ -1,55 +1,33 @@
-import { CramBufferOverrunError } from '../../errors'
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
+import { Int32, Int64, Int8 } from '../../branding'
 
 export type DataType = 'int' | 'byte' | 'long' | 'byteArray' | 'byteArrayBlock'
+
+export type Cursor = {
+  bitPosition: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+  bytePosition: Int32
+}
+
+export type DecodedData = Int8 | Int32 | Int64 | Buffer | Uint8Array
 
 export type Cursors = {
   lastAlignmentStart: number
   coreBlock: { bitPosition: number; bytePosition: number }
   externalBlocks: {
     map: Map<any, any>
-    getCursor: (contentId: number) => {
-      bitPosition: number
-      bytePosition: number
-    }
+    getCursor: (contentId: number) => Cursor
   }
 }
 
 // codec base class
-export default abstract class CramCodec {
-  public parameters: any
+export default abstract class CramCodec<TParameters = unknown> {
+  public parameters: TParameters
   public dataType: DataType
 
-  constructor(parameters = {}, dataType: DataType) {
+  constructor(parameters: TParameters, dataType: DataType) {
     this.parameters = parameters
     this.dataType = dataType
-  }
-
-  // decode(slice, coreDataBlock, blocksByContentId, cursors) {
-  // }
-
-  _getBits(data: any, cursor: any, numBits: any) {
-    let val = 0
-    if (
-      cursor.bytePosition + (7 - cursor.bitPosition + numBits) / 8 >
-      data.length
-    ) {
-      throw new CramBufferOverrunError(
-        'read error during decoding. the file seems to be truncated.',
-      )
-    }
-    for (let dlen = numBits; dlen; dlen -= 1) {
-      // get the next `dlen` bits in the input, put them in val
-      val <<= 1
-      val |= (data[cursor.bytePosition] >> cursor.bitPosition) & 1
-      cursor.bitPosition -= 1
-      if (cursor.bitPosition < 0) {
-        cursor.bytePosition += 1
-      }
-      cursor.bitPosition &= 7
-    }
-    return val
   }
 
   abstract decode(
@@ -57,5 +35,5 @@ export default abstract class CramCodec {
     coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
-  ): any
+  ): DecodedData
 }

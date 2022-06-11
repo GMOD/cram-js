@@ -1,5 +1,6 @@
 import { CramUnimplementedError } from '../../errors'
 import CramCodec from './_base'
+import { getBits } from './getBits'
 
 export default class SubexpCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
@@ -13,7 +14,7 @@ export default class SubexpCodec extends CramCodec {
 
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
     let numLeadingOnes = 0
-    while (this._getBits(coreDataBlock.content, cursors.coreBlock, 1)) {
+    while (getBits(coreDataBlock.content, cursors.coreBlock, 1)) {
       numLeadingOnes += 1
     }
 
@@ -21,10 +22,10 @@ export default class SubexpCodec extends CramCodec {
     let n
     if (numLeadingOnes === 0) {
       b = this.parameters.K
-      n = this._getBits(coreDataBlock.content, cursors.coreBlock, b)
+      n = getBits(coreDataBlock.content, cursors.coreBlock, b)
     } else {
       b = numLeadingOnes + this.parameters.K - 1
-      n = (1 << b) | this._getBits(coreDataBlock.content, cursors.coreBlock, b)
+      n = (1 << b) | getBits(coreDataBlock.content, cursors.coreBlock, b)
     }
 
     return n - this.parameters.offset

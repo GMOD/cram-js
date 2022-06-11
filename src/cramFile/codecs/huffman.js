@@ -1,5 +1,6 @@
 import { CramMalformedError } from '../../errors'
 import CramCodec from './_base'
+import { getBits } from './getBits'
 
 function numberOfSetBits(ii) {
   let i = (ii - (ii >> 1)) & 0x55555555
@@ -114,7 +115,7 @@ export default class HuffmanIntCodec extends CramCodec {
     for (let i = 0; i < this.sortedCodes.length; i += 1) {
       const length = this.sortedCodes[i].bitLength
       bits <<= length - prevLen
-      bits |= this._getBits(input, coreCursor, length - prevLen)
+      bits |= getBits(input, coreCursor, length - prevLen)
       prevLen = length
       {
         const index = this.bitCodeToValue[bits]

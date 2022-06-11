@@ -9,7 +9,6 @@ export class CramMalformedError extends CramError {}
 /**
  * An error caused by attempting to read beyond the end of the defined data.
  */
-export class CramBufferOverrunError extends CramMalformedError {}
 
 /**
  * An error caused by data being too big, exceeding a size limit.

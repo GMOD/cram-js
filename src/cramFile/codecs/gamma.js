@@ -1,5 +1,6 @@
 import { CramUnimplementedError } from '../../errors'
 import CramCodec from './_base'
+import { getBits } from './getBits'
 
 export default class GammaCodec extends CramCodec {
   constructor(parameters = {}, dataType) {
@@ -14,11 +15,11 @@ export default class GammaCodec extends CramCodec {
   decode(slice, coreDataBlock, blocksByContentId, cursors) {
     let length = 1
 
-    while (this._getBits(coreDataBlock.content, cursors.coreBlock, 1) === 0) {
+    while (getBits(coreDataBlock.content, cursors.coreBlock, 1) === 0) {
       length += 1
     }
 
-    const readBits = this._getBits(
+    const readBits = getBits(
       coreDataBlock.content,
       cursors.coreBlock,
       length - 1,

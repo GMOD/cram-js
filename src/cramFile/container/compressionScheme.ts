@@ -7,6 +7,7 @@ import {
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
 } from '../sectionParsers'
+import { CramEncoding } from '../encoding'
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -86,8 +87,8 @@ export default class CramContainerCompressionScheme {
   public tagIdsDictionary: any
   public substitutionMatrix: string[][]
   public dataSeriesCodecCache = new Map<string, CramCodec>()
-  public tagCodecCache: any = {}
-  public tagEncoding: any = {}
+  public tagCodecCache: Record<string, CramCodec> = {}
+  public tagEncoding: Record<string, CramEncoding> = {}
   public dataSeriesEncoding: DataSeriesEncodingMap
   private preservation: CramPreservationMap
   private _endPosition: number

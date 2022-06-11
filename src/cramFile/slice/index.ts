@@ -1,8 +1,4 @@
-import {
-  CramArgumentError,
-  CramBufferOverrunError,
-  CramMalformedError,
-} from '../../errors'
+import { CramArgumentError, CramMalformedError } from '../../errors'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util'
 
 import Constants from '../constants'
@@ -16,6 +12,7 @@ import {
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers'
+import { CramBufferOverrunError } from '../codecs/getBits'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -414,7 +411,13 @@ export default class CramSlice {
         )
       }
       // console.log(dataSeriesName, Object.getPrototypeOf(codec))
-      return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
+      const decoded = codec.decode(
+        this,
+        coreDataBlock,
+        blocksByContentId,
+        cursors,
+      )
+      return decoded
     }
     let records: CramRecord[] = new Array(sliceHeader.parsedContent.numRecords)
     for (let i = 0; i < records.length; i += 1) {

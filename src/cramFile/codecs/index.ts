@@ -8,7 +8,7 @@ import BetaCodec from './beta'
 import GammaCodec from './gamma'
 import SubexpCodec from './subexp'
 import CramCodec, { DataType } from './_base'
-import { CramEncoding } from '../sectionParsers'
+import { CramEncoding } from '../encoding'
 
 const codecClasses = {
   1: ExternalCodec,
@@ -22,7 +22,7 @@ const codecClasses = {
   9: GammaCodec,
 }
 
-export function getCodecClassWithId(id: number) {
+function getCodecClassWithId(id: number) {
   return (codecClasses as any)[id]
 }
 

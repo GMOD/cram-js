@@ -1,6 +1,7 @@
 import { Parser } from '@gmod/binary-parser'
 import { TupleOf } from '../typescript'
 import { ParsedItem } from './util'
+import { CramEncoding } from './encoding'
 
 const singleItf8 = new Parser().itf8()
 
@@ -205,86 +206,6 @@ const unversionedParsers = {
   cramBlockHeader,
   cramBlockCrc32,
 }
-
-export type ExternalCramEncoding = {
-  codecId: 1
-  parametersBytes: number
-  parameters: {
-    blockContentId: number
-  }
-}
-export type ByteArrayStopCramEncoding = {
-  codecId: 5
-  parametersBytes: number
-  parameters: {
-    stopByte: number
-    blockContentId: number
-  }
-}
-
-export type CramEncoding =
-  | {
-      codecId: 0
-      parametersBytes: number
-      parameters: Record<string, never>
-    }
-  | ExternalCramEncoding
-  | {
-      codecId: 2
-      parametersBytes: number
-      parameters: {
-        offset: number
-        M: number
-      }
-    }
-  | {
-      codecId: 3
-      parametersBytes: number
-      parameters: {
-        numCodes: number
-        symbols: number[]
-        numLengths: number
-        bitLengths: number[]
-      }
-    }
-  | {
-      codecId: 4
-      parametersBytes: number
-      parameters: {
-        lengthsEncoding: CramEncoding
-        valuesEncoding: CramEncoding
-      }
-    }
-  | ByteArrayStopCramEncoding
-  | {
-      codecId: 6
-      parametersBytes: number
-      parameters: {
-        offset: number
-        length: number
-      }
-    }
-  | {
-      codecId: 7
-      parametersBytes: number
-      parameters: {
-        offset: number
-        K: number
-      }
-    }
-  | {
-      codecId: 8
-      parametersBytes: number
-      parameters: {
-        offset: number
-        log2m: number
-      }
-    }
-  | {
-      codecId: 9
-      parametersBytes: number
-      parameters: { offset: number }
-    }
 
 export type MappedSliceHeader = {
   refSeqId: number
