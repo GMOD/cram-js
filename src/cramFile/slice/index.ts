@@ -13,6 +13,8 @@ import {
   UnmappedSliceHeader,
 } from '../sectionParsers'
 import { CramBufferOverrunError } from '../codecs/getBits'
+import { Cursors } from '../codecs/_base'
+import { assertInt32 } from '../../branding'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -385,11 +387,11 @@ export default class CramSlice {
     // data note that we are only decoding a single block here, the core
     // data block
     const coreDataBlock = await this.getCoreDataBlock()
-    const cursors = {
+    const cursors: Cursors = {
       lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
         ? sliceHeader.parsedContent.refSeqStart
         : 0,
-      coreBlock: { bitPosition: 7, bytePosition: 0 },
+      coreBlock: { bitPosition: 7, bytePosition: assertInt32(0) },
       externalBlocks: {
         map: new Map(),
         getCursor(contentId: number) {

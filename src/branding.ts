@@ -96,3 +96,15 @@ export function ensureInt64n(n: number): Int64 {
 export function addInt32(a: Int32, b: Int32) {
   return ensureInt32(a + b)
 }
+
+export function incrementInt32(a: Int32) {
+  return addInt32(a, assertInt32(1))
+}
+
+export function decrementInt32(a: Int32) {
+  return addInt32(a, assertInt32(-1))
+}
+
+export function subtractInt32(a: Int32, b: Int32) {
+  return ensureInt32(a - b)
+}

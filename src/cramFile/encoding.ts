@@ -27,10 +27,10 @@ export type HuffmanEncoding = {
   codecId: 3
   parametersBytes: Int32
   parameters: {
-    numCodes: number
-    symbols: number[]
-    numLengths: number
-    bitLengths: number[]
+    numCodes: Int32
+    symbols: Int32[]
+    numLengths: Int32
+    bitLengths: Int32[]
   }
 }
 
@@ -56,8 +56,8 @@ export type BetaEncoding = {
   codecId: 6
   parametersBytes: Int32
   parameters: {
-    offset: number
-    length: number
+    offset: Int32
+    length: Int32 // int number of bits
   }
 }
 
@@ -65,8 +65,8 @@ export type SubexpEncoding = {
   codecId: 7
   parametersBytes: Int32
   parameters: {
-    offset: number
-    K: number
+    offset: Int32
+    K: Int32
   }
 }
 
@@ -82,7 +82,9 @@ export type GolombRiceEncoding = {
 export type GammaEncoding = {
   codecId: 9
   parametersBytes: Int32
-  parameters: { offset: number }
+  parameters: {
+    offset: Int32
+  }
 }
 
 export type CramEncoding =

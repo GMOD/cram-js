@@ -2,7 +2,14 @@ import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
 import { Int32, Int64, Int8 } from '../../branding'
 
-export type DataType = 'int' | 'byte' | 'long' | 'byteArray' | 'byteArrayBlock'
+export type DataType = 'int' | 'byte' | 'long' | 'byteArray'
+
+export type DataTypeMapping = {
+  byte: Int8
+  int: Int32
+  long: Int64
+  byteArray: Uint8Array
+}
 
 export type Cursor = {
   bitPosition: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
@@ -13,7 +20,7 @@ export type DecodedData = Int8 | Int32 | Int64 | Buffer | Uint8Array
 
 export type Cursors = {
   lastAlignmentStart: number
-  coreBlock: { bitPosition: number; bytePosition: number }
+  coreBlock: Cursor
   externalBlocks: {
     map: Map<any, any>
     getCursor: (contentId: number) => Cursor
@@ -21,11 +28,14 @@ export type Cursors = {
 }
 
 // codec base class
-export default abstract class CramCodec<TParameters = unknown> {
+export default abstract class CramCodec<
+  TResult extends DataType = DataType,
+  TParameters = unknown,
+> {
   public parameters: TParameters
   public dataType: DataType
 
-  constructor(parameters: TParameters, dataType: DataType) {
+  constructor(parameters: TParameters, dataType: TResult) {
     this.parameters = parameters
     this.dataType = dataType
   }
@@ -35,5 +45,5 @@ export default abstract class CramCodec<TParameters = unknown> {
     coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
-  ): DecodedData
+  ): DataTypeMapping[TResult]
 }

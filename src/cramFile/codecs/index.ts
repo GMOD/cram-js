@@ -26,10 +26,10 @@ function getCodecClassWithId(id: number) {
   return (codecClasses as any)[id]
 }
 
-export function instantiateCodec(
+export function instantiateCodec<TResult extends DataType = DataType>(
   encodingData: CramEncoding,
   dataType: DataType | 'ignore',
-): CramCodec {
+): CramCodec<TResult> {
   const CodecClass = getCodecClassWithId(
     dataType === 'ignore' ? 0 : encodingData.codecId,
   )

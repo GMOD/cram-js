@@ -1,15 +1,43 @@
 import { CramMalformedError } from '../../errors'
-import CramCodec from './_base'
+import CramCodec, { Cursor, Cursors } from './_base'
 import { getBits } from './getBits'
+import { HuffmanEncoding } from '../encoding'
+import {
+  addInt32,
+  assertInt32,
+  ensureInt32,
+  incrementInt32,
+  Int32,
+  subtractInt32,
+} from '../../branding'
+import CramSlice from '../slice'
+import { CramFileBlock } from '../file'
 
-function numberOfSetBits(ii) {
+function numberOfSetBits(ii: Int32) {
   let i = (ii - (ii >> 1)) & 0x55555555
   i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
   return (((i + (i >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
 }
 
-export default class HuffmanIntCodec extends CramCodec {
-  constructor(parameters = {}, dataType) {
+type Code = { bitLength: Int32; value: Int32; bitCode: Int32 }
+
+export default class HuffmanIntCodec extends CramCodec<
+  'byte' | 'int',
+  HuffmanEncoding['parameters']
+> {
+  private codes: Record<Int32, Code> = {}
+  private codeBook: Record<Int32, Int32[]> = {}
+  private sortedByValue: Code[] = []
+  private sortedCodes: Code[] = []
+  private sortedValuesByBitCode: Int32[] = []
+  private sortedBitCodes: Int32[] = []
+  private sortedBitLengthsByBitCode: Int32[] = []
+  private bitCodeToValue: Int32[] = []
+
+  constructor(
+    parameters: HuffmanEncoding['parameters'],
+    dataType: 'byte' | 'int',
+  ) {
     super(parameters, dataType)
     if (!['byte', 'int'].includes(this.dataType)) {
       throw new TypeError(
@@ -29,7 +57,9 @@ export default class HuffmanIntCodec extends CramCodec {
 
   buildCodeBook() {
     // parse the parameters together into a `codes` data structure
-    let codes = new Array(this.parameters.numCodes)
+    let codes: Array<{ symbol: Int32; bitLength: Int32 }> = new Array(
+      this.parameters.numCodes,
+    )
     for (let i = 0; i < this.parameters.numCodes; i += 1) {
       codes[i] = {
         symbol: this.parameters.symbols[i],
@@ -52,19 +82,23 @@ export default class HuffmanIntCodec extends CramCodec {
 
   buildCodes() {
     this.codes = {} /*  new TreeMap<Integer, HuffmanBitCode>(); */
-    let codeLength = 0
-    let codeValue = -1
+    let codeLength = assertInt32(0)
+    let codeValue = assertInt32(-1)
     Object.entries(this.codeBook).forEach(([bitLength, symbols]) => {
-      bitLength = parseInt(bitLength, 10)
+      const bitLengthInt = ensureInt32(parseInt(bitLength, 10))
       symbols.forEach(symbol => {
-        const code = { bitLength, value: symbol }
-        codeValue += 1
-        const delta = bitLength - codeLength // new length?
-        codeValue <<= delta // pad with 0's
+        const code = {
+          bitLength: bitLengthInt,
+          value: symbol,
+          bitCode: assertInt32(0),
+        }
+        codeValue = incrementInt32(codeValue)
+        const delta = subtractInt32(bitLengthInt, codeLength) // new length?
+        codeValue = ensureInt32(codeValue << delta) // pad with 0's
         code.bitCode = codeValue // calculated: huffman code
-        codeLength += delta // adjust current code length
+        codeLength = addInt32(codeLength, delta) // adjust current code length
 
-        if (numberOfSetBits(codeValue) > bitLength) {
+        if (numberOfSetBits(codeValue) > bitLengthInt) {
           throw new CramMalformedError('Symbol out of range')
         }
 
@@ -90,11 +124,16 @@ export default class HuffmanIntCodec extends CramCodec {
 
     this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
     for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
-      this.bitCodeToValue[this.sortedCodes[i].bitCode] = i
+      this.bitCodeToValue[this.sortedCodes[i].bitCode] = assertInt32(i)
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors) {
+  decode(
+    slice: CramSlice,
+    coreDataBlock: CramFileBlock,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ) {
     return this._decode(slice, coreDataBlock, cursors.coreBlock)
   }
 
@@ -107,15 +146,15 @@ export default class HuffmanIntCodec extends CramCodec {
     return this.sortedCodes[0].value
   }
 
-  _decode(slice, coreDataBlock, coreCursor) {
+  _decode(slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
     const input = coreDataBlock.content
 
-    let prevLen = 0
+    let prevLen = assertInt32(0)
     let bits = 0
     for (let i = 0; i < this.sortedCodes.length; i += 1) {
       const length = this.sortedCodes[i].bitLength
       bits <<= length - prevLen
-      bits |= getBits(input, coreCursor, length - prevLen)
+      bits |= getBits(input, coreCursor, subtractInt32(length, prevLen))
       prevLen = length
       {
         const index = this.bitCodeToValue[bits]
