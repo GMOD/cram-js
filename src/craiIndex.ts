@@ -8,7 +8,7 @@ import { Filehandle } from './cramFile/filehandle'
 
 const BAI_MAGIC = 21578050 // BAI\1
 
-type Slice = {
+export type Slice = {
   start: number
   span: number
   containerStart: number

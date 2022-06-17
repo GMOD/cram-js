@@ -481,10 +481,10 @@ export default class CramSlice {
   async getRecords(filterFunction: (r: CramRecord) => boolean) {
     // fetch the features if necessary, using the file-level feature cache
     const cacheKey = this.container.filePosition + this.containerPosition
-    let recordsPromise = this.file.featureCache.get(cacheKey)
+    let recordsPromise = this.file.featureCache.get(cacheKey.toString())
     if (!recordsPromise) {
       recordsPromise = this._fetchRecords()
-      this.file.featureCache.set(cacheKey, recordsPromise)
+      this.file.featureCache.set(cacheKey.toString(), recordsPromise)
     }
 
     const unfiltered = await recordsPromise

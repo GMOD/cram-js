@@ -3,6 +3,7 @@ import { TupleOf } from '../typescript'
 import { ParsedItem } from './util'
 import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
 import { Int32 } from '../branding'
+import { CramEncoding } from './encoding'
 
 const singleItf8 = new Parser().itf8()
 
@@ -442,7 +443,7 @@ export type BlockHeader = {
 export type CramCompressionHeader = ParsedItem<{
   preservation: CramPreservationMap
   dataSeriesEncoding: DataSeriesEncodingMap
-  tagEncoding: any
+  tagEncoding: Record<string, CramEncoding>
 }>
 
 function getSectionParsers(majorVersion: number): {

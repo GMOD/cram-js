@@ -73,7 +73,7 @@ export default class CramFile {
     checkSequenceMD5: boolean
     cacheSize: number
   }
-  public featureCache: QuickLRU<number, Promise<CramRecord[]>>
+  public featureCache: QuickLRU<string, Promise<CramRecord[]>>
   private header: string | undefined
 
   constructor(args: CramFileArgs) {

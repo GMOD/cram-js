@@ -4,6 +4,7 @@ import CramFile from './cramFile'
 import CramRecord from './cramFile/record'
 import { SeqFetch } from './cramFile/file'
 import { Filehandle } from './cramFile/filehandle'
+import { Slice } from './craiIndex'
 
 export type CramFileSource = {
   cramFilehandle?: Filehandle
@@ -16,7 +17,7 @@ export type CramIndexLike = {
     seqId: number,
     start: number,
     end: number,
-  ) => Promise<any[]>
+  ) => Promise<Slice[]>
   hasDataForReferenceSequence: (seqId: number) => Promise<boolean>
 }
 
