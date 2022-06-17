@@ -1,17 +1,17 @@
-import { CramMalformedError } from '../../errors'
 import { instantiateCodec } from '../codecs'
-import CramCodec, { DataType } from '../codecs/_base'
+import CramCodec from '../codecs/_base'
+import { CramCompressionHeader, CramPreservationMap } from '../sectionParsers'
+import { CramEncoding } from '../encoding'
+import { CramMalformedError } from '../../errors'
 import {
-  CramCompressionHeader,
-  CramPreservationMap,
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
-} from '../sectionParsers'
-import { CramEncoding } from '../encoding'
+} from '../codecs/dataSeriesTypes'
+import { Int32 } from '../../branding'
 
 // the hardcoded data type to be decoded for each core
 // data field
-const dataSeriesTypes: Record<DataSeriesEncodingKey, DataType | 'ignore'> = {
+const dataSeriesTypes = {
   BF: 'int',
   CF: 'int',
   RI: 'int',
@@ -42,9 +42,11 @@ const dataSeriesTypes: Record<DataSeriesEncodingKey, DataType | 'ignore'> = {
   QS: 'byte',
   QQ: 'byteArray',
   TL: 'int',
-  TM: 'ignore',
-  TV: 'ignore',
-}
+  // TM: 'ignore',
+  // TV: 'ignore',
+} as const
+
+export type DataSeriesTypes = typeof dataSeriesTypes
 
 function parseSubstitutionMatrix(byteArray: number[]) {
   const matrix: string[][] = new Array(5)
@@ -80,13 +82,17 @@ function parseSubstitutionMatrix(byteArray: number[]) {
   return matrix
 }
 
+type DataSeriesCache = {
+  [K in DataSeriesEncodingKey]?: CramCodec<DataSeriesTypes[K]>
+}
+
 export default class CramContainerCompressionScheme {
   public readNamesIncluded: boolean
   public APdelta: boolean
   public referenceRequired: boolean
-  public tagIdsDictionary: any
+  public tagIdsDictionary: Record<Int32, string[]>
   public substitutionMatrix: string[][]
-  public dataSeriesCodecCache = new Map<string, CramCodec>()
+  public dataSeriesCodecCache: DataSeriesCache = {}
   public tagCodecCache: Record<string, CramCodec> = {}
   public tagEncoding: Record<string, CramEncoding> = {}
   public dataSeriesEncoding: DataSeriesEncodingMap
@@ -131,12 +137,15 @@ export default class CramContainerCompressionScheme {
    * @param {number} tagListId ID of the tag list to fetch from the tag dictionary
    * @private
    */
-  getTagNames(tagListId: string) {
+  getTagNames(tagListId: Int32) {
     return this.tagIdsDictionary[tagListId]
   }
 
-  getCodecForDataSeries(dataSeriesName: DataSeriesEncodingKey) {
-    let r = this.dataSeriesCodecCache.get(dataSeriesName)
+  getCodecForDataSeries<TDataSeries extends DataSeriesEncodingKey>(
+    dataSeriesName: TDataSeries,
+  ): CramCodec<DataSeriesTypes[TDataSeries]> | undefined {
+    let r: CramCodec<DataSeriesTypes[TDataSeries]> | undefined =
+      this.dataSeriesCodecCache[dataSeriesName]
     if (r === undefined) {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
       if (encodingData) {
@@ -147,7 +156,8 @@ export default class CramContainerCompressionScheme {
           )
         }
         r = instantiateCodec(encodingData, dataType)
-        this.dataSeriesCodecCache.set(dataSeriesName, r)
+        // didn't find a way to make TS understand this
+        this.dataSeriesCodecCache[dataSeriesName] = r as CramCodec<any>
       }
     }
     return r

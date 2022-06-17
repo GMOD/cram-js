@@ -1,6 +1,7 @@
 import Constants from './constants'
 import CramContainerCompressionScheme from './container/compressionScheme'
 import decodeRecord from './slice/decodeRecord'
+import { Int32 } from '../branding'
 
 export type RefRegion = {
   start: number
@@ -238,7 +239,7 @@ export default class CramRecord {
   public lengthOnRef: number | undefined
   public readLength: number
   public templateLength?: number
-  public templateSize: number
+  public templateSize?: Int32
   public readName?: string
   public mateRecordNumber?: number
   public mate?: MateRecord
@@ -426,6 +427,9 @@ export default class CramRecord {
 
       const tmp = []
       let isize = this.templateLength || this.templateSize
+      if (isize === undefined) {
+        throw new Error('One of templateSize and templateLength must be set')
+      }
       if (this.alignmentStart > this.mate.alignmentStart && isize > 0) {
         isize = -isize
       }

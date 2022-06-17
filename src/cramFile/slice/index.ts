@@ -2,19 +2,20 @@ import { CramArgumentError, CramMalformedError } from '../../errors'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util'
 
 import Constants from '../constants'
-import decodeRecord from './decodeRecord'
+import decodeRecord, { DataSeriesDecoder } from './decodeRecord'
 import CramRecord from '../record'
 import CramContainer from '../container'
 import CramFile, { CramFileBlock } from '../file'
 import {
-  DataSeriesEncodingKey,
   isMappedSliceHeader,
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers'
 import { CramBufferOverrunError } from '../codecs/getBits'
-import { Cursors } from '../codecs/_base'
+import { Cursors, DataTypeMapping } from '../codecs/_base'
 import { assertInt32 } from '../../branding'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
+import { DataSeriesTypes } from '../container/compressionScheme'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -390,7 +391,7 @@ export default class CramSlice {
     const cursors: Cursors = {
       lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
         ? sliceHeader.parsedContent.refSeqStart
-        : 0,
+        : assertInt32(0),
       coreBlock: { bitPosition: 7, bytePosition: assertInt32(0) },
       externalBlocks: {
         map: new Map(),
@@ -405,7 +406,11 @@ export default class CramSlice {
       },
     }
 
-    const decodeDataSeries = (dataSeriesName: DataSeriesEncodingKey) => {
+    const decodeDataSeries: DataSeriesDecoder = <
+      T extends DataSeriesEncodingKey,
+    >(
+      dataSeriesName: T,
+    ): DataTypeMapping[DataSeriesTypes[T]] => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec) {
         throw new CramMalformedError(

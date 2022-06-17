@@ -1,9 +1,10 @@
 import { tinyMemoize } from '../util'
 
-import CramCodec, { Cursors, DataType } from './_base'
+import CramCodec, { Cursors } from './_base'
 import { ByteArrayLengthEncoding, CramEncoding } from '../encoding'
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
+import { DataType } from './dataSeriesTypes'
 
 type CramCodecFactory = <TData extends DataType = DataType>(
   encodingData: CramEncoding,

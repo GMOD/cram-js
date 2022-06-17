@@ -1,7 +1,8 @@
 import { Parser } from '@gmod/binary-parser'
 import { TupleOf } from '../typescript'
 import { ParsedItem } from './util'
-import { CramEncoding } from './encoding'
+import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
+import { Int32 } from '../branding'
 
 const singleItf8 = new Parser().itf8()
 
@@ -123,42 +124,6 @@ export type CramPreservationMap = {
   TD: CramTagDictionary
 }
 
-export type DataSeriesEncodingKey =
-  | 'BF'
-  | 'CF'
-  | 'RI'
-  | 'RL'
-  | 'AP'
-  | 'RG'
-  | 'RN'
-  | 'MF'
-  | 'NS'
-  | 'NP'
-  | 'TS'
-  | 'NF'
-  | 'TL'
-  | 'FN'
-  | 'FC'
-  | 'FP'
-  | 'DL'
-  | 'BB'
-  | 'QQ'
-  | 'BS'
-  | 'IN'
-  | 'RS'
-  | 'PD'
-  | 'HC'
-  | 'SC'
-  | 'MQ'
-  | 'BA'
-  | 'QS'
-  | 'TC'
-  | 'TN'
-  | 'TM'
-  | 'TV'
-
-export type DataSeriesEncodingMap = Record<DataSeriesEncodingKey, CramEncoding>
-
 const cramPreservationMap = new Parser()
   .itf8('mapSize')
   .itf8('mapCount')
@@ -209,7 +174,7 @@ const unversionedParsers = {
 
 export type MappedSliceHeader = {
   refSeqId: number
-  refSeqStart: number
+  refSeqStart: Int32
   refSeqSpan: number
   numRecords: number
   recordCounter: number

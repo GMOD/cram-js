@@ -7,8 +7,9 @@ import ByteArrayLengthCodec from './byteArrayLength'
 import BetaCodec from './beta'
 import GammaCodec from './gamma'
 import SubexpCodec from './subexp'
-import CramCodec, { DataType } from './_base'
+import CramCodec from './_base'
 import { CramEncoding } from '../encoding'
+import { DataType } from './dataSeriesTypes'
 
 const codecClasses = {
   1: ExternalCodec,

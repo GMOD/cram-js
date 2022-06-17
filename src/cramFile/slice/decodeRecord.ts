@@ -7,16 +7,20 @@ import {
   ReadFeature,
 } from '../record'
 import CramSlice, { SliceHeader } from './index'
-import { DataSeriesEncodingKey, isMappedSliceHeader } from '../sectionParsers'
-import CramContainerCompressionScheme from '../container/compressionScheme'
+import { isMappedSliceHeader } from '../sectionParsers'
+import CramContainerCompressionScheme, {
+  DataSeriesTypes,
+} from '../container/compressionScheme'
 import { CramFileBlock } from '../file'
-import { Cursors } from '../codecs/_base'
+import { Cursors, DataTypeMapping } from '../codecs/_base'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
+import { addInt32, assertInt32, Int8, subtractInt32 } from '../../branding'
 
 /**
  * given a Buffer, read a string up to the first null character
  * @private
  */
-function readNullTerminatedString(buffer: number[]) {
+function readNullTerminatedString(buffer: Uint8Array) {
   let r = ''
   for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
     r += String.fromCharCode(buffer[i])
@@ -28,11 +32,11 @@ function readNullTerminatedString(buffer: number[]) {
  * parse a BAM tag's array value from a binary buffer
  * @private
  */
-function parseTagValueArray(buffer: any) {
+function parseTagValueArray(buffer: Buffer) {
   const arrayType = String.fromCharCode(buffer[0])
   const length = Int32Array.from(buffer.slice(1))[0]
 
-  const array = new Array(length)
+  const array: number[] = new Array(length)
   buffer = buffer.slice(5)
 
   if (arrayType === 'c') {
@@ -100,7 +104,7 @@ function parseTagData(tagType: string, buffer: any) {
     return new Int8Array(buffer.buffer)[0]
   }
   if (tagType === 'C') {
-    return buffer[0]
+    return buffer[0] as number
   }
   if (tagType === 'f') {
     return new Float32Array(buffer.buffer)[0]
@@ -202,9 +206,13 @@ function decodeReadFeatures(
   return readFeatures
 }
 
+export type DataSeriesDecoder = <T extends DataSeriesEncodingKey>(
+  dataSeriesName: T,
+) => DataTypeMapping[DataSeriesTypes[T]]
+
 export default function decodeRecord(
   slice: CramSlice,
-  decodeDataSeries: (dataSeriesName: DataSeriesEncodingKey) => any,
+  decodeDataSeries: DataSeriesDecoder,
   compressionScheme: CramContainerCompressionScheme,
   sliceHeader: SliceHeader,
   coreDataBlock: CramFileBlock,
@@ -231,14 +239,14 @@ export default function decodeRecord(
     sequenceId = sliceHeader.parsedContent.refSeqId
   }
 
-  const readLength = decodeDataSeries('RL') as number
+  const readLength = decodeDataSeries('RL')
   // if APDelta, will calculate the true start in a second pass
-  let alignmentStart = decodeDataSeries('AP') as number
+  let alignmentStart = decodeDataSeries('AP')
   if (compressionScheme.APdelta) {
-    alignmentStart += cursors.lastAlignmentStart
+    alignmentStart = addInt32(alignmentStart, cursors.lastAlignmentStart)
   }
   cursors.lastAlignmentStart = alignmentStart
-  const readGroupId = decodeDataSeries('RG') as number
+  const readGroupId = decodeDataSeries('RG')
 
   let readName
   if (compressionScheme.readNamesIncluded) {
@@ -293,7 +301,7 @@ export default function decodeRecord(
     throw new CramMalformedError('invalid TL index')
   }
 
-  const tags: any = {}
+  const tags: Record<string, any> = {}
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)
   const ntags = TN.length
@@ -343,9 +351,9 @@ export default function decodeRecord(
         if (code === 'D' || code === 'N') {
           lengthOnRef += data
         } else if (code === 'I' || code === 'S') {
-          lengthOnRef -= data.length
+          lengthOnRef = subtractInt32(lengthOnRef, data.length)
         } else if (code === 'i') {
-          lengthOnRef -= 1
+          lengthOnRef = subtractInt32(lengthOnRef, assertInt32(1))
         }
       }
     }
@@ -370,9 +378,9 @@ export default function decodeRecord(
     readBases = null
     qualityScores = null
   } else {
-    const bases = new Array(readLength)
+    const bases: Int8[] = new Array(readLength)
     for (let i = 0; i < bases.length; i += 1) {
-      bases[i] = decodeDataSeries('BA') as number[]
+      bases[i] = decodeDataSeries('BA')
     }
     readBases = String.fromCharCode(...bases)
 
