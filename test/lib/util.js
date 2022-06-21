@@ -31,18 +31,6 @@ export function JsonClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
-let extended = xit
-try {
-  if (fs.existsSync(require.resolve(`../data/extended/insilico_21.cram`))) {
-    extended = it
-  }
-} catch (e) {
-  // ignore
-  console.log(
-    'extended tests disabled, download the extended test dataset and fix all the symlinks in tests/data/extended to enable them',
-  )
-}
-
 const REWRITE_EXPECTED_DATA =
   typeof process !== 'undefined' &&
   process.env.CRAMJS_REWRITE_EXPECTED_DATA &&
@@ -53,7 +41,6 @@ module.exports = {
   testDataUrl,
   testDataFile,
   loadTestJSON,
-  extended,
   JsonClone,
   REWRITE_EXPECTED_DATA,
   fs,
