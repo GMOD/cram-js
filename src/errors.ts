@@ -7,10 +7,6 @@ export class CramUnimplementedError extends Error {}
 export class CramMalformedError extends CramError {}
 
 /**
- * An error caused by attempting to read beyond the end of the defined data.
- */
-
-/**
  * An error caused by data being too big, exceeding a size limit.
  */
 export class CramSizeLimitError extends CramError {}

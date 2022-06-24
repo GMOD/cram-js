@@ -16,16 +16,6 @@ export type Slice = {
   sliceBytes: number
 }
 
-// class Slice {
-//   constructor(args) {
-//     Object.assign(this, args)
-//   }
-//
-//   toString() {
-//     return `${this.start}:${this.span}:${this.containerStart}:${this.sliceStart}:${this.sliceBytes}`
-//   }
-// }
-
 type ParsedIndex = Record<string, Slice[]>
 
 function addRecordToIndex(index: ParsedIndex, record: number[]) {
@@ -73,7 +63,6 @@ export default class CraiIndex {
       cache: new QuickLRU({ maxSize: 1 }),
       fill: (data, signal) => this.parseIndex(),
     })
-    // this.readFile = filehandle.readFile.bind(filehandle)
   }
 
   parseIndex() {
