@@ -1,3 +1,7 @@
+# v1.7.1
+
+- Re-export CramRecord class for typescript
+
 # v1.7.0
 
 - Typescript entire codebase, big thanks to @0xorial for taking on this effort!
