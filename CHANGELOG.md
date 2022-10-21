@@ -1,6 +1,7 @@
 # v1.7.0
 
 - Typescript entire codebase, big thanks to @0xorial for taking on this effort!
+- Update to use webpack 5 for UMD build
 
 # v1.6.4
 
