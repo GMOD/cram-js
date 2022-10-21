@@ -1,3 +1,7 @@
+# v1.7.0
+
+- Typescript entire codebase, big thanks to @0xorial for taking on this effort!
+
 # v1.6.4
 
 - Fix off by one in returning features from getRecordsFromRange
