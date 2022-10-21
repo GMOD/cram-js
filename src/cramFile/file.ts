@@ -149,7 +149,7 @@ export default class CramFile {
 
     const firstBlock = await firstContainer.getFirstBlock()
     if (firstBlock === undefined) {
-      return undefined
+      return parseHeaderText('')
     }
     const content = firstBlock.content
     // find the end of the trailing zeros in the header text

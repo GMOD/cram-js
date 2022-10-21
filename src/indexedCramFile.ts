@@ -23,7 +23,7 @@ export type CramIndexLike = {
 
 export default class IndexedCramFile {
   public cram: CramFile
-  private index: CramIndexLike
+  public index: CramIndexLike
   private fetchSizeLimit: number
 
   /**
