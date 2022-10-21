@@ -1,6 +1,5 @@
 import md5 from 'md5'
 import { Parser } from '@gmod/binary-parser'
-import { assertInt32, ensureInt32, Int32 } from '../branding'
 import { CramBufferOverrunError } from './codecs/getBits'
 
 export function itf8Size(v: number) {
@@ -21,22 +20,22 @@ export function itf8Size(v: number) {
 
 export function parseItf8(
   buffer: Uint8Array,
-  initialOffset: Int32,
-): [Int32, Int32] {
+  initialOffset: number,
+): [number, number] {
   let offset = initialOffset
   const countFlags = buffer[offset]
   let result
   if (countFlags < 0x80) {
     result = countFlags
-    offset = assertInt32(offset + 1)
+    offset = offset + 1
   } else if (countFlags < 0xc0) {
     result = ((countFlags << 8) | buffer[offset + 1]) & 0x3fff
-    offset = assertInt32(offset + 2)
+    offset = offset + 2
   } else if (countFlags < 0xe0) {
     result =
       ((countFlags << 16) | (buffer[offset + 1] << 8) | buffer[offset + 2]) &
       0x1fffff
-    offset = assertInt32(offset + 3)
+    offset = offset + 3
   } else if (countFlags < 0xf0) {
     result =
       ((countFlags << 24) |
@@ -44,7 +43,7 @@ export function parseItf8(
         (buffer[offset + 2] << 8) |
         buffer[offset + 3]) &
       0x0fffffff
-    offset = assertInt32(offset + 4)
+    offset = offset + 4
   } else {
     result =
       ((countFlags & 0x0f) << 28) |
@@ -54,14 +53,14 @@ export function parseItf8(
       (buffer[offset + 4] & 0x0f)
     // x=((0xff & 0x0f)<<28) | (0xff<<20) | (0xff<<12) | (0xff<<4) | (0x0f & 0x0f);
     // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
-    offset = assertInt32(offset + 5)
+    offset = offset + 5
   }
   if (offset > buffer.length) {
     throw new CramBufferOverrunError(
       'Attempted to read beyond end of buffer; this file seems truncated.',
     )
   }
-  return [ensureInt32(result), ensureInt32(offset - initialOffset)]
+  return [result, offset - initialOffset]
 }
 
 // parseLtf8(buffer, initialOffset) {

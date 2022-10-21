@@ -1,7 +1,6 @@
 import Constants from './constants'
 import CramContainerCompressionScheme from './container/compressionScheme'
 import decodeRecord from './slice/decodeRecord'
-import { Int32 } from '../branding'
 
 export type RefRegion = {
   start: number
@@ -239,7 +238,7 @@ export default class CramRecord {
   public lengthOnRef: number | undefined
   public readLength: number
   public templateLength?: number
-  public templateSize?: Int32
+  public templateSize?: number
   public readName?: string
   public mateRecordNumber?: number
   public mate?: MateRecord

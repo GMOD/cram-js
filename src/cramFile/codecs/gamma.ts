@@ -4,14 +4,6 @@ import { getBits } from './getBits'
 import { GammaEncoding } from '../encoding'
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
-import {
-  assertInt32,
-  decrementInt32,
-  ensureInt32,
-  incrementInt32,
-  Int32,
-  subtractInt32,
-} from '../../branding'
 
 export default class GammaCodec extends CramCodec<
   'int',
@@ -32,21 +24,19 @@ export default class GammaCodec extends CramCodec<
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    let length: Int32 = assertInt32(1)
+    let length = 1
 
-    while (
-      getBits(coreDataBlock.content, cursors.coreBlock, assertInt32(1)) === 0
-    ) {
-      length = incrementInt32(length)
+    while (getBits(coreDataBlock.content, cursors.coreBlock, 1) === 0) {
+      length = length + 1
     }
 
     const readBits = getBits(
       coreDataBlock.content,
       cursors.coreBlock,
-      decrementInt32(length),
+      length - 1,
     )
 
     const value = readBits | (1 << (length - 1))
-    return subtractInt32(ensureInt32(value), this.parameters.offset)
+    return value - this.parameters.offset
   }
 }

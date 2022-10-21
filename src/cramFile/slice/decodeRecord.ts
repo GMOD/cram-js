@@ -14,7 +14,6 @@ import CramContainerCompressionScheme, {
 import { CramFileBlock } from '../file'
 import { Cursors, DataTypeMapping } from '../codecs/_base'
 import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
-import { addInt32, assertInt32, Int8, subtractInt32 } from '../../branding'
 
 /**
  * given a Buffer, read a string up to the first null character
@@ -243,7 +242,7 @@ export default function decodeRecord(
   // if APDelta, will calculate the true start in a second pass
   let alignmentStart = decodeDataSeries('AP')
   if (compressionScheme.APdelta) {
-    alignmentStart = addInt32(alignmentStart, cursors.lastAlignmentStart)
+    alignmentStart = alignmentStart + cursors.lastAlignmentStart
   }
   cursors.lastAlignmentStart = alignmentStart
   const readGroupId = decodeDataSeries('RG')
@@ -351,9 +350,9 @@ export default function decodeRecord(
         if (code === 'D' || code === 'N') {
           lengthOnRef += data
         } else if (code === 'I' || code === 'S') {
-          lengthOnRef = subtractInt32(lengthOnRef, data.length)
+          lengthOnRef = lengthOnRef - data.length
         } else if (code === 'i') {
-          lengthOnRef = subtractInt32(lengthOnRef, assertInt32(1))
+          lengthOnRef = lengthOnRef - 1
         }
       }
     }
@@ -378,7 +377,7 @@ export default function decodeRecord(
     readBases = null
     qualityScores = null
   } else {
-    const bases: Int8[] = new Array(readLength)
+    const bases = new Array(readLength) as number[]
     for (let i = 0; i < bases.length; i += 1) {
       bases[i] = decodeDataSeries('BA')
     }

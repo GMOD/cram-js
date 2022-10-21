@@ -2,7 +2,6 @@ import { Parser } from '@gmod/binary-parser'
 import { TupleOf } from '../typescript'
 import { ParsedItem } from './util'
 import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
-import { Int32 } from '../branding'
 import { CramEncoding } from './encoding'
 
 const singleItf8 = new Parser().itf8()
@@ -175,7 +174,7 @@ const unversionedParsers = {
 
 export type MappedSliceHeader = {
   refSeqId: number
-  refSeqStart: Int32
+  refSeqStart: number
   refSeqSpan: number
   numRecords: number
   recordCounter: number
