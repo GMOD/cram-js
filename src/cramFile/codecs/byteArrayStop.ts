@@ -1,20 +1,34 @@
-import { CramBufferOverrunError, CramMalformedError } from '../../errors'
+import { CramMalformedError } from '../../errors'
 
-import CramCodec from './_base'
+import CramCodec, { Cursor, Cursors } from './_base'
+import CramSlice from '../slice'
+import { CramFileBlock } from '../file'
+import { ByteArrayStopCramEncoding } from '../encoding'
+import { CramBufferOverrunError } from './getBits'
+import { addInt32, assertInt32 } from '../../branding'
 
-export default class ByteArrayStopCodec extends CramCodec {
-  constructor(parameters = {}, dataType) {
+export default class ByteArrayStopCodec extends CramCodec<
+  'byteArray',
+  ByteArrayStopCramEncoding['parameters']
+> {
+  constructor(
+    parameters: ByteArrayStopCramEncoding['parameters'],
+    dataType: 'byteArray',
+  ) {
     super(parameters, dataType)
-    if (dataType === 'byteArray') {
-      this._decode = this._decodeByteArray
-    } else {
+    if (dataType !== 'byteArray') {
       throw new TypeError(
         `byteArrayStop codec does not support data type ${dataType}`,
       )
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors) {
+  decode(
+    slice: CramSlice,
+    coreDataBlock: CramFileBlock,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
     if (!contentBlock) {
@@ -23,10 +37,10 @@ export default class ByteArrayStopCodec extends CramCodec {
       )
     }
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
-    return this._decode(contentBlock, cursor)
+    return this._decodeByteArray(contentBlock, cursor)
   }
 
-  _decodeByteArray(contentBlock, cursor) {
+  _decodeByteArray(contentBlock: CramFileBlock, cursor: Cursor) {
     const dataBuffer = contentBlock.content
     const { stopByte } = this.parameters
     // scan to the next stop byte
@@ -41,9 +55,9 @@ export default class ByteArrayStopCodec extends CramCodec {
           `byteArrayStop reading beyond length of data buffer?`,
         )
       }
-      stopPosition += 1
+      stopPosition = addInt32(stopPosition, assertInt32(1))
     }
-    cursor.bytePosition = stopPosition + 1
+    cursor.bytePosition = addInt32(stopPosition, assertInt32(1))
     return dataBuffer.slice(startPosition, stopPosition)
   }
 }

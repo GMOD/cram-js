@@ -1,7 +1,9 @@
-import { IndexedCramFile, CraiIndex } from '@gmod/cram'
+// import { IndexedCramFile, CraiIndex } from '@gmod/cram'
 
 //Use indexedfasta library for seqFetch, if using local file (see below)
 import { IndexedFasta } from '@gmod/indexedfasta'
+import { CraiIndex, IndexedCramFile } from '../src'
+import CramRecord from '../src/cramFile/record'
 
 if (process.argv.length != 7) {
   process.stderr.write(
@@ -11,8 +13,11 @@ if (process.argv.length != 7) {
 }
 
 const chr = process.argv[4]
-const start = process.argv[5]
-const end = process.argv[6]
+const startStr = process.argv[5]
+const endStr = process.argv[6]
+
+const start = parseInt(startStr)
+const end = parseInt(endStr)
 
 // Fasta
 const t = new IndexedFasta({
@@ -37,25 +42,30 @@ const indexedFile = new IndexedCramFile({
     // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
     // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
     // * the seqId is a numeric identifier
-    const seqList = await t.getSequenceList()
-    return (ref = await t.getSequence(seqList[seqId], start - 1, end))
+    const seqList = await t.getSequenceNames()
+    const r = await t.getSequence(seqList[seqId], start - 1, end)
+    if (r === undefined) {
+      throw new Error()
+    }
+    return r
   },
   checkSequenceMD5: false,
 })
 
-function decodeSeqCigar(record) {
-  var seq = ''
-  var cigar = ''
-  var op = 'M'
-  var oplen = 0
+function decodeSeqCigar(record: CramRecord) {
+  let sublen
+  let seq = ''
+  let cigar = ''
+  let op = 'M'
+  let oplen = 0
 
   // not sure I should access these, but...
-  const ref = record._refRegion.seq
-  const refStart = record._refRegion.start
-  var last_pos = record.alignmentStart
+  const ref = record._refRegion!.seq
+  const refStart = record._refRegion!.start
+  let last_pos = record.alignmentStart
   if (typeof record.readFeatures !== 'undefined') {
     record.readFeatures.forEach(({ code, refPos, sub, data }) => {
-      var sublen = refPos - last_pos
+      const sublen = refPos - last_pos
       seq += ref.substring(last_pos - refStart, refPos - refStart)
       last_pos = refPos
 
@@ -70,7 +80,7 @@ function decodeSeqCigar(record) {
 
       if (code === 'b') {
         // An array of bases stored verbatim
-        const ret = feature.data.split(',')
+        const ret = data.split(',')
         const added = String.fromCharCode(...ret)
         seq += added
         last_pos += added.length
@@ -125,10 +135,10 @@ function decodeSeqCigar(record) {
       } // else q or Q
     })
   } else {
-    var sublen = record.readLength - seq.length
+    sublen = record.readLength - seq.length
   }
   if (seq.length != record.readLength) {
-    var sublen = record.readLength - seq.length
+    sublen = record.readLength - seq.length
     seq += ref.substring(last_pos - refStart, last_pos - refStart + sublen)
 
     if (oplen && op != 'M') {
@@ -145,9 +155,9 @@ function decodeSeqCigar(record) {
   return [seq, cigar]
 }
 
-function tags2str(record, RG) {
-  var str = ''
-  for (var type in record.tags) {
+function tags2str(record: CramRecord, RG: string[]) {
+  let str = ''
+  for (const type in record.tags) {
     str += '\t'
     if (typeof record.tags[type] === 'number') {
       str += type + ':i:' + record.tags[type]
@@ -174,10 +184,10 @@ function tags2str(record, RG) {
 }
 
 // Wrap in an async and then run
-run = async () => {
+async function run() {
   // Turn chr into tid
-  const seqList = await t.getSequenceList()
-  var tid = chr // ie numeric or string form
+  const seqList = await t.getSequenceNames()
+  let tid: string | number = chr // ie numeric or string form
   seqList.forEach((name, id) => {
     if (name == chr) {
       tid = id
@@ -186,29 +196,35 @@ run = async () => {
   })
 
   const hdr = await indexedFile.cram.getSamHeader()
-  var RG = []
-  var nRG = 0
-  for (var line in hdr) {
-    if (hdr[line].tag === 'RG') {
-      for (var i in hdr[line].data) {
-        if (hdr[line].data[i].tag === 'ID') {
-          RG[nRG++] = hdr[line].data[i].value
+  if (!hdr) {
+    throw new Error()
+  }
+  const RG: string[] = []
+  let nRG = 0
+  for (const line of hdr) {
+    if (line.tag === 'RG') {
+      for (const i in line.data) {
+        if (line.data[i].tag === 'ID') {
+          RG[nRG++] = line.data[i].value
         }
       }
     }
   }
 
   // Region to query on.  NB gets mapped reads only
+  if (typeof tid === 'string') {
+    tid = parseInt(tid)
+  }
   const records = await indexedFile.getRecordsForRange(tid >>> 0, start, end)
 
   //return; // benchmark decoder only
 
-  var refStart = undefined
+  let refStart: number | undefined = undefined
   records.forEach(record => {
     if (!refStart) {
       refStart = record.alignmentStart
     }
-    var [seq, cigar] = decodeSeqCigar(record)
+    const [seq, cigar] = decodeSeqCigar(record)
 
     //  // or record.getReadBases()
     //  if (seq != record.getReadBases()) {
@@ -217,18 +233,18 @@ run = async () => {
     //      console.error(record.getReadBases());
     //  }
 
-    qual = ''
-    record.qualityScores.forEach(q => {
+    let qual = ''
+    record.qualityScores!.forEach(q => {
       qual += String.fromCharCode(q + 33)
     })
 
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var _rnext =
-      record.sequenceId == record.mate.sequenceId
+    const _rnext =
+      record.sequenceId == record.mate!.sequenceId
         ? '='
         : seqList[record.sequenceId]
     //eslint-disable-next-line @typescript-eslint/no-unused-vars
-    var _tlen = record.templateSize // only if detached
+    const _tlen = record.templateSize // only if detached
     const tags = tags2str(record, RG)
     console.log(
       `${record.readName}\t${record.flags}\t${seqList[record.sequenceId]}\t${

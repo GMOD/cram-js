@@ -1,9 +1,27 @@
 import { tinyMemoize } from '../util'
 
-import CramCodec from './_base'
+import CramCodec, { Cursors } from './_base'
+import { ByteArrayLengthEncoding, CramEncoding } from '../encoding'
+import CramSlice from '../slice'
+import { CramFileBlock } from '../file'
+import { DataType } from './dataSeriesTypes'
 
-export default class ByteArrayStopCodec extends CramCodec {
-  constructor(parameters = {}, dataType, instantiateCodec) {
+type CramCodecFactory = <TData extends DataType = DataType>(
+  encodingData: CramEncoding,
+  dataType: TData | 'ignore',
+) => CramCodec<TData>
+
+export default class ByteArrayStopCodec extends CramCodec<
+  'byteArray',
+  ByteArrayLengthEncoding['parameters']
+> {
+  private instantiateCodec: CramCodecFactory
+
+  constructor(
+    parameters: ByteArrayLengthEncoding['parameters'],
+    dataType: 'byteArray',
+    instantiateCodec: CramCodecFactory,
+  ) {
     super(parameters, dataType)
     this.instantiateCodec = instantiateCodec
     if (dataType !== 'byteArray') {
@@ -13,7 +31,12 @@ export default class ByteArrayStopCodec extends CramCodec {
     }
   }
 
-  decode(slice, coreDataBlock, blocksByContentId, cursors) {
+  decode(
+    slice: CramSlice,
+    coreDataBlock: CramFileBlock,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ) {
     const lengthCodec = this._getLengthCodec()
     const arrayLength = lengthCodec.decode(
       slice,
@@ -45,7 +68,6 @@ export default class ByteArrayStopCodec extends CramCodec {
   // memoize
   _getDataCodec() {
     const encodingParams = this.parameters.valuesEncoding
-
     return this.instantiateCodec(encodingParams, 'byte')
   }
 }

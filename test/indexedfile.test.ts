@@ -1,13 +1,14 @@
 //@ts-nocheck
 import {
-  testDataFile,
-  loadTestJSON,
-  JsonClone,
-  REWRITE_EXPECTED_DATA,
   fs,
+  JsonClone,
+  loadTestJSON,
+  REWRITE_EXPECTED_DATA,
+  testDataFile,
 } from './lib/util'
 import { IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
+import CramRecord from '../src/cramFile/record'
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {
@@ -77,10 +78,16 @@ describe('.crai indexed cram file', () => {
       )
     }
 
-    const expectedFeatures3 = loadTestJSON(
+    const expectedFeatures3 = await loadTestJSON(
       'ce#1000.tmp.cram.test1.expected.json',
     )
-    expect(JsonClone(features)).toEqual(await expectedFeatures3)
+
+    const clonedFeatures: CramRecord[] = JsonClone(features)
+
+    expect(clonedFeatures[0]).toEqual(expectedFeatures3[0])
+    expect(clonedFeatures.slice(0, 10)).toEqual(expectedFeatures3.slice(0, 10))
+
+    expect(clonedFeatures).toEqual(expectedFeatures3)
   })
 
   it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {

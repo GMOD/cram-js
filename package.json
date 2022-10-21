@@ -31,6 +31,7 @@
     "build": "npm run build:esm && npm run build:es5",
     "postbuild": "webpack",
     "prepublishOnly": "npm test && npm run build && cp dist/errors.js errors.js",
+    "prepack": "npm test && npm run build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js",
     "postversion": "git push --follow-tags"
   },
@@ -51,18 +52,23 @@
     "long": "^4.0.0",
     "md5": "^2.2.1",
     "pako": "^1.0.4",
-    "quick-lru": "^2.0.0"
+    "quick-lru": "^4.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12",
     "@gmod/indexedfasta": "^2.0.2",
+    "@types/buffer-crc32": "^0.2.0",
     "@types/jest": "^27.4.0",
+    "@types/long": "^4.0.2",
+    "@types/md5": "^2.3.2",
     "@types/pako": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
     "buffer": "^6.0.3",
     "documentation": "^13.2.5",
     "eslint": "^8.15.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-prettier": "^4.0.0",
     "glob": "^8.0.3",

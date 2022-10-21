@@ -1,8 +1,31 @@
-import { CramUnimplementedError, CramSizeLimitError } from './errors'
+import { CramSizeLimitError, CramUnimplementedError } from './errors'
 
 import CramFile from './cramFile'
+import CramRecord from './cramFile/record'
+import { SeqFetch } from './cramFile/file'
+import { Filehandle } from './cramFile/filehandle'
+import { Slice } from './craiIndex'
+
+export type CramFileSource = {
+  cramFilehandle?: Filehandle
+  cramUrl?: string
+  cramPath?: string
+}
+
+export type CramIndexLike = {
+  getEntriesForRange: (
+    seqId: number,
+    start: number,
+    end: number,
+  ) => Promise<Slice[]>
+  hasDataForReferenceSequence: (seqId: number) => Promise<boolean>
+}
 
 export default class IndexedCramFile {
+  public cram: CramFile
+  private index: CramIndexLike
+  private fetchSizeLimit: number
+
   /**
    *
    * @param {object} args
@@ -13,7 +36,20 @@ export default class IndexedCramFile {
    * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
    * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
    */
-  constructor(args) {
+  constructor(
+    args: {
+      index: CramIndexLike
+      fetchSizeLimit?: number
+    } & (
+      | { cram: CramFile }
+      | ({
+          cram?: undefined
+          seqFetch: SeqFetch
+          checkSequenceMD5: boolean
+          cacheSize?: number
+        } & CramFileSource)
+    ),
+  ) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
     if (args.cram) {
       this.cram = args.cram
@@ -47,7 +83,16 @@ export default class IndexedCramFile {
    * @param {number} end end of the range of interest. 1-based closed coordinates.
    * @returns {Promise[Array[CramRecord]]}
    */
-  async getRecordsForRange(seq, start, end, opts = {}) {
+  async getRecordsForRange(
+    seq: number,
+    start: number,
+    end: number,
+    opts: {
+      viewAsPairs?: boolean
+      pairAcrossChr?: boolean
+      maxInsertSize?: number
+    } = {},
+  ) {
     opts.viewAsPairs = opts.viewAsPairs || false
     opts.pairAcrossChr = opts.pairAcrossChr || false
     opts.maxInsertSize = opts.maxInsertSize || 200000
@@ -70,20 +115,24 @@ export default class IndexedCramFile {
     // TODO: do we need to merge or de-duplicate the blocks?
 
     // fetch all the slices and parse the feature data
-    const filter = feature =>
+    const filter = (feature: CramRecord) =>
       feature.sequenceId === seq &&
       feature.alignmentStart <= end &&
+      feature.lengthOnRef !== undefined &&
       feature.alignmentStart + feature.lengthOnRef - 1 >= start
     const sliceResults = await Promise.all(
       slices.map(slice => this.getRecordsInSlice(slice, filter)),
     )
 
-    let ret = Array.prototype.concat(...sliceResults)
+    let ret: CramRecord[] = Array.prototype.concat(...sliceResults)
     if (opts.viewAsPairs) {
-      const readNames = {}
-      const readIds = {}
+      const readNames: Record<string, number> = {}
+      const readIds: Record<string, number> = {}
       for (let i = 0; i < ret.length; i += 1) {
         const name = ret[i].readName
+        if (name === undefined) {
+          throw new Error()
+        }
         const id = ret[i].uniqueId
         if (!readNames[name]) {
           readNames[name] = 0
@@ -91,7 +140,7 @@ export default class IndexedCramFile {
         readNames[name] += 1
         readIds[id] = 1
       }
-      const unmatedPairs = {}
+      const unmatedPairs: Record<string, boolean> = {}
       Object.entries(readNames).forEach(([k, v]) => {
         if (v === 1) {
           unmatedPairs[k] = true
@@ -99,18 +148,22 @@ export default class IndexedCramFile {
       })
       const matePromises = []
       for (let i = 0; i < ret.length; i += 1) {
-        const name = ret[i].readName
+        const cramRecord = ret[i]
+        const name = cramRecord.readName
+        if (name === undefined) {
+          throw new Error()
+        }
         if (
           unmatedPairs[name] &&
-          ret[i].mate &&
-          (ret[i].mate.sequenceId === seqId || opts.pairAcrossChr) &&
-          Math.abs(ret[i].alignmentStart - ret[i].mate.alignmentStart) <
+          cramRecord.mate &&
+          (cramRecord.mate.sequenceId === seqId || opts.pairAcrossChr) &&
+          Math.abs(cramRecord.alignmentStart - cramRecord.mate.alignmentStart) <
             opts.maxInsertSize
         ) {
           const mateSlices = this.index.getEntriesForRange(
-            ret[i].mate.sequenceId,
-            ret[i].mate.alignmentStart,
-            ret[i].mate.alignmentStart + 1,
+            cramRecord.mate.sequenceId,
+            cramRecord.mate.alignmentStart,
+            cramRecord.mate.alignmentStart + 1,
           )
           matePromises.push(mateSlices)
         }
@@ -129,7 +182,7 @@ export default class IndexedCramFile {
         )
 
       const mateRecordPromises = []
-      const mateFeatPromises = []
+      const mateFeatPromises: Array<Promise<CramRecord[]>> = []
 
       const mateTotalSize = mateChunks
         .map(s => s.sliceBytes)
@@ -151,6 +204,9 @@ export default class IndexedCramFile {
           const mateRecs = []
           for (let i = 0; i < feats.length; i += 1) {
             const feature = feats[i]
+            if (feature.readName === undefined) {
+              throw new Error()
+            }
             if (unmatedPairs[feature.readName] && !readIds[feature.uniqueId]) {
               mateRecs.push(feature)
             }
@@ -171,8 +227,12 @@ export default class IndexedCramFile {
   }
 
   getRecordsInSlice(
-    { containerStart, sliceStart, sliceBytes },
-    filterFunction,
+    {
+      containerStart,
+      sliceStart,
+      sliceBytes,
+    }: { containerStart: number; sliceStart: number; sliceBytes: number },
+    filterFunction: (r: CramRecord) => boolean,
   ) {
     const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
@@ -185,7 +245,7 @@ export default class IndexedCramFile {
    * @returns {Promise} true if the CRAM file contains data for the given
    * reference sequence numerical ID
    */
-  hasDataForReferenceSequence(seqId) {
+  hasDataForReferenceSequence(seqId: number) {
     return this.index.hasDataForReferenceSequence(seqId)
   }
 }

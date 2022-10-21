@@ -1,6 +1,11 @@
-export function parseHeaderText(text) {
+export type HeaderDataItem = {
+  tag: string
+  data: Array<{ tag: string; value: string }>
+}
+
+export function parseHeaderText(text: string): HeaderDataItem[] {
   const lines = text.split(/\r?\n/)
-  const data = []
+  const data: HeaderDataItem[] = []
   lines.forEach(line => {
     const [tag, ...fields] = line.split(/\t/)
     const parsedFields = fields.map(f => {

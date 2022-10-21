@@ -1,5 +1,13 @@
-import { CramMalformedError } from '../../errors'
 import { instantiateCodec } from '../codecs'
+import CramCodec from '../codecs/_base'
+import { CramCompressionHeader, CramPreservationMap } from '../sectionParsers'
+import { CramEncoding } from '../encoding'
+import { CramMalformedError } from '../../errors'
+import {
+  DataSeriesEncodingKey,
+  DataSeriesEncodingMap,
+} from '../codecs/dataSeriesTypes'
+import { Int32 } from '../../branding'
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -34,12 +42,14 @@ const dataSeriesTypes = {
   QS: 'byte',
   QQ: 'byteArray',
   TL: 'int',
-  TM: 'ignore',
-  TV: 'ignore',
-}
+  // TM: 'ignore',
+  // TV: 'ignore',
+} as const
 
-function parseSubstitutionMatrix(byteArray) {
-  const matrix = new Array(5)
+export type DataSeriesTypes = typeof dataSeriesTypes
+
+function parseSubstitutionMatrix(byteArray: number[]) {
+  const matrix: string[][] = new Array(5)
   for (let i = 0; i < 5; i += 1) {
     matrix[i] = new Array(4)
   }
@@ -72,25 +82,44 @@ function parseSubstitutionMatrix(byteArray) {
   return matrix
 }
 
+type DataSeriesCache = {
+  [K in DataSeriesEncodingKey]?: CramCodec<DataSeriesTypes[K]>
+}
+
 export default class CramContainerCompressionScheme {
-  constructor(content) {
-    Object.assign(this, content)
+  public readNamesIncluded: boolean
+  public APdelta: boolean
+  public referenceRequired: boolean
+  public tagIdsDictionary: Record<Int32, string[]>
+  public substitutionMatrix: string[][]
+  public dataSeriesCodecCache: DataSeriesCache = {}
+  public tagCodecCache: Record<string, CramCodec> = {}
+  public tagEncoding: Record<string, CramEncoding> = {}
+  public dataSeriesEncoding: DataSeriesEncodingMap
+  private preservation: CramPreservationMap
+  private _endPosition: number
+  private _size: number
+
+  constructor(content: CramCompressionHeader) {
+    // Object.assign(this, content)
     // interpret some of the preservation map tags for convenient use
     this.readNamesIncluded = content.preservation.RN
     this.APdelta = content.preservation.AP
     this.referenceRequired = !!content.preservation.RR
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
-
-    this.dataSeriesCodecCache = new Map()
-    this.tagCodecCache = {}
+    this.dataSeriesEncoding = content.dataSeriesEncoding
+    this.tagEncoding = content.tagEncoding
+    this.preservation = content.preservation
+    this._size = content._size
+    this._endPosition = content._endPosition
   }
 
   /**
    * @param {string} tagName three-character tag name
    * @private
    */
-  getCodecForTag(tagName) {
+  getCodecForTag(tagName: string): CramCodec {
     if (!this.tagCodecCache[tagName]) {
       const encodingData = this.tagEncoding[tagName]
       if (encodingData) {
@@ -108,12 +137,15 @@ export default class CramContainerCompressionScheme {
    * @param {number} tagListId ID of the tag list to fetch from the tag dictionary
    * @private
    */
-  getTagNames(tagListId) {
+  getTagNames(tagListId: Int32) {
     return this.tagIdsDictionary[tagListId]
   }
 
-  getCodecForDataSeries(dataSeriesName) {
-    let r = this.dataSeriesCodecCache.get(dataSeriesName)
+  getCodecForDataSeries<TDataSeries extends DataSeriesEncodingKey>(
+    dataSeriesName: TDataSeries,
+  ): CramCodec<DataSeriesTypes[TDataSeries]> | undefined {
+    let r: CramCodec<DataSeriesTypes[TDataSeries]> | undefined =
+      this.dataSeriesCodecCache[dataSeriesName]
     if (r === undefined) {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
       if (encodingData) {
@@ -124,19 +156,20 @@ export default class CramContainerCompressionScheme {
           )
         }
         r = instantiateCodec(encodingData, dataType)
-        this.dataSeriesCodecCache.set(dataSeriesName, r)
+        // didn't find a way to make TS understand this
+        this.dataSeriesCodecCache[dataSeriesName] = r as CramCodec<any>
       }
     }
     return r
   }
 
   toJSON() {
-    const data = {}
+    const data: any = {}
     Object.keys(this).forEach(k => {
       if (/Cache$/.test(k)) {
         return
       }
-      data[k] = this[k]
+      data[k] = (this as any)[k]
     })
     return data
   }

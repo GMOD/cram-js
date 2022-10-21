@@ -21,7 +21,13 @@ async function loadTestJSON(filename) {
   return JSON.parse(text)
 }
 
-function JsonClone(obj) {
+function JSONstringifyOrder(obj, space) {
+  const allKeys = new Set()
+  JSON.stringify(obj, (key, value) => (allKeys.add(key), value))
+  return JSON.stringify(obj, Array.from(allKeys).sort(), space)
+}
+
+export function JsonClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 

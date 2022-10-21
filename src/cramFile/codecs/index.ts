@@ -7,6 +7,9 @@ import ByteArrayLengthCodec from './byteArrayLength'
 import BetaCodec from './beta'
 import GammaCodec from './gamma'
 import SubexpCodec from './subexp'
+import CramCodec from './_base'
+import { CramEncoding } from '../encoding'
+import { DataType } from './dataSeriesTypes'
 
 const codecClasses = {
   1: ExternalCodec,
@@ -20,11 +23,14 @@ const codecClasses = {
   9: GammaCodec,
 }
 
-export function getCodecClassWithId(id) {
-  return codecClasses[id]
+function getCodecClassWithId(id: number) {
+  return (codecClasses as any)[id]
 }
 
-export function instantiateCodec(encodingData, dataType) {
+export function instantiateCodec<TResult extends DataType = DataType>(
+  encodingData: CramEncoding,
+  dataType: DataType | 'ignore',
+): CramCodec<TResult> {
   const CodecClass = getCodecClassWithId(
     dataType === 'ignore' ? 0 : encodingData.codecId,
   )

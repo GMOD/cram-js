@@ -1,12 +1,25 @@
-import {
-  CramMalformedError,
-  CramBufferOverrunError,
-  CramArgumentError,
-} from '../../errors'
-import { parseItem, tinyMemoize, sequenceMD5 } from '../util'
+import { CramArgumentError, CramMalformedError } from '../../errors'
+import { parseItem, sequenceMD5, tinyMemoize } from '../util'
 
 import Constants from '../constants'
-import decodeRecord from './decodeRecord'
+import decodeRecord, { DataSeriesDecoder } from './decodeRecord'
+import CramRecord from '../record'
+import CramContainer from '../container'
+import CramFile, { CramFileBlock } from '../file'
+import {
+  isMappedSliceHeader,
+  MappedSliceHeader,
+  UnmappedSliceHeader,
+} from '../sectionParsers'
+import { CramBufferOverrunError } from '../codecs/getBits'
+import { Cursors, DataTypeMapping } from '../codecs/_base'
+import { assertInt32 } from '../../branding'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
+import { DataSeriesTypes } from '../container/compressionScheme'
+
+export type SliceHeader = CramFileBlock & {
+  parsedContent: MappedSliceHeader | UnmappedSliceHeader
+}
 
 /**
  * @private
@@ -16,13 +29,16 @@ import decodeRecord from './decodeRecord'
  * @param {CramRecord} thisRecord
  */
 function calculateMultiSegmentMatedTemplateLength(
-  allRecords,
-  currentRecordNumber,
-  thisRecord,
+  allRecords: CramRecord[],
+  currentRecordNumber: number,
+  thisRecord: CramRecord,
 ) {
-  function getAllMatedRecords(startRecord) {
+  function getAllMatedRecords(startRecord: CramRecord) {
     const records = [startRecord]
-    if (startRecord.mateRecordNumber >= 0) {
+    if (
+      startRecord.mateRecordNumber !== undefined &&
+      startRecord.mateRecordNumber >= 0
+    ) {
       const mateRecord = allRecords[startRecord.mateRecordNumber]
       if (!mateRecord) {
         throw new CramMalformedError(
@@ -57,7 +73,10 @@ function calculateMultiSegmentMatedTemplateLength(
  * @param {CramRecord} thisRecord
  * @param {CramRecord} mateRecord
  */
-function calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord) {
+function calculateIntraSliceMatePairTemplateLength(
+  thisRecord: CramRecord,
+  mateRecord: CramRecord,
+) {
   // this just estimates the template length by using the simple (non-gapped) end coordinate of each
   // read, because gapping in the alignment doesn't mean the template is longer or shorter
   const start = Math.min(thisRecord.alignmentStart, mateRecord.alignmentStart)
@@ -76,10 +95,10 @@ function calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord) {
  * just one record having the index in the slice of its mate
  */
 function associateIntraSliceMate(
-  allRecords,
-  currentRecordNumber,
-  thisRecord,
-  mateRecord,
+  allRecords: CramRecord[],
+  currentRecordNumber: number,
+  thisRecord: CramRecord,
+  mateRecord: CramRecord,
 ) {
   if (!mateRecord) {
     throw new CramMalformedError(
@@ -162,40 +181,48 @@ function associateIntraSliceMate(
 }
 
 export default class CramSlice {
-  constructor(container, position) {
-    this.container = container
+  private file: CramFile
+
+  constructor(
+    public container: CramContainer,
+    public containerPosition: number,
+    _unused: number,
+  ) {
     this.file = container.file
-    this.containerPosition = position
   }
 
   // memoize
-  async getHeader() {
+  async getHeader(): Promise<SliceHeader> {
     // fetch and parse the slice header
     const sectionParsers = await this.file.getSectionParsers()
     const containerHeader = await this.container.getHeader()
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
     )
+    if (header === undefined) {
+      throw new Error()
+    }
     if (header.contentType === 'MAPPED_SLICE_HEADER') {
-      header.content = parseItem(
+      const content = parseItem(
         header.content,
         sectionParsers.cramMappedSliceHeader.parser,
         0,
         containerHeader._endPosition,
       )
+      return { ...header, parsedContent: content }
     } else if (header.contentType === 'UNMAPPED_SLICE_HEADER') {
-      header.content = parseItem(
+      const content = parseItem(
         header.content,
         sectionParsers.cramUnmappedSliceHeader.parser,
         0,
         containerHeader._endPosition,
       )
+      return { ...header, parsedContent: content }
     } else {
       throw new CramMalformedError(
-        `error reading slice header block, invalid content type ${header._contentType}`,
+        `error reading slice header block, invalid content type ${header.contentType}`,
       )
     }
-    return header
   }
 
   // memoize
@@ -203,9 +230,13 @@ export default class CramSlice {
     const header = await this.getHeader()
     // read all the blocks into memory and store them
     let blockPosition = header._endPosition
-    const blocks = new Array(header.content.numBlocks)
+    const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i += 1) {
-      blocks[i] = await this.file.readBlock(blockPosition)
+      const block = await this.file.readBlock(blockPosition)
+      if (block === undefined) {
+        throw new Error()
+      }
+      blocks[i] = block
       blockPosition = blocks[i]._endPosition
     }
 
@@ -220,9 +251,9 @@ export default class CramSlice {
   }
 
   // memoize
-  async _getBlocksContentIdIndex() {
+  async _getBlocksContentIdIndex(): Promise<Record<number, CramFileBlock>> {
     const blocks = await this.getBlocks()
-    const blocksByContentId = {}
+    const blocksByContentId: Record<number, CramFileBlock> = {}
     blocks.forEach(block => {
       if (block.contentType === 'EXTERNAL_DATA') {
         blocksByContentId[block.contentId] = block
@@ -231,37 +262,47 @@ export default class CramSlice {
     return blocksByContentId
   }
 
-  async getBlockByContentId(id) {
+  async getBlockByContentId(id: number) {
     const blocksByContentId = await this._getBlocksContentIdIndex()
     return blocksByContentId[id]
   }
 
   async getReferenceRegion() {
     // read the slice header
-    const sliceHeader = (await this.getHeader()).content
+    const sliceHeader = (await this.getHeader()).parsedContent
+    if (!isMappedSliceHeader(sliceHeader)) {
+      throw new Error()
+    }
 
     if (sliceHeader.refSeqId < 0) {
       return undefined
     }
 
     const compressionScheme = await this.container.getCompressionScheme()
+    if (compressionScheme === undefined) {
+      throw new Error()
+    }
 
     // console.log(JSON.stringify(sliceHeader, null, '  '))
 
     if (sliceHeader.refBaseBlockId >= 0) {
-      const refBlock = this.getBlockByContentId(sliceHeader.refBaseBlockId)
+      const refBlock = await this.getBlockByContentId(
+        sliceHeader.refBaseBlockId,
+      )
       if (!refBlock) {
         throw new CramMalformedError(
           'embedded reference specified, but reference block does not exist',
         )
       }
 
-      if (sliceHeader.span > refBlock.uncompressedSize) {
-        throw new CramMalformedError('Embedded reference is too small')
-      }
+      // TODO: we do not read anything named 'span'
+      // if (sliceHeader.span > refBlock.uncompressedSize) {
+      //   throw new CramMalformedError('Embedded reference is too small')
+      // }
 
+      // TODO verify
       return {
-        seq: refBlock.data.toString('utf8'),
+        seq: (refBlock as any).data.toString('utf8'),
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
@@ -308,8 +349,14 @@ export default class CramSlice {
     const { majorVersion } = await this.file.getDefinition()
 
     const compressionScheme = await this.container.getCompressionScheme()
+    if (compressionScheme === undefined) {
+      throw new Error()
+    }
 
     const sliceHeader = await this.getHeader()
+    if (sliceHeader === undefined) {
+      throw new Error()
+    }
 
     const blocksByContentId = await this._getBlocksContentIdIndex()
 
@@ -317,19 +364,20 @@ export default class CramSlice {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
-      sliceHeader.content.refSeqId >= 0 &&
-      sliceHeader.content.md5.join('') !== '0000000000000000'
+      isMappedSliceHeader(sliceHeader.parsedContent) &&
+      sliceHeader.parsedContent.refSeqId >= 0 &&
+      sliceHeader.parsedContent.md5.join('') !== '0000000000000000'
     ) {
       const refRegion = await this.getReferenceRegion()
       if (refRegion) {
         const { seq, start, end } = refRegion
         const seqMd5 = sequenceMD5(seq)
-        const storedMd5 = sliceHeader.content.md5
+        const storedMd5 = sliceHeader.parsedContent.md5
           .map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
           .join('')
         if (seqMd5 !== storedMd5) {
           throw new CramMalformedError(
-            `MD5 checksum reference mismatch for ref ${sliceHeader.content.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
+            `MD5 checksum reference mismatch for ref ${sliceHeader.parsedContent.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
           )
         }
       }
@@ -340,12 +388,14 @@ export default class CramSlice {
     // data note that we are only decoding a single block here, the core
     // data block
     const coreDataBlock = await this.getCoreDataBlock()
-    const cursors = {
-      lastAlignmentStart: sliceHeader.content.refSeqStart || 0,
-      coreBlock: { bitPosition: 7, bytePosition: 0 },
+    const cursors: Cursors = {
+      lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
+        ? sliceHeader.parsedContent.refSeqStart
+        : assertInt32(0),
+      coreBlock: { bitPosition: 7, bytePosition: assertInt32(0) },
       externalBlocks: {
         map: new Map(),
-        getCursor(contentId) {
+        getCursor(contentId: number) {
           let r = this.map.get(contentId)
           if (r === undefined) {
             r = { bitPosition: 7, bytePosition: 0 }
@@ -356,7 +406,11 @@ export default class CramSlice {
       },
     }
 
-    const decodeDataSeries = dataSeriesName => {
+    const decodeDataSeries: DataSeriesDecoder = <
+      T extends DataSeriesEncodingKey,
+    >(
+      dataSeriesName: T,
+    ): DataTypeMapping[DataSeriesTypes[T]] => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec) {
         throw new CramMalformedError(
@@ -364,12 +418,18 @@ export default class CramSlice {
         )
       }
       // console.log(dataSeriesName, Object.getPrototypeOf(codec))
-      return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
+      const decoded = codec.decode(
+        this,
+        coreDataBlock,
+        blocksByContentId,
+        cursors,
+      )
+      return decoded
     }
-    let records = new Array(sliceHeader.content.numRecords)
+    let records: CramRecord[] = new Array(sliceHeader.parsedContent.numRecords)
     for (let i = 0; i < records.length; i += 1) {
       try {
-        records[i] = decodeRecord(
+        const init = decodeRecord(
           this,
           decodeDataSeries,
           compressionScheme,
@@ -380,11 +440,14 @@ export default class CramSlice {
           majorVersion,
           i,
         )
-        records[i].uniqueId =
-          sliceHeader.contentPosition +
-          sliceHeader.content.recordCounter +
-          i +
-          1
+        records[i] = new CramRecord({
+          ...init,
+          uniqueId:
+            sliceHeader.contentPosition +
+            sliceHeader.parsedContent.recordCounter +
+            i +
+            1,
+        })
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
           console.warn(
@@ -402,7 +465,7 @@ export default class CramSlice {
     // objects Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
       const { mateRecordNumber } = records[i]
-      if (mateRecordNumber >= 0) {
+      if (mateRecordNumber !== undefined && mateRecordNumber >= 0) {
         associateIntraSliceMate(
           records,
           i,
@@ -415,30 +478,38 @@ export default class CramSlice {
     return records
   }
 
-  async getRecords(filterFunction) {
+  async getRecords(filterFunction: (r: CramRecord) => boolean) {
     // fetch the features if necessary, using the file-level feature cache
     const cacheKey = this.container.filePosition + this.containerPosition
-    let recordsPromise = this.file.featureCache.get(cacheKey)
+    let recordsPromise = this.file.featureCache.get(cacheKey.toString())
     if (!recordsPromise) {
       recordsPromise = this._fetchRecords()
-      this.file.featureCache.set(cacheKey, recordsPromise)
+      this.file.featureCache.set(cacheKey.toString(), recordsPromise)
     }
 
-    const records = (await recordsPromise).filter(filterFunction)
+    const unfiltered = await recordsPromise
+    const records = unfiltered.filter(filterFunction)
 
     // if we can fetch reference sequence, add the reference sequence to the records
     if (records.length && this.file.fetchReferenceSequenceCallback) {
       const sliceHeader = await this.getHeader()
       if (
-        sliceHeader.content.refSeqId >= 0 || // single-ref slice
-        sliceHeader.content.refSeqId === -2 // multi-ref slice
+        isMappedSliceHeader(sliceHeader.parsedContent) &&
+        (sliceHeader.parsedContent.refSeqId >= 0 || // single-ref slice
+          sliceHeader.parsedContent.refSeqId === -2) // multi-ref slice
       ) {
         const singleRefId =
-          sliceHeader.content.refSeqId >= 0
-            ? sliceHeader.content.refSeqId
+          sliceHeader.parsedContent.refSeqId >= 0
+            ? sliceHeader.parsedContent.refSeqId
             : undefined
         const compressionScheme = await this.container.getCompressionScheme()
-        const refRegions = {} // seqId => { start, end, seq }
+        if (compressionScheme === undefined) {
+          throw new Error()
+        }
+        const refRegions: Record<
+          string,
+          { id: number; start: number; end: number; seq: string | null }
+        > = {} // seqId => { start, end, seq }
 
         // iterate over the records to find the spans of the reference sequences we need to fetch
         for (let i = 0; i < records.length; i += 1) {
@@ -450,6 +521,7 @@ export default class CramSlice {
               id: seqId,
               start: records[i].alignmentStart,
               end: -Infinity,
+              seq: null,
             }
             refRegions[seqId] = refRegion
           }
@@ -485,7 +557,11 @@ export default class CramSlice {
             singleRefId !== undefined ? singleRefId : records[i].sequenceId
           const refRegion = refRegions[seqId]
           if (refRegion && refRegion.seq) {
-            records[i].addReferenceSequence(refRegion, compressionScheme)
+            const seq = refRegion.seq
+            records[i].addReferenceSequence(
+              { ...refRegion, seq },
+              compressionScheme,
+            )
           }
         }
       }

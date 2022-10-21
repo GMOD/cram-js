@@ -3,20 +3,22 @@ import QuickLRU from 'quick-lru'
 import { unzip } from './unzip'
 import { open } from './io'
 import { CramMalformedError } from './errors'
+import { CramFileSource } from './cramFile/file'
+import { Filehandle } from './cramFile/filehandle'
 
 const BAI_MAGIC = 21578050 // BAI\1
 
-class Slice {
-  constructor(args) {
-    Object.assign(this, args)
-  }
-
-  toString() {
-    return `${this.start}:${this.span}:${this.containerStart}:${this.sliceStart}:${this.sliceBytes}`
-  }
+export type Slice = {
+  start: number
+  span: number
+  containerStart: number
+  sliceStart: number
+  sliceBytes: number
 }
 
-function addRecordToIndex(index, record) {
+type ParsedIndex = Record<string, Slice[]>
+
+function addRecordToIndex(index: ParsedIndex, record: number[]) {
   if (record.some(el => el === undefined)) {
     throw new CramMalformedError('invalid .crai index file')
   }
@@ -27,15 +29,13 @@ function addRecordToIndex(index, record) {
     index[seqId] = []
   }
 
-  index[seqId].push(
-    new Slice({
-      start,
-      span,
-      containerStart,
-      sliceStart,
-      sliceBytes,
-    }),
-  )
+  index[seqId].push({
+    start,
+    span,
+    containerStart,
+    sliceStart,
+    sliceBytes,
+  })
 }
 
 export default class CraiIndex {
@@ -47,6 +47,8 @@ export default class CraiIndex {
   // 5. Slice start byte position in the container data (‘blocks’)
   // 6. Slice size in bytes
   // Each line represents a slice in the CRAM file. Please note that all slices must be listed in index file.
+  private _parseCache: AbortablePromiseCache<unknown, ParsedIndex>
+  private filehandle: Filehandle
 
   /**
    *
@@ -55,18 +57,18 @@ export default class CraiIndex {
    * @param {string} [args.url]
    * @param {FileHandle} [args.filehandle]
    */
-  constructor(args) {
-    const filehandle = open(args.url, args.path, args.filehandle)
-    this._parseCache = new AbortablePromiseCache({
+  constructor(args: CramFileSource) {
+    this.filehandle = open(args.url, args.path, args.filehandle)
+    this._parseCache = new AbortablePromiseCache<unknown, ParsedIndex>({
       cache: new QuickLRU({ maxSize: 1 }),
-      fill: (data, signal) => this.parseIndex({ signal }),
+      fill: (data, signal) => this.parseIndex(),
     })
-    this.readFile = filehandle.readFile.bind(filehandle)
   }
 
   parseIndex() {
-    const index = {}
-    return this.readFile()
+    const index: ParsedIndex = {}
+    return this.filehandle
+      .readFile()
       .then(data => {
         if (data[0] === 31 && data[1] === 139) {
           return unzip(data)
@@ -86,7 +88,7 @@ export default class CraiIndex {
         // supposed to be only digits and whitespace characters
         // this is written in a deliberately low-level fashion for performance,
         // because some .crai files can be pretty large.
-        let currentRecord = []
+        let currentRecord: number[] = []
         let currentString = ''
         for (let i = 0; i < uncompressedBuffer.length; i += 1) {
           const charCode = uncompressedBuffer[i]
@@ -128,7 +130,7 @@ export default class CraiIndex {
       })
   }
 
-  getIndex(opts = {}) {
+  getIndex(opts: { signal?: AbortSignal } = {}) {
     return this._parseCache.get('index', null, opts.signal)
   }
 
@@ -137,7 +139,7 @@ export default class CraiIndex {
    * @returns {Promise} true if the index contains entries for
    * the given reference sequence ID, false otherwise
    */
-  async hasDataForReferenceSequence(seqId) {
+  async hasDataForReferenceSequence(seqId: number) {
     return !!(await this.getIndex())[seqId]
   }
 
@@ -152,13 +154,17 @@ export default class CraiIndex {
    * an array of objects of the form
    * `{start, span, containerStart, sliceStart, sliceBytes }`
    */
-  async getEntriesForRange(seqId, queryStart, queryEnd) {
+  async getEntriesForRange(
+    seqId: number,
+    queryStart: number,
+    queryEnd: number,
+  ) {
     const seqEntries = (await this.getIndex())[seqId]
     if (!seqEntries) {
       return []
     }
 
-    const compare = entry => {
+    const compare = (entry: Slice) => {
       const entryStart = entry.start
       const entryEnd = entry.start + entry.span
       if (entryStart > queryEnd) {
