@@ -7,7 +7,6 @@ import {
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
 } from '../codecs/dataSeriesTypes'
-import { Int32 } from '../../branding'
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -90,7 +89,7 @@ export default class CramContainerCompressionScheme {
   public readNamesIncluded: boolean
   public APdelta: boolean
   public referenceRequired: boolean
-  public tagIdsDictionary: Record<Int32, string[]>
+  public tagIdsDictionary: Record<number, string[]>
   public substitutionMatrix: string[][]
   public dataSeriesCodecCache: DataSeriesCache = {}
   public tagCodecCache: Record<string, CramCodec> = {}
@@ -137,7 +136,7 @@ export default class CramContainerCompressionScheme {
    * @param {number} tagListId ID of the tag list to fetch from the tag dictionary
    * @private
    */
-  getTagNames(tagListId: Int32) {
+  getTagNames(tagListId: number) {
     return this.tagIdsDictionary[tagListId]
   }
 

@@ -1,22 +1,21 @@
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
-import { Int32, Int64, Int8 } from '../../branding'
 import { DataType } from './dataSeriesTypes'
 
 export type DataTypeMapping = {
-  byte: Int8
-  int: Int32
-  long: Int64
+  byte: number
+  int: number
+  long: number
   byteArray: Uint8Array
 }
 
 export type Cursor = {
   bitPosition: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
-  bytePosition: Int32
+  bytePosition: number
 }
 
 export type Cursors = {
-  lastAlignmentStart: Int32
+  lastAlignmentStart: number
   coreBlock: Cursor
   externalBlocks: {
     map: Map<any, any>

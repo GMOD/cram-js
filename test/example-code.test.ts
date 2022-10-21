@@ -1,8 +1,6 @@
 //@ts-nocheck
 import { IndexedCramFile, CraiIndex } from '../src'
 
-console.log(process.cwd())
-
 describe('code examples', () => {
   describe('readme 1', () => {
     it('runs without error', async () => {

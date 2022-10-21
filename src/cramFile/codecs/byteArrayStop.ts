@@ -5,7 +5,6 @@ import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
 import { ByteArrayStopCramEncoding } from '../encoding'
 import { CramBufferOverrunError } from './getBits'
-import { addInt32, assertInt32 } from '../../branding'
 
 export default class ByteArrayStopCodec extends CramCodec<
   'byteArray',
@@ -55,9 +54,9 @@ export default class ByteArrayStopCodec extends CramCodec<
           `byteArrayStop reading beyond length of data buffer?`,
         )
       }
-      stopPosition = addInt32(stopPosition, assertInt32(1))
+      stopPosition = stopPosition + 1
     }
-    cursor.bytePosition = addInt32(stopPosition, assertInt32(1))
-    return dataBuffer.slice(startPosition, stopPosition)
+    cursor.bytePosition = stopPosition + 1
+    return dataBuffer.subarray(startPosition, stopPosition)
   }
 }

@@ -1,42 +1,40 @@
-import { Int32, Int8 } from '../branding'
-
 export type NullEncoding = {
   codecId: 0
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: Record<string, never>
 }
 
 export type ExternalCramEncoding = {
   codecId: 1
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    blockContentId: Int32
+    blockContentId: number
   }
 }
 
 export type GolombEncoding = {
   codecId: 2
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    offset: Int32
-    M: Int32
+    offset: number
+    M: number
   }
 }
 
 export type HuffmanEncoding = {
   codecId: 3
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    numCodes: Int32
-    symbols: Int32[]
-    numLengths: Int32
-    bitLengths: Int32[]
+    numCodes: number
+    symbols: number[]
+    numLengths: number
+    bitLengths: number[]
   }
 }
 
 export type ByteArrayLengthEncoding = {
   codecId: 4
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
     lengthsEncoding: CramEncoding
     valuesEncoding: CramEncoding
@@ -45,34 +43,34 @@ export type ByteArrayLengthEncoding = {
 
 export type ByteArrayStopCramEncoding = {
   codecId: 5
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    stopByte: Int8
-    blockContentId: Int32
+    stopByte: number
+    blockContentId: number
   }
 }
 
 export type BetaEncoding = {
   codecId: 6
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    offset: Int32
-    length: Int32 // int number of bits
+    offset: number
+    length: number // int number of bits
   }
 }
 
 export type SubexpEncoding = {
   codecId: 7
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    offset: Int32
-    K: Int32
+    offset: number
+    K: number
   }
 }
 
 export type GolombRiceEncoding = {
   codecId: 8
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
     offset: number
     log2m: number
@@ -81,9 +79,9 @@ export type GolombRiceEncoding = {
 
 export type GammaEncoding = {
   codecId: 9
-  parametersBytes: Int32
+  parametersBytes: number
   parameters: {
-    offset: Int32
+    offset: number
   }
 }
 

@@ -13,7 +13,6 @@ import {
 } from '../sectionParsers'
 import { CramBufferOverrunError } from '../codecs/getBits'
 import { Cursors, DataTypeMapping } from '../codecs/_base'
-import { assertInt32 } from '../../branding'
 import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
 import { DataSeriesTypes } from '../container/compressionScheme'
 
@@ -391,8 +390,8 @@ export default class CramSlice {
     const cursors: Cursors = {
       lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
         ? sliceHeader.parsedContent.refSeqStart
-        : assertInt32(0),
-      coreBlock: { bitPosition: 7, bytePosition: assertInt32(0) },
+        : 0,
+      coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
         map: new Map(),
         getCursor(contentId: number) {

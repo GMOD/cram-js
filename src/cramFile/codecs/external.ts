@@ -4,7 +4,6 @@ import { parseItf8 } from '../util'
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
 import { CramBufferOverrunError } from './getBits'
-import { addInt32, assertInt8, Int32, Int8 } from '../../branding'
 import { ExternalCramEncoding } from '../encoding'
 
 export default class ExternalCodec extends CramCodec<
@@ -14,7 +13,7 @@ export default class ExternalCodec extends CramCodec<
   private readonly _decodeData: (
     contentBlock: CramFileBlock,
     cursor: Cursor,
-  ) => Int8 | Int32
+  ) => number
 
   constructor(
     parameters: ExternalCramEncoding['parameters'],
@@ -54,7 +53,7 @@ export default class ExternalCodec extends CramCodec<
       contentBlock.content,
       cursor.bytePosition,
     )
-    cursor.bytePosition = addInt32(cursor.bytePosition, bytesRead)
+    cursor.bytePosition = cursor.bytePosition + bytesRead
     return result
   }
 
@@ -64,6 +63,6 @@ export default class ExternalCodec extends CramCodec<
         'attempted to read beyond end of block. this file seems truncated.',
       )
     }
-    return assertInt8(contentBlock.content[cursor.bytePosition++])
+    return contentBlock.content[cursor.bytePosition++]
   }
 }

@@ -2,37 +2,30 @@ import { CramMalformedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
 import { getBits } from './getBits'
 import { HuffmanEncoding } from '../encoding'
-import {
-  addInt32,
-  assertInt32,
-  ensureInt32,
-  incrementInt32,
-  Int32,
-  subtractInt32,
-} from '../../branding'
+
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
 
-function numberOfSetBits(ii: Int32) {
+function numberOfSetBits(ii: number) {
   let i = (ii - (ii >> 1)) & 0x55555555
   i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
   return (((i + (i >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
 }
 
-type Code = { bitLength: Int32; value: Int32; bitCode: Int32 }
+type Code = { bitLength: number; value: number; bitCode: number }
 
 export default class HuffmanIntCodec extends CramCodec<
   'byte' | 'int',
   HuffmanEncoding['parameters']
 > {
-  private codes: Record<Int32, Code> = {}
-  private codeBook: Record<Int32, Int32[]> = {}
+  private codes: Record<number, Code> = {}
+  private codeBook: Record<number, number[]> = {}
   private sortedByValue: Code[] = []
   private sortedCodes: Code[] = []
-  private sortedValuesByBitCode: Int32[] = []
-  private sortedBitCodes: Int32[] = []
-  private sortedBitLengthsByBitCode: Int32[] = []
-  private bitCodeToValue: Int32[] = []
+  private sortedValuesByBitCode: number[] = []
+  private sortedBitCodes: number[] = []
+  private sortedBitLengthsByBitCode: number[] = []
+  private bitCodeToValue: number[] = []
 
   constructor(
     parameters: HuffmanEncoding['parameters'],
@@ -57,7 +50,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
   buildCodeBook() {
     // parse the parameters together into a `codes` data structure
-    let codes: Array<{ symbol: Int32; bitLength: Int32 }> = new Array(
+    let codes: Array<{ symbol: number; bitLength: number }> = new Array(
       this.parameters.numCodes,
     )
     for (let i = 0; i < this.parameters.numCodes; i += 1) {
@@ -82,21 +75,21 @@ export default class HuffmanIntCodec extends CramCodec<
 
   buildCodes() {
     this.codes = {} /*  new TreeMap<Integer, HuffmanBitCode>(); */
-    let codeLength = assertInt32(0)
-    let codeValue = assertInt32(-1)
+    let codeLength = 0
+    let codeValue = -1
     Object.entries(this.codeBook).forEach(([bitLength, symbols]) => {
-      const bitLengthInt = ensureInt32(parseInt(bitLength, 10))
+      const bitLengthInt = parseInt(bitLength, 10)
       symbols.forEach(symbol => {
         const code = {
           bitLength: bitLengthInt,
           value: symbol,
-          bitCode: assertInt32(0),
+          bitCode: 0,
         }
-        codeValue = incrementInt32(codeValue)
-        const delta = subtractInt32(bitLengthInt, codeLength) // new length?
-        codeValue = ensureInt32(codeValue << delta) // pad with 0's
+        codeValue = codeValue + 1
+        const delta = bitLengthInt - codeLength // new length?
+        codeValue = codeValue << delta // pad with 0's
         code.bitCode = codeValue // calculated: huffman code
-        codeLength = addInt32(codeLength, delta) // adjust current code length
+        codeLength = codeLength + delta // adjust current code length
 
         if (numberOfSetBits(codeValue) > bitLengthInt) {
           throw new CramMalformedError('Symbol out of range')
@@ -124,7 +117,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
     this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
     for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
-      this.bitCodeToValue[this.sortedCodes[i].bitCode] = assertInt32(i)
+      this.bitCodeToValue[this.sortedCodes[i].bitCode] = i
     }
   }
 
@@ -149,12 +142,12 @@ export default class HuffmanIntCodec extends CramCodec<
   _decode(slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
     const input = coreDataBlock.content
 
-    let prevLen = assertInt32(0)
+    let prevLen = 0
     let bits = 0
     for (let i = 0; i < this.sortedCodes.length; i += 1) {
       const length = this.sortedCodes[i].bitLength
       bits <<= length - prevLen
-      bits |= getBits(input, coreCursor, subtractInt32(length, prevLen))
+      bits |= getBits(input, coreCursor, length - prevLen)
       prevLen = length
       {
         const index = this.bitCodeToValue[bits]

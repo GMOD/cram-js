@@ -4,15 +4,6 @@ import { getBits } from './getBits'
 import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
 import { SubexpEncoding } from '../encoding'
-import {
-  addInt32,
-  assertInt32,
-  decrementInt32,
-  ensureInt32,
-  incrementInt32,
-  Int32,
-  subtractInt32,
-} from '../../branding'
 
 export default class SubexpCodec extends CramCodec<
   'int',
@@ -33,22 +24,22 @@ export default class SubexpCodec extends CramCodec<
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    let numLeadingOnes = assertInt32(0)
-    while (getBits(coreDataBlock.content, cursors.coreBlock, assertInt32(1))) {
-      numLeadingOnes = incrementInt32(numLeadingOnes)
+    let numLeadingOnes = 0
+    while (getBits(coreDataBlock.content, cursors.coreBlock, 1)) {
+      numLeadingOnes = numLeadingOnes + 1
     }
 
-    let b: Int32
-    let n: Int32
+    let b
+    let n
     if (numLeadingOnes === 0) {
       b = this.parameters.K
       n = getBits(coreDataBlock.content, cursors.coreBlock, b)
     } else {
-      b = decrementInt32(addInt32(numLeadingOnes, this.parameters.K))
+      b = numLeadingOnes + this.parameters.K - 1
       const bits = getBits(coreDataBlock.content, cursors.coreBlock, b)
-      n = ensureInt32((1 << b) | bits)
+      n = (1 << b) | bits
     }
 
-    return subtractInt32(n, this.parameters.offset)
+    return n - this.parameters.offset
   }
 }
