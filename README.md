@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 [![Coverage Status](https://img.shields.io/codecov/c/github/GMOD/cram-js/master.svg?style=flat-square)](https://codecov.io/gh/GMOD/cram-js/branch/master)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/push.yml?branch=main)](https://github.com/GMOD/cram-js/actions?query=branch%3Amaster+workflow%3APush+)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/push.yml?branch=master)](https://github.com/GMOD/cram-js/actions?query=branch%3Amaster+workflow%3APush+)
 
 Read CRAM files (indexed or unindexed) with pure JS, works in node or in the browser.
 
