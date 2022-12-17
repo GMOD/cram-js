@@ -1,3 +1,7 @@
+# v1.7.2
+
+- Update README.md with docs
+
 # v1.7.1
 
 - Re-export CramRecord class for typescript
