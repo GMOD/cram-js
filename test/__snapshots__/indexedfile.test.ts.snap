@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`cram31 returns the correct sequence 1`] = `
-Object {
+{
   "alignmentStart": 3,
   "cramFlags": 3,
   "flags": 0,
   "lengthOnRef": 100,
   "mappingQuality": 37,
-  "qualityScores": Array [
+  "qualityScores": [
     17,
     17,
     17,
@@ -114,7 +114,7 @@ Object {
   "readLength": 100,
   "readName": "ctgA_3_555_0:0:0_2:0:0_102d",
   "sequenceId": 0,
-  "tags": Object {
+  "tags": {
     "X0": 1,
     "X1": 0,
     "XG": 0,
