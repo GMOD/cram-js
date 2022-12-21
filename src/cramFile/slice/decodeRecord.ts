@@ -141,7 +141,11 @@ function decodeReadFeatures(
       return String.fromCharCode(data)
     }
     if (type === 'string') {
-      return data.toString('utf8')
+      let r = ''
+      for (let i = 0; i < data.byteLength; i++) {
+        r += String.fromCharCode(data[i])
+      }
+      return r
     }
     if (type === 'numArray') {
       return data.toArray()
