@@ -1,3 +1,8 @@
+# v1.7.3
+
+- Fix usage of the 'b' tag under situations in CRA4 where a Uint8Array is
+  received instead of Buffer
+
 # v1.7.2
 
 - Update README.md with docs
