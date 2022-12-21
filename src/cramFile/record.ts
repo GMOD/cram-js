@@ -54,8 +54,7 @@ function decodeReadSequence(
 
         if (feature.code === 'b') {
           // specify a base pair for some reason
-          const ret = feature.data.split(',')
-          const added = String.fromCharCode(...ret)
+          const added = feature.data
           bases += added
           regionPos += added.length
         } else if (feature.code === 'B') {
