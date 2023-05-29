@@ -485,10 +485,58 @@ export default class CramRecord {
       !this.readBases &&
       refRegion.start <= this.alignmentStart &&
       refRegion.end >=
-        this.alignmentStart + (this.lengthOnRef || this.readLength) - 1
+      this.alignmentStart + (this.lengthOnRef || this.readLength) - 1
     ) {
       this._refRegion = refRegion
     }
+  }
+
+  getCigar() {
+    /*
+    This function is to parse the readFeatures to cigar string
+    It will return false if there is no readFeatures in the record,
+    otherwise return the cigar string
+    */
+    const readFeatures = this.readFeatures
+    const readLen = this.getReadBases()?.length
+
+    if (!readFeatures) {
+      return false
+    }
+
+    const features = readFeatures.filter((e) => e.code !== 'X')
+    const allMatches = Array.from(Array(readLen).keys()).map((e) => 'M')
+
+    features.map((e) => {
+      let featuresLen = 0
+      if (e.code === 'I' || e.code === 'i' || e.code === 'S') {
+        featuresLen = e.data.length
+      } else if (e.code === 'D') {
+        featuresLen = e.data
+      }
+      allMatches.splice(e.pos - 1, featuresLen, ...Array.from(Array(featuresLen).keys()).map((k) => e.code.toUpperCase()))
+    })
+
+
+    let cigarStr = ''
+    let currCigarChar = ''
+    let contigCount = 0
+    for (let i = 0; i < allMatches.length; i++) {
+      if (currCigarChar === '') {
+        currCigarChar = allMatches[i]
+      }
+      if (allMatches[i] !== currCigarChar) {
+        cigarStr += contigCount + currCigarChar
+        currCigarChar = allMatches[i]
+        contigCount = 0
+      }
+      if (i === allMatches.length - 1) {
+        cigarStr += contigCount + 1 + currCigarChar
+      }
+      contigCount++
+    }
+
+    return cigarStr
   }
 
   toJSON() {
