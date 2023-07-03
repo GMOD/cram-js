@@ -311,6 +311,23 @@ describe('match samtools', () => {
   })
 })
 
+describe('cigar string match samtools', () => {
+  it('matches cigars given from samtools', async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile('SRR396636.sorted.clip.cram'),
+      index: new CraiIndex({
+        filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
+      }),
+    })
+
+    const features = await cram.getRecordsForRange(0, 19999, 24499)
+
+    const featCigar = await loadTestJSON('SRR396636.expected.cigars.json')
+    expect(features.map(f => f.getCigar())).toEqual(featCigar)
+    expect(features.length).toEqual(3303)
+  })
+})
+
 describe('getHeaderText', () => {
   it('matches names given from samtools', async () => {
     const cram = new IndexedCramFile({

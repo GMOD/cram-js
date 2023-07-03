@@ -492,31 +492,46 @@ export default class CramRecord {
   }
 
   getCigar() {
-    /*
-    This function is to parse the readFeatures to cigar string
-    It will return false if there is no readFeatures in the record,
-    otherwise return the cigar string
-    */
+    // This function is to parse the readFeatures to cigar string
     const readFeatures = this.readFeatures
-    const readLen = this.getReadBases()?.length
+    const readLen = this.readLength
 
     if (!readFeatures) {
-      return false
+      return readLen + 'M'
+    }
+    if (this.mappingQuality === 0) {
+      return "*"
     }
 
     const features = readFeatures.filter((e) => e.code !== 'X')
-    const allMatches = Array.from(Array(readLen).keys()).map((e) => 'M')
+    const delLen = readFeatures.filter((e) => e.code === 'D')
+      .map((e) => e.data)
+      .reduce((pre, acc) => acc + pre, 0)
+    const allMatches = Array.from(Array(readLen + delLen).keys()).map((e) => 'M')
 
+    let shiftedLen = 0
     features.map((e) => {
       let featuresLen = 0
+      let replaceLen = 0
+      const spliceStart = e.pos - 1 + shiftedLen
+
       if (e.code === 'I' || e.code === 'i' || e.code === 'S') {
         featuresLen = e.data.length
-      } else if (e.code === 'D') {
+        replaceLen = featuresLen
+      } else {
         featuresLen = e.data
-      }
-      allMatches.splice(e.pos - 1, featuresLen, ...Array.from(Array(featuresLen).keys()).map((k) => e.code.toUpperCase()))
-    })
+        if (e.code === 'D') {
+          replaceLen = featuresLen
+        }
+        if (e.code === 'H') {
+          replaceLen = 0
+        }
 
+        shiftedLen += featuresLen
+      }
+
+      allMatches.splice(spliceStart, replaceLen, ...Array.from(Array(featuresLen).keys()).map((k) => e.code.toUpperCase()))
+    })
 
     let cigarStr = ''
     let currCigarChar = ''
