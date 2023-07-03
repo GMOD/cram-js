@@ -485,10 +485,73 @@ export default class CramRecord {
       !this.readBases &&
       refRegion.start <= this.alignmentStart &&
       refRegion.end >=
-        this.alignmentStart + (this.lengthOnRef || this.readLength) - 1
+      this.alignmentStart + (this.lengthOnRef || this.readLength) - 1
     ) {
       this._refRegion = refRegion
     }
+  }
+
+  getCigar() {
+    // This function is to parse the readFeatures to cigar string
+    const readFeatures = this.readFeatures
+    const readLen = this.readLength
+
+    if (!readFeatures) {
+      return readLen + 'M'
+    }
+    if (this.mappingQuality === 0) {
+      return "*"
+    }
+
+    const features = readFeatures.filter((e) => e.code !== 'X')
+    const delLen = readFeatures.filter((e) => e.code === 'D')
+      .map((e) => e.data)
+      .reduce((pre, acc) => acc + pre, 0)
+    const allMatches = Array.from(Array(readLen + delLen).keys()).map((e) => 'M')
+
+    let shiftedLen = 0
+    features.map((e) => {
+      let featuresLen = 0
+      let replaceLen = 0
+      const spliceStart = e.pos - 1 + shiftedLen
+
+      if (e.code === 'I' || e.code === 'i' || e.code === 'S') {
+        featuresLen = e.data.length
+        replaceLen = featuresLen
+      } else {
+        featuresLen = e.data
+        if (e.code === 'D') {
+          replaceLen = featuresLen
+        }
+        if (e.code === 'H') {
+          replaceLen = 0
+        }
+
+        shiftedLen += featuresLen
+      }
+
+      allMatches.splice(spliceStart, replaceLen, ...Array.from(Array(featuresLen).keys()).map((k) => e.code.toUpperCase()))
+    })
+
+    let cigarStr = ''
+    let currCigarChar = ''
+    let contigCount = 0
+    for (let i = 0; i < allMatches.length; i++) {
+      if (currCigarChar === '') {
+        currCigarChar = allMatches[i]
+      }
+      if (allMatches[i] !== currCigarChar) {
+        cigarStr += contigCount + currCigarChar
+        currCigarChar = allMatches[i]
+        contigCount = 0
+      }
+      if (i === allMatches.length - 1) {
+        cigarStr += contigCount + 1 + currCigarChar
+      }
+      contigCount++
+    }
+
+    return cigarStr
   }
 
   toJSON() {
