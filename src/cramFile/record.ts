@@ -450,7 +450,7 @@ export default class CramRecord {
   /**
    * Annotates this feature with the given reference sequence basepair
    * information. This will add a `sub` and a `ref` item to base
-   * subsitution read features given the actual substituted and reference
+   * substitution read features given the actual substituted and reference
    * base pairs, and will make the `getReadSequence()` method work.
    *
    * @param {object} refRegion
