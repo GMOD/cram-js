@@ -128,6 +128,7 @@ describe('CRAM reader', () => {
       refSeqStart: 0,
     })
     const {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       content,
       parsedContent: compressionBlockData,
       ...compressionBlock
