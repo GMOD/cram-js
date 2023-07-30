@@ -79,7 +79,7 @@ export default class CraiIndex {
     // because some .crai files can be pretty large.
     let currentRecord: number[] = []
     let currentString = ''
-        for (const charCode of uncompressedBuffer) {
+    for (const charCode of uncompressedBuffer) {
       if (
         (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
         (!currentString && charCode === 45) /* leading - */
@@ -100,22 +100,19 @@ export default class CraiIndex {
       }
     }
 
-        // if the file ends without a \n, we need to flush our buffers
-        if (currentString) {
-          currentRecord.push(Number.parseInt(currentString, 10))
-        }
-        if (currentRecord.length === 6) {
-          addRecordToIndex(index, currentRecord)
-        }
+    // if the file ends without a \n, we need to flush our buffers
+    if (currentString) {
+      currentRecord.push(Number.parseInt(currentString, 10))
+    }
+    if (currentRecord.length === 6) {
+      addRecordToIndex(index, currentRecord)
+    }
 
-        // sort each of them by start
-        Object.entries(index).forEach(([seqId, ent]) => {
-          index[seqId] = ent.sort(
-            (a, b) => a.start - b.start || a.span - b.span,
-          )
-        })
-        return index
-      })
+    // sort each of them by start
+    Object.entries(index).forEach(([seqId, ent]) => {
+      index[seqId] = ent.sort((a, b) => a.start - b.start || a.span - b.span)
+    })
+    return index
   }
 
   getIndex(opts?: { signal?: AbortSignal }) {

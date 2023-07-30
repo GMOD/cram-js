@@ -102,7 +102,7 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
     return new Int8Array(buffer.buffer)[0]
   }
   if (tagType === 'C') {
-    return buffer[0] as number
+    return buffer[0]
   }
   if (tagType === 'f') {
     return new Float32Array(buffer.buffer)[0]
@@ -323,6 +323,7 @@ export default function decodeRecord(
       blocksByContentId,
       cursors,
     )
+    // @ts-expect-error
     tags[tagName] = parseTagData(tagType, tagData)
   }
 
