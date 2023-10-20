@@ -6,7 +6,10 @@ import CramContainerCompressionScheme from './compressionScheme'
 import CramFile from '../file'
 
 export default class CramContainer {
-  constructor(public file: CramFile, public filePosition: number) {}
+  constructor(
+    public file: CramFile,
+    public filePosition: number,
+  ) {}
 
   // memoize
   getHeader() {

@@ -61,7 +61,7 @@ export default class CraiIndex {
     this.filehandle = open(args.url, args.path, args.filehandle)
     this._parseCache = new AbortablePromiseCache<unknown, ParsedIndex>({
       cache: new QuickLRU({ maxSize: 1 }),
-      fill: (data, signal) => this.parseIndex(),
+      fill: (_data, _signal) => this.parseIndex(),
     })
   }
 

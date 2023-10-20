@@ -279,7 +279,7 @@ const versionedParsers = {
     return { parser, maxLength: maxLengthFunc }
   },
 
-  cramEncoding(majorVersion: number) {
+  cramEncoding(_majorVersion: number) {
     const parser = new Parser()
       .namely('cramEncoding')
       .itf8('codecId')

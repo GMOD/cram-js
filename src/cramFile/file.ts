@@ -1,6 +1,11 @@
 import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
+import { Parser } from '@gmod/binary-parser'
+import htscodecs from '@jkbonfield/htscodecs'
+
+// @ts-expect-error
+import bzip2 from 'bzip2'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
@@ -10,17 +15,15 @@ import {
   cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
 } from './sectionParsers'
-import htscodecs from '@jkbonfield/htscodecs'
 import CramContainer from './container'
 
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
-import { Parser } from '@gmod/binary-parser'
 import CramRecord from './record'
 import { Filehandle } from './filehandle'
 
-//source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
+// source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
   const uInt32 = new Uint32Array([0x11223344])
   const uInt8 = new Uint8Array(uInt32.buffer)
