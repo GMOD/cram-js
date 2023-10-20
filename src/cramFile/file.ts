@@ -1,6 +1,8 @@
 import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
+// @ts-expect-error
+import bzip2 from 'bzip2'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
