@@ -1,3 +1,7 @@
+# v1.7.4
+
+- Fix import of bzip2 module
+
 # v1.7.3
 
 - Fix usage of the 'b' tag under situations in CRA4 where a Uint8Array is
