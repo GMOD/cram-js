@@ -3,6 +3,7 @@ import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
 // @ts-expect-error
 import bzip2 from 'bzip2'
+import lzma from 'lzma-native'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
@@ -319,7 +320,7 @@ export default class CramFile {
     return data
   }
 
-  _uncompress(
+  async _uncompress(
     compressionMethod: CompressionMethod,
     inputBuffer: Buffer,
     outputBuffer: Buffer,
@@ -340,6 +341,11 @@ export default class CramFile {
           size -= chunk.length
         }
       } while (chunk != -1)
+    } else if (compressionMethod === 'lzma') {
+      // https://github.com/addaleax/lzma-native#encoding-strings-and-buffer-objects
+      // @ts-expect-error @types/lzma-native says return type void but it seems promise
+      const res = (await lzma.decompress(inputBuffer)) as Buffer
+      res.copy(outputBuffer)
     } else if (compressionMethod === 'rans') {
       ransuncompress(inputBuffer, outputBuffer)
       //htscodecs r4x8 is slower, but compatible.
@@ -386,7 +392,7 @@ export default class CramFile {
         blockContentPosition,
       )
 
-      this._uncompress(
+      await this._uncompress(
         blockHeader.compressionMethod,
         compressedData,
         uncompressedData,
