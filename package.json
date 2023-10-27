@@ -23,7 +23,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src test",
-    "docs": "documentation readme --shallow src/indexedCramFile.js --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/craiIndex.js --section=CraiIndex;  documentation readme --shallow errors.js '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.js --section=CramFile; documentation readme --shallow src/cramFile/record.js --section=CramRecord",
+    "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow errors.ts '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
     "prebuild": "npm run clean",
     "clean": "rimraf dist esm",
     "build:esm": "tsc --target es2018 --outDir esm",
