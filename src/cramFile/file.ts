@@ -258,9 +258,8 @@ export default class CramFile {
     let containerCount = 0
     let position = sectionParsers.cramFileDefinition.maxLength
     while (position + cramContainerHeader1.maxLength + 8 < fileSize) {
-      const currentHeader = await this.getContainerAtPosition(
-        position,
-      ).getHeader()
+      const currentHeader =
+        await this.getContainerAtPosition(position).getHeader()
       if (!currentHeader) {
         break
       }
