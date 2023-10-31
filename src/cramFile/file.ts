@@ -3,7 +3,9 @@ import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
 // @ts-expect-error
 import bzip2 from 'bzip2'
-import lzma from 'lzma-native'
+import { XzReadableStream } from 'xz-decompress'
+import htscodecs from '@jkbonfield/htscodecs'
+import { Parser } from '@gmod/binary-parser'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
@@ -13,15 +15,23 @@ import {
   cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
 } from './sectionParsers'
-import htscodecs from '@jkbonfield/htscodecs'
+
 import CramContainer from './container'
 
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
-import { Parser } from '@gmod/binary-parser'
 import CramRecord from './record'
 import { Filehandle } from './filehandle'
+
+function bufferToStream(buf: Buffer) {
+  return new ReadableStream({
+    start(controller) {
+      controller.enqueue(buf)
+      controller.close()
+    },
+  })
+}
 
 //source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
@@ -342,10 +352,11 @@ export default class CramFile {
         }
       } while (chunk != -1)
     } else if (compressionMethod === 'lzma') {
-      // https://github.com/addaleax/lzma-native#encoding-strings-and-buffer-objects
-      // @ts-expect-error @types/lzma-native says return type void but it seems promise
-      const res = (await lzma.decompress(inputBuffer)) as Buffer
-      res.copy(outputBuffer)
+      const decompressedResponse = new Response(
+        new XzReadableStream(bufferToStream(inputBuffer)),
+      )
+      const ret = Buffer.from(await decompressedResponse.arrayBuffer())
+      ret.copy(outputBuffer)
     } else if (compressionMethod === 'rans') {
       ransuncompress(inputBuffer, outputBuffer)
       //htscodecs r4x8 is slower, but compatible.
