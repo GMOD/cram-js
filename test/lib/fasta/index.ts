@@ -1,6 +1,5 @@
-import IndexedFasta from './indexedFasta'
-
-function parseSmallFasta(text) {
+//@ts-nocheck
+function parseSmallFasta(text: string) {
   return text
     .split('>')
     .filter(t => /\S/.test(t))
@@ -38,4 +37,4 @@ class FetchableSmallFasta {
   }
 }
 
-export { parseSmallFasta, FetchableSmallFasta, IndexedFasta }
+export { parseSmallFasta, FetchableSmallFasta }

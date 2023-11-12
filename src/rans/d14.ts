@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { TF_SHIFT } from './constants'
 import Decoding from './decoding'
 
