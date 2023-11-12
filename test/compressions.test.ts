@@ -5,7 +5,7 @@ import { CramFile } from '../src/index'
 import { FetchableSmallFasta } from './lib/fasta'
 
 test('lzma', async () => {
-  const fasta = new FetchableSmallFasta(testDataFile('hts-specs/ce.fa'))
+  const fasta = new FetchableSmallFasta(testDataFile('ce.fa'))
   const seqFetch = fasta.fetch.bind(fasta)
   const file = new CramFile({
     filehandle: testDataFile('hts-specs/0903_comp_lzma.cram'),
@@ -18,7 +18,7 @@ test('lzma', async () => {
 })
 
 test('bzip2', async () => {
-  const fasta = new FetchableSmallFasta(testDataFile('hts-specs/ce.fa'))
+  const fasta = new FetchableSmallFasta(testDataFile('ce.fa'))
   const seqFetch = fasta.fetch.bind(fasta)
   const file = new CramFile({
     filehandle: testDataFile('hts-specs/0902_comp_bz2.cram'),

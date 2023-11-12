@@ -1,12 +1,11 @@
 import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
+import htscodecs from '@jkbonfield/htscodecs'
+import { Parser } from '@gmod/binary-parser'
 // @ts-expect-error
 import bzip2 from 'bzip2'
 import { XzReadableStream } from 'xz-decompress'
-import htscodecs from '@jkbonfield/htscodecs'
-import { Parser } from '@gmod/binary-parser'
-
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
 import {
@@ -109,17 +108,6 @@ export default class CramFile {
       throw new Error('Detected big-endian machine, may be unable to run')
     }
   }
-
-  // toString() {
-  //   if (this.file.filename) {
-  //     return this.file.filename
-  //   }
-  //   if (this.file.url) {
-  //     return this.file.url
-  //   }
-  //
-  //   return '(cram file)'
-  // }
 
   // can just read this object like a filehandle
   read(
