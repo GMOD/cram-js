@@ -38,9 +38,9 @@ exports[`CRAM reader > can count containers in ce#tag_depadded.tmp.cram 1`] = `2
 
 exports[`CRAM reader > can count containers in ce#tag_padded.tmp.cram 1`] = `2`;
 
-exports[`CRAM reader > can count containers in ce#unmap.tmp.cram 1`] = `2`;
+exports[`CRAM reader > can count containers in ce#unmap.tmp.cram 1`] = `1`;
 
-exports[`CRAM reader > can count containers in ce#unmap1.tmp.cram 1`] = `2`;
+exports[`CRAM reader > can count containers in ce#unmap1.tmp.cram 1`] = `1`;
 
 exports[`CRAM reader > can count containers in ce#unmap2.tmp.cram 1`] = `3`;
 

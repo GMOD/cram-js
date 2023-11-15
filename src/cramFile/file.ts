@@ -106,11 +106,6 @@ export default class CramFile {
     return this.file.read(buffer, offset, length, position)
   }
 
-  // can just stat this object like a filehandle
-  stat() {
-    return this.file.stat()
-  }
-
   // memoized
   async getDefinition() {
     const { maxLength, parser } = cramFileDefinition()
@@ -153,25 +148,13 @@ export default class CramFile {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     let position = sectionParsers.cramFileDefinition.maxLength
-    const { size: fileSize } = await this.file.stat()
-    const { cramContainerHeader1 } = sectionParsers
 
     // skip with a series of reads to the proper container
     let currentContainer: CramContainer | undefined
     for (let i = 0; i <= containerNumber; i++) {
-      // if we are about to go off the end of the file
-      // and have not found that container, it does not exist
-      if (position + cramContainerHeader1.maxLength + 8 >= fileSize) {
-        return undefined
-      }
-
       currentContainer = this.getContainerAtPosition(position)
       const currentHeader = await currentContainer.getHeader()
-      if (!currentHeader) {
-        throw new CramMalformedError(
-          `container ${containerNumber} not found in file`,
-        )
-      }
+
       // if this is the first container, read all the blocks in the container
       // to determine its length, because we cannot trust the container
       // header's given length due to a bug somewhere in htslib
@@ -185,8 +168,7 @@ export default class CramFile {
           position = block._endPosition
         }
       } else {
-        // otherwise, just traverse to the next container using the container's
-        // length
+        // otherwise, just traverse to the next container using the container's length
         position += currentHeader._size + currentHeader.length
       }
     }
@@ -213,20 +195,18 @@ export default class CramFile {
   /**
    * @returns {Promise[number]} the number of containers in the file
    */
-  async containerCount(): Promise<number | undefined> {
+  async containerCount() {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
-    const { size: fileSize } = await this.file.stat()
-    const { cramContainerHeader1 } = sectionParsers
 
     let containerCount = 0
     let position = sectionParsers.cramFileDefinition.maxLength
-    while (position + cramContainerHeader1.maxLength + 8 < fileSize) {
+    let i = 0
+    while (i++ < 5000) {
       const currentHeader =
         await this.getContainerAtPosition(position).getHeader()
-      if (!currentHeader) {
-        break
-      }
+      // console.log({ currentHeader }, currentHeader._endPosition)
+
       // if this is the first container, read all the blocks in the container,
       // because we cannot trust the container header's given length due to a
       // bug somewhere in htslib
@@ -244,6 +224,9 @@ export default class CramFile {
         // length
         position += currentHeader._size + currentHeader.length
       }
+      if (currentHeader.refSeqId === -1) {
+        return containerCount
+      }
       containerCount += 1
     }
 
@@ -258,11 +241,6 @@ export default class CramFile {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     const { cramBlockHeader } = sectionParsers
-    const { size: fileSize } = await this.file.stat()
-
-    if (position + cramBlockHeader.maxLength >= fileSize) {
-      return undefined
-    }
 
     const buffer = Buffer.allocUnsafe(cramBlockHeader.maxLength)
     await this.file.read(buffer, 0, cramBlockHeader.maxLength, position)
@@ -282,10 +260,6 @@ export default class CramFile {
     if (preReadBuffer) {
       buffer = preReadBuffer
     } else {
-      const { size: fileSize } = await this.file.stat()
-      if (position + size >= fileSize) {
-        return undefined
-      }
       buffer = Buffer.allocUnsafe(size)
       await this.file.read(buffer, 0, size, position)
     }
@@ -348,9 +322,6 @@ export default class CramFile {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     const blockHeader = await this.readBlockHeader(position)
-    if (blockHeader === undefined) {
-      return undefined
-    }
     const blockContentPosition = blockHeader._endPosition
 
     const uncompressedData = Buffer.allocUnsafe(blockHeader.uncompressedSize)
@@ -391,9 +362,6 @@ export default class CramFile {
         sectionParsers.cramBlockCrc32,
         blockContentPosition + blockHeader.compressedSize,
       )
-      if (crc === undefined) {
-        return undefined
-      }
       block.crc32 = crc.crc32
 
       // check the block data crc32
