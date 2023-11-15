@@ -223,7 +223,7 @@ export default class CramRecord {
   public tags: Record<string, string>
   public flags: number
   public cramFlags: number
-  public readBases?: string | null
+  public readBases?: string
   public _refRegion?: RefRegion
   public readFeatures?: ReadFeature[]
   public alignmentStart: number
