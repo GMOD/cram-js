@@ -67,11 +67,6 @@ export default class CramContainer {
   async _readContainerHeader(position: number) {
     const sectionParsers = await this.file.getSectionParsers()
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
-    const { size: fileSize } = await this.file.stat()
-
-    if (position >= fileSize) {
-      return undefined
-    }
 
     // parse the container header. do it in 2 pieces because you cannot tell
     // how much to buffer until you read numLandmarks
@@ -79,12 +74,6 @@ export default class CramContainer {
     await this.file.read(bytes1, 0, cramContainerHeader1.maxLength, position)
     const header1 = parseItem(bytes1, cramContainerHeader1.parser) as any
     const numLandmarksSize = itf8Size(header1.numLandmarks)
-    if (position + header1.length >= fileSize) {
-      console.warn(
-        `${this.file}: container header at ${position} indicates that the container has length ${header1.length}, which extends beyond the length of the file. Skipping this container.`,
-      )
-      return undefined
-    }
     const bytes2 = Buffer.allocUnsafe(
       cramContainerHeader2.maxLength(header1.numLandmarks),
     )
