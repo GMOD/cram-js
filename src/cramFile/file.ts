@@ -1,9 +1,11 @@
 import { unzip } from '../unzip'
 import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
+import htscodecs from '@jkbonfield/htscodecs'
+import { Parser } from '@gmod/binary-parser'
 // @ts-expect-error
 import bzip2 from 'bzip2'
-
+import { XzReadableStream } from 'xz-decompress'
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import ransuncompress from '../rans'
 import {
@@ -12,15 +14,23 @@ import {
   cramFileDefinition as cramFileDefinitionParser,
   getSectionParsers,
 } from './sectionParsers'
-import htscodecs from '@jkbonfield/htscodecs'
+
 import CramContainer from './container'
 
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
-import { Parser } from '@gmod/binary-parser'
 import CramRecord from './record'
 import { Filehandle } from './filehandle'
+
+function bufferToStream(buf: Buffer) {
+  return new ReadableStream({
+    start(controller) {
+      controller.enqueue(buf)
+      controller.close()
+    },
+  })
+}
 
 //source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
@@ -98,17 +108,6 @@ export default class CramFile {
       throw new Error('Detected big-endian machine, may be unable to run')
     }
   }
-
-  // toString() {
-  //   if (this.file.filename) {
-  //     return this.file.filename
-  //   }
-  //   if (this.file.url) {
-  //     return this.file.url
-  //   }
-  //
-  //   return '(cram file)'
-  // }
 
   // can just read this object like a filehandle
   read(
@@ -247,9 +246,8 @@ export default class CramFile {
     let containerCount = 0
     let position = sectionParsers.cramFileDefinition.maxLength
     while (position + cramContainerHeader1.maxLength + 8 < fileSize) {
-      const currentHeader = await this.getContainerAtPosition(
-        position,
-      ).getHeader()
+      const currentHeader =
+        await this.getContainerAtPosition(position).getHeader()
       if (!currentHeader) {
         break
       }
@@ -319,7 +317,7 @@ export default class CramFile {
     return data
   }
 
-  _uncompress(
+  async _uncompress(
     compressionMethod: CompressionMethod,
     inputBuffer: Buffer,
     outputBuffer: Buffer,
@@ -340,6 +338,12 @@ export default class CramFile {
           size -= chunk.length
         }
       } while (chunk != -1)
+    } else if (compressionMethod === 'lzma') {
+      const decompressedResponse = new Response(
+        new XzReadableStream(bufferToStream(inputBuffer)),
+      )
+      const ret = Buffer.from(await decompressedResponse.arrayBuffer())
+      ret.copy(outputBuffer)
     } else if (compressionMethod === 'rans') {
       ransuncompress(inputBuffer, outputBuffer)
       //htscodecs r4x8 is slower, but compatible.
@@ -386,7 +390,7 @@ export default class CramFile {
         blockContentPosition,
       )
 
-      this._uncompress(
+      await this._uncompress(
         blockHeader.compressionMethod,
         compressedData,
         uncompressedData,

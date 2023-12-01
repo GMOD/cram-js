@@ -1,3 +1,4 @@
+//@ts-nocheck
 const path = typeof __webpack_require__ !== 'function' ? require('path') : null // eslint-disable-line camelcase
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
 import { fromUrl } from '../../src/io'

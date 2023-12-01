@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { CramMalformedError } from '../errors'
 
 import { TF_SHIFT } from './constants'

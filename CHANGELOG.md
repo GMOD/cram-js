@@ -26,7 +26,8 @@
 
 # v1.6.3
 
-- Optimize CRAM parsing slightly (15% improvement on many short reads). This removes support for big endian machines
+- Optimize CRAM parsing slightly (15% improvement on many short reads). This
+  removes support for big endian machines
 - Publish src directory for sourceMap
 
 # v1.6.2
@@ -93,7 +94,8 @@
 
 # v1.4.3
 
-- Make sure mate exists for unmated pair, can exist when coordinate slices of cram file are made via samtools view
+- Make sure mate exists for unmated pair, can exist when coordinate slices of
+  cram file are made via samtools view
 
 # v1.4.2
 

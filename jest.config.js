@@ -1,9 +1,6 @@
-/** @type {import("ts-jest/dist/types").InitialOptionsTsJest} */
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
   preset: 'ts-jest',
-  transform: {
-    '^.+\\.(ts|js)x?$': 'ts-jest',
-  },
+  testEnvironment: 'node',
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\](?!quick-lru/).+\\.js$'],
-  testTimeout: 1000,
 }
