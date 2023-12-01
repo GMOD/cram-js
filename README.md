@@ -12,8 +12,9 @@ browser.
 - Can use .crai indexes out of the box, for efficient sequence fetching, but
   also has an [index API](#craiindex) that would allow use with other index
   types
-- Does implement bzip2 but not lzma codecs (yet); if this is important to your
-  use case, please file an issue
+- Has preliminary support for bzip2 and lzma codecs. lzma requires the latest
+  @gmod/cram version, and uses webassembly. If you find you are unable to
+  compile it, you can try downgrading
 
 ## Install
 

@@ -1,3 +1,8 @@
+# v2.0.0
+
+- Add lzma support via xz-decompress. This uses webassembly, so it is a major
+  version bump
+
 # v1.7.4
 
 - Fix import of bzip2 module
