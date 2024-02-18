@@ -39,13 +39,17 @@ const indexedFile = new IndexedCramFile({
   }),
   seqFetch: async (seqId, start, end) => {
     // note:
-    // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
-    // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
-    // * the seqId is a numeric identifier
+    // - seqFetch should return a promise for a string, in this instance
+    // retrieved from IndexedFasta
+    //
+    // - we use start-1 because cram-js uses 1-based but IndexedFasta uses
+    // 0-based coordinates
+    //
+    // - the seqId is a numeric identifier
     const seqList = await t.getSequenceNames()
     const r = await t.getSequence(seqList[seqId], start - 1, end)
     if (r === undefined) {
-      throw new Error()
+      throw new Error('error getting sequence')
     }
     return r
   },
@@ -62,12 +66,12 @@ function decodeSeqCigar(record: CramRecord) {
   // not sure I should access these, but...
   const ref = record._refRegion!.seq
   const refStart = record._refRegion!.start
-  let last_pos = record.alignmentStart
-  if (typeof record.readFeatures !== 'undefined') {
+  let lastPos = record.alignmentStart
+  if (record.readFeatures !== undefined) {
     record.readFeatures.forEach(({ code, refPos, sub, data }) => {
-      const sublen = refPos - last_pos
-      seq += ref.substring(last_pos - refStart, refPos - refStart)
-      last_pos = refPos
+      const sublen = refPos - lastPos
+      seq += ref.slice(lastPos - refStart, refPos - refStart)
+      lastPos = refPos
 
       if (oplen && op != 'M') {
         cigar += oplen + op
@@ -83,21 +87,21 @@ function decodeSeqCigar(record: CramRecord) {
         const ret = data.split(',')
         const added = String.fromCharCode(...ret)
         seq += added
-        last_pos += added.length
+        lastPos += added.length
         oplen += added.length
       } else if (code === 'B') {
         // Single base (+ qual score)
         seq += sub
-        last_pos++
+        lastPos++
         oplen++
       } else if (code === 'X') {
         // Substitution
         seq += sub
-        last_pos++
+        lastPos++
         oplen++
       } else if (code == 'D' || code == 'N') {
         // Deletion or Ref Skip
-        last_pos += data
+        lastPos += data
         if (oplen) {
           cigar += oplen + op
         }
@@ -139,7 +143,7 @@ function decodeSeqCigar(record: CramRecord) {
   }
   if (seq.length != record.readLength) {
     sublen = record.readLength - seq.length
-    seq += ref.substring(last_pos - refStart, last_pos - refStart + sublen)
+    seq += ref.slice(lastPos - refStart, lastPos - refStart + sublen)
 
     if (oplen && op != 'M') {
       cigar += oplen + op
@@ -162,11 +166,10 @@ function tags2str(record: CramRecord, RG: string[]) {
     if (typeof record.tags[type] === 'number') {
       str += type + ':i:' + record.tags[type]
     } else if (typeof record.tags[type] === 'string') {
-      if (record.tags[type].length === 1) {
-        str += type + ':A:' + record.tags[type]
-      } else {
-        str += type + ':Z:' + record.tags[type]
-      }
+      str +=
+        record.tags[type].length === 1
+          ? type + ':A:' + record.tags[type]
+          : type + ':Z:' + record.tags[type]
     } else {
       console.error(
         type,
@@ -177,7 +180,7 @@ function tags2str(record: CramRecord, RG: string[]) {
     }
   }
 
-  if (typeof record.readGroupId !== undefined && record.readGroupId >= 0) {
+  if (record.readGroupId !== undefined && record.readGroupId >= 0) {
     str += '\tRG:Z:' + RG[record.readGroupId]
   }
   return str
@@ -196,16 +199,13 @@ async function run() {
   })
 
   const hdr = await indexedFile.cram.getSamHeader()
-  if (!hdr) {
-    throw new Error()
-  }
   const RG: string[] = []
   let nRG = 0
   for (const line of hdr) {
     if (line.tag === 'RG') {
-      for (const i in line.data) {
-        if (line.data[i].tag === 'ID') {
-          RG[nRG++] = line.data[i].value
+      for (const entry of line.data) {
+        if (entry.tag === 'ID') {
+          RG[nRG++] = entry.value
         }
       }
     }
@@ -254,4 +254,6 @@ async function run() {
   })
 }
 
-run()
+run().catch(e => {
+  console.error(e)
+})

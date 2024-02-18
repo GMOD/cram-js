@@ -2,19 +2,19 @@ import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
 import { DataType } from './dataSeriesTypes'
 
-export type DataTypeMapping = {
+export interface DataTypeMapping {
   byte: number
   int: number
   long: number
   byteArray: Uint8Array
 }
 
-export type Cursor = {
+export interface Cursor {
   bitPosition: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
   bytePosition: number
 }
 
-export type Cursors = {
+export interface Cursors {
   lastAlignmentStart: number
   coreBlock: Cursor
   externalBlocks: {

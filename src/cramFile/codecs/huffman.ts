@@ -12,7 +12,11 @@ function numberOfSetBits(ii: number) {
   return (((i + (i >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
 }
 
-type Code = { bitLength: number; value: number; bitCode: number }
+interface Code {
+  bitLength: number
+  value: number
+  bitCode: number
+}
 
 export default class HuffmanIntCodec extends CramCodec<
   'byte' | 'int',
@@ -20,12 +24,16 @@ export default class HuffmanIntCodec extends CramCodec<
 > {
   private codes: Record<number, Code> = {}
   private codeBook: Record<number, number[]> = {}
-  private sortedByValue: Code[] = []
   private sortedCodes: Code[] = []
   private sortedValuesByBitCode: number[] = []
   private sortedBitCodes: number[] = []
   private sortedBitLengthsByBitCode: number[] = []
   private bitCodeToValue: number[] = []
+  private decoder = (
+    slice: CramSlice,
+    coreDataBlock: CramFileBlock,
+    coreCursor: Cursor,
+  ) => this._decode(slice, coreDataBlock, coreCursor)
 
   constructor(
     parameters: HuffmanEncoding['parameters'],
@@ -44,13 +52,13 @@ export default class HuffmanIntCodec extends CramCodec<
 
     // if this is a degenerate zero-length huffman code, special-case the decoding
     if (this.sortedCodes[0].bitLength === 0) {
-      this._decode = this._decodeZeroLengthCode
+      this.decoder = () => this.sortedCodes[0].value
     }
   }
 
   buildCodeBook() {
     // parse the parameters together into a `codes` data structure
-    let codes: Array<{ symbol: number; bitLength: number }> = new Array(
+    let codes = new Array<{ symbol: number; bitLength: number }>(
       this.parameters.numCodes,
     )
     for (let i = 0; i < this.parameters.numCodes; i += 1) {
@@ -105,11 +113,6 @@ export default class HuffmanIntCodec extends CramCodec<
       (a, b) => a.bitLength - b.bitLength || a.bitCode - b.bitCode,
     )
 
-    // this.sortedValues = this.parameters.values.sort((a,b) => a-b)
-    this.sortedByValue = Object.values(this.codes).sort(
-      (a, b) => a.value - b.value,
-    )
-
     this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
     this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
     this.sortedBitLengthsByBitCode = this.sortedCodes.map(c => c.bitLength)
@@ -124,22 +127,13 @@ export default class HuffmanIntCodec extends CramCodec<
   decode(
     slice: CramSlice,
     coreDataBlock: CramFileBlock,
-    blocksByContentId: Record<number, CramFileBlock>,
+    _blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    return this._decode(slice, coreDataBlock, cursors.coreBlock)
+    return this.decoder(slice, coreDataBlock, cursors.coreBlock)
   }
 
-  // _decodeNull() {
-  //   return -1
-  // }
-
-  // the special case for zero-length codes
-  _decodeZeroLengthCode() {
-    return this.sortedCodes[0].value
-  }
-
-  _decode(slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
+  _decode(_slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
     const input = coreDataBlock.content
 
     let prevLen = 0

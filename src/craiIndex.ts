@@ -8,7 +8,7 @@ import { Filehandle } from './cramFile/filehandle'
 
 const BAI_MAGIC = 21578050 // BAI\1
 
-export type Slice = {
+export interface Slice {
   start: number
   span: number
   containerStart: number
@@ -19,10 +19,6 @@ export type Slice = {
 type ParsedIndex = Record<string, Slice[]>
 
 function addRecordToIndex(index: ParsedIndex, record: number[]) {
-  if (record.some(el => el === undefined)) {
-    throw new CramMalformedError('invalid .crai index file')
-  }
-
   const [seqId, start, span, containerStart, sliceStart, sliceBytes] = record
 
   if (!index[seqId]) {
@@ -75,37 +71,33 @@ export default class CraiIndex {
         }
         return data
       })
-      .then(uncompressedBuffer => {
-        if (
-          uncompressedBuffer.length > 4 &&
-          uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
-        ) {
+      .then(buf => {
+        if (buf.length > 4 && buf.readUInt32LE(0) === BAI_MAGIC) {
           throw new CramMalformedError(
             'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
           )
         }
-        // interpret the text as regular ascii, since it is
-        // supposed to be only digits and whitespace characters
-        // this is written in a deliberately low-level fashion for performance,
-        // because some .crai files can be pretty large.
-        let currentRecord: number[] = []
-        let currentString = ''
-        for (let i = 0; i < uncompressedBuffer.length; i += 1) {
-          const charCode = uncompressedBuffer[i]
+        // interpret the text as regular ascii, since it is supposed to be only
+        // digits and whitespace characters this is written in a deliberately
+        // low-level fashion for performance, because some .crai files can be
+        // pretty large.
+        let rec: number[] = []
+        let str = ''
+        for (const c of buf) {
           if (
-            (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
-            (!currentString && charCode === 45) /* leading - */
+            (c >= 48 && c <= 57) /* 0-9 */ ||
+            (!str && c === 45) /* leading - */
           ) {
-            currentString += String.fromCharCode(charCode)
-          } else if (charCode === 9 /* \t */) {
-            currentRecord.push(Number.parseInt(currentString, 10))
-            currentString = ''
-          } else if (charCode === 10 /* \n */) {
-            currentRecord.push(Number.parseInt(currentString, 10))
-            currentString = ''
-            addRecordToIndex(index, currentRecord)
-            currentRecord = []
-          } else if (charCode !== 13 /* \r */ && charCode !== 32 /* space */) {
+            str += String.fromCharCode(c)
+          } else if (c === 9 /* \t */) {
+            rec.push(Number.parseInt(str, 10))
+            str = ''
+          } else if (c === 10 /* \n */) {
+            rec.push(Number.parseInt(str, 10))
+            str = ''
+            addRecordToIndex(index, rec)
+            rec = []
+          } else if (c !== 13 /* \r */ && c !== 32 /* space */) {
             // if there are other characters in the file besides
             // space and \r, something is wrong.
             throw new CramMalformedError('invalid .crai index file')
@@ -113,11 +105,11 @@ export default class CraiIndex {
         }
 
         // if the file ends without a \n, we need to flush our buffers
-        if (currentString) {
-          currentRecord.push(Number.parseInt(currentString, 10))
+        if (str) {
+          rec.push(Number.parseInt(str, 10))
         }
-        if (currentRecord.length === 6) {
-          addRecordToIndex(index, currentRecord)
+        if (rec.length === 6) {
+          addRecordToIndex(index, rec)
         }
 
         // sort each of them by start

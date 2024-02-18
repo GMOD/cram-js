@@ -247,16 +247,14 @@ describe('paired orientation test', () => {
       viewAsPairs: true,
     })
 
-    let feat1
-    let feat2
-    for (let i = 0; i < features.length; i += 1) {
-      if (
-        features[i].readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0'
-      ) {
-        if (features[i].isRead1()) {
-          feat1 = features[i]
-        } else if (features[i].isRead2()) {
-          feat2 = features[i]
+    let feat1: CramRecord | undefined
+    let feat2: CramRecord | undefined
+    for (const f of features) {
+      if (f.readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0') {
+        if (f.isRead1()) {
+          feat1 = f
+        } else if (f.isRead2()) {
+          feat2 = f
         }
       }
     }
@@ -277,16 +275,12 @@ describe('duplicate IDs test', () => {
     const features = await cram.getRecordsForRange(0, 163504, 175473)
     const totalMap = {}
     let noCollisions = true
-    for (let i = 0; i < features.length; i += 1) {
-      const feature = features[i]
-      if (
-        totalMap[feature.uniqueId] &&
-        totalMap[feature.uniqueId] !== feature.readName
-      ) {
+    for (const f of features) {
+      if (totalMap[f.uniqueId] && totalMap[f.uniqueId] !== f.readName) {
         noCollisions = false
-        console.log('collision', totalMap[feature.uniqueId], feature.readName)
+        console.log('collision', totalMap[f.uniqueId], f.readName)
       } else {
-        totalMap[feature.uniqueId] = feature.readName
+        totalMap[f.uniqueId] = f.readName
       }
     }
 
@@ -359,7 +353,7 @@ TCACCCTCTAAATCACCACGATCAAAAGGAACAAGCATCAAGCACGCAGCAATGCAGCTC
 AAAACGCTTAGCCTAGCCACACCCCCACGGGAAACAGCAGTGATTAACCTTTAGCAATAA
 ACGAAAGTTTAACTAAGCTATACTAACCCCAGGGTTGGTCAATTTCGTGCCAGCCACCGC
 GGTCACACGATTAACCCAAGTCAATAGAAGCCGGCGTAAAGAGTGTTTTAGATCACCCCC
-TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replace(/\n/g, '')
+TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replace('\n', '')
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('raw_sorted_duplicates_removed.cram'),
       seqFetch(ref, start, end) {

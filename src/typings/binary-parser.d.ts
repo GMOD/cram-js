@@ -1,5 +1,5 @@
 declare module '@gmod/binary-parser' {
-  export type Options = {
+  export interface Options {
     stripNull?: boolean
     formatter?: (item: any) => any
     length?: number | string | ((this: { $parent: unknown }) => void)

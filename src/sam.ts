@@ -1,6 +1,6 @@
-export type HeaderDataItem = {
+export interface HeaderDataItem {
   tag: string
-  data: Array<{ tag: string; value: string }>
+  data: { tag: string; value: string }[]
 }
 
 export function parseHeaderText(text: string): HeaderDataItem[] {
@@ -13,7 +13,7 @@ export function parseHeaderText(text: string): HeaderDataItem[] {
       return { tag: fieldTag, value }
     })
     if (tag) {
-      data.push({ tag: tag.substr(1), data: parsedFields })
+      data.push({ tag: tag.slice(1), data: parsedFields })
     }
   })
   return data

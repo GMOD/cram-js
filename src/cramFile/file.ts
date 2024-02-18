@@ -51,7 +51,7 @@ function getEndianness() {
 //   | { path: string; url?: undefined; filehandle?: undefined }
 //   | { filehandle: Filehandle; url?: undefined; path?: undefined }
 
-export type CramFileSource = {
+export interface CramFileSource {
   filehandle?: Filehandle
   url?: string
   path?: string

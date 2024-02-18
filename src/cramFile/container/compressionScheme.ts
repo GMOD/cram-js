@@ -165,7 +165,7 @@ export default class CramContainerCompressionScheme {
   toJSON() {
     const data: any = {}
     Object.keys(this).forEach(k => {
-      if (/Cache$/.test(k)) {
+      if (k.endsWith('Cache')) {
         return
       }
       data[k] = (this as any)[k]

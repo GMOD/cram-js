@@ -1,5 +1,3 @@
-import CramFile, { CramRecord } from './cramFile'
-import IndexedCramFile from './indexedCramFile'
-import CraiIndex from './craiIndex'
-
-export { CramFile, IndexedCramFile, CraiIndex, CramRecord }
+export { default as CramFile, CramRecord } from './cramFile'
+export { default as CraiIndex } from './craiIndex'
+export { default as IndexedCramFile } from './indexedCramFile'

@@ -199,7 +199,7 @@ export default class CramSlice {
       containerHeader._endPosition + this.containerPosition,
     )
     if (header === undefined) {
-      throw new Error()
+      throw new Error('header undefined')
     }
     if (header.contentType === 'MAPPED_SLICE_HEADER') {
       const content = parseItem(
@@ -233,7 +233,7 @@ export default class CramSlice {
     for (let i = 0; i < blocks.length; i += 1) {
       const block = await this.file.readBlock(blockPosition)
       if (block === undefined) {
-        throw new Error()
+        throw new Error('block undefined')
       }
       blocks[i] = block
       blockPosition = blocks[i]._endPosition
@@ -270,7 +270,7 @@ export default class CramSlice {
     // read the slice header
     const sliceHeader = (await this.getHeader()).parsedContent
     if (!isMappedSliceHeader(sliceHeader)) {
-      throw new Error()
+      throw new Error('slice header not mapped')
     }
 
     if (sliceHeader.refSeqId < 0) {
@@ -279,10 +279,8 @@ export default class CramSlice {
 
     const compressionScheme = await this.container.getCompressionScheme()
     if (compressionScheme === undefined) {
-      throw new Error()
+      throw new Error('compression scheme undefined')
     }
-
-    // console.log(JSON.stringify(sliceHeader, null, '  '))
 
     if (sliceHeader.refBaseBlockId >= 0) {
       const refBlock = await this.getBlockByContentId(
@@ -349,12 +347,12 @@ export default class CramSlice {
 
     const compressionScheme = await this.container.getCompressionScheme()
     if (compressionScheme === undefined) {
-      throw new Error()
+      throw new Error('compression scheme undefined')
     }
 
     const sliceHeader = await this.getHeader()
     if (sliceHeader === undefined) {
-      throw new Error()
+      throw new Error('slice header undefined')
     }
 
     const blocksByContentId = await this._getBlocksContentIdIndex()
@@ -503,7 +501,7 @@ export default class CramSlice {
             : undefined
         const compressionScheme = await this.container.getCompressionScheme()
         if (compressionScheme === undefined) {
-          throw new Error()
+          throw new Error('compression scheme undefined')
         }
         const refRegions: Record<
           string,
@@ -511,14 +509,14 @@ export default class CramSlice {
         > = {} // seqId => { start, end, seq }
 
         // iterate over the records to find the spans of the reference sequences we need to fetch
-        for (let i = 0; i < records.length; i += 1) {
+        for (const record of records) {
           const seqId =
-            singleRefId !== undefined ? singleRefId : records[i].sequenceId
+            singleRefId !== undefined ? singleRefId : record.sequenceId
           let refRegion = refRegions[seqId]
           if (!refRegion) {
             refRegion = {
               id: seqId,
-              start: records[i].alignmentStart,
+              start: record.alignmentStart,
               end: -Infinity,
               seq: null,
             }
@@ -526,14 +524,14 @@ export default class CramSlice {
           }
 
           const end =
-            records[i].alignmentStart +
-            (records[i].lengthOnRef || records[i].readLength) -
+            record.alignmentStart +
+            (record.lengthOnRef || record.readLength) -
             1
           if (end > refRegion.end) {
             refRegion.end = end
           }
-          if (records[i].alignmentStart < refRegion.start) {
-            refRegion.start = records[i].alignmentStart
+          if (record.alignmentStart < refRegion.start) {
+            refRegion.start = record.alignmentStart
           }
         }
 

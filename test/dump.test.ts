@@ -42,20 +42,16 @@ describe('dumping cram files', () => {
       for (let i = 0; i < data.length; i++) {
         const datum = data[i]
         const expectedDatum = expectedFeatures[i]
-        try {
-          if (isIterable(datum.data)) {
-            for (const data2 of datum.data) {
-              if (data2.header && data2.header.parsedContent) {
-                data2.header.content = data2.header.parsedContent
-                delete data2.header.parsedContent
-              }
+        if (isIterable(datum.data)) {
+          for (const data2 of datum.data) {
+            if (data2.header?.parsedContent) {
+              data2.header.content = data2.header.parsedContent
+              delete data2.header.parsedContent
             }
           }
-
-          expect(datum).toEqual(expectedDatum)
-        } catch (e) {
-          throw e
         }
+
+        expect(datum).toEqual(expectedDatum)
       }
       expect(data).toEqual(expectedFeatures)
     }, 10000)

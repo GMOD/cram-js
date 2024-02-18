@@ -3,9 +3,9 @@ const path = typeof __webpack_require__ !== 'function' ? require('path') : null 
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
 import { fromUrl } from '../../src/io'
 
-const dataDir =
-  path &&
-  path.dirname(require.resolve('../data/xx#unsorted.tmp.cram.dump.json'))
+const dataDir = path?.dirname(
+  require.resolve('../data/xx#unsorted.tmp.cram.dump.json'),
+)
 
 function testDataUrl(filename) {
   return `file://${dataDir}/${filename}`.replace('#', '%23')
@@ -33,8 +33,7 @@ export function JsonClone(obj) {
 }
 
 const REWRITE_EXPECTED_DATA =
-  typeof process !== 'undefined' &&
-  process.env.CRAMJS_REWRITE_EXPECTED_DATA &&
+  process?.env.CRAMJS_REWRITE_EXPECTED_DATA &&
   process.env.CRAMJS_REWRITE_EXPECTED_DATA !== '0' &&
   process.env.CRAMJS_REWRITE_EXPECTED_DATA !== 'false'
 

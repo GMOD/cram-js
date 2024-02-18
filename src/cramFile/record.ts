@@ -2,13 +2,13 @@ import Constants from './constants'
 import CramContainerCompressionScheme from './container/compressionScheme'
 import decodeRecord from './slice/decodeRecord'
 
-export type RefRegion = {
+export interface RefRegion {
   start: number
   end: number
   seq: string
 }
 
-export type ReadFeature = {
+export interface ReadFeature {
   code: string
   pos: number
   refPos: number
@@ -36,7 +36,7 @@ function decodeReadSequence(
 
   if (!cramRecord.readFeatures) {
     return refRegion.seq
-      .substr(regionSeqOffset, cramRecord.lengthOnRef)
+      .slice(regionSeqOffset, regionSeqOffset + (cramRecord.lengthOnRef || 0))
       .toUpperCase()
   }
 
@@ -91,18 +91,21 @@ function decodeReadSequence(
         }
       } else if (currentReadFeature < cramRecord.readFeatures.length) {
         // put down a chunk of sequence up to the next read feature
-        const chunk = refRegion.seq.substr(
+        const chunk = refRegion.seq.slice(
           regionPos,
-          cramRecord.readFeatures[currentReadFeature].pos - bases.length - 1,
+          regionPos +
+            cramRecord.readFeatures[currentReadFeature].pos -
+            bases.length -
+            1,
         )
         bases += chunk
         regionPos += chunk.length
       }
     } else {
       // put down a chunk of reference up to the full read length
-      const chunk = refRegion.seq.substr(
+      const chunk = refRegion.seq.slice(
         regionPos,
-        cramRecord.readLength - bases.length,
+        regionPos + cramRecord.readLength - bases.length,
       )
       bases += chunk
       regionPos += chunk.length
@@ -152,7 +155,7 @@ function decodeBaseSubstitution(
   }
 }
 
-export type MateRecord = {
+export interface MateRecord {
   readName?: string
   sequenceId: number
   alignmentStart: number
@@ -208,7 +211,7 @@ type FlagsEncoder<Type> = {
 }
 
 function makeFlagsHelper<T>(
-  x: ReadonlyArray<readonly [number, T]>,
+  x: readonly (readonly [number, T])[],
 ): FlagsDecoder<T> & FlagsEncoder<T> {
   const r: any = {}
   for (const [code, name] of x) {
@@ -494,7 +497,7 @@ export default class CramRecord {
   toJSON() {
     const data: any = {}
     Object.keys(this).forEach(k => {
-      if (k.charAt(0) === '_') {
+      if (k.startsWith('_')) {
         return
       }
       data[k] = (this as any)[k]

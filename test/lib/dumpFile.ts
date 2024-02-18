@@ -53,7 +53,7 @@ async function dumpWholeFile(file) {
   // iterate through each container
   const items = [await file.getDefinition()]
   const containerCount = await file.containerCount()
-  const dumpsP = [...Array(containerCount).keys()].map((x, i) =>
+  const dumpsP = [...new Array(containerCount).keys()].map((x, i) =>
     dumpContainerById(file, i),
   )
   const containerDumps = await Promise.all(dumpsP)
