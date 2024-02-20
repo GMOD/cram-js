@@ -219,9 +219,7 @@ describe('match samtools', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 25999, 26499)
-
-    const featNames = await loadTestJSON('SRR396636.expected.names.json')
-    expect(features.map(f => f.readName)).toEqual(featNames)
+    expect(features.map(f => f.readName)).toMatchSnapshot()
     expect(features.length).toEqual(406)
   })
 })

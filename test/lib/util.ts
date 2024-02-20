@@ -1,40 +1,13 @@
-//@ts-nocheck
-const path = typeof __webpack_require__ !== 'function' ? require('path') : null // eslint-disable-line camelcase
-const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
 import { fromUrl } from '../../src/io'
+import path from 'path'
 
 const dataDir = path && path.dirname(require.resolve('../data/xx.fa'))
 
-function testDataUrl(filename) {
+export function testDataUrl(filename: string) {
   return `file://${dataDir}/${filename}`.replace('#', '%23')
 }
 
-function testDataFile(filename) {
+export function testDataFile(filename: string) {
   const source = testDataUrl(filename)
   return fromUrl(source)
-}
-
-async function loadTestJSON(filename) {
-  const data = await testDataFile(`${filename}`).readFile()
-  const text = data.toString()
-  return JSON.parse(text)
-}
-
-export function JsonClone(obj) {
-  return JSON.parse(JSON.stringify(obj))
-}
-
-const REWRITE_EXPECTED_DATA =
-  typeof process !== 'undefined' &&
-  process.env.CRAMJS_REWRITE_EXPECTED_DATA &&
-  process.env.CRAMJS_REWRITE_EXPECTED_DATA !== '0' &&
-  process.env.CRAMJS_REWRITE_EXPECTED_DATA !== 'false'
-
-module.exports = {
-  testDataUrl,
-  testDataFile,
-  loadTestJSON,
-  JsonClone,
-  REWRITE_EXPECTED_DATA,
-  fs,
 }
