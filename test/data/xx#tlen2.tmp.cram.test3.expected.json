@@ -1,41 +1,36 @@
 [
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 3,
-    "sequenceId": 1,
     "readLength": 5,
-    "alignmentStart": 1,
+    "mappingQuality": 1,
+    "lengthOnRef": 5,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "readGroupId": -1,
     "readName": "y4",
+    "sequenceId": 1,
+    "uniqueId": 1957,
+    "templateSize": 10,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "flags": 0,
       "sequenceId": 1,
       "alignmentStart": 16
-    },
-    "templateSize": 10,
-    "lengthOnRef": 5,
-    "mappingQuality": 1,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 1957
+    }
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 5,
-    "sequenceId": 1,
     "readLength": 5,
-    "alignmentStart": 16,
-    "readGroupId": -1,
-    "readName": "y1",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -43,7 +38,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "y1",
+    "sequenceId": 1,
     "uniqueId": 1612,
+    "alignmentStart": 16,
+    "tags": {},
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 1,
@@ -53,16 +53,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 1,
-    "sequenceId": 1,
     "readLength": 5,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "y1",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -70,7 +65,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "y1",
+    "sequenceId": 1,
     "uniqueId": 1613,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 16,
@@ -80,16 +80,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 5,
-    "sequenceId": 1,
     "readLength": 5,
-    "alignmentStart": 10,
-    "readGroupId": -1,
-    "readName": "y2",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -97,7 +92,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "y2",
+    "sequenceId": 1,
     "uniqueId": 1614,
+    "alignmentStart": 10,
+    "tags": {},
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 7,
@@ -107,16 +107,11 @@
     "templateLength": 8
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 1,
-    "sequenceId": 1,
     "readLength": 5,
-    "alignmentStart": 7,
-    "readGroupId": -1,
-    "readName": "y2",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -124,7 +119,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "y2",
+    "sequenceId": 1,
     "uniqueId": 1615,
+    "alignmentStart": 7,
+    "tags": {},
     "mate": {
       "sequenceId": 1,
       "alignmentStart": 10,
@@ -134,22 +134,37 @@
     "templateLength": 8
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 3,
-    "sequenceId": 1,
     "readLength": 5,
-    "alignmentStart": 10,
+    "mappingQuality": 1,
+    "lengthOnRef": 5,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "readGroupId": -1,
     "readName": "y3",
+    "sequenceId": 1,
+    "uniqueId": 1616,
+    "templateSize": 2,
+    "alignmentStart": 10,
+    "tags": {},
     "mate": {
       "flags": 1,
       "sequenceId": 1,
       "alignmentStart": 7
-    },
-    "templateSize": 2,
-    "lengthOnRef": 5,
+    }
+  },
+  {
+    "flags": 147,
+    "cramFlags": 3,
+    "readLength": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -157,25 +172,25 @@
       9,
       9
     ],
-    "uniqueId": 1616
-  },
-  {
-    "tags": {},
-    "flags": 147,
-    "cramFlags": 3,
-    "sequenceId": 1,
-    "readLength": 5,
-    "alignmentStart": 7,
     "readGroupId": -1,
     "readName": "y3",
+    "sequenceId": 1,
+    "uniqueId": 1617,
+    "templateSize": -2,
+    "alignmentStart": 7,
+    "tags": {},
     "mate": {
       "flags": 0,
       "sequenceId": 1,
       "alignmentStart": 10
-    },
-    "templateSize": -2,
-    "lengthOnRef": 5,
+    }
+  },
+  {
+    "flags": 99,
+    "cramFlags": 3,
+    "readLength": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -183,32 +198,17 @@
       9,
       9
     ],
-    "uniqueId": 1617
-  },
-  {
-    "tags": {},
-    "flags": 99,
-    "cramFlags": 3,
-    "sequenceId": 1,
-    "readLength": 5,
-    "alignmentStart": 16,
     "readGroupId": -1,
     "readName": "y4",
+    "sequenceId": 1,
+    "uniqueId": 1618,
+    "templateSize": -10,
+    "alignmentStart": 16,
+    "tags": {},
     "mate": {
       "flags": 1,
       "sequenceId": 1,
       "alignmentStart": 1
-    },
-    "templateSize": -10,
-    "lengthOnRef": 5,
-    "mappingQuality": 1,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 1618
+    }
   }
 ]

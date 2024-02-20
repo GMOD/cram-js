@@ -1,16 +1,10 @@
 [
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "s0",
-    "templateSize": 0,
-    "lengthOnRef": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -23,34 +17,60 @@
       9,
       9
     ],
-    "uniqueId": 480
+    "readGroupId": -1,
+    "readName": "s0",
+    "sequenceId": 0,
+    "uniqueId": 480,
+    "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {}
   },
   {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 10,
+    "mappingQuality": 0,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
+    "readGroupId": -1,
+    "readName": "s1",
+    "sequenceId": 0,
+    "uniqueId": 481,
+    "templateSize": 0,
+    "alignmentStart": 2,
     "tags": {
       "MD": "9",
       "NM": 0
     },
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 2,
-    "readGroupId": -1,
-    "readName": "s1",
-    "templateSize": 0,
     "readFeatures": [
       {
         "code": "B",
+        "pos": 10,
+        "refPos": 11,
         "data": [
           "C",
           9
-        ],
-        "pos": 10,
-        "refPos": 11
+        ]
       }
-    ],
-    "lengthOnRef": 10,
+    ]
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -63,55 +83,35 @@
       9,
       9
     ],
-    "uniqueId": 481
-  },
-  {
+    "readGroupId": -1,
+    "readName": "s2",
+    "sequenceId": 0,
+    "uniqueId": 482,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "MD": "8",
       "NM": 0
     },
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "s2",
-    "templateSize": 0,
     "readFeatures": [
       {
         "code": "B",
+        "pos": 9,
+        "refPos": 11,
         "data": [
           "C",
           9
-        ],
-        "pos": 9,
-        "refPos": 11
+        ]
       },
       {
         "code": "B",
+        "pos": 10,
+        "refPos": 12,
         "data": [
           "G",
           9
-        ],
-        "pos": 10,
-        "refPos": 12
+        ]
       }
-    ],
-    "lengthOnRef": 10,
-    "mappingQuality": 0,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 482
+    ]
   }
 ]

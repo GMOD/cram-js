@@ -1,92 +1,92 @@
 [
   {
-    "tags": {
-      "MD": "0",
-      "NM": 0
-    },
     "flags": 16,
     "cramFlags": 11,
-    "sequenceId": 1,
     "readLength": 0,
-    "alignmentStart": 4,
+    "mappingQuality": 1,
+    "lengthOnRef": 0,
+    "qualityScores": [],
     "readGroupId": -1,
     "readName": "A0",
+    "sequenceId": 1,
+    "uniqueId": 1131,
     "templateSize": 0,
-    "lengthOnRef": 0,
-    "mappingQuality": 1,
-    "qualityScores": [],
-    "uniqueId": 1131
-  },
-  {
+    "alignmentStart": 4,
     "tags": {
       "MD": "0",
       "NM": 0
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 11,
-    "sequenceId": 1,
     "readLength": 0,
-    "alignmentStart": 4,
+    "mappingQuality": 1,
+    "lengthOnRef": 0,
+    "qualityScores": [],
     "readGroupId": -1,
     "readName": "A1",
+    "sequenceId": 1,
+    "uniqueId": 1132,
     "templateSize": 0,
-    "lengthOnRef": 0,
-    "mappingQuality": 1,
-    "qualityScores": [],
-    "uniqueId": 1132
-  },
-  {
+    "alignmentStart": 4,
     "tags": {
       "MD": "0",
       "NM": 0
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 11,
-    "sequenceId": 1,
     "readLength": 0,
-    "alignmentStart": 4,
+    "mappingQuality": 1,
+    "lengthOnRef": 0,
+    "qualityScores": [],
     "readGroupId": -1,
     "readName": "A2",
+    "sequenceId": 1,
+    "uniqueId": 1133,
     "templateSize": 0,
-    "lengthOnRef": 0,
-    "mappingQuality": 1,
-    "qualityScores": [],
-    "uniqueId": 1133
-  },
-  {
+    "alignmentStart": 4,
     "tags": {
       "MD": "0",
       "NM": 0
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 11,
-    "sequenceId": 1,
     "readLength": 0,
-    "alignmentStart": 4,
+    "mappingQuality": 1,
+    "lengthOnRef": 0,
+    "qualityScores": [],
     "readGroupId": -1,
     "readName": "A3",
+    "sequenceId": 1,
+    "uniqueId": 1134,
     "templateSize": 0,
-    "lengthOnRef": 0,
-    "mappingQuality": 1,
-    "qualityScores": [],
-    "uniqueId": 1134
-  },
-  {
+    "alignmentStart": 4,
     "tags": {
       "MD": "0",
       "NM": 0
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 11,
-    "sequenceId": 1,
     "readLength": 0,
-    "alignmentStart": 4,
+    "mappingQuality": 1,
+    "lengthOnRef": 0,
+    "qualityScores": [],
     "readGroupId": -1,
     "readName": "A4",
+    "sequenceId": 1,
+    "uniqueId": 1135,
     "templateSize": 0,
-    "lengthOnRef": 0,
-    "mappingQuality": 1,
-    "qualityScores": [],
-    "uniqueId": 1135
+    "alignmentStart": 4,
+    "tags": {
+      "MD": "0",
+      "NM": 0
+    }
   }
 ]

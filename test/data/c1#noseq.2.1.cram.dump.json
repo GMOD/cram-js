@@ -84,24 +84,85 @@
       ]
     },
     "compressionScheme": {
-      "preservation": {
-        "TD": [
-          [],
-          [
-            "MDZ",
-            "NMC"
-          ]
-        ],
-        "SM": [
-          27,
-          27,
-          27,
-          27,
-          27
-        ],
-        "RN": true,
-        "AP": true
+      "tagEncoding": {
+        "MDZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 9
+          }
+        },
+        "NMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
       },
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [],
+        [
+          "MDZ",
+          "NMC"
+        ]
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
       "dataSeriesEncoding": {
         "BF": {
           "codecId": 3,
@@ -389,87 +450,26 @@
           }
         }
       },
-      "tagEncoding": {
-        "MDZ": {
-          "codecId": 5,
-          "parametersBytes": 2,
-          "parameters": {
-            "stopByte": 9,
-            "blockContentId": 9
-          }
-        },
-        "NMC": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        }
+      "preservation": {
+        "TD": [
+          [],
+          [
+            "MDZ",
+            "NMC"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
       },
-      "_endPosition": 10397,
       "_size": 237,
-      "readNamesIncluded": true,
-      "APdelta": true,
-      "referenceRequired": false,
-      "tagIdsDictionary": [
-        [],
-        [
-          "MDZ",
-          "NMC"
-        ]
-      ],
-      "substitutionMatrix": [
-        [
-          "C",
-          "G",
-          "T",
-          "N"
-        ],
-        [
-          "A",
-          "G",
-          "T",
-          "N"
-        ],
-        [
-          "A",
-          "C",
-          "T",
-          "N"
-        ],
-        [
-          "A",
-          "C",
-          "G",
-          "N"
-        ],
-        [
-          "A",
-          "C",
-          "G",
-          "T"
-        ]
-      ]
+      "_endPosition": 10397
     },
     "data": [
       {
@@ -499,6 +499,43 @@
           "_size": 32,
           "contentPosition": 10402,
           "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              1,
+              10,
+              9,
+              0,
+              5,
+              4,
+              1,
+              9,
+              11,
+              12,
+              255,
+              255,
+              255,
+              255,
+              15,
+              226,
+              36,
+              189,
+              138,
+              112,
+              229,
+              70,
+              108,
+              106,
+              3,
+              59,
+              232,
+              134,
+              4,
+              92,
+              133
+            ]
+          },
+          "parsedContent": {
             "refSeqId": 0,
             "refSeqStart": 1,
             "refSeqSpan": 10,
@@ -537,17 +574,11 @@
         },
         "features": [
           {
-            "tags": {},
             "flags": 0,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "sq1",
-            "templateSize": 0,
-            "lengthOnRef": 10,
             "mappingQuality": 0,
+            "lengthOnRef": 10,
             "qualityScores": [
               9,
               9,
@@ -560,21 +591,21 @@
               9,
               9
             ],
+            "readGroupId": -1,
+            "readName": "sq1",
+            "sequenceId": 0,
             "uniqueId": 10403,
+            "templateSize": 0,
+            "alignmentStart": 1,
+            "tags": {},
             "readBases": "AACCGCGGTT"
           },
           {
-            "tags": {},
             "flags": 0,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 10,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "sQ1",
-            "templateSize": 0,
-            "lengthOnRef": 10,
             "mappingQuality": 0,
+            "lengthOnRef": 10,
             "qualityScores": [
               255,
               255,
@@ -587,59 +618,51 @@
               255,
               255
             ],
+            "readGroupId": -1,
+            "readName": "sQ1",
+            "sequenceId": 0,
             "uniqueId": 10404,
+            "templateSize": 0,
+            "alignmentStart": 1,
+            "tags": {},
             "readBases": "AACCGCGGTT"
           },
           {
+            "flags": 0,
+            "cramFlags": 3,
+            "readLength": 10,
+            "mappingQuality": 0,
+            "lengthOnRef": 10,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
+            "readGroupId": -1,
+            "readName": "SQ1",
+            "sequenceId": 0,
+            "uniqueId": 10405,
+            "templateSize": 0,
+            "alignmentStart": 1,
             "tags": {
               "MD": "10",
               "NM": 0
             },
-            "flags": 0,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 10,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "SQ1",
-            "templateSize": 0,
-            "lengthOnRef": 10,
-            "mappingQuality": 0,
-            "qualityScores": [
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255
-            ],
-            "uniqueId": 10405,
             "readBases": "AACCGCGGTT"
           },
           {
-            "tags": {},
             "flags": 0,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "sq2",
-            "templateSize": 0,
-            "readFeatures": [
-              {
-                "code": "D",
-                "data": 1,
-                "pos": 5,
-                "refPos": 5
-              }
-            ],
-            "lengthOnRef": 10,
             "mappingQuality": 0,
+            "lengthOnRef": 10,
             "qualityScores": [
               9,
               9,
@@ -651,29 +674,29 @@
               9,
               9
             ],
-            "uniqueId": 10406,
-            "readBases": "AACCCGGTT"
-          },
-          {
-            "tags": {},
-            "flags": 0,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 9,
-            "alignmentStart": 1,
             "readGroupId": -1,
-            "readName": "sQ2",
+            "readName": "sq2",
+            "sequenceId": 0,
+            "uniqueId": 10406,
             "templateSize": 0,
+            "alignmentStart": 1,
+            "tags": {},
             "readFeatures": [
               {
                 "code": "D",
-                "data": 1,
                 "pos": 5,
-                "refPos": 5
+                "refPos": 5,
+                "data": 1
               }
             ],
-            "lengthOnRef": 10,
+            "readBases": "AACCCGGTT"
+          },
+          {
+            "flags": 0,
+            "cramFlags": 3,
+            "readLength": 9,
             "mappingQuality": 0,
+            "lengthOnRef": 10,
             "qualityScores": [
               255,
               255,
@@ -685,57 +708,64 @@
               255,
               255
             ],
+            "readGroupId": -1,
+            "readName": "sQ2",
+            "sequenceId": 0,
             "uniqueId": 10407,
+            "templateSize": 0,
+            "alignmentStart": 1,
+            "tags": {},
+            "readFeatures": [
+              {
+                "code": "D",
+                "pos": 5,
+                "refPos": 5,
+                "data": 1
+              }
+            ],
             "readBases": "AACCCGGTT"
           },
           {
+            "flags": 0,
+            "cramFlags": 3,
+            "readLength": 9,
+            "mappingQuality": 0,
+            "lengthOnRef": 10,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
+            "readGroupId": -1,
+            "readName": "SQ2",
+            "sequenceId": 0,
+            "uniqueId": 10408,
+            "templateSize": 0,
+            "alignmentStart": 1,
             "tags": {
               "MD": "4^G5",
               "NM": 1
             },
-            "flags": 0,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 9,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "SQ2",
-            "templateSize": 0,
             "readFeatures": [
               {
                 "code": "D",
-                "data": 1,
                 "pos": 5,
-                "refPos": 5
+                "refPos": 5,
+                "data": 1
               }
             ],
-            "lengthOnRef": 10,
-            "mappingQuality": 0,
-            "qualityScores": [
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255
-            ],
-            "uniqueId": 10408,
             "readBases": "AACCCGGTT"
           },
           {
-            "tags": {},
             "flags": 4,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "sq3",
-            "templateSize": 0,
-            "readBases": "AACCCGGTT",
             "qualityScores": [
               9,
               9,
@@ -747,19 +777,19 @@
               9,
               9
             ],
-            "uniqueId": 10409
+            "readBases": "AACCCGGTT",
+            "readGroupId": -1,
+            "readName": "sq3",
+            "sequenceId": 0,
+            "uniqueId": 10409,
+            "templateSize": 0,
+            "alignmentStart": 1,
+            "tags": {}
           },
           {
-            "tags": {},
             "flags": 4,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 9,
-            "alignmentStart": 1,
-            "readGroupId": -1,
-            "readName": "sQ3",
-            "templateSize": 0,
-            "readBases": "AACCCGGTT",
             "qualityScores": [
               255,
               255,
@@ -771,20 +801,27 @@
               255,
               255
             ],
-            "uniqueId": 10410
+            "readBases": "AACCCGGTT",
+            "readGroupId": -1,
+            "readName": "sQ3",
+            "sequenceId": 0,
+            "uniqueId": 10410,
+            "templateSize": 0,
+            "alignmentStart": 1,
+            "tags": {}
           },
           {
-            "tags": {},
             "flags": 4,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 0,
-            "alignmentStart": 1,
+            "qualityScores": [],
             "readGroupId": -1,
             "readName": "SQ3",
+            "sequenceId": 0,
+            "uniqueId": 10411,
             "templateSize": 0,
-            "qualityScores": [],
-            "uniqueId": 10411
+            "alignmentStart": 1,
+            "tags": {}
           }
         ]
       }

@@ -1,62 +1,10 @@
 [
   {
-    "tags": {
-      "XG": 1,
-      "XM": 5,
-      "XN": 0,
-      "XO": 1,
-      "AS": -18,
-      "XS": -18,
-      "YT": "UU"
-    },
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 2,
-    "readGroupId": -1,
-    "readName": "SRR065390.14978392",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 5,
-        "refPos": 6
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 6,
-        "refPos": 7
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 12,
-        "refPos": 13
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 18,
-        "refPos": 19
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 24,
-        "refPos": 25
-      },
-      {
-        "code": "D",
-        "data": 1,
-        "pos": 28,
-        "refPos": 29
-      }
-    ],
-    "lengthOnRef": 101,
     "mappingQuality": 1,
+    "lengthOnRef": 101,
     "qualityScores": [
       2,
       2,
@@ -159,28 +107,66 @@
       34,
       34
     ],
-    "uniqueId": 1019
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.14978392",
+    "sequenceId": 0,
+    "uniqueId": 1019,
+    "templateSize": 0,
+    "alignmentStart": 2,
     "tags": {
-      "XG": 0,
-      "XM": 0,
+      "XG": 1,
+      "XM": 5,
       "XN": 0,
-      "XO": 0,
-      "AS": 0,
-      "XS": 0,
+      "XO": 1,
+      "AS": -18,
+      "XS": -18,
       "YT": "UU"
     },
+    "readFeatures": [
+      {
+        "code": "X",
+        "pos": 5,
+        "refPos": 6,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 6,
+        "refPos": 7,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 12,
+        "refPos": 13,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 18,
+        "refPos": 19,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 24,
+        "refPos": 25,
+        "data": 1
+      },
+      {
+        "code": "D",
+        "pos": 28,
+        "refPos": 29,
+        "data": 1
+      }
+    ]
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.1871511",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       27,
       30,
@@ -283,9 +269,12 @@
       34,
       34
     ],
-    "uniqueId": 1021
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.1871511",
+    "sequenceId": 0,
+    "uniqueId": 1021,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
       "XM": 0,
@@ -294,17 +283,14 @@
       "AS": 0,
       "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.3743423",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       2,
       2,
@@ -407,9 +393,12 @@
       34,
       34
     ],
-    "uniqueId": 1022
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.3743423",
+    "sequenceId": 0,
+    "uniqueId": 1022,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
       "XM": 0,
@@ -418,17 +407,14 @@
       "AS": 0,
       "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.4251890",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       2,
       2,
@@ -531,9 +517,12 @@
       34,
       34
     ],
-    "uniqueId": 1023
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.4251890",
+    "sequenceId": 0,
+    "uniqueId": 1023,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
       "XM": 0,
@@ -542,17 +531,14 @@
       "AS": 0,
       "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.5238868",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       31,
       11,
@@ -655,48 +641,28 @@
       34,
       34
     ],
-    "uniqueId": 1024
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.5238868",
+    "sequenceId": 0,
+    "uniqueId": 1024,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
-      "XM": 3,
+      "XM": 0,
       "XN": 0,
       "XO": 0,
-      "AS": -6,
-      "XS": -6,
+      "AS": 0,
+      "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.6023338",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 95,
-        "refPos": 97
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 96,
-        "refPos": 98
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 100,
-        "refPos": 102
-      }
-    ],
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       34,
       34,
@@ -799,28 +765,48 @@
       2,
       2
     ],
-    "uniqueId": 1025
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.6023338",
+    "sequenceId": 0,
+    "uniqueId": 1025,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
-      "XM": 0,
+      "XM": 3,
       "XN": 0,
       "XO": 0,
-      "AS": 0,
-      "XS": 0,
+      "AS": -6,
+      "XS": -6,
       "YT": "UU"
     },
+    "readFeatures": [
+      {
+        "code": "X",
+        "pos": 95,
+        "refPos": 97,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 96,
+        "refPos": 98,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 100,
+        "refPos": 102,
+        "data": 0
+      }
+    ]
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.6815812",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       2,
       2,
@@ -923,9 +909,12 @@
       34,
       34
     ],
-    "uniqueId": 2000
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.6815812",
+    "sequenceId": 0,
+    "uniqueId": 2000,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
       "XM": 0,
@@ -934,17 +923,14 @@
       "AS": 0,
       "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.6905811",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       2,
       2,
@@ -1047,9 +1033,12 @@
       34,
       34
     ],
-    "uniqueId": 2001
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.6905811",
+    "sequenceId": 0,
+    "uniqueId": 2001,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
       "XM": 0,
@@ -1058,17 +1047,14 @@
       "AS": 0,
       "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.8289592",
-    "templateSize": 0,
-    "lengthOnRef": 100,
     "mappingQuality": 1,
+    "lengthOnRef": 100,
     "qualityScores": [
       2,
       2,
@@ -1171,48 +1157,28 @@
       34,
       34
     ],
-    "uniqueId": 2002
-  },
-  {
+    "readGroupId": -1,
+    "readName": "SRR065390.8289592",
+    "sequenceId": 0,
+    "uniqueId": 2002,
+    "templateSize": 0,
+    "alignmentStart": 3,
     "tags": {
       "XG": 0,
-      "XM": 3,
+      "XM": 0,
       "XN": 0,
       "XO": 0,
-      "AS": -6,
-      "XS": -13,
+      "AS": 0,
+      "XS": 0,
       "YT": "UU"
-    },
+    }
+  },
+  {
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 100,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "SRR065390.921023",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 11,
-        "refPos": 13
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 12,
-        "refPos": 14
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 23,
-        "refPos": 25
-      }
-    ],
-    "lengthOnRef": 100,
     "mappingQuality": 12,
+    "lengthOnRef": 100,
     "qualityScores": [
       2,
       2,
@@ -1315,6 +1281,40 @@
       15,
       15
     ],
-    "uniqueId": 1020
+    "readGroupId": -1,
+    "readName": "SRR065390.921023",
+    "sequenceId": 0,
+    "uniqueId": 1020,
+    "templateSize": 0,
+    "alignmentStart": 3,
+    "tags": {
+      "XG": 0,
+      "XM": 3,
+      "XN": 0,
+      "XO": 0,
+      "AS": -6,
+      "XS": -13,
+      "YT": "UU"
+    },
+    "readFeatures": [
+      {
+        "code": "X",
+        "pos": 11,
+        "refPos": 13,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 12,
+        "refPos": 14,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 23,
+        "refPos": 25,
+        "data": 1
+      }
+    ]
   }
 ]

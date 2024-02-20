@@ -1,479 +1,10 @@
 [
   {
-    "tags": {
-      "X0": 1,
-      "X1": 0,
-      "XG": 0,
-      "AM": 37,
-      "SM": 37,
-      "XM": 0,
-      "XO": 0,
-      "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-      "MQ": 60,
-      "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGGHHHHHIHHHHHHHHHHHHHHHHHHHHHGBH6ADAAHHHHGB",
-      "XT": "U"
-    },
     "flags": 163,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 101,
-    "alignmentStart": 100009,
-    "readGroupId": 2,
-    "readName": "a",
-    "mate": {
-      "flags": 1,
-      "sequenceId": 0,
-      "alignmentStart": 100257
-    },
-    "templateSize": 348,
-    "readFeatures": [
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 2,
-        "refPos": 100010
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 4,
-        "refPos": 100012
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 5,
-        "refPos": 100013
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 6,
-        "refPos": 100014
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 7,
-        "refPos": 100015
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 8,
-        "refPos": 100016
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 9,
-        "refPos": 100017
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 12,
-        "refPos": 100020
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 13,
-        "refPos": 100021
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 17,
-        "refPos": 100025
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 18,
-        "refPos": 100026
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 19,
-        "refPos": 100027
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 20,
-        "refPos": 100028
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 21,
-        "refPos": 100029
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 22,
-        "refPos": 100030
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 23,
-        "refPos": 100031
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 24,
-        "refPos": 100032
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 25,
-        "refPos": 100033
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 26,
-        "refPos": 100034
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 28,
-        "refPos": 100036
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 30,
-        "refPos": 100038
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 31,
-        "refPos": 100039
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 32,
-        "refPos": 100040
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 33,
-        "refPos": 100041
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 34,
-        "refPos": 100042
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 35,
-        "refPos": 100043
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 36,
-        "refPos": 100044
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 37,
-        "refPos": 100045
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 38,
-        "refPos": 100046
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 39,
-        "refPos": 100047
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 40,
-        "refPos": 100048
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 41,
-        "refPos": 100049
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 42,
-        "refPos": 100050
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 43,
-        "refPos": 100051
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 45,
-        "refPos": 100053
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 46,
-        "refPos": 100054
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 47,
-        "refPos": 100055
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 49,
-        "refPos": 100057
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 50,
-        "refPos": 100058
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 51,
-        "refPos": 100059
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 52,
-        "refPos": 100060
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 54,
-        "refPos": 100062
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 55,
-        "refPos": 100063
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 58,
-        "refPos": 100066
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 59,
-        "refPos": 100067
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 60,
-        "refPos": 100068
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 63,
-        "refPos": 100071
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 65,
-        "refPos": 100073
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 66,
-        "refPos": 100074
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 67,
-        "refPos": 100075
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 68,
-        "refPos": 100076
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 70,
-        "refPos": 100078
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 71,
-        "refPos": 100079
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 73,
-        "refPos": 100081
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 74,
-        "refPos": 100082
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 75,
-        "refPos": 100083
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 76,
-        "refPos": 100084
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 77,
-        "refPos": 100085
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 78,
-        "refPos": 100086
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 79,
-        "refPos": 100087
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 80,
-        "refPos": 100088
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 82,
-        "refPos": 100090
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 83,
-        "refPos": 100091
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 84,
-        "refPos": 100092
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 85,
-        "refPos": 100093
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 86,
-        "refPos": 100094
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 87,
-        "refPos": 100095
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 90,
-        "refPos": 100098
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 91,
-        "refPos": 100099
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 94,
-        "refPos": 100102
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 95,
-        "refPos": 100103
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 96,
-        "refPos": 100104
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 100,
-        "refPos": 100108
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 101,
-        "refPos": 100109
-      }
-    ],
-    "lengthOnRef": 101,
     "mappingQuality": 60,
+    "lengthOnRef": 101,
     "qualityScores": [
       32,
       33,
@@ -577,9 +108,12 @@
       34,
       27
     ],
-    "uniqueId": 2572
-  },
-  {
+    "readGroupId": 2,
+    "readName": "a",
+    "sequenceId": 0,
+    "uniqueId": 2572,
+    "templateSize": 348,
+    "alignmentStart": 100009,
     "tags": {
       "X0": 1,
       "X1": 0,
@@ -590,470 +124,467 @@
       "XO": 0,
       "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
       "MQ": 60,
-      "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGEHHHHHIHHHHHHHHHHHHHHHHEHHHHHHHHHHHEFFFBF#",
+      "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGGHHHHHIHHHHHHHHHHHHHHHHHHHHHGBH6ADAAHHHHGB",
       "XT": "U"
     },
-    "flags": 163,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 101,
-    "alignmentStart": 100009,
-    "readGroupId": 4,
-    "readName": "b",
-    "mate": {
-      "flags": 1,
-      "sequenceId": 0,
-      "alignmentStart": 100318
-    },
-    "templateSize": 409,
     "readFeatures": [
       {
         "code": "X",
-        "data": 0,
         "pos": 2,
-        "refPos": 100010
+        "refPos": 100010,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 4,
-        "refPos": 100012
+        "refPos": 100012,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 5,
-        "refPos": 100013
+        "refPos": 100013,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 6,
-        "refPos": 100014
+        "refPos": 100014,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 7,
-        "refPos": 100015
+        "refPos": 100015,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 8,
-        "refPos": 100016
+        "refPos": 100016,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 9,
-        "refPos": 100017
+        "refPos": 100017,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 12,
-        "refPos": 100020
+        "refPos": 100020,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 13,
-        "refPos": 100021
+        "refPos": 100021,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 17,
-        "refPos": 100025
+        "refPos": 100025,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 18,
-        "refPos": 100026
+        "refPos": 100026,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 19,
-        "refPos": 100027
+        "refPos": 100027,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 20,
-        "refPos": 100028
+        "refPos": 100028,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 21,
-        "refPos": 100029
+        "refPos": 100029,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 22,
-        "refPos": 100030
+        "refPos": 100030,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 23,
-        "refPos": 100031
+        "refPos": 100031,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 24,
-        "refPos": 100032
+        "refPos": 100032,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 25,
-        "refPos": 100033
+        "refPos": 100033,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 26,
-        "refPos": 100034
+        "refPos": 100034,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 28,
-        "refPos": 100036
+        "refPos": 100036,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 30,
-        "refPos": 100038
+        "refPos": 100038,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 31,
-        "refPos": 100039
+        "refPos": 100039,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 32,
-        "refPos": 100040
+        "refPos": 100040,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 33,
-        "refPos": 100041
+        "refPos": 100041,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 34,
-        "refPos": 100042
+        "refPos": 100042,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 35,
-        "refPos": 100043
+        "refPos": 100043,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 36,
-        "refPos": 100044
+        "refPos": 100044,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 37,
-        "refPos": 100045
+        "refPos": 100045,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 38,
-        "refPos": 100046
+        "refPos": 100046,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 39,
-        "refPos": 100047
+        "refPos": 100047,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 40,
-        "refPos": 100048
+        "refPos": 100048,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 41,
-        "refPos": 100049
+        "refPos": 100049,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 42,
-        "refPos": 100050
+        "refPos": 100050,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 43,
-        "refPos": 100051
+        "refPos": 100051,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 45,
-        "refPos": 100053
+        "refPos": 100053,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 46,
-        "refPos": 100054
+        "refPos": 100054,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 47,
-        "refPos": 100055
+        "refPos": 100055,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 49,
-        "refPos": 100057
+        "refPos": 100057,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 50,
-        "refPos": 100058
+        "refPos": 100058,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 51,
-        "refPos": 100059
+        "refPos": 100059,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 52,
-        "refPos": 100060
+        "refPos": 100060,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 54,
-        "refPos": 100062
+        "refPos": 100062,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 55,
-        "refPos": 100063
+        "refPos": 100063,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 58,
-        "refPos": 100066
+        "refPos": 100066,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 59,
-        "refPos": 100067
+        "refPos": 100067,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 60,
-        "refPos": 100068
+        "refPos": 100068,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 63,
-        "refPos": 100071
+        "refPos": 100071,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 65,
-        "refPos": 100073
+        "refPos": 100073,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 66,
-        "refPos": 100074
+        "refPos": 100074,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 67,
-        "refPos": 100075
+        "refPos": 100075,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 68,
-        "refPos": 100076
+        "refPos": 100076,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 70,
-        "refPos": 100078
+        "refPos": 100078,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 71,
-        "refPos": 100079
+        "refPos": 100079,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 73,
-        "refPos": 100081
+        "refPos": 100081,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 74,
-        "refPos": 100082
+        "refPos": 100082,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 75,
-        "refPos": 100083
+        "refPos": 100083,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 76,
-        "refPos": 100084
+        "refPos": 100084,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 77,
-        "refPos": 100085
+        "refPos": 100085,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 78,
-        "refPos": 100086
+        "refPos": 100086,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 79,
-        "refPos": 100087
+        "refPos": 100087,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 80,
-        "refPos": 100088
+        "refPos": 100088,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 82,
-        "refPos": 100090
+        "refPos": 100090,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 83,
-        "refPos": 100091
+        "refPos": 100091,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 84,
-        "refPos": 100092
+        "refPos": 100092,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 85,
-        "refPos": 100093
+        "refPos": 100093,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 86,
-        "refPos": 100094
+        "refPos": 100094,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 87,
-        "refPos": 100095
+        "refPos": 100095,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 90,
-        "refPos": 100098
+        "refPos": 100098,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 91,
-        "refPos": 100099
+        "refPos": 100099,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 94,
-        "refPos": 100102
+        "refPos": 100102,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 95,
-        "refPos": 100103
+        "refPos": 100103,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 96,
-        "refPos": 100104
+        "refPos": 100104,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 100,
-        "refPos": 100108
+        "refPos": 100108,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 101,
-        "refPos": 100109
+        "refPos": 100109,
+        "data": 0
       }
     ],
-    "lengthOnRef": 101,
+    "mate": {
+      "flags": 1,
+      "sequenceId": 0,
+      "alignmentStart": 100257
+    }
+  },
+  {
+    "flags": 163,
+    "cramFlags": 3,
+    "readLength": 101,
     "mappingQuality": 60,
+    "lengthOnRef": 101,
     "qualityScores": [
       32,
       33,
@@ -1157,9 +688,12 @@
       34,
       2
     ],
-    "uniqueId": 2573
-  },
-  {
+    "readGroupId": 4,
+    "readName": "b",
+    "sequenceId": 0,
+    "uniqueId": 2573,
+    "templateSize": 409,
+    "alignmentStart": 100009,
     "tags": {
       "X0": 1,
       "X1": 0,
@@ -1168,471 +702,469 @@
       "SM": 37,
       "XM": 0,
       "XO": 0,
+      "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
       "MQ": 60,
-      "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHI",
+      "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGEHHHHHIHHHHHHHHHHHHHHHHEHHHHHHHHHHHEFFFBF#",
       "XT": "U"
     },
-    "flags": 1123,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 101,
-    "alignmentStart": 100009,
-    "readGroupId": 10,
-    "readName": "c",
-    "mate": {
-      "flags": 1,
-      "sequenceId": 0,
-      "alignmentStart": 100257
-    },
-    "templateSize": 348,
     "readFeatures": [
       {
         "code": "X",
-        "data": 0,
         "pos": 2,
-        "refPos": 100010
+        "refPos": 100010,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 4,
-        "refPos": 100012
+        "refPos": 100012,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 5,
-        "refPos": 100013
+        "refPos": 100013,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 6,
-        "refPos": 100014
+        "refPos": 100014,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 7,
-        "refPos": 100015
+        "refPos": 100015,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 8,
-        "refPos": 100016
+        "refPos": 100016,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 9,
-        "refPos": 100017
+        "refPos": 100017,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 12,
-        "refPos": 100020
+        "refPos": 100020,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 13,
-        "refPos": 100021
+        "refPos": 100021,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 17,
-        "refPos": 100025
+        "refPos": 100025,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 18,
-        "refPos": 100026
+        "refPos": 100026,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 19,
-        "refPos": 100027
+        "refPos": 100027,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 20,
-        "refPos": 100028
+        "refPos": 100028,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 21,
-        "refPos": 100029
+        "refPos": 100029,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 22,
-        "refPos": 100030
+        "refPos": 100030,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 23,
-        "refPos": 100031
+        "refPos": 100031,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 24,
-        "refPos": 100032
+        "refPos": 100032,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 25,
-        "refPos": 100033
+        "refPos": 100033,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 26,
-        "refPos": 100034
+        "refPos": 100034,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 28,
-        "refPos": 100036
+        "refPos": 100036,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 30,
-        "refPos": 100038
+        "refPos": 100038,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 31,
-        "refPos": 100039
+        "refPos": 100039,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 32,
-        "refPos": 100040
+        "refPos": 100040,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 33,
-        "refPos": 100041
+        "refPos": 100041,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 34,
-        "refPos": 100042
+        "refPos": 100042,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 35,
-        "refPos": 100043
+        "refPos": 100043,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 36,
-        "refPos": 100044
+        "refPos": 100044,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 37,
-        "refPos": 100045
+        "refPos": 100045,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 38,
-        "refPos": 100046
+        "refPos": 100046,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 39,
-        "refPos": 100047
+        "refPos": 100047,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 40,
-        "refPos": 100048
+        "refPos": 100048,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 41,
-        "refPos": 100049
+        "refPos": 100049,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 42,
-        "refPos": 100050
+        "refPos": 100050,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 43,
-        "refPos": 100051
+        "refPos": 100051,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 45,
-        "refPos": 100053
+        "refPos": 100053,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 46,
-        "refPos": 100054
+        "refPos": 100054,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 47,
-        "refPos": 100055
+        "refPos": 100055,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 49,
-        "refPos": 100057
+        "refPos": 100057,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 50,
-        "refPos": 100058
+        "refPos": 100058,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 51,
-        "refPos": 100059
+        "refPos": 100059,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 52,
-        "refPos": 100060
+        "refPos": 100060,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 54,
-        "refPos": 100062
+        "refPos": 100062,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 55,
-        "refPos": 100063
+        "refPos": 100063,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 58,
-        "refPos": 100066
+        "refPos": 100066,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 59,
-        "refPos": 100067
+        "refPos": 100067,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 60,
-        "refPos": 100068
+        "refPos": 100068,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 63,
-        "refPos": 100071
+        "refPos": 100071,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 65,
-        "refPos": 100073
+        "refPos": 100073,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 66,
-        "refPos": 100074
+        "refPos": 100074,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 67,
-        "refPos": 100075
+        "refPos": 100075,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 68,
-        "refPos": 100076
+        "refPos": 100076,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 70,
-        "refPos": 100078
+        "refPos": 100078,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 71,
-        "refPos": 100079
+        "refPos": 100079,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 73,
-        "refPos": 100081
+        "refPos": 100081,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 74,
-        "refPos": 100082
+        "refPos": 100082,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 75,
-        "refPos": 100083
+        "refPos": 100083,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 76,
-        "refPos": 100084
+        "refPos": 100084,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 77,
-        "refPos": 100085
+        "refPos": 100085,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 78,
-        "refPos": 100086
+        "refPos": 100086,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 79,
-        "refPos": 100087
+        "refPos": 100087,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 80,
-        "refPos": 100088
+        "refPos": 100088,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 82,
-        "refPos": 100090
+        "refPos": 100090,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 83,
-        "refPos": 100091
+        "refPos": 100091,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 84,
-        "refPos": 100092
+        "refPos": 100092,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 85,
-        "refPos": 100093
+        "refPos": 100093,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 86,
-        "refPos": 100094
+        "refPos": 100094,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 87,
-        "refPos": 100095
+        "refPos": 100095,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 90,
-        "refPos": 100098
+        "refPos": 100098,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 91,
-        "refPos": 100099
+        "refPos": 100099,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 94,
-        "refPos": 100102
+        "refPos": 100102,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 95,
-        "refPos": 100103
+        "refPos": 100103,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 96,
-        "refPos": 100104
+        "refPos": 100104,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 100,
-        "refPos": 100108
+        "refPos": 100108,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 101,
-        "refPos": 100109
+        "refPos": 100109,
+        "data": 0
       }
     ],
-    "lengthOnRef": 101,
+    "mate": {
+      "flags": 1,
+      "sequenceId": 0,
+      "alignmentStart": 100318
+    }
+  },
+  {
+    "flags": 1123,
+    "cramFlags": 3,
+    "readLength": 101,
     "mappingQuality": 60,
+    "lengthOnRef": 101,
     "qualityScores": [
       35,
       34,
@@ -1736,9 +1268,12 @@
       37,
       35
     ],
-    "uniqueId": 2574
-  },
-  {
+    "readGroupId": 10,
+    "readName": "c",
+    "sequenceId": 0,
+    "uniqueId": 2574,
+    "templateSize": 348,
+    "alignmentStart": 100009,
     "tags": {
       "X0": 1,
       "X1": 0,
@@ -1747,478 +1282,468 @@
       "SM": 37,
       "XM": 0,
       "XO": 0,
-      "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
       "MQ": 60,
-      "OQ": "@?A??A>AA@?A@@9??@BB@>A@@B@@AAAA@AA@A@ABAAA?AABBBB?AA>AAABBABAABBBABBBB?BBBBB@BB@BBB>?ABBBBBBBBABBBBB",
+      "OQ": "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHGGHHGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHI",
       "XT": "U"
     },
-    "flags": 147,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 101,
-    "alignmentStart": 100010,
-    "readGroupId": 10,
-    "readName": "d",
-    "mate": {
-      "flags": 0,
-      "sequenceId": 0,
-      "alignmentStart": 99760
-    },
-    "templateSize": -350,
     "readFeatures": [
       {
         "code": "X",
-        "data": 0,
-        "pos": 1,
-        "refPos": 100010
+        "pos": 2,
+        "refPos": 100010,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
-        "pos": 3,
-        "refPos": 100012
-      },
-      {
-        "code": "X",
-        "data": 1,
         "pos": 4,
-        "refPos": 100013
+        "refPos": 100012,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 5,
-        "refPos": 100014
+        "refPos": 100013,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 6,
-        "refPos": 100015
+        "refPos": 100014,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 7,
-        "refPos": 100016
+        "refPos": 100015,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 8,
-        "refPos": 100017
+        "refPos": 100016,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
-        "pos": 11,
-        "refPos": 100020
+        "pos": 9,
+        "refPos": 100017,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 12,
-        "refPos": 100021
+        "refPos": 100020,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
-        "pos": 16,
-        "refPos": 100025
+        "pos": 13,
+        "refPos": 100021,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 17,
-        "refPos": 100026
+        "refPos": 100025,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 18,
-        "refPos": 100027
+        "refPos": 100026,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 19,
-        "refPos": 100028
+        "refPos": 100027,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 20,
-        "refPos": 100029
+        "refPos": 100028,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 21,
-        "refPos": 100030
+        "refPos": 100029,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 22,
-        "refPos": 100031
+        "refPos": 100030,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 23,
-        "refPos": 100032
+        "refPos": 100031,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 24,
-        "refPos": 100033
+        "refPos": 100032,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 25,
-        "refPos": 100034
+        "refPos": 100033,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
-        "pos": 27,
-        "refPos": 100036
+        "pos": 26,
+        "refPos": 100034,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
-        "pos": 29,
-        "refPos": 100038
+        "pos": 28,
+        "refPos": 100036,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 30,
-        "refPos": 100039
+        "refPos": 100038,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 31,
-        "refPos": 100040
+        "refPos": 100039,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 32,
-        "refPos": 100041
+        "refPos": 100040,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 33,
-        "refPos": 100042
+        "refPos": 100041,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 34,
-        "refPos": 100043
+        "refPos": 100042,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 35,
-        "refPos": 100044
+        "refPos": 100043,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 36,
-        "refPos": 100045
+        "refPos": 100044,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 37,
-        "refPos": 100046
+        "refPos": 100045,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 38,
-        "refPos": 100047
+        "refPos": 100046,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 39,
-        "refPos": 100048
+        "refPos": 100047,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 40,
-        "refPos": 100049
+        "refPos": 100048,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 41,
-        "refPos": 100050
+        "refPos": 100049,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 42,
-        "refPos": 100051
+        "refPos": 100050,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
-        "pos": 44,
-        "refPos": 100053
+        "pos": 43,
+        "refPos": 100051,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 45,
-        "refPos": 100054
+        "refPos": 100053,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 46,
-        "refPos": 100055
+        "refPos": 100054,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
-        "pos": 48,
-        "refPos": 100057
+        "pos": 47,
+        "refPos": 100055,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 49,
-        "refPos": 100058
+        "refPos": 100057,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 50,
-        "refPos": 100059
+        "refPos": 100058,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 51,
-        "refPos": 100060
+        "refPos": 100059,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
-        "pos": 53,
-        "refPos": 100062
+        "pos": 52,
+        "refPos": 100060,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 54,
-        "refPos": 100063
+        "refPos": 100062,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
-        "pos": 57,
-        "refPos": 100066
+        "pos": 55,
+        "refPos": 100063,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 58,
-        "refPos": 100067
+        "refPos": 100066,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 59,
-        "refPos": 100068
+        "refPos": 100067,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
-        "pos": 62,
-        "refPos": 100071
+        "pos": 60,
+        "refPos": 100068,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
-        "pos": 64,
-        "refPos": 100073
+        "pos": 63,
+        "refPos": 100071,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 65,
-        "refPos": 100074
+        "refPos": 100073,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 66,
-        "refPos": 100075
+        "refPos": 100074,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 67,
-        "refPos": 100076
+        "refPos": 100075,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
-        "pos": 69,
-        "refPos": 100078
+        "pos": 68,
+        "refPos": 100076,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 70,
-        "refPos": 100079
+        "refPos": 100078,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
-        "pos": 72,
-        "refPos": 100081
+        "pos": 71,
+        "refPos": 100079,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 73,
-        "refPos": 100082
+        "refPos": 100081,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 74,
-        "refPos": 100083
+        "refPos": 100082,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 75,
-        "refPos": 100084
+        "refPos": 100083,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 76,
-        "refPos": 100085
+        "refPos": 100084,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 77,
-        "refPos": 100086
+        "refPos": 100085,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 78,
-        "refPos": 100087
+        "refPos": 100086,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 79,
-        "refPos": 100088
+        "refPos": 100087,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
-        "pos": 81,
-        "refPos": 100090
+        "pos": 80,
+        "refPos": 100088,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 82,
-        "refPos": 100091
+        "refPos": 100090,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 83,
-        "refPos": 100092
+        "refPos": 100091,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 84,
-        "refPos": 100093
+        "refPos": 100092,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 85,
-        "refPos": 100094
+        "refPos": 100093,
+        "data": 2
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 86,
-        "refPos": 100095
+        "refPos": 100094,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
-        "pos": 89,
-        "refPos": 100098
+        "pos": 87,
+        "refPos": 100095,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 90,
-        "refPos": 100099
+        "refPos": 100098,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 1,
-        "pos": 93,
-        "refPos": 100102
+        "pos": 91,
+        "refPos": 100099,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
         "pos": 94,
-        "refPos": 100103
+        "refPos": 100102,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 95,
-        "refPos": 100104
+        "refPos": 100103,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 1,
-        "pos": 99,
-        "refPos": 100108
+        "pos": 96,
+        "refPos": 100104,
+        "data": 0
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 100,
-        "refPos": 100109
+        "refPos": 100108,
+        "data": 1
       },
       {
         "code": "X",
-        "data": 0,
         "pos": 101,
-        "refPos": 100110
+        "refPos": 100109,
+        "data": 0
       }
     ],
-    "lengthOnRef": 101,
+    "mate": {
+      "flags": 1,
+      "sequenceId": 0,
+      "alignmentStart": 100257
+    }
+  },
+  {
+    "flags": 147,
+    "cramFlags": 3,
+    "readLength": 101,
     "mappingQuality": 60,
+    "lengthOnRef": 101,
     "qualityScores": [
       34,
       38,
@@ -2322,309 +1847,489 @@
       36,
       33
     ],
-    "uniqueId": 2575
-  },
-  {
+    "readGroupId": 10,
+    "readName": "d",
+    "sequenceId": 0,
+    "uniqueId": 2575,
+    "templateSize": -350,
+    "alignmentStart": 100010,
     "tags": {
       "X0": 1,
       "X1": 0,
-      "XC": 57,
       "XG": 0,
       "AM": 37,
       "SM": 37,
       "XM": 0,
       "XO": 0,
+      "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
       "MQ": 60,
-      "OQ": "#############################################A9;FFEA=7775441555544454.+7=59A4544444/54/114.9@99FEEEEE",
+      "OQ": "@?A??A>AA@?A@@9??@BB@>A@@B@@AAAA@AA@A@ABAAA?AABBBB?AA>AAABBABAABBBABBBB?BBBBB@BB@BBB>?ABBBBBBBBABBBBB",
       "XT": "U"
     },
-    "flags": 1107,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 101,
-    "alignmentStart": 100011,
-    "readGroupId": 13,
-    "readName": "e",
+    "readFeatures": [
+      {
+        "code": "X",
+        "pos": 1,
+        "refPos": 100010,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 3,
+        "refPos": 100012,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 4,
+        "refPos": 100013,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 5,
+        "refPos": 100014,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 6,
+        "refPos": 100015,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 7,
+        "refPos": 100016,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 8,
+        "refPos": 100017,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 11,
+        "refPos": 100020,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 12,
+        "refPos": 100021,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 16,
+        "refPos": 100025,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 17,
+        "refPos": 100026,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 18,
+        "refPos": 100027,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 19,
+        "refPos": 100028,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 20,
+        "refPos": 100029,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 21,
+        "refPos": 100030,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 22,
+        "refPos": 100031,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 23,
+        "refPos": 100032,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 24,
+        "refPos": 100033,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 25,
+        "refPos": 100034,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 27,
+        "refPos": 100036,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 29,
+        "refPos": 100038,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 30,
+        "refPos": 100039,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 31,
+        "refPos": 100040,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 32,
+        "refPos": 100041,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 33,
+        "refPos": 100042,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 34,
+        "refPos": 100043,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 35,
+        "refPos": 100044,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 36,
+        "refPos": 100045,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 37,
+        "refPos": 100046,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 38,
+        "refPos": 100047,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 39,
+        "refPos": 100048,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 40,
+        "refPos": 100049,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 41,
+        "refPos": 100050,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 42,
+        "refPos": 100051,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 44,
+        "refPos": 100053,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 45,
+        "refPos": 100054,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 46,
+        "refPos": 100055,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 48,
+        "refPos": 100057,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 49,
+        "refPos": 100058,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 50,
+        "refPos": 100059,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 51,
+        "refPos": 100060,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 53,
+        "refPos": 100062,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 54,
+        "refPos": 100063,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 57,
+        "refPos": 100066,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 58,
+        "refPos": 100067,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 59,
+        "refPos": 100068,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 62,
+        "refPos": 100071,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 64,
+        "refPos": 100073,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 65,
+        "refPos": 100074,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 66,
+        "refPos": 100075,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 67,
+        "refPos": 100076,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 69,
+        "refPos": 100078,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 70,
+        "refPos": 100079,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 72,
+        "refPos": 100081,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 73,
+        "refPos": 100082,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 74,
+        "refPos": 100083,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 75,
+        "refPos": 100084,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 76,
+        "refPos": 100085,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 77,
+        "refPos": 100086,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 78,
+        "refPos": 100087,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 79,
+        "refPos": 100088,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 81,
+        "refPos": 100090,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 82,
+        "refPos": 100091,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 83,
+        "refPos": 100092,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 84,
+        "refPos": 100093,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 85,
+        "refPos": 100094,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 86,
+        "refPos": 100095,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 89,
+        "refPos": 100098,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 90,
+        "refPos": 100099,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 93,
+        "refPos": 100102,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 94,
+        "refPos": 100103,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 95,
+        "refPos": 100104,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 99,
+        "refPos": 100108,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 100,
+        "refPos": 100109,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 101,
+        "refPos": 100110,
+        "data": 0
+      }
+    ],
     "mate": {
       "flags": 0,
       "sequenceId": 0,
-      "alignmentStart": 99694
-    },
-    "templateSize": -373,
-    "readFeatures": [
-      {
-        "code": "S",
-        "data": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTAC",
-        "pos": 1,
-        "refPos": 100011
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 46,
-        "refPos": 100012
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 47,
-        "refPos": 100013
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 48,
-        "refPos": 100014
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 49,
-        "refPos": 100015
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 50,
-        "refPos": 100016
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 51,
-        "refPos": 100017
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 54,
-        "refPos": 100020
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 55,
-        "refPos": 100021
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 59,
-        "refPos": 100025
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 60,
-        "refPos": 100026
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 61,
-        "refPos": 100027
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 62,
-        "refPos": 100028
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 63,
-        "refPos": 100029
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 64,
-        "refPos": 100030
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 65,
-        "refPos": 100031
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 66,
-        "refPos": 100032
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 67,
-        "refPos": 100033
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 68,
-        "refPos": 100034
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 70,
-        "refPos": 100036
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 72,
-        "refPos": 100038
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 73,
-        "refPos": 100039
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 74,
-        "refPos": 100040
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 75,
-        "refPos": 100041
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 76,
-        "refPos": 100042
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 77,
-        "refPos": 100043
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 78,
-        "refPos": 100044
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 79,
-        "refPos": 100045
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 80,
-        "refPos": 100046
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 81,
-        "refPos": 100047
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 82,
-        "refPos": 100048
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 83,
-        "refPos": 100049
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 84,
-        "refPos": 100050
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 85,
-        "refPos": 100051
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 87,
-        "refPos": 100053
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 88,
-        "refPos": 100054
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 89,
-        "refPos": 100055
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 91,
-        "refPos": 100057
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 92,
-        "refPos": 100058
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 93,
-        "refPos": 100059
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 94,
-        "refPos": 100060
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 96,
-        "refPos": 100062
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 97,
-        "refPos": 100063
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 100,
-        "refPos": 100066
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 101,
-        "refPos": 100067
-      }
-    ],
-    "lengthOnRef": 57,
+      "alignmentStart": 99760
+    }
+  },
+  {
+    "flags": 1107,
+    "cramFlags": 3,
+    "readLength": 101,
     "mappingQuality": 60,
+    "lengthOnRef": 57,
     "qualityScores": [
       2,
       2,
@@ -2728,207 +2433,309 @@
       28,
       22
     ],
-    "uniqueId": 2576
-  },
-  {
+    "readGroupId": 13,
+    "readName": "e",
+    "sequenceId": 0,
+    "uniqueId": 2576,
+    "templateSize": -373,
+    "alignmentStart": 100011,
     "tags": {
       "X0": 1,
       "X1": 0,
-      "XC": 35,
+      "XC": 57,
       "XG": 0,
-      "AM": 0,
+      "AM": 37,
       "SM": 37,
-      "XM": 1,
+      "XM": 0,
       "XO": 0,
-      "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
-      "OQ": "#####################################################################################################",
+      "MQ": 60,
+      "OQ": "#############################################A9;FFEA=7775441555544454.+7=59A4544444/54/114.9@99FEEEEE",
       "XT": "U"
     },
-    "flags": 137,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 101,
-    "alignmentStart": 100013,
-    "readGroupId": 4,
-    "readName": "f",
-    "mate": {
-      "flags": 2,
-      "sequenceId": 0,
-      "alignmentStart": 100013
-    },
-    "templateSize": 0,
     "readFeatures": [
       {
-        "code": "X",
-        "data": 1,
-        "pos": 1,
-        "refPos": 100013
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 2,
-        "refPos": 100014
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 3,
-        "refPos": 100015
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 4,
-        "refPos": 100016
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 5,
-        "refPos": 100017
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 8,
-        "refPos": 100020
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 9,
-        "refPos": 100021
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 13,
-        "refPos": 100025
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 14,
-        "refPos": 100026
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 15,
-        "refPos": 100027
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 16,
-        "refPos": 100028
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 17,
-        "refPos": 100029
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 18,
-        "refPos": 100030
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 19,
-        "refPos": 100031
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 20,
-        "refPos": 100032
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 21,
-        "refPos": 100033
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 22,
-        "refPos": 100034
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 24,
-        "refPos": 100036
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 26,
-        "refPos": 100038
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 27,
-        "refPos": 100039
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 29,
-        "refPos": 100041
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 30,
-        "refPos": 100042
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 31,
-        "refPos": 100043
-      },
-      {
-        "code": "X",
-        "data": 0,
-        "pos": 32,
-        "refPos": 100044
-      },
-      {
-        "code": "X",
-        "data": 1,
-        "pos": 33,
-        "refPos": 100045
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 34,
-        "refPos": 100046
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 35,
-        "refPos": 100047
-      },
-      {
         "code": "S",
-        "data": "CTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA",
-        "pos": 36,
-        "refPos": 100048
+        "pos": 1,
+        "refPos": 100011,
+        "data": "ACATCTCTATCCTTATGCCAGTACCACACTGGTGTGTTTACTAC"
+      },
+      {
+        "code": "X",
+        "pos": 46,
+        "refPos": 100012,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 47,
+        "refPos": 100013,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 48,
+        "refPos": 100014,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 49,
+        "refPos": 100015,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 50,
+        "refPos": 100016,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 51,
+        "refPos": 100017,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 54,
+        "refPos": 100020,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 55,
+        "refPos": 100021,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 59,
+        "refPos": 100025,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 60,
+        "refPos": 100026,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 61,
+        "refPos": 100027,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 62,
+        "refPos": 100028,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 63,
+        "refPos": 100029,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 64,
+        "refPos": 100030,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 65,
+        "refPos": 100031,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 66,
+        "refPos": 100032,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 67,
+        "refPos": 100033,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 68,
+        "refPos": 100034,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 70,
+        "refPos": 100036,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 72,
+        "refPos": 100038,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 73,
+        "refPos": 100039,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 74,
+        "refPos": 100040,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 75,
+        "refPos": 100041,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 76,
+        "refPos": 100042,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 77,
+        "refPos": 100043,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 78,
+        "refPos": 100044,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 79,
+        "refPos": 100045,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 80,
+        "refPos": 100046,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 81,
+        "refPos": 100047,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 82,
+        "refPos": 100048,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 83,
+        "refPos": 100049,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 84,
+        "refPos": 100050,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 85,
+        "refPos": 100051,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 87,
+        "refPos": 100053,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 88,
+        "refPos": 100054,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 89,
+        "refPos": 100055,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 91,
+        "refPos": 100057,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 92,
+        "refPos": 100058,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 93,
+        "refPos": 100059,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 94,
+        "refPos": 100060,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 96,
+        "refPos": 100062,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 97,
+        "refPos": 100063,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 100,
+        "refPos": 100066,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 101,
+        "refPos": 100067,
+        "data": 2
       }
     ],
-    "lengthOnRef": 35,
+    "mate": {
+      "flags": 0,
+      "sequenceId": 0,
+      "alignmentStart": 99694
+    }
+  },
+  {
+    "flags": 137,
+    "cramFlags": 3,
+    "readLength": 101,
     "mappingQuality": 37,
+    "lengthOnRef": 35,
     "qualityScores": [
       2,
       2,
@@ -3032,6 +2839,199 @@
       2,
       2
     ],
-    "uniqueId": 2578
+    "readGroupId": 4,
+    "readName": "f",
+    "sequenceId": 0,
+    "uniqueId": 2578,
+    "templateSize": 0,
+    "alignmentStart": 100013,
+    "tags": {
+      "X0": 1,
+      "X1": 0,
+      "XC": 35,
+      "XG": 0,
+      "AM": 0,
+      "SM": 37,
+      "XM": 1,
+      "XO": 0,
+      "BQ": "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
+      "OQ": "#####################################################################################################",
+      "XT": "U"
+    },
+    "readFeatures": [
+      {
+        "code": "X",
+        "pos": 1,
+        "refPos": 100013,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 2,
+        "refPos": 100014,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 3,
+        "refPos": 100015,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 4,
+        "refPos": 100016,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 5,
+        "refPos": 100017,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 8,
+        "refPos": 100020,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 9,
+        "refPos": 100021,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 13,
+        "refPos": 100025,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 14,
+        "refPos": 100026,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 15,
+        "refPos": 100027,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 16,
+        "refPos": 100028,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 17,
+        "refPos": 100029,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 18,
+        "refPos": 100030,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 19,
+        "refPos": 100031,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 20,
+        "refPos": 100032,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 21,
+        "refPos": 100033,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 22,
+        "refPos": 100034,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 24,
+        "refPos": 100036,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 26,
+        "refPos": 100038,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 27,
+        "refPos": 100039,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 29,
+        "refPos": 100041,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 30,
+        "refPos": 100042,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 31,
+        "refPos": 100043,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 32,
+        "refPos": 100044,
+        "data": 0
+      },
+      {
+        "code": "X",
+        "pos": 33,
+        "refPos": 100045,
+        "data": 1
+      },
+      {
+        "code": "X",
+        "pos": 34,
+        "refPos": 100046,
+        "data": 2
+      },
+      {
+        "code": "X",
+        "pos": 35,
+        "refPos": 100047,
+        "data": 2
+      },
+      {
+        "code": "S",
+        "pos": 36,
+        "refPos": 100048,
+        "data": "CTCTATCTTCGCTTGTTTTTCCAGAGTGTTTTGACTCTCATTGCGGCATCCTTTGTCTTTCCATAA"
+      }
+    ],
+    "mate": {
+      "flags": 2,
+      "sequenceId": 0,
+      "alignmentStart": 100013
+    }
   }
 ]

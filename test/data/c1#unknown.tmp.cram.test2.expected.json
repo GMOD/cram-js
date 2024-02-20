@@ -1,30 +1,50 @@
 [
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
+    "mappingQuality": 0,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "readGroupId": -1,
     "readName": "_m",
+    "sequenceId": 0,
+    "uniqueId": 601,
     "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
     "readFeatures": [
       {
         "code": "i",
-        "data": "N",
         "pos": 3,
-        "refPos": 3
+        "refPos": 3,
+        "data": "N"
       },
       {
         "code": "D",
-        "data": 1,
         "pos": 8,
-        "refPos": 7
+        "refPos": 7,
+        "data": 1
       }
-    ],
-    "lengthOnRef": 10,
+    ]
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       255,
       255,
@@ -37,86 +57,40 @@
       255,
       255
     ],
-    "uniqueId": 601
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "_sm",
+    "sequenceId": 0,
+    "uniqueId": 600,
     "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
     "readFeatures": [
       {
         "code": "i",
-        "data": "C",
         "pos": 3,
-        "refPos": 3
+        "refPos": 3,
+        "data": "C"
       },
       {
         "code": "X",
-        "data": 2,
         "pos": 6,
-        "refPos": 5
+        "refPos": 5,
+        "data": 2
       },
       {
         "code": "D",
-        "data": 1,
         "pos": 8,
-        "refPos": 7
+        "refPos": 7,
+        "data": 1
       }
-    ],
-    "lengthOnRef": 10,
-    "mappingQuality": 0,
-    "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 600
+    ]
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "_sqm",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "i",
-        "data": "C",
-        "pos": 3,
-        "refPos": 3
-      },
-      {
-        "code": "X",
-        "data": 2,
-        "pos": 6,
-        "refPos": 5
-      },
-      {
-        "code": "D",
-        "data": 1,
-        "pos": 8,
-        "refPos": 7
-      }
-    ],
-    "lengthOnRef": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       40,
       40,
@@ -129,6 +103,32 @@
       40,
       40
     ],
-    "uniqueId": 599
+    "readGroupId": -1,
+    "readName": "_sqm",
+    "sequenceId": 0,
+    "uniqueId": 599,
+    "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
+    "readFeatures": [
+      {
+        "code": "i",
+        "pos": 3,
+        "refPos": 3,
+        "data": "C"
+      },
+      {
+        "code": "X",
+        "pos": 6,
+        "refPos": 5,
+        "data": 2
+      },
+      {
+        "code": "D",
+        "pos": 8,
+        "refPos": 7,
+        "data": 1
+      }
+    ]
   }
 ]

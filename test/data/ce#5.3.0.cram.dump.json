@@ -282,29 +282,225 @@
       "crc32": 3823753493
     },
     "compressionScheme": {
-      "preservation": {
-        "TD": [
-          [
-            "XGC",
-            "XMC",
-            "XNC",
-            "XOC",
-            "XSc",
-            "ASc",
-            "YTZ"
-          ],
-          []
-        ],
-        "SM": [
-          27,
-          27,
-          27,
-          27,
-          27
-        ],
-        "RN": true,
-        "AP": true
+      "tagEncoding": {
+        "XSc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XOC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XMC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XGC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "XNC": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        },
+        "YTZ": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 9,
+            "blockContentId": 9
+          }
+        },
+        "ASc": {
+          "codecId": 4,
+          "parametersBytes": 9,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parametersBytes": 4,
+              "parameters": {
+                "numCodes": 1,
+                "symbols": [
+                  1
+                ],
+                "numLengths": 1,
+                "bitLengths": [
+                  0
+                ]
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 1
+              }
+            }
+          }
+        }
       },
+      "readNamesIncluded": true,
+      "APdelta": true,
+      "referenceRequired": false,
+      "tagIdsDictionary": [
+        [
+          "XGC",
+          "XMC",
+          "XNC",
+          "XOC",
+          "XSc",
+          "ASc",
+          "YTZ"
+        ],
+        []
+      ],
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N"
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T"
+        ]
+      ],
       "dataSeriesEncoding": {
         "BF": {
           "codecId": 3,
@@ -620,227 +816,31 @@
           }
         }
       },
-      "tagEncoding": {
-        "XSc": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        },
-        "XOC": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        },
-        "XMC": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        },
-        "XGC": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        },
-        "XNC": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        },
-        "YTZ": {
-          "codecId": 5,
-          "parametersBytes": 2,
-          "parameters": {
-            "stopByte": 9,
-            "blockContentId": 9
-          }
-        },
-        "ASc": {
-          "codecId": 4,
-          "parametersBytes": 9,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 3,
-              "parametersBytes": 4,
-              "parameters": {
-                "numCodes": 1,
-                "symbols": [
-                  1
-                ],
-                "numLengths": 1,
-                "bitLengths": [
-                  0
-                ]
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 1
-              }
-            }
-          }
-        }
+      "preservation": {
+        "TD": [
+          [
+            "XGC",
+            "XMC",
+            "XNC",
+            "XOC",
+            "XSc",
+            "ASc",
+            "YTZ"
+          ],
+          []
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
       },
-      "_endPosition": 797,
       "_size": 348,
-      "readNamesIncluded": true,
-      "APdelta": true,
-      "referenceRequired": false,
-      "tagIdsDictionary": [
-        [
-          "XGC",
-          "XMC",
-          "XNC",
-          "XOC",
-          "XSc",
-          "ASc",
-          "YTZ"
-        ],
-        []
-      ],
-      "substitutionMatrix": [
-        [
-          "C",
-          "G",
-          "T",
-          "N"
-        ],
-        [
-          "A",
-          "G",
-          "T",
-          "N"
-        ],
-        [
-          "A",
-          "C",
-          "T",
-          "N"
-        ],
-        [
-          "A",
-          "C",
-          "G",
-          "N"
-        ],
-        [
-          "A",
-          "C",
-          "G",
-          "T"
-        ]
-      ]
+      "_endPosition": 797
     },
     "data": [
       {
@@ -871,6 +871,46 @@
           "_size": 38,
           "contentPosition": 806,
           "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              2,
+              193,
+              135,
+              4,
+              6,
+              0,
+              5,
+              4,
+              1,
+              9,
+              11,
+              12,
+              255,
+              255,
+              255,
+              255,
+              15,
+              141,
+              217,
+              102,
+              124,
+              204,
+              42,
+              226,
+              90,
+              139,
+              251,
+              231,
+              239,
+              221,
+              251,
+              155,
+              86
+            ]
+          },
+          "crc32": 4160904222,
+          "parsedContent": {
             "refSeqId": 0,
             "refSeqStart": 2,
             "refSeqSpan": 100100,
@@ -905,78 +945,188 @@
             ],
             "_endPosition": 476,
             "_size": 34
-          },
-          "crc32": 4160904222
+          }
         },
         "features": [
           {
-            "tags": {
-              "XG": 1,
-              "XM": 5,
-              "XN": 0,
-              "XO": 1,
-              "XS": -18,
-              "AS": -18,
-              "YT": "UU"
-            },
             "flags": 16,
             "cramFlags": 3,
-            "sequenceId": 0,
             "readLength": 100,
-            "alignmentStart": 2,
+            "mappingQuality": 1,
+            "lengthOnRef": 101,
+            "qualityScores": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34
+            ],
             "readGroupId": -1,
             "readName": "I",
+            "sequenceId": 0,
+            "uniqueId": 807,
             "templateSize": 0,
+            "alignmentStart": 2,
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
             "readFeatures": [
               {
                 "code": "X",
-                "data": 1,
                 "pos": 5,
                 "refPos": 6,
+                "data": 1,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 6,
                 "refPos": 7,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 12,
                 "refPos": 13,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 18,
                 "refPos": 19,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 24,
                 "refPos": 25,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "D",
-                "data": 1,
                 "pos": 28,
-                "refPos": 29
+                "refPos": 29,
+                "data": 1
               }
             ],
-            "lengthOnRef": 101,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
+          },
+          {
+            "flags": 16,
+            "cramFlags": 3,
+            "readLength": 100,
             "mappingQuality": 1,
+            "lengthOnRef": 101,
             "qualityScores": [
               2,
               2,
@@ -1079,77 +1229,77 @@
               34,
               34
             ],
-            "uniqueId": 807,
-            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
-          },
-          {
-            "tags": {
-              "XG": 1,
-              "XM": 5,
-              "XN": 0,
-              "XO": 1,
-              "XS": -18,
-              "AS": -18,
-              "YT": "UU"
-            },
-            "flags": 16,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 100,
-            "alignmentStart": 2,
             "readGroupId": -1,
             "readName": "II.14978392",
+            "sequenceId": 0,
+            "uniqueId": 808,
             "templateSize": 0,
+            "alignmentStart": 2,
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
             "readFeatures": [
               {
                 "code": "X",
-                "data": 1,
                 "pos": 5,
                 "refPos": 6,
+                "data": 1,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 6,
                 "refPos": 7,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 12,
                 "refPos": 13,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 18,
                 "refPos": 19,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 24,
                 "refPos": 25,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "D",
-                "data": 1,
                 "pos": 28,
-                "refPos": 29
+                "refPos": 29,
+                "data": 1
               }
             ],
-            "lengthOnRef": 101,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
+          },
+          {
+            "flags": 16,
+            "cramFlags": 3,
+            "readLength": 100,
             "mappingQuality": 1,
+            "lengthOnRef": 101,
             "qualityScores": [
               2,
               2,
@@ -1252,77 +1402,77 @@
               34,
               34
             ],
-            "uniqueId": 808,
-            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
-          },
-          {
-            "tags": {
-              "XG": 1,
-              "XM": 5,
-              "XN": 0,
-              "XO": 1,
-              "XS": -18,
-              "AS": -18,
-              "YT": "UU"
-            },
-            "flags": 16,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 100,
-            "alignmentStart": 2,
             "readGroupId": -1,
             "readName": "III",
+            "sequenceId": 0,
+            "uniqueId": 809,
             "templateSize": 0,
+            "alignmentStart": 2,
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
             "readFeatures": [
               {
                 "code": "X",
-                "data": 1,
                 "pos": 5,
                 "refPos": 6,
+                "data": 1,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 6,
                 "refPos": 7,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 12,
                 "refPos": 13,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 18,
                 "refPos": 19,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 24,
                 "refPos": 25,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "D",
-                "data": 1,
                 "pos": 28,
-                "refPos": 29
+                "refPos": 29,
+                "data": 1
               }
             ],
-            "lengthOnRef": 101,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
+          },
+          {
+            "flags": 16,
+            "cramFlags": 3,
+            "readLength": 100,
             "mappingQuality": 1,
+            "lengthOnRef": 101,
             "qualityScores": [
               2,
               2,
@@ -1425,183 +1575,12 @@
               34,
               34
             ],
-            "uniqueId": 809,
-            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
-          },
-          {
-            "tags": {
-              "XG": 1,
-              "XM": 5,
-              "XN": 0,
-              "XO": 1,
-              "XS": -18,
-              "AS": -18,
-              "YT": "UU"
-            },
-            "flags": 16,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 100,
-            "alignmentStart": 2,
             "readGroupId": -1,
             "readName": "IV",
-            "templateSize": 0,
-            "readFeatures": [
-              {
-                "code": "X",
-                "data": 1,
-                "pos": 5,
-                "refPos": 6,
-                "ref": "A",
-                "sub": "G"
-              },
-              {
-                "code": "X",
-                "data": 1,
-                "pos": 6,
-                "refPos": 7,
-                "ref": "G",
-                "sub": "C"
-              },
-              {
-                "code": "X",
-                "data": 1,
-                "pos": 12,
-                "refPos": 13,
-                "ref": "G",
-                "sub": "C"
-              },
-              {
-                "code": "X",
-                "data": 1,
-                "pos": 18,
-                "refPos": 19,
-                "ref": "G",
-                "sub": "C"
-              },
-              {
-                "code": "X",
-                "data": 1,
-                "pos": 24,
-                "refPos": 25,
-                "ref": "G",
-                "sub": "C"
-              },
-              {
-                "code": "D",
-                "data": 1,
-                "pos": 28,
-                "refPos": 29
-              }
-            ],
-            "lengthOnRef": 101,
-            "mappingQuality": 1,
-            "qualityScores": [
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              31,
-              33,
-              30,
-              23,
-              33,
-              30,
-              33,
-              32,
-              31,
-              31,
-              35,
-              35,
-              33,
-              34,
-              35,
-              35,
-              34,
-              33,
-              34,
-              31,
-              34,
-              35,
-              34,
-              35,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34
-            ],
+            "sequenceId": 0,
             "uniqueId": 810,
-            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
-          },
-          {
+            "templateSize": 0,
+            "alignmentStart": 2,
             "tags": {
               "XG": 1,
               "XM": 5,
@@ -1611,64 +1590,62 @@
               "AS": -18,
               "YT": "UU"
             },
-            "flags": 16,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 100,
-            "alignmentStart": 2,
-            "readGroupId": -1,
-            "readName": "V",
-            "templateSize": 0,
             "readFeatures": [
               {
                 "code": "X",
-                "data": 1,
                 "pos": 5,
                 "refPos": 6,
+                "data": 1,
                 "ref": "A",
                 "sub": "G"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 6,
                 "refPos": 7,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 12,
                 "refPos": 13,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 18,
                 "refPos": 19,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "X",
-                "data": 1,
                 "pos": 24,
                 "refPos": 25,
+                "data": 1,
                 "ref": "G",
                 "sub": "C"
               },
               {
                 "code": "D",
-                "data": 1,
                 "pos": 28,
-                "refPos": 29
+                "refPos": 29,
+                "data": 1
               }
             ],
-            "lengthOnRef": 101,
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
+          },
+          {
+            "flags": 16,
+            "cramFlags": 3,
+            "readLength": 100,
             "mappingQuality": 1,
+            "lengthOnRef": 101,
             "qualityScores": [
               2,
               2,
@@ -1771,164 +1748,226 @@
               34,
               34
             ],
-            "uniqueId": 811,
-            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
-          },
-          {
-            "tags": {},
-            "flags": 2048,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 100,
-            "alignmentStart": 2,
             "readGroupId": -1,
-            "readName": "VI",
+            "readName": "V",
+            "sequenceId": 0,
+            "uniqueId": 811,
             "templateSize": 0,
+            "alignmentStart": 2,
+            "tags": {
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "AS": -18,
+              "YT": "UU"
+            },
             "readFeatures": [
               {
                 "code": "X",
-                "data": 0,
+                "pos": 5,
+                "refPos": 6,
+                "data": 1,
+                "ref": "A",
+                "sub": "G"
+              },
+              {
+                "code": "X",
+                "pos": 6,
+                "refPos": 7,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
+              },
+              {
+                "code": "X",
+                "pos": 12,
+                "refPos": 13,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
+              },
+              {
+                "code": "X",
+                "pos": 18,
+                "refPos": 19,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
+              },
+              {
+                "code": "X",
+                "pos": 24,
+                "refPos": 25,
+                "data": 1,
+                "ref": "G",
+                "sub": "C"
+              },
+              {
+                "code": "D",
+                "pos": 28,
+                "refPos": 29,
+                "data": 1
+              }
+            ],
+            "readBases": "CCTAGCCCTAACCCTAACCCTAACCCTAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAAGCCTAA"
+          },
+          {
+            "flags": 2048,
+            "cramFlags": 3,
+            "readLength": 100,
+            "mappingQuality": 1,
+            "lengthOnRef": 100100,
+            "qualityScores": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34
+            ],
+            "readGroupId": -1,
+            "readName": "VI",
+            "sequenceId": 0,
+            "uniqueId": 812,
+            "templateSize": 0,
+            "alignmentStart": 2,
+            "tags": {},
+            "readFeatures": [
+              {
+                "code": "X",
                 "pos": 1,
                 "refPos": 2,
+                "data": 0,
                 "ref": "C",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "data": 0,
                 "pos": 27,
                 "refPos": 28,
+                "data": 0,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "D",
-                "data": 100000,
                 "pos": 28,
-                "refPos": 29
+                "refPos": 29,
+                "data": 100000
               },
               {
                 "code": "X",
-                "data": 0,
                 "pos": 28,
                 "refPos": 100029,
+                "data": 0,
                 "ref": "T",
                 "sub": "A"
               },
               {
                 "code": "X",
-                "data": 0,
                 "pos": 100,
                 "refPos": 100101,
+                "data": 0,
                 "ref": "T",
                 "sub": "A"
               }
             ],
-            "lengthOnRef": 100100,
-            "mappingQuality": 1,
-            "qualityScores": [
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              2,
-              31,
-              33,
-              30,
-              23,
-              33,
-              30,
-              33,
-              32,
-              31,
-              31,
-              35,
-              35,
-              33,
-              34,
-              35,
-              35,
-              34,
-              33,
-              34,
-              31,
-              34,
-              35,
-              34,
-              35,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34,
-              34
-            ],
-            "uniqueId": 812,
             "readBases": "ACTAAGCCTAAGCCTAAGCCTAAGCCAATTATCGATTTCTGAAAAAATTATCGAATTTTCTAGAAATTTTGCAAATTTTTTCATAAAATTATCGATTTTA"
           }
         ]

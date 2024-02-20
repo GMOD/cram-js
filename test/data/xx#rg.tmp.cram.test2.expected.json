@@ -1,16 +1,36 @@
 [
   {
-    "tags": {},
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
+    "mappingQuality": 1,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "readGroupId": 0,
     "readName": "a1",
+    "sequenceId": 0,
+    "uniqueId": 599,
     "templateSize": 0,
-    "lengthOnRef": 10,
+    "alignmentStart": 1,
+    "tags": {}
+  },
+  {
+    "flags": 16,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -23,20 +43,20 @@
       9,
       9
     ],
-    "uniqueId": 599
-  },
-  {
-    "tags": {},
-    "flags": 16,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 11,
     "readGroupId": 0,
     "readName": "a2",
+    "sequenceId": 0,
+    "uniqueId": 602,
     "templateSize": 0,
-    "lengthOnRef": 10,
+    "alignmentStart": 11,
+    "tags": {}
+  },
+  {
+    "flags": 16,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -49,20 +69,20 @@
       9,
       9
     ],
-    "uniqueId": 602
-  },
-  {
-    "tags": {},
-    "flags": 16,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 1,
     "readGroupId": 1,
     "readName": "b1",
+    "sequenceId": 0,
+    "uniqueId": 600,
     "templateSize": 0,
-    "lengthOnRef": 10,
+    "alignmentStart": 1,
+    "tags": {}
+  },
+  {
+    "flags": 16,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -75,20 +95,20 @@
       9,
       9
     ],
-    "uniqueId": 600
-  },
-  {
-    "tags": {},
-    "flags": 16,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 11,
     "readGroupId": 1,
     "readName": "b2",
+    "sequenceId": 0,
+    "uniqueId": 603,
     "templateSize": 0,
-    "lengthOnRef": 10,
+    "alignmentStart": 11,
+    "tags": {}
+  },
+  {
+    "flags": 16,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -101,46 +121,20 @@
       9,
       9
     ],
-    "uniqueId": 603
-  },
-  {
-    "tags": {},
-    "flags": 16,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "c1",
+    "sequenceId": 0,
+    "uniqueId": 601,
     "templateSize": 0,
-    "lengthOnRef": 10,
-    "mappingQuality": 1,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 601
+    "alignmentStart": 1,
+    "tags": {}
   },
   {
-    "tags": {},
     "flags": 16,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 11,
-    "readGroupId": -1,
-    "readName": "c2",
-    "templateSize": 0,
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -153,6 +147,12 @@
       9,
       9
     ],
-    "uniqueId": 604
+    "readGroupId": -1,
+    "readName": "c2",
+    "sequenceId": 0,
+    "uniqueId": 604,
+    "templateSize": 0,
+    "alignmentStart": 11,
+    "tags": {}
   }
 ]

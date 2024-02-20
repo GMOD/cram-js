@@ -166,275 +166,6 @@
       "crc32": 3362745060
     },
     "compressionScheme": {
-      "preservation": {
-        "TD": [
-          [
-            "A!A",
-            "AcA",
-            "ACA",
-            "I0C",
-            "I1C",
-            "I2C",
-            "I3C",
-            "I4C",
-            "I5S",
-            "I6S",
-            "I7S",
-            "I8S",
-            "I9I",
-            "IAI",
-            "i1c",
-            "i2c",
-            "i3c",
-            "i4s",
-            "i5s",
-            "i6s",
-            "i7s",
-            "i8i",
-            "i9i",
-            "iAi",
-            "iBi",
-            "F0f",
-            "F1f",
-            "F2f",
-            "F3f",
-            "F4f",
-            "F5f",
-            "F6f",
-            "H0H",
-            "H1H",
-            "Z0Z",
-            "ZnZ",
-            "HnH"
-          ],
-          [
-            "BCB",
-            "BcB",
-            "BSB",
-            "BsB",
-            "BIB",
-            "BiB",
-            "HnH",
-            "ZnZ"
-          ]
-        ],
-        "SM": [
-          27,
-          27,
-          27,
-          27,
-          27
-        ],
-        "RN": true,
-        "AP": true
-      },
-      "dataSeriesEncoding": {
-        "BF": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              16
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "CF": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              3
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "RL": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              10
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "AP": {
-          "codecId": 1,
-          "parametersBytes": 1,
-          "parameters": {
-            "blockContentId": 17
-          }
-        },
-        "RG": {
-          "codecId": 1,
-          "parametersBytes": 1,
-          "parameters": {
-            "blockContentId": 18
-          }
-        },
-        "MF": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              0
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "NS": {
-          "codecId": 3,
-          "parametersBytes": 8,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              -1
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "NP": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              0
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "TS": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              0
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "TL": {
-          "codecId": 1,
-          "parametersBytes": 1,
-          "parameters": {
-            "blockContentId": 32
-          }
-        },
-        "FN": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              0
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "IN": {
-          "codecId": 5,
-          "parametersBytes": 2,
-          "parameters": {
-            "stopByte": 0,
-            "blockContentId": 13
-          }
-        },
-        "BB": {
-          "codecId": 4,
-          "parametersBytes": 6,
-          "parameters": {
-            "lengthsEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 42
-              }
-            },
-            "valuesEncoding": {
-              "codecId": 1,
-              "parametersBytes": 1,
-              "parameters": {
-                "blockContentId": 37
-              }
-            }
-          }
-        },
-        "MQ": {
-          "codecId": 1,
-          "parametersBytes": 1,
-          "parameters": {
-            "blockContentId": 19
-          }
-        },
-        "RN": {
-          "codecId": 5,
-          "parametersBytes": 2,
-          "parameters": {
-            "stopByte": 0,
-            "blockContentId": 11
-          }
-        },
-        "QS": {
-          "codecId": 1,
-          "parametersBytes": 1,
-          "parameters": {
-            "blockContentId": 12
-          }
-        },
-        "RI": {
-          "codecId": 3,
-          "parametersBytes": 4,
-          "parameters": {
-            "numCodes": 1,
-            "symbols": [
-              0
-            ],
-            "numLengths": 1,
-            "bitLengths": [
-              0
-            ]
-          }
-        },
-        "SC": {
-          "codecId": 5,
-          "parametersBytes": 2,
-          "parameters": {
-            "stopByte": 0,
-            "blockContentId": 14
-          }
-        }
-      },
       "tagEncoding": {
         "ACA": {
           "codecId": 4,
@@ -1461,8 +1192,6 @@
           }
         }
       },
-      "_endPosition": 1351,
-      "_size": 1031,
       "readNamesIncluded": true,
       "APdelta": true,
       "referenceRequired": false,
@@ -1548,7 +1277,278 @@
           "G",
           "T"
         ]
-      ]
+      ],
+      "dataSeriesEncoding": {
+        "BF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              16
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "CF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              3
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "RL": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              10
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "AP": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 17
+          }
+        },
+        "RG": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 18
+          }
+        },
+        "MF": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NS": {
+          "codecId": 3,
+          "parametersBytes": 8,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              -1
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "NP": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TS": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "TL": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 32
+          }
+        },
+        "FN": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "IN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 13
+          }
+        },
+        "BB": {
+          "codecId": 4,
+          "parametersBytes": 6,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 42
+              }
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parametersBytes": 1,
+              "parameters": {
+                "blockContentId": 37
+              }
+            }
+          }
+        },
+        "MQ": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 19
+          }
+        },
+        "RN": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 11
+          }
+        },
+        "QS": {
+          "codecId": 1,
+          "parametersBytes": 1,
+          "parameters": {
+            "blockContentId": 12
+          }
+        },
+        "RI": {
+          "codecId": 3,
+          "parametersBytes": 4,
+          "parameters": {
+            "numCodes": 1,
+            "symbols": [
+              0
+            ],
+            "numLengths": 1,
+            "bitLengths": [
+              0
+            ]
+          }
+        },
+        "SC": {
+          "codecId": 5,
+          "parametersBytes": 2,
+          "parameters": {
+            "stopByte": 0,
+            "blockContentId": 14
+          }
+        }
+      },
+      "preservation": {
+        "TD": [
+          [
+            "A!A",
+            "AcA",
+            "ACA",
+            "I0C",
+            "I1C",
+            "I2C",
+            "I3C",
+            "I4C",
+            "I5S",
+            "I6S",
+            "I7S",
+            "I8S",
+            "I9I",
+            "IAI",
+            "i1c",
+            "i2c",
+            "i3c",
+            "i4s",
+            "i5s",
+            "i6s",
+            "i7s",
+            "i8i",
+            "i9i",
+            "iAi",
+            "iBi",
+            "F0f",
+            "F1f",
+            "F2f",
+            "F3f",
+            "F4f",
+            "F5f",
+            "F6f",
+            "H0H",
+            "H1H",
+            "Z0Z",
+            "ZnZ",
+            "HnH"
+          ],
+          [
+            "BCB",
+            "BcB",
+            "BSB",
+            "BsB",
+            "BIB",
+            "BiB",
+            "HnH",
+            "ZnZ"
+          ]
+        ],
+        "SM": [
+          27,
+          27,
+          27,
+          27,
+          27
+        ],
+        "RN": true,
+        "AP": true
+      },
+      "_size": 1031,
+      "_endPosition": 1351
     },
     "data": [
       {
@@ -1579,6 +1579,218 @@
           "_size": 210,
           "contentPosition": 1362,
           "content": {
+            "type": "Buffer",
+            "data": [
+              0,
+              1,
+              20,
+              2,
+              0,
+              50,
+              49,
+              11,
+              12,
+              17,
+              18,
+              19,
+              32,
+              224,
+              65,
+              67,
+              65,
+              224,
+              65,
+              33,
+              65,
+              224,
+              73,
+              48,
+              67,
+              224,
+              65,
+              99,
+              65,
+              224,
+              66,
+              67,
+              66,
+              224,
+              73,
+              50,
+              67,
+              224,
+              72,
+              48,
+              72,
+              224,
+              73,
+              52,
+              67,
+              224,
+              73,
+              57,
+              73,
+              224,
+              72,
+              49,
+              72,
+              224,
+              73,
+              65,
+              73,
+              224,
+              73,
+              49,
+              67,
+              224,
+              72,
+              110,
+              72,
+              224,
+              70,
+              54,
+              102,
+              224,
+              66,
+              73,
+              66,
+              224,
+              66,
+              99,
+              66,
+              224,
+              73,
+              51,
+              67,
+              224,
+              73,
+              55,
+              83,
+              224,
+              73,
+              54,
+              83,
+              224,
+              73,
+              56,
+              83,
+              224,
+              66,
+              83,
+              66,
+              224,
+              73,
+              53,
+              83,
+              224,
+              90,
+              48,
+              90,
+              224,
+              90,
+              110,
+              90,
+              224,
+              70,
+              52,
+              102,
+              224,
+              66,
+              115,
+              66,
+              224,
+              105,
+              51,
+              99,
+              224,
+              105,
+              49,
+              99,
+              224,
+              105,
+              50,
+              99,
+              224,
+              70,
+              48,
+              102,
+              224,
+              70,
+              53,
+              102,
+              224,
+              105,
+              65,
+              105,
+              224,
+              105,
+              57,
+              105,
+              224,
+              66,
+              105,
+              66,
+              224,
+              105,
+              66,
+              105,
+              224,
+              105,
+              56,
+              105,
+              224,
+              70,
+              49,
+              102,
+              224,
+              105,
+              53,
+              115,
+              224,
+              105,
+              54,
+              115,
+              224,
+              70,
+              50,
+              102,
+              224,
+              105,
+              55,
+              115,
+              224,
+              105,
+              52,
+              115,
+              224,
+              70,
+              51,
+              102,
+              255,
+              255,
+              255,
+              255,
+              15,
+              125,
+              221,
+              138,
+              75,
+              79,
+              44,
+              29,
+              236,
+              67,
+              71,
+              106,
+              115,
+              139,
+              26,
+              155,
+              114
+            ]
+          },
+          "crc32": 1994888111,
+          "parsedContent": {
             "refSeqId": 0,
             "refSeqStart": 1,
             "refSeqSpan": 20,
@@ -1658,11 +1870,33 @@
             ],
             "_endPosition": 519,
             "_size": 206
-          },
-          "crc32": 1994888111
+          }
         },
         "features": [
           {
+            "flags": 16,
+            "cramFlags": 3,
+            "readLength": 10,
+            "mappingQuality": 86,
+            "lengthOnRef": 10,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9
+            ],
+            "readGroupId": 0,
+            "readName": "Fred",
+            "sequenceId": 0,
+            "uniqueId": 1363,
+            "templateSize": 0,
+            "alignmentStart": 1,
             "tags": {
               "A!": "!",
               "Ac": "c",
@@ -1702,32 +1936,32 @@
               "Zn": "",
               "Hn": null
             },
-            "flags": 16,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 10,
-            "alignmentStart": 1,
-            "readGroupId": 0,
-            "readName": "Fred",
-            "templateSize": 0,
-            "lengthOnRef": 10,
-            "mappingQuality": 86,
-            "qualityScores": [
-              9,
-              9,
-              9,
-              9,
-              9,
-              9,
-              9,
-              9,
-              9,
-              9
-            ],
-            "uniqueId": 1363,
             "readBases": "GCTAGCTCAG"
           },
           {
+            "flags": 16,
+            "cramFlags": 3,
+            "readLength": 10,
+            "mappingQuality": 11,
+            "lengthOnRef": 10,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255
+            ],
+            "readGroupId": -1,
+            "readName": "Jim",
+            "sequenceId": 0,
+            "uniqueId": 1364,
+            "templateSize": 0,
+            "alignmentStart": 11,
             "tags": {
               "BC": [
                 0,
@@ -1768,29 +2002,6 @@
               "Hn": null,
               "Zn": ""
             },
-            "flags": 16,
-            "cramFlags": 3,
-            "sequenceId": 0,
-            "readLength": 10,
-            "alignmentStart": 11,
-            "readGroupId": -1,
-            "readName": "Jim",
-            "templateSize": 0,
-            "lengthOnRef": 10,
-            "mappingQuality": 11,
-            "qualityScores": [
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255,
-              255
-            ],
-            "uniqueId": 1364,
             "readBases": "AAAAAAAAAA"
           }
         ]

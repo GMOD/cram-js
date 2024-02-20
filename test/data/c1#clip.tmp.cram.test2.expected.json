@@ -1,16 +1,10 @@
 [
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "s0a",
-    "templateSize": 0,
-    "lengthOnRef": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -23,29 +17,55 @@
       9,
       9
     ],
-    "uniqueId": 449
+    "readGroupId": -1,
+    "readName": "s0a",
+    "sequenceId": 0,
+    "uniqueId": 449,
+    "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {}
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 6,
-    "alignmentStart": 1,
+    "mappingQuality": 0,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "readGroupId": -1,
     "readName": "s0A",
+    "sequenceId": 0,
+    "uniqueId": 450,
     "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
     "readFeatures": [
       {
         "code": "N",
-        "data": 4,
         "pos": 4,
-        "refPos": 4
+        "refPos": 4,
+        "data": 4
       }
-    ],
-    "lengthOnRef": 10,
+    ]
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 8,
     "qualityScores": [
+      9,
+      9,
+      9,
+      9,
       9,
       9,
       9,
@@ -53,37 +73,35 @@
       9,
       9
     ],
-    "uniqueId": 450
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 2,
     "readGroupId": -1,
     "readName": "s0b",
+    "sequenceId": 0,
+    "uniqueId": 451,
     "templateSize": 0,
+    "alignmentStart": 2,
+    "tags": {},
     "readFeatures": [
       {
         "code": "S",
-        "data": "A",
         "pos": 1,
-        "refPos": 2
+        "refPos": 2,
+        "data": "A"
       },
       {
         "code": "S",
-        "data": "T",
         "pos": 10,
-        "refPos": 10
+        "refPos": 10,
+        "data": "T"
       }
-    ],
-    "lengthOnRef": 8,
+    ]
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 8,
     "mappingQuality": 0,
+    "lengthOnRef": 8,
     "qualityScores": [
-      9,
-      9,
       9,
       9,
       9,
@@ -93,72 +111,34 @@
       9,
       9
     ],
-    "uniqueId": 451
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 8,
-    "alignmentStart": 2,
     "readGroupId": -1,
     "readName": "s0B",
+    "sequenceId": 0,
+    "uniqueId": 452,
     "templateSize": 0,
+    "alignmentStart": 2,
+    "tags": {},
     "readFeatures": [
       {
         "code": "H",
-        "data": 1,
         "pos": 1,
-        "refPos": 2
+        "refPos": 2,
+        "data": 1
       },
       {
         "code": "H",
-        "data": 1,
         "pos": 9,
-        "refPos": 10
+        "refPos": 10,
+        "data": 1
       }
-    ],
-    "lengthOnRef": 8,
-    "mappingQuality": 0,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 452
+    ]
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 3,
-    "readGroupId": -1,
-    "readName": "s0c",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "S",
-        "data": "AA",
-        "pos": 1,
-        "refPos": 3
-      },
-      {
-        "code": "S",
-        "data": "TT",
-        "pos": 9,
-        "refPos": 9
-      }
-    ],
-    "lengthOnRef": 6,
     "mappingQuality": 0,
+    "lengthOnRef": 6,
     "qualityScores": [
       9,
       9,
@@ -171,47 +151,83 @@
       9,
       9
     ],
-    "uniqueId": 453
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 12,
-    "alignmentStart": 3,
     "readGroupId": -1,
     "readName": "s0c",
+    "sequenceId": 0,
+    "uniqueId": 453,
     "templateSize": 0,
+    "alignmentStart": 3,
+    "tags": {},
     "readFeatures": [
       {
         "code": "S",
-        "data": "AA",
         "pos": 1,
-        "refPos": 3
+        "refPos": 3,
+        "data": "AA"
+      },
+      {
+        "code": "S",
+        "pos": 9,
+        "refPos": 9,
+        "data": "TT"
+      }
+    ]
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 12,
+    "mappingQuality": 0,
+    "lengthOnRef": 6,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
+    "readGroupId": -1,
+    "readName": "s0c",
+    "sequenceId": 0,
+    "uniqueId": 454,
+    "templateSize": 0,
+    "alignmentStart": 3,
+    "tags": {},
+    "readFeatures": [
+      {
+        "code": "S",
+        "pos": 1,
+        "refPos": 3,
+        "data": "AA"
       },
       {
         "code": "I",
-        "data": "NN",
         "pos": 6,
-        "refPos": 6
+        "refPos": 6,
+        "data": "NN"
       },
       {
         "code": "S",
-        "data": "TT",
         "pos": 11,
-        "refPos": 9
+        "refPos": 9,
+        "data": "TT"
       }
-    ],
-    "lengthOnRef": 6,
+    ]
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 6,
     "mappingQuality": 0,
+    "lengthOnRef": 6,
     "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
       9,
       9,
       9,
@@ -219,42 +235,26 @@
       9,
       9
     ],
-    "uniqueId": 454
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 6,
-    "alignmentStart": 3,
     "readGroupId": -1,
     "readName": "s0C",
+    "sequenceId": 0,
+    "uniqueId": 455,
     "templateSize": 0,
+    "alignmentStart": 3,
+    "tags": {},
     "readFeatures": [
       {
         "code": "H",
-        "data": 2,
         "pos": 1,
-        "refPos": 3
+        "refPos": 3,
+        "data": 2
       },
       {
         "code": "H",
-        "data": 2,
         "pos": 7,
-        "refPos": 9
+        "refPos": 9,
+        "data": 2
       }
-    ],
-    "lengthOnRef": 6,
-    "mappingQuality": 0,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 455
+    ]
   }
 ]

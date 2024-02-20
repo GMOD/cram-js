@@ -1,15 +1,10 @@
 [
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 11,
-    "readGroupId": -1,
-    "readName": "a1",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -22,7 +17,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "a1",
+    "sequenceId": 0,
     "uniqueId": 730,
+    "alignmentStart": 11,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 1,
@@ -32,16 +32,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 1,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "a1",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -54,7 +49,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "a1",
+    "sequenceId": 0,
     "uniqueId": 731,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 11,
@@ -64,16 +64,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "c1",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -86,7 +81,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "c1",
+    "sequenceId": 0,
     "uniqueId": 1128,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 11,
@@ -96,16 +96,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 1,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 11,
-    "readGroupId": -1,
-    "readName": "c1",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -118,7 +113,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "c1",
+    "sequenceId": 0,
     "uniqueId": 1129,
+    "alignmentStart": 11,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 1,

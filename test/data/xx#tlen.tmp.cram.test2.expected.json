@@ -1,15 +1,10 @@
 [
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "x1",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -17,7 +12,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "x1",
+    "sequenceId": 0,
     "uniqueId": 735,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 16,
@@ -27,16 +27,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 1,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 16,
-    "readGroupId": -1,
-    "readName": "x1",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -44,7 +39,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "x1",
+    "sequenceId": 0,
     "uniqueId": 736,
+    "alignmentStart": 16,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 1,
@@ -54,16 +54,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 7,
-    "readGroupId": -1,
-    "readName": "x2",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -71,7 +66,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "x2",
+    "sequenceId": 0,
     "uniqueId": 737,
+    "alignmentStart": 7,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 10,
@@ -81,16 +81,11 @@
     "templateLength": 8
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 1,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 10,
-    "readGroupId": -1,
-    "readName": "x2",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -98,7 +93,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "x2",
+    "sequenceId": 0,
     "uniqueId": 738,
+    "alignmentStart": 10,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 7,
@@ -108,16 +108,11 @@
     "templateLength": 8
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 7,
-    "readGroupId": -1,
-    "readName": "x3",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -125,7 +120,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "x3",
+    "sequenceId": 0,
     "uniqueId": 739,
+    "alignmentStart": 7,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 10,
@@ -135,16 +135,11 @@
     "templateLength": 8
   },
   {
-    "tags": {},
     "flags": 99,
     "cramFlags": 1,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 10,
-    "readGroupId": -1,
-    "readName": "x3",
-    "lengthOnRef": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -152,7 +147,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "x3",
+    "sequenceId": 0,
     "uniqueId": 740,
+    "alignmentStart": 10,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 7,
@@ -162,22 +162,37 @@
     "templateLength": 8
   },
   {
-    "tags": {},
     "flags": 147,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 5,
-    "alignmentStart": 1,
+    "mappingQuality": 1,
+    "lengthOnRef": 5,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "readGroupId": -1,
     "readName": "x4",
+    "sequenceId": 0,
+    "uniqueId": 741,
+    "templateSize": 20,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "flags": 0,
       "sequenceId": 0,
       "alignmentStart": 16
-    },
-    "templateSize": 20,
-    "lengthOnRef": 5,
+    }
+  },
+  {
+    "flags": 99,
+    "cramFlags": 3,
+    "readLength": 5,
     "mappingQuality": 1,
+    "lengthOnRef": 5,
     "qualityScores": [
       9,
       9,
@@ -185,32 +200,17 @@
       9,
       9
     ],
-    "uniqueId": 741
-  },
-  {
-    "tags": {},
-    "flags": 99,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 5,
-    "alignmentStart": 16,
     "readGroupId": -1,
     "readName": "x4",
+    "sequenceId": 0,
+    "uniqueId": 1066,
+    "templateSize": -20,
+    "alignmentStart": 16,
+    "tags": {},
     "mate": {
       "flags": 1,
       "sequenceId": 0,
       "alignmentStart": 1
-    },
-    "templateSize": -20,
-    "lengthOnRef": 5,
-    "mappingQuality": 1,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 1066
+    }
   }
 ]

@@ -1,42 +1,62 @@
 [
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
+    "mappingQuality": 0,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
     "readGroupId": -1,
     "readName": "sq1",
+    "sequenceId": 0,
+    "uniqueId": 454,
     "templateSize": 0,
-    "lengthOnRef": 10,
-    "mappingQuality": 0,
-    "qualityScores": [
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9,
-      9
-    ],
-    "uniqueId": 454
+    "alignmentStart": 1,
+    "tags": {}
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
+    "mappingQuality": 0,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "readGroupId": -1,
     "readName": "sQ1",
+    "sequenceId": 0,
+    "uniqueId": 455,
     "templateSize": 0,
-    "lengthOnRef": 10,
+    "alignmentStart": 1,
+    "tags": {}
+  },
+  {
+    "flags": 0,
+    "cramFlags": 3,
+    "readLength": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       255,
       255,
@@ -49,54 +69,20 @@
       255,
       255
     ],
-    "uniqueId": 455
-  },
-  {
-    "tags": {},
-    "flags": 0,
-    "cramFlags": 3,
-    "sequenceId": 0,
-    "readLength": 10,
-    "alignmentStart": 1,
     "readGroupId": -1,
     "readName": "SQ1",
+    "sequenceId": 0,
+    "uniqueId": 456,
     "templateSize": 0,
-    "lengthOnRef": 10,
-    "mappingQuality": 0,
-    "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 456
+    "alignmentStart": 1,
+    "tags": {}
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 9,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "sq2",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "D",
-        "data": 1,
-        "pos": 5,
-        "refPos": 5
-      }
-    ],
-    "lengthOnRef": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -108,61 +94,61 @@
       9,
       9
     ],
-    "uniqueId": 457
+    "readGroupId": -1,
+    "readName": "sq2",
+    "sequenceId": 0,
+    "uniqueId": 457,
+    "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
+    "readFeatures": [
+      {
+        "code": "D",
+        "pos": 5,
+        "refPos": 5,
+        "data": 1
+      }
+    ]
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 9,
-    "alignmentStart": 1,
+    "mappingQuality": 0,
+    "lengthOnRef": 10,
+    "qualityScores": [
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255,
+      255
+    ],
     "readGroupId": -1,
     "readName": "sQ2",
+    "sequenceId": 0,
+    "uniqueId": 458,
     "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
     "readFeatures": [
       {
         "code": "D",
-        "data": 1,
         "pos": 5,
-        "refPos": 5
+        "refPos": 5,
+        "data": 1
       }
-    ],
-    "lengthOnRef": 10,
-    "mappingQuality": 0,
-    "qualityScores": [
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255,
-      255
-    ],
-    "uniqueId": 458
+    ]
   },
   {
-    "tags": {},
     "flags": 0,
     "cramFlags": 3,
-    "sequenceId": 0,
     "readLength": 9,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "SQ2",
-    "templateSize": 0,
-    "readFeatures": [
-      {
-        "code": "D",
-        "data": 1,
-        "pos": 5,
-        "refPos": 5
-      }
-    ],
-    "lengthOnRef": 10,
     "mappingQuality": 0,
+    "lengthOnRef": 10,
     "qualityScores": [
       255,
       255,
@@ -174,6 +160,20 @@
       255,
       255
     ],
-    "uniqueId": 459
+    "readGroupId": -1,
+    "readName": "SQ2",
+    "sequenceId": 0,
+    "uniqueId": 459,
+    "templateSize": 0,
+    "alignmentStart": 1,
+    "tags": {},
+    "readFeatures": [
+      {
+        "code": "D",
+        "pos": 5,
+        "refPos": 5,
+        "data": 1
+      }
+    ]
   }
 ]

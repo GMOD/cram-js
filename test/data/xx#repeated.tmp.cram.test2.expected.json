@@ -1,15 +1,10 @@
 [
   {
-    "tags": {},
     "flags": 67,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "S",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -22,7 +17,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "S",
+    "sequenceId": 0,
     "uniqueId": 398,
+    "alignmentStart": 1,
+    "tags": {},
     "mate": {
       "sequenceId": 0,
       "alignmentStart": 11,
@@ -32,16 +32,11 @@
     "templateLength": 20
   },
   {
-    "tags": {},
     "flags": 131,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 11,
-    "readGroupId": -1,
-    "readName": "S",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -54,7 +49,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "S",
+    "sequenceId": 0,
     "uniqueId": 399,
+    "alignmentStart": 11,
+    "tags": {},
     "templateLength": 20,
     "mate": {
       "sequenceId": 0,
@@ -64,16 +64,11 @@
     }
   },
   {
-    "tags": {},
     "flags": 67,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "S",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -86,7 +81,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "S",
+    "sequenceId": 0,
     "uniqueId": 400,
+    "alignmentStart": 1,
+    "tags": {},
     "templateLength": 20,
     "mate": {
       "sequenceId": 0,
@@ -96,16 +96,11 @@
     }
   },
   {
-    "tags": {},
     "flags": 131,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 11,
-    "readGroupId": -1,
-    "readName": "S",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -118,7 +113,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "S",
+    "sequenceId": 0,
     "uniqueId": 401,
+    "alignmentStart": 11,
+    "tags": {},
     "templateLength": 20,
     "mate": {
       "sequenceId": 0,
@@ -128,16 +128,11 @@
     }
   },
   {
-    "tags": {},
     "flags": 67,
     "cramFlags": 5,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 1,
-    "readGroupId": -1,
-    "readName": "S",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -150,7 +145,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "S",
+    "sequenceId": 0,
     "uniqueId": 402,
+    "alignmentStart": 1,
+    "tags": {},
     "templateLength": 20,
     "mate": {
       "sequenceId": 0,
@@ -160,16 +160,11 @@
     }
   },
   {
-    "tags": {},
     "flags": 131,
     "cramFlags": 1,
-    "sequenceId": 0,
     "readLength": 10,
-    "alignmentStart": 11,
-    "readGroupId": -1,
-    "readName": "S",
-    "lengthOnRef": 10,
     "mappingQuality": 1,
+    "lengthOnRef": 10,
     "qualityScores": [
       9,
       9,
@@ -182,7 +177,12 @@
       9,
       9
     ],
+    "readGroupId": -1,
+    "readName": "S",
+    "sequenceId": 0,
     "uniqueId": 403,
+    "alignmentStart": 11,
+    "tags": {},
     "templateLength": 20,
     "mate": {
       "sequenceId": 0,
