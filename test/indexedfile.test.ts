@@ -1,8 +1,7 @@
 //@ts-nocheck
-import { loadTestJSON, testDataFile } from './lib/util'
+import { testDataFile } from './lib/util'
 import { IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
-import CramRecord from '../src/cramFile/record'
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {
