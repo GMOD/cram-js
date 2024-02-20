@@ -1,3 +1,7 @@
+# v2.0.1
+
+- Fix issue parsing header tags with : character
+
 # v2.0.0
 
 - Add lzma support via xz-decompress. This uses webassembly, so it is a major
