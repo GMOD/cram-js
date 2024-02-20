@@ -1,4 +1,4 @@
-const allFiles = `
+const t1 = `
 human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-SeqsPerSlice.0-unMapped.cram
 human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-SeqsPerSlice.1-unMapped.cram
 human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-SeqsPerSlice.500-unMapped.cram
@@ -47,6 +47,11 @@ ce#5b.2.1.cram
 ce#5b.3.0.cram
 ce#5b.tmp.cram
 ce#large_seq.2.1.cram
+`
+  .split(/\s+/)
+  .filter(f => !!f)
+
+const t2 = `
 ce#large_seq.3.0.cram
 ce#large_seq.tmp.cram
 ce#supp.2.1.cram
@@ -116,9 +121,5 @@ grc37-1#HG03297.mapped.ILLUMINA.bwa.ESN.low_coverage.20130415.bam.cram
 `
   .split(/\s+/)
   .filter(f => !!f)
-// .filter(f => /xx#repeated/.test(f))
 
-module.exports = {
-  allFiles,
-  fullFiles: allFiles,
-}
+export { t1, t2 }
