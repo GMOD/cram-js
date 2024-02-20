@@ -44,8 +44,8 @@ export default class IndexedCramFile {
       | { cram: CramFile }
       | ({
           cram?: undefined
-          seqFetch: SeqFetch
-          checkSequenceMD5: boolean
+          seqFetch?: SeqFetch
+          checkSequenceMD5?: boolean
           cacheSize?: number
         } & CramFileSource)
     ),

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { testDataFile } from './lib/util'
 import { dumpWholeFile } from './lib/dumpFile'
 import { CramFile } from '../src/index'

@@ -540,7 +540,11 @@ export default class CramSlice {
         // fetch the `seq` for all of the ref regions
         await Promise.all(
           Object.values(refRegions).map(async refRegion => {
-            if (refRegion.id !== -1 && refRegion.start <= refRegion.end) {
+            if (
+              refRegion.id !== -1 &&
+              refRegion.start <= refRegion.end &&
+              this.file.fetchReferenceSequenceCallback
+            ) {
               refRegion.seq = await this.file.fetchReferenceSequenceCallback(
                 refRegion.id,
                 refRegion.start,

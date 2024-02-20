@@ -61,4 +61,4 @@ async function dumpWholeFile(file) {
   return items
 }
 
-module.exports = { dumpWholeFile }
+export { dumpWholeFile }

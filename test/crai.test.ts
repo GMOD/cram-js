@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { testDataFile } from './lib/util'
 
 import CraiIndex from '../src/craiIndex'

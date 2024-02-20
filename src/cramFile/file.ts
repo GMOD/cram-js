@@ -64,9 +64,9 @@ export type SeqFetch = (
 ) => Promise<string>
 
 export type CramFileArgs = CramFileSource & {
-  checkSequenceMD5: boolean
+  checkSequenceMD5?: boolean
   cacheSize?: number
-  seqFetch: SeqFetch
+  seqFetch?: SeqFetch
 }
 
 export type CramFileBlock = BlockHeader & {
@@ -80,9 +80,9 @@ export type CramFileBlock = BlockHeader & {
 export default class CramFile {
   private file: Filehandle
   public validateChecksums: boolean
-  public fetchReferenceSequenceCallback: SeqFetch
+  public fetchReferenceSequenceCallback?: SeqFetch
   public options: {
-    checkSequenceMD5: boolean
+    checkSequenceMD5?: boolean
     cacheSize: number
   }
   public featureCache: QuickLRU<string, Promise<CramRecord[]>>

@@ -1,12 +1,11 @@
-//@ts-nocheck
 import { IndexedCramFile, CraiIndex } from '../src'
 
 describe('code examples', () => {
   describe('readme 1', () => {
     it('runs without error', async () => {
-      const messages = []
+      const messages = [] as string[]
       const console = {
-        log(msg) {
+        log(msg: string) {
           messages.push(msg)
         },
       }
@@ -32,7 +31,7 @@ describe('code examples', () => {
       const records = await indexedFile2.getRecordsForRange(0, 10000, 20000)
       records.forEach(record => {
         console.log(`got a record named ${record.readName}`)
-        record.readFeatures.forEach(({ code, refPos, ref, sub }) => {
+        record.readFeatures?.forEach(({ code, refPos, ref, sub }) => {
           if (code === 'X') {
             console.log(
               `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,

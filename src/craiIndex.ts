@@ -158,7 +158,7 @@ export default class CraiIndex {
     seqId: number,
     queryStart: number,
     queryEnd: number,
-  ) {
+  ): Promise<Slice[]> {
     const seqEntries = (await this.getIndex())[seqId]
     if (!seqEntries) {
       return []

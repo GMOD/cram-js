@@ -1,6 +1,3 @@
-// import { IndexedCramFile, CraiIndex } from '@gmod/cram'
-
-//Use indexedfasta library for seqFetch, if using local file (see below)
 import { IndexedFasta } from '@gmod/indexedfasta'
 import { CraiIndex, IndexedCramFile } from '../src'
 import CramRecord from '../src/cramFile/record'
@@ -27,14 +24,8 @@ const t = new IndexedFasta({
 
 // open local files
 const indexedFile = new IndexedCramFile({
-  //cramPath: '/var/tmp/9827_10m.cram',
-  //cramPath: '/var/tmp/9827_10m.3.1.cram',
-  //cramPath: '/var/tmp/novaseq-10m.cram',
   cramPath: process.argv[3],
   index: new CraiIndex({
-    //path: '/var/tmp/9827_10m.cram.crai',
-    //path: '/var/tmp/9827_10m.3.1.cram.crai',
-    //path: '/var/tmp/novaseq-10m.cram.crai',
     path: process.argv[3] + '.crai',
   }),
   seqFetch: async (seqId, start, end) => {
