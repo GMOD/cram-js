@@ -1,11 +1,5 @@
 //@ts-nocheck
-import {
-  fs,
-  JsonClone,
-  loadTestJSON,
-  REWRITE_EXPECTED_DATA,
-  testDataFile,
-} from './lib/util'
+import { loadTestJSON, testDataFile } from './lib/util'
 import { IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
 import CramRecord from '../src/cramFile/record'
@@ -20,19 +14,7 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 2, 200)
-    if (REWRITE_EXPECTED_DATA) {
-      fs.writeFileSync(
-        'test/data/ce#tag_padded.tmp.cram.test1.expected.json',
-        JSON.stringify(features, null, '  '),
-      )
-    }
-
-    const expectedFeatures1 = loadTestJSON(
-      'ce#tag_padded.tmp.cram.test1.expected.json',
-    )
-
-    expect(features.length).toEqual(8)
-    expect(JsonClone(features)).toEqual(await expectedFeatures1)
+    expect(features).toMatchSnapshot()
 
     expect(await cram.getRecordsForRange(1, 2, 200)).toEqual([])
     expect(await cram.hasDataForReferenceSequence(1)).toEqual(false)
@@ -48,17 +30,7 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 2, 200)
-    if (REWRITE_EXPECTED_DATA) {
-      fs.writeFileSync(
-        'test/data/ce#unmap2.tmp.cram.test1.expected.json',
-        JSON.stringify(features, null, '  '),
-      )
-    }
-
-    const expectedFeatures2 = loadTestJSON(
-      'ce#unmap2.tmp.cram.test1.expected.json',
-    )
-    expect(JsonClone(features)).toEqual(await expectedFeatures2)
+    expect(features).toMatchSnapshot()
   })
 
   it('can read ce#1000.tmp.cram', async () => {
@@ -71,23 +43,7 @@ describe('.crai indexed cram file', () => {
 
     const features = await cram.getRecordsForRange(0, 2, 200)
     features.sort((a, b) => a.readName.localeCompare(b.readName))
-    if (REWRITE_EXPECTED_DATA) {
-      fs.writeFileSync(
-        'test/data/ce#1000.tmp.cram.test1.expected.json',
-        JSON.stringify(features, null, '  '),
-      )
-    }
-
-    const expectedFeatures3 = await loadTestJSON(
-      'ce#1000.tmp.cram.test1.expected.json',
-    )
-
-    const clonedFeatures: CramRecord[] = JsonClone(features)
-
-    expect(clonedFeatures[0]).toEqual(expectedFeatures3[0])
-    expect(clonedFeatures.slice(0, 10)).toEqual(expectedFeatures3.slice(0, 10))
-
-    expect(clonedFeatures).toEqual(expectedFeatures3)
+    expect(features).toMatchSnapshot()
   })
 
   it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
@@ -103,31 +59,9 @@ describe('.crai indexed cram file', () => {
     })
 
     const features = await cram.getRecordsForRange(0, 0, Infinity)
-    if (REWRITE_EXPECTED_DATA) {
-      fs.writeFileSync(
-        'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
-        JSON.stringify(features, null, '  '),
-      )
-    }
-    const expectedFeatures4 = loadTestJSON(
-      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test1.expected.json',
-    )
-    expect(JsonClone(features)).toEqual(await expectedFeatures4)
-
     const features2 = await cram.getRecordsForRange(-1, 0, Infinity)
-
-    if (REWRITE_EXPECTED_DATA) {
-      fs.writeFileSync(
-        'test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
-        JSON.stringify(features2, null, '  '),
-      )
-    }
-    // console.log(JSON.stringify(features2, null, '  '))
-    const expectedFeatures5 = loadTestJSON(
-      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.test2.expected.json',
-    )
-
-    expect(JsonClone(features2)).toEqual(await expectedFeatures5)
+    expect(features).toMatchSnapshot()
+    expect(features2).toMatchSnapshot()
   })
   ;[
     'auxf#values.tmp.cram',
@@ -173,19 +107,9 @@ describe('.crai indexed cram file', () => {
       })
 
       const features = await cram.getRecordsForRange(0, 0, Infinity)
-
       features.sort((a, b) => a.readName.localeCompare(b.readName))
-      if (REWRITE_EXPECTED_DATA) {
-        fs.writeFileSync(
-          `test/data/${filename}.test2.expected.json`,
-          JSON.stringify(features, null, '  '),
-        )
-      }
-      // console.log(`${filename} first ref got ${features.length} features`)
       expect(features.length).toBeGreaterThan(-1)
-      expect(JsonClone(features)).toEqual(
-        await loadTestJSON(`${filename}.test2.expected.json`),
-      )
+      expect(features).toMatchSnapshot()
     })
 
     it(`can read the second chrom of ${filename} without error`, async () => {
@@ -195,17 +119,8 @@ describe('.crai indexed cram file', () => {
       })
 
       const features = await cram.getRecordsForRange(1, 0, Infinity)
-      if (REWRITE_EXPECTED_DATA) {
-        fs.writeFileSync(
-          `test/data/${filename}.test3.expected.json`,
-          JSON.stringify(features, null, '  '),
-        )
-      }
-      // console.log(`${filename} second ref got ${features.length} features`)
       expect(features.length).toBeGreaterThan(-1)
-      expect(JsonClone(features)).toEqual(
-        await loadTestJSON(`${filename}.test3.expected.json`),
-      )
+      expect(features).toMatchSnapshot()
     })
   })
 })

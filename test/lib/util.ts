@@ -3,9 +3,7 @@ const path = typeof __webpack_require__ !== 'function' ? require('path') : null 
 const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
 import { fromUrl } from '../../src/io'
 
-const dataDir =
-  path &&
-  path.dirname(require.resolve('../data/xx#unsorted.tmp.cram.dump.json'))
+const dataDir = path && path.dirname(require.resolve('../data/xx.fa'))
 
 function testDataUrl(filename) {
   return `file://${dataDir}/${filename}`.replace('#', '%23')
