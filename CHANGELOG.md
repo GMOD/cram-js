@@ -1,3 +1,8 @@
+# v2.0.2
+
+- Update buffer-crc32
+- Update typescript-eslint config and related fixes
+
 # v2.0.1
 
 - Fix issue parsing header tags with : character
