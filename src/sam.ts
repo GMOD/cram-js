@@ -4,7 +4,7 @@ export function parseHeaderText(text: string) {
     tag: string
     data: {
       tag: string
-      value: string | undefined
+      value: string
     }[]
   }[] = []
   for (const line of lines) {
@@ -21,10 +21,10 @@ export function parseHeaderText(text: string) {
               }
             : // @CO lines are not comma separated.
               // See "samtools view -H c2\#pad.3.0.cram"
-              // so, just store value tag itself
+              // so, just store value tag and value itself
               {
                 tag: f,
-                value: undefined,
+                value: '',
               }
         }),
       })

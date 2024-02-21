@@ -1,3 +1,7 @@
+# v2.0.3
+
+- Update sam header parsing to avoid breaking 'type contract'
+
 # v2.0.2
 
 - Update buffer-crc32
