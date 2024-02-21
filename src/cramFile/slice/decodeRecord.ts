@@ -224,23 +224,21 @@ export default function decodeRecord(
   majorVersion: number,
   recordNumber: number,
 ) {
-  let flags = decodeDataSeries('BF') as number
+  let flags = decodeDataSeries('BF')
 
   // note: the C data type of compressionFlags is byte in cram v1
   // and int32 in cram v2+, but that does not matter for us here
   // in javascript land.
-  const cramFlags = decodeDataSeries('CF') as number
+  const cramFlags = decodeDataSeries('CF')
 
   if (!isMappedSliceHeader(sliceHeader.parsedContent)) {
-    throw new Error()
+    throw new Error('slice header not mapped')
   }
 
-  let sequenceId
-  if (majorVersion > 1 && sliceHeader.parsedContent.refSeqId === -2) {
-    sequenceId = decodeDataSeries('RI')
-  } else {
-    sequenceId = sliceHeader.parsedContent.refSeqId
-  }
+  const sequenceId =
+    majorVersion > 1 && sliceHeader.parsedContent.refSeqId === -2
+      ? decodeDataSeries('RI')
+      : sliceHeader.parsedContent.refSeqId
 
   const readLength = decodeDataSeries('RL')
   // if APDelta, will calculate the true start in a second pass
@@ -263,14 +261,14 @@ export default function decodeRecord(
   if (CramFlagsDecoder.isDetached(cramFlags)) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't matter for javascript
     // const mate: any = {}
-    const mateFlags = decodeDataSeries('MF') as number
+    const mateFlags = decodeDataSeries('MF')
     let mateReadName
     if (!compressionScheme.readNamesIncluded) {
       mateReadName = readNullTerminatedString(decodeDataSeries('RN'))
       readName = mateReadName
     }
-    const mateSequenceId = decodeDataSeries('NS') as number
-    const mateAlignmentStart = decodeDataSeries('NP') as number
+    const mateSequenceId = decodeDataSeries('NS')
+    const mateAlignmentStart = decodeDataSeries('NP')
     if (mateFlags || mateSequenceId > -1) {
       mateToUse = {
         mateFlags,
@@ -293,7 +291,7 @@ export default function decodeRecord(
 
     // detachedCount++
   } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
-    mateRecordNumber = (decodeDataSeries('NF') as number) + recordNumber + 1
+    mateRecordNumber = decodeDataSeries('NF') + recordNumber + 1
   }
 
   // TODO: the aux tag parsing will have to be refactored if we want to support
@@ -311,8 +309,8 @@ export default function decodeRecord(
 
   for (let i = 0; i < ntags; i += 1) {
     const tagId = TN[i]
-    const tagName = tagId.substr(0, 2)
-    const tagType = tagId.substr(2, 1)
+    const tagName = tagId.slice(0, 2)
+    const tagType = tagId.slice(2, 3)
 
     const tagCodec = compressionScheme.getCodecForTag(tagId)
     if (!tagCodec) {
@@ -336,7 +334,7 @@ export default function decodeRecord(
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
-    const readFeatureCount = decodeDataSeries('FN') as number
+    const readFeatureCount = decodeDataSeries('FN')
     if (readFeatureCount) {
       readFeatures = decodeReadFeatures(
         alignmentStart,
@@ -370,7 +368,7 @@ export default function decodeRecord(
     }
 
     // mapping quality
-    mappingQuality = decodeDataSeries('MQ') as number
+    mappingQuality = decodeDataSeries('MQ')
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       qualityScores = new Array(readLength)
       for (let i = 0; i < qualityScores.length; i++) {

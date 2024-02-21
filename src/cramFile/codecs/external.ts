@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { CramMalformedError, CramUnimplementedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
 import { parseItf8 } from '../util'

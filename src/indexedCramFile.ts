@@ -6,13 +6,13 @@ import { SeqFetch } from './cramFile/file'
 import { Filehandle } from './cramFile/filehandle'
 import { Slice } from './craiIndex'
 
-export type CramFileSource = {
+export interface CramFileSource {
   cramFilehandle?: Filehandle
   cramUrl?: string
   cramPath?: string
 }
 
-export type CramIndexLike = {
+export interface CramIndexLike {
   getEntriesForRange: (
     seqId: number,
     start: number,
@@ -51,10 +51,9 @@ export default class IndexedCramFile {
     ),
   ) {
     // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
-    if (args.cram) {
-      this.cram = args.cram
-    } else {
-      this.cram = new CramFile({
+    this.cram =
+      args.cram ??
+      new CramFile({
         url: args.cramUrl,
         path: args.cramPath,
         filehandle: args.cramFilehandle,
@@ -62,7 +61,6 @@ export default class IndexedCramFile {
         checkSequenceMD5: args.checkSequenceMD5,
         cacheSize: args.cacheSize,
       })
-    }
 
     if (!(this.cram instanceof CramFile)) {
       throw new Error('invalid arguments: no cramfile')
@@ -128,12 +126,12 @@ export default class IndexedCramFile {
     if (opts.viewAsPairs) {
       const readNames: Record<string, number> = {}
       const readIds: Record<string, number> = {}
-      for (let i = 0; i < ret.length; i += 1) {
-        const name = ret[i].readName
+      for (const read of ret) {
+        const name = read.readName
         if (name === undefined) {
-          throw new Error()
+          throw new Error('readName undefined')
         }
-        const id = ret[i].uniqueId
+        const id = read.uniqueId
         if (!readNames[name]) {
           readNames[name] = 0
         }
@@ -147,11 +145,10 @@ export default class IndexedCramFile {
         }
       })
       const matePromises = []
-      for (let i = 0; i < ret.length; i += 1) {
-        const cramRecord = ret[i]
+      for (const cramRecord of ret) {
         const name = cramRecord.readName
         if (name === undefined) {
-          throw new Error()
+          throw new Error('readName undefined')
         }
         if (
           unmatedPairs[name] &&
@@ -169,9 +166,9 @@ export default class IndexedCramFile {
         }
       }
       const mateBlocks = await Promise.all(matePromises)
-      let mateChunks = []
-      for (let i = 0; i < mateBlocks.length; i += 1) {
-        mateChunks.push(...mateBlocks[i])
+      let mateChunks = [] as Slice[]
+      for (const block of mateBlocks) {
+        mateChunks.push(...block)
       }
       // filter out duplicates
       mateChunks = mateChunks
@@ -182,7 +179,7 @@ export default class IndexedCramFile {
         )
 
       const mateRecordPromises = []
-      const mateFeatPromises: Array<Promise<CramRecord[]>> = []
+      const mateFeatPromises: Promise<CramRecord[]>[] = []
 
       const mateTotalSize = mateChunks
         .map(s => s.sliceBytes)
@@ -202,10 +199,9 @@ export default class IndexedCramFile {
         mateRecordPromises.push(recordPromise)
         const featPromise = recordPromise.then(feats => {
           const mateRecs = []
-          for (let i = 0; i < feats.length; i += 1) {
-            const feature = feats[i]
+          for (const feature of feats) {
             if (feature.readName === undefined) {
-              throw new Error()
+              throw new Error('readName undefined')
             }
             if (unmatedPairs[feature.readName] && !readIds[feature.uniqueId]) {
               mateRecs.push(feature)

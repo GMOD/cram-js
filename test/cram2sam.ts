@@ -36,7 +36,7 @@ const indexedFile = new IndexedCramFile({
     const seqList = await t.getSequenceNames()
     const r = await t.getSequence(seqList[seqId], start - 1, end)
     if (r === undefined) {
-      throw new Error()
+      throw new Error('getSequence returned undefined')
     }
     return r
   },
@@ -54,10 +54,10 @@ function decodeSeqCigar(record: CramRecord) {
   const ref = record._refRegion!.seq
   const refStart = record._refRegion!.start
   let last_pos = record.alignmentStart
-  if (typeof record.readFeatures !== 'undefined') {
+  if (record.readFeatures !== undefined) {
     record.readFeatures.forEach(({ code, refPos, sub, data }) => {
       const sublen = refPos - last_pos
-      seq += ref.substring(last_pos - refStart, refPos - refStart)
+      seq += ref.slice(last_pos - refStart, refPos - refStart)
       last_pos = refPos
 
       if (oplen && op != 'M') {
@@ -130,7 +130,7 @@ function decodeSeqCigar(record: CramRecord) {
   }
   if (seq.length != record.readLength) {
     sublen = record.readLength - seq.length
-    seq += ref.substring(last_pos - refStart, last_pos - refStart + sublen)
+    seq += ref.slice(last_pos - refStart, last_pos - refStart + sublen)
 
     if (oplen && op != 'M') {
       cigar += oplen + op
@@ -153,11 +153,10 @@ function tags2str(record: CramRecord, RG: string[]) {
     if (typeof record.tags[type] === 'number') {
       str += type + ':i:' + record.tags[type]
     } else if (typeof record.tags[type] === 'string') {
-      if (record.tags[type].length === 1) {
-        str += type + ':A:' + record.tags[type]
-      } else {
-        str += type + ':Z:' + record.tags[type]
-      }
+      str +=
+        record.tags[type].length === 1
+          ? type + ':A:' + record.tags[type]
+          : type + ':Z:' + record.tags[type]
     } else {
       console.error(
         type,
@@ -188,15 +187,15 @@ async function run() {
 
   const hdr = await indexedFile.cram.getSamHeader()
   if (!hdr) {
-    throw new Error()
+    throw new Error('getSamHeader returned undefined')
   }
   const RG: string[] = []
   let nRG = 0
   for (const line of hdr) {
     if (line.tag === 'RG') {
-      for (const i in line.data) {
-        if (line.data[i].tag === 'ID') {
-          RG[nRG++] = line.data[i].value
+      for (const entry of line.data) {
+        if (entry.tag === 'ID') {
+          RG[nRG++] = entry.value!
         }
       }
     }
@@ -245,4 +244,4 @@ async function run() {
   })
 }
 
-run()
+run().catch(e => console.error(e))

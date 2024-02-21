@@ -176,5 +176,5 @@ export function tinyMemoize(_class: any, methodName: any) {
 }
 
 export function sequenceMD5(seq: string) {
-  return md5(seq.toUpperCase().replace(/[^\x21-\x7e]/g, ''))
+  return md5(seq.toUpperCase().replaceAll(/[^\u0021-\u007e]/g, ''))
 }

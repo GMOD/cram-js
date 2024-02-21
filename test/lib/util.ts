@@ -1,7 +1,7 @@
 import { fromUrl } from '../../src/io'
 import path from 'path'
 
-const dataDir = path && path.dirname(require.resolve('../data/xx.fa'))
+const dataDir = path.dirname(require.resolve('../data/xx.fa'))
 
 export function testDataUrl(filename: string) {
   return `file://${dataDir}/${filename}`.replace('#', '%23')

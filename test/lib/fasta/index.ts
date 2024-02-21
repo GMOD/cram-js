@@ -1,4 +1,3 @@
-//@ts-nocheck
 function parseSmallFasta(text: string) {
   return text
     .split('>')
@@ -13,21 +12,22 @@ function parseSmallFasta(text: string) {
 }
 
 class FetchableSmallFasta {
-  constructor(filehandle) {
+  data: Promise<ReturnType<typeof parseSmallFasta>>
+  constructor(filehandle: { readFile: () => Promise<Buffer> }) {
     this.data = filehandle.readFile().then(buffer => {
       const text = buffer.toString('utf8')
       return parseSmallFasta(text)
     })
   }
 
-  async fetch(id, start, end) {
+  async fetch(id: number, start: number, end: number) {
     const data = await this.data
     const entry = data[id]
     const length = end - start + 1
     if (!entry) {
       throw new Error(`no sequence with id ${id} exists`)
     }
-    return entry.sequence.substr(start - 1, length)
+    return entry.sequence.slice(start - 1, start - 1 + length)
   }
 
   async getSequenceList() {

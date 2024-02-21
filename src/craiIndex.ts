@@ -8,7 +8,7 @@ import { Filehandle } from './cramFile/filehandle'
 
 const BAI_MAGIC = 21578050 // BAI\1
 
-export type Slice = {
+export interface Slice {
   start: number
   span: number
   containerStart: number
@@ -19,10 +19,6 @@ export type Slice = {
 type ParsedIndex = Record<string, Slice[]>
 
 function addRecordToIndex(index: ParsedIndex, record: number[]) {
-  if (record.some(el => el === undefined)) {
-    throw new CramMalformedError('invalid .crai index file')
-  }
-
   const [seqId, start, span, containerStart, sliceStart, sliceBytes] = record
 
   if (!index[seqId]) {
@@ -61,7 +57,7 @@ export default class CraiIndex {
     this.filehandle = open(args.url, args.path, args.filehandle)
     this._parseCache = new AbortablePromiseCache<unknown, ParsedIndex>({
       cache: new QuickLRU({ maxSize: 1 }),
-      fill: (data, signal) => this.parseIndex(),
+      fill: (_data, _signal) => this.parseIndex(),
     })
   }
 
@@ -90,8 +86,7 @@ export default class CraiIndex {
         // because some .crai files can be pretty large.
         let currentRecord: number[] = []
         let currentString = ''
-        for (let i = 0; i < uncompressedBuffer.length; i += 1) {
-          const charCode = uncompressedBuffer[i]
+        for (const charCode of uncompressedBuffer) {
           if (
             (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
             (!currentString && charCode === 45) /* leading - */
@@ -175,10 +170,10 @@ export default class CraiIndex {
       } // entry is behind query
       return 0 // entry overlaps query
     }
-    const bins = []
-    for (let i = 0; i < seqEntries.length; i += 1) {
-      if (compare(seqEntries[i]) === 0) {
-        bins.push(seqEntries[i])
+    const bins = [] as Slice[]
+    for (const entry of seqEntries) {
+      if (compare(entry) === 0) {
+        bins.push(entry)
       }
     }
     return bins

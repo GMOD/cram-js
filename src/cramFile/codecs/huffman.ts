@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { CramMalformedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
 import { getBits } from './getBits'
@@ -12,7 +13,11 @@ function numberOfSetBits(ii: number) {
   return (((i + (i >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
 }
 
-type Code = { bitLength: number; value: number; bitCode: number }
+interface Code {
+  bitLength: number
+  value: number
+  bitCode: number
+}
 
 export default class HuffmanIntCodec extends CramCodec<
   'byte' | 'int',
@@ -20,7 +25,6 @@ export default class HuffmanIntCodec extends CramCodec<
 > {
   private codes: Record<number, Code> = {}
   private codeBook: Record<number, number[]> = {}
-  private sortedByValue: Code[] = []
   private sortedCodes: Code[] = []
   private sortedValuesByBitCode: number[] = []
   private sortedBitCodes: number[] = []
@@ -50,7 +54,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
   buildCodeBook() {
     // parse the parameters together into a `codes` data structure
-    let codes: Array<{ symbol: number; bitLength: number }> = new Array(
+    let codes = new Array<{ symbol: number; bitLength: number }>(
       this.parameters.numCodes,
     )
     for (let i = 0; i < this.parameters.numCodes; i += 1) {
@@ -103,11 +107,6 @@ export default class HuffmanIntCodec extends CramCodec<
   buildCaches() {
     this.sortedCodes = Object.values(this.codes).sort(
       (a, b) => a.bitLength - b.bitLength || a.bitCode - b.bitCode,
-    )
-
-    // this.sortedValues = this.parameters.values.sort((a,b) => a-b)
-    this.sortedByValue = Object.values(this.codes).sort(
-      (a, b) => a.value - b.value,
     )
 
     this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)

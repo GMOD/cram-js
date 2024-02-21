@@ -1,7 +1,6 @@
 import { testDataFile } from './lib/util'
 import { CramRecord, IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
-import CramContainerCompressionScheme from '../src/cramFile/container/compressionScheme'
 
 describe('.crai indexed cram file', () => {
   it('can read ce#tag_padded.tmp.cram', async () => {
@@ -165,14 +164,12 @@ describe('paired orientation test', () => {
 
     let feat1: CramRecord | undefined
     let feat2: CramRecord | undefined
-    for (let i = 0; i < features.length; i += 1) {
-      if (
-        features[i].readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0'
-      ) {
-        if (features[i].isRead1()) {
-          feat1 = features[i]
-        } else if (features[i].isRead2()) {
-          feat2 = features[i]
+    for (const feature of features) {
+      if (feature.readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0') {
+        if (feature.isRead1()) {
+          feat1 = feature
+        } else if (feature.isRead2()) {
+          feat2 = feature
         }
       }
     }
@@ -192,8 +189,7 @@ test('duplicate IDs test', async () => {
   const features = await cram.getRecordsForRange(0, 163504, 175473)
   const totalMap = {} as Record<string, string | undefined>
   let noCollisions = true
-  for (let i = 0; i < features.length; i += 1) {
-    const feature = features[i]
+  for (const feature of features) {
     if (
       totalMap[feature.uniqueId] &&
       totalMap[feature.uniqueId] !== feature.readName
@@ -264,7 +260,7 @@ TCACCCTCTAAATCACCACGATCAAAAGGAACAAGCATCAAGCACGCAGCAATGCAGCTC
 AAAACGCTTAGCCTAGCCACACCCCCACGGGAAACAGCAGTGATTAACCTTTAGCAATAA
 ACGAAAGTTTAACTAAGCTATACTAACCCCAGGGTTGGTCAATTTCGTGCCAGCCACCGC
 GGTCACACGATTAACCCAAGTCAATAGAAGCCGGCGTAAAGAGTGTTTTAGATCACCCCC
-TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replace(/\n/g, '')
+TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
   const cram = new IndexedCramFile({
     cramFilehandle: testDataFile('raw_sorted_duplicates_removed.cram'),
     async seqFetch(ref, start, end) {

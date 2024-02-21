@@ -1,10 +1,10 @@
-export type NullEncoding = {
+export interface NullEncoding {
   codecId: 0
   parametersBytes: number
   parameters: Record<string, never>
 }
 
-export type ExternalCramEncoding = {
+export interface ExternalCramEncoding {
   codecId: 1
   parametersBytes: number
   parameters: {
@@ -12,7 +12,7 @@ export type ExternalCramEncoding = {
   }
 }
 
-export type GolombEncoding = {
+export interface GolombEncoding {
   codecId: 2
   parametersBytes: number
   parameters: {
@@ -21,7 +21,7 @@ export type GolombEncoding = {
   }
 }
 
-export type HuffmanEncoding = {
+export interface HuffmanEncoding {
   codecId: 3
   parametersBytes: number
   parameters: {
@@ -32,7 +32,7 @@ export type HuffmanEncoding = {
   }
 }
 
-export type ByteArrayLengthEncoding = {
+export interface ByteArrayLengthEncoding {
   codecId: 4
   parametersBytes: number
   parameters: {
@@ -41,7 +41,7 @@ export type ByteArrayLengthEncoding = {
   }
 }
 
-export type ByteArrayStopCramEncoding = {
+export interface ByteArrayStopCramEncoding {
   codecId: 5
   parametersBytes: number
   parameters: {
@@ -50,7 +50,7 @@ export type ByteArrayStopCramEncoding = {
   }
 }
 
-export type BetaEncoding = {
+export interface BetaEncoding {
   codecId: 6
   parametersBytes: number
   parameters: {
@@ -59,7 +59,7 @@ export type BetaEncoding = {
   }
 }
 
-export type SubexpEncoding = {
+export interface SubexpEncoding {
   codecId: 7
   parametersBytes: number
   parameters: {
@@ -68,7 +68,7 @@ export type SubexpEncoding = {
   }
 }
 
-export type GolombRiceEncoding = {
+export interface GolombRiceEncoding {
   codecId: 8
   parametersBytes: number
   parameters: {
@@ -77,7 +77,7 @@ export type GolombRiceEncoding = {
   }
 }
 
-export type GammaEncoding = {
+export interface GammaEncoding {
   codecId: 9
   parametersBytes: number
   parameters: {

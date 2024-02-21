@@ -7,6 +7,7 @@
     "declaration": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "target": "es2015",
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

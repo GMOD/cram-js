@@ -1,3 +1,1 @@
-import { GenericFilehandle } from 'generic-filehandle'
-
-export { GenericFilehandle as Filehandle }
+export { GenericFilehandle as Filehandle } from 'generic-filehandle'

@@ -85,7 +85,7 @@ const cramTagDictionary = new Parser().itf8('size').buffer('ents', {
       const str = buffer.toString('utf8', stringStart, stringEnd)
       const tags = []
       for (let i = 0; i < str.length; i += 3) {
-        tags.push(str.substr(i, 3))
+        tags.push(str.slice(i, i + 3))
       }
       return tags
     }
@@ -113,7 +113,7 @@ const parseByteAsBool = new Parser().uint8(null, {
   formatter: /* istanbul ignore next */ val => !!val,
 })
 
-export type CramPreservationMap = {
+export interface CramPreservationMap {
   MI: boolean
   UI: boolean
   PI: boolean
@@ -155,9 +155,8 @@ const cramPreservationMap = new Parser()
 
 /* istanbul ignore next */
 function formatMap<T>(data: { ents: { key: string; value: T }[] }) {
-  const map: { [x: string]: T } = {}
-  for (let i = 0; i < data.ents.length; i += 1) {
-    const { key, value } = data.ents[i]
+  const map: Record<string, T> = {}
+  for (const { key, value } of data.ents) {
     if (map[key]) {
       console.warn(`duplicate key ${key} in map`)
     }
@@ -172,7 +171,7 @@ const unversionedParsers = {
   cramBlockCrc32,
 }
 
-export type MappedSliceHeader = {
+export interface MappedSliceHeader {
   refSeqId: number
   refSeqStart: number
   refSeqSpan: number
@@ -185,7 +184,7 @@ export type MappedSliceHeader = {
   md5: TupleOf<number, 16>
 }
 
-export type UnmappedSliceHeader = {
+export interface UnmappedSliceHeader {
   numRecords: number
   recordCounter: number
   numBlocks: number
@@ -279,7 +278,7 @@ const versionedParsers = {
     return { parser, maxLength: maxLengthFunc }
   },
 
-  cramEncoding(majorVersion: number) {
+  cramEncoding(_majorVersion: number) {
     const parser = new Parser()
       .namely('cramEncoding')
       .itf8('codecId')
@@ -425,7 +424,7 @@ export type CompressionMethod =
   | 'fqzcomp'
   | 'tok3'
 
-export type BlockHeader = {
+export interface BlockHeader {
   compressionMethod: CompressionMethod
   contentType:
     | 'FILE_HEADER'
