@@ -84,7 +84,7 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
     return readNullTerminatedString(buffer)
   }
   if (tagType === 'A') {
-    return String.fromCharCode(buffer[0])
+    return String.fromCharCode(buffer[0]!)
   }
   if (tagType === 'I') {
     return new Uint32Array(buffer.buffer)[0]
@@ -102,7 +102,7 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
     return new Int8Array(buffer.buffer)[0]
   }
   if (tagType === 'C') {
-    return buffer[0] as number
+    return buffer[0]!
   }
   if (tagType === 'f') {
     return new Float32Array(buffer.buffer)[0]
@@ -312,7 +312,6 @@ export default function decodeRecord(
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
-
   for (let i = 0; i < ntags; i += 1) {
     const tagId = TN[i]!
     const tagName = tagId.slice(0, 2)
@@ -321,7 +320,8 @@ export default function decodeRecord(
     const tagData = compressionScheme
       .getCodecForTag(tagId)
       .decode(slice, coreDataBlock, blocksByContentId, cursors)
-    tags[tagName] = parseTagData(tagType, tagData)
+    tags[tagName] =
+      typeof tagData === 'number' ? tagData : parseTagData(tagType, tagData)
   }
 
   let readFeatures: ReadFeature[] | undefined

@@ -1,5 +1,3 @@
-import AbortablePromiseCache from '@gmod/abortable-promise-cache'
-import QuickLRU from 'quick-lru'
 import { unzip } from './unzip'
 import { open } from './io'
 import { CramMalformedError } from './errors'
@@ -68,9 +66,9 @@ export default class CraiIndex {
     this.filehandle = open(args.url, args.path, args.filehandle)
   }
 
-  async parseIndex(opts: { signal?: AbortSignal } = {}) {
+  async parseIndex() {
     const index: ParsedIndex = {}
-    const uncompressedBuffer = maybeUnzip(await this.filehandle.readFile(opts))
+    const uncompressedBuffer = maybeUnzip(await this.filehandle.readFile())
     if (
       uncompressedBuffer.length > 4 &&
       uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
@@ -122,9 +120,9 @@ export default class CraiIndex {
     return index
   }
 
-  getIndex(opts?: { signal?: AbortSignal }) {
+  getIndex() {
     if (!this.parseIndexP) {
-      this.parseIndexP = this.parseIndex(opts).catch(e => {
+      this.parseIndexP = this.parseIndex().catch((e: unknown) => {
         this.parseIndexP = undefined
         throw e
       })

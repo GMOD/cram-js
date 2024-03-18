@@ -21,7 +21,7 @@
     "esm"
   ],
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest",
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow errors.ts '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
@@ -31,7 +31,7 @@
     "build:es5": "tsc --target es2015 --module commonjs --outDir dist",
     "build": "npm run build:esm && npm run build:es5",
     "postbuild": "webpack",
-    "prepack": "npm test && npm run build && cp dist/errors.js errors.js",
+    "prepack": "npm test run && npm run build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js",
     "postversion": "git push --follow-tags"
   },
