@@ -1,15 +1,5 @@
-import url from 'url'
-import { ensureNotNullish } from '../typescript'
 import { Filehandle } from '../cramFile/filehandle'
 import { LocalFile, RemoteFile } from 'generic-filehandle'
-
-function fromUrl(source: string) {
-  const { protocol, pathname } = url.parse(source)
-  if (protocol === 'file:') {
-    return new LocalFile(unescape(ensureNotNullish(pathname)))
-  }
-  return new RemoteFile(source)
-}
 
 function open(
   maybeUrl?: string,
@@ -20,7 +10,7 @@ function open(
     return maybeFilehandle
   }
   if (maybeUrl) {
-    return fromUrl(maybeUrl)
+    return new RemoteFile(maybeUrl)
   }
   if (maybePath) {
     return new LocalFile(maybePath)
@@ -28,6 +18,6 @@ function open(
   throw new Error('no url, path, or filehandle provided, cannot open')
 }
 
-export { fromUrl, open }
+export { open }
 
 export { LocalFile, RemoteFile } from 'generic-filehandle'

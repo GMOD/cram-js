@@ -1,13 +1,8 @@
-import { fromUrl } from '../../src/io'
 import path from 'path'
+import { LocalFile } from 'generic-filehandle'
 
 const dataDir = path.dirname(require.resolve('../data/xx.fa'))
 
-export function testDataUrl(filename: string) {
-  return `file://${dataDir}/${filename}`.replace('#', '%23')
-}
-
 export function testDataFile(filename: string) {
-  const source = testDataUrl(filename)
-  return fromUrl(source)
+  return new LocalFile(`${dataDir}/${filename}`)
 }
