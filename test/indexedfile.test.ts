@@ -234,7 +234,7 @@ test('region not downloading enough records', async () => {
   // entries
   const index = new CraiIndex({
     filehandle: testDataFile(
-      'HG002_ONTrel2_16x_RG_HP10xtrioRTG.chr1.cram.crai ',
+      'HG002_ONTrel2_16x_RG_HP10xtrioRTG.chr1.cram.crai',
     ),
   })
   const entries = await index.getEntriesForRange(0, 75100635, 75125544)
