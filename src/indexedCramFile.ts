@@ -24,7 +24,6 @@ export interface CramIndexLike {
 export default class IndexedCramFile {
   public cram: CramFile
   public index: CramIndexLike
-  private fetchSizeLimit: number
 
   /**
    *
@@ -32,14 +31,12 @@ export default class IndexedCramFile {
    * @param {CramFile} args.cram
    * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
    * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
-   * @param {number} [args.fetchSizeLimit] optional maximum number of bytes to fetch in a single getRecordsForRange call.  Default 3 MiB.
    * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
    * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
    */
   constructor(
     args: {
       index: CramIndexLike
-      fetchSizeLimit?: number
     } & (
       | { cram: CramFile }
       | ({
@@ -70,8 +67,6 @@ export default class IndexedCramFile {
     if (!this.index.getEntriesForRange) {
       throw new Error('invalid arguments: not an index')
     }
-
-    this.fetchSizeLimit = args.fetchSizeLimit || 3000000
   }
 
   /**
@@ -104,11 +99,6 @@ export default class IndexedCramFile {
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
     const totalSize = slices.map(s => s.sliceBytes).reduce((a, b) => a + b, 0)
-    if (totalSize > this.fetchSizeLimit) {
-      throw new CramSizeLimitError(
-        `data size of ${totalSize.toLocaleString()} bytes exceeded fetch size limit of ${this.fetchSizeLimit.toLocaleString()} bytes`,
-      )
-    }
 
     // TODO: do we need to merge or de-duplicate the blocks?
 
@@ -180,17 +170,7 @@ export default class IndexedCramFile {
 
       const mateRecordPromises = []
       const mateFeatPromises: Promise<CramRecord[]>[] = []
-
-      const mateTotalSize = mateChunks
-        .map(s => s.sliceBytes)
-        .reduce((a, b) => a + b, 0)
-      if (mateTotalSize > this.fetchSizeLimit) {
-        throw new Error(
-          `mate data size of ${mateTotalSize.toLocaleString()} bytes exceeded fetch size limit of ${this.fetchSizeLimit.toLocaleString()} bytes`,
-        )
-      }
-
-      mateChunks.forEach(c => {
+      for (const c of mateChunks) {
         let recordPromise = this.cram.featureCache.get(c.toString())
         if (!recordPromise) {
           recordPromise = this.getRecordsInSlice(c, () => true)
@@ -210,7 +190,7 @@ export default class IndexedCramFile {
           return mateRecs
         })
         mateFeatPromises.push(featPromise)
-      })
+      }
       const newMateFeats = await Promise.all(mateFeatPromises)
       if (newMateFeats.length) {
         const newMates = newMateFeats.reduce((result, current) =>

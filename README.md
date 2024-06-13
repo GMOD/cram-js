@@ -344,10 +344,6 @@ that show insertions, deletions, substitutions, etc.
   - `args.cacheSize`
     **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?**
     optional maximum number of CRAM records to cache. default 20,000
-  - `args.fetchSizeLimit`
-    **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?**
-    optional maximum number of bytes to fetch in a single getRecordsForRange
-    call. Default 3 MiB.
   - `args.checkSequenceMD5`
     **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)?**
     default true. if false, disables verifying the MD5 checksum of the reference
