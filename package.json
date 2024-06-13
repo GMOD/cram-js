@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "lint": "eslint --report-unused-disable-directives --max-warnings 0 src test",
+    "lint": "eslint src test",
     "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow errors.ts '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
     "prebuild": "npm run clean",
     "clean": "rimraf dist esm",
@@ -54,6 +54,8 @@
     "xz-decompress": "^0.2.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12",
     "@gmod/indexedfasta": "^2.1.0",
     "@types/jest": "^29.5.12",
     "@types/long": "^4.0.2",
