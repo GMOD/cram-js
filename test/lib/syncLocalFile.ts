@@ -1,6 +1,6 @@
 //@ts-nocheck
 // don't load fs native module if running in webpacked code
-const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null // eslint-disable-line camelcase
+const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null
 
 const fsOpen = fs.openSync
 const fsRead = fs.readSync

@@ -151,12 +151,12 @@ function tags2str(record: CramRecord, RG: string[]) {
   for (const type in record.tags) {
     str += '\t'
     if (typeof record.tags[type] === 'number') {
-      str += type + ':i:' + record.tags[type]
+      str += `${type}:i:${record.tags[type]}`
     } else if (typeof record.tags[type] === 'string') {
       str +=
         record.tags[type].length === 1
-          ? type + ':A:' + record.tags[type]
-          : type + ':Z:' + record.tags[type]
+          ? `${type}:A:${record.tags[type]}`
+          : `${type}:Z:${record.tags[type]}`
     } else {
       console.error(
         type,

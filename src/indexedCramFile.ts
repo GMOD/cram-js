@@ -1,5 +1,4 @@
-import { CramSizeLimitError, CramUnimplementedError } from './errors'
-
+import { CramUnimplementedError } from './errors'
 import CramFile from './cramFile'
 import CramRecord from './cramFile/record'
 import { SeqFetch } from './cramFile/file'
@@ -98,7 +97,6 @@ export default class IndexedCramFile {
     }
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
-    const totalSize = slices.map(s => s.sliceBytes).reduce((a, b) => a + b, 0)
 
     // TODO: do we need to merge or de-duplicate the blocks?
 
