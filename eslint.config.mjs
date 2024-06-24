@@ -37,7 +37,6 @@ export default [
       sourceType: 'script',
 
       parserOptions: {
-        tsconfigRootDir: '/home/cdiesh/src/gmod/cram-js',
         project: './tsconfig.lint.json',
       },
     },
