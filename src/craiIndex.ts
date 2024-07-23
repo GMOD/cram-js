@@ -1,4 +1,4 @@
-import AbortablePromiseCache from 'abortable-promise-cache'
+import AbortablePromiseCache from '@gmod/abortable-promise-cache'
 import QuickLRU from 'quick-lru'
 import { unzip } from './unzip'
 import { open } from './io'
