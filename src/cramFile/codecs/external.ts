@@ -39,10 +39,14 @@ export default class ExternalCodec extends CramCodec<
     cursors: Cursors,
   ) {
     const { blockContentId } = this.parameters
+    // console.log({
+    //   blocksByContentId: Object.keys(blocksByContentId),
+    //   blockContentId,
+    // })
     const contentBlock = blocksByContentId[blockContentId]
     if (!contentBlock) {
       throw new CramMalformedError(
-        `no block found with content ID ${blockContentId}`,
+        `no block found with content ID ${blockContentId}}`,
       )
     }
     const cursor = cursors.externalBlocks.getCursor(blockContentId)

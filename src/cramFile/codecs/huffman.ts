@@ -46,7 +46,8 @@ export default class HuffmanIntCodec extends CramCodec<
     this.buildCodes()
     this.buildCaches()
 
-    // if this is a degenerate zero-length huffman code, special-case the decoding
+    // if this is a degenerate zero-length huffman code, special-case the
+    // decoding
     if (this.sortedCodes[0].bitLength === 0) {
       this._decode = this._decodeZeroLengthCode
     }

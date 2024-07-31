@@ -1,6 +1,5 @@
 //@ts-nocheck
-// don't load fs native module if running in webpacked code
-const fs = typeof __webpack_require__ !== 'function' ? require('fs') : null
+import fs from 'fs'
 
 const fsOpen = fs.openSync
 const fsRead = fs.readSync

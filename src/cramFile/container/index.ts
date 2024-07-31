@@ -4,6 +4,7 @@ import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramSlice from '../slice'
 import CramContainerCompressionScheme from './compressionScheme'
 import CramFile from '../file'
+import { getSectionParsers } from '../sectionParsers'
 
 export default class CramContainer {
   constructor(
@@ -11,20 +12,21 @@ export default class CramContainer {
     public filePosition: number,
   ) {}
 
-  // memoize
   getHeader() {
     return this._readContainerHeader(this.filePosition)
   }
 
-  // memoize
   async getCompressionHeaderBlock() {
     const containerHeader = await this.getHeader()
 
-    // if there are no records in the container, there will be no compression header
-    if (!containerHeader.numRecords) {
+    // if there are no records in the container, there will be no compression
+    // header
+    if (!containerHeader?.numRecords) {
       return null
     }
-    const sectionParsers = await this.file.getSectionParsers()
+    const { majorVersion } = await this.file.getDefinition()
+    const sectionParsers = getSectionParsers(majorVersion)
+
     const block = await this.getFirstBlock()
     if (block === undefined) {
       return undefined
@@ -34,6 +36,7 @@ export default class CramContainer {
         `invalid content type ${block.contentType} in what is supposed to be the compression header block`,
       )
     }
+
     const content = parseItem(
       block.content,
       sectionParsers.cramCompressionHeader.parser,
@@ -48,16 +51,20 @@ export default class CramContainer {
 
   async getFirstBlock() {
     const containerHeader = await this.getHeader()
+    if (!containerHeader) {
+      return undefined
+    }
     return this.file.readBlock(containerHeader._endPosition)
   }
 
-  // parses the compression header data into a CramContainerCompressionScheme object
-  // memoize
+  // parses the compression header data into a CramContainerCompressionScheme
+  // object
   async getCompressionScheme() {
     const header = await this.getCompressionHeaderBlock()
     if (!header) {
       return undefined
     }
+
     return new CramContainerCompressionScheme(header.parsedContent)
   }
 
@@ -68,11 +75,15 @@ export default class CramContainer {
   }
 
   async _readContainerHeader(position: number) {
-    const sectionParsers = await this.file.getSectionParsers()
+    const { majorVersion } = await this.file.getDefinition()
+    const sectionParsers = getSectionParsers(majorVersion)
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
     const { size: fileSize } = await this.file.stat()
 
     if (position >= fileSize) {
+      console.warn(
+        `position:${position}>=fileSize:${fileSize} in cram container`,
+      )
       return undefined
     }
 
@@ -80,11 +91,11 @@ export default class CramContainer {
     // how much to buffer until you read numLandmarks
     const bytes1 = Buffer.allocUnsafe(cramContainerHeader1.maxLength)
     await this.file.read(bytes1, 0, cramContainerHeader1.maxLength, position)
-    const header1 = parseItem(bytes1, cramContainerHeader1.parser) as any
+    const header1 = parseItem(bytes1, cramContainerHeader1.parser)
     const numLandmarksSize = itf8Size(header1.numLandmarks)
     if (position + header1.length >= fileSize) {
       console.warn(
-        `${this.file}: container header at ${position} indicates that the container has length ${header1.length}, which extends beyond the length of the file. Skipping this container.`,
+        `container header at ${position} indicates that the container has length ${header1.length}, which extends beyond the length of the file. Skipping this container.`,
       )
       return undefined
     }

@@ -1,117 +1,160 @@
-import { Parser } from '@gmod/binary-parser'
 import { TupleOf } from '../typescript'
-import { ParsedItem } from './util'
+import { parseItf8, parseLtf8 } from './util'
 import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
 import { CramEncoding } from './encoding'
 
-const singleItf8 = new Parser().itf8()
-
-const cramFileDefinition = {
-  parser: new Parser()
-    .string('magic', { length: 4 })
-    .uint8('majorVersion')
-    .uint8('minorVersion')
-    .string('fileId', { length: 20, stripNull: true }),
-  maxLength: 26,
+export function cramFileDefinition() {
+  return {
+    parser: (buffer: Buffer, _startOffset = 0) => {
+      const b = buffer
+      const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+      let offset = 0
+      const magic = buffer.subarray(offset, offset + 4).toString()
+      offset += 4
+      const majorVersion = dataView.getUint8(offset)
+      offset += 1
+      const minorVersion = dataView.getUint8(offset)
+      offset += 1
+      const fileId = b
+        .subarray(offset, offset + 20)
+        .toString()
+        .replaceAll('\0', '')
+      offset += 20
+      return {
+        value: {
+          magic,
+          majorVersion,
+          minorVersion,
+          fileId,
+        },
+        offset,
+      }
+    },
+    maxLength: 26,
+  }
 }
+export function cramBlockHeader() {
+  const parser = (buffer: Buffer, _startOffset = 0) => {
+    const b = buffer
+    const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+    let offset = 0
+    const d = dataView.getUint8(offset)
+    const compressionMethod = [
+      'raw',
+      'gzip',
+      'bzip2',
+      'lzma',
+      'rans',
+      'rans4x16',
+      'arith',
+      'fqzcomp',
+      'tok3',
+    ][d]
+    if (!compressionMethod) {
+      throw new Error(`compression method number ${d} not implemented`)
+    }
+    offset += 1
 
-const cramBlockHeader = {
-  parser: new Parser()
-    .uint8('compressionMethod', {
-      formatter: /* istanbul ignore next */ b => {
-        const method = [
-          'raw',
-          'gzip',
-          'bzip2',
-          'lzma',
-          'rans',
-          'rans4x16',
-          'arith',
-          'fqzcomp',
-          'tok3',
-        ][b]
-        if (!method) {
-          throw new Error(`compression method number ${b} not implemented`)
-        }
-        return method
+    const c = dataView.getUint8(offset)
+    const contentType = [
+      'FILE_HEADER',
+      'COMPRESSION_HEADER',
+      'MAPPED_SLICE_HEADER',
+      'UNMAPPED_SLICE_HEADER', // < only used in cram v1
+      'EXTERNAL_DATA',
+      'CORE_DATA',
+    ][c]
+    if (!contentType) {
+      throw new Error(`invalid block content type id ${c}`)
+    }
+    offset += 1
+
+    const [contentId, newOffset1] = parseItf8(buffer, offset)
+    offset += newOffset1
+    const [compressedSize, newOffset2] = parseItf8(buffer, offset)
+    offset += newOffset2
+    const [uncompressedSize, newOffset3] = parseItf8(buffer, offset)
+    offset += newOffset3
+    return {
+      offset,
+      value: {
+        uncompressedSize,
+        compressedSize,
+        contentId,
+        contentType: contentType as
+          | 'FILE_HEADER'
+          | 'COMPRESSION_HEADER'
+          | 'MAPPED_SLICE_HEADER'
+          | 'UNMAPPED_SLICE_HEADER' // < only used in cram v1
+          | 'EXTERNAL_DATA'
+          | 'CORE_DATA',
+        compressionMethod: compressionMethod as CompressionMethod,
       },
-    })
-    .uint8('contentType', {
-      formatter: /* istanbul ignore next */ b => {
-        const type = [
-          'FILE_HEADER',
-          'COMPRESSION_HEADER',
-          'MAPPED_SLICE_HEADER',
-          'UNMAPPED_SLICE_HEADER', // < only used in cram v1
-          'EXTERNAL_DATA',
-          'CORE_DATA',
-        ][b]
-        if (!type) {
-          throw new Error(`invalid block content type id ${b}`)
-        }
-        return type
-      },
-    })
-    .itf8('contentId')
-    .itf8('compressedSize')
-    .itf8('uncompressedSize'),
-  maxLength: 17,
+    }
+  }
+  return { parser, maxLength: 17 }
 }
 
-const cramBlockCrc32 = {
-  parser: new Parser().uint32('crc32'),
-  maxLength: 4,
+export function cramBlockCrc32() {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      const b = buffer
+      const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+      const crc32 = dataView.getUint32(offset, true)
+      offset += 4
+      return {
+        offset,
+        value: {
+          crc32,
+        },
+      }
+    },
+    maxLength: 4,
+  }
 }
-
-// const ENCODING_NAMES = [
-//   'NULL', // 0
-//   'EXTERNAL', // 1
-//   'GOLOMB', // 2
-//   'HUFFMAN_INT', // 3
-//   'BYTE_ARRAY_LEN', // 4
-//   'BYTE_ARRAY_STOP', // 5
-//   'BETA', // 6
-//   'SUBEXP', // 7
-//   'GOLOMB_RICE', // 8
-//   'GAMMA', // 9
-// ]
 
 export type CramTagDictionary = string[][]
 
-const cramTagDictionary = new Parser().itf8('size').buffer('ents', {
-  length: 'size',
-  formatter: /* istanbul ignore next */ buffer => {
-    function makeTagSet(stringStart: number, stringEnd: number) {
-      const str = buffer.toString('utf8', stringStart, stringEnd)
-      const tags = []
-      for (let i = 0; i < str.length; i += 3) {
-        tags.push(str.slice(i, i + 3))
-      }
-      return tags
-    }
+function makeTagSet(buffer: Buffer, stringStart: number, stringEnd: number) {
+  const str = buffer.toString('utf8', stringStart, stringEnd)
+  const tags = []
+  for (let i = 0; i < str.length; i += 3) {
+    tags.push(str.slice(i, i + 3))
+  }
+  return tags
+}
 
-    /* eslint-disable */
-    var tagSets = []
-    var stringStart = 0
-    var i
-    /* eslint-enable */
-    for (i = 0; i < buffer.length; i += 1) {
-      if (!buffer[i]) {
-        tagSets.push(makeTagSet(stringStart, i))
-        stringStart = i + 1
-      }
-    }
-    if (i > stringStart) {
-      tagSets.push(makeTagSet(stringStart, i))
-    }
-    return tagSets
-  },
-})
+export function cramTagDictionary() {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      const [size, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const subbuf = buffer.subarray(offset, offset + size)
+      offset += size
 
-// const cramPreservationMapKeys = 'XX RN AP RR SM TD'.split(' ')
-const parseByteAsBool = new Parser().uint8(null, {
-  formatter: /* istanbul ignore next */ val => !!val,
-})
+      const tagSets = []
+      let stringStart = 0
+      let i = 0
+      for (; i < subbuf.length; i++) {
+        if (!subbuf[i]) {
+          tagSets.push(makeTagSet(subbuf, stringStart, i))
+          stringStart = i + 1
+        }
+      }
+      if (i > stringStart) {
+        tagSets.push(makeTagSet(subbuf, stringStart, i))
+      }
+
+      return {
+        value: {
+          size,
+          ents: tagSets,
+        },
+        offset,
+      }
+    },
+  }
+}
 
 export interface CramPreservationMap {
   MI: boolean
@@ -124,38 +167,72 @@ export interface CramPreservationMap {
   TD: CramTagDictionary
 }
 
-const cramPreservationMap = new Parser()
-  .itf8('mapSize')
-  .itf8('mapCount')
-  .array('ents', {
-    length: 'mapCount',
-    type: new Parser()
-      .string('key', {
-        length: 2,
-        stripNull: false,
-        // formatter: val => cramPreservationMapKeys[val] || 0,
-      })
-      .choice('value', {
-        tag: 'key',
-        choices: {
-          MI: parseByteAsBool,
-          UI: parseByteAsBool,
-          PI: parseByteAsBool,
-          RN: parseByteAsBool,
-          AP: parseByteAsBool,
-          RR: parseByteAsBool,
-          SM: new Parser().array(null, { type: 'uint8', length: 5 }),
-          TD: new Parser().nest(null, {
-            type: cramTagDictionary,
-            formatter: /* istanbul ignore next */ data => data.ents,
-          }),
-        },
-      }),
-  })
+export function cramPreservationMap() {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      const b = buffer
+      const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+      const [mapSize, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const [mapCount, newOffset2] = parseItf8(buffer, offset)
+      offset += newOffset2
+      const ents = []
+      for (let i = 0; i < mapCount; i++) {
+        const key =
+          String.fromCharCode(buffer[offset]) +
+          String.fromCharCode(buffer[offset + 1])
+        offset += 2
 
-/* istanbul ignore next */
-function formatMap<T>(data: { ents: { key: string; value: T }[] }) {
-  const map: Record<string, T> = {}
+        if (
+          key === 'MI' ||
+          key === 'UI' ||
+          key === 'PI' ||
+          key === 'RN' ||
+          key === 'AP' ||
+          key === 'RR'
+        ) {
+          ents.push({
+            key,
+            value: !!dataView.getUint8(offset),
+          })
+          offset += 1
+        } else if (key === 'SM') {
+          ents.push({
+            key,
+            value: [
+              dataView.getUint8(offset),
+              dataView.getUint8(offset + 1),
+              dataView.getUint8(offset + 2),
+              dataView.getUint8(offset + 3),
+              dataView.getUint8(offset + 4),
+            ],
+          })
+          offset += 5
+        } else if (key === 'TD') {
+          const { offset: offsetRet, value } = cramTagDictionary().parser(
+            buffer,
+            offset,
+          )
+          ents.push({ key, value: value.ents })
+          offset = offsetRet
+        } else {
+          throw new Error(`unknown key ${key}`)
+        }
+      }
+      return {
+        value: {
+          mapSize,
+          mapCount,
+          ents,
+        },
+        offset,
+      }
+    },
+  }
+}
+
+function formatMap(data: { ents: { key: string; value: unknown }[] }) {
+  const map: Record<string, unknown> = {}
   for (const { key, value } of data.ents) {
     if (map[key]) {
       console.warn(`duplicate key ${key} in map`)
@@ -163,12 +240,6 @@ function formatMap<T>(data: { ents: { key: string; value: T }[] }) {
     map[key] = value
   }
   return map
-}
-
-const unversionedParsers = {
-  cramFileDefinition,
-  cramBlockHeader,
-  cramBlockCrc32,
 }
 
 export interface MappedSliceHeader {
@@ -181,7 +252,7 @@ export interface MappedSliceHeader {
   numContentIds: number
   contentIds: number[]
   refBaseBlockId: number
-  md5: TupleOf<number, 16>
+  md5?: TupleOf<number, 16>
 }
 
 export interface UnmappedSliceHeader {
@@ -190,227 +261,477 @@ export interface UnmappedSliceHeader {
   numBlocks: number
   numContentIds: number
   contentIds: number[]
-  md5: TupleOf<number, 16>
+  md5?: TupleOf<number, 16>
 }
 
 export function isMappedSliceHeader(
-  header: MappedSliceHeader | UnmappedSliceHeader,
+  header: unknown,
 ): header is MappedSliceHeader {
   return typeof (header as any).refSeqId === 'number'
 }
 
-// each of these is a function of the major and minor version
-const versionedParsers = {
-  // assemble a section parser for the unmapped slice header, with slight
-  // variations depending on the major version of the cram file
-  cramUnmappedSliceHeader(majorVersion: number) {
-    let maxLength = 0
-    let parser = new Parser().itf8('numRecords')
-    maxLength += 5
+interface Value {
+  codecId: number
+  parametersBytes: number
+  parameters: Record<string, unknown>
+}
+// assemble a section parser for the unmapped slice header, with slight
+// variations depending on the major version of the cram file
+function cramUnmappedSliceHeader(majorVersion: number) {
+  let maxLength = 0
+  maxLength += 5
+  maxLength += 9
+  maxLength += 5 * 2
+  maxLength += 16
+
+  const parser = (buffer: Buffer, offset: number) => {
+    const [numRecords, newOffset1] = parseItf8(buffer, offset)
+    offset += newOffset1
+    let recordCounter = 0
 
     // recordCounter is itf8 in a CRAM v2 file, absent in CRAM v1
     if (majorVersion >= 3) {
-      parser = parser.ltf8('recordCounter')
-      maxLength += 9
+      const [rc, newOffset2] = parseLtf8(buffer, offset)
+      offset += newOffset2
+      recordCounter = rc
     } else if (majorVersion === 2) {
-      parser = parser.itf8('recordCounter')
-      maxLength += 5
+      const [rc, newOffset2] = parseItf8(buffer, offset)
+      offset += newOffset2
+      recordCounter = rc
+    } else {
+      console.warn('recordCounter=0')
     }
 
-    parser = parser
-      .itf8('numBlocks')
-      .itf8('numContentIds')
-      .array('contentIds', {
-        type: singleItf8,
-        length: 'numContentIds',
-      })
-    maxLength += 5 * 2 // + numContentIds*5
+    const [numBlocks, newOffset3] = parseItf8(buffer, offset)
+    offset += newOffset3
+    const [numContentIds, newOffset4] = parseItf8(buffer, offset)
+    offset += newOffset4
+    const contentIds = []
+    for (let i = 0; i < numContentIds; i++) {
+      const [id, newOffset5] = parseItf8(buffer, offset)
+      offset += newOffset5
+      contentIds.push(id)
+    }
 
     // the md5 sum is missing in cram v1
+    let md5
     if (majorVersion >= 2) {
-      parser = parser.array('md5', { type: 'uint8', length: 16 })
-      maxLength += 16
+      md5 = [...buffer.subarray(offset, offset + 16)] as TupleOf<number, 16>
+      offset += 16
     }
 
-    const maxLengthFunc = (numContentIds: number) =>
-      maxLength + numContentIds * 5
-
-    return { parser, maxLength: maxLengthFunc } // : p, maxLength: numContentIds => 5 + 9 + 5 * 2 + 5 * numContentIds + 16 }
-  },
-
-  // assembles a section parser for the unmapped slice header, with slight
-  // variations depending on the major version of the cram file
-  cramMappedSliceHeader(majorVersion: number) {
-    let parser = new Parser()
-      .itf8('refSeqId')
-      .itf8('refSeqStart')
-      .itf8('refSeqSpan')
-      .itf8('numRecords')
-    let maxLength = 5 * 4
-
-    if (majorVersion >= 3) {
-      parser = parser.ltf8('recordCounter')
-      maxLength += 9
-    } else if (majorVersion === 2) {
-      parser = parser.itf8('recordCounter')
-      maxLength += 5
-    }
-
-    parser = parser
-      .itf8('numBlocks')
-      .itf8('numContentIds')
-      .array('contentIds', {
-        type: singleItf8,
-        length: 'numContentIds',
-      })
-      .itf8('refBaseBlockId')
-    maxLength += 5 * 3
-
-    // the md5 sum is missing in cram v1
-    if (majorVersion >= 2) {
-      parser = parser.array('md5', { type: 'uint8', length: 16 })
-      maxLength += 16
-    }
-
-    const maxLengthFunc = (numContentIds: number) =>
-      maxLength + numContentIds * 5
-
-    return { parser, maxLength: maxLengthFunc }
-  },
-
-  cramEncoding(_majorVersion: number) {
-    const parser = new Parser()
-      .namely('cramEncoding')
-      .itf8('codecId')
-      .itf8('parametersBytes')
-      .choice('parameters', {
-        tag: 'codecId',
-        choices: {
-          0: new Parser(), // NULL
-          1: new Parser().itf8('blockContentId'), // EXTERNAL
-          2: new Parser().itf8('offset').itf8('M'), // GOLOMB,
-          // HUFFMAN_INT
-          3: Parser.start()
-            .itf8('numCodes')
-            .array('symbols', { length: 'numCodes', type: singleItf8 })
-            .itf8('numLengths')
-            .array('bitLengths', { length: 'numLengths', type: singleItf8 }),
-          4: Parser.start() // BYTE_ARRAY_LEN
-            .nest('lengthsEncoding', { type: 'cramEncoding' })
-            .nest('valuesEncoding', { type: 'cramEncoding' }),
-          // BYTE_ARRAY_STOP is a little different for CRAM v1
-          5: new Parser().uint8('stopByte').itf8('blockContentId'),
-          6: new Parser().itf8('offset').itf8('length'), // BETA
-          7: new Parser().itf8('offset').itf8('K'), // SUBEXP
-          8: new Parser().itf8('offset').itf8('log2m'), // GOLOMB_RICE
-          9: new Parser().itf8('offset'), // GAMMA
-        },
-      })
-
-    return { parser }
-  },
-
-  cramDataSeriesEncodingMap(majorVersion: number) {
-    return new Parser()
-      .itf8('mapSize')
-      .itf8('mapCount')
-      .array('ents', {
-        length: 'mapCount',
-        type: new Parser()
-          .string('key', { length: 2, stripNull: false })
-          .nest('value', { type: this.cramEncoding(majorVersion).parser }),
-      })
-  },
-
-  cramTagEncodingMap(majorVersion: number) {
-    return new Parser()
-      .itf8('mapSize')
-      .itf8('mapCount')
-      .array('ents', {
-        length: 'mapCount',
-        type: new Parser()
-          .itf8('key', {
-            formatter: /* istanbul ignore next */ integerRepresentation =>
-              /* istanbul ignore next */
-              String.fromCharCode((integerRepresentation >> 16) & 0xff) +
-              String.fromCharCode((integerRepresentation >> 8) & 0xff) +
-              String.fromCharCode(integerRepresentation & 0xff),
-          })
-          .nest('value', { type: this.cramEncoding(majorVersion).parser }),
-      })
-  },
-
-  cramCompressionHeader(majorVersion: number) {
-    let parser = new Parser()
-    // TODO: if we want to support CRAM v1, we will need to refactor
-    // compression header into 2 parts to parse the landmarks,
-    // like the container header
-    parser = parser
-      .nest('preservation', {
-        type: cramPreservationMap,
-        formatter: formatMap,
-      })
-      .nest('dataSeriesEncoding', {
-        type: this.cramDataSeriesEncodingMap(majorVersion),
-        formatter: formatMap,
-      })
-      .nest('tagEncoding', {
-        type: this.cramTagEncodingMap(majorVersion),
-        formatter: formatMap,
-      })
-    return { parser }
-  },
-
-  cramContainerHeader1(majorVersion: number) {
-    let parser = new Parser()
-      .int32('length') // byte size of the container data (blocks)
-      .itf8('refSeqId') // reference sequence identifier, -1 for unmapped reads, -2 for multiple reference sequences
-      .itf8('refSeqStart') // the alignment start position or 0 for unmapped reads
-      .itf8('alignmentSpan') // the length of the alignment or 0 for unmapped reads
-      .itf8('numRecords') // number of records in the container
-    let maxLength = 4 + 5 * 4
-
-    if (majorVersion >= 3) {
-      parser = parser.ltf8('recordCounter') // 1-based sequential index of records in the file/stream.
-      maxLength += 9
-    } else if (majorVersion === 2) {
-      parser = parser.itf8('recordCounter')
-      maxLength += 5
-    }
-
-    if (majorVersion > 1) {
-      parser = parser.ltf8('numBases') // number of read bases
-      maxLength += 9
-    }
-    parser = parser
-      .itf8('numBlocks') // the number of blocks
-      .itf8('numLandmarks') // the number of landmarks
-    maxLength += 5 + 5
-
-    return { parser, maxLength }
-  },
-
-  cramContainerHeader2(majorVersion: number) {
-    let parser = new Parser()
-      .itf8('numLandmarks') // the number of blocks
-      // Each integer value of this array is a byte offset
-      // into the blocks byte array. Landmarks are used for
-      // random access indexing.
-      .array('landmarks', {
-        type: new Parser().itf8(),
-        length: 'numLandmarks',
-      })
-
-    let crcLength = 0
-    if (majorVersion >= 3) {
-      parser = parser.uint32('crc32')
-      crcLength = 4
-    }
     return {
-      parser,
-      maxLength: (numLandmarks: number) => 5 + numLandmarks * 5 + crcLength,
+      value: {
+        recordCounter,
+        md5,
+        contentIds,
+        numContentIds,
+        numBlocks,
+        numRecords,
+      },
+      offset,
     }
-  },
+  }
+  return {
+    parser,
+    maxLength: (numContentIds: number) => maxLength + numContentIds * 5,
+  }
+}
+
+// assembles a section parser for the unmapped slice header, with slight
+// variations depending on the major version of the cram file
+function cramMappedSliceHeader(majorVersion: number) {
+  let maxLength = 0
+  maxLength += 5 * 4 // EL0
+  maxLength += 9 // EL1
+  maxLength += 5 * 3 // EL2 ITF8s
+  maxLength += 16 // MD5
+
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      // L0
+      const [refSeqId, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const [refSeqStart, newOffset2] = parseItf8(buffer, offset)
+      offset += newOffset2
+      const [refSeqSpan, newOffset3] = parseItf8(buffer, offset)
+      offset += newOffset3
+      const [numRecords, newOffset4] = parseItf8(buffer, offset)
+      offset += newOffset4
+      // EL0
+
+      // L1
+      let recordCounter = 0
+      if (majorVersion >= 3) {
+        const [rc, newOffset5] = parseLtf8(buffer, offset)
+        offset += newOffset5
+        recordCounter = rc
+      } else if (majorVersion === 2) {
+        const [rc, newOffset5] = parseItf8(buffer, offset)
+        offset += newOffset5
+        recordCounter = rc
+      } else {
+        console.warn('majorVersion is <2, recordCounter set to 0')
+      }
+      // EL1
+
+      // L2
+      const [numBlocks, newOffset6] = parseItf8(buffer, offset)
+      offset += newOffset6
+      const [numContentIds, newOffset7] = parseItf8(buffer, offset)
+      offset += newOffset7
+      const contentIds = []
+      for (let i = 0; i < numContentIds; i++) {
+        const [id, newOffset5] = parseItf8(buffer, offset)
+        offset += newOffset5
+        contentIds.push(id)
+      }
+      const [refBaseBlockId, newOffset8] = parseItf8(buffer, offset)
+      offset += newOffset8
+      // EL2
+
+      // the md5 sum is missing in cram v1
+      let md5
+      if (majorVersion >= 2) {
+        md5 = [...buffer.subarray(offset, offset + 16)] as TupleOf<number, 16>
+        offset += 16
+      }
+
+      return {
+        value: {
+          md5,
+          numBlocks,
+          numRecords,
+          numContentIds,
+          refSeqSpan,
+          refSeqId,
+          refSeqStart,
+          recordCounter,
+          refBaseBlockId,
+          contentIds,
+        },
+        offset,
+      }
+    },
+    maxLength: (numContentIds: number) => maxLength + numContentIds * 5,
+  }
+}
+
+function cramEncoding() {
+  return {
+    parser: (buffer: Buffer, offset: number) => cramEncodingSub(buffer, offset),
+  }
+}
+
+function cramEncodingSub(
+  buffer: Buffer,
+  offset: number,
+): { value: Value; offset: number } {
+  const b = buffer
+  const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+  const [codecId, newOffset1] = parseItf8(buffer, offset)
+  offset += newOffset1
+  const [parametersBytes, newOffset2] = parseItf8(buffer, offset)
+  offset += newOffset2
+
+  const parameters = {} as Record<string, unknown>
+
+  if (codecId === 0) {
+    // NULL
+  } else if (codecId === 1) {
+    // EXTERNAL
+    const [bc, newOffset3] = parseItf8(buffer, offset)
+    parameters.blockContentId = bc
+    offset += newOffset3
+  } else if (codecId === 2) {
+    // GOLUMB
+    const [off, newOffset3] = parseItf8(buffer, offset)
+    parameters.offset = off
+    offset += newOffset3
+    const [M2, newOffset4] = parseItf8(buffer, offset)
+    parameters.M = M2
+    offset += newOffset4
+  } else if (codecId === 3) {
+    // HUFFMAN_INT
+    const val = parseItf8(buffer, offset)
+    const numCodes = val[0]
+    offset += val[1]
+    const symbols = [] as number[]
+    for (let i = 0; i < numCodes; i++) {
+      const code = parseItf8(buffer, offset)
+      symbols.push(code[0])
+      offset += code[1]
+    }
+    parameters.symbols = symbols
+    const val2 = parseItf8(buffer, offset)
+    const numLengths = val[0]
+    parameters.numLengths = numLengths
+    parameters.numCodes = numCodes
+    parameters.numLengths = numLengths
+    offset += val2[1]
+    const bitLengths = [] as number[]
+    for (let i = 0; i < numLengths; i++) {
+      const len = parseItf8(buffer, offset)
+      offset += len[1]
+      bitLengths.push(len[0])
+    }
+    parameters.bitLengths = bitLengths
+  } else if (codecId === 4) {
+    // BYTE_ARRAY_LEN
+    const { value: lengthsEncoding, offset: newOffset1 } = cramEncodingSub(
+      buffer,
+      offset,
+    )
+    parameters.lengthsEncoding = lengthsEncoding
+    offset = newOffset1
+    const { value: valuesEncoding, offset: newOffset2 } = cramEncodingSub(
+      buffer,
+      offset,
+    )
+    parameters.valuesEncoding = valuesEncoding
+    offset = newOffset2
+  } else if (codecId === 5) {
+    // BYTE_ARRAY_STOP
+    parameters.stopByte = dataView.getUint8(offset)
+    offset += 1
+    const [blockContentId, newOffset1] = parseItf8(buffer, offset)
+    parameters.blockContentId = blockContentId
+    offset += newOffset1
+  } else if (codecId === 6) {
+    // BETA
+    const [off, newOffset1] = parseItf8(buffer, offset)
+    parameters.offset = off
+    offset += newOffset1
+    const [len, newOffset2] = parseItf8(buffer, offset)
+    parameters.length = len
+    offset += newOffset2
+  } else if (codecId === 7) {
+    // SUBEXP
+    const [off, newOffset1] = parseItf8(buffer, offset)
+    parameters.offset = off
+    offset += newOffset1
+    const [K, newOffset2] = parseItf8(buffer, offset)
+    parameters.K = K
+    offset += newOffset2
+  } else if (codecId === 8) {
+    // GOLOMB_RICE
+    const [off, newOffset1] = parseItf8(buffer, offset)
+    parameters.offset = off
+    offset += newOffset1
+    const [l2m, newOffset2] = parseItf8(buffer, offset)
+    parameters.log2m = l2m
+    offset += newOffset2
+  } else if (codecId === 9) {
+    // GAMMA
+    const [off, newOffset1] = parseItf8(buffer, offset)
+    parameters.offset = off
+    offset += newOffset1
+  } else {
+    throw new Error(`unknown codecId ${codecId}`)
+  }
+
+  return {
+    value: {
+      codecId,
+      parametersBytes,
+      parameters,
+    },
+    offset,
+  }
+}
+
+function cramDataSeriesEncodingMap() {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      const [mapSize, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const [mapCount, newOffset2] = parseItf8(buffer, offset)
+      offset += newOffset2
+      const ents = []
+      for (let i = 0; i < mapCount; i++) {
+        const key =
+          String.fromCharCode(buffer[offset]) +
+          String.fromCharCode(buffer[offset + 1])
+        offset += 2
+
+        const { value, offset: newOffset4 } = cramEncodingSub(buffer, offset)
+        offset = newOffset4
+        ents.push({ key, value })
+      }
+      return {
+        value: {
+          mapSize,
+          ents,
+          mapCount,
+        },
+        offset,
+      }
+    },
+  }
+}
+
+function cramTagEncodingMap() {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      const [mapSize, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const [mapCount, newOffset2] = parseItf8(buffer, offset)
+      offset += newOffset2
+      const ents = []
+      for (let i = 0; i < mapCount; i++) {
+        const [k0, newOffset3] = parseItf8(buffer, offset)
+        offset += newOffset3
+        const key =
+          String.fromCharCode((k0 >> 16) & 0xff) +
+          String.fromCharCode((k0 >> 8) & 0xff) +
+          String.fromCharCode(k0 & 0xff)
+
+        const { value, offset: newOffset4 } = cramEncodingSub(buffer, offset)
+        offset = newOffset4
+        ents.push({ key, value })
+      }
+      return {
+        value: {
+          mapSize,
+          ents,
+          mapCount,
+        },
+        offset,
+      }
+    },
+  }
+}
+
+function cramCompressionHeader() {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      // TODO: if we want to support CRAM v1, we will need to refactor
+      // compression header into 2 parts to parse the landmarks, like the
+      // container header
+      const { value: preservation, offset: newOffset1 } =
+        cramPreservationMap().parser(buffer, offset)
+      offset = newOffset1
+
+      const { value: dataSeriesEncoding, offset: newOffset2 } =
+        cramDataSeriesEncodingMap().parser(buffer, offset)
+      offset = newOffset2
+
+      const { value: tagEncoding, offset: newOffset3 } =
+        cramTagEncodingMap().parser(buffer, offset)
+      offset = newOffset3
+
+      return {
+        value: {
+          dataSeriesEncoding: formatMap(
+            dataSeriesEncoding,
+          ) as DataSeriesEncodingMap,
+          preservation: formatMap(
+            preservation,
+          ) as unknown as CramPreservationMap,
+          tagEncoding: formatMap(tagEncoding) as Record<string, CramEncoding>,
+        },
+        offset,
+      }
+    },
+  }
+}
+
+function cramContainerHeader1(majorVersion: number) {
+  let maxLength = 4
+  maxLength += 5 * 4
+  maxLength += 9
+  maxLength += 9
+  maxLength += 5 + 5
+  return {
+    maxLength,
+    parser: (buffer: Buffer, offset: number) => {
+      const b = buffer
+      const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+      // byte size of the container data (blocks)
+      const length = dataView.getInt32(offset, true)
+      offset += 4
+      // reference sequence identifier, -1 for unmapped reads, -2 for multiple
+      // reference sequences
+      const [refSeqId, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const [refSeqStart, newOffset2] = parseItf8(buffer, offset)
+      offset += newOffset2
+      const [alignmentSpan, newOffset3] = parseItf8(buffer, offset)
+      offset += newOffset3
+      const [numRecords, newOffset4] = parseItf8(buffer, offset)
+      offset += newOffset4
+
+      let recordCounter = 0
+      if (majorVersion >= 3) {
+        const [rc, newOffset5] = parseLtf8(buffer, offset)
+        recordCounter = rc
+        offset += newOffset5
+      } else if (majorVersion === 2) {
+        const [rc, newOffset5] = parseItf8(buffer, offset)
+        recordCounter = rc
+        offset += newOffset5
+      } else {
+        console.warn('setting recordCounter=0')
+      }
+
+      let numBases
+      if (majorVersion > 1) {
+        const [n, newOffset5] = parseLtf8(buffer, offset)
+        numBases = n
+        offset += newOffset5
+      }
+      const [numBlocks, newOffset6] = parseItf8(buffer, offset)
+      offset += newOffset6
+      const [numLandmarks, newOffset7] = parseItf8(buffer, offset)
+      offset += newOffset7
+      return {
+        value: {
+          length,
+          refSeqId,
+          refSeqStart,
+          alignmentSpan,
+          numBlocks,
+          numLandmarks,
+          numBases,
+          recordCounter,
+          numRecords,
+        },
+        offset,
+      }
+    },
+  }
+}
+
+function cramContainerHeader2(majorVersion: number) {
+  return {
+    parser: (buffer: Buffer, offset: number) => {
+      const b = buffer
+      const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+      const [numLandmarks, newOffset1] = parseItf8(buffer, offset)
+      offset += newOffset1
+      const landmarks = []
+      for (let i = 0; i < numLandmarks; i++) {
+        const [landmark, newOffset2] = parseItf8(buffer, offset)
+        offset += newOffset2
+        landmarks.push(landmark)
+      }
+
+      let crc32
+      if (majorVersion >= 3) {
+        crc32 = dataView.getUint32(offset, true)
+        offset += 4
+      }
+      return {
+        value: {
+          ...(crc32 === undefined ? {} : { crc32 }),
+          numLandmarks,
+          landmarks,
+        },
+        offset,
+      }
+    },
+    maxLength: (numLandmarks: number) => 5 + 5 * numLandmarks + 4,
+  }
 }
 
 export type CompressionMethod =
@@ -438,69 +759,26 @@ export interface BlockHeader {
   uncompressedSize: number
 }
 
-export type CramCompressionHeader = ParsedItem<{
+export interface CramCompressionHeader {
   preservation: CramPreservationMap
   dataSeriesEncoding: DataSeriesEncodingMap
   tagEncoding: Record<string, CramEncoding>
-}>
-
-function getSectionParsers(majorVersion: number): {
-  cramFileDefinition: {
-    parser: Parser<{
-      magic: string
-      majorVersion: number
-      minorVersion: number
-      fileId: string
-    }>
-    maxLength: number
-  }
-  cramContainerHeader1: {
-    parser: Parser<{
-      length: number
-      refSeqId: number
-      refSeqStart: number
-      alignmentSpan: number
-      numRecords: number
-      recordCounter: number
-      numBases: number
-      numBlocks: number
-      numLandmarks: number
-    }>
-    maxLength: number
-  }
-  cramContainerHeader2: {
-    parser: Parser<{
-      numLandmarks: number
-      landmarks: number[]
-      crc32: number
-    }>
-    maxLength: (x: number) => number
-  }
-  cramBlockHeader: {
-    parser: Parser<BlockHeader>
-    maxLength: number
-  }
-  cramBlockCrc32: {
-    parser: Parser<{ crc32: number }>
-    maxLength: number
-  }
-  cramCompressionHeader: {
-    parser: Parser<CramCompressionHeader>
-  }
-  cramMappedSliceHeader: {
-    parser: Parser<MappedSliceHeader>
-    maxLength: (numContentIds: number) => number
-  }
-  cramUnmappedSliceHeader: {
-    parser: Parser<UnmappedSliceHeader>
-    maxLength: (numContentIds: number) => number
-  }
-} {
-  const parsers: any = Object.assign({}, unversionedParsers)
-  Object.keys(versionedParsers).forEach(parserName => {
-    parsers[parserName] = (versionedParsers as any)[parserName](majorVersion)
-  })
-  return parsers
+  _size: number
+  _endPosition: number
 }
 
-export { cramFileDefinition, getSectionParsers }
+export function getSectionParsers(majorVersion: number) {
+  return {
+    cramFileDefinition: cramFileDefinition(),
+    cramBlockHeader: cramBlockHeader(),
+    cramBlockCrc32: cramBlockCrc32(),
+    cramDataSeriesEncodingMap: cramDataSeriesEncodingMap(),
+    cramTagEncodingMap: cramTagEncodingMap(),
+    cramCompressionHeader: cramCompressionHeader(),
+    cramEncoding: cramEncoding(),
+    cramUnmappedSliceHeader: cramUnmappedSliceHeader(majorVersion),
+    cramMappedSliceHeader: cramMappedSliceHeader(majorVersion),
+    cramContainerHeader1: cramContainerHeader1(majorVersion),
+    cramContainerHeader2: cramContainerHeader2(majorVersion),
+  }
+}

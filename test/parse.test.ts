@@ -147,7 +147,6 @@ describe('CRAM reader', () => {
     expect(Object.keys(compressionBlockData).includes(['dataSeriesEncoding']))
     expect(Object.keys(compressionBlockData).includes(['_size']))
     expect(Object.keys(compressionBlockData).includes(['_endPosition']))
-    // console.log(JSON.stringify(compressionBlockData.preservation, null, '  '))
     expect(compressionBlockData.preservation).toEqual({
       TD: [
         ['ASC', 'XSC', 'XNC', 'XMC', 'XOC', 'XGC', 'YTZ'],
@@ -158,14 +157,8 @@ describe('CRAM reader', () => {
       AP: false,
     })
     expect(Object.keys(compressionBlockData.tagEncoding).length).toEqual(9)
-    // console.log(JSON.stringify(compressionBlockData.tagEncoding, null, '  '))
-
     expect(Object.keys(compressionBlockData.dataSeriesEncoding).length).toEqual(
       21,
     )
-
-    // console.log(
-    //   JSON.stringify(compressionBlockData.dataSeriesEncoding, null, '  '),
-    // )
   })
 })
