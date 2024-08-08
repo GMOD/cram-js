@@ -1,5 +1,5 @@
 import md5 from 'md5'
-import { Parser } from '@gmod/binary-parser'
+import Long from 'long'
 import { CramBufferOverrunError } from './codecs/getBits'
 
 export function itf8Size(v: number) {
@@ -18,10 +18,7 @@ export function itf8Size(v: number) {
   return 5
 }
 
-export function parseItf8(
-  buffer: Uint8Array,
-  initialOffset: number,
-): [number, number] {
+export function parseItf8(buffer: Uint8Array, initialOffset: number) {
   let offset = initialOffset
   const countFlags = buffer[offset]
   let result
@@ -60,106 +57,108 @@ export function parseItf8(
       'Attempted to read beyond end of buffer; this file seems truncated.',
     )
   }
-  return [result, offset - initialOffset]
+  return [result, offset - initialOffset] as const
 }
 
-// parseLtf8(buffer, initialOffset) {
-//   let offset = initialOffset
-//   const countFlags = buffer[offset]
-//   let result
-//   if (countFlags < 0x80) {
-//     result = countFlags
-//     offset += 1
-//   } else if (countFlags < 0xc0) {
-//     result = ((buffer[offset] << 8) | buffer[offset + 1]) & 0x3fff
-//     offset += 2
-//   } else if (countFlags < 0xe0) {
-//     result =
-//       ((buffer[offset] << 16) |
-//         (buffer[offset + 1] << 8) |
-//         buffer[offset + 2]) &
-//       0x1fffff
-//     offset += 3
-//   } else if (countFlags < 0xf0) {
-//     result =
-//       ((buffer[offset] << 24) |
-//         (buffer[offset + 1] << 16) |
-//         (buffer[offset + 2] << 8) |
-//         buffer[offset + 3]) &
-//       0x0fffffff
-//     offset += 4
-//   } else if (countFlags < 0xf8) {
-//     result =
-//       ((buffer[offset] & 15) * Math.pow(2,32) + (buffer[offset + 1] << 24)) |
-//       ((buffer[offset + 2] << 16) |
-//         (buffer[offset + 3] << 8) |
-//         buffer[offset + 4])
-//     // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
-//     offset += 5
-//   } else if (countFlags < 0xfc) {
-//     result =
-//       ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * Math.pow(2,32) +
-//         (buffer[offset + 2] << 24)) |
-//       ((buffer[offset + 3] << 16) |
-//         (buffer[offset + 4] << 8) |
-//         buffer[offset + 5])
-//     offset += 6
-//   } else if (countFlags < 0xfe) {
-//     result =
-//       ((((buffer[offset] & 3) << 16) |
-//         (buffer[offset + 1] << 8) |
-//         buffer[offset + 2]) *
-//         Math.pow(2,32) +
-//         (buffer[offset + 3] << 24)) |
-//       ((buffer[offset + 4] << 16) |
-//         (buffer[offset + 5] << 8) |
-//         buffer[offset + 6])
-//     offset += 7
-//   } else if (countFlags < 0xff) {
-//     result = Long.fromBytesBE(buffer.slice(offset + 1, offset + 8))
-//     if (
-//       result.greaterThan(Number.MAX_SAFE_INTEGER) ||
-//       result.lessThan(Number.MIN_SAFE_INTEGER)
-//     )
-//       throw new CramUnimplementedError('integer overflow')
-//     result = result.toNumber()
-//     offset += 8
-//   } else {
-//     result = Long.fromBytesBE(buffer.slice(offset + 1, offset + 9))
-//     if (
-//       result.greaterThan(Number.MAX_SAFE_INTEGER) ||
-//       result.lessThan(Number.MIN_SAFE_INTEGER)
-//     )
-//       throw new CramUnimplementedError('integer overflow')
-//     result = result.toNumber()
-//     offset += 9
-//   }
-//   return [result, offset - initialOffset]
-// },
-
-export type ParsedItem<T> = T & {
-  _endPosition: number
-  _size: number
+export function parseLtf8(buffer: Buffer, initialOffset: number) {
+  let offset = initialOffset
+  const countFlags = buffer[offset]
+  let n
+  if (countFlags < 0x80) {
+    n = countFlags
+    offset += 1
+  } else if (countFlags < 0xc0) {
+    n = ((buffer[offset] << 8) | buffer[offset + 1]) & 0x3fff
+    offset += 2
+  } else if (countFlags < 0xe0) {
+    n =
+      ((buffer[offset] << 16) |
+        (buffer[offset + 1] << 8) |
+        buffer[offset + 2]) &
+      0x1fffff
+    n = ((countFlags & 63) << 16) | buffer.readUInt16LE(offset + 1)
+    offset += 3
+  } else if (countFlags < 0xf0) {
+    n =
+      ((buffer[offset] << 24) |
+        (buffer[offset + 1] << 16) |
+        (buffer[offset + 2] << 8) |
+        buffer[offset + 3]) &
+      0x0fffffff
+    offset += 4
+  } else if (countFlags < 0xf8) {
+    n =
+      ((buffer[offset] & 15) * Math.pow(2, 32) + (buffer[offset + 1] << 24)) |
+      ((buffer[offset + 2] << 16) |
+        (buffer[offset + 3] << 8) |
+        buffer[offset + 4])
+    // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
+    offset += 5
+  } else if (countFlags < 0xfc) {
+    n =
+      ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * Math.pow(2, 32) +
+        (buffer[offset + 2] << 24)) |
+      ((buffer[offset + 3] << 16) |
+        (buffer[offset + 4] << 8) |
+        buffer[offset + 5])
+    offset += 6
+  } else if (countFlags < 0xfe) {
+    n =
+      ((((buffer[offset] & 3) << 16) |
+        (buffer[offset + 1] << 8) |
+        buffer[offset + 2]) *
+        Math.pow(2, 32) +
+        (buffer[offset + 3] << 24)) |
+      ((buffer[offset + 4] << 16) |
+        (buffer[offset + 5] << 8) |
+        buffer[offset + 6])
+    offset += 7
+  } else if (countFlags < 0xff) {
+    n = Long.fromBytesBE(
+      buffer.slice(offset + 1, offset + 8) as unknown as number[],
+    )
+    if (
+      n.greaterThan(Number.MAX_SAFE_INTEGER) ||
+      n.lessThan(Number.MIN_SAFE_INTEGER)
+    ) {
+      throw new Error('integer overflow')
+    }
+    n = n.toNumber()
+    offset += 8
+  } else {
+    n = Long.fromBytesBE(
+      buffer.slice(offset + 1, offset + 9) as unknown as number[],
+    )
+    if (
+      n.greaterThan(Number.MAX_SAFE_INTEGER) ||
+      n.lessThan(Number.MIN_SAFE_INTEGER)
+    ) {
+      throw new Error('integer overflow')
+    }
+    n = n.toNumber()
+    offset += 9
+  }
+  return [n, offset - initialOffset] as const
 }
 
 export function parseItem<T>(
   buffer: Buffer,
-  parser: Parser<T>,
+  parser: (buffer: Buffer, offset: number) => { offset: number; value: T },
   startBufferPosition = 0,
   startFilePosition = 0,
-): ParsedItem<T> {
-  const { offset, result } = parser.parse(buffer)
+) {
+  const { offset, value } = parser(buffer, startBufferPosition)
   return {
-    ...result,
+    ...value,
     _endPosition: offset + startFilePosition,
     _size: offset - startBufferPosition,
   }
 }
 
-// this would be nice as a decorator, but i'm a little worried about
-// babel support for it going away or changing.
-// memoizes a method in the stupidest possible way, with no regard for the
-// arguments.  actually, this only works on methods that take no arguments
+// this would be nice as a decorator, but i'm a little worried about babel
+// support for it going away or changing. memoizes a method in the stupidest
+// possible way, with no regard for the arguments.  actually, this only works
+// on methods that take no arguments
 export function tinyMemoize(_class: any, methodName: any) {
   const method = _class.prototype[methodName]
   const memoAttrName = `_memo_${methodName}`

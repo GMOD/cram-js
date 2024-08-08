@@ -1,8 +1,14 @@
+const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
   mode: 'production',
   entry: './dist/index.js',
+  plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
   resolve: {
     fallback: {
       buffer: require.resolve('buffer/'),

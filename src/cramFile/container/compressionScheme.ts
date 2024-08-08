@@ -1,6 +1,6 @@
 import { instantiateCodec } from '../codecs'
 import CramCodec from '../codecs/_base'
-import { CramCompressionHeader, CramPreservationMap } from '../sectionParsers'
+import { CramCompressionHeader } from '../sectionParsers'
 import { CramEncoding } from '../encoding'
 import { CramMalformedError } from '../../errors'
 import {
@@ -95,12 +95,8 @@ export default class CramContainerCompressionScheme {
   public tagCodecCache: Record<string, CramCodec> = {}
   public tagEncoding: Record<string, CramEncoding> = {}
   public dataSeriesEncoding: DataSeriesEncodingMap
-  private preservation: CramPreservationMap
-  private _endPosition: number
-  private _size: number
 
   constructor(content: CramCompressionHeader) {
-    // Object.assign(this, content)
     // interpret some of the preservation map tags for convenient use
     this.readNamesIncluded = content.preservation.RN
     this.APdelta = content.preservation.AP
@@ -109,9 +105,6 @@ export default class CramContainerCompressionScheme {
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
     this.dataSeriesEncoding = content.dataSeriesEncoding
     this.tagEncoding = content.tagEncoding
-    this.preservation = content.preservation
-    this._size = content._size
-    this._endPosition = content._endPosition
   }
 
   /**

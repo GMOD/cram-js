@@ -195,7 +195,7 @@ test('duplicate IDs test', async () => {
       totalMap[feature.uniqueId] !== feature.readName
     ) {
       noCollisions = false
-      console.log('collision', totalMap[feature.uniqueId], feature.readName)
+      console.error('collision', totalMap[feature.uniqueId], feature.readName)
     } else {
       totalMap[feature.uniqueId] = feature.readName
     }

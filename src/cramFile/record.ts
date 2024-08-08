@@ -1,6 +1,6 @@
 import Constants from './constants'
 import CramContainerCompressionScheme from './container/compressionScheme'
-import decodeRecord from './slice/decodeRecord'
+import type decodeRecord from './slice/decodeRecord'
 
 export interface RefRegion {
   start: number

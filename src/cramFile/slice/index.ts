@@ -7,6 +7,7 @@ import CramRecord from '../record'
 import CramContainer from '../container'
 import CramFile, { CramFileBlock } from '../file'
 import {
+  getSectionParsers,
   isMappedSliceHeader,
   MappedSliceHeader,
   UnmappedSliceHeader,
@@ -191,10 +192,15 @@ export default class CramSlice {
   }
 
   // memoize
-  async getHeader(): Promise<SliceHeader> {
+  async getHeader() {
     // fetch and parse the slice header
-    const sectionParsers = await this.file.getSectionParsers()
+    const { majorVersion } = await this.file.getDefinition()
+    const sectionParsers = getSectionParsers(majorVersion)
     const containerHeader = await this.container.getHeader()
+    if (!containerHeader) {
+      throw new Error('no container header detected')
+    }
+
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
     )
@@ -230,7 +236,7 @@ export default class CramSlice {
     // read all the blocks into memory and store them
     let blockPosition = header._endPosition
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
-    for (let i = 0; i < blocks.length; i += 1) {
+    for (let i = 0; i < blocks.length; i++) {
       const block = await this.file.readBlock(blockPosition)
       if (block === undefined) {
         throw new Error('block undefined')
@@ -363,14 +369,14 @@ export default class CramSlice {
       this.file.options.checkSequenceMD5 &&
       isMappedSliceHeader(sliceHeader.parsedContent) &&
       sliceHeader.parsedContent.refSeqId >= 0 &&
-      sliceHeader.parsedContent.md5.join('') !== '0000000000000000'
+      sliceHeader.parsedContent.md5?.join('') !== '0000000000000000'
     ) {
       const refRegion = await this.getReferenceRegion()
       if (refRegion) {
         const { seq, start, end } = refRegion
         const seqMd5 = sequenceMD5(seq)
         const storedMd5 = sliceHeader.parsedContent.md5
-          .map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
+          ?.map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
           .join('')
         if (seqMd5 !== storedMd5) {
           throw new CramMalformedError(

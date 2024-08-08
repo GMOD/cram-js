@@ -228,14 +228,15 @@ async function run() {
       qual += String.fromCharCode(q + 33)
     })
 
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _rnext =
       record.sequenceId == record.mate!.sequenceId
         ? '='
         : seqList[record.sequenceId]
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _tlen = record.templateSize // only if detached
     const tags = tags2str(record, RG)
+    // eslint-disable-next-line no-console
     console.log(
       `${record.readName}\t${record.flags}\t${seqList[record.sequenceId]}\t${
         record.alignmentStart

@@ -19,8 +19,8 @@ describe('retry nonexist file', () => {
       })
 
       await cram.cram.getSamHeader()
-    } catch (e) {
-      /* console.error('initial error', e) */
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_e) {
       exception = 1
     }
     expect(exception).toEqual(1)
@@ -43,7 +43,8 @@ describe('retry nonexist file', () => {
       })
 
       await cram.getRecordsForRange(0, 2, 200)
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_e) {
       exception = 1
     }
     expect(exception).toEqual(1)

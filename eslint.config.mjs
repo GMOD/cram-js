@@ -15,9 +15,6 @@ const compat = new FlatCompat({
 })
 
 export default [
-  {
-    ignores: ['src/binary-parser/*.js'],
-  },
   ...compat.extends(
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-type-checked',
@@ -49,7 +46,12 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-
+      'no-console': [
+        'warn',
+        {
+          allow: ['error', 'warn'],
+        },
+      ],
       'no-underscore-dangle': 0,
       curly: 'error',
       '@typescript-eslint/no-explicit-any': 0,
