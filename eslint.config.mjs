@@ -15,9 +15,6 @@ const compat = new FlatCompat({
 })
 
 export default [
-  {
-    ignores: ['src/binary-parser/*.js'],
-  },
   ...compat.extends(
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-type-checked',

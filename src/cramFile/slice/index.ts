@@ -198,7 +198,7 @@ export default class CramSlice {
     const sectionParsers = getSectionParsers(majorVersion)
     const containerHeader = await this.container.getHeader()
     if (!containerHeader) {
-      throw new Error('wow')
+      throw new Error('no container header detected')
     }
 
     const header = await this.file.readBlock(
