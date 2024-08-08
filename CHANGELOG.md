@@ -1,3 +1,13 @@
+# v3.0.0
+
+- Remove @gmod/binary-parser to avoid CSP violation for use of 'eval'/'new
+  Function'
+
+# v2.0.4
+
+- Remove `fetchSizeLimit`
+- Remove usage of `url` module
+
 # v2.0.3
 
 - Update sam header parsing to avoid breaking 'type contract'
