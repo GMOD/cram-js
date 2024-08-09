@@ -314,7 +314,7 @@ function cramUnmappedSliceHeader(majorVersion: number) {
     }
 
     // the md5 sum is missing in cram v1
-    let md5
+    let md5: TupleOf<number, 16> | undefined
     if (majorVersion >= 2) {
       md5 = [...buffer.subarray(offset, offset + 16)] as TupleOf<number, 16>
       offset += 16
@@ -391,7 +391,7 @@ function cramMappedSliceHeader(majorVersion: number) {
       // EL2
 
       // the md5 sum is missing in cram v1
-      let md5
+      let md5: TupleOf<number, 16> | undefined
       if (majorVersion >= 2) {
         md5 = [...buffer.subarray(offset, offset + 16)] as TupleOf<number, 16>
         offset += 16
@@ -674,7 +674,7 @@ function cramContainerHeader1(majorVersion: number) {
         console.warn('setting recordCounter=0')
       }
 
-      let numBases
+      let numBases: number | undefined
       if (majorVersion > 1) {
         const [n, newOffset5] = parseLtf8(buffer, offset)
         numBases = n
@@ -716,7 +716,7 @@ function cramContainerHeader2(majorVersion: number) {
         landmarks.push(landmark)
       }
 
-      let crc32
+      let crc32: number | undefined
       if (majorVersion >= 3) {
         crc32 = dataView.getUint32(offset, true)
         offset += 4

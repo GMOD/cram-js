@@ -51,7 +51,7 @@ export default class ByteArrayStopCodec extends CramCodec<
     ) {
       if (stopPosition === dataBuffer.length) {
         throw new CramBufferOverrunError(
-          `byteArrayStop reading beyond length of data buffer?`,
+          'byteArrayStop reading beyond length of data buffer?',
         )
       }
       stopPosition = stopPosition + 1

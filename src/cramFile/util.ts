@@ -21,7 +21,7 @@ export function itf8Size(v: number) {
 export function parseItf8(buffer: Uint8Array, initialOffset: number) {
   let offset = initialOffset
   const countFlags = buffer[offset]
-  let result
+  let result: number
   if (countFlags < 0x80) {
     result = countFlags
     offset = offset + 1
@@ -63,7 +63,7 @@ export function parseItf8(buffer: Uint8Array, initialOffset: number) {
 export function parseLtf8(buffer: Buffer, initialOffset: number) {
   let offset = initialOffset
   const countFlags = buffer[offset]
-  let n
+  let n: number | Long
   if (countFlags < 0x80) {
     n = countFlags
     offset += 1
@@ -88,7 +88,7 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
     offset += 4
   } else if (countFlags < 0xf8) {
     n =
-      ((buffer[offset] & 15) * Math.pow(2, 32) + (buffer[offset + 1] << 24)) |
+      ((buffer[offset] & 15) * 2 ** 32 + (buffer[offset + 1] << 24)) |
       ((buffer[offset + 2] << 16) |
         (buffer[offset + 3] << 8) |
         buffer[offset + 4])
@@ -96,7 +96,7 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
     offset += 5
   } else if (countFlags < 0xfc) {
     n =
-      ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * Math.pow(2, 32) +
+      ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * 2 ** 32 +
         (buffer[offset + 2] << 24)) |
       ((buffer[offset + 3] << 16) |
         (buffer[offset + 4] << 8) |
@@ -107,7 +107,7 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
       ((((buffer[offset] & 3) << 16) |
         (buffer[offset + 1] << 8) |
         buffer[offset + 2]) *
-        Math.pow(2, 32) +
+        2 ** 32 +
         (buffer[offset + 3] << 24)) |
       ((buffer[offset + 4] << 16) |
         (buffer[offset + 5] << 8) |

@@ -18,10 +18,7 @@ export interface ReadFeature {
   sub?: string
 }
 
-function decodeReadSequence(
-  cramRecord: CramRecord,
-  refRegion: RefRegion,
-): string | null {
+function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   // if it has no length, it has no sequence
   if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
     return null
@@ -215,8 +212,8 @@ function makeFlagsHelper<T>(
 ): FlagsDecoder<T> & FlagsEncoder<T> {
   const r: any = {}
   for (const [code, name] of x) {
-    r['is' + name] = (flags: number) => !!(flags & code)
-    r['set' + name] = (flags: number) => flags | code
+    r[`is${name}`] = (flags: number) => !!(flags & code)
+    r[`set${name}`] = (flags: number) => flags | code
   }
 
   return r

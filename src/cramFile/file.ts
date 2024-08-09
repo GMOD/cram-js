@@ -1,11 +1,12 @@
-import { unzip } from '../unzip'
+import { Buffer } from 'buffer'
 import crc32 from 'buffer-crc32'
 import QuickLRU from 'quick-lru'
 import htscodecs from '@jkbonfield/htscodecs'
-// @ts-expect-error
 import bzip2 from 'bzip2'
 import { XzReadableStream } from 'xz-decompress'
 import { CramMalformedError, CramUnimplementedError } from '../errors'
+// locals
+import { unzip } from '../unzip'
 import ransuncompress from '../rans'
 import {
   BlockHeader,
@@ -13,13 +14,11 @@ import {
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers'
-
 import CramContainer from './container'
-
+import CramRecord from './record'
 import { open } from '../io'
 import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
-import CramRecord from './record'
 import { Filehandle } from './filehandle'
 
 function bufferToStream(buf: Buffer) {
@@ -31,7 +30,7 @@ function bufferToStream(buf: Buffer) {
   })
 }
 
-// source:https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
+// source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
   const uInt32 = new Uint32Array([0x11223344])
   const uInt8 = new Uint8Array(uInt32.buffer)
@@ -163,7 +162,7 @@ export default class CramFile {
     const { cramContainerHeader1 } = sectionParsers
 
     // skip with a series of reads to the proper container
-    let currentContainer
+    let currentContainer: CramContainer | undefined
     for (let i = 0; i <= containerNumber; i++) {
       // if we are about to go off the end of the file
       // and have not found that container, it does not exist
@@ -282,7 +281,7 @@ export default class CramFile {
     size = section.maxLength,
     preReadBuffer = undefined,
   ) {
-    let buffer
+    let buffer: Buffer
     if (preReadBuffer) {
       buffer = preReadBuffer
     } else {
@@ -314,15 +313,15 @@ export default class CramFile {
       const bits = bzip2.array(inputBuffer)
       let size = bzip2.header(bits)
       let j = 0
-      let chunk
+      let chunk: Uint8Array | -1
       do {
         chunk = bzip2.decompress(bits, size)
-        if (chunk != -1) {
+        if (chunk !== -1) {
           Buffer.from(chunk).copy(outputBuffer, j)
           j += chunk.length
           size -= chunk.length
         }
-      } while (chunk != -1)
+      } while (chunk !== -1)
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),

@@ -29,8 +29,8 @@ export default class SubexpCodec extends CramCodec<
       numLeadingOnes = numLeadingOnes + 1
     }
 
-    let b
-    let n
+    let b: number
+    let n: number
     if (numLeadingOnes === 0) {
       b = this.parameters.K
       n = getBits(coreDataBlock.content, cursors.coreBlock, b)

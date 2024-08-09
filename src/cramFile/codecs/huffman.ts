@@ -83,7 +83,7 @@ export default class HuffmanIntCodec extends CramCodec<
     let codeLength = 0
     let codeValue = -1
     Object.entries(this.codeBook).forEach(([bitLength, symbols]) => {
-      const bitLengthInt = parseInt(bitLength, 10)
+      const bitLengthInt = Number.parseInt(bitLength, 10)
       symbols.forEach(symbol => {
         const code = {
           bitLength: bitLengthInt,

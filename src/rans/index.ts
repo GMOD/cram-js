@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { Buffer } from 'buffer'
 import { CramMalformedError } from '../errors'
 
 import Decoding from './decoding'
@@ -118,7 +119,7 @@ function /* static ByteBuffer */ uncompressOrder0Way4(
   const D = new Decoding.AriDecoder()
   const syms = new Array(256)
   for (let i = 0; i < syms.length; i += 1) {
-    syms[i] = new Decoding.Symbol()
+    syms[i] = new Decoding.DecodingSymbol()
   }
 
   readStatsO0(input, D, syms)
@@ -140,7 +141,7 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
   for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Array(256)
     for (let j = 0; j < syms[i].length; j += 1) {
-      syms[i][j] = new Decoding.Symbol()
+      syms[i][j] = new Decoding.DecodingSymbol()
     }
   }
   readStatsO1(input, D, syms)

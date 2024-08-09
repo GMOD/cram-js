@@ -24,7 +24,7 @@ class AriDecoder {
   }
 }
 
-class Symbol {
+class DecodingSymbol {
   // int start; // Start of range.
   // int freq; // Symbol frequency.
   constructor() {
@@ -36,10 +36,10 @@ class Symbol {
 // Initialize a decoder symbol to start "start" and frequency "freq"
 function symbolInit(sym, start, freq) {
   if (!(start <= 1 << 16)) {
-    throw new CramMalformedError(`assertion failed: start <= 1<<16`)
+    throw new CramMalformedError('assertion failed: start <= 1<<16')
   }
   if (!(freq <= (1 << 16) - start)) {
-    throw new CramMalformedError(`assertion failed: freq <= 1<<16`)
+    throw new CramMalformedError('assertion failed: freq <= 1<<16')
   }
   sym.start = start
   sym.freq = freq
@@ -127,10 +127,10 @@ function symbolInit(sym, start, freq) {
   return r
 }
 
-const Decode = {
+export default {
   FC,
   AriDecoder,
-  Symbol,
+  DecodingSymbol,
   symbolInit,
   advanceStep,
   advanceSymbolStep,
@@ -138,5 +138,3 @@ const Decode = {
   advanceSymbol,
   renormalize,
 }
-
-export default Decode

@@ -1,5 +1,6 @@
+import { Buffer } from 'buffer'
 import { CramMalformedError } from '../../errors'
-
+// locals
 import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramSlice from '../slice'
 import CramContainerCompressionScheme from './compressionScheme'
@@ -33,7 +34,7 @@ export default class CramContainer {
     }
     if (block.contentType !== 'COMPRESSION_HEADER') {
       throw new CramMalformedError(
-        `invalid content type ${block.contentType} in what is supposed to be the compression header block`,
+        `invalid content type ${block.contentType} in compression header block`,
       )
     }
 
@@ -81,9 +82,7 @@ export default class CramContainer {
     const { size: fileSize } = await this.file.stat()
 
     if (position >= fileSize) {
-      console.warn(
-        `position:${position}>=fileSize:${fileSize} in cram container`,
-      )
+      console.warn(`pos:${position}>=fileSize:${fileSize} in cram container`)
       return undefined
     }
 
@@ -94,8 +93,9 @@ export default class CramContainer {
     const header1 = parseItem(bytes1, cramContainerHeader1.parser)
     const numLandmarksSize = itf8Size(header1.numLandmarks)
     if (position + header1.length >= fileSize) {
+      // header indicates container goes beyond fileSize
       console.warn(
-        `container header at ${position} indicates that the container has length ${header1.length}, which extends beyond the length of the file. Skipping this container.`,
+        `container at ${position} is beyond fileSize:${fileSize}, skipping`,
       )
       return undefined
     }

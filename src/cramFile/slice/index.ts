@@ -177,7 +177,7 @@ function associateIntraSliceMate(
 
   // delete this last because it's used by the
   // complicated template length estimation
-  delete thisRecord.mateRecordNumber
+  thisRecord.mateRecordNumber = undefined
 }
 
 export default class CramSlice {
@@ -524,7 +524,7 @@ export default class CramSlice {
             refRegion = {
               id: seqId,
               start: record.alignmentStart,
-              end: -Infinity,
+              end: Number.NEGATIVE_INFINITY,
               seq: null,
             }
             refRegions[seqId] = refRegion

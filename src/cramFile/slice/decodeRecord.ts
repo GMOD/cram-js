@@ -74,7 +74,7 @@ function parseTagValueArray(buffer: Buffer) {
       array[i] = arr[i]
     }
   } else {
-    throw new Error('unknown type: ' + arrayType)
+    throw new Error(`unknown type: ${arrayType}`)
   }
 
   return array
@@ -249,20 +249,27 @@ export default function decodeRecord(
   cursors.lastAlignmentStart = alignmentStart
   const readGroupId = decodeDataSeries('RG')
 
-  let readName
+  let readName: string | undefined
   if (compressionScheme.readNamesIncluded) {
     readName = readNullTerminatedString(decodeDataSeries('RN'))
   }
 
-  let mateToUse
-  let templateSize
-  let mateRecordNumber
+  let mateToUse:
+    | {
+        mateFlags: number
+        mateSequenceId: number
+        mateAlignmentStart: number
+        mateReadName: string | undefined
+      }
+    | undefined
+  let templateSize: number | undefined
+  let mateRecordNumber: number | undefined
   // mate record
   if (CramFlagsDecoder.isDetached(cramFlags)) {
-    // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't matter for javascript
-    // const mate: any = {}
+    // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
+    // matter for javascript
     const mateFlags = decodeDataSeries('MF')
-    let mateReadName
+    let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
       mateReadName = readNullTerminatedString(decodeDataSeries('RN'))
       readName = mateReadName
@@ -327,9 +334,9 @@ export default function decodeRecord(
     tags[tagName] = parseTagData(tagType, tagData)
   }
 
-  let readFeatures
-  let lengthOnRef
-  let mappingQuality
+  let readFeatures: ReadFeature[] | undefined
+  let lengthOnRef: number | undefined
+  let mappingQuality: number | undefined
   let qualityScores: number[] | undefined | null
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
@@ -345,7 +352,8 @@ export default function decodeRecord(
       )
     }
 
-    // compute the read's true span on the reference sequence, and the end coordinate of the alignment on the reference
+    // compute the read's true span on the reference sequence, and the end
+    // coordinate of the alignment on the reference
     lengthOnRef = readLength
     if (readFeatures) {
       for (const { code, data } of readFeatures) {

@@ -40,7 +40,7 @@ export default function uncompress(
   }
 
   out.setPosition(outputEnd)
-  let /* byte */ c
+  let /* byte */ c: number
   switch (outputSize & 3) {
     case 0:
       break
