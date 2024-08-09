@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer'
-import crc32 from 'buffer-crc32'
+import crc32 from 'crc/crc32'
 import QuickLRU from 'quick-lru'
 import htscodecs from '@jkbonfield/htscodecs'
 import bzip2 from 'bzip2'

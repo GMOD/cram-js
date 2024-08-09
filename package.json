@@ -43,8 +43,8 @@
   "dependencies": {
     "@gmod/abortable-promise-cache": "^2.0.0",
     "@jkbonfield/htscodecs": "^0.5.1",
-    "buffer-crc32": "^1.0.0",
     "bzip2": "^0.1.1",
+    "crc": "^4.3.2",
     "long": "^4.0.0",
     "md5": "^2.2.1",
     "pako": "^1.0.4",
