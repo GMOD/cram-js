@@ -1,6 +1,6 @@
 {
   "name": "@gmod/cram",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
   "repository": "GMOD/cram-js",
@@ -30,7 +30,6 @@
     "build:es5": "tsc --target es2015 --module commonjs --outDir dist",
     "build": "npm run build:esm && npm run build:es5",
     "postbuild": "webpack",
-    "prepublishOnly": "npm test && npm run build && cp dist/errors.js errors.js",
     "prepack": "npm test && npm run build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js",
     "postversion": "git push --follow-tags"
