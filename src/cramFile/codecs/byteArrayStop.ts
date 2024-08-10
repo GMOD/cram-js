@@ -10,18 +10,6 @@ export default class ByteArrayStopCodec extends CramCodec<
   'byteArray',
   ByteArrayStopCramEncoding['parameters']
 > {
-  constructor(
-    parameters: ByteArrayStopCramEncoding['parameters'],
-    dataType: 'byteArray',
-  ) {
-    super(parameters, dataType)
-    if (dataType !== 'byteArray') {
-      throw new TypeError(
-        `byteArrayStop codec does not support data type ${dataType}`,
-      )
-    }
-  }
-
   decode(
     slice: CramSlice,
     coreDataBlock: CramFileBlock,

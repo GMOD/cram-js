@@ -63,9 +63,6 @@ export default class IndexedCramFile {
     }
 
     this.index = args.index
-    if (!this.index.getEntriesForRange) {
-      throw new Error('invalid arguments: not an index')
-    }
   }
 
   /**
@@ -163,7 +160,7 @@ export default class IndexedCramFile {
         .sort((a, b) => a.toString().localeCompare(b.toString()))
         .filter(
           (item, pos, ary) =>
-            !pos || item.toString() !== ary[pos - 1].toString(),
+            !pos || item.toString() !== ary[pos - 1]!.toString(),
         )
 
       const mateRecordPromises = []

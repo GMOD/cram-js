@@ -279,7 +279,7 @@ export default class CramFile {
     },
     position: number,
     size = section.maxLength,
-    preReadBuffer = undefined,
+    preReadBuffer?: Buffer,
   ) {
     let buffer: Buffer
     if (preReadBuffer) {
@@ -330,8 +330,8 @@ export default class CramFile {
       ret.copy(outputBuffer)
     } else if (compressionMethod === 'rans') {
       ransuncompress(inputBuffer, outputBuffer)
-      //htscodecs r4x8 is slower, but compatible.
-      //htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
+      // htscodecs r4x8 is slower, but compatible.
+      // htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
     } else if (compressionMethod === 'rans4x16') {
       htscodecs.r4x16_uncompress(inputBuffer, outputBuffer)
     } else if (compressionMethod === 'arith') {
@@ -422,6 +422,6 @@ export default class CramFile {
   }
 }
 
-'getDefinition getSectionParsers getSamHeader'
-  .split(' ')
-  .forEach(method => tinyMemoize(CramFile, method))
+'getDefinition getSectionParsers getSamHeader'.split(' ').forEach(method => {
+  tinyMemoize(CramFile, method)
+})

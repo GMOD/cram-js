@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { describe, it, expect } from 'vitest'
 import { sequenceMD5 } from '../src/cramFile/util'
 

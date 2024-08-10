@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { Buffer } from 'buffer'
 import { CramMalformedError } from '../errors'
 

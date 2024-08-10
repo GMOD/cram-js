@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { CramMalformedError } from '../errors'
 
 import { RANS_BYTE_L } from './constants'

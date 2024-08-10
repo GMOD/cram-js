@@ -20,34 +20,34 @@ export function itf8Size(v: number) {
 
 export function parseItf8(buffer: Uint8Array, initialOffset: number) {
   let offset = initialOffset
-  const countFlags = buffer[offset]
+  const countFlags = buffer[offset]!
   let result: number
   if (countFlags < 0x80) {
     result = countFlags
     offset = offset + 1
   } else if (countFlags < 0xc0) {
-    result = ((countFlags << 8) | buffer[offset + 1]) & 0x3fff
+    result = ((countFlags << 8) | buffer[offset + 1]!) & 0x3fff
     offset = offset + 2
   } else if (countFlags < 0xe0) {
     result =
-      ((countFlags << 16) | (buffer[offset + 1] << 8) | buffer[offset + 2]) &
+      ((countFlags << 16) | (buffer[offset + 1]! << 8) | buffer[offset + 2]!) &
       0x1fffff
     offset = offset + 3
   } else if (countFlags < 0xf0) {
     result =
       ((countFlags << 24) |
-        (buffer[offset + 1] << 16) |
-        (buffer[offset + 2] << 8) |
-        buffer[offset + 3]) &
+        (buffer[offset + 1]! << 16) |
+        (buffer[offset + 2]! << 8) |
+        buffer[offset + 3]!) &
       0x0fffffff
     offset = offset + 4
   } else {
     result =
       ((countFlags & 0x0f) << 28) |
-      (buffer[offset + 1] << 20) |
-      (buffer[offset + 2] << 12) |
-      (buffer[offset + 3] << 4) |
-      (buffer[offset + 4] & 0x0f)
+      (buffer[offset + 1]! << 20) |
+      (buffer[offset + 2]! << 12) |
+      (buffer[offset + 3]! << 4) |
+      (buffer[offset + 4]! & 0x0f)
     // x=((0xff & 0x0f)<<28) | (0xff<<20) | (0xff<<12) | (0xff<<4) | (0x0f & 0x0f);
     // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
     offset = offset + 5
@@ -62,56 +62,56 @@ export function parseItf8(buffer: Uint8Array, initialOffset: number) {
 
 export function parseLtf8(buffer: Buffer, initialOffset: number) {
   let offset = initialOffset
-  const countFlags = buffer[offset]
+  const countFlags = buffer[offset]!
   let n: number | Long
   if (countFlags < 0x80) {
     n = countFlags
     offset += 1
   } else if (countFlags < 0xc0) {
-    n = ((buffer[offset] << 8) | buffer[offset + 1]) & 0x3fff
+    n = ((buffer[offset]! << 8) | buffer[offset + 1]!) & 0x3fff
     offset += 2
   } else if (countFlags < 0xe0) {
     n =
-      ((buffer[offset] << 16) |
-        (buffer[offset + 1] << 8) |
-        buffer[offset + 2]) &
+      ((buffer[offset]! << 16) |
+        (buffer[offset + 1]! << 8) |
+        buffer[offset + 2]!) &
       0x1fffff
     n = ((countFlags & 63) << 16) | buffer.readUInt16LE(offset + 1)
     offset += 3
   } else if (countFlags < 0xf0) {
     n =
-      ((buffer[offset] << 24) |
-        (buffer[offset + 1] << 16) |
-        (buffer[offset + 2] << 8) |
-        buffer[offset + 3]) &
+      ((buffer[offset]! << 24) |
+        (buffer[offset + 1]! << 16) |
+        (buffer[offset + 2]! << 8) |
+        buffer[offset + 3]!) &
       0x0fffffff
     offset += 4
   } else if (countFlags < 0xf8) {
     n =
-      ((buffer[offset] & 15) * 2 ** 32 + (buffer[offset + 1] << 24)) |
-      ((buffer[offset + 2] << 16) |
-        (buffer[offset + 3] << 8) |
-        buffer[offset + 4])
+      ((buffer[offset]! & 15) * 2 ** 32 + (buffer[offset + 1]! << 24)) |
+      ((buffer[offset + 2]! << 16) |
+        (buffer[offset + 3]! << 8) |
+        buffer[offset + 4]!)
     // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
     offset += 5
   } else if (countFlags < 0xfc) {
     n =
-      ((((buffer[offset] & 7) << 8) | buffer[offset + 1]) * 2 ** 32 +
-        (buffer[offset + 2] << 24)) |
-      ((buffer[offset + 3] << 16) |
-        (buffer[offset + 4] << 8) |
-        buffer[offset + 5])
+      ((((buffer[offset]! & 7) << 8) | buffer[offset + 1]!) * 2 ** 32 +
+        (buffer[offset + 2]! << 24)) |
+      ((buffer[offset + 3]! << 16) |
+        (buffer[offset + 4]! << 8) |
+        buffer[offset + 5]!)
     offset += 6
   } else if (countFlags < 0xfe) {
     n =
-      ((((buffer[offset] & 3) << 16) |
-        (buffer[offset + 1] << 8) |
-        buffer[offset + 2]) *
+      ((((buffer[offset]! & 3) << 16) |
+        (buffer[offset + 1]! << 8) |
+        buffer[offset + 2]!) *
         2 ** 32 +
-        (buffer[offset + 3] << 24)) |
-      ((buffer[offset + 4] << 16) |
-        (buffer[offset + 5] << 8) |
-        buffer[offset + 6])
+        (buffer[offset + 3]! << 24)) |
+      ((buffer[offset + 4]! << 16) |
+        (buffer[offset + 5]! << 8) |
+        buffer[offset + 6]!)
     offset += 7
   } else if (countFlags < 0xff) {
     n = Long.fromBytesBE(
@@ -167,6 +167,7 @@ export function tinyMemoize(_class: any, methodName: any) {
       const res = method.call(this)
       this[memoAttrName] = res
       Promise.resolve(res).catch(() => {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete this[memoAttrName]
       })
     }

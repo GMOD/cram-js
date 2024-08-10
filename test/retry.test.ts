@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { describe, it, expect } from 'vitest'
 import mock from 'mock-fs'
 import LocalFile from './lib/syncLocalFile'
@@ -20,7 +20,6 @@ describe('retry nonexist file', () => {
       })
 
       await cram.cram.getSamHeader()
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_e) {
       exception = 1
     }
@@ -44,7 +43,6 @@ describe('retry nonexist file', () => {
       })
 
       await cram.getRecordsForRange(0, 2, 200)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_e) {
       exception = 1
     }

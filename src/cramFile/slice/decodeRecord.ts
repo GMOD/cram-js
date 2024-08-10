@@ -22,7 +22,7 @@ import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
 function readNullTerminatedString(buffer: Uint8Array) {
   let r = ''
   for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
-    r += String.fromCharCode(buffer[i])
+    r += String.fromCharCode(buffer[i]!)
   }
   return r
 }
@@ -32,8 +32,8 @@ function readNullTerminatedString(buffer: Uint8Array) {
  * @private
  */
 function parseTagValueArray(buffer: Buffer) {
-  const arrayType = String.fromCharCode(buffer[0])
-  const length = Int32Array.from(buffer.slice(1))[0]
+  const arrayType = String.fromCharCode(buffer[0]!)
+  const length = Int32Array.from(buffer.slice(1))[0]!
 
   const array: number[] = new Array(length)
   buffer = buffer.slice(5)
@@ -41,37 +41,37 @@ function parseTagValueArray(buffer: Buffer) {
   if (arrayType === 'c') {
     const arr = new Int8Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else if (arrayType === 'C') {
     const arr = new Uint8Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else if (arrayType === 's') {
     const arr = new Int16Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else if (arrayType === 'S') {
     const arr = new Uint16Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else if (arrayType === 'i') {
     const arr = new Int32Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else if (arrayType === 'I') {
     const arr = new Uint32Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else if (arrayType === 'f') {
     const arr = new Float32Array(buffer.buffer)
     for (let i = 0; i < length; i += 1) {
-      array[i] = arr[i]
+      array[i] = arr[i]!
     }
   } else {
     throw new Error(`unknown type: ${arrayType}`)
@@ -311,26 +311,17 @@ export default function decodeRecord(
 
   const tags: Record<string, any> = {}
   // TN = tag names
-  const TN = compressionScheme.getTagNames(TLindex)
+  const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
 
   for (let i = 0; i < ntags; i += 1) {
-    const tagId = TN[i]
+    const tagId = TN[i]!
     const tagName = tagId.slice(0, 2)
     const tagType = tagId.slice(2, 3)
 
-    const tagCodec = compressionScheme.getCodecForTag(tagId)
-    if (!tagCodec) {
-      throw new CramMalformedError(
-        `no codec defined for auxiliary tag ${tagId}`,
-      )
-    }
-    const tagData = tagCodec.decode(
-      slice,
-      coreDataBlock,
-      blocksByContentId,
-      cursors,
-    )
+    const tagData = compressionScheme
+      .getCodecForTag(tagId)
+      .decode(slice, coreDataBlock, blocksByContentId, cursors)
     tags[tagName] = parseTagData(tagType, tagData)
   }
 

@@ -62,7 +62,7 @@ describe('.crai reader', () => {
       () => {
         throw new Error('the getIndex call should have failed')
       },
-      err => {
+      (err: unknown) => {
         expect(`${err}`).toMatch(/invalid/)
       },
     )
@@ -146,7 +146,7 @@ describe('reading a BAI file instead', () => {
       () => {
         throw new Error('the getIndex call should have failed')
       },
-      err => {
+      (err: unknown) => {
         expect(`${err}`).toMatch(/bai/)
       },
     )

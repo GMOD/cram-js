@@ -57,8 +57,16 @@ describe('.crai indexed cram file', () => {
       }),
     })
 
-    const features = await cram.getRecordsForRange(0, 0, Infinity)
-    const features2 = await cram.getRecordsForRange(-1, 0, Infinity)
+    const features = await cram.getRecordsForRange(
+      0,
+      0,
+      Number.POSITIVE_INFINITY,
+    )
+    const features2 = await cram.getRecordsForRange(
+      -1,
+      0,
+      Number.POSITIVE_INFINITY,
+    )
     expect(features).toMatchSnapshot()
     expect(features2).toMatchSnapshot()
   })
@@ -105,7 +113,11 @@ describe('.crai indexed cram file', () => {
         index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
       })
 
-      const features = await cram.getRecordsForRange(0, 0, Infinity)
+      const features = await cram.getRecordsForRange(
+        0,
+        0,
+        Number.POSITIVE_INFINITY,
+      )
       features.sort((a, b) =>
         (a.readName || '').localeCompare(b.readName || ''),
       )
@@ -119,7 +131,11 @@ describe('.crai indexed cram file', () => {
         index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
       })
 
-      const features = await cram.getRecordsForRange(1, 0, Infinity)
+      const features = await cram.getRecordsForRange(
+        1,
+        0,
+        Number.POSITIVE_INFINITY,
+      )
       expect(features.length).toBeGreaterThan(-1)
       expect(features).toMatchSnapshot()
     })
@@ -240,8 +256,8 @@ test('region not downloading enough records', async () => {
   })
   const entries = await index.getEntriesForRange(0, 75100635, 75125544)
   expect(entries.length).toEqual(2)
-  expect(entries[0].start).toEqual(74378949)
-  expect(entries[1].start).toEqual(74945118)
+  expect(entries[0]!.start).toEqual(74378949)
+  expect(entries[1]!.start).toEqual(74945118)
 })
 
 test('troublesome file returns the correct sequence', async () => {

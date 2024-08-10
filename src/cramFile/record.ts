@@ -42,7 +42,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   let currentReadFeature = 0
   while (bases.length < cramRecord.readLength) {
     if (currentReadFeature < cramRecord.readFeatures.length) {
-      const feature = cramRecord.readFeatures[currentReadFeature]
+      const feature = cramRecord.readFeatures[currentReadFeature]!
       if (feature.code === 'Q' || feature.code === 'q') {
         currentReadFeature += 1
       } else if (feature.pos === bases.length + 1) {
@@ -90,10 +90,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
         // put down a chunk of sequence up to the next read feature
         const chunk = refRegion.seq.slice(
           regionPos,
-          regionPos +
-            cramRecord.readFeatures[currentReadFeature].pos -
-            bases.length -
-            1,
+          regionPos + feature.pos - bases.length - 1,
         )
         bases += chunk
         regionPos += chunk.length
@@ -131,10 +128,6 @@ function decodeBaseSubstitution(
   compressionScheme: CramContainerCompressionScheme,
   readFeature: ReadFeature,
 ) {
-  if (!refRegion) {
-    return
-  }
-
   // decode base substitution code using the substitution matrix
   const refCoord = readFeature.refPos - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
@@ -145,7 +138,7 @@ function decodeBaseSubstitution(
   if (baseNumber === undefined) {
     baseNumber = 4
   }
-  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]
+  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]!
   const base = substitutionScheme[readFeature.data]
   if (base) {
     readFeature.sub = base

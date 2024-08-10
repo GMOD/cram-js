@@ -179,8 +179,8 @@ export function cramPreservationMap() {
       const ents = []
       for (let i = 0; i < mapCount; i++) {
         const key =
-          String.fromCharCode(buffer[offset]) +
-          String.fromCharCode(buffer[offset + 1])
+          String.fromCharCode(buffer[offset]!) +
+          String.fromCharCode(buffer[offset + 1]!)
         offset += 2
 
         if (
@@ -550,8 +550,8 @@ function cramDataSeriesEncodingMap() {
       const ents = []
       for (let i = 0; i < mapCount; i++) {
         const key =
-          String.fromCharCode(buffer[offset]) +
-          String.fromCharCode(buffer[offset + 1])
+          String.fromCharCode(buffer[offset]!) +
+          String.fromCharCode(buffer[offset + 1]!)
         offset += 2
 
         const { value, offset: newOffset4 } = cramEncodingSub(buffer, offset)

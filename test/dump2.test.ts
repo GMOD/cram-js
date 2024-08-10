@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { test, expect } from 'vitest'
 import { t2 as testFileList } from './lib/testFileList'
 import { testDataFile } from './lib/util'

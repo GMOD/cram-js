@@ -130,4 +130,6 @@ export default class CramContainer {
 
 'getHeader getCompressionHeaderBlock getCompressionScheme'
   .split(' ')
-  .forEach(method => tinyMemoize(CramContainer, method))
+  .forEach(method => {
+    tinyMemoize(CramContainer, method)
+  })

@@ -90,9 +90,10 @@ function calculateIntraSliceMatePairTemplateLength(
 }
 
 /**
- * @private establishes a mate-pair relationship between two records in the same slice.
- * CRAM compresses mate-pair relationships between records in the same slice down into
- * just one record having the index in the slice of its mate
+ * @private establishes a mate-pair relationship between two records in the
+ * same slice. CRAM compresses mate-pair relationships between records in the
+ * same slice down into just one record having the index in the slice of its
+ * mate
  */
 function associateIntraSliceMate(
   allRecords: CramRecord[],
@@ -100,12 +101,6 @@ function associateIntraSliceMate(
   thisRecord: CramRecord,
   mateRecord: CramRecord,
 ) {
-  if (!mateRecord) {
-    throw new CramMalformedError(
-      'could not resolve intra-slice mate pairs, file seems truncated or malformed',
-    )
-  }
-
   const complicatedMultiSegment = !!(
     mateRecord.mate ||
     (mateRecord.mateRecordNumber !== undefined &&
@@ -242,7 +237,7 @@ export default class CramSlice {
         throw new Error('block undefined')
       }
       blocks[i] = block
-      blockPosition = blocks[i]._endPosition
+      blockPosition = blocks[i]!._endPosition
     }
 
     return blocks
@@ -251,8 +246,7 @@ export default class CramSlice {
   // no memoize
   async getCoreDataBlock() {
     const blocks = await this.getBlocks()
-    // the core data block is always the first block in the slice
-    return blocks[0]
+    return blocks[0]!
   }
 
   // memoize
@@ -357,10 +351,6 @@ export default class CramSlice {
     }
 
     const sliceHeader = await this.getHeader()
-    if (sliceHeader === undefined) {
-      throw new Error('slice header undefined')
-    }
-
     const blocksByContentId = await this._getBlocksContentIdIndex()
 
     // check MD5 of reference if available
@@ -429,7 +419,9 @@ export default class CramSlice {
       )
       return decoded
     }
-    let records: CramRecord[] = new Array(sliceHeader.parsedContent.numRecords)
+    const records: CramRecord[] = new Array(
+      sliceHeader.parsedContent.numRecords,
+    )
     for (let i = 0; i < records.length; i += 1) {
       try {
         const init = decodeRecord(
@@ -456,7 +448,6 @@ export default class CramSlice {
           console.warn(
             'read attempted beyond end of buffer, file seems truncated.',
           )
-          records = records.filter(r => !!r)
           break
         } else {
           throw e
@@ -467,13 +458,13 @@ export default class CramSlice {
     // interpret `recordsToNextFragment` attributes to make standard `mate`
     // objects Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
-      const { mateRecordNumber } = records[i]
+      const { mateRecordNumber } = records[i]!
       if (mateRecordNumber !== undefined && mateRecordNumber >= 0) {
         associateIntraSliceMate(
           records,
           i,
-          records[i],
-          records[mateRecordNumber],
+          records[i]!,
+          records[mateRecordNumber]!,
         )
       }
     }
@@ -580,6 +571,6 @@ export default class CramSlice {
 }
 
 // memoize several methods in the class for performance
-'getHeader getBlocks _getBlocksContentIdIndex'
-  .split(' ')
-  .forEach(method => tinyMemoize(CramSlice, method))
+'getHeader getBlocks _getBlocksContentIdIndex'.split(' ').forEach(method => {
+  tinyMemoize(CramSlice, method)
+})

@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { test, expect } from 'vitest'
 import { testDataFile } from './lib/util'
 import { dumpWholeFile } from './lib/dumpFile'

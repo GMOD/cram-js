@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 async function dumpSlice(container, sliceOffset) {
   const slice = container.getSlice(sliceOffset)
   const header = await slice.getHeader()

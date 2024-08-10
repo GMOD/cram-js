@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { CramMalformedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
 import { getBits } from './getBits'
@@ -48,7 +47,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
     // if this is a degenerate zero-length huffman code, special-case the
     // decoding
-    if (this.sortedCodes[0].bitLength === 0) {
+    if (this.sortedCodes[0]!.bitLength === 0) {
       this._decode = this._decodeZeroLengthCode
     }
   }
@@ -58,10 +57,10 @@ export default class HuffmanIntCodec extends CramCodec<
     let codes = new Array<{ symbol: number; bitLength: number }>(
       this.parameters.numCodes,
     )
-    for (let i = 0; i < this.parameters.numCodes; i += 1) {
+    for (let i = 0; i < this.parameters.numCodes; i++) {
       codes[i] = {
-        symbol: this.parameters.symbols[i],
-        bitLength: this.parameters.bitLengths[i],
+        symbol: this.parameters.symbols[i]!,
+        bitLength: this.parameters.bitLengths[i]!,
       }
     }
     // sort the codes by bit length and symbol value
@@ -74,7 +73,7 @@ export default class HuffmanIntCodec extends CramCodec<
       if (!this.codeBook[code.bitLength]) {
         this.codeBook[code.bitLength] = []
       }
-      this.codeBook[code.bitLength].push(code.symbol)
+      this.codeBook[code.bitLength]!.push(code.symbol)
     })
   }
 
@@ -117,7 +116,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
     this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
     for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
-      this.bitCodeToValue[this.sortedCodes[i].bitCode] = i
+      this.bitCodeToValue[this.sortedCodes[i]!.bitCode] = i
     }
   }
 
@@ -136,7 +135,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
   // the special case for zero-length codes
   _decodeZeroLengthCode() {
-    return this.sortedCodes[0].value
+    return this.sortedCodes[0]!.value
   }
 
   _decode(slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
@@ -145,19 +144,19 @@ export default class HuffmanIntCodec extends CramCodec<
     let prevLen = 0
     let bits = 0
     for (let i = 0; i < this.sortedCodes.length; i += 1) {
-      const length = this.sortedCodes[i].bitLength
+      const length = this.sortedCodes[i]!.bitLength
       bits <<= length - prevLen
       bits |= getBits(input, coreCursor, length - prevLen)
       prevLen = length
       {
-        const index = this.bitCodeToValue[bits]
+        const index = this.bitCodeToValue[bits]!
         if (index > -1 && this.sortedBitLengthsByBitCode[index] === length) {
-          return this.sortedValuesByBitCode[index]
+          return this.sortedValuesByBitCode[index]!
         }
 
         for (
           let j = i;
-          this.sortedCodes[j + 1].bitLength === length &&
+          this.sortedCodes[j + 1]!.bitLength === length &&
           j < this.sortedCodes.length;
           j += 1
         ) {

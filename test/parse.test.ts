@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { describe, it, expect } from 'vitest'
 import { CramFile } from '../src'
 

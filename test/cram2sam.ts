@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import { IndexedFasta } from '@gmod/indexedfasta'
 import { CraiIndex, IndexedCramFile } from '../src'
 import CramRecord from '../src/cramFile/record'
 
-if (process.argv.length != 7) {
+if (process.argv.length !== 7) {
   process.stderr.write(
     'Usage: node jkb_test.js REF.fa input.cram tid start end\n',
   )
@@ -13,20 +14,20 @@ const chr = process.argv[4]
 const startStr = process.argv[5]
 const endStr = process.argv[6]
 
-const start = parseInt(startStr)
-const end = parseInt(endStr)
+const start = Number.parseInt(startStr)
+const end = Number.parseInt(endStr)
 
 // Fasta
 const t = new IndexedFasta({
   path: process.argv[2],
-  faiPath: process.argv[2] + '.fai',
+  faiPath: `${process.argv[2]}.fai`,
 })
 
 // open local files
 const indexedFile = new IndexedCramFile({
   cramPath: process.argv[3],
   index: new CraiIndex({
-    path: process.argv[3] + '.crai',
+    path: `${process.argv[3]}.crai`,
   }),
   seqFetch: async (seqId, start, end) => {
     // note:
@@ -60,7 +61,7 @@ function decodeSeqCigar(record: CramRecord) {
       seq += ref.slice(last_pos - refStart, refPos - refStart)
       last_pos = refPos
 
-      if (oplen && op != 'M') {
+      if (oplen && op !== 'M') {
         cigar += oplen + op
         oplen = 0
       }
@@ -86,7 +87,7 @@ function decodeSeqCigar(record: CramRecord) {
         seq += sub
         last_pos++
         oplen++
-      } else if (code == 'D' || code == 'N') {
+      } else if (code === 'D' || code === 'N') {
         // Deletion or Ref Skip
         last_pos += data
         if (oplen) {
@@ -94,7 +95,7 @@ function decodeSeqCigar(record: CramRecord) {
         }
         cigar += data + code
         oplen = 0
-      } else if (code == 'I' || code == 'S') {
+      } else if (code === 'I' || code === 'S') {
         // Insertion or soft-clip
         seq += data
         if (oplen) {
@@ -102,37 +103,37 @@ function decodeSeqCigar(record: CramRecord) {
         }
         cigar += data.length + code
         oplen = 0
-      } else if (code == 'i') {
+      } else if (code === 'i') {
         // Single base insertion
         seq += data
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += 1 + 'I'
+        cigar += `1I`
         oplen = 0
-      } else if (code == 'P') {
+      } else if (code === 'P') {
         // Padding
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += data + 'P'
-      } else if (code == 'H') {
+        cigar += `${data}P`
+      } else if (code === 'H') {
         // Hard clip
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += data + 'H'
+        cigar += `${data}H`
         oplen = 0
       } // else q or Q
     })
   } else {
     sublen = record.readLength - seq.length
   }
-  if (seq.length != record.readLength) {
+  if (seq.length !== record.readLength) {
     sublen = record.readLength - seq.length
     seq += ref.slice(last_pos - refStart, last_pos - refStart + sublen)
 
-    if (oplen && op != 'M') {
+    if (oplen && op !== 'M') {
       cigar += oplen + op
       oplen = 0
     }
@@ -167,8 +168,8 @@ function tags2str(record: CramRecord, RG: string[]) {
     }
   }
 
-  if (typeof record.readGroupId !== undefined && record.readGroupId >= 0) {
-    str += '\tRG:Z:' + RG[record.readGroupId]
+  if (record.readGroupId >= 0) {
+    str += `\tRG:Z:${RG[record.readGroupId]}`
   }
   return str
 }
@@ -179,16 +180,13 @@ async function run() {
   const seqList = await t.getSequenceNames()
   let tid: string | number = chr // ie numeric or string form
   seqList.forEach((name, id) => {
-    if (name == chr) {
+    if (name === chr) {
       tid = id
       return
     }
   })
 
   const hdr = await indexedFile.cram.getSamHeader()
-  if (!hdr) {
-    throw new Error('getSamHeader returned undefined')
-  }
   const RG: string[] = []
   let nRG = 0
   for (const line of hdr) {
@@ -207,7 +205,7 @@ async function run() {
   }
   const records = await indexedFile.getRecordsForRange(tid >>> 0, start, end)
 
-  //return; // benchmark decoder only
+  // return; // benchmark decoder only
 
   let refStart: number | undefined = undefined
   records.forEach(record => {
@@ -236,7 +234,7 @@ async function run() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _tlen = record.templateSize // only if detached
     const tags = tags2str(record, RG)
-    // eslint-disable-next-line no-console
+
     console.log(
       `${record.readName}\t${record.flags}\t${seqList[record.sequenceId]}\t${
         record.alignmentStart
@@ -245,4 +243,6 @@ async function run() {
   })
 }
 
-run().catch(e => console.error(e))
+run().catch(e => {
+  console.error(e)
+})

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import { CramMalformedError, CramUnimplementedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
 import { parseItf8 } from '../util'
@@ -64,6 +63,6 @@ export default class ExternalCodec extends CramCodec<
         'attempted to read beyond end of block. this file seems truncated.',
       )
     }
-    return contentBlock.content[cursor.bytePosition++]
+    return contentBlock.content[cursor.bytePosition++]!
   }
 }

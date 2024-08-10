@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import fs from 'fs'
 
 const fsOpen = fs.openSync
@@ -12,7 +12,7 @@ class LocalFile {
     this.filename = source
   }
 
-  async read(buffer, offset = 0, length, position) {
+  async read(buffer, offset, length, position) {
     let readPosition = position
     if (readPosition === null) {
       readPosition = this.position

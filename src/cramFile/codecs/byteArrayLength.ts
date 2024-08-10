@@ -23,11 +23,6 @@ export default class ByteArrayStopCodec extends CramCodec<
   ) {
     super(parameters, dataType)
     this.instantiateCodec = instantiateCodec
-    if (dataType !== 'byteArray') {
-      throw new TypeError(
-        `byteArrayLength does not support data type ${dataType}`,
-      )
-    }
   }
 
   decode(
@@ -71,6 +66,6 @@ export default class ByteArrayStopCodec extends CramCodec<
   }
 }
 
-'_getLengthCodec _getDataCodec'
-  .split(' ')
-  .forEach(method => tinyMemoize(ByteArrayStopCodec, method))
+'_getLengthCodec _getDataCodec'.split(' ').forEach(method => {
+  tinyMemoize(ByteArrayStopCodec, method)
+})
