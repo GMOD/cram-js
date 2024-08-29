@@ -167,7 +167,7 @@ export function tinyMemoize(_class: any, methodName: any) {
       const res = method.call(this)
       this[memoAttrName] = res
       Promise.resolve(res).catch(() => {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+         
         delete this[memoAttrName]
       })
     }

@@ -243,6 +243,6 @@ async function run() {
   })
 }
 
-run().catch(e => {
+run().catch((e: unknown) => {
   console.error(e)
 })
