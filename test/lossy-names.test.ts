@@ -1,12 +1,13 @@
 //@ts-nocheck
+import { describe, it, expect } from 'vitest'
 import { CraiIndex, IndexedCramFile } from '../src'
 
 describe('1kg mate test', () => {
   it('runs without error', async () => {
     const indexedCramFile = new IndexedCramFile({
-      cramPath: require.resolve(`./data/na12889_lossy.cram`),
+      cramPath: require.resolve('./data/na12889_lossy.cram'),
       index: new CraiIndex({
-        path: require.resolve(`./data/na12889_lossy.cram.crai`),
+        path: require.resolve('./data/na12889_lossy.cram.crai'),
       }),
       seqFetch: async (seqId, start, end) => {
         let fakeSeq = ''

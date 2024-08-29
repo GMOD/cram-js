@@ -1,4 +1,5 @@
 import { testDataFile } from './lib/util'
+import { test, expect } from 'vitest'
 import { dumpWholeFile } from './lib/dumpFile'
 import { CramFile } from '../src/index'
 import { FetchableSmallFasta } from './lib/fasta'

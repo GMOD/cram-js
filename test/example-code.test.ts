@@ -1,4 +1,5 @@
 import { IndexedCramFile, CraiIndex } from '../src'
+import { describe, it, expect } from 'vitest'
 
 describe('code examples', () => {
   describe('readme 1', () => {
@@ -12,9 +13,9 @@ describe('code examples', () => {
 
       // or with local files
       const indexedFile2 = new IndexedCramFile({
-        cramPath: require.resolve(`./data/ce#5.tmp.cram`),
+        cramPath: require.resolve('./data/ce#5.tmp.cram'),
         index: new CraiIndex({
-          path: require.resolve(`./data/ce#5.tmp.cram.crai`),
+          path: require.resolve('./data/ce#5.tmp.cram.crai'),
         }),
         seqFetch: async (seqId, start, end) => {
           let fakeSeq = ''

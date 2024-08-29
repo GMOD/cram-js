@@ -2,7 +2,7 @@
   "include": ["src"],
   "compilerOptions": {
     "outDir": "dist",
-    "types": ["node", "jest"],
+    "types": ["node"],
     "lib": ["dom", "esnext"],
     "declaration": true,
     "moduleResolution": "node",
@@ -10,6 +10,7 @@
     "target": "es2015",
     "strict": true,
     "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "allowJs": true

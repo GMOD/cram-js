@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { describe, it, expect } from 'vitest'
 import { sequenceMD5 } from '../src/cramFile/util'
 
 describe('util.sequenceMD5', () => {

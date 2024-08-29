@@ -1,4 +1,5 @@
 import { testDataFile } from './lib/util'
+import { test, describe, it, expect } from 'vitest'
 import { CramRecord, IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
 

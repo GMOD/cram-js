@@ -1,4 +1,5 @@
 import { testDataFile } from './lib/util'
+import { describe, it, expect } from 'vitest'
 
 import CraiIndex from '../src/craiIndex'
 

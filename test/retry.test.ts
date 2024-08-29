@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { describe, it, expect } from 'vitest'
 import mock from 'mock-fs'
 import LocalFile from './lib/syncLocalFile'
 
