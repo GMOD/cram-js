@@ -90,10 +90,9 @@ export default class CramFile {
       cacheSize: args.cacheSize ?? 20000,
     }
 
-    // cache of features in a slice, keyed by the
-    // slice offset. caches all of the features in a slice, or none.
-    // the cache is actually used by the slice object, it's just
-    // kept here at the level of the file
+    // cache of features in a slice, keyed by the slice offset. caches all of
+    // the features in a slice, or none. the cache is actually used by the
+    // slice object, it's just kept here at the level of the file
     this.featureCache = new QuickLRU({
       maxSize: this.options.cacheSize,
     })

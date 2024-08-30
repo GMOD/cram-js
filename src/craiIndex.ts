@@ -1,5 +1,3 @@
-import AbortablePromiseCache from '@gmod/abortable-promise-cache'
-import QuickLRU from 'quick-lru'
 import { unzip } from './unzip'
 import { open } from './io'
 import { CramMalformedError } from './errors'
@@ -35,6 +33,13 @@ function addRecordToIndex(index: ParsedIndex, record: number[]) {
   })
 }
 
+function maybeUnzip(data: Buffer) {
+  if (data[0] === 31 && data[1] === 139) {
+    return unzip(data)
+  }
+  return data
+}
+
 export default class CraiIndex {
   // A CRAM index (.crai) is a gzipped tab delimited file containing the
   // following columns:
@@ -45,10 +50,9 @@ export default class CraiIndex {
   // 4. Container start byte position in the file
   // 5. Slice start byte position in the container data (‘blocks’)
   // 6. Slice size in bytes
-  //
-  // Each line represents a slice in the CRAM file. Please note that all slices
-  // must be listed in index file.
-  private _parseCache: AbortablePromiseCache<unknown, ParsedIndex>
+  // Each line represents a slice in the CRAM file. Please note that all slices must be listed in index file.
+  private parseIndexP?: Promise<ParsedIndex>
+
   private filehandle: Filehandle
 
   /**
@@ -60,17 +64,11 @@ export default class CraiIndex {
    */
   constructor(args: CramFileSource) {
     this.filehandle = open(args.url, args.path, args.filehandle)
-    this._parseCache = new AbortablePromiseCache<unknown, ParsedIndex>({
-      cache: new QuickLRU({ maxSize: 1 }),
-      fill: (_data, _signal) => this.parseIndex(),
-    })
   }
 
   async parseIndex() {
     const index: ParsedIndex = {}
-    const data = await this.filehandle.readFile()
-    const uncompressedBuffer =
-      data[0] === 31 && data[1] === 139 ? unzip(data) : data
+    const uncompressedBuffer = maybeUnzip(await this.filehandle.readFile())
     if (
       uncompressedBuffer.length > 4 &&
       uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
@@ -122,8 +120,14 @@ export default class CraiIndex {
     return index
   }
 
-  getIndex(opts: { signal?: AbortSignal } = {}) {
-    return this._parseCache.get('index', null, opts.signal)
+  getIndex() {
+    if (!this.parseIndexP) {
+      this.parseIndexP = this.parseIndex().catch((e: unknown) => {
+        this.parseIndexP = undefined
+        throw e
+      })
+    }
+    return this.parseIndexP
   }
 
   /**

@@ -181,7 +181,7 @@ export default class CramSlice {
   constructor(
     public container: CramContainer,
     public containerPosition: number,
-    _unused: number,
+    public sliceSize: number,
   ) {
     this.file = container.file
   }
