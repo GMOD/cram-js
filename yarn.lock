@@ -333,11 +333,6 @@
   resolved "https://registry.yarnpkg.com/@eslint/object-schema/-/object-schema-2.1.4.tgz#9e69f8bb4031e11df79e03db09f9dbbae1740843"
   integrity sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==
 
-"@gmod/abortable-promise-cache@^2.0.0":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@gmod/abortable-promise-cache/-/abortable-promise-cache-2.0.1.tgz#d01cbcb2d9ad23cf0f421824b7e759a441815ebc"
-  integrity sha512-6PQTJv+uxAb8XE/oL2Uh4EmFJpn65YOTSqGn8HLNXrWRlW1Clp1Oze6biHeRCMonLwEx4oH4bPeyjdcMnNP8pw==
-
 "@gmod/bgzf-filehandle@^1.4.0":
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/@gmod/bgzf-filehandle/-/bgzf-filehandle-1.4.7.tgz#de2b1fbf2f56e15c31179bd42cd8bce7a8d1ada8"
