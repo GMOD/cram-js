@@ -137,12 +137,8 @@ export default class CramFile {
       return parseHeaderText('')
     }
     const content = firstBlock.content
-    // find the end of the trailing zeros in the header text
     const headerLength = content.readInt32LE(0)
     const textStart = 4
-    // let textEnd = content.length - 1
-    // while (textEnd >= textStart && !content[textEnd]) textEnd -= 1
-    // trim off the trailing zeros
     const text = content.toString('utf8', textStart, textStart + headerLength)
     this.header = text
     return parseHeaderText(text)
