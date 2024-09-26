@@ -185,7 +185,8 @@ export default class CramFile {
           position = block._endPosition
         }
       } else {
-        // otherwise, just traverse to the next container using the container's length
+        // otherwise, just traverse to the next container using the container's
+        // length
         position += currentHeader._size + currentHeader.length
       }
     }
@@ -226,9 +227,9 @@ export default class CramFile {
       if (!currentHeader) {
         break
       }
-      // if this is the first container, read all the blocks in the
-      // container, because we cannot trust the container
-      // header's given length due to a bug somewhere in htslib
+      // if this is the first container, read all the blocks in the container,
+      // because we cannot trust the container header's given length due to a
+      // bug somewhere in htslib
       if (containerCount === 0) {
         position = currentHeader._endPosition
         for (let j = 0; j < currentHeader.numBlocks; j++) {
@@ -239,7 +240,8 @@ export default class CramFile {
           position = block._endPosition
         }
       } else {
-        // otherwise, just traverse to the next container using the container's length
+        // otherwise, just traverse to the next container using the container's
+        // length
         position += currentHeader._size + currentHeader.length
       }
       containerCount += 1

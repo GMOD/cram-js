@@ -122,4 +122,15 @@ grc37-1#HG03297.mapped.ILLUMINA.bwa.ESN.low_coverage.20130415.bam.cram
   .split(/\s+/)
   .filter(f => !!f)
 
-export { t1, t2 }
+const t3 = `
+hts-specs/0902_comp_bz2.cram
+hts-specs/0903_comp_lzma.cram
+hts-specs/3.1/passed/level-3.cram
+hts-specs/3.1/passed/level-4.cram
+hts-specs/3.1/passed/level-1.cram
+hts-specs/3.1/passed/level-2.cram
+`
+  .split(/\s+/)
+  .filter(f => !!f)
+
+export { t1, t2, t3 }
