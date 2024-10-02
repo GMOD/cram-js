@@ -32,7 +32,11 @@ function readNullTerminatedString(buffer: Uint8Array) {
  */
 function parseTagValueArray(buffer: Uint8Array) {
   const arrayType = String.fromCharCode(buffer[0]!)
-  const length = Int32Array.from(buffer.slice(1))[0]!
+
+  //const length = Int32Array.from(buffer.slice(1))[0]!
+  const dataView = new DataView(buffer.buffer)
+  const littleEndian = true
+  const length = dataView.getUint32(1, littleEndian)
 
   const array: number[] = new Array(length)
   buffer = buffer.slice(5)
