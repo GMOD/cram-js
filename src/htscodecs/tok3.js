@@ -57,7 +57,7 @@ const TOK_MATCH = 10
 const TOK_NOP = 11
 const TOK_END = 12
 
-// ----------------------------------------------------------------------
+//----------------------------------------------------------------------
 // Token byte streams
 function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
   var t = -1
@@ -88,7 +88,8 @@ function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
       var clen = src.ReadUint7()
       var data = src.ReadData(clen)
 
-      B[t][type] = use_arith ? arith.decode(data) : rans.decode(data)
+      if (use_arith) B[t][type] = arith.decode(data)
+      else B[t][type] = rans.decode(data)
       B[t][type] = new IOStream(B[t][type])
     }
   }
@@ -96,13 +97,11 @@ function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
   return B
 }
 
-// ----------------------------------------------------------------------
+//----------------------------------------------------------------------
 // Token decode
 function LeftPadNumber(val, len) {
   var str = val + ''
-  while (str.length < len) {
-    str = '0' + str
-  }
+  while (str.length < len) str = '0' + str
 
   return str
 }
@@ -168,7 +167,7 @@ function DecodeSingleName(B, N, T, n) {
   return N[n]
 }
 
-// ----------------------------------------------------------------------
+//----------------------------------------------------------------------
 // Main tokeniser decode entry function: decodes a compressed src and
 // returns the uncompressed buffer.
 function decode(src, len, separator) {
@@ -182,17 +181,14 @@ function decode(src, len, separator) {
   var T = new Array(nnames)
 
   var str = ''
-  if (separator === undefined) {
-    separator = '\n'
-  }
-  for (var i = 0; i < nnames; i++) {
+  if (typeof separator === 'undefined') separator = '\n'
+  for (var i = 0; i < nnames; i++)
     str += DecodeSingleName(B, N, T, i) + separator
-  }
 
   return str
 }
 
-// ----------------------------------------------------------------------
+//----------------------------------------------------------------------
 // Main tokeniser encode function
 
 // Encoder is trickier than decode as we have a lot of decisions to make.
@@ -202,9 +198,7 @@ function decode(src, len, separator) {
 function encode(src, use_arith) {
   // Convert buffer to array of names
   var str = src.toString()
-  if (str[str.length - 1] == '\n') {
-    str = str.slice(0, Math.max(0, str.length - 1))
-  }
+  if (str[str.length - 1] == '\n') str = str.substring(0, str.length - 1)
   var names = str.split('\n')
 
   var out = new IOStream('', 0, str.length * 2 + 10000) // guess max size
@@ -220,20 +214,15 @@ function encode(src, use_arith) {
   var max_len = 0
   for (var i = 0; i < names.length; i++) {
     var [ntok, len] = TokeniseName(T, H, F, names[i], i)
-    if (max_tok < ntok) {
-      max_tok = ntok
-    }
-    if (max_len < len) {
-      max_len = len
-    }
+    if (max_tok < ntok) max_tok = ntok
+    if (max_len < len) max_len = len
   }
 
   // Convert tokens to byte streams and serialise
   for (var tnum = 0; tnum < max_tok; tnum++) {
     var B = new Array(TOK_END + 1)
-    for (var type = 0; type <= TOK_END; type++) {
+    for (var type = 0; type <= TOK_END; type++)
       B[type] = new IOStream('', 0, names.length * max_len)
-    }
 
     FillByteStreams(B, T, tnum, names, max_tok, max_len)
     SerialiseByteStreams(B, tnum, use_arith, out)
@@ -245,13 +234,9 @@ function encode(src, use_arith) {
 function FillByteStreams(B, T, tnum, names, max_tok, max_len) {
   // Create byte streams B[]
   for (var n = 0; n < names.length; n++) {
-    if (tnum > 0 && T[n][0].type == TOK_DUP) {
-      continue
-    }
+    if (tnum > 0 && T[n][0].type == TOK_DUP) continue
 
-    if (!T[n][tnum]) {
-      continue
-    }
+    if (!T[n][tnum]) continue
 
     B[TOK_TYPE].WriteByte(T[n][tnum].type)
 
@@ -295,9 +280,7 @@ function FillByteStreams(B, T, tnum, names, max_tok, max_len) {
 function SerialiseByteStreams(B, tnum, use_arith, out) {
   // Compress and serialise byte streams B[]
   for (var type = 0; type <= TOK_END; type++) {
-    if (B[type].pos <= 0) {
-      continue
-    }
+    if (B[type].pos <= 0) continue
 
     out.WriteByte(type + (type == 0 ? 128 : 0))
 
@@ -317,13 +300,9 @@ function try_compress(src, use_arith) {
   var methods = [0, 1, 64, 65, 128, 129, 193 + 8]
   for (var i in methods) {
     var lvl = methods[i]
-    if (lvl & 1 && src.length < 100) {
-      continue
-    }
+    if (lvl & 1 && src.length < 100) continue
 
-    if (lvl & 8 && src.length % 4 != 0) {
-      continue
-    }
+    if (lvl & 8 && src.length % 4 != 0) continue
 
     try {
       var tmp = use_arith ? arith.encode(src, lvl) : rans.encode(src, lvl)
@@ -347,7 +326,7 @@ function TokeniseName(T, H, F, name, n) {
   T[n] = new Array(256)
 
   if (H[name]) {
-    // console.error(name,H[name],n)
+    //console.error(name,H[name],n)
     T[n][0] = {
       type: TOK_DUP,
       val: n - H[name],
@@ -367,13 +346,9 @@ function TokeniseName(T, H, F, name, n) {
     var t = i + 1 // token 0 = DIFF vs DUP
     var type = TOK_STRING
     var val = tok[i]
-    if (tok[i].match(/^0+[0-9]*$/g)) {
-      type = TOK_DIGITS0
-    } else if (tok[i].match(/^[0-9]+$/g)) {
-      type = TOK_DIGITS
-    } else if (tok[i].length == 1) {
-      type = TOK_CHAR
-    }
+    if (tok[i].match(/^0+[0-9]*$/g)) type = TOK_DIGITS0
+    else if (tok[i].match(/^[0-9]+$/g)) type = TOK_DIGITS
+    else if (tok[i].length == 1) type = TOK_CHAR
 
     if (p >= 0 && T[p][t]) {
       if (T[p][t].str == tok[i]) {
@@ -405,12 +380,11 @@ function TokeniseName(T, H, F, name, n) {
       type: type,
     }
 
-    if (max_len < T[n][t].val.length + 3) {
+    if (max_len < T[n][t].val.length + 3)
       // +3 for integers; 5 -> (Uint32)5
       max_len = T[n][t].val.length + 3
-    }
 
-    // console.error(t,T[n][t])
+    //console.error(t,T[n][t])
   }
   T[n][++t] = {
     type: TOK_END,

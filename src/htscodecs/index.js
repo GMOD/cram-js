@@ -54,11 +54,13 @@ function r4x16_uncompress(inputBuffer, outputBuffer) {
 }
 
 function arith_uncompress(inputBuffer, outputBuffer) {
-  arith.decode(inputBuffer).copy(outputBuffer, 0, 0)
+  // fix by @cmdcolin for CRAM 3.1
+  // xref https://github.com/jkbonfield/htscodecs/pull/1/files
+  return new arith().decode(inputBuffer).copy(outputBuffer, 0, 0)
 }
 
 function fqzcomp_uncompress(inputBuffer, outputBuffer) {
-  var q_lens = []
+  var q_lens = new Array()
   fqzcomp.decode(inputBuffer, q_lens).copy(outputBuffer, 0, 0)
 }
 

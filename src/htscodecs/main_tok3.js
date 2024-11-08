@@ -53,14 +53,10 @@ var raw = argv.r
 if (!argv.d) {
   var pos = 0
   var out_len = 0
-  if (raw) {
-    blk_size = buf.length
-  }
+  if (raw) blk_size = buf.length
   while (pos < buf.length) {
     var blk_end = blk_size
-    while (pos + blk_end < buf.length && buf[pos + blk_end - 1] != 10) {
-      blk_end--
-    }
+    while (pos + blk_end < buf.length && buf[pos + blk_end - 1] != 10) blk_end--
     var buf2 = tok3.encode(buf.slice(pos, pos + blk_end), argv.a)
     var header = new Buffer.allocUnsafe(4)
     if (!raw) {

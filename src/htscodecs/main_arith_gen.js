@@ -58,9 +58,7 @@ if (!argv.d) {
   order += Math.round((order - (order >> 0)) * 10) * 256
   var pos = 0
   var out_len = 0
-  if (raw) {
-    blk_size = buf.length
-  }
+  if (raw) blk_size = buf.length
   while (pos < buf.length) {
     var buf2 = arith.encode(buf.slice(pos, pos + blk_size), order)
 

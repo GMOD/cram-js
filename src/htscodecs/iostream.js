@@ -86,9 +86,7 @@ module.exports = class IOStream {
     var s = ''
     do {
       var b = this.buf[this.pos++]
-      if (b) {
-        s += String.fromCharCode(b)
-      }
+      if (b) s += String.fromCharCode(b)
     } while (b)
     return s
   }
@@ -121,7 +119,7 @@ module.exports = class IOStream {
     var i = this.buf[this.pos]
     this.pos++
 
-    // process.stderr.write("i="+i+"\n");
+    //process.stderr.write("i="+i+"\n");
 
     if (i >= 0xf0) {
       // 1111xxxx => +4 bytes
@@ -132,7 +130,7 @@ module.exports = class IOStream {
         (this.buf[this.pos + 2] << 4) +
         (this.buf[this.pos + 3] >> 4)
       this.pos += 4
-      // process.stderr.write("  4i="+i+"\n");
+      //process.stderr.write("  4i="+i+"\n");
     } else if (i >= 0xe0) {
       // 1110xxxx => +3 bytes
       i = (i & 0x0f) << 24
@@ -141,19 +139,19 @@ module.exports = class IOStream {
         (this.buf[this.pos + 1] << 8) +
         (this.buf[this.pos + 2] << 0)
       this.pos += 3
-      // process.stderr.write("  3i="+i+"\n");
+      //process.stderr.write("  3i="+i+"\n");
     } else if (i >= 0xc0) {
       // 110xxxxx => +2 bytes
       i = (i & 0x1f) << 16
       i += (this.buf[this.pos + 0] << 8) + (this.buf[this.pos + 1] << 0)
       this.pos += 2
-      // process.stderr.write("  2i="+i+"\n");
+      //process.stderr.write("  2i="+i+"\n");
     } else if (i >= 0x80) {
       // 10xxxxxx => +1 bytes
       i = (i & 0x3f) << 8
       i += this.buf[this.pos]
       this.pos++
-      // process.stderr.write("  1i="+i+"\n");
+      //process.stderr.write("  1i="+i+"\n");
     } else {
       // 0xxxxxxx => +0 bytes
     }
@@ -172,16 +170,13 @@ module.exports = class IOStream {
   }
 
   WriteString(str) {
-    for (var i = 0; i < str.length; i++) {
+    for (var i = 0; i < str.length; i++)
       this.buf[this.pos++] = str.charCodeAt(i)
-    }
     this.buf[this.pos++] = 0
   }
 
   WriteData(buf, len) {
-    for (var i = 0; i < len; i++) {
-      this.buf[this.pos++] = buf[i]
-    }
+    for (var i = 0; i < len; i++) this.buf[this.pos++] = buf[i]
   }
 
   WriteStream(stream) {
@@ -189,7 +184,7 @@ module.exports = class IOStream {
   }
 
   WriteUint16(u) {
-    // this.buf.writeInt16LE(u, this.pos);
+    //this.buf.writeInt16LE(u, this.pos);
     this.WriteByte(u & 0xff)
     this.WriteByte((u >> 8) & 0xff)
   }
@@ -222,9 +217,7 @@ module.exports = class IOStream {
 
   WriteITF8(i) {
     // Horrid, ITF8 is unsigned, but we still write signed into it
-    if (i < 0) {
-      i = (1 << 32) + i
-    }
+    if (i < 0) i = (1 << 32) + i
 
     if (i <= 0x0000007f) {
       // 1 byte

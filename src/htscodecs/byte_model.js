@@ -42,8 +42,8 @@ module.exports = class ByteModel {
   constructor(max_sym = 256) {
     this.total_freq = max_sym
     this.max_sym = max_sym - 1
-    this.S = []
-    this.F = []
+    this.S = new Array()
+    this.F = new Array()
 
     for (var i = 0; i <= this.max_sym; i++) {
       this.S[i] = i
@@ -58,9 +58,7 @@ module.exports = class ByteModel {
     // Linear scan to find cumulative frequency 'freq'
     var acc = 0
     var x = 0
-    while (acc + this.F[x] <= freq) {
-      acc += this.F[x++]
-    }
+    while (acc + this.F[x] <= freq) acc += this.F[x++]
 
     //	for (var acc = 0; (acc += this.F[x]) <= freq; x++)
     //	    ;
@@ -72,9 +70,7 @@ module.exports = class ByteModel {
     // Update model
     this.F[x] += STEP
     this.total_freq += STEP
-    if (this.total_freq > MAX_FREQ) {
-      this.ModelRenormalise()
-    }
+    if (this.total_freq > MAX_FREQ) this.ModelRenormalise()
 
     // Keep symbols approximately frequency sorted
     var sym = this.S[x]
@@ -103,9 +99,7 @@ module.exports = class ByteModel {
   ModelEncode(dst, rc, sym) {
     // Find cumulative frequency
     var acc = 0
-    for (var x = 0; this.S[x] != sym; x++) {
-      acc += this.F[x]
-    }
+    for (var x = 0; this.S[x] != sym; x++) acc += this.F[x]
 
     // Encode
     rc.RangeEncode(dst, acc, this.F[x], this.total_freq)
@@ -113,10 +107,9 @@ module.exports = class ByteModel {
     // Update model
     this.F[x] += STEP
     this.total_freq += STEP
-    if (this.total_freq > MAX_FREQ) {
+    if (this.total_freq > MAX_FREQ)
       // FIXME x2
       this.ModelRenormalise()
-    }
 
     // Keep symbols approximately frequency sorted
     var sym = this.S[x]

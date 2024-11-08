@@ -52,25 +52,21 @@ if (!argv.d) {
   // a single non-breaking buffer.
   var len = 0
   var j = 0
-  var q_lens = []
-  var q_dirs = []
+  var q_lens = new Array()
+  var q_dirs = new Array()
   var q_len = 0
   for (var i = 0; i < buf.length; i++) {
     if (buf[i] == '\n'.charCodeAt(0) || buf[i] == '\t'.charCodeAt(0)) {
       q_lens.push(len)
-      if (q_len == 0) {
-        q_len = len
-      } else if (q_len != len) {
-        q_len = -1
-      } // marker for multiple lengths
+      if (q_len == 0) q_len = len
+      else if (q_len != len) q_len = -1 // marker for multiple lengths
       len = 0
 
       if (buf[i] == '\t'.charCodeAt(0)) {
         // parse 2nd token for read1/read2 status
         var dir = ''
-        for (i++; i < buf.length && buf[i] != '\n'.charCodeAt(0); i++) {
+        for (i++; i < buf.length && buf[i] != '\n'.charCodeAt(0); i++)
           dir += String.fromCharCode(buf[i])
-        }
         q_dirs.push(dir)
       } else {
         q_dirs.push(0)
@@ -81,9 +77,7 @@ if (!argv.d) {
     }
   }
   buf = buf.slice(0, j)
-  if (q_len > 0) {
-    q_lens = [q_lens[0]]
-  }
+  if (q_len > 0) q_lens = [q_lens[0]]
 
   var buf2 = fqz.encode(buf, q_lens, q_dirs)
   process.stderr.write('Compress ' + buf.length + ' => ' + buf2.length + '\n')
@@ -95,10 +89,11 @@ if (!argv.d) {
   }
   process.stdout.write(buf2)
 } else {
-  var q_lens = []
+  var q_lens = new Array()
   // Consume ulen and clen from outer test harness (pointless as non-blocking atm)
   var buf2
-  buf2 = raw ? fqz.decode(buf, q_lens) : fqz.decode(buf.slice(8), q_lens)
+  if (raw) buf2 = fqz.decode(buf, q_lens)
+  else buf2 = fqz.decode(buf.slice(8), q_lens)
 
   // Split into newlines so we can do easy data comparison
   var buf3 = new Buffer.allocUnsafe(buf2.length + q_lens.length)
