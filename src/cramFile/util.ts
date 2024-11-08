@@ -167,7 +167,6 @@ export function tinyMemoize(_class: any, methodName: any) {
       const res = method.call(this)
       this[memoAttrName] = res
       Promise.resolve(res).catch(() => {
-         
         delete this[memoAttrName]
       })
     }

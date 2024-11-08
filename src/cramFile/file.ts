@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer'
 import crc32 from 'crc/crc32'
 import QuickLRU from 'quick-lru'
-import htscodecs from '@jkbonfield/htscodecs'
+import htscodecs from '../htscodecs'
 import bzip2 from 'bzip2'
 import { XzReadableStream } from 'xz-decompress'
 import { CramMalformedError, CramUnimplementedError } from '../errors'
@@ -137,12 +137,8 @@ export default class CramFile {
       return parseHeaderText('')
     }
     const content = firstBlock.content
-    // find the end of the trailing zeros in the header text
     const headerLength = content.readInt32LE(0)
     const textStart = 4
-    // let textEnd = content.length - 1
-    // while (textEnd >= textStart && !content[textEnd]) textEnd -= 1
-    // trim off the trailing zeros
     const text = content.toString('utf8', textStart, textStart + headerLength)
     this.header = text
     return parseHeaderText(text)
@@ -189,7 +185,8 @@ export default class CramFile {
           position = block._endPosition
         }
       } else {
-        // otherwise, just traverse to the next container using the container's length
+        // otherwise, just traverse to the next container using the container's
+        // length
         position += currentHeader._size + currentHeader.length
       }
     }
@@ -230,9 +227,9 @@ export default class CramFile {
       if (!currentHeader) {
         break
       }
-      // if this is the first container, read all the blocks in the
-      // container, because we cannot trust the container
-      // header's given length due to a bug somewhere in htslib
+      // if this is the first container, read all the blocks in the container,
+      // because we cannot trust the container header's given length due to a
+      // bug somewhere in htslib
       if (containerCount === 0) {
         position = currentHeader._endPosition
         for (let j = 0; j < currentHeader.numBlocks; j++) {
@@ -243,7 +240,8 @@ export default class CramFile {
           position = block._endPosition
         }
       } else {
-        // otherwise, just traverse to the next container using the container's length
+        // otherwise, just traverse to the next container using the container's
+        // length
         position += currentHeader._size + currentHeader.length
       }
       containerCount += 1

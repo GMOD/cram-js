@@ -42,7 +42,6 @@
     "biojs"
   ],
   "dependencies": {
-    "@jkbonfield/htscodecs": "^0.5.1",
     "bzip2": "^0.1.1",
     "crc": "^4.3.2",
     "long": "^4.0.0",
