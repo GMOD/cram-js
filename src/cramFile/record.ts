@@ -21,11 +21,11 @@ export interface ReadFeature {
 function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   // if it has no length, it has no sequence
   if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
-    return null
+    return undefined
   }
 
   if (cramRecord.isUnknownBases()) {
-    return null
+    return undefined
   }
 
   // remember: all coordinates are 1-based closed
@@ -223,7 +223,7 @@ export default class CramRecord {
   public tags: Record<string, string>
   public flags: number
   public cramFlags: number
-  public readBases?: string | null
+  public readBases?: string
   public _refRegion?: RefRegion
   public readFeatures?: ReadFeature[]
   public alignmentStart: number
@@ -437,7 +437,7 @@ export default class CramRecord {
       }
       return tmp.join('')
     }
-    return null
+    return undefined
   }
 
   /**

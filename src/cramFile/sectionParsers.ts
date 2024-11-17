@@ -1,3 +1,4 @@
+import type { Buffer } from 'buffer'
 import { TupleOf } from '../typescript'
 import { parseItf8, parseLtf8 } from './util'
 import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
@@ -92,7 +93,10 @@ export function cramBlockHeader() {
       },
     }
   }
-  return { parser, maxLength: 17 }
+  return {
+    parser,
+    maxLength: 17,
+  }
 }
 
 export function cramBlockCrc32() {
