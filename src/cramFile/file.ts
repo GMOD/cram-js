@@ -21,7 +21,7 @@ import { parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
 import { Filehandle } from './filehandle'
 
-function bufferToStream(buf: Buffer) {
+function bufferToStream(buf: Uint8Array) {
   return new ReadableStream({
     start(controller) {
       controller.enqueue(buf)
