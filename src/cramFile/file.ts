@@ -1,5 +1,4 @@
-import { Buffer } from 'buffer'
-import crc32 from 'crc/crc32'
+import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
 import htscodecs from '../htscodecs'
 import bzip2 from 'bzip2'
@@ -205,8 +204,10 @@ export default class CramFile {
     description: string,
   ) {
     const b = await this.file.read(length, position)
-    // @ts-expect-error
-    const calculatedCrc32 = crc32.unsigned(b)
+    // this shift >>> 0 is equivalent to crc32(b).unsigned but uses the
+    // internal calculator of crc32 to avoid accidentally importing buffer
+    // https://github.com/alexgorbatchev/crc/blob/31fc3853e417b5fb5ec83335428805842575f699/src/define_crc.ts#L5
+    const calculatedCrc32 = crc32(b) >>> 0
     if (calculatedCrc32 !== recordedCrc32) {
       throw new CramMalformedError(
         `crc mismatch in ${description}: recorded CRC32 = ${recordedCrc32}, but calculated CRC32 = ${calculatedCrc32}`,
@@ -335,21 +336,13 @@ export default class CramFile {
       // htscodecs r4x8 is slower, but compatible.
       // htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
     } else if (compressionMethod === 'rans4x16') {
-      const outputBuffer = new Uint8Array(uncompressedSize)
-      htscodecs.r4x16_uncompress(inputBuffer, outputBuffer)
-      return outputBuffer
+      return htscodecs.r4x16_uncompress(inputBuffer)
     } else if (compressionMethod === 'arith') {
-      const outputBuffer = new Uint8Array(uncompressedSize)
-      htscodecs.arith_uncompress(inputBuffer, outputBuffer)
-      return outputBuffer
+      return htscodecs.arith_uncompress(inputBuffer)
     } else if (compressionMethod === 'fqzcomp') {
-      const outputBuffer = new Uint8Array(uncompressedSize)
-      htscodecs.fqzcomp_uncompress(inputBuffer, outputBuffer)
-      return outputBuffer
+      return htscodecs.fqzcomp_uncompress(inputBuffer)
     } else if (compressionMethod === 'tok3') {
-      const outputBuffer = new Uint8Array(uncompressedSize)
-      htscodecs.tok3_uncompress(inputBuffer, outputBuffer)
-      return outputBuffer
+      return htscodecs.tok3_uncompress(inputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,

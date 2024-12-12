@@ -277,7 +277,7 @@ function decode_fqz(src, q_lens) {
   // Create our entropy encoder and output buffers
   var rc = new RangeCoder(src)
   rc.RangeStartDecode(src)
-  var output = new Buffer.allocUnsafe(n_out)
+  var output = new Uint8Array(n_out)
 
   // Internal FQZ state
   var state = {

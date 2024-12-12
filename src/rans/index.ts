@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { Buffer } from 'buffer'
 import { CramMalformedError } from '../errors'
 
 import Decoding from './decoding'
@@ -230,7 +229,7 @@ export default function uncompress(
   }
 
   const /* int */ outputSize = input.getInt()
-  const output = new ByteBuffer(outputBuffer || Buffer.allocUnsafe(outputSize))
+  const output = new ByteBuffer(outputBuffer || new Uint8Array(outputSize))
   // TODO output.limit(outputSize)
 
   if (output.length < outputSize) {

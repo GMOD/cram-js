@@ -37,8 +37,6 @@
 // This JavaScript file is not part of the reference implementation
 // and is simply and interface to get a consistent interface for cram-js.
 
-'use strict'
-
 var r4x8 = require('./rans')
 var r4x16 = require('./rans4x16')
 var arith = require('./arith_gen')
@@ -46,28 +44,28 @@ var fqzcomp = require('./fqzcomp')
 var tok3 = require('./tok3')
 
 function r4x8_uncompress(inputBuffer, outputBuffer) {
-  r4x8.decode(inputBuffer).copy(outputBuffer, 0, 0)
+  return r4x8.decode(inputBuffer)
 }
 
-function r4x16_uncompress(inputBuffer, outputBuffer) {
-  r4x16.decode(inputBuffer).copy(outputBuffer, 0, 0)
+function r4x16_uncompress(inputBuffer) {
+  return r4x16.decode(inputBuffer)
 }
 
-function arith_uncompress(inputBuffer, outputBuffer) {
+function arith_uncompress(inputBuffer) {
   // fix by @cmdcolin for CRAM 3.1
   // xref https://github.com/jkbonfield/htscodecs/pull/1/files
-  return new arith().decode(inputBuffer).copy(outputBuffer, 0, 0)
+  return new arith().decode(inputBuffer)
 }
 
-function fqzcomp_uncompress(inputBuffer, outputBuffer) {
+function fqzcomp_uncompress(inputBuffer) {
   var q_lens = new Array()
-  fqzcomp.decode(inputBuffer, q_lens).copy(outputBuffer, 0, 0)
+  return fqzcomp.decode(inputBuffer, q_lens)
 }
 
-function tok3_uncompress(inputBuffer, outputBuffer) {
+function tok3_uncompress(inputBuffer) {
   // Returns in string form instead of buffer
   var out = tok3.decode(inputBuffer, 0, '\0')
-  Buffer.from(out, 'binary').copy(outputBuffer, 0, 0)
+  return Uint8Array.from(Array.from(out).map(letter => letter.charCodeAt(0)))
 }
 
 module.exports = {

@@ -36,6 +36,23 @@ const IOStream = require('./iostream')
 const ByteModel = require('./byte_model')
 const bzip2 = require('bzip2')
 
+function sum(array) {
+  let sum = 0
+  for (const entry of array) {
+    sum += entry.length
+  }
+  return sum
+}
+function concatUint8Array(args) {
+  const mergedArray = new Uint8Array(sum(args))
+  let offset = 0
+  for (const entry of args) {
+    mergedArray.set(entry, offset)
+    offset += entry.length
+  }
+  return mergedArray
+}
+
 const ARITH_ORDER = 1
 const ARITH_EXT = 4
 const ARITH_STRIPE = 8
@@ -94,7 +111,7 @@ module.exports = class RangeCoderGen {
     if (!(flags & ARITH_NOSIZE)) this.stream.WriteUint7(src.length)
 
     if (flags & ARITH_STRIPE)
-      return Buffer.concat([
+      return concatUint8Array([
         this.stream.buf.slice(0, this.stream.pos),
         this.encodeStripe(this.stream, src, flags >> 8),
       ])
@@ -124,7 +141,7 @@ module.exports = class RangeCoderGen {
   //----------------------------------------------------------------------
   // Order-0 codec
   decode0(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -160,7 +177,7 @@ module.exports = class RangeCoderGen {
   // Order-1 codec
 
   decode1(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -205,7 +222,7 @@ module.exports = class RangeCoderGen {
   // External codec
   decodeExt(stream, n_out) {
     // Bzip2 only for now
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
     var bits = bzip2.array(stream.buf.slice(stream.pos))
     var size = bzip2.header(bits)
     var j = 0
@@ -230,7 +247,7 @@ module.exports = class RangeCoderGen {
   //----------------------------------------------------------------------
   // Order-0 RLE codec
   decodeRLE0(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -304,7 +321,7 @@ module.exports = class RangeCoderGen {
   // Order-1 RLE codec
 
   decodeRLE1(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -394,7 +411,7 @@ module.exports = class RangeCoderGen {
   }
 
   decodePack(data, M, len) {
-    var out = new Buffer.allocUnsafe(len)
+    var out = new Uint8Array(len)
 
     if (this.nsym <= 1) {
       // Constant value
@@ -461,12 +478,12 @@ module.exports = class RangeCoderGen {
     if (nsym <= 1) {
       // Constant values
       meta.WriteUint7(0)
-      return [meta, new Buffer.allocUnsafe(0), 0]
+      return [meta, new Uint8Array(0), 0]
     }
 
     if (nsym <= 2) {
       // 1 bit per value
-      var out = new Buffer.allocUnsafe(Math.floor((len + 7) / 8))
+      var out = new Uint8Array(Math.floor((len + 7) / 8))
       for (var i = 0, j = 0; i < (len & ~7); i += 8, j++)
         out[j] =
           (M[data[i + 0]] << 0) +
@@ -493,7 +510,7 @@ module.exports = class RangeCoderGen {
 
     if (nsym <= 4) {
       // 2 bits per value
-      var out = new Buffer.allocUnsafe(Math.floor((len + 3) / 4))
+      var out = new Uint8Array(Math.floor((len + 3) / 4))
       for (var i = 0, j = 0; i < (len & ~3); i += 4, j++)
         out[j] =
           (M[data[i + 0]] << 0) +
@@ -517,7 +534,7 @@ module.exports = class RangeCoderGen {
 
     if (nsym <= 16) {
       // 4 bits per value
-      var out = new Buffer.allocUnsafe(Math.floor((len + 1) / 2))
+      var out = new Uint8Array(Math.floor((len + 1) / 2))
       for (var i = 0, j = 0; i < (len & ~1); i += 2, j++)
         out[j] = (M[data[i + 0]] << 0) + (M[data[i + 1]] << 4)
       if (i < len) out[j++] = M[data[i++]]
@@ -586,7 +603,7 @@ module.exports = class RangeCoderGen {
     }
 
     // Transpose
-    var out = new Buffer.allocUnsafe(len)
+    var out = new Uint8Array(len)
     for (var j = 0; j < N; j++) {
       for (var i = 0; i < ulen[j]; i++) {
         out[i * N + j] = T[j][i]
@@ -599,7 +616,7 @@ module.exports = class RangeCoderGen {
   //----------------------------------------------------------------------
   // Cat method
   decodeCat(stream, len) {
-    var out = new Buffer.allocUnsafe(len)
+    var out = new Uint8Array(len)
     for (var i = 0; i < len; i++) out[i] = stream.ReadByte()
 
     return out

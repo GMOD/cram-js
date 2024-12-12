@@ -33,6 +33,22 @@
 
 const IOStream = require('./iostream')
 
+function sum(array) {
+  let sum = 0
+  for (const entry of array) {
+    sum += entry.length
+  }
+  return sum
+}
+function concatUint8Array(args) {
+  const mergedArray = new Uint8Array(sum(args))
+  let offset = 0
+  for (const entry of args) {
+    mergedArray.set(entry, offset)
+    offset += entry.length
+  }
+  return mergedArray
+}
 //----------------------------------------------------------------------
 // rANS primitives itself
 //
@@ -139,7 +155,7 @@ function EncodeRLE(src, N) {
   for (var i = 0; i < 256; i++) if (L[i] > 0) meta.WriteByte(i)
 
   // Step 2: Now apply RLE itself
-  var data = new Buffer.allocUnsafe(src.length)
+  var data = new Uint8Array(src.length)
   var dpos = 0
   for (var i = 0; i < src.length; i++) {
     data[dpos++] = src[i]
@@ -158,7 +174,7 @@ function EncodeRLE(src, N) {
   hdr.WriteUint7(meta.pos * 2) // Uncompressed meta-data length + compressed-bit-flag(0)
   hdr.WriteUint7(dpos) // Length of RLE encoded data
   hdr.WriteUint7(cmeta.length) // Compressed meta-data length
-  var meta = Buffer.concat([hdr.buf.slice(0, hdr.pos), cmeta])
+  var meta = concatUint8Array([hdr.buf.slice(0, hdr.pos), cmeta])
 
   return [meta, data.slice(0, dpos)]
 }
@@ -189,7 +205,7 @@ function DecodeRLEMeta(src, N) {
 function DecodeRLE(buf, L, rle_meta, len) {
   var src = new IOStream(buf)
 
-  var out = new Buffer.allocUnsafe(len)
+  var out = new Uint8Array(len)
 
   // Expand up buf+meta to out; i = buf index, j = out index
   var j = 0
@@ -228,10 +244,10 @@ function EncodePack(src) {
   // Pack data
   if (nsym <= 1) {
     // Constant
-    var data = new Buffer.allocUnsafe(0)
+    var data = new Uint8Array(0)
   } else if (nsym <= 2) {
     // 1 bit per value
-    var data = new Buffer.allocUnsafe(Math.ceil(src.length / 8))
+    var data = new Uint8Array(Math.ceil(src.length / 8))
     var j = -1
     for (i = 0; i < src.length; i++) {
       if (i % 8 == 0) data[++j] = 0
@@ -239,7 +255,7 @@ function EncodePack(src) {
     }
   } else if (nsym <= 4) {
     // 2 bits per value
-    var data = new Buffer.allocUnsafe(Math.ceil(src.length / 4))
+    var data = new Uint8Array(Math.ceil(src.length / 4))
     var j = -1
     for (i = 0; i < src.length; i++) {
       if (i % 4 == 0) data[++j] = 0
@@ -247,7 +263,7 @@ function EncodePack(src) {
     }
   } else {
     // 4 bits per value
-    var data = new Buffer.allocUnsafe(Math.ceil(src.length / 2))
+    var data = new Uint8Array(Math.ceil(src.length / 2))
     var j = -1
     for (i = 0; i < src.length; i++) {
       if (i % 2 == 0) data[++j] = 0
@@ -286,7 +302,7 @@ function DecodePackMeta(src) {
 // Extract bits from src producing output of length len.
 // Nsym is number of distinct symbols used.
 function DecodePack(data, P, nsym, len) {
-  var out = new Buffer.allocUnsafe(len)
+  var out = new Uint8Array(len)
   var j = 0
 
   // Constant value
@@ -389,7 +405,7 @@ function RansDecodeStripe(src, len) {
   }
 
   // Transpose
-  var out = new Buffer.allocUnsafe(len)
+  var out = new Uint8Array(len)
   for (var j = 0; j < N; j++) {
     for (var i = 0; i < ulen[j]; i++) {
       out[i * N + j] = T[j][i]
@@ -467,15 +483,15 @@ function encode(src, format) {
   if (!nosz) hdr.WriteUint7(src.length)
 
   if (stripe)
-    return Buffer.concat([
+    return concatUint8Array([
       hdr.buf.slice(0, hdr.pos),
       RansEncodeStripe(hdr, src, N),
     ])
 
-  var pack_meta = new Buffer.alloc(0)
+  var pack_meta = new Uint8Array(0)
   if (pack) [pack_meta, src] = EncodePack(src)
 
-  var rle_meta = new Buffer.alloc(0)
+  var rle_meta = new Uint8Array(0)
   if (rle) [rle_meta, src] = EncodeRLE(src, Nway)
 
   if (src.length < 4 && order == 1) {
@@ -488,7 +504,12 @@ function encode(src, format) {
   else if (order == 0) var comp = RansEncode0(src, Nway)
   else var comp = RansEncode1(src, Nway)
 
-  return Buffer.concat([hdr.buf.slice(0, hdr.pos), pack_meta, rle_meta, comp])
+  return concatUint8Array([
+    hdr.buf.slice(0, hdr.pos),
+    pack_meta,
+    rle_meta,
+    comp,
+  ])
 }
 
 //----------------------------------------------------------------------
@@ -552,7 +573,7 @@ function RansDecode0(src, nbytes, N) {
   for (var i = 0; i < N; i++) R[i] = src.ReadUint32()
 
   // Main decode loop
-  var output = new Buffer.allocUnsafe(nbytes)
+  var output = new Uint8Array(nbytes)
   for (var i = 0; i < nbytes; i++) {
     var ix = i & (N - 1) // equiv to i%N as N is power of 2
     var f = RansGetCumulativeFreq(R[ix], 12)
@@ -704,7 +725,7 @@ function RansEncode0(src, N) {
   // Stitch blocks together into final output buffer
   //console.error("pos=",rans_out.pos, " len=",rans_out.length)
   //console.error(rans_out.buf.slice(rans_out.pos, rans_out.length))
-  return Buffer.concat(
+  return concatUint8Array(
     [
       output.buf.slice(0, output.pos),
       rans_out.buf.slice(rans_out.pos, rans_out.length),
@@ -787,7 +808,7 @@ function RansDecode1(src, nbytes, N) {
   }
 
   // Main decode loop
-  var output = new Buffer.allocUnsafe(nbytes)
+  var output = new Uint8Array(nbytes)
   var nbytesx = Math.floor(nbytes / N)
   for (var i = 0; i < nbytesx; i++) {
     for (var j = 0; j < N; j++) {
@@ -991,7 +1012,7 @@ function RansEncode1(src, N) {
   for (var i = N - 1; i >= 0; i--) RansEncFlush(R[i], rans_out)
 
   // Stitch blocks together into final output buffer
-  return Buffer.concat(
+  return concatUint8Array(
     [
       output.buf.slice(0, output.pos),
       rans_out.buf.slice(rans_out.pos, rans_out.length),

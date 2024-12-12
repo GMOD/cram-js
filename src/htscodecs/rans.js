@@ -180,7 +180,7 @@ function RansDecode0(src, nbytes) {
   for (var i = 0; i < 4; i++) R[i] = src.ReadUint32()
 
   // Main decode loop
-  var output = new Buffer.allocUnsafe(nbytes)
+  var output = new Uint8Array(nbytes)
   for (var i = 0; i < nbytes; i++) {
     var i4 = i % 4
     var f = RansGetCumulativeFreq(R[i4])
@@ -308,7 +308,7 @@ function RansEncode0(src) {
   output.buf.writeInt32LE(freq_tab - 9 + (rans_out.length - rans_out.pos), 1)
   output.buf.writeInt32LE(nbytes, 5)
 
-  return Buffer.concat(
+  return concatUint8Array(
     [
       output.buf.slice(0, output.pos),
       rans_out.buf.slice(rans_out.pos, rans_out.length),
@@ -368,7 +368,7 @@ function RansDecode1(src, nbytes) {
   }
 
   // Main decode loop
-  var output = new Buffer.allocUnsafe(nbytes)
+  var output = new Uint8Array(nbytes)
   var nbytes4 = Math.floor(nbytes / 4)
   for (var i = 0; i < nbytes4; i++) {
     for (var j = 0; j < 4; j++) {
@@ -533,7 +533,7 @@ function RansEncode1(src) {
   output.buf.writeInt32LE(freq_tab - 9 + (rans_out.length - rans_out.pos), 1)
   output.buf.writeInt32LE(nbytes, 5)
 
-  return Buffer.concat(
+  return concatUint8Array(
     [
       output.buf.slice(0, output.pos),
       rans_out.buf.slice(rans_out.pos, rans_out.length),

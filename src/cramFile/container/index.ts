@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer'
 import { CramMalformedError } from '../../errors'
 // locals
 import { itf8Size, parseItem, tinyMemoize } from '../util'
