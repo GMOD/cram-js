@@ -127,7 +127,6 @@ function decodeBaseSubstitution(
   compressionScheme: CramContainerCompressionScheme,
   readFeature: ReadFeature,
 ) {
-  console.log('wopwze')
   // decode base substitution code using the substitution matrix
   const refCoord = readFeature.refPos - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
