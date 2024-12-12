@@ -1,4 +1,9 @@
 import { CramMalformedError } from '../../errors'
+import { Cursors, DataTypeMapping } from '../codecs/_base'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
+import CramContainerCompressionScheme, {
+  DataSeriesTypes,
+} from '../container/compressionScheme'
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
@@ -6,13 +11,8 @@ import {
   ReadFeature,
 } from '../record'
 import CramSlice, { SliceHeader } from './index'
-import { isMappedSliceHeader } from '../sectionParsers'
-import CramContainerCompressionScheme, {
-  DataSeriesTypes,
-} from '../container/compressionScheme'
 import { CramFileBlock } from '../file'
-import { Cursors, DataTypeMapping } from '../codecs/_base'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
+import { isMappedSliceHeader } from '../sectionParsers'
 
 /**
  * given a Buffer, read a string up to the first null character

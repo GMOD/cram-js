@@ -1,8 +1,8 @@
-import { CramMalformedError, CramUnimplementedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
-import { parseItf8 } from '../util'
-import CramSlice from '../slice'
+import { CramMalformedError, CramUnimplementedError } from '../../errors'
 import { CramFileBlock } from '../file'
+import CramSlice from '../slice'
+import { parseItf8 } from '../util'
 import { CramBufferOverrunError } from './getBits'
 import { ExternalCramEncoding } from '../encoding'
 

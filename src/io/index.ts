@@ -1,5 +1,6 @@
-import { Filehandle } from '../cramFile/filehandle'
 import { LocalFile, RemoteFile } from 'generic-filehandle2'
+
+import { Filehandle } from '../cramFile/filehandle'
 
 function open(
   maybeUrl?: string,

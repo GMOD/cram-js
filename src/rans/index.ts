@@ -1,11 +1,9 @@
 // @ts-nocheck
 import { CramMalformedError } from '../errors'
-
-import Decoding from './decoding'
-import { readStatsO0, readStatsO1 } from './frequencies'
-
 import D04 from './d04'
 import D14 from './d14'
+import Decoding from './decoding'
+import { readStatsO0, readStatsO1 } from './frequencies'
 
 // const /* int */ ORDER_BYTE_LENGTH = 1
 // const /* int */ COMPRESSED_BYTE_LENGTH = 4

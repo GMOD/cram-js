@@ -1,9 +1,9 @@
-import { CramUnimplementedError } from './errors'
+import { Slice } from './craiIndex'
 import CramFile from './cramFile'
-import CramRecord from './cramFile/record'
 import { SeqFetch } from './cramFile/file'
 import { Filehandle } from './cramFile/filehandle'
-import { Slice } from './craiIndex'
+import CramRecord from './cramFile/record'
+import { CramUnimplementedError } from './errors'
 
 export interface CramFileSource {
   cramFilehandle?: Filehandle

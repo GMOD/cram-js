@@ -1,5 +1,6 @@
-import md5 from 'md5'
 import Long from 'long'
+import md5 from 'md5'
+
 import { CramBufferOverrunError } from './codecs/getBits'
 
 export function itf8Size(v: number) {

@@ -1,7 +1,7 @@
 import { CramMalformedError } from '../../errors'
 // locals
-import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramSlice from '../slice'
+import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramContainerCompressionScheme from './compressionScheme'
 import CramFile from '../file'
 import { getSectionParsers } from '../sectionParsers'

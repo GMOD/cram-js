@@ -1,24 +1,25 @@
+import bzip2 from 'bzip2'
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
-import htscodecs from '../htscodecs'
-import bzip2 from 'bzip2'
 import { XzReadableStream } from 'xz-decompress'
+
 import { CramMalformedError, CramUnimplementedError } from '../errors'
-// locals
-import { unzip } from '../unzip'
+import htscodecs from '../htscodecs'
+
+import { open } from '../io'
 import ransuncompress from '../rans'
+import { parseHeaderText } from '../sam'
+import { unzip } from '../unzip'
+import CramContainer from './container'
+import { Filehandle } from './filehandle'
+import CramRecord from './record'
 import {
   BlockHeader,
   CompressionMethod,
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers'
-import CramContainer from './container'
-import CramRecord from './record'
-import { open } from '../io'
 import { concatUint8Array, parseItem, tinyMemoize } from './util'
-import { parseHeaderText } from '../sam'
-import { Filehandle } from './filehandle'
 
 function bufferToStream(buf: Uint8Array) {
   return new ReadableStream({
@@ -98,11 +99,6 @@ export default class CramFile {
     if (getEndianness() > 0) {
       throw new Error('Detected big-endian machine, may be unable to run')
     }
-  }
-
-  // can just read this object like a filehandle
-  read(length: number, position: number) {
-    return this.file.read(length, position)
   }
 
   // can just stat this object like a filehandle
@@ -359,7 +355,10 @@ export default class CramFile {
     }
     const blockContentPosition = blockHeader._endPosition
 
-    const d = await this.read(blockHeader.compressedSize, blockContentPosition)
+    const d = await this.file.read(
+      blockHeader.compressedSize,
+      blockContentPosition,
+    )
     const uncompressedData =
       blockHeader.compressionMethod !== 'raw'
         ? await this._uncompress(

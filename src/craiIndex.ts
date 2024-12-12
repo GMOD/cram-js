@@ -1,8 +1,8 @@
-import { unzip } from './unzip'
-import { open } from './io'
-import { CramMalformedError } from './errors'
 import { CramFileSource } from './cramFile/file'
 import { Filehandle } from './cramFile/filehandle'
+import { CramMalformedError } from './errors'
+import { open } from './io'
+import { unzip } from './unzip'
 
 const BAI_MAGIC = 21_578_050 // BAI\1
 

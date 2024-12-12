@@ -1,9 +1,8 @@
-import { CramMalformedError } from '../../errors'
-
 import CramCodec, { Cursor, Cursors } from './_base'
-import CramSlice from '../slice'
-import { CramFileBlock } from '../file'
+import { CramMalformedError } from '../../errors'
 import { ByteArrayStopCramEncoding } from '../encoding'
+import { CramFileBlock } from '../file'
+import CramSlice from '../slice'
 import { CramBufferOverrunError } from './getBits'
 
 export default class ByteArrayStopCodec extends CramCodec<

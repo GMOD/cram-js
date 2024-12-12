@@ -1,4 +1,5 @@
 import eslint from '@eslint/js'
+import importPlugin from 'eslint-plugin-import'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 import tseslint from 'typescript-eslint'
 
@@ -25,6 +26,7 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   ...tseslint.configs.stylisticTypeChecked,
   ...tseslint.configs.strictTypeChecked,
+  importPlugin.flatConfigs.recommended,
   eslintPluginUnicorn.configs['flat/recommended'],
   {
     rules: {
@@ -118,6 +120,24 @@ export default tseslint.config(
           argsIgnorePattern: '^_',
           ignoreRestSiblings: true,
           caughtErrors: 'none',
+        },
+      ],
+
+      'import/no-unresolved': 'off',
+      'import/order': [
+        'error',
+        {
+          named: true,
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+          },
+          groups: [
+            'builtin',
+            ['external', 'internal'],
+            ['parent', 'sibling', 'index', 'object'],
+            'type',
+          ],
         },
       ],
     },

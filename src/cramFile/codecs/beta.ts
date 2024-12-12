@@ -1,9 +1,9 @@
-import { CramUnimplementedError } from '../../errors'
 import CramCodec, { Cursors } from './_base'
 import { getBits } from './getBits'
-import CramSlice from '../slice'
-import { CramFileBlock } from '../file'
+import { CramUnimplementedError } from '../../errors'
 import { BetaEncoding } from '../encoding'
+import { CramFileBlock } from '../file'
+import CramSlice from '../slice'
 
 export default class BetaCodec extends CramCodec<
   'int',

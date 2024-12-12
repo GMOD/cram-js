@@ -1,10 +1,9 @@
-import { CramMalformedError } from '../../errors'
 import CramCodec, { Cursor, Cursors } from './_base'
 import { getBits } from './getBits'
+import { CramMalformedError } from '../../errors'
 import { HuffmanEncoding } from '../encoding'
-
-import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
+import CramSlice from '../slice'
 
 function numberOfSetBits(ii: number) {
   let i = (ii - (ii >> 1)) & 0x55555555

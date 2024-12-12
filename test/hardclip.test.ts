@@ -1,8 +1,9 @@
-import { testDataFile } from './lib/util'
-import { test, expect } from 'vitest'
+import { expect, test } from 'vitest'
+
 import { dumpWholeFile } from './lib/dumpFile'
 import { CramFile } from '../src/index'
 import { FetchableSmallFasta } from './lib/fasta'
+import { testDataFile } from './lib/util'
 
 test('works with hard clipping', async () => {
   const fasta = new FetchableSmallFasta(testDataFile('volvox.fa'))

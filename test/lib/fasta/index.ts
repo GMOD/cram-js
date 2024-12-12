@@ -37,4 +37,4 @@ class FetchableSmallFasta {
   }
 }
 
-export { parseSmallFasta, FetchableSmallFasta }
+export { FetchableSmallFasta, parseSmallFasta }

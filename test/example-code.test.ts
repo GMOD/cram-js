@@ -1,5 +1,6 @@
-import { IndexedCramFile, CraiIndex } from '../src'
-import { test, expect } from 'vitest'
+import { expect, test } from 'vitest'
+
+import { CraiIndex, IndexedCramFile } from '../src'
 
 test('runs without error', async () => {
   const messages = [] as string[]

@@ -1,7 +1,7 @@
 import { TupleOf } from '../typescript'
-import { parseItf8, parseLtf8 } from './util'
 import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
 import { CramEncoding } from './encoding'
+import { parseItf8, parseLtf8 } from './util'
 
 export function cramFileDefinition() {
   return {

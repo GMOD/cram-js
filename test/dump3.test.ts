@@ -1,7 +1,8 @@
 import { test } from 'vitest'
+
+import { dumpWholeFile } from './lib/dumpFile'
 import { t3 as testFileList } from './lib/testFileList'
 import { testDataFile } from './lib/util'
-import { dumpWholeFile } from './lib/dumpFile'
 import { CramFile } from '../src/index'
 import { FetchableSmallFasta } from './lib/fasta'
 

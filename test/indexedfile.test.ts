@@ -1,7 +1,8 @@
+import { describe, expect, test } from 'vitest'
+
 import { testDataFile } from './lib/util'
-import { test, describe, expect } from 'vitest'
-import { CramRecord, IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
+import { CramRecord, IndexedCramFile } from '../src/index'
 
 test('can read ce#tag_padded.tmp.cram', async () => {
   const cram = new IndexedCramFile({

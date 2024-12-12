@@ -1,5 +1,6 @@
 // @ts-nocheck
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
+
 import { CraiIndex, IndexedCramFile } from '../src'
 
 describe('1kg mate test', () => {

@@ -1,6 +1,6 @@
-import { testDataFile } from './lib/util'
-import { test, expect } from 'vitest'
+import { expect, test } from 'vitest'
 
+import { testDataFile } from './lib/util'
 import CraiIndex from '../src/craiIndex'
 
 test('can read xx#unsorted.tmp.cram.crai', async () => {
