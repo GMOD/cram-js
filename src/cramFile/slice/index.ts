@@ -267,6 +267,7 @@ export default class CramSlice {
 
   async getReferenceRegion() {
     // read the slice header
+    const decoder = new TextDecoder('utf8')
     const sliceHeader = (await this.getHeader()).parsedContent
     if (!isMappedSliceHeader(sliceHeader)) {
       throw new Error('slice header not mapped')
@@ -298,7 +299,8 @@ export default class CramSlice {
 
       // TODO verify
       return {
-        seq: (refBlock as any).data.toString('utf8'),
+        // @ts-expect-error
+        seq: decoder.decode(refBlock.data),
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,

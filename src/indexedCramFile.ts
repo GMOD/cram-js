@@ -29,10 +29,17 @@ export default class IndexedCramFile {
    *
    * @param {object} args
    * @param {CramFile} args.cram
-   * @param {Index-like} args.index object that supports getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
-   * @param {number} [args.cacheSize] optional maximum number of CRAM records to cache.  default 20,000
-   * @param {boolean} [args.checkSequenceMD5] - default true. if false, disables verifying the MD5
-   * checksum of the reference sequence underlying a slice. In some applications, this check can cause an inconvenient amount (many megabases) of sequences to be fetched.
+   *
+   * @param {Index-like} args.index object that supports
+   * getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
+   *
+   * @param {number} [args.cacheSize] optional maximum number of CRAM records
+   * to cache.  default 20,000
+   *
+   * @param {boolean} [args.checkSequenceMD5] - default true. if false,
+   * disables verifying the MD5 checksum of the reference sequence underlying a
+   * slice. In some applications, this check can cause an inconvenient amount
+   * (many megabases) of sequences to be fetched.
    */
   constructor(
     args: {
@@ -47,7 +54,6 @@ export default class IndexedCramFile {
         } & CramFileSource)
     ),
   ) {
-    // { cram, index, seqFetch /* fasta, fastaIndex */ }) {
     this.cram =
       args.cram ??
       new CramFile({
@@ -68,10 +74,9 @@ export default class IndexedCramFile {
 
   /**
    *
-   * @param {number} seq numeric ID of the reference sequence
-   * @param {number} start start of the range of interest. 1-based closed coordinates.
-   * @param {number} end end of the range of interest. 1-based closed coordinates.
-   * @returns {Promise[Array[CramRecord]]}
+   * @param seq numeric ID of the reference sequence
+   * @param start start of the range of interest. 1-based closed coordinates.
+   * @param end end of the range of interest. 1-based closed coordinates.
    */
   async getRecordsForRange(
     seq: number,
@@ -96,16 +101,18 @@ export default class IndexedCramFile {
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
 
-    // TODO: do we need to merge or de-duplicate the blocks?
-
     // fetch all the slices and parse the feature data
-    const filter = (feature: CramRecord) =>
-      feature.sequenceId === seq &&
-      feature.alignmentStart <= end &&
-      feature.lengthOnRef !== undefined &&
-      feature.alignmentStart + feature.lengthOnRef - 1 >= start
     const sliceResults = await Promise.all(
-      slices.map(slice => this.getRecordsInSlice(slice, filter)),
+      slices.map(slice =>
+        this.getRecordsInSlice(
+          slice,
+          feature =>
+            feature.sequenceId === seq &&
+            feature.alignmentStart <= end &&
+            feature.lengthOnRef !== undefined &&
+            feature.alignmentStart + feature.lengthOnRef - 1 >= start,
+        ),
+      ),
     )
 
     let ret: CramRecord[] = Array.prototype.concat(...sliceResults)

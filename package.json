@@ -1,6 +1,6 @@
 {
   "name": "@gmod/cram",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
   "repository": "GMOD/cram-js",
@@ -25,13 +25,13 @@
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow errors.ts '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
-    "prebuild": "npm run clean",
+    "prebuild": "yarn clean",
     "clean": "rimraf dist esm",
     "build:esm": "tsc --outDir esm",
     "build:es5": "tsc --module commonjs --outDir dist",
-    "build": "npm run build:esm && npm run build:es5",
+    "build": "yarn build:esm && yarn build:es5",
     "postbuild": "webpack",
-    "prepack": "npm test run && npm run build && cp dist/errors.js errors.js",
+    "preversion": "yarn test --run && yarn build && cp dist/errors.js errors.js",
     "postpublish": "rm errors.js",
     "postversion": "git push --follow-tags"
   },
@@ -44,7 +44,7 @@
   "dependencies": {
     "bzip2": "^0.1.1",
     "crc": "^4.3.2",
-    "generic-filehandle2": "^0.0.2",
+    "generic-filehandle2": "^1.0.0",
     "long": "^4.0.0",
     "md5": "^2.2.1",
     "pako": "^1.0.4",
@@ -52,7 +52,7 @@
     "xz-decompress": "^0.2.1"
   },
   "devDependencies": {
-    "@gmod/indexedfasta": "^2.1.0",
+    "@gmod/indexedfasta": "^3.0.0",
     "@types/long": "^4.0.0",
     "@types/md5": "^2.3.2",
     "@types/pako": "^1.0.3",
@@ -63,7 +63,7 @@
     "documentation": "^14.0.3",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-unicorn": "^56.0.1",
     "mock-fs": "^5.2.0",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
