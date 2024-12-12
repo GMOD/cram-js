@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { describe, it, expect } from 'vitest'
 import mock from 'mock-fs'
-import LocalFile from './lib/syncLocalFile'
+import { LocalFile } from 'generic-filehandle2'
 
 import { IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
