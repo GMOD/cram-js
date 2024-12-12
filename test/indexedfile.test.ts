@@ -1,60 +1,111 @@
 import { testDataFile } from './lib/util'
-import { test, describe, it, expect } from 'vitest'
+import { test, describe, expect } from 'vitest'
 import { CramRecord, IndexedCramFile } from '../src/index'
 import CraiIndex from '../src/craiIndex'
 
-describe('.crai indexed cram file', () => {
-  it('can read ce#tag_padded.tmp.cram', async () => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile('ce#tag_padded.tmp.cram'),
-      index: new CraiIndex({
-        filehandle: testDataFile('ce#tag_padded.tmp.cram.crai'),
-      }),
-    })
-
-    const features = await cram.getRecordsForRange(0, 2, 200)
-    expect(features).toMatchSnapshot()
-
-    expect(await cram.getRecordsForRange(1, 2, 200)).toEqual([])
-    expect(await cram.hasDataForReferenceSequence(1)).toEqual(false)
-    expect(await cram.hasDataForReferenceSequence(0)).toEqual(true)
+test('can read ce#tag_padded.tmp.cram', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('ce#tag_padded.tmp.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('ce#tag_padded.tmp.cram.crai'),
+    }),
   })
 
-  it('can read ce#unmap2.tmp.cram', async () => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile('ce#unmap2.tmp.cram'),
-      index: new CraiIndex({
-        filehandle: testDataFile('ce#unmap2.tmp.cram.crai'),
-      }),
-    })
+  const features = await cram.getRecordsForRange(0, 2, 200)
+  expect(features).toMatchSnapshot()
 
-    const features = await cram.getRecordsForRange(0, 2, 200)
-    expect(features).toMatchSnapshot()
+  expect(await cram.getRecordsForRange(1, 2, 200)).toEqual([])
+  expect(await cram.hasDataForReferenceSequence(1)).toEqual(false)
+  expect(await cram.hasDataForReferenceSequence(0)).toEqual(true)
+})
+
+test('can read ce#unmap2.tmp.cram', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('ce#unmap2.tmp.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('ce#unmap2.tmp.cram.crai'),
+    }),
   })
 
-  it('can read ce#1000.tmp.cram', async () => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile('ce#1000.tmp.cram'),
-      index: new CraiIndex({
-        filehandle: testDataFile('ce#1000.tmp.cram.crai'),
-      }),
-    })
+  const features = await cram.getRecordsForRange(0, 2, 200)
+  expect(features).toMatchSnapshot()
+})
 
-    const features = await cram.getRecordsForRange(0, 2, 200)
-    features.sort((a, b) => (a.readName || '').localeCompare(b.readName || ''))
-    expect(features).toMatchSnapshot()
+test('can read ce#1000.tmp.cram', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('ce#1000.tmp.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('ce#1000.tmp.cram.crai'),
+    }),
   })
 
-  it('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile(
-        'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram',
+  const features = await cram.getRecordsForRange(0, 2, 200)
+  features.sort((a, b) => (a.readName || '').localeCompare(b.readName || ''))
+  expect(features).toMatchSnapshot()
+})
+
+test('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile(
+      'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram',
+    ),
+    index: new CraiIndex({
+      filehandle: testDataFile(
+        'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
       ),
-      index: new CraiIndex({
-        filehandle: testDataFile(
-          'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
-        ),
-      }),
+    }),
+  })
+
+  const features = await cram.getRecordsForRange(0, 0, Number.POSITIVE_INFINITY)
+  const features2 = await cram.getRecordsForRange(
+    -1,
+    0,
+    Number.POSITIVE_INFINITY,
+  )
+  expect(features).toMatchSnapshot()
+  expect(features2).toMatchSnapshot()
+})
+;[
+  'auxf#values.tmp.cram',
+  'c1#bounds.tmp.cram',
+  'c1#clip.tmp.cram',
+  'c1#noseq.tmp.cram',
+  'c1#pad1.tmp.cram',
+  'c1#pad2.tmp.cram',
+  'c1#pad3.tmp.cram',
+  'c1#unknown.tmp.cram',
+  'c2#pad.tmp.cram',
+  'ce#1.tmp.cram',
+  'ce#1000.tmp.cram',
+  'ce#2.tmp.cram',
+  'ce#5.tmp.cram',
+  'ce#5b.tmp.cram',
+  'ce#large_seq.tmp.cram',
+  'ce#supp.tmp.cram',
+  'ce#tag_depadded.tmp.cram',
+  'ce#tag_padded.tmp.cram',
+  'ce#unmap.tmp.cram',
+  'ce#unmap1.tmp.cram',
+  'ce#unmap2.tmp.cram',
+  'headernul.tmp.cram',
+  'md#1.tmp.cram',
+  'sam_alignment.tmp.cram',
+  'xx#blank.tmp.cram',
+  'xx#large_aux.tmp.cram',
+  'xx#large_aux2.tmp.cram',
+  'xx#minimal.tmp.cram',
+  'xx#pair.tmp.cram',
+  'xx#repeated.tmp.cram',
+  'xx#rg.tmp.cram',
+  'xx#tlen.tmp.cram',
+  'xx#tlen2.tmp.cram',
+  'xx#triplet.tmp.cram',
+  'xx#unsorted.tmp.cram',
+].forEach(filename => {
+  test(`can read the first chrom of ${filename} without error`, async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile(filename),
+      index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
     })
 
     const features = await cram.getRecordsForRange(
@@ -62,88 +113,29 @@ describe('.crai indexed cram file', () => {
       0,
       Number.POSITIVE_INFINITY,
     )
-    const features2 = await cram.getRecordsForRange(
-      -1,
+    features.sort((a, b) => (a.readName || '').localeCompare(b.readName || ''))
+    expect(features.length).toBeGreaterThan(-1)
+    expect(features).toMatchSnapshot()
+  })
+
+  test(`can read the second chrom of ${filename} without error`, async () => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile(filename),
+      index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
+    })
+
+    const features = await cram.getRecordsForRange(
+      1,
       0,
       Number.POSITIVE_INFINITY,
     )
+    expect(features.length).toBeGreaterThan(-1)
     expect(features).toMatchSnapshot()
-    expect(features2).toMatchSnapshot()
-  })
-  ;[
-    'auxf#values.tmp.cram',
-    'c1#bounds.tmp.cram',
-    'c1#clip.tmp.cram',
-    'c1#noseq.tmp.cram',
-    'c1#pad1.tmp.cram',
-    'c1#pad2.tmp.cram',
-    'c1#pad3.tmp.cram',
-    'c1#unknown.tmp.cram',
-    'c2#pad.tmp.cram',
-    'ce#1.tmp.cram',
-    'ce#1000.tmp.cram',
-    'ce#2.tmp.cram',
-    'ce#5.tmp.cram',
-    'ce#5b.tmp.cram',
-    'ce#large_seq.tmp.cram',
-    'ce#supp.tmp.cram',
-    'ce#tag_depadded.tmp.cram',
-    'ce#tag_padded.tmp.cram',
-    'ce#unmap.tmp.cram',
-    'ce#unmap1.tmp.cram',
-    'ce#unmap2.tmp.cram',
-    'headernul.tmp.cram',
-    'md#1.tmp.cram',
-    'sam_alignment.tmp.cram',
-    'xx#blank.tmp.cram',
-    'xx#large_aux.tmp.cram',
-    'xx#large_aux2.tmp.cram',
-    'xx#minimal.tmp.cram',
-    'xx#pair.tmp.cram',
-    'xx#repeated.tmp.cram',
-    'xx#rg.tmp.cram',
-    'xx#tlen.tmp.cram',
-    'xx#tlen2.tmp.cram',
-    'xx#triplet.tmp.cram',
-    'xx#unsorted.tmp.cram',
-  ].forEach(filename => {
-    it(`can read the first chrom of ${filename} without error`, async () => {
-      const cram = new IndexedCramFile({
-        cramFilehandle: testDataFile(filename),
-        index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
-      })
-
-      const features = await cram.getRecordsForRange(
-        0,
-        0,
-        Number.POSITIVE_INFINITY,
-      )
-      features.sort((a, b) =>
-        (a.readName || '').localeCompare(b.readName || ''),
-      )
-      expect(features.length).toBeGreaterThan(-1)
-      expect(features).toMatchSnapshot()
-    })
-
-    it(`can read the second chrom of ${filename} without error`, async () => {
-      const cram = new IndexedCramFile({
-        cramFilehandle: testDataFile(filename),
-        index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
-      })
-
-      const features = await cram.getRecordsForRange(
-        1,
-        0,
-        Number.POSITIVE_INFINITY,
-      )
-      expect(features.length).toBeGreaterThan(-1)
-      expect(features).toMatchSnapshot()
-    })
   })
 })
 
 describe('paired read test', () => {
-  it('can read paired.cram', async () => {
+  test('can read paired.cram', async () => {
     const cram = new IndexedCramFile({
       cramFilehandle: testDataFile('paired.cram'),
       index: new CraiIndex({
@@ -166,33 +158,31 @@ describe('paired read test', () => {
   })
 })
 
-describe('paired orientation test', () => {
-  it('can read long_pair.cram', async () => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile('long_pair.cram'),
-      index: new CraiIndex({
-        filehandle: testDataFile('long_pair.cram.crai'),
-      }),
-    })
+test('can read long_pair.cram', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('long_pair.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('long_pair.cram.crai'),
+    }),
+  })
 
-    const features = await cram.getRecordsForRange(0, 15767, 28287, {
-      viewAsPairs: true,
-    })
+  const features = await cram.getRecordsForRange(0, 15767, 28287, {
+    viewAsPairs: true,
+  })
 
-    let feat1: CramRecord | undefined
-    let feat2: CramRecord | undefined
-    for (const feature of features) {
-      if (feature.readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0') {
-        if (feature.isRead1()) {
-          feat1 = feature
-        } else if (feature.isRead2()) {
-          feat2 = feature
-        }
+  let feat1: CramRecord | undefined
+  let feat2: CramRecord | undefined
+  for (const feature of features) {
+    if (feature.readName === 'HWI-EAS14X_10277_FC62BUY_4_24_15069_16274#0') {
+      if (feature.isRead1()) {
+        feat1 = feature
+      } else if (feature.isRead2()) {
+        feat2 = feature
       }
     }
-    expect(feat1?.getPairOrientation()).toEqual('R2F1')
-    expect(feat2?.getPairOrientation()).toEqual('R2F1')
-  })
+  }
+  expect(feat1?.getPairOrientation()).toEqual('R2F1')
+  expect(feat2?.getPairOrientation()).toEqual('R2F1')
 })
 
 test('duplicate IDs test', async () => {

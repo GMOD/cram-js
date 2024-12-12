@@ -382,7 +382,6 @@ export default class CramRecord {
    * @returns {String} sequence basepairs
    */
   getReadBases() {
-    console.log(this.readBases, this._refRegion)
     if (!this.readBases && this._refRegion) {
       const decoded = decodeReadSequence(this, this._refRegion)
       if (decoded) {
@@ -457,10 +456,9 @@ export default class CramRecord {
     refRegion: RefRegion,
     compressionScheme: CramContainerCompressionScheme,
   ) {
-    console.log('wowzers')
     if (this.readFeatures) {
-      // use the reference bases to decode the bases
-      // substituted in each base substitution
+      // use the reference bases to decode the bases substituted in each base
+      // substitution
       this.readFeatures.forEach(readFeature => {
         if (readFeature.code === 'X') {
           decodeBaseSubstitution(
