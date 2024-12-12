@@ -78,8 +78,6 @@
   },
   "browser": {
     "./dist/io/localFile.js": false,
-    "./esm/io/localFile.js": false,
-    "./esm/unzip.js": "./esm/unzip-pako.js",
-    "./dist/unzip.js": "./dist/unzip-pako.js"
+    "./esm/io/localFile.js": false
   }
 }
