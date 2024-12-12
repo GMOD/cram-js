@@ -66,7 +66,7 @@ export type CramFileBlock = BlockHeader & {
   _endPosition: number
   contentPosition: number
   _size: number
-  content: Buffer
+  content: Uint8Array
   crc32?: number
 }
 
@@ -102,8 +102,8 @@ export default class CramFile {
   }
 
   // can just read this object like a filehandle
-  read(buffer: Buffer, offset: number, length: number, position: number) {
-    return this.file.read(buffer, offset, length, position)
+  read(length: number, position: number) {
+    return this.file.read(length, position)
   }
 
   // can just stat this object like a filehandle
@@ -114,8 +114,7 @@ export default class CramFile {
   // memoized
   async getDefinition() {
     const { maxLength, parser } = cramFileDefinition()
-    const headbytes = Buffer.allocUnsafe(maxLength)
-    await this.file.read(headbytes, 0, maxLength, 0)
+    const headbytes = await this.file.read(maxLength, 0)
     const definition = parser(headbytes).value
     if (definition.majorVersion !== 2 && definition.majorVersion !== 3) {
       throw new CramUnimplementedError(
@@ -135,13 +134,18 @@ export default class CramFile {
     const firstBlock = await firstContainer.getFirstBlock()
     if (firstBlock === undefined) {
       return parseHeaderText('')
+    } else {
+      const content = firstBlock.content
+      const dataView = new DataView(content.buffer)
+      const headerLength = dataView.getInt32(0, true)
+      const textStart = 4
+      const decoder = new TextDecoder('utf8')
+      const text = decoder.decode(
+        content.subarray(textStart, textStart + headerLength),
+      )
+      this.header = text
+      return parseHeaderText(text)
     }
-    const content = firstBlock.content
-    const headerLength = content.readInt32LE(0)
-    const textStart = 4
-    const text = content.toString('utf8', textStart, textStart + headerLength)
-    this.header = text
-    return parseHeaderText(text)
   }
 
   async getHeaderText() {
@@ -200,8 +204,8 @@ export default class CramFile {
     recordedCrc32: number,
     description: string,
   ) {
-    const b = Buffer.allocUnsafe(length)
-    await this.file.read(b, 0, length, position)
+    const b = await this.file.read(length, position)
+    // @ts-expect-error
     const calculatedCrc32 = crc32.unsigned(b)
     if (calculatedCrc32 !== recordedCrc32) {
       throw new CramMalformedError(
@@ -264,21 +268,23 @@ export default class CramFile {
       return undefined
     }
 
-    const buffer = Buffer.allocUnsafe(cramBlockHeader.maxLength)
-    await this.file.read(buffer, 0, cramBlockHeader.maxLength, position)
+    const buffer = await this.file.read(cramBlockHeader.maxLength, position)
     return parseItem(buffer, cramBlockHeader.parser, 0, position)
   }
 
   async _parseSection<T>(
     section: {
       maxLength: number
-      parser: (buffer: Buffer, offset: number) => { offset: number; value: T }
+      parser: (
+        buffer: Uint8Array,
+        offset: number,
+      ) => { offset: number; value: T }
     },
     position: number,
     size = section.maxLength,
-    preReadBuffer?: Buffer,
+    preReadBuffer?: Uint8Array,
   ) {
-    let buffer: Buffer
+    let buffer: Uint8Array
     if (preReadBuffer) {
       buffer = preReadBuffer
     } else {
@@ -286,8 +292,7 @@ export default class CramFile {
       if (position + size >= fileSize) {
         return undefined
       }
-      buffer = Buffer.allocUnsafe(size)
-      await this.file.read(buffer, 0, size, position)
+      buffer = await this.file.read(size, position)
     }
     const data = parseItem(buffer, section.parser, 0, position)
     if (data._size !== size) {
@@ -300,12 +305,11 @@ export default class CramFile {
 
   async _uncompress(
     compressionMethod: CompressionMethod,
-    inputBuffer: Buffer,
-    outputBuffer: Buffer,
+    inputBuffer: Uint8Array,
+    outputBuffer: Uint8Array,
   ) {
     if (compressionMethod === 'gzip') {
-      const result = unzip(inputBuffer)
-      result.copy(outputBuffer)
+      return unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
       const bits = bzip2.array(inputBuffer)
       let size = bzip2.header(bits)
@@ -342,6 +346,7 @@ export default class CramFile {
         `${compressionMethod} decompression not yet implemented`,
       )
     }
+    return outputBuffer
   }
 
   async readBlock(position: number) {
@@ -353,7 +358,12 @@ export default class CramFile {
     }
     const blockContentPosition = blockHeader._endPosition
 
-    const uncompressedData = Buffer.allocUnsafe(blockHeader.uncompressedSize)
+    const d = await this.read(blockHeader.compressedSize, blockContentPosition)
+    const tmp = new Uint8Array(blockHeader.uncompressedSize)
+    const uncompressedData =
+      blockHeader.compressionMethod !== 'raw'
+        ? await this._uncompress(blockHeader.compressionMethod, d, tmp)
+        : d
 
     const block: CramFileBlock = {
       ...blockHeader,
@@ -361,30 +371,6 @@ export default class CramFile {
       contentPosition: blockContentPosition,
       content: uncompressedData,
     }
-
-    if (blockHeader.compressionMethod !== 'raw') {
-      const compressedData = Buffer.allocUnsafe(blockHeader.compressedSize)
-      await this.read(
-        compressedData,
-        0,
-        blockHeader.compressedSize,
-        blockContentPosition,
-      )
-
-      await this._uncompress(
-        blockHeader.compressionMethod,
-        compressedData,
-        uncompressedData,
-      )
-    } else {
-      await this.read(
-        uncompressedData,
-        0,
-        blockHeader.uncompressedSize,
-        blockContentPosition,
-      )
-    }
-
     if (majorVersion >= 3) {
       // parse the crc32
       const crc = await this._parseSection(

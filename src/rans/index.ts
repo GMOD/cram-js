@@ -155,6 +155,7 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
 class ByteBuffer {
   constructor(nodeBuffer, initialInputPosition = 0) {
     this._buffer = nodeBuffer
+    this._dataView = new DataView(nodeBuffer.buffer)
     this._position = initialInputPosition
     this.length = nodeBuffer.length
   }
@@ -194,7 +195,7 @@ class ByteBuffer {
   }
 
   getInt() {
-    const i = this._buffer.readInt32LE(this._position)
+    const i = this._dataView.getInt32(this._position, true)
     this._position += 4
     return i
   }

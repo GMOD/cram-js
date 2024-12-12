@@ -33,11 +33,8 @@ function addRecordToIndex(index: ParsedIndex, record: number[]) {
   })
 }
 
-function maybeUnzip(data: Buffer) {
-  if (data[0] === 31 && data[1] === 139) {
-    return unzip(data)
-  }
-  return data
+function maybeUnzip(data: Uint8Array) {
+  return data[0] === 31 && data[1] === 139 ? unzip(data) : data
 }
 
 export default class CraiIndex {
@@ -69,9 +66,10 @@ export default class CraiIndex {
   async parseIndex() {
     const index: ParsedIndex = {}
     const uncompressedBuffer = maybeUnzip(await this.filehandle.readFile())
+    const dataView = new DataView(uncompressedBuffer.buffer)
     if (
       uncompressedBuffer.length > 4 &&
-      uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
+      dataView.getUint32(0, true) === BAI_MAGIC
     ) {
       throw new CramMalformedError(
         'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',

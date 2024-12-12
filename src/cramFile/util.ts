@@ -60,7 +60,8 @@ export function parseItf8(buffer: Uint8Array, initialOffset: number) {
   return [result, offset - initialOffset] as const
 }
 
-export function parseLtf8(buffer: Buffer, initialOffset: number) {
+export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
+  const dataView = new DataView(buffer.buffer)
   let offset = initialOffset
   const countFlags = buffer[offset]!
   let n: number | Long
@@ -76,7 +77,7 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
         (buffer[offset + 1]! << 8) |
         buffer[offset + 2]!) &
       0x1fffff
-    n = ((countFlags & 63) << 16) | buffer.readUInt16LE(offset + 1)
+    n = ((countFlags & 63) << 16) | dataView.getUint16(offset + 1, true)
     offset += 3
   } else if (countFlags < 0xf0) {
     n =
@@ -142,8 +143,8 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
 }
 
 export function parseItem<T>(
-  buffer: Buffer,
-  parser: (buffer: Buffer, offset: number) => { offset: number; value: T },
+  buffer: Uint8Array,
+  parser: (buffer: Uint8Array, offset: number) => { offset: number; value: T },
   startBufferPosition = 0,
   startFilePosition = 0,
 ) {
