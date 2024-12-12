@@ -21,4 +21,4 @@ function open(
 
 export { open }
 
-export { LocalFile, RemoteFile } from 'generic-filehandle'
+export { LocalFile, RemoteFile } from 'generic-filehandle2'
