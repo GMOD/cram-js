@@ -13,7 +13,6 @@ export interface ReadFeature {
   pos: number
   refPos: number
   data: any
-
   ref?: string
   sub?: string
 }
@@ -128,6 +127,7 @@ function decodeBaseSubstitution(
   compressionScheme: CramContainerCompressionScheme,
   readFeature: ReadFeature,
 ) {
+  console.log('wopwze')
   // decode base substitution code using the substitution matrix
   const refCoord = readFeature.refPos - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
@@ -383,6 +383,7 @@ export default class CramRecord {
    * @returns {String} sequence basepairs
    */
   getReadBases() {
+    console.log(this.readBases, this._refRegion)
     if (!this.readBases && this._refRegion) {
       const decoded = decodeReadSequence(this, this._refRegion)
       if (decoded) {
@@ -457,6 +458,7 @@ export default class CramRecord {
     refRegion: RefRegion,
     compressionScheme: CramContainerCompressionScheme,
   ) {
+    console.log('wowzers')
     if (this.readFeatures) {
       // use the reference bases to decode the bases
       // substituted in each base substitution

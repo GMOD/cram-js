@@ -17,7 +17,7 @@ import {
 import CramContainer from './container'
 import CramRecord from './record'
 import { open } from '../io'
-import { parseItem, tinyMemoize } from './util'
+import { concatUint8Array, parseItem, tinyMemoize } from './util'
 import { parseHeaderText } from '../sam'
 import { Filehandle } from './filehandle'
 
@@ -306,47 +306,55 @@ export default class CramFile {
   async _uncompress(
     compressionMethod: CompressionMethod,
     inputBuffer: Uint8Array,
-    outputBuffer: Uint8Array,
+    uncompressedSize: number,
   ) {
     if (compressionMethod === 'gzip') {
       return unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
       const bits = bzip2.array(inputBuffer)
       let size = bzip2.header(bits)
-      let j = 0
       let chunk: Uint8Array | -1
+      const chunks = []
       do {
         chunk = bzip2.decompress(bits, size)
         if (chunk !== -1) {
-          Buffer.from(chunk).copy(outputBuffer, j)
-          j += chunk.length
+          chunks.push(chunk)
           size -= chunk.length
         }
       } while (chunk !== -1)
+      return concatUint8Array(chunks)
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),
       )
-      const ret = Buffer.from(await decompressedResponse.arrayBuffer())
-      ret.copy(outputBuffer)
+      return new Uint8Array(await decompressedResponse.arrayBuffer())
     } else if (compressionMethod === 'rans') {
+      const outputBuffer = new Uint8Array(uncompressedSize)
       ransuncompress(inputBuffer, outputBuffer)
+      return outputBuffer
       // htscodecs r4x8 is slower, but compatible.
       // htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
     } else if (compressionMethod === 'rans4x16') {
+      const outputBuffer = new Uint8Array(uncompressedSize)
       htscodecs.r4x16_uncompress(inputBuffer, outputBuffer)
+      return outputBuffer
     } else if (compressionMethod === 'arith') {
+      const outputBuffer = new Uint8Array(uncompressedSize)
       htscodecs.arith_uncompress(inputBuffer, outputBuffer)
+      return outputBuffer
     } else if (compressionMethod === 'fqzcomp') {
+      const outputBuffer = new Uint8Array(uncompressedSize)
       htscodecs.fqzcomp_uncompress(inputBuffer, outputBuffer)
+      return outputBuffer
     } else if (compressionMethod === 'tok3') {
+      const outputBuffer = new Uint8Array(uncompressedSize)
       htscodecs.tok3_uncompress(inputBuffer, outputBuffer)
+      return outputBuffer
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,
       )
     }
-    return outputBuffer
   }
 
   async readBlock(position: number) {
@@ -359,10 +367,13 @@ export default class CramFile {
     const blockContentPosition = blockHeader._endPosition
 
     const d = await this.read(blockHeader.compressedSize, blockContentPosition)
-    const tmp = new Uint8Array(blockHeader.uncompressedSize)
     const uncompressedData =
       blockHeader.compressionMethod !== 'raw'
-        ? await this._uncompress(blockHeader.compressionMethod, d, tmp)
+        ? await this._uncompress(
+            blockHeader.compressionMethod,
+            d,
+            blockHeader.uncompressedSize,
+          )
         : d
 
     const block: CramFileBlock = {
