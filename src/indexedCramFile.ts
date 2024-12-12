@@ -1,12 +1,13 @@
-import { CramUnimplementedError } from './errors'
-import CramFile from './cramFile'
-import CramRecord from './cramFile/record'
-import { SeqFetch } from './cramFile/file'
-import { Filehandle } from './cramFile/filehandle'
 import { Slice } from './craiIndex'
+import CramFile from './cramFile'
+import { SeqFetch } from './cramFile/file'
+import CramRecord from './cramFile/record'
+import { CramUnimplementedError } from './errors'
+
+import type { GenericFilehandle } from 'generic-filehandle2'
 
 export interface CramFileSource {
-  cramFilehandle?: Filehandle
+  cramFilehandle?: GenericFilehandle
   cramUrl?: string
   cramPath?: string
 }

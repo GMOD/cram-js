@@ -1,7 +1,7 @@
 export class CramBufferOverrunError extends Error {}
 
 export function getBits(
-  data: Buffer,
+  data: Uint8Array,
   cursor: { bytePosition: number; bitPosition: number },
   numBits: number,
 ) {

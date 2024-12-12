@@ -41,6 +41,23 @@ const IOStream = require('./iostream')
 const rans = require('./rans4x16')
 const arith_gen = require('./arith_gen')
 
+function sum(array) {
+  let sum = 0
+  for (const entry of array) {
+    sum += entry.length
+  }
+  return sum
+}
+function concatUint8Array(args) {
+  const mergedArray = new Uint8Array(sum(args))
+  let offset = 0
+  for (const entry of args) {
+    mergedArray.set(entry, offset)
+    offset += entry.length
+  }
+  return mergedArray
+}
+
 var arith = new arith_gen()
 
 const TOK_TYPE = 0
@@ -77,7 +94,7 @@ function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
 
     if (type != TOK_TYPE && tok_new) {
       var M = new Array(nnames - 1).fill(TOK_MATCH)
-      B[t][TOK_TYPE] = new IOStream(Buffer.from([type].concat(M)))
+      B[t][TOK_TYPE] = new IOStream(concatUint8Array([new Uint8Array(type), M]))
     }
 
     if (tok_dup) {

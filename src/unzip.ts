@@ -1,1 +1,5 @@
-export { gunzipSync as unzip } from 'zlib'
+import { inflate } from 'pako'
+
+export function unzip(input: Uint8Array) {
+  return inflate(input)
+}

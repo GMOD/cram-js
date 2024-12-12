@@ -36,6 +36,23 @@ const IOStream = require('./iostream')
 const ByteModel = require('./byte_model')
 const bzip2 = require('bzip2')
 
+function sum(array) {
+  let sum = 0
+  for (const entry of array) {
+    sum += entry.length
+  }
+  return sum
+}
+function concatUint8Array(args) {
+  const mergedArray = new Uint8Array(sum(args))
+  let offset = 0
+  for (const entry of args) {
+    mergedArray.set(entry, offset)
+    offset += entry.length
+  }
+  return mergedArray
+}
+
 const ARITH_ORDER = 1
 const ARITH_EXT = 4
 const ARITH_STRIPE = 8
@@ -87,44 +104,10 @@ module.exports = class RangeCoderGen {
     return data
   }
 
-  encode(src, flags) {
-    this.stream = new IOStream('', 0, src.length * 1.1 + 100) // guestimate worst case!
-
-    this.stream.WriteByte(flags)
-    if (!(flags & ARITH_NOSIZE)) this.stream.WriteUint7(src.length)
-
-    if (flags & ARITH_STRIPE)
-      return Buffer.concat([
-        this.stream.buf.slice(0, this.stream.pos),
-        this.encodeStripe(this.stream, src, flags >> 8),
-      ])
-
-    var order = flags & ARITH_ORDER
-    var e_len = src.length
-
-    // step 1: Encode meta-data
-    var pack_meta
-    if (flags & ARITH_PACK) [pack_meta, src, e_len] = this.encodePack(src)
-
-    // step 2: Write any meta data
-    if (flags & ARITH_PACK) this.stream.WriteStream(pack_meta)
-
-    // step 3: arith encoding below
-    if (flags & ARITH_RLE) {
-      return order
-        ? this.encodeRLE1(src, e_len, this.stream)
-        : this.encodeRLE0(src, e_len, this.stream)
-    } else {
-      return order
-        ? this.encode1(src, e_len, this.stream)
-        : this.encode0(src, e_len, this.stream)
-    }
-  }
-
   //----------------------------------------------------------------------
   // Order-0 codec
   decode0(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -140,27 +123,11 @@ module.exports = class RangeCoderGen {
     return output
   }
 
-  encode0(src, n_in, out) {
-    // Count the maximum symbol present
-    var max_sym = 0
-    for (var i = 0; i < n_in; i++) if (max_sym < src[i]) max_sym = src[i]
-    max_sym++ // FIXME not what spec states!?
-
-    var byte_model = new ByteModel(max_sym)
-    out.WriteByte(max_sym)
-    var rc = new RangeCoder(out)
-
-    for (var i = 0; i < n_in; i++) byte_model.ModelEncode(out, rc, src[i])
-    rc.RangeFinishEncode(out)
-
-    return out.buf.slice(0, out.pos)
-  }
-
   //----------------------------------------------------------------------
   // Order-1 codec
 
   decode1(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -180,57 +147,27 @@ module.exports = class RangeCoderGen {
     return output
   }
 
-  encode1(src, n_in, out) {
-    // Count the maximum symbol present
-    var max_sym = 0
-    for (var i = 0; i < n_in; i++) if (max_sym < src[i]) max_sym = src[i]
-    max_sym++ // FIXME not what spec states!
-
-    var byte_model = new Array(max_sym)
-    for (var i = 0; i < max_sym; i++) byte_model[i] = new ByteModel(max_sym)
-    out.WriteByte(max_sym)
-    var rc = new RangeCoder(out)
-
-    var last = 0
-    for (var i = 0; i < n_in; i++) {
-      byte_model[last].ModelEncode(out, rc, src[i])
-      last = src[i]
-    }
-    rc.RangeFinishEncode(out)
-
-    return out.buf.slice(0, out.pos)
-  }
-
   //----------------------------------------------------------------------
   // External codec
   decodeExt(stream, n_out) {
-    // Bzip2 only for now
-    var output = new Buffer.allocUnsafe(n_out)
-    var bits = bzip2.array(stream.buf.slice(stream.pos))
-    var size = bzip2.header(bits)
-    var j = 0
+    const bits = bzip2.array(stream.buf.slice(stream.pos))
+    let size = bzip2.header(bits)
+    let chunk
+    const chunks = []
     do {
-      var chunk = bzip2.decompress(bits, size)
-      if (chunk != -1) {
-        Buffer.from(chunk).copy(output, j)
-        j += chunk.length
+      chunk = bzip2.decompress(bits, size)
+      if (chunk !== -1) {
+        chunks.push(chunk)
         size -= chunk.length
       }
-    } while (chunk != -1)
-
-    return output
-  }
-
-  encodeExt(stream, n_out) {
-    // We cannot compress using Bzip2 now as it's
-    // absent from bzip2.js, but consider using
-    // https://github.com/cscott/compressjs
+    } while (chunk !== -1)
+    return concatUint8Array(chunks)
   }
 
   //----------------------------------------------------------------------
   // Order-0 RLE codec
   decodeRLE0(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -260,51 +197,11 @@ module.exports = class RangeCoderGen {
     return output
   }
 
-  encodeRLE0(src, n_in, out) {
-    // Count the maximum symbol present
-    var max_sym = 0
-    for (var i = 0; i < n_in; i++) if (max_sym < src[i]) max_sym = src[i]
-    max_sym++ // FIXME not what spec states!
-
-    var model_lit = new ByteModel(max_sym)
-    var model_run = new Array(258)
-    for (var i = 0; i <= 257; i++) model_run[i] = new ByteModel(4)
-
-    out.WriteByte(max_sym)
-    var rc = new RangeCoder(out)
-
-    var i = 0
-    while (i < n_in) {
-      model_lit.ModelEncode(out, rc, src[i])
-      var run = 1
-      while (i + run < n_in && src[i + run] == src[i]) run++
-      run--
-
-      var rctx = src[i]
-      var last = src[i]
-      i += run + 1
-
-      var part = run >= 3 ? 3 : run
-      model_run[rctx].ModelEncode(out, rc, part)
-      run -= part
-      rctx = 256
-      while (part == 3) {
-        part = run >= 3 ? 3 : run
-        model_run[rctx].ModelEncode(out, rc, part)
-        rctx = 257
-        run -= part
-      }
-    }
-    rc.RangeFinishEncode(out)
-
-    return out.buf.slice(0, out.pos)
-  }
-
   //----------------------------------------------------------------------
   // Order-1 RLE codec
 
   decodeRLE1(stream, n_out) {
-    var output = new Buffer.allocUnsafe(n_out)
+    var output = new Uint8Array(n_out)
 
     var max_sym = stream.ReadByte()
     if (max_sym == 0) max_sym = 256
@@ -338,48 +235,6 @@ module.exports = class RangeCoderGen {
     return output
   }
 
-  encodeRLE1(src, n_in, out) {
-    // Count the maximum symbol present
-    var max_sym = 0
-    for (var i = 0; i < n_in; i++) if (max_sym < src[i]) max_sym = src[i]
-    max_sym++ // FIXME not what spec states!
-
-    var model_lit = new Array(max_sym)
-    for (var i = 0; i < max_sym; i++) model_lit[i] = new ByteModel(max_sym)
-    var model_run = new Array(258)
-    for (var i = 0; i <= 257; i++) model_run[i] = new ByteModel(4)
-
-    out.WriteByte(max_sym)
-    var rc = new RangeCoder(out)
-
-    var i = 0
-    var last = 0
-    while (i < n_in) {
-      model_lit[last].ModelEncode(out, rc, src[i])
-      var run = 1
-      while (i + run < n_in && src[i + run] == src[i]) run++
-      run--
-
-      var rctx = src[i]
-      last = src[i]
-      i += run + 1
-
-      var part = run >= 3 ? 3 : run
-      model_run[rctx].ModelEncode(out, rc, part)
-      run -= part
-      rctx = 256
-      while (part == 3) {
-        part = run >= 3 ? 3 : run
-        model_run[rctx].ModelEncode(out, rc, part)
-        rctx = 257
-        run -= part
-      }
-    }
-    rc.RangeFinishEncode(out)
-
-    return out.buf.slice(0, out.pos)
-  }
-
   //----------------------------------------------------------------------
   // Pack method
   decodePackMeta(stream) {
@@ -394,7 +249,7 @@ module.exports = class RangeCoderGen {
   }
 
   decodePack(data, M, len) {
-    var out = new Buffer.allocUnsafe(len)
+    var out = new Uint8Array(len)
 
     if (this.nsym <= 1) {
       // Constant value
@@ -452,124 +307,6 @@ module.exports = class RangeCoderGen {
     return [stream, M, nsym]
   }
 
-  encodePack(data) {
-    var meta, M, nsym
-    ;[meta, M, nsym] = this.packMeta(data)
-
-    var len = data.length
-    var i = 0
-    if (nsym <= 1) {
-      // Constant values
-      meta.WriteUint7(0)
-      return [meta, new Buffer.allocUnsafe(0), 0]
-    }
-
-    if (nsym <= 2) {
-      // 1 bit per value
-      var out = new Buffer.allocUnsafe(Math.floor((len + 7) / 8))
-      for (var i = 0, j = 0; i < (len & ~7); i += 8, j++)
-        out[j] =
-          (M[data[i + 0]] << 0) +
-          (M[data[i + 1]] << 1) +
-          (M[data[i + 2]] << 2) +
-          (M[data[i + 3]] << 3) +
-          (M[data[i + 4]] << 4) +
-          (M[data[i + 5]] << 5) +
-          (M[data[i + 6]] << 6) +
-          (M[data[i + 7]] << 7)
-      if (i < len) {
-        out[j] = 0
-        var v = 0
-        while (i < len) {
-          out[j] |= M[data[i++]] << v
-          v++
-        }
-        j++
-      }
-
-      meta.WriteUint7(j)
-      return [meta, out, out.length]
-    }
-
-    if (nsym <= 4) {
-      // 2 bits per value
-      var out = new Buffer.allocUnsafe(Math.floor((len + 3) / 4))
-      for (var i = 0, j = 0; i < (len & ~3); i += 4, j++)
-        out[j] =
-          (M[data[i + 0]] << 0) +
-          (M[data[i + 1]] << 2) +
-          (M[data[i + 2]] << 4) +
-          (M[data[i + 3]] << 6)
-
-      if (i < len) {
-        out[j] = 0
-        var v = 0
-        while (i < len) {
-          out[j] |= M[data[i++]] << v
-          v += 2
-        }
-        j++
-      }
-
-      meta.WriteUint7(j)
-      return [meta, out, out.length]
-    }
-
-    if (nsym <= 16) {
-      // 4 bits per value
-      var out = new Buffer.allocUnsafe(Math.floor((len + 1) / 2))
-      for (var i = 0, j = 0; i < (len & ~1); i += 2, j++)
-        out[j] = (M[data[i + 0]] << 0) + (M[data[i + 1]] << 4)
-      if (i < len) out[j++] = M[data[i++]]
-
-      meta.WriteUint7(j)
-      return [meta, out, out.length]
-    }
-
-    // Otherwise an expensive NOP
-    meta.WriteUint7(data.length)
-    return [meta, data, data.length]
-  }
-
-  //----------------------------------------------------------------------
-  // STRIPE method
-  encodeStripe(hdr, src, N) {
-    if (N == 0) N = 4 // old default
-
-    // Split into multiple streams
-    var part = new Array(N)
-    var ulen = new Array(N)
-    for (var s = 0; s < N; s++) {
-      ulen[s] = Math.floor(src.length / N) + (src.length % N > s)
-      part[s] = new Array(ulen[s])
-    }
-
-    for (var x = 0, i = 0; i < src.length; i += N, x++) {
-      for (var j = 0; j < N; j++)
-        if (x < part[j].length) part[j][x] = src[i + j]
-    }
-
-    // Compress each part
-    var comp = new Array(N)
-    var total = 0
-    for (var s = 0; s < N; s++) {
-      // Example: try O0 and O1 and choose best
-      var comp0 = this.encode(part[s], 0)
-      var comp1 = this.encode(part[s], 1)
-      comp[s] = comp1.length < comp0.length ? comp1 : comp0
-      total += comp[s].length
-    }
-
-    // Serialise
-    var out = new IOStream('', 0, total + 5 * N + 1)
-    out.WriteByte(N)
-    for (var s = 0; s < N; s++) out.WriteUint7(comp[s].length)
-
-    for (var s = 0; s < N; s++) out.WriteData(comp[s], comp[s].length)
-
-    return out.buf.slice(0, out.buf.pos)
-  }
-
   decodeStripe(stream, len) {
     var N = stream.ReadByte()
 
@@ -586,7 +323,7 @@ module.exports = class RangeCoderGen {
     }
 
     // Transpose
-    var out = new Buffer.allocUnsafe(len)
+    var out = new Uint8Array(len)
     for (var j = 0; j < N; j++) {
       for (var i = 0; i < ulen[j]; i++) {
         out[i * N + j] = T[j][i]
@@ -599,7 +336,7 @@ module.exports = class RangeCoderGen {
   //----------------------------------------------------------------------
   // Cat method
   decodeCat(stream, len) {
-    var out = new Buffer.allocUnsafe(len)
+    var out = new Uint8Array(len)
     for (var i = 0; i < len; i++) out[i] = stream.ReadByte()
 
     return out

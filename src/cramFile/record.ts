@@ -1,5 +1,6 @@
 import Constants from './constants'
 import CramContainerCompressionScheme from './container/compressionScheme'
+
 import type decodeRecord from './slice/decodeRecord'
 
 export interface RefRegion {
@@ -13,7 +14,6 @@ export interface ReadFeature {
   pos: number
   refPos: number
   data: any
-
   ref?: string
   sub?: string
 }
@@ -458,8 +458,8 @@ export default class CramRecord {
     compressionScheme: CramContainerCompressionScheme,
   ) {
     if (this.readFeatures) {
-      // use the reference bases to decode the bases
-      // substituted in each base substitution
+      // use the reference bases to decode the bases substituted in each base
+      // substitution
       this.readFeatures.forEach(readFeature => {
         if (readFeature.code === 'X') {
           decodeBaseSubstitution(

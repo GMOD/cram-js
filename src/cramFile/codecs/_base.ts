@@ -1,5 +1,5 @@
-import CramSlice from '../slice'
 import { CramFileBlock } from '../file'
+import CramSlice from '../slice'
 import { DataType } from './dataSeriesTypes'
 
 export interface DataTypeMapping {

@@ -36,12 +36,13 @@
 module.exports = class IOStream {
   constructor(buf, start_pos = 0, size = 0) {
     if (size != 0) {
-      this.buf = Buffer.allocUnsafe(size)
+      this.buf = new Uint8Array(size)
       this.length = size
     } else {
       this.buf = buf
       this.length = buf.length
     }
+    this.dataView = new DataView(this.buf.buffer)
     this.pos = start_pos
   }
 
@@ -76,7 +77,7 @@ module.exports = class IOStream {
   }
 
   ReadUint32() {
-    const i = this.buf.readInt32LE(this.pos)
+    const i = this.dataView.getInt32(this.pos, true)
     this.pos += 4
     return i
   }

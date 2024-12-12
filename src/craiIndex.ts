@@ -1,8 +1,9 @@
-import { unzip } from './unzip'
-import { open } from './io'
-import { CramMalformedError } from './errors'
 import { CramFileSource } from './cramFile/file'
-import { Filehandle } from './cramFile/filehandle'
+import { CramMalformedError } from './errors'
+import { open } from './io'
+import { unzip } from './unzip'
+
+import type { GenericFilehandle } from 'generic-filehandle2'
 
 const BAI_MAGIC = 21_578_050 // BAI\1
 
@@ -33,11 +34,8 @@ function addRecordToIndex(index: ParsedIndex, record: number[]) {
   })
 }
 
-function maybeUnzip(data: Buffer) {
-  if (data[0] === 31 && data[1] === 139) {
-    return unzip(data)
-  }
-  return data
+function maybeUnzip(data: Uint8Array) {
+  return data[0] === 31 && data[1] === 139 ? unzip(data) : data
 }
 
 export default class CraiIndex {
@@ -50,10 +48,12 @@ export default class CraiIndex {
   // 4. Container start byte position in the file
   // 5. Slice start byte position in the container data (‘blocks’)
   // 6. Slice size in bytes
-  // Each line represents a slice in the CRAM file. Please note that all slices must be listed in index file.
+  //
+  // Each line represents a slice in the CRAM file. Please note that all slices
+  // must be listed in index file.
   private parseIndexP?: Promise<ParsedIndex>
 
-  private filehandle: Filehandle
+  private filehandle: GenericFilehandle
 
   /**
    *
@@ -69,18 +69,19 @@ export default class CraiIndex {
   async parseIndex() {
     const index: ParsedIndex = {}
     const uncompressedBuffer = maybeUnzip(await this.filehandle.readFile())
+    const dataView = new DataView(uncompressedBuffer.buffer)
     if (
       uncompressedBuffer.length > 4 &&
-      uncompressedBuffer.readUInt32LE(0) === BAI_MAGIC
+      dataView.getUint32(0, true) === BAI_MAGIC
     ) {
       throw new CramMalformedError(
         'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
       )
     }
-    // interpret the text as regular ascii, since it is
-    // supposed to be only digits and whitespace characters
-    // this is written in a deliberately low-level fashion for performance,
-    // because some .crai files can be pretty large.
+    // interpret the text as regular ascii, since it is supposed to be only
+    // digits and whitespace characters this is written in a deliberately
+    // low-level fashion for performance, because some .crai files can be
+    // pretty large.
     let currentRecord: number[] = []
     let currentString = ''
     for (const charCode of uncompressedBuffer) {

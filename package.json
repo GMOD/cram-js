@@ -27,8 +27,8 @@
     "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow errors.ts '--section=Exception Classes'; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
     "prebuild": "npm run clean",
     "clean": "rimraf dist esm",
-    "build:esm": "tsc --target es2018 --outDir esm",
-    "build:es5": "tsc --target es2015 --module commonjs --outDir dist",
+    "build:esm": "tsc --outDir esm",
+    "build:es5": "tsc --module commonjs --outDir dist",
     "build": "npm run build:esm && npm run build:es5",
     "postbuild": "webpack",
     "prepack": "npm test run && npm run build && cp dist/errors.js errors.js",
@@ -44,6 +44,7 @@
   "dependencies": {
     "bzip2": "^0.1.1",
     "crc": "^4.3.2",
+    "generic-filehandle2": "^0.0.2",
     "long": "^4.0.0",
     "md5": "^2.2.1",
     "pako": "^1.0.4",
@@ -61,13 +62,12 @@
     "buffer": "^6.0.3",
     "documentation": "^14.0.3",
     "eslint": "^9.9.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-unicorn": "^55.0.0",
     "mock-fs": "^5.2.0",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
-    "typescript": "^5.0.3",
+    "typescript": "^5.7.0",
     "typescript-eslint": "^8.0.1",
     "vitest": "^2.0.5",
     "webpack": "^5.90.3",
@@ -78,8 +78,6 @@
   },
   "browser": {
     "./dist/io/localFile.js": false,
-    "./esm/io/localFile.js": false,
-    "./esm/unzip.js": "./esm/unzip-pako.js",
-    "./dist/unzip.js": "./dist/unzip-pako.js"
+    "./esm/io/localFile.js": false
   }
 }

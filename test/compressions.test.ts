@@ -1,7 +1,7 @@
-// @ts-nocheck
-import { test, expect } from 'vitest'
-import { testDataFile } from './lib/util'
+import { expect, test } from 'vitest'
+
 import { dumpWholeFile } from './lib/dumpFile'
+import { testDataFile } from './lib/util'
 import { CramFile } from '../src/index'
 import { FetchableSmallFasta } from './lib/fasta'
 

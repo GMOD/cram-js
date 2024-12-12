@@ -1,21 +1,20 @@
 import { CramArgumentError, CramMalformedError } from '../../errors'
-import { parseItem, sequenceMD5, tinyMemoize } from '../util'
-
+import { Cursors, DataTypeMapping } from '../codecs/_base'
+import { CramBufferOverrunError } from '../codecs/getBits'
 import Constants from '../constants'
 import decodeRecord, { DataSeriesDecoder } from './decodeRecord'
-import CramRecord from '../record'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
 import CramContainer from '../container'
+import { DataSeriesTypes } from '../container/compressionScheme'
 import CramFile, { CramFileBlock } from '../file'
+import CramRecord from '../record'
 import {
-  getSectionParsers,
-  isMappedSliceHeader,
   MappedSliceHeader,
   UnmappedSliceHeader,
+  getSectionParsers,
+  isMappedSliceHeader,
 } from '../sectionParsers'
-import { CramBufferOverrunError } from '../codecs/getBits'
-import { Cursors, DataTypeMapping } from '../codecs/_base'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
-import { DataSeriesTypes } from '../container/compressionScheme'
+import { parseItem, sequenceMD5, tinyMemoize } from '../util'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader

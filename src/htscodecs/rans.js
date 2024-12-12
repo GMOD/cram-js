@@ -71,41 +71,6 @@ function RansRenorm(src, R) {
 
   return R
 }
-
-// RanEnc* is for encoder
-function RansEncInit() {
-  return 1 << 23
-}
-
-function RansEncFlush(R, dst) {
-  dst.WriteByteNeg((R >> 24) & 0xff)
-  dst.WriteByteNeg((R >> 16) & 0xff)
-  dst.WriteByteNeg((R >> 8) & 0xff)
-  dst.WriteByteNeg((R >> 0) & 0xff)
-}
-
-function RansEncRenorm(R, dst, freq, scale_bits) {
-  var R_max = (((1 << 23) >> scale_bits) << 8) * freq
-
-  while (R >= R_max) {
-    dst.WriteByteNeg(R & 0xff)
-    R >>= 8
-  }
-  return R
-}
-
-// Puts a symbol with frequency freq, cumulative freq start
-// and total freq 1<<scale_bits.
-//
-// Note with static probabilities, /freq and %freq could be
-// precomputed via multiplies and shifts.
-function RansEncPut(R, dst, start, freq, scale_bits) {
-  var scale = 1 << scale_bits
-  R = RansEncRenorm(R, dst, freq, scale_bits)
-  R = (Math.floor(R / freq) << scale_bits) + (R % freq) + start
-  return R
-}
-
 //----------------------------------------------------------------------
 // Main rANS entry function: decodes a compressed src and
 // returns the uncompressed buffer.
@@ -119,18 +84,6 @@ function decode(src) {
     return RansDecode0(stream, n_out)
   } else {
     return RansDecode1(stream, n_out)
-  }
-}
-
-function encode(src, order) {
-  //var stream = new IOStream(src);
-  //var n_in  = stream.ReadUint32();
-  //var n_out = stream.ReadUint32();
-
-  if (order == 0) {
-    return RansEncode0(src)
-  } else {
-    return RansEncode1(src)
   }
 }
 
@@ -180,7 +133,7 @@ function RansDecode0(src, nbytes) {
   for (var i = 0; i < 4; i++) R[i] = src.ReadUint32()
 
   // Main decode loop
-  var output = new Buffer.allocUnsafe(nbytes)
+  var output = new Uint8Array(nbytes)
   for (var i = 0; i < nbytes; i++) {
     var i4 = i % 4
     var f = RansGetCumulativeFreq(R[i4])
@@ -192,129 +145,6 @@ function RansDecode0(src, nbytes) {
   }
 
   return output
-}
-
-//----------------------------------------------------------------------
-// Order-0 encoder
-
-function BuildFrequencies0(src, F) {
-  for (var i = 0; i < 256; i++) F[i] = 0
-
-  for (var i = 0; i < src.length; i++) F[src[i]]++
-}
-
-function NormaliseFrequencies0(F) {
-  // Compute total
-  var tot = 0
-  for (var i = 0; i < 256; i++) tot += F[i]
-
-  // Scale total of frequencies to max
-  const max = 1 << 12
-  var scale = max / tot
-  do {
-    var max_val = 0
-    var max_idx = 0
-    var renorm = 0
-    tot = 0
-    for (var i = 0; i < 256; i++) {
-      if (F[i] == 0) continue
-
-      if (max_val < F[i]) {
-        max_val = F[i]
-        max_idx = i
-      }
-
-      F[i] = Math.floor(F[i] * scale)
-      if (F[i] == 0) F[i] = 1
-
-      tot += F[i]
-    }
-
-    // Adjust new tot to ensure it matches.
-    if (tot < max) {
-      // Too low, boost the most common symbol
-      F[max_idx] += max - tot
-    } else if (tot - max < F[max_idx] / 2 && F[max_idx] > 2) {
-      // Too high, reduce the common symbol
-      F[max_idx] -= tot - max
-    } else if (tot != max) {
-      // Much too high, fudge scale and try again.
-      scale = scale * 0.99
-      renorm = 1
-    }
-  } while (renorm)
-}
-
-function WriteFrequencies0(out, F) {
-  var rle = 0
-  for (var i = 0; i < 256; i++) {
-    if (!F[i]) continue
-
-    // Output Symbol if needed and Frequency
-    if (rle > 0) rle--
-    else {
-      out.WriteByte(i)
-
-      if (i > 0 && F[i - 1] > 0) {
-        // We've encoded two symbol frequencies in a row.
-        // How many more are there?  Store that count so
-        // we can avoid writing consecutive symbols.
-        for (rle = i + 1; rle < 256 && F[rle]; rle++);
-        rle -= i + 1
-
-        out.WriteByte(rle)
-      }
-    }
-
-    out.WriteITF8(F[i])
-  }
-  out.WriteByte(0)
-}
-
-function RansEncode0(src) {
-  const nbytes = src.length
-  var output = new IOStream('', 0, 257 * 3 + 9)
-
-  output.WriteByte(0) // Order 0
-  output.WriteUint32(0) // compressed size: correct later
-  output.WriteUint32(0) // uncompressed size: correct later
-
-  // Compute frequencies
-  var F = new Array(256)
-  BuildFrequencies0(src, F)
-  NormaliseFrequencies0(F)
-  WriteFrequencies0(output, F)
-
-  // Compute cumulative frequencies
-  var C = new Array(256)
-  C[0] = 0
-  for (var i = 1; i < 256; i++) C[i] = C[i - 1] + F[i - 1]
-
-  // Initialise rANS state
-  var R = new Array(4)
-  for (var i = 0; i < 4; i++) R[i] = RansEncInit()
-
-  var alloc = Math.floor(nbytes * 1.05 + 100)
-  var rans_out = new IOStream('', alloc, alloc)
-
-  // Main encode loop
-  for (var i = nbytes - 1; i >= 0; i--)
-    R[i % 4] = RansEncPut(R[i % 4], rans_out, C[src[i]], F[src[i]], 12)
-
-  for (var i = 3; i >= 0; i--) RansEncFlush(R[i], rans_out)
-
-  // Stitch blocks together into final output buffer
-  var freq_tab = output.pos
-  output.buf.writeInt32LE(freq_tab - 9 + (rans_out.length - rans_out.pos), 1)
-  output.buf.writeInt32LE(nbytes, 5)
-
-  return Buffer.concat(
-    [
-      output.buf.slice(0, output.pos),
-      rans_out.buf.slice(rans_out.pos, rans_out.length),
-    ],
-    output.pos + rans_out.length - rans_out.pos,
-  )
 }
 
 //----------------------------------------------------------------------
@@ -368,7 +198,7 @@ function RansDecode1(src, nbytes) {
   }
 
   // Main decode loop
-  var output = new Buffer.allocUnsafe(nbytes)
+  var output = new Uint8Array(nbytes)
   var nbytes4 = Math.floor(nbytes / 4)
   for (var i = 0; i < nbytes4; i++) {
     for (var j = 0; j < 4; j++) {
@@ -400,146 +230,4 @@ function RansDecode1(src, nbytes) {
   return output
 }
 
-//----------------------------------------------------------------------
-// Order-1 encoder
-
-function BuildFrequencies1(src, F, F0) {
-  for (var i = 0; i < 256; i++) {
-    F0[i] = 0
-    for (var j = 0; j < 256; j++) F[i][j] = 0
-  }
-
-  var last = 0
-  for (var i = 0; i < src.length; i++) {
-    F0[src[i]]++
-    F[last][src[i]]++
-    //F[last][src[i]]++;
-    last = src[i]
-  }
-
-  // Also accept we'll be starting at 4 points, not just byte 0
-  F[0][src[1 * (src.length >> 2)]]++
-  F[0][src[2 * (src.length >> 2)]]++
-  F[0][src[3 * (src.length >> 2)]]++
-  F0[0] += 3
-}
-
-function NormaliseFrequencies1(F, F0) {
-  for (var i = 0; i < 256; i++) if (F0[i]) NormaliseFrequencies0(F[i])
-}
-
-function WriteFrequencies1(out, F, F0) {
-  var rle = 0
-  var last_sym = 0
-
-  for (var i = 0; i < 256; i++) {
-    if (!F0[i]) continue
-
-    // Output Symbol if needed and Frequency
-    if (rle > 0) rle--
-    else {
-      out.WriteByte(i)
-
-      if (i > 0 && F0[i - 1] > 0) {
-        for (rle = i + 1; rle < 256 && F0[rle]; rle++);
-        rle -= i + 1
-        out.WriteByte(rle)
-      }
-    }
-
-    WriteFrequencies0(out, F[i])
-  }
-  out.WriteByte(0)
-}
-
-function RansEncode1(src) {
-  const nbytes = src.length
-  var output = new IOStream('', 0, 257 * 257 * 3 + 9)
-
-  output.WriteByte(1) // Order 0
-  output.WriteUint32(0) // compressed size: correct later
-  output.WriteUint32(0) // uncompressed size: correct later
-
-  // Compute frequencies
-  var F0 = new Array(256)
-  var F = new Array(256)
-  var C = new Array(256)
-  for (var i = 0; i < 256; i++) {
-    F[i] = new Array(256)
-    C[i] = new Array(256)
-  }
-
-  BuildFrequencies1(src, F, F0)
-  NormaliseFrequencies1(F, F0)
-  WriteFrequencies1(output, F, F0)
-
-  // Compute cumulative frequencies
-  for (var i = 0; i < 256; i++) {
-    if (!F0[i]) continue
-
-    C[i][0] = 0
-    for (var j = 1; j < 256; j++) C[i][j] = C[i][j - 1] + F[i][j - 1]
-  }
-
-  // Initialise rANS state
-  var R = new Array(4)
-  var L = new Array(4)
-  for (var j = 0; j < 4; j++) {
-    R[j] = RansEncInit()
-    L[j] = 0
-  }
-  var rans_out = new IOStream('', nbytes, nbytes)
-
-  // We have 4 rans codecs running in parallel on its own 1/4tr of buffer
-  var nbytes4 = Math.floor(nbytes / 4)
-  var idx = new Array(4)
-  var last = new Array(4)
-  for (var j = 0; j < 4; j++) {
-    idx[j] = (j + 1) * nbytes4 - 2
-    last[j] = src[idx[j] + 1]
-  }
-
-  // Deal with the remainder if not a multiple of 4
-  last[3] = src[nbytes - 1]
-  for (var i = nbytes - 2; i > 4 * nbytes4 - 2; i--) {
-    R[3] = RansEncPut(
-      R[3],
-      rans_out,
-      C[src[i]][last[3]],
-      F[src[i]][last[3]],
-      12,
-    )
-    last[3] = src[i]
-  }
-
-  // Main encode loop
-  while (idx[0] >= 0) {
-    for (var j = 3; j >= 0; j--) {
-      var s = src[idx[j]]
-      R[j] = RansEncPut(R[j], rans_out, C[s][last[j]], F[s][last[j]], 12)
-      last[j] = s
-      idx[j]--
-    }
-  }
-
-  for (var j = 3; j >= 0; j--) {
-    R[j] = RansEncPut(R[j], rans_out, C[0][last[j]], F[0][last[j]], 12)
-  }
-
-  for (var i = 3; i >= 0; i--) RansEncFlush(R[i], rans_out)
-
-  // Stitch blocks together into final output buffer
-  var freq_tab = output.pos
-  output.buf.writeInt32LE(freq_tab - 9 + (rans_out.length - rans_out.pos), 1)
-  output.buf.writeInt32LE(nbytes, 5)
-
-  return Buffer.concat(
-    [
-      output.buf.slice(0, output.pos),
-      rans_out.buf.slice(rans_out.pos, rans_out.length),
-    ],
-    output.pos + rans_out.length - rans_out.pos,
-  )
-}
-
-module.exports = { decode, encode }
+module.exports = { decode }

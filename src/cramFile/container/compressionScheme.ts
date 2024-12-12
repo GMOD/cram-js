@@ -1,12 +1,12 @@
+import { CramMalformedError } from '../../errors'
 import { instantiateCodec } from '../codecs'
 import CramCodec from '../codecs/_base'
-import { CramCompressionHeader } from '../sectionParsers'
-import { CramEncoding } from '../encoding'
-import { CramMalformedError } from '../../errors'
 import {
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
 } from '../codecs/dataSeriesTypes'
+import { CramEncoding } from '../encoding'
+import { CramCompressionHeader } from '../sectionParsers'
 
 // the hardcoded data type to be decoded for each core
 // data field

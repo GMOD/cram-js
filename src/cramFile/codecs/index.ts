@@ -1,15 +1,14 @@
-import { CramUnimplementedError } from '../../errors'
-
-import HuffmanIntCodec from './huffman'
-import ExternalCodec from './external'
-import ByteArrayStopCodec from './byteArrayStop'
-import ByteArrayLengthCodec from './byteArrayLength'
-import BetaCodec from './beta'
-import GammaCodec from './gamma'
-import SubexpCodec from './subexp'
 import CramCodec from './_base'
-import { CramEncoding } from '../encoding'
+import BetaCodec from './beta'
+import ByteArrayLengthCodec from './byteArrayLength'
+import ByteArrayStopCodec from './byteArrayStop'
 import { DataType } from './dataSeriesTypes'
+import ExternalCodec from './external'
+import GammaCodec from './gamma'
+import HuffmanIntCodec from './huffman'
+import SubexpCodec from './subexp'
+import { CramUnimplementedError } from '../../errors'
+import { CramEncoding } from '../encoding'
 
 const codecClasses = {
   1: ExternalCodec,

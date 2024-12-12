@@ -13,9 +13,10 @@ function parseSmallFasta(text: string) {
 
 class FetchableSmallFasta {
   data: Promise<ReturnType<typeof parseSmallFasta>>
-  constructor(filehandle: { readFile: () => Promise<Buffer> }) {
+  constructor(filehandle: { readFile: () => Promise<Uint8Array> }) {
     this.data = filehandle.readFile().then(buffer => {
-      const text = buffer.toString('utf8')
+      const decoder = new TextDecoder('utf8')
+      const text = decoder.decode(buffer)
       return parseSmallFasta(text)
     })
   }
@@ -36,4 +37,4 @@ class FetchableSmallFasta {
   }
 }
 
-export { parseSmallFasta, FetchableSmallFasta }
+export { FetchableSmallFasta, parseSmallFasta }

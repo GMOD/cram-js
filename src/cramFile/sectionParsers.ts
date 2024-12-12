@@ -1,23 +1,22 @@
 import { TupleOf } from '../typescript'
-import { parseItf8, parseLtf8 } from './util'
 import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
 import { CramEncoding } from './encoding'
+import { parseItf8, parseLtf8 } from './util'
 
 export function cramFileDefinition() {
   return {
-    parser: (buffer: Buffer, _startOffset = 0) => {
-      const b = buffer
+    parser: (b: Uint8Array, _startOffset = 0) => {
       const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+      const decoder = new TextDecoder('utf8')
       let offset = 0
-      const magic = buffer.subarray(offset, offset + 4).toString()
+      const magic = decoder.decode(b.subarray(offset, offset + 4))
       offset += 4
       const majorVersion = dataView.getUint8(offset)
       offset += 1
       const minorVersion = dataView.getUint8(offset)
       offset += 1
-      const fileId = b
-        .subarray(offset, offset + 20)
-        .toString()
+      const fileId = decoder
+        .decode(b.subarray(offset, offset + 20))
         .replaceAll('\0', '')
       offset += 20
       return {
@@ -34,7 +33,7 @@ export function cramFileDefinition() {
   }
 }
 export function cramBlockHeader() {
-  const parser = (buffer: Buffer, _startOffset = 0) => {
+  const parser = (buffer: Uint8Array, _startOffset = 0) => {
     const b = buffer
     const dataView = new DataView(b.buffer, b.byteOffset, b.length)
     let offset = 0
@@ -97,7 +96,7 @@ export function cramBlockHeader() {
 
 export function cramBlockCrc32() {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const b = buffer
       const dataView = new DataView(b.buffer, b.byteOffset, b.length)
       const crc32 = dataView.getUint32(offset, true)
@@ -115,8 +114,13 @@ export function cramBlockCrc32() {
 
 export type CramTagDictionary = string[][]
 
-function makeTagSet(buffer: Buffer, stringStart: number, stringEnd: number) {
-  const str = buffer.toString('utf8', stringStart, stringEnd)
+function makeTagSet(
+  buffer: Uint8Array,
+  stringStart: number,
+  stringEnd: number,
+) {
+  const decoder = new TextDecoder('utf8')
+  const str = decoder.decode(buffer.subarray(stringStart, stringEnd))
   const tags = []
   for (let i = 0; i < str.length; i += 3) {
     tags.push(str.slice(i, i + 3))
@@ -126,7 +130,7 @@ function makeTagSet(buffer: Buffer, stringStart: number, stringEnd: number) {
 
 export function cramTagDictionary() {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const [size, newOffset1] = parseItf8(buffer, offset)
       offset += newOffset1
       const subbuf = buffer.subarray(offset, offset + size)
@@ -169,7 +173,7 @@ export interface CramPreservationMap {
 
 export function cramPreservationMap() {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const b = buffer
       const dataView = new DataView(b.buffer, b.byteOffset, b.length)
       const [mapSize, newOffset1] = parseItf8(buffer, offset)
@@ -284,7 +288,7 @@ function cramUnmappedSliceHeader(majorVersion: number) {
   maxLength += 5 * 2
   maxLength += 16
 
-  const parser = (buffer: Buffer, offset: number) => {
+  const parser = (buffer: Uint8Array, offset: number) => {
     const [numRecords, newOffset1] = parseItf8(buffer, offset)
     offset += newOffset1
     let recordCounter = 0
@@ -348,7 +352,7 @@ function cramMappedSliceHeader(majorVersion: number) {
   maxLength += 16 // MD5
 
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       // L0
       const [refSeqId, newOffset1] = parseItf8(buffer, offset)
       offset += newOffset1
@@ -419,12 +423,13 @@ function cramMappedSliceHeader(majorVersion: number) {
 
 function cramEncoding() {
   return {
-    parser: (buffer: Buffer, offset: number) => cramEncodingSub(buffer, offset),
+    parser: (buffer: Uint8Array, offset: number) =>
+      cramEncodingSub(buffer, offset),
   }
 }
 
 function cramEncodingSub(
-  buffer: Buffer,
+  buffer: Uint8Array,
   offset: number,
 ): { value: Value; offset: number } {
   const b = buffer
@@ -542,7 +547,7 @@ function cramEncodingSub(
 
 function cramDataSeriesEncodingMap() {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const [mapSize, newOffset1] = parseItf8(buffer, offset)
       offset += newOffset1
       const [mapCount, newOffset2] = parseItf8(buffer, offset)
@@ -572,7 +577,7 @@ function cramDataSeriesEncodingMap() {
 
 function cramTagEncodingMap() {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const [mapSize, newOffset1] = parseItf8(buffer, offset)
       offset += newOffset1
       const [mapCount, newOffset2] = parseItf8(buffer, offset)
@@ -604,7 +609,7 @@ function cramTagEncodingMap() {
 
 function cramCompressionHeader() {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       // TODO: if we want to support CRAM v1, we will need to refactor
       // compression header into 2 parts to parse the landmarks, like the
       // container header
@@ -644,7 +649,7 @@ function cramContainerHeader1(majorVersion: number) {
   maxLength += 5 + 5
   return {
     maxLength,
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const b = buffer
       const dataView = new DataView(b.buffer, b.byteOffset, b.length)
       // byte size of the container data (blocks)
@@ -704,7 +709,7 @@ function cramContainerHeader1(majorVersion: number) {
 
 function cramContainerHeader2(majorVersion: number) {
   return {
-    parser: (buffer: Buffer, offset: number) => {
+    parser: (buffer: Uint8Array, offset: number) => {
       const b = buffer
       const dataView = new DataView(b.buffer, b.byteOffset, b.length)
       const [numLandmarks, newOffset1] = parseItf8(buffer, offset)

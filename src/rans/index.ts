@@ -1,12 +1,9 @@
 // @ts-nocheck
-import { Buffer } from 'buffer'
 import { CramMalformedError } from '../errors'
-
-import Decoding from './decoding'
-import { readStatsO0, readStatsO1 } from './frequencies'
-
 import D04 from './d04'
 import D14 from './d14'
+import Decoding from './decoding'
+import { readStatsO0, readStatsO1 } from './frequencies'
 
 // const /* int */ ORDER_BYTE_LENGTH = 1
 // const /* int */ COMPRESSED_BYTE_LENGTH = 4
@@ -155,6 +152,7 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
 class ByteBuffer {
   constructor(nodeBuffer, initialInputPosition = 0) {
     this._buffer = nodeBuffer
+    this._dataView = new DataView(nodeBuffer.buffer)
     this._position = initialInputPosition
     this.length = nodeBuffer.length
   }
@@ -194,7 +192,7 @@ class ByteBuffer {
   }
 
   getInt() {
-    const i = this._buffer.readInt32LE(this._position)
+    const i = this._dataView.getInt32(this._position, true)
     this._position += 4
     return i
   }
@@ -229,7 +227,7 @@ export default function uncompress(
   }
 
   const /* int */ outputSize = input.getInt()
-  const output = new ByteBuffer(outputBuffer || Buffer.allocUnsafe(outputSize))
+  const output = new ByteBuffer(outputBuffer || new Uint8Array(outputSize))
   // TODO output.limit(outputSize)
 
   if (output.length < outputSize) {

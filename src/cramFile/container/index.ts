@@ -1,8 +1,7 @@
-import { Buffer } from 'buffer'
 import { CramMalformedError } from '../../errors'
 // locals
-import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramSlice from '../slice'
+import { itf8Size, parseItem, tinyMemoize } from '../util'
 import CramContainerCompressionScheme from './compressionScheme'
 import CramFile from '../file'
 import { getSectionParsers } from '../sectionParsers'
@@ -88,8 +87,10 @@ export default class CramContainer {
 
     // parse the container header. do it in 2 pieces because you cannot tell
     // how much to buffer until you read numLandmarks
-    const bytes1 = Buffer.allocUnsafe(cramContainerHeader1.maxLength)
-    await this.file.read(bytes1, 0, cramContainerHeader1.maxLength, position)
+    const bytes1 = await this.file.read(
+      cramContainerHeader1.maxLength,
+      position,
+    )
     const header1 = parseItem(bytes1, cramContainerHeader1.parser)
     const numLandmarksSize = itf8Size(header1.numLandmarks)
     if (position + header1.length >= fileSize) {
@@ -99,12 +100,8 @@ export default class CramContainer {
       )
       return undefined
     }
-    const bytes2 = Buffer.allocUnsafe(
-      cramContainerHeader2.maxLength(header1.numLandmarks),
-    )
-    await this.file.read(
-      bytes2,
-      0,
+
+    const bytes2 = await this.file.read(
       cramContainerHeader2.maxLength(header1.numLandmarks),
       position + header1._size - numLandmarksSize,
     )

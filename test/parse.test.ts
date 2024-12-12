@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { describe, it, expect } from 'vitest'
-import { CramFile } from '../src'
+import { describe, expect, it } from 'vitest'
 
+import { CramFile } from '../src'
 import { testDataFile } from './lib/util'
 
 describe('CRAM reader', () => {

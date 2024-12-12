@@ -1,5 +1,6 @@
-import md5 from 'md5'
 import Long from 'long'
+import md5 from 'md5'
+
 import { CramBufferOverrunError } from './codecs/getBits'
 
 export function itf8Size(v: number) {
@@ -60,7 +61,8 @@ export function parseItf8(buffer: Uint8Array, initialOffset: number) {
   return [result, offset - initialOffset] as const
 }
 
-export function parseLtf8(buffer: Buffer, initialOffset: number) {
+export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
+  const dataView = new DataView(buffer.buffer)
   let offset = initialOffset
   const countFlags = buffer[offset]!
   let n: number | Long
@@ -76,7 +78,7 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
         (buffer[offset + 1]! << 8) |
         buffer[offset + 2]!) &
       0x1fffff
-    n = ((countFlags & 63) << 16) | buffer.readUInt16LE(offset + 1)
+    n = ((countFlags & 63) << 16) | dataView.getUint16(offset + 1, true)
     offset += 3
   } else if (countFlags < 0xf0) {
     n =
@@ -142,8 +144,8 @@ export function parseLtf8(buffer: Buffer, initialOffset: number) {
 }
 
 export function parseItem<T>(
-  buffer: Buffer,
-  parser: (buffer: Buffer, offset: number) => { offset: number; value: T },
+  buffer: Uint8Array,
+  parser: (buffer: Uint8Array, offset: number) => { offset: number; value: T },
   startBufferPosition = 0,
   startFilePosition = 0,
 ) {
@@ -176,4 +178,21 @@ export function tinyMemoize(_class: any, methodName: any) {
 
 export function sequenceMD5(seq: string) {
   return md5(seq.toUpperCase().replaceAll(/[^\u0021-\u007e]/g, ''))
+}
+
+export function sum(array: Uint8Array[]) {
+  let sum = 0
+  for (const entry of array) {
+    sum += entry.length
+  }
+  return sum
+}
+export function concatUint8Array(args: Uint8Array[]) {
+  const mergedArray = new Uint8Array(sum(args))
+  let offset = 0
+  for (const entry of args) {
+    mergedArray.set(entry, offset)
+    offset += entry.length
+  }
+  return mergedArray
 }

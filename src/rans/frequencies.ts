@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { CramMalformedError } from '../errors'
-
 import { TOTFREQ } from './constants'
 import Decoding from './decoding'
 
