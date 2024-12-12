@@ -5,7 +5,6 @@ import { XzReadableStream } from 'xz-decompress'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
 import htscodecs from '../htscodecs'
-
 import { open } from '../io'
 import ransuncompress from '../rans'
 import { parseHeaderText } from '../sam'
