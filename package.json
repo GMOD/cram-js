@@ -1,6 +1,6 @@
 {
   "name": "@gmod/cram",
-  "version": "3.0.7",
+  "version": "4.0.0",
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
   "repository": "GMOD/cram-js",
