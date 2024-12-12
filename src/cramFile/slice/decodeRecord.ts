@@ -42,37 +42,37 @@ function parseTagValueArray(buffer: Uint8Array) {
 
   if (arrayType === 'c') {
     const arr = new Int8Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else if (arrayType === 'C') {
     const arr = new Uint8Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else if (arrayType === 's') {
     const arr = new Int16Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else if (arrayType === 'S') {
     const arr = new Uint16Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else if (arrayType === 'i') {
     const arr = new Int32Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else if (arrayType === 'I') {
     const arr = new Uint32Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else if (arrayType === 'f') {
     const arr = new Float32Array(buffer.buffer)
-    for (let i = 0; i < length; i += 1) {
+    for (let i = 0; i < length; i++) {
       array[i] = arr[i]!
     }
   } else {
@@ -158,7 +158,7 @@ function decodeReadFeatures(
     return data
   }
 
-  for (let i = 0; i < readFeatureCount; i += 1) {
+  for (let i = 0; i < readFeatureCount; i++) {
     const code = String.fromCharCode(decodeDataSeries('FC'))
 
     const readPosDelta = decodeDataSeries('FP')
@@ -315,7 +315,7 @@ export default function decodeRecord(
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
-  for (let i = 0; i < ntags; i += 1) {
+  for (let i = 0; i < ntags; i++) {
     const tagId = TN[i]!
     const tagName = tagId.slice(0, 2)
     const tagType = tagId.slice(2, 3)
@@ -381,14 +381,14 @@ export default function decodeRecord(
     qualityScores = null
   } else {
     const bases = new Array(readLength) as number[]
-    for (let i = 0; i < bases.length; i += 1) {
+    for (let i = 0; i < bases.length; i++) {
       bases[i] = decodeDataSeries('BA')
     }
     readBases = String.fromCharCode(...bases)
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       qualityScores = new Array(readLength)
-      for (let i = 0; i < bases.length; i += 1) {
+      for (let i = 0; i < bases.length; i++) {
         qualityScores[i] = decodeDataSeries('QS')
       }
     }
