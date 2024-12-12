@@ -10,7 +10,6 @@ import ransuncompress from '../rans'
 import { parseHeaderText } from '../sam'
 import { unzip } from '../unzip'
 import CramContainer from './container'
-import { Filehandle } from './filehandle'
 import CramRecord from './record'
 import {
   BlockHeader,
@@ -19,6 +18,8 @@ import {
   getSectionParsers,
 } from './sectionParsers'
 import { concatUint8Array, parseItem, tinyMemoize } from './util'
+
+import type { GenericFilehandle } from 'generic-filehandle2'
 
 function bufferToStream(buf: Uint8Array) {
   return new ReadableStream({
@@ -44,7 +45,7 @@ function getEndianness() {
 }
 
 export interface CramFileSource {
-  filehandle?: Filehandle
+  filehandle?: GenericFilehandle
   url?: string
   path?: string
 }
@@ -70,7 +71,7 @@ export type CramFileBlock = BlockHeader & {
 }
 
 export default class CramFile {
-  private file: Filehandle
+  private file: GenericFilehandle
   public validateChecksums: boolean
   public fetchReferenceSequenceCallback?: SeqFetch
   public options: {
@@ -103,6 +104,11 @@ export default class CramFile {
   // can just stat this object like a filehandle
   stat() {
     return this.file.stat()
+  }
+
+  // can just stat this object like a filehandle
+  read(length: number, position: number) {
+    return this.file.read(length, position)
   }
 
   // memoized
