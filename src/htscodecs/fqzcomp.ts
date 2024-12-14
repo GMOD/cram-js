@@ -31,9 +31,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const IOStream = require('./iostream')
-const ByteModel = require('./byte_model')
-const RangeCoder = require('./arith_sh')
+import IOStream from './iostream'
+import ByteModel from './byte_model'
+import RangeCoder from './arith_sh'
 
 //----------------------------------------------------------------------
 // Main arithmetic entry function: decodes a compressed src and
@@ -349,12 +349,10 @@ function reverse_qualities(qual, qual_len, rev, len) {
   }
 }
 
-function decode(src, q_lens) {
+export function decode(src, q_lens) {
   var stream = new IOStream(src)
 
   //var n_out = stream.ReadUint32(); stream.ReadUint32(); // move to main
 
   return decode_fqz(stream, q_lens)
 }
-
-module.exports = { decode }

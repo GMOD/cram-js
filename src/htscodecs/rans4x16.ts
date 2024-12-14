@@ -31,7 +31,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const IOStream = require('./iostream')
+import IOStream from './iostream'
 
 //----------------------------------------------------------------------
 // rANS primitives itself
@@ -204,7 +204,7 @@ function RansDecodeStripe(src, len) {
 //----------------------------------------------------------------------
 // Main rANS entry function: decodes a compressed src and
 // returns the uncompressed buffer.
-function decode(src) {
+export function decode(src) {
   var stream = new IOStream(src)
   return RansDecodeStream(stream, 0)
 }
@@ -448,5 +448,3 @@ function RansDecode1(src, nbytes, N) {
 
   return output
 }
-
-module.exports = { decode }

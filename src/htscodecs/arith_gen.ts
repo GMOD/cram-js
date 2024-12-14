@@ -31,10 +31,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const RangeCoder = require('./arith_sh')
-const IOStream = require('./iostream')
-const ByteModel = require('./byte_model')
-const bzip2 = require('bzip2')
+import RangeCoder from './arith_sh'
+import IOStream from './iostream'
+import ByteModel from './byte_model'
+import bzip2 from 'bzip2'
 
 function sum(array) {
   let sum = 0
@@ -61,7 +61,7 @@ const ARITH_CAT = 32
 const ARITH_RLE = 64
 const ARITH_PACK = 128
 
-module.exports = class RangeCoderGen {
+export default class RangeCoderGen {
   decode(src) {
     this.stream = new IOStream(src)
     return this.decodeStream(this.stream)

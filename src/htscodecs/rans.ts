@@ -31,7 +31,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const IOStream = require('./iostream')
+import IOStream from './iostream'
 
 //----------------------------------------------------------------------
 // rANS primitives itself

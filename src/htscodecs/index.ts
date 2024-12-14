@@ -37,11 +37,11 @@
 // This JavaScript file is not part of the reference implementation
 // and is simply and interface to get a consistent interface for cram-js.
 
-var r4x8 = require('./rans')
-var r4x16 = require('./rans4x16')
-var arith = require('./arith_gen')
-var fqzcomp = require('./fqzcomp')
-var tok3 = require('./tok3')
+import * as r4x8 from './rans'
+import * as r4x16 from './rans4x16'
+import arith from './arith_gen'
+import * as fqzcomp from './fqzcomp'
+import * as tok3 from './tok3'
 
 function r4x8_uncompress(inputBuffer, outputBuffer) {
   return r4x8.decode(inputBuffer)

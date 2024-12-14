@@ -33,7 +33,7 @@
 
 // Turn a buffer into a fake stream with get / put commands.
 // This enables up to closely match the published pseudocode.
-module.exports = class IOStream {
+export default class IOStream {
   constructor(buf, start_pos = 0, size = 0) {
     if (size != 0) {
       this.buf = new Uint8Array(size)

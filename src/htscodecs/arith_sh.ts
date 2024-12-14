@@ -41,7 +41,7 @@
 
 //----------------------------------------------------------------------
 // Arithmetic (range) coder
-module.exports = class RangeCoder {
+export default class RangeCoder {
   constructor(src) {
     this.low = 0
     this.range = 0xffffffff

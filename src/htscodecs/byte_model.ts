@@ -38,7 +38,7 @@
 const MAX_FREQ = (1 << 16) - 17
 const STEP = 16
 
-module.exports = class ByteModel {
+export default class ByteModel {
   constructor(max_sym = 256) {
     this.total_freq = max_sym
     this.max_sym = max_sym - 1
