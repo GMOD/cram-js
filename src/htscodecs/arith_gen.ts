@@ -31,10 +31,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import RangeCoder from './arith_sh'
-import IOStream from './iostream'
-import ByteModel from './byte_model'
 import bzip2 from 'bzip2'
+
+import RangeCoder from './arith_sh'
+import ByteModel from './byte_model'
+import IOStream from './iostream'
 
 function sum(array) {
   let sum = 0
@@ -68,14 +69,18 @@ export default class RangeCoderGen {
   }
 
   decodeStream(stream, n_out = 0) {
-    var flags = this.stream.ReadByte()
-    if (!(flags & ARITH_NOSIZE)) n_out = this.stream.ReadUint7()
-    var e_len = n_out
+    const flags = this.stream.ReadByte()
+    if (!(flags & ARITH_NOSIZE)) {
+      n_out = this.stream.ReadUint7()
+    }
+    let e_len = n_out
 
-    var order = flags & ARITH_ORDER
+    const order = flags & ARITH_ORDER
 
     // 4-way recursion
-    if (flags & ARITH_STRIPE) return this.decodeStripe(this.stream, n_out)
+    if (flags & ARITH_STRIPE) {
+      return this.decodeStripe(this.stream, n_out)
+    }
 
     // Meta data
     if (flags & ARITH_PACK) {
@@ -84,7 +89,9 @@ export default class RangeCoderGen {
     }
 
     // NOP, useful for tiny blocks
-    if (flags & ARITH_CAT) var data = this.decodeCat(this.stream, e_len)
+    if (flags & ARITH_CAT) {
+      var data = this.decodeCat(this.stream, e_len)
+    }
     // Entropy decode
     else if (flags & ARITH_EXT) {
       var data = this.decodeExt(this.stream, e_len)
@@ -99,46 +106,55 @@ export default class RangeCoderGen {
     }
 
     // Transforms
-    if (flags & ARITH_PACK) data = this.decodePack(data, P, n_out)
+    if (flags & ARITH_PACK) {
+      data = this.decodePack(data, P, n_out)
+    }
 
     return data
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Order-0 codec
   decode0(stream, n_out) {
-    var output = new Uint8Array(n_out)
+    const output = new Uint8Array(n_out)
 
-    var max_sym = stream.ReadByte()
-    if (max_sym == 0) max_sym = 256
+    let max_sym = stream.ReadByte()
+    if (max_sym == 0) {
+      max_sym = 256
+    }
 
-    var byte_model = new ByteModel(max_sym)
+    const byte_model = new ByteModel(max_sym)
 
-    var rc = new RangeCoder(stream)
+    const rc = new RangeCoder(stream)
     rc.RangeStartDecode(stream)
 
-    for (var i = 0; i < n_out; i++)
+    for (let i = 0; i < n_out; i++) {
       output[i] = byte_model.ModelDecode(stream, rc)
+    }
 
     return output
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Order-1 codec
 
   decode1(stream, n_out) {
-    var output = new Uint8Array(n_out)
+    const output = new Uint8Array(n_out)
 
-    var max_sym = stream.ReadByte()
-    if (max_sym == 0) max_sym = 256
+    let max_sym = stream.ReadByte()
+    if (max_sym == 0) {
+      max_sym = 256
+    }
 
-    var byte_model = new Array(max_sym)
-    for (var i = 0; i < max_sym; i++) byte_model[i] = new ByteModel(max_sym)
+    const byte_model = new Array(max_sym)
+    for (var i = 0; i < max_sym; i++) {
+      byte_model[i] = new ByteModel(max_sym)
+    }
 
-    var rc = new RangeCoder(stream)
+    const rc = new RangeCoder(stream)
     rc.RangeStartDecode(stream)
 
-    var last = 0
+    let last = 0
     for (var i = 0; i < n_out; i++) {
       output[i] = byte_model[last].ModelDecode(stream, rc)
       last = output[i]
@@ -147,7 +163,7 @@ export default class RangeCoderGen {
     return output
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // External codec
   decodeExt(stream, n_out) {
     const bits = bzip2.array(stream.buf.slice(stream.pos))
@@ -164,114 +180,138 @@ export default class RangeCoderGen {
     return concatUint8Array(chunks)
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Order-0 RLE codec
   decodeRLE0(stream, n_out) {
-    var output = new Uint8Array(n_out)
+    const output = new Uint8Array(n_out)
 
-    var max_sym = stream.ReadByte()
-    if (max_sym == 0) max_sym = 256
+    let max_sym = stream.ReadByte()
+    if (max_sym == 0) {
+      max_sym = 256
+    }
 
-    var model_lit = new ByteModel(max_sym)
-    var model_run = new Array(258)
-    for (var i = 0; i <= 257; i++) model_run[i] = new ByteModel(4)
+    const model_lit = new ByteModel(max_sym)
+    const model_run = new Array(258)
+    for (var i = 0; i <= 257; i++) {
+      model_run[i] = new ByteModel(4)
+    }
 
-    var rc = new RangeCoder(stream)
+    const rc = new RangeCoder(stream)
     rc.RangeStartDecode(stream)
 
     var i = 0
     while (i < n_out) {
       output[i] = model_lit.ModelDecode(stream, rc)
-      var part = model_run[output[i]].ModelDecode(stream, rc)
-      var run = part
-      var rctx = 256
+      let part = model_run[output[i]].ModelDecode(stream, rc)
+      let run = part
+      let rctx = 256
       while (part == 3) {
         part = model_run[rctx].ModelDecode(stream, rc)
         rctx = 257
         run += part
       }
-      for (var j = 1; j <= run; j++) output[i + j] = output[i]
+      for (let j = 1; j <= run; j++) {
+        output[i + j] = output[i]
+      }
       i += run + 1
     }
 
     return output
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Order-1 RLE codec
 
   decodeRLE1(stream, n_out) {
-    var output = new Uint8Array(n_out)
+    const output = new Uint8Array(n_out)
 
-    var max_sym = stream.ReadByte()
-    if (max_sym == 0) max_sym = 256
+    let max_sym = stream.ReadByte()
+    if (max_sym == 0) {
+      max_sym = 256
+    }
 
-    var model_lit = new Array(max_sym)
-    for (var i = 0; i < max_sym; i++) model_lit[i] = new ByteModel(max_sym)
+    const model_lit = new Array(max_sym)
+    for (var i = 0; i < max_sym; i++) {
+      model_lit[i] = new ByteModel(max_sym)
+    }
 
-    var model_run = new Array(258)
-    for (var i = 0; i <= 257; i++) model_run[i] = new ByteModel(4)
+    const model_run = new Array(258)
+    for (var i = 0; i <= 257; i++) {
+      model_run[i] = new ByteModel(4)
+    }
 
-    var rc = new RangeCoder(stream)
+    const rc = new RangeCoder(stream)
     rc.RangeStartDecode(stream)
 
-    var last = 0
+    let last = 0
     var i = 0
     while (i < n_out) {
       output[i] = model_lit[last].ModelDecode(stream, rc)
       last = output[i]
-      var part = model_run[output[i]].ModelDecode(stream, rc)
-      var run = part
-      var rctx = 256
+      let part = model_run[output[i]].ModelDecode(stream, rc)
+      let run = part
+      let rctx = 256
       while (part == 3) {
         part = model_run[rctx].ModelDecode(stream, rc)
         rctx = 257
         run += part
       }
-      for (var j = 1; j <= run; j++) output[i + j] = output[i]
+      for (let j = 1; j <= run; j++) {
+        output[i + j] = output[i]
+      }
       i += run + 1
     }
 
     return output
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Pack method
   decodePackMeta(stream) {
     this.nsym = stream.ReadByte()
 
-    var M = new Array(this.nsym)
-    for (var i = 0; i < this.nsym; i++) M[i] = stream.ReadByte()
+    const M = new Array(this.nsym)
+    for (let i = 0; i < this.nsym; i++) {
+      M[i] = stream.ReadByte()
+    }
 
-    var e_len = stream.ReadUint7() // Could be derived data from nsym and n_out
+    const e_len = stream.ReadUint7() // Could be derived data from nsym and n_out
 
     return [M, e_len]
   }
 
   decodePack(data, M, len) {
-    var out = new Uint8Array(len)
+    const out = new Uint8Array(len)
 
     if (this.nsym <= 1) {
       // Constant value
-      for (var i = 0; i < len; i++) out[i] = M[0]
+      for (var i = 0; i < len; i++) {
+        out[i] = M[0]
+      }
     } else if (this.nsym <= 2) {
       // 1 bit per value
       for (var i = 0, j = 0; i < len; i++) {
-        if (i % 8 == 0) var v = data[j++]
+        if (i % 8 == 0) {
+          var v = data[j++]
+        }
         out[i] = M[v & 1]
         v >>= 1
       }
     } else if (this.nsym <= 4) {
       // 2 bits per value
       for (var i = 0, j = 0; i < len; i++) {
-        if (i % 4 == 0) var v = data[j++]
+        if (i % 4 == 0) {
+          var v = data[j++]
+        }
         out[i] = M[v & 3]
         v >>= 2
       }
     } else if (this.nsym <= 16) {
       // 4 bits per value
       for (var i = 0, j = 0; i < len; i++) {
-        if (i % 2 == 0) var v = data[j++]
+        if (i % 2 == 0) {
+          var v = data[j++]
+        }
         out[i] = M[v & 15]
         v >>= 4
       }
@@ -285,14 +325,20 @@ export default class RangeCoderGen {
 
   // Compute M array and return meta-data stream
   packMeta(src) {
-    var stream = new IOStream('', 0, 1024)
+    const stream = new IOStream('', 0, 1024)
 
     // Count symbols
-    var M = new Array(256)
-    for (var i = 0; i < src.length; i++) M[src[i]] = 1
+    const M = new Array(256)
+    for (var i = 0; i < src.length; i++) {
+      M[src[i]] = 1
+    }
 
     // Write Map
-    for (var nsym = 0, i = 0; i < 256; i++) if (M[i]) M[i] = ++nsym // map to 1..N
+    for (var nsym = 0, i = 0; i < 256; i++) {
+      if (M[i]) {
+        M[i] = ++nsym
+      }
+    } // map to 1..N
     stream.WriteByte(nsym)
 
     // FIXME: add check for nsym > 16?
@@ -308,24 +354,26 @@ export default class RangeCoderGen {
   }
 
   decodeStripe(stream, len) {
-    var N = stream.ReadByte()
+    const N = stream.ReadByte()
 
     // Retrieve lengths
-    var clen = new Array(N)
-    var ulen = new Array(N)
-    for (var j = 0; j < N; j++) clen[j] = stream.ReadUint7()
+    const clen = new Array(N)
+    const ulen = new Array(N)
+    for (var j = 0; j < N; j++) {
+      clen[j] = stream.ReadUint7()
+    }
 
     // Decode streams
-    var T = new Array(N)
+    const T = new Array(N)
     for (var j = 0; j < N; j++) {
       ulen[j] = Math.floor(len / N) + (len % N > j)
       T[j] = this.decodeStream(stream, ulen[j])
     }
 
     // Transpose
-    var out = new Uint8Array(len)
+    const out = new Uint8Array(len)
     for (var j = 0; j < N; j++) {
-      for (var i = 0; i < ulen[j]; i++) {
+      for (let i = 0; i < ulen[j]; i++) {
         out[i * N + j] = T[j][i]
       }
     }
@@ -333,11 +381,13 @@ export default class RangeCoderGen {
     return out
   }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Cat method
   decodeCat(stream, len) {
-    var out = new Uint8Array(len)
-    for (var i = 0; i < len; i++) out[i] = stream.ReadByte()
+    const out = new Uint8Array(len)
+    for (let i = 0; i < len; i++) {
+      out[i] = stream.ReadByte()
+    }
 
     return out
   }

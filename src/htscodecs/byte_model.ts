@@ -42,10 +42,10 @@ export default class ByteModel {
   constructor(max_sym = 256) {
     this.total_freq = max_sym
     this.max_sym = max_sym - 1
-    this.S = new Array()
-    this.F = new Array()
+    this.S = []
+    this.F = []
 
-    for (var i = 0; i <= this.max_sym; i++) {
+    for (let i = 0; i <= this.max_sym; i++) {
       this.S[i] = i
       this.F[i] = 1
     }
@@ -53,12 +53,14 @@ export default class ByteModel {
 
   ModelDecode(src, rc) {
     // Find symbol
-    var freq = rc.RangeGetFrequency(this.total_freq)
+    const freq = rc.RangeGetFrequency(this.total_freq)
 
     // Linear scan to find cumulative frequency 'freq'
-    var acc = 0
-    var x = 0
-    while (acc + this.F[x] <= freq) acc += this.F[x++]
+    let acc = 0
+    let x = 0
+    while (acc + this.F[x] <= freq) {
+      acc += this.F[x++]
+    }
 
     //	for (var acc = 0; (acc += this.F[x]) <= freq; x++)
     //	    ;
@@ -70,12 +72,14 @@ export default class ByteModel {
     // Update model
     this.F[x] += STEP
     this.total_freq += STEP
-    if (this.total_freq > MAX_FREQ) this.ModelRenormalise()
+    if (this.total_freq > MAX_FREQ) {
+      this.ModelRenormalise()
+    }
 
     // Keep symbols approximately frequency sorted
-    var sym = this.S[x]
+    const sym = this.S[x]
     if (x > 0 && this.F[x] > this.F[x - 1]) {
-      var tmp = this.F[x]
+      let tmp = this.F[x]
       this.F[x] = this.F[x - 1]
       this.F[x - 1] = tmp
 
@@ -90,7 +94,7 @@ export default class ByteModel {
   ModelRenormalise() {
     // Halve all the frequencies, being careful not to hit zero
     this.total_freq = 0
-    for (var i = 0; i <= this.max_sym; i++) {
+    for (let i = 0; i <= this.max_sym; i++) {
       this.F[i] -= Math.floor(this.F[i] / 2)
       this.total_freq += this.F[i]
     }
@@ -98,8 +102,10 @@ export default class ByteModel {
 
   ModelEncode(dst, rc, sym) {
     // Find cumulative frequency
-    var acc = 0
-    for (var x = 0; this.S[x] != sym; x++) acc += this.F[x]
+    let acc = 0
+    for (var x = 0; this.S[x] != sym; x++) {
+      acc += this.F[x]
+    }
 
     // Encode
     rc.RangeEncode(dst, acc, this.F[x], this.total_freq)
@@ -107,14 +113,15 @@ export default class ByteModel {
     // Update model
     this.F[x] += STEP
     this.total_freq += STEP
-    if (this.total_freq > MAX_FREQ)
+    if (this.total_freq > MAX_FREQ) {
       // FIXME x2
       this.ModelRenormalise()
+    }
 
     // Keep symbols approximately frequency sorted
     var sym = this.S[x]
     if (x > 0 && this.F[x] > this.F[x - 1]) {
-      var tmp = this.F[x]
+      let tmp = this.F[x]
       this.F[x] = this.F[x - 1]
       this.F[x - 1] = tmp
 

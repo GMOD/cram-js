@@ -37,9 +37,9 @@
 // written specification as closely as possible.  It is *NOT*
 // an efficient implementation, but see comments below.
 
+import arith_gen from './arith_gen'
 import IOStream from './iostream'
 import * as rans from './rans4x16'
-import arith_gen from './arith_gen'
 
 function sum(array) {
   let sum = 0
@@ -58,7 +58,7 @@ function concatUint8Array(args) {
   return mergedArray
 }
 
-var arith = new arith_gen()
+const arith = new arith_gen()
 
 const TOK_TYPE = 0
 const TOK_STRING = 1
@@ -74,18 +74,18 @@ const TOK_MATCH = 10
 const TOK_NOP = 11
 const TOK_END = 12
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Token byte streams
 function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
-  var t = -1
+  let t = -1
 
-  var B = new Array(256)
+  const B = new Array(256)
 
   while (!src.EOF()) {
-    var ttype = src.ReadByte()
-    var tok_new = ttype & 128
-    var tok_dup = ttype & 64
-    var type = ttype & 63
+    const ttype = src.ReadByte()
+    const tok_new = ttype & 128
+    const tok_dup = ttype & 64
+    const type = ttype & 63
 
     if (tok_new) {
       t++
@@ -93,20 +93,19 @@ function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
     }
 
     if (type != TOK_TYPE && tok_new) {
-      var M = new Array(nnames - 1).fill(TOK_MATCH)
+      const M = new Array(nnames - 1).fill(TOK_MATCH)
       B[t][TOK_TYPE] = new IOStream(concatUint8Array([new Uint8Array(type), M]))
     }
 
     if (tok_dup) {
-      var dup_pos = src.ReadByte()
-      var dup_type = src.ReadByte()
+      const dup_pos = src.ReadByte()
+      const dup_type = src.ReadByte()
       B[t][type] = new IOStream(B[dup_pos][dup_type].buf)
     } else {
-      var clen = src.ReadUint7()
-      var data = src.ReadData(clen)
+      const clen = src.ReadUint7()
+      const data = src.ReadData(clen)
 
-      if (use_arith) B[t][type] = arith.decode(data)
-      else B[t][type] = rans.decode(data)
+      B[t][type] = use_arith ? arith.decode(data) : rans.decode(data)
       B[t][type] = new IOStream(B[t][type])
     }
   }
@@ -114,19 +113,21 @@ function DecodeTokenByteStreams(src, in_size, use_arith, nnames) {
   return B
 }
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Token decode
 function LeftPadNumber(val, len) {
-  var str = val + ''
-  while (str.length < len) str = '0' + str
+  let str = val + ''
+  while (str.length < len) {
+    str = '0' + str
+  }
 
   return str
 }
 
 function DecodeSingleName(B, N, T, n) {
-  var type = B[0][TOK_TYPE].ReadByte()
-  var dist = B[0][type].ReadUint32()
-  var m = n - dist
+  let type = B[0][TOK_TYPE].ReadByte()
+  const dist = B[0][type].ReadUint32()
+  const m = n - dist
 
   if (type == TOK_DUP) {
     N[n] = N[m]
@@ -134,7 +135,7 @@ function DecodeSingleName(B, N, T, n) {
     return N[n]
   }
 
-  var t = 1
+  let t = 1
   N[n] = ''
   T[n] = new Array(256)
   do {
@@ -184,23 +185,26 @@ function DecodeSingleName(B, N, T, n) {
   return N[n]
 }
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Main tokeniser decode entry function: decodes a compressed src and
 // returns the uncompressed buffer.
 export function decode(src, len, separator) {
   var src = new IOStream(src)
-  var ulen = src.ReadUint32()
-  var nnames = src.ReadUint32()
-  var use_arith = src.ReadByte()
+  const ulen = src.ReadUint32()
+  const nnames = src.ReadUint32()
+  const use_arith = src.ReadByte()
 
-  var B = DecodeTokenByteStreams(src, len, use_arith, nnames)
-  var N = new Array(nnames)
-  var T = new Array(nnames)
+  const B = DecodeTokenByteStreams(src, len, use_arith, nnames)
+  const N = new Array(nnames)
+  const T = new Array(nnames)
 
-  var str = ''
-  if (typeof separator === 'undefined') separator = '\n'
-  for (var i = 0; i < nnames; i++)
+  let str = ''
+  if (separator === undefined) {
+    separator = '\n'
+  }
+  for (let i = 0; i < nnames; i++) {
     str += DecodeSingleName(B, N, T, i) + separator
+  }
 
   return str
 }

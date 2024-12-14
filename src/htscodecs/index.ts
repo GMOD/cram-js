@@ -37,10 +37,10 @@
 // This JavaScript file is not part of the reference implementation
 // and is simply and interface to get a consistent interface for cram-js.
 
-import * as r4x8 from './rans'
-import * as r4x16 from './rans4x16'
 import arith from './arith_gen'
 import * as fqzcomp from './fqzcomp'
+import * as r4x8 from './rans'
+import * as r4x16 from './rans4x16'
 import * as tok3 from './tok3'
 
 function r4x8_uncompress(inputBuffer, outputBuffer) {
@@ -58,20 +58,20 @@ function arith_uncompress(inputBuffer) {
 }
 
 function fqzcomp_uncompress(inputBuffer) {
-  var q_lens = new Array()
+  const q_lens = []
   return fqzcomp.decode(inputBuffer, q_lens)
 }
 
 function tok3_uncompress(inputBuffer) {
   // Returns in string form instead of buffer
-  var out = tok3.decode(inputBuffer, 0, '\0')
+  const out = tok3.decode(inputBuffer, 0, '\0')
   return Uint8Array.from(Array.from(out).map(letter => letter.charCodeAt(0)))
 }
 
 module.exports = {
-  r4x8_uncompress: r4x8_uncompress,
-  r4x16_uncompress: r4x16_uncompress,
   arith_uncompress: arith_uncompress,
   fqzcomp_uncompress: fqzcomp_uncompress,
+  r4x16_uncompress: r4x16_uncompress,
+  r4x8_uncompress: r4x8_uncompress,
   tok3_uncompress: tok3_uncompress,
 }

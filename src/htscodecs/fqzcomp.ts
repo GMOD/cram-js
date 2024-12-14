@@ -31,46 +31,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import IOStream from './iostream'
-import ByteModel from './byte_model'
 import RangeCoder from './arith_sh'
+import ByteModel from './byte_model'
+import IOStream from './iostream'
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Main arithmetic entry function: decodes a compressed src and
 // returns the uncompressed buffer.
 
 function read_array(src, tab, size) {
-  var j = 0 // array value
-  var z = 0 // array index: tab[j]
-  var last = -1
+  let j = 0 // array value
+  let z = 0 // array index: tab[j]
+  let last = -1
 
   // Remove first level of run-length encoding
-  var R = new Array(1024) // runs
+  const R = new Array(1024) // runs
   while (z < size) {
-    var run = src.ReadByte()
+    const run = src.ReadByte()
     R[j++] = run
     z += run
 
     if (run == last) {
-      var copy = src.ReadByte()
+      let copy = src.ReadByte()
       z += run * copy
-      while (copy--) R[j++] = run
+      while (copy--) {
+        R[j++] = run
+      }
     }
     last = run
   }
 
   // Now expand runs in R to tab, noting 255 is max run
-  var i = 0
+  let i = 0
   j = 0
   z = 0
   while (z < size) {
-    var run_len = 0
+    let run_len = 0
     do {
       var part = R[j++]
       run_len += part
     } while (part == 255)
 
-    while (run_len--) tab[z++] = i
+    while (run_len--) {
+      tab[z++] = i
+    }
     i++
   }
 }
@@ -91,11 +95,13 @@ const GFLAG_DO_REV = 4
 
 // Compute a new context from our current state and qual q
 function fqz_update_ctx(params, state, q) {
-  var last = params.context
+  let last = params.context
   state.qctx = (state.qctx << params.qshift) + params.qtab[q] // >>> 0
   last += (state.qctx & ((1 << params.qbits) - 1)) << params.qloc // >>> 0
 
-  if (params.do_pos) last += params.ptab[Math.min(state.p, 1023)] << params.ploc
+  if (params.do_pos) {
+    last += params.ptab[Math.min(state.p, 1023)] << params.ploc
+  }
 
   if (params.do_delta) {
     last += params.dtab[Math.min(state.delta, 255)] << params.dloc
@@ -106,7 +112,9 @@ function fqz_update_ctx(params, state, q) {
     state.prevq = q
   }
 
-  if (params.do_sel) last += state.s << params.sloc
+  if (params.do_sel) {
+    last += state.s << params.sloc
+  }
 
   state.p--
 
@@ -114,7 +122,7 @@ function fqz_update_ctx(params, state, q) {
 }
 
 function decode_fqz_single_param(src) {
-  var p = {} // params
+  const p = {} // params
 
   // Load FQZ parameters
   p.context = src.ReadUint16()
@@ -130,7 +138,7 @@ function decode_fqz_single_param(src) {
 
   p.max_sym = src.ReadByte()
 
-  var x = src.ReadByte()
+  let x = src.ReadByte()
   p.qbits = x >> 4
   p.qshift = x & 15
   x = src.ReadByte()
@@ -143,10 +151,14 @@ function decode_fqz_single_param(src) {
   // Qual map, eg to "unbin" Illumina qualities
   p.qmap = new Array(256)
   if (p.pflags & FLAG_QMAP) {
-    for (var i = 0; i < p.max_sym; i++) p.qmap[i] = src.ReadByte()
+    for (var i = 0; i < p.max_sym; i++) {
+      p.qmap[i] = src.ReadByte()
+    }
   } else {
     // Useful optimisation to speed up main loop
-    for (var i = 0; i < 256; i++) p.qmap[i] = i // NOP
+    for (var i = 0; i < 256; i++) {
+      p.qmap[i] = i
+    } // NOP
   }
 
   // Read tables
@@ -155,70 +167,86 @@ function decode_fqz_single_param(src) {
     read_array(src, p.qtab, 256)
   } else {
     // Useful optimisation to speed up main loop
-    for (var i = 0; i < 256; i++) p.qtab[i] = i // NOP
+    for (var i = 0; i < 256; i++) {
+      p.qtab[i] = i
+    } // NOP
   }
 
   p.ptab = new Array(1024)
-  if (p.pflags & FLAG_PTAB) read_array(src, p.ptab, 1024)
+  if (p.pflags & FLAG_PTAB) {
+    read_array(src, p.ptab, 1024)
+  }
 
   p.dtab = new Array(256)
-  if (p.pflags & FLAG_DTAB) read_array(src, p.dtab, 256)
+  if (p.pflags & FLAG_DTAB) {
+    read_array(src, p.dtab, 256)
+  }
 
   return p
 }
 
 function decode_fqz_params(src) {
-  var gparams = {
+  const gparams = {
     max_sym: 0,
   }
 
   // Check fqz format version
-  var vers = src.ReadByte()
+  const vers = src.ReadByte()
   if (vers != 5) {
     console.error('Invalid FQZComp version number')
     return
   }
 
-  var gflags = src.ReadByte()
-  var nparam = gflags & GFLAG_MULTI_PARAM ? src.ReadByte() : 1
-  var max_sel = gflags.nparam > 1 ? gflags.nparam - 1 : 0 // Note max_sel, not num_sel
+  const gflags = src.ReadByte()
+  const nparam = gflags & GFLAG_MULTI_PARAM ? src.ReadByte() : 1
+  let max_sel = gflags.nparam > 1 ? gflags.nparam - 1 : 0 // Note max_sel, not num_sel
 
-  var stab = new Array(256)
+  const stab = new Array(256)
   if (gflags & GFLAG_HAVE_STAB) {
     max_sel = src.ReadByte()
     read_array(src, stab, 256)
   } else {
-    for (var i = 0; i < nparam; i++) stab[i] = i
-    for (; i < 256; i++) stab[i] = nparam - 1
+    for (var i = 0; i < nparam; i++) {
+      stab[i] = i
+    }
+    for (; i < 256; i++) {
+      stab[i] = nparam - 1
+    }
   }
   gparams.do_rev = gflags & GFLAG_DO_REV
   gparams.stab = stab
   gparams.max_sel = max_sel
 
   gparams.params = new Array(gparams.nparam)
-  for (var p = 0; p < nparam; p++) {
+  for (let p = 0; p < nparam; p++) {
     gparams.params[p] = decode_fqz_single_param(src)
-    if (gparams.max_sym < gparams.params[p].max_sym)
+    if (gparams.max_sym < gparams.params[p].max_sym) {
       gparams.max_sym = gparams.params[p].max_sym
+    }
   }
 
   return gparams
 }
 
 function fqz_create_models(gparams) {
-  var model = {}
+  const model = {}
 
   model.qual = new Array(1 << 16)
-  for (var i = 0; i < 1 << 16; i++)
-    model.qual[i] = new ByteModel(gparams.max_sym + 1) // +1 as max value not num. values
+  for (var i = 0; i < 1 << 16; i++) {
+    model.qual[i] = new ByteModel(gparams.max_sym + 1)
+  } // +1 as max value not num. values
 
   model.len = new Array(4)
-  for (var i = 0; i < 4; i++) model.len[i] = new ByteModel(256)
+  for (var i = 0; i < 4; i++) {
+    model.len[i] = new ByteModel(256)
+  }
 
   model.rev = new ByteModel(2)
   model.dup = new ByteModel(2)
 
-  if (gparams.max_sel > 0) model.sel = new ByteModel(gparams.max_sel + 1) // +1 as max value not num. values
+  if (gparams.max_sel > 0) {
+    model.sel = new ByteModel(gparams.max_sel + 1)
+  } // +1 as max value not num. values
 
   return model
 }
@@ -227,14 +255,10 @@ function fqz_create_models(gparams) {
 // Returns 1 if dup, otherwise 0
 function decode_fqz_new_record(src, rc, gparams, model, state, rev) {
   // Parameter selector
-  if (gparams.max_sel > 0) {
-    state.s = model.sel.ModelDecode(src, rc)
-  } else {
-    state.s = 0
-  }
+  state.s = gparams.max_sel > 0 ? model.sel.ModelDecode(src, rc) : 0
   state.x = gparams.stab[state.s]
 
-  var params = gparams.params[state.x]
+  const params = gparams.params[state.x]
 
   // Reset contexts at the start of each new record
   if (params.fixed_len >= 0) {
@@ -243,17 +267,23 @@ function decode_fqz_new_record(src, rc, gparams, model, state, rev) {
     len |= model.len[1].ModelDecode(src, rc) << 8
     len |= model.len[2].ModelDecode(src, rc) << 16
     len |= model.len[3].ModelDecode(src, rc) << 24
-    if (params.fixed_len > 0) params.fixed_len = -len
+    if (params.fixed_len > 0) {
+      params.fixed_len = -len
+    }
   } else {
     len = -params.fixed_len
   }
   state.len = len
 
-  if (gparams.do_rev) rev[state.rec] = model.rev.ModelDecode(src, rc)
+  if (gparams.do_rev) {
+    rev[state.rec] = model.rev.ModelDecode(src, rc)
+  }
 
   state.is_dup = 0
   if (params.pflags & FLAG_DEDUP) {
-    if (model.dup.ModelDecode(src, rc)) state.is_dup = 1
+    if (model.dup.ModelDecode(src, rc)) {
+      state.is_dup = 1
+    }
   }
 
   state.p = len // number of remaining bytes in this record
@@ -265,22 +295,24 @@ function decode_fqz_new_record(src, rc, gparams, model, state, rev) {
 
 function decode_fqz(src, q_lens) {
   // Decode parameter block
-  var n_out = src.ReadUint7()
-  var gparams = decode_fqz_params(src)
-  if (!gparams) return
+  const n_out = src.ReadUint7()
+  const gparams = decode_fqz_params(src)
+  if (!gparams) {
+    return
+  }
   var params = gparams.params
-  var rev = new Array(q_lens.length)
+  const rev = new Array(q_lens.length)
 
   // Create initial models
-  var model = fqz_create_models(gparams)
+  const model = fqz_create_models(gparams)
 
   // Create our entropy encoder and output buffers
-  var rc = new RangeCoder(src)
+  const rc = new RangeCoder(src)
   rc.RangeStartDecode(src)
-  var output = new Uint8Array(n_out)
+  const output = new Uint8Array(n_out)
 
   // Internal FQZ state
-  var state = {
+  const state = {
     qctx: 0, // Qual-only sub-context
     prevq: 0, // Previous quality value
     delta: 0, // Running delta (q vs prevq)
@@ -293,15 +325,16 @@ function decode_fqz(src, q_lens) {
   }
 
   // The main decode loop itself
-  var i = 0 // position in output buffer
+  let i = 0 // position in output buffer
   while (i < n_out) {
     if (state.p == 0) {
       decode_fqz_new_record(src, rc, gparams, model, state, rev)
       if (state.is_dup > 0) {
         if (model.dup.ModelDecode(src, rc)) {
           // Duplicate of last line
-          for (var x = 0; x < len; x++)
+          for (let x = 0; x < len; x++) {
             output[i + x] = output[i + x - state.len]
+          }
           i += state.len
           state.p = 0
           continue
@@ -314,30 +347,32 @@ function decode_fqz(src, q_lens) {
     }
 
     // Decode the current quality (possibly mapped via qmap)
-    var Q = model.qual[last].ModelDecode(src, rc)
+    const Q = model.qual[last].ModelDecode(src, rc)
 
-    //if (params.do_qmap)
+    // if (params.do_qmap)
     //    output[i++] = params.qmap[Q];
-    //else
+    // else
     //    output[i++] = Q
     output[i++] = params.qmap[Q] // optimised version of above
     last = fqz_update_ctx(params, state, Q)
   }
 
-  if (gparams.do_rev) reverse_qualities(output, n_out, rev, q_lens)
+  if (gparams.do_rev) {
+    reverse_qualities(output, n_out, rev, q_lens)
+  }
 
   return output
 }
 
 function reverse_qualities(qual, qual_len, rev, len) {
-  var rec = 0
-  var i = 0
+  let rec = 0
+  let i = 0
   while (i < qual_len) {
     if (rev[rec]) {
-      var j = 0
-      var k = len[rec] - 1
+      let j = 0
+      let k = len[rec] - 1
       while (j < k) {
-        var tmp = qual[i + j]
+        const tmp = qual[i + j]
         qual[i + j] = qual[i + k]
         qual[i + k] = tmp
         j++
@@ -350,9 +385,9 @@ function reverse_qualities(qual, qual_len, rev, len) {
 }
 
 export function decode(src, q_lens) {
-  var stream = new IOStream(src)
+  const stream = new IOStream(src)
 
-  //var n_out = stream.ReadUint32(); stream.ReadUint32(); // move to main
+  // var n_out = stream.ReadUint32(); stream.ReadUint32(); // move to main
 
   return decode_fqz(stream, q_lens)
 }

@@ -5,14 +5,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: [
-      'esm/**/*',
-      'dist/**/*',
-      '*.js',
-      '*.mjs',
-      'example/*',
-      'src/htscodecs',
-    ],
+    ignores: ['esm/**/*', 'dist/**/*', '*.js', '*.mjs', 'example/*'],
   },
   {
     languageOptions: {

@@ -39,7 +39,7 @@
 // Arith_sh.js     6.7s decode  (32-bit with carries)
 // Arith.js      317.0s decode  (64-bit no carries); int64 crippling it.
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Arithmetic (range) coder
 export default class RangeCoder {
   constructor(src) {
@@ -52,23 +52,25 @@ export default class RangeCoder {
   }
 
   RangeStartDecode(src) {
-    for (var i = 0; i < 5; i++) this.code = (this.code << 8) + src.ReadByte()
+    for (let i = 0; i < 5; i++) {
+      this.code = (this.code << 8) + src.ReadByte()
+    }
     this.code &= 0xffffffff
     this.code >>>= 0 // force to be +ve int
   }
 
   RangeGetFrequency(tot_freq) {
     this.range = Math.floor(this.range / tot_freq)
-    //return this.code / this.range;
+    // return this.code / this.range;
     return Math.floor(this.code / this.range)
 
     // Conceptual scenario; return freq only and don't modify range yet
-    //return Math.floor(this.code / (Math.floor(this.range / tot_freq)));
+    // return Math.floor(this.code / (Math.floor(this.range / tot_freq)));
   }
 
   RangeDecode(src, sym_low, sym_freq, tot_freq) {
     // Conceptually we divide range here, but in practice we cached it earlier
-    //this.range = Math.floor(this.range / tot_freq);
+    // this.range = Math.floor(this.range / tot_freq);
 
     this.code -= sym_low * this.range
     this.range *= sym_freq
@@ -111,7 +113,7 @@ export default class RangeCoder {
   }
 
   RangeEncode(dst, sym_low, sym_freq, tot_freq) {
-    var old_low = this.low
+    const old_low = this.low
     this.range = Math.floor(this.range / tot_freq)
     this.low += sym_low * this.range
     this.low >>>= 0 // Truncate to +ve int so we can spot overflow
@@ -121,7 +123,9 @@ export default class RangeCoder {
     // NB: can this.low < old_low occur twice before range < (1<<24)?
     // We claim not, but prove it!
     if (this.low < old_low) {
-      if (this.carry != 0) console.log('ERROR: Multiple carry')
+      if (this.carry != 0) {
+        console.log('ERROR: Multiple carry')
+      }
       this.carry = 1
     }
 
@@ -133,6 +137,8 @@ export default class RangeCoder {
   }
 
   RangeFinishEncode(dst) {
-    for (var i = 0; i < 5; i++) this.RangeShiftLow(dst)
+    for (let i = 0; i < 5; i++) {
+      this.RangeShiftLow(dst)
+    }
   }
 }
