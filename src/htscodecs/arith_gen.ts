@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019,2020 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -36,23 +39,7 @@ import bzip2 from 'bzip2'
 import RangeCoder from './arith_sh'
 import ByteModel from './byte_model'
 import IOStream from './iostream'
-
-function sum(array) {
-  let sum = 0
-  for (const entry of array) {
-    sum += entry.length
-  }
-  return sum
-}
-function concatUint8Array(args) {
-  const mergedArray = new Uint8Array(sum(args))
-  let offset = 0
-  for (const entry of args) {
-    mergedArray.set(entry, offset)
-    offset += entry.length
-  }
-  return mergedArray
-}
+import { concatUint8Array } from '../util'
 
 const ARITH_ORDER = 1
 const ARITH_EXT = 4
@@ -63,12 +50,13 @@ const ARITH_RLE = 64
 const ARITH_PACK = 128
 
 export default class RangeCoderGen {
-  decode(src) {
+  stream: IOStream
+  decode(src: Uint8Array) {
     this.stream = new IOStream(src)
     return this.decodeStream(this.stream)
   }
 
-  decodeStream(stream, n_out = 0) {
+  decodeStream(stream: IOStream, n_out = 0) {
     const flags = this.stream.ReadByte()
     if (!(flags & ARITH_NOSIZE)) {
       n_out = this.stream.ReadUint7()

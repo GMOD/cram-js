@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -37,26 +40,10 @@
 // written specification as closely as possible.  It is *NOT*
 // an efficient implementation, but see comments below.
 
+import { concatUint8Array } from '../util'
 import arith_gen from './arith_gen'
 import IOStream from './iostream'
 import * as rans from './rans4x16'
-
-function sum(array) {
-  let sum = 0
-  for (const entry of array) {
-    sum += entry.length
-  }
-  return sum
-}
-function concatUint8Array(args) {
-  const mergedArray = new Uint8Array(sum(args))
-  let offset = 0
-  for (const entry of args) {
-    mergedArray.set(entry, offset)
-    offset += entry.length
-  }
-  return mergedArray
-}
 
 const arith = new arith_gen()
 

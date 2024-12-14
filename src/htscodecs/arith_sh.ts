@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019 Genome Research Ltd.
  * Author(s): James Bonfield

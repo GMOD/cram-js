@@ -1,3 +1,5 @@
+// @ts-nocheck
+//
 /*
  * Copyright (c) 2020 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -43,35 +45,27 @@ import * as r4x8 from './rans'
 import * as r4x16 from './rans4x16'
 import * as tok3 from './tok3'
 
-function r4x8_uncompress(inputBuffer, outputBuffer) {
+export function r4x8_uncompress(inputBuffer: Uint8Array) {
   return r4x8.decode(inputBuffer)
 }
 
-function r4x16_uncompress(inputBuffer) {
+export function r4x16_uncompress(inputBuffer: Uint8Array) {
   return r4x16.decode(inputBuffer)
 }
 
-function arith_uncompress(inputBuffer) {
+export function arith_uncompress(inputBuffer: Uint8Array) {
   // fix by @cmdcolin for CRAM 3.1
   // xref https://github.com/jkbonfield/htscodecs/pull/1/files
   return new arith().decode(inputBuffer)
 }
 
-function fqzcomp_uncompress(inputBuffer) {
+export function fqzcomp_uncompress(inputBuffer: Uint8Array) {
   const q_lens = []
   return fqzcomp.decode(inputBuffer, q_lens)
 }
 
-function tok3_uncompress(inputBuffer) {
+export function tok3_uncompress(inputBuffer: Uint8Array) {
   // Returns in string form instead of buffer
   const out = tok3.decode(inputBuffer, 0, '\0')
   return Uint8Array.from(Array.from(out).map(letter => letter.charCodeAt(0)))
-}
-
-module.exports = {
-  arith_uncompress: arith_uncompress,
-  fqzcomp_uncompress: fqzcomp_uncompress,
-  r4x16_uncompress: r4x16_uncompress,
-  r4x8_uncompress: r4x8_uncompress,
-  tok3_uncompress: tok3_uncompress,
 }

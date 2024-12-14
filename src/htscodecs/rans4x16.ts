@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019,2020 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -468,8 +471,11 @@ function RansDecode1(src, nbytes, N) {
 
   // Fast lookup to avoid slow RansGetSymbolFromFreq
   const C2S = new Array(256)
-  for (var i = 0; i < 256; i++) // Could do only for symbols in alphabet?
-  {
+  for (
+    var i = 0;
+    i < 256;
+    i++ // Could do only for symbols in alphabet?
+  ) {
     C2S[i] = RansBuildC2S(C[i], shift)
   }
 

@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019-2020 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -80,7 +83,7 @@ function RansRenorm(src, R) {
 // ----------------------------------------------------------------------
 // Main rANS entry function: decodes a compressed src and
 // returns the uncompressed buffer.
-function decode(src) {
+export function decode(src) {
   const stream = new IOStream(src)
   const order = stream.ReadByte()
   const n_in = stream.ReadUint32()
@@ -245,5 +248,3 @@ function RansDecode1(src, nbytes) {
 
   return output
 }
-
-module.exports = { decode }

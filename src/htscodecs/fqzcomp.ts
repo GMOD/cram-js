@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -293,7 +296,7 @@ function decode_fqz_new_record(src, rc, gparams, model, state, rev) {
   state.rec++
 }
 
-function decode_fqz(src, q_lens) {
+function decode_fqz(src: IOStream, q_lens: number) {
   // Decode parameter block
   const n_out = src.ReadUint7()
   const gparams = decode_fqz_params(src)
@@ -384,10 +387,8 @@ function reverse_qualities(qual, qual_len, rev, len) {
   }
 }
 
-export function decode(src, q_lens) {
+export function decode(src: Uint8Array, q_lens) {
   const stream = new IOStream(src)
-
-  // var n_out = stream.ReadUint32(); stream.ReadUint32(); // move to main
 
   return decode_fqz(stream, q_lens)
 }

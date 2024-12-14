@@ -4,11 +4,12 @@ import QuickLRU from 'quick-lru'
 import { XzReadableStream } from 'xz-decompress'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
-import htscodecs from '../htscodecs'
+import * as htscodecs from '../htscodecs'
 import { open } from '../io'
 import ransuncompress from '../rans'
 import { parseHeaderText } from '../sam'
 import { unzip } from '../unzip'
+import { concatUint8Array } from '../util'
 import CramContainer from './container'
 import CramRecord from './record'
 import {
@@ -17,7 +18,7 @@ import {
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers'
-import { concatUint8Array, parseItem, tinyMemoize } from './util'
+import { parseItem, tinyMemoize } from './util'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
 
