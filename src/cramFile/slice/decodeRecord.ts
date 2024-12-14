@@ -141,16 +141,14 @@ function decodeReadFeatures(
     const data = decodeDataSeries(dataSeriesName)
     if (type === 'character') {
       return String.fromCharCode(data)
-    }
-    if (type === 'string') {
+    } else if (type === 'string') {
       let r = ''
       for (let i = 0; i < data.byteLength; i++) {
         r += String.fromCharCode(data[i])
       }
       return r
-    }
-    if (type === 'numArray') {
-      return data.toArray()
+    } else if (type === 'numArray') {
+      return Array.from(data)
     }
     // else if (type === 'number') {
     //   return data[0]

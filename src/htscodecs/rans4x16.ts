@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+// @ts-nocheck
+
 /*
  * Copyright (c) 2019,2020 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -31,9 +34,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const IOStream = require('./iostream')
+import IOStream from './iostream'
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // rANS primitives itself
 //
 // RansGet* is decoder side
@@ -46,20 +49,24 @@ function RansGetSymbolFromFreq(C, f) {
   // NOTE: Inefficient.
   // In practice we would implement this via a precomputed
   // lookup table C2S[f]; see RansBuildC2S below.
-  var s = 0
-  while (f >= C[s + 1]) s++
+  let s = 0
+  while (f >= C[s + 1]) {
+    s++
+  }
 
-  //console.error(f, C, s)
+  // console.error(f, C, s)
 
   return s
 }
 
 function RansBuildC2S(C, bits) {
-  var max = 1 << bits
-  var C2S = new Array(max)
-  var s = 0
-  for (var f = 0; f < max; f++) {
-    while (f >= C[s + 1]) s++
+  const max = 1 << bits
+  const C2S = new Array(max)
+  let s = 0
+  for (let f = 0; f < max; f++) {
+    while (f >= C[s + 1]) {
+      s++
+    }
     C2S[f] = s
   }
   return C2S
@@ -70,46 +77,54 @@ function RansAdvanceStep(R, c, f, bits) {
 }
 
 function RansRenorm(src, R) {
-  if (R < 1 << 15) R = (R << 16) + src.ReadUint16()
+  if (R < 1 << 15) {
+    R = (R << 16) + src.ReadUint16()
+  }
 
   return R
 }
 
 function DecodeRLEMeta(src, N) {
-  var u_meta_len = src.ReadUint7()
-  var rle_len = src.ReadUint7()
+  const u_meta_len = src.ReadUint7()
+  const rle_len = src.ReadUint7()
 
   // Decode RLE lengths
   if (u_meta_len & 1) {
     var rle_meta = src.ReadData((u_meta_len - 1) / 2)
   } else {
-    var comp_meta_len = src.ReadUint7()
+    const comp_meta_len = src.ReadUint7()
     var rle_meta = src.ReadData(comp_meta_len)
     rle_meta = RansDecode0(new IOStream(rle_meta), u_meta_len / 2, N)
   }
 
   // Decode list of symbols for which RLE lengths are applied
   var rle_meta = new IOStream(rle_meta)
-  var L = new Array(256)
-  var n = rle_meta.ReadByte()
-  if (n == 0) n = 256
-  for (var i = 0; i < n; i++) L[rle_meta.ReadByte()] = 1
+  const L = new Array(256)
+  let n = rle_meta.ReadByte()
+  if (n == 0) {
+    n = 256
+  }
+  for (let i = 0; i < n; i++) {
+    L[rle_meta.ReadByte()] = 1
+  }
 
   return [L, rle_meta, rle_len]
 }
 
 function DecodeRLE(buf, L, rle_meta, len) {
-  var src = new IOStream(buf)
+  const src = new IOStream(buf)
 
-  var out = new Uint8Array(len)
+  const out = new Uint8Array(len)
 
   // Expand up buf+meta to out; i = buf index, j = out index
-  var j = 0
-  for (var i = 0; j < len; i++) {
-    var sym = buf[i]
+  let j = 0
+  for (let i = 0; j < len; i++) {
+    const sym = buf[i]
     if (L[sym]) {
-      var run = rle_meta.ReadUint7()
-      for (var r = 0; r <= run; r++) out[j++] = sym
+      const run = rle_meta.ReadUint7()
+      for (let r = 0; r <= run; r++) {
+        out[j++] = sym
+      }
     } else {
       out[j++] = sym
     }
@@ -121,12 +136,14 @@ function DecodeRLE(buf, L, rle_meta, len) {
 // Pack meta data is the number and value of distinct symbols plus
 // the length of the packed byte stream.
 function DecodePackMeta(src) {
-  var nsym = src.ReadByte()
-  var P = new Array(nsym)
+  const nsym = src.ReadByte()
+  const P = new Array(nsym)
 
-  for (var i = 0; i < nsym; i++) P[i] = src.ReadByte()
+  for (let i = 0; i < nsym; i++) {
+    P[i] = src.ReadByte()
+  }
 
-  var len = src.ReadUint7()
+  const len = src.ReadUint7()
 
   return [P, nsym, len]
 }
@@ -134,18 +151,22 @@ function DecodePackMeta(src) {
 // Extract bits from src producing output of length len.
 // Nsym is number of distinct symbols used.
 function DecodePack(data, P, nsym, len) {
-  var out = new Uint8Array(len)
-  var j = 0
+  const out = new Uint8Array(len)
+  let j = 0
 
   // Constant value
   if (nsym <= 1) {
-    for (var i = 0; i < len; i++) out[i] = P[0]
+    for (var i = 0; i < len; i++) {
+      out[i] = P[0]
+    }
   }
 
   // 1 bit per value
   else if (nsym <= 2) {
     for (i = 0; i < len; i++) {
-      if (i % 8 == 0) var v = data[j++]
+      if (i % 8 == 0) {
+        var v = data[j++]
+      }
 
       out[i] = P[v & 1]
       v >>= 1
@@ -155,7 +176,9 @@ function DecodePack(data, P, nsym, len) {
   // 2 bits per value
   else if (nsym <= 4) {
     for (i = 0; i < len; i++) {
-      if (i % 4 == 0) var v = data[j++]
+      if (i % 4 == 0) {
+        var v = data[j++]
+      }
 
       out[i] = P[v & 3]
       v >>= 2
@@ -165,7 +188,9 @@ function DecodePack(data, P, nsym, len) {
   // 4 bits per value
   else if (nsym <= 16) {
     for (i = 0; i < len; i++) {
-      if (i % 2 == 0) var v = data[j++]
+      if (i % 2 == 0) {
+        var v = data[j++]
+      }
 
       out[i] = P[v & 15]
       v >>= 4
@@ -176,24 +201,26 @@ function DecodePack(data, P, nsym, len) {
 }
 
 function RansDecodeStripe(src, len) {
-  var N = src.ReadByte()
+  const N = src.ReadByte()
 
   // Retrieve lengths
-  var clen = new Array(N)
-  var ulen = new Array(N)
-  for (var j = 0; j < N; j++) clen[j] = src.ReadUint7()
+  const clen = new Array(N)
+  const ulen = new Array(N)
+  for (var j = 0; j < N; j++) {
+    clen[j] = src.ReadUint7()
+  }
 
   // Decode streams
-  var T = new Array(N)
+  const T = new Array(N)
   for (var j = 0; j < N; j++) {
     ulen[j] = Math.floor(len / N) + (len % N > j)
     T[j] = RansDecodeStream(src, ulen[j])
   }
 
   // Transpose
-  var out = new Uint8Array(len)
+  const out = new Uint8Array(len)
   for (var j = 0; j < N; j++) {
-    for (var i = 0; i < ulen[j]; i++) {
+    for (let i = 0; i < ulen[j]; i++) {
       out[i * N + j] = T[j][i]
     }
   }
@@ -201,30 +228,34 @@ function RansDecodeStripe(src, len) {
   return out
 }
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Main rANS entry function: decodes a compressed src and
 // returns the uncompressed buffer.
-function decode(src) {
-  var stream = new IOStream(src)
+export function decode(src) {
+  const stream = new IOStream(src)
   return RansDecodeStream(stream, 0)
 }
 
 function RansDecodeStream(stream, n_out) {
-  var format = stream.ReadByte()
-  var order = format & 1
-  var x32 = format & 4
-  var stripe = format & 8
-  var nosz = format & 16
-  var cat = format & 32
-  var rle = format & 64
-  var pack = format & 128
+  const format = stream.ReadByte()
+  const order = format & 1
+  const x32 = format & 4
+  const stripe = format & 8
+  const nosz = format & 16
+  const cat = format & 32
+  const rle = format & 64
+  const pack = format & 128
 
-  var Nway = x32 ? 32 : 4
+  const Nway = x32 ? 32 : 4
 
-  if (!nosz) n_out = stream.ReadUint7()
+  if (!nosz) {
+    n_out = stream.ReadUint7()
+  }
 
   // N-way interleaving
-  if (stripe) return RansDecodeStripe(stream, n_out)
+  if (stripe) {
+    return RansDecodeStripe(stream, n_out)
+  }
 
   // Bit packing
   if (pack) {
@@ -239,28 +270,38 @@ function RansDecodeStream(stream, n_out) {
   }
 
   // Uncompress data (all, packed or run literals)
-  if (cat) var buf = stream.ReadData(n_out)
-  else if (order == 0) var buf = RansDecode0(stream, n_out, Nway)
-  else var buf = RansDecode1(stream, n_out, Nway)
+  if (cat) {
+    var buf = stream.ReadData(n_out)
+  } else if (order == 0) {
+    var buf = RansDecode0(stream, n_out, Nway)
+  } else {
+    var buf = RansDecode1(stream, n_out, Nway)
+  }
 
   // Apply expansion transforms
-  if (rle) buf = DecodeRLE(buf, L, rle_meta, rle_len)
+  if (rle) {
+    buf = DecodeRLE(buf, L, rle_meta, rle_len)
+  }
 
-  if (pack) buf = DecodePack(buf, P, nsym, pack_len)
+  if (pack) {
+    buf = DecodePack(buf, P, nsym, pack_len)
+  }
 
   return buf
 }
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Order-0 decoder
 
 function ReadAlphabet(src) {
-  var A = new Array(256)
-  for (var i = 0; i < 256; i++) A[i] = 0
+  const A = new Array(256)
+  for (let i = 0; i < 256; i++) {
+    A[i] = 0
+  }
 
-  var rle = 0
-  var sym = src.ReadByte()
-  var last_sym = sym
+  let rle = 0
+  let sym = src.ReadByte()
+  let last_sym = sym
 
   do {
     A[sym] = 1
@@ -269,7 +310,9 @@ function ReadAlphabet(src) {
       sym++
     } else {
       sym = src.ReadByte()
-      if (sym == last_sym + 1) rle = src.ReadByte()
+      if (sym == last_sym + 1) {
+        rle = src.ReadByte()
+      }
     }
     last_sym = sym
   } while (sym != 0)
@@ -281,42 +324,50 @@ function ReadAlphabet(src) {
 // filling out the F and C arrays.
 function ReadFrequencies0(src, F, C) {
   // Initialise; not in the specification - implicit?
-  for (var i = 0; i < 256; i++) F[i] = 0
+  for (var i = 0; i < 256; i++) {
+    F[i] = 0
+  }
 
   // Fetch alphabet
-  var A = ReadAlphabet(src)
+  const A = ReadAlphabet(src)
 
   // Fetch frequencies for the symbols listed in our alphabet
   for (var i = 0; i < 256; i++) {
-    if (A[i] > 0) F[i] = src.ReadUint7()
+    if (A[i] > 0) {
+      F[i] = src.ReadUint7()
+    }
   }
 
   NormaliseFrequencies0_Shift(F, 12)
 
   // Compute C[] from F[]
   C[0] = 0
-  for (var i = 0; i <= 255; i++) C[i + 1] = C[i] + F[i]
+  for (var i = 0; i <= 255; i++) {
+    C[i + 1] = C[i] + F[i]
+  }
 }
 
 function RansDecode0(src, nbytes, N) {
   // Decode frequencies
-  var F = new Array(256)
-  var C = new Array(256)
+  const F = new Array(256)
+  const C = new Array(256)
   ReadFrequencies0(src, F, C)
 
   // Fast lookup to avoid slow RansGetSymbolFromFreq
-  var C2S = RansBuildC2S(C, 12)
+  const C2S = RansBuildC2S(C, 12)
 
   // Initialise rANS state
-  var R = new Array(N)
-  for (var i = 0; i < N; i++) R[i] = src.ReadUint32()
+  const R = new Array(N)
+  for (var i = 0; i < N; i++) {
+    R[i] = src.ReadUint32()
+  }
 
   // Main decode loop
-  var output = new Uint8Array(nbytes)
+  const output = new Uint8Array(nbytes)
   for (var i = 0; i < nbytes; i++) {
-    var ix = i & (N - 1) // equiv to i%N as N is power of 2
-    var f = RansGetCumulativeFreq(R[ix], 12)
-    var s = C2S[f] // Equiv to RansGetSymbolFromFreq(C, f);
+    const ix = i & (N - 1) // equiv to i%N as N is power of 2
+    const f = RansGetCumulativeFreq(R[ix], 12)
+    const s = C2S[f] // Equiv to RansGetSymbolFromFreq(C, f);
 
     output[i] = s
     R[ix] = RansAdvanceStep(R[ix], C[s], F[s], 12)
@@ -329,21 +380,27 @@ function RansDecode0(src, nbytes, N) {
 
 function NormaliseFrequencies0_Shift(F, bits) {
   // Compute total and number of bits to shift by
-  var tot = 0
-  for (var i = 0; i < 256; i++) tot += F[i]
+  let tot = 0
+  for (var i = 0; i < 256; i++) {
+    tot += F[i]
+  }
 
-  if (tot == 0 || tot == 1 << bits) return
+  if (tot == 0 || tot == 1 << bits) {
+    return
+  }
 
-  var shift = 0
+  let shift = 0
   while (tot < 1 << bits) {
     tot *= 2
     shift++
   }
 
   // Scale total of frequencies to (1<<bits)
-  for (var i = 0; i < 256; i++) F[i] <<= shift
+  for (var i = 0; i < 256; i++) {
+    F[i] <<= shift
+  }
 }
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 // Order-1 decoder
 
 // Decode a table of order-1 frequences,
@@ -353,25 +410,33 @@ function ReadFrequencies1(src, F, C, shift) {
   for (var i = 0; i < 256; i++) {
     F[i] = new Array(256)
     C[i] = new Array(256)
-    for (var j = 0; j < 256; j++) F[i][j] = 0
+    for (var j = 0; j < 256; j++) {
+      F[i][j] = 0
+    }
   }
 
   // Fetch alphabet
-  var A = ReadAlphabet(src)
+  const A = ReadAlphabet(src)
 
   // Read F[]
   for (var i = 0; i < 256; i++) {
-    if (!A[i]) continue
+    if (!A[i]) {
+      continue
+    }
 
-    var run = 0
+    let run = 0
     for (var j = 0; j < 256; j++) {
-      if (!A[j]) continue
+      if (!A[j]) {
+        continue
+      }
 
       if (run > 0) {
         run--
       } else {
         F[i][j] = src.ReadUint7()
-        if (F[i][j] == 0) run = src.ReadByte()
+        if (F[i][j] == 0) {
+          run = src.ReadByte()
+        }
       }
     }
 
@@ -379,7 +444,9 @@ function ReadFrequencies1(src, F, C, shift) {
 
     // Compute C[] from F[]
     C[i][0] = 0
-    for (var j = 0; j < 256; j++) C[i][j + 1] = C[i][j] + F[i][j]
+    for (var j = 0; j < 256; j++) {
+      C[i][j + 1] = C[i][j] + F[i][j]
+    }
   }
 }
 
@@ -387,43 +454,47 @@ function RansDecode1(src, nbytes, N) {
   // FIXME: this bit is missing from the RansDecode0 pseudocode.
 
   var comp = src.ReadByte()
-  var shift = comp >> 4
+  const shift = comp >> 4
 
   var freq_src = src
   if (comp & 1) {
-    var ulen = src.ReadUint7()
-    var clen = src.ReadUint7()
+    const ulen = src.ReadUint7()
+    const clen = src.ReadUint7()
     var comp = new IOStream(src.ReadData(clen))
     var freq_src = new IOStream(RansDecode0(comp, ulen, 4))
   }
 
   // Decode frequencies
-  var F = new Array(256)
-  var C = new Array(256)
+  const F = new Array(256)
+  const C = new Array(256)
   ReadFrequencies1(freq_src, F, C, shift)
 
   // Fast lookup to avoid slow RansGetSymbolFromFreq
-  var C2S = new Array(256)
-  for (var i = 0; i < 256; i++)
-    // Could do only for symbols in alphabet?
+  const C2S = new Array(256)
+  for (
+    var i = 0;
+    i < 256;
+    i++ // Could do only for symbols in alphabet?
+  ) {
     C2S[i] = RansBuildC2S(C[i], shift)
+  }
 
   // Initialise rANS state
-  var R = new Array(N)
-  var L = new Array(N)
+  const R = new Array(N)
+  const L = new Array(N)
   for (var j = 0; j < N; j++) {
     R[j] = src.ReadUint32()
     L[j] = 0
   }
 
   // Main decode loop
-  var output = new Uint8Array(nbytes)
-  var nbytesx = Math.floor(nbytes / N)
+  const output = new Uint8Array(nbytes)
+  const nbytesx = Math.floor(nbytes / N)
   for (var i = 0; i < nbytesx; i++) {
     for (var j = 0; j < N; j++) {
       var f = RansGetCumulativeFreq(R[j], shift)
 
-      //var s = RansGetSymbolFromFreq(C[L[j]], f);
+      // var s = RansGetSymbolFromFreq(C[L[j]], f);
       var s = C2S[L[j]][f] // Precomputed version of above
 
       output[i + j * nbytesx] = s
@@ -448,5 +519,3 @@ function RansDecode1(src, nbytes, N) {
 
   return output
 }
-
-module.exports = { decode }
