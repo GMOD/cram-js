@@ -20,6 +20,13 @@ export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
 }
 
+interface RefRegion {
+  id: number
+  start: number
+  end: number
+  seq: string | null
+}
+
 /**
  * @private
  * Try to estimate the template length from a bunch of interrelated multi-segment reads.
@@ -233,7 +240,7 @@ export default class CramSlice {
     for (let i = 0; i < blocks.length; i++) {
       const block = await this.file.readBlock(blockPosition)
       if (block === undefined) {
-        throw new Error('block undefined')
+        continue
       }
       blocks[i] = block
       blockPosition = blocks[i]!._endPosition
@@ -404,21 +411,14 @@ export default class CramSlice {
       T extends DataSeriesEncodingKey,
     >(
       dataSeriesName: T,
-    ): DataTypeMapping[DataSeriesTypes[T]] => {
+    ): DataTypeMapping[DataSeriesTypes[T]] | undefined => {
       const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec) {
         throw new CramMalformedError(
           `no codec defined for ${dataSeriesName} data series`,
         )
       }
-      // console.log(dataSeriesName, Object.getPrototypeOf(codec))
-      const decoded = codec.decode(
-        this,
-        coreDataBlock,
-        blocksByContentId,
-        cursors,
-      )
-      return decoded
+      return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
@@ -457,16 +457,22 @@ export default class CramSlice {
     }
 
     // interpret `recordsToNextFragment` attributes to make standard `mate`
-    // objects Resolve mate pair cross-references between records in this slice
+    // objects
+    //
+    // Resolve mate pair cross-references between records in this slice
     for (let i = 0; i < records.length; i += 1) {
-      const { mateRecordNumber } = records[i]!
-      if (mateRecordNumber !== undefined && mateRecordNumber >= 0) {
-        associateIntraSliceMate(
-          records,
-          i,
-          records[i]!,
-          records[mateRecordNumber]!,
-        )
+      const r = records[i]
+      // check for !!r added after removal  of "stat" file size check: found
+      // some undefined entries
+      if (r) {
+        const { mateRecordNumber } = r
+        if (
+          mateRecordNumber !== undefined &&
+          mateRecordNumber >= 0 &&
+          records[mateRecordNumber]
+        ) {
+          associateIntraSliceMate(records, i, r, records[mateRecordNumber])
+        }
       }
     }
 
@@ -501,10 +507,7 @@ export default class CramSlice {
         if (compressionScheme === undefined) {
           throw new Error('compression scheme undefined')
         }
-        const refRegions: Record<
-          string,
-          { id: number; start: number; end: number; seq: string | null }
-        > = {}
+        const refRegions: Record<string, RefRegion> = {}
 
         // iterate over the records to find the spans of the reference
         // sequences we need to fetch

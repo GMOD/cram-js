@@ -103,11 +103,6 @@ export default class CramFile {
   }
 
   // can just stat this object like a filehandle
-  stat() {
-    return this.file.stat()
-  }
-
-  // can just stat this object like a filehandle
   read(length: number, position: number) {
     return this.file.read(length, position)
   }
@@ -158,7 +153,6 @@ export default class CramFile {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     let position = sectionParsers.cramFileDefinition.maxLength
-    const { size: fileSize } = await this.file.stat()
     const { cramContainerHeader1 } = sectionParsers
 
     // skip with a series of reads to the proper container
@@ -166,17 +160,13 @@ export default class CramFile {
     for (let i = 0; i <= containerNumber; i++) {
       // if we are about to go off the end of the file
       // and have not found that container, it does not exist
-      if (position + cramContainerHeader1.maxLength + 8 >= fileSize) {
-        return undefined
-      }
+      // if (position + cramContainerHeader1.maxLength + 8 >= fileSize) {
+      //   return undefined
+      // }
 
       currentContainer = this.getContainerAtPosition(position)
       const currentHeader = await currentContainer.getHeader()
-      if (!currentHeader) {
-        throw new CramMalformedError(
-          `container ${containerNumber} not found in file`,
-        )
-      }
+
       // if this is the first container, read all the blocks in the container
       // to determine its length, because we cannot trust the container
       // header's given length due to a bug somewhere in htslib
@@ -219,39 +209,44 @@ export default class CramFile {
 
   /**
    * @returns {Promise[number]} the number of containers in the file
+   *
+   * note: this is currently used only in unit tests, and after removing file
+   * length check, relies on a try catch to read return an error to break
    */
   async containerCount(): Promise<number | undefined> {
     const { majorVersion } = await this.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
-    const { size: fileSize } = await this.file.stat()
-    const { cramContainerHeader1 } = sectionParsers
 
     let containerCount = 0
     let position = sectionParsers.cramFileDefinition.maxLength
-    while (position + cramContainerHeader1.maxLength + 8 < fileSize) {
-      const currentHeader =
-        await this.getContainerAtPosition(position).getHeader()
-      if (!currentHeader) {
-        break
-      }
-      // if this is the first container, read all the blocks in the container,
-      // because we cannot trust the container header's given length due to a
-      // bug somewhere in htslib
-      if (containerCount === 0) {
-        position = currentHeader._endPosition
-        for (let j = 0; j < currentHeader.numBlocks; j++) {
-          const block = await this.readBlock(position)
-          if (block === undefined) {
-            return undefined
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      while (true) {
+        const currentHeader =
+          await this.getContainerAtPosition(position).getHeader()
+
+        // if this is the first container, read all the blocks in the container,
+        // because we cannot trust the container header's given length due to a
+        // bug somewhere in htslib
+        if (containerCount === 0) {
+          position = currentHeader._endPosition
+          for (let j = 0; j < currentHeader.numBlocks; j++) {
+            const block = await this.readBlock(position)
+            if (block === undefined) {
+              break
+            }
+            position = block._endPosition
           }
-          position = block._endPosition
+        } else {
+          // otherwise, just traverse to the next container using the container's
+          // length
+          position += currentHeader._size + currentHeader.length
         }
-      } else {
-        // otherwise, just traverse to the next container using the container's
-        // length
-        position += currentHeader._size + currentHeader.length
+        containerCount += 1
       }
-      containerCount += 1
+    } catch (e) {
+      containerCount--
+      /* do nothing */
     }
 
     return containerCount

@@ -21,7 +21,7 @@ export default class CramContainer {
 
     // if there are no records in the container, there will be no compression
     // header
-    if (!containerHeader?.numRecords) {
+    if (!containerHeader.numRecords) {
       return null
     }
     const { majorVersion } = await this.file.getDefinition()
@@ -51,9 +51,6 @@ export default class CramContainer {
 
   async getFirstBlock() {
     const containerHeader = await this.getHeader()
-    if (!containerHeader) {
-      return undefined
-    }
     return this.file.readBlock(containerHeader._endPosition)
   }
 
@@ -78,12 +75,6 @@ export default class CramContainer {
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
-    const { size: fileSize } = await this.file.stat()
-
-    if (position >= fileSize) {
-      console.warn(`pos:${position}>=fileSize:${fileSize} in cram container`)
-      return undefined
-    }
 
     // parse the container header. do it in 2 pieces because you cannot tell
     // how much to buffer until you read numLandmarks
@@ -93,13 +84,6 @@ export default class CramContainer {
     )
     const header1 = parseItem(bytes1, cramContainerHeader1.parser)
     const numLandmarksSize = itf8Size(header1.numLandmarks)
-    if (position + header1.length >= fileSize) {
-      // header indicates container goes beyond fileSize
-      console.warn(
-        `container at ${position} is beyond fileSize:${fileSize}, skipping`,
-      )
-      return undefined
-    }
 
     const bytes2 = await this.file.read(
       cramContainerHeader2.maxLength(header1.numLandmarks),
@@ -116,12 +100,12 @@ export default class CramContainer {
       )
     }
 
-    const completeHeader = Object.assign(header1, header2, {
+    return {
+      ...header1,
+      ...header2,
       _size: header1._size + header2._size - numLandmarksSize,
       _endPosition: header1._size + header2._size - numLandmarksSize + position,
-    })
-
-    return completeHeader
+    }
   }
 }
 

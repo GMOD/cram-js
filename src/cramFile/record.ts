@@ -271,7 +271,7 @@ export default class CramRecord {
 
     this.readGroupId = readGroupId
     this.readName = readName
-    this.sequenceId = sequenceId
+    this.sequenceId = sequenceId!
     this.uniqueId = uniqueId
     this.templateSize = templateSize
     this.alignmentStart = alignmentStart
