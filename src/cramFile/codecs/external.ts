@@ -1,5 +1,5 @@
 import CramCodec, { Cursor, Cursors } from './_base'
-import { CramMalformedError, CramUnimplementedError } from '../../errors'
+import { CramUnimplementedError } from '../../errors'
 import { CramFileBlock } from '../file'
 import CramSlice from '../slice'
 import { parseItf8 } from '../util'

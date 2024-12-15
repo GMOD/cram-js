@@ -198,16 +198,10 @@ export default class CramSlice {
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     const containerHeader = await this.container.getHeader()
-    if (!containerHeader) {
-      throw new Error('no container header detected')
-    }
 
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
     )
-    if (header === undefined) {
-      throw new Error('block header undefined')
-    }
     if (header.contentType === 'MAPPED_SLICE_HEADER') {
       const content = parseItem(
         header.content,
@@ -239,9 +233,6 @@ export default class CramSlice {
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i++) {
       const block = await this.file.readBlock(blockPosition)
-      if (block === undefined) {
-        continue
-      }
       blocks[i] = block
       blockPosition = blocks[i]!._endPosition
     }

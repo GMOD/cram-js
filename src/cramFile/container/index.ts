@@ -28,9 +28,6 @@ export default class CramContainer {
     const sectionParsers = getSectionParsers(majorVersion)
 
     const block = await this.getFirstBlock()
-    if (block === undefined) {
-      return undefined
-    }
     if (block.contentType !== 'COMPRESSION_HEADER') {
       throw new CramMalformedError(
         `invalid content type ${block.contentType} in compression header block`,
