@@ -1,4 +1,4 @@
-import Long from 'long'
+import { fromBytesBE, toNumber } from 'longfn'
 import md5 from 'md5'
 
 import { CramBufferOverrunError } from './codecs/getBits'
@@ -65,7 +65,7 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
   const dataView = new DataView(buffer.buffer)
   let offset = initialOffset
   const countFlags = buffer[offset]!
-  let n: number | Long
+  let n: number
   if (countFlags < 0x80) {
     n = countFlags
     offset += 1
@@ -116,28 +116,12 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
         buffer[offset + 6]!)
     offset += 7
   } else if (countFlags < 0xff) {
-    n = Long.fromBytesBE(
-      buffer.slice(offset + 1, offset + 8) as unknown as number[],
-    )
-    if (
-      n.greaterThan(Number.MAX_SAFE_INTEGER) ||
-      n.lessThan(Number.MIN_SAFE_INTEGER)
-    ) {
-      throw new Error('integer overflow')
-    }
-    n = n.toNumber()
+    n = toNumber(fromBytesBE(buffer.slice(offset + 1, offset + 8), false))
+
     offset += 8
   } else {
-    n = Long.fromBytesBE(
-      buffer.slice(offset + 1, offset + 9) as unknown as number[],
-    )
-    if (
-      n.greaterThan(Number.MAX_SAFE_INTEGER) ||
-      n.lessThan(Number.MIN_SAFE_INTEGER)
-    ) {
-      throw new Error('integer overflow')
-    }
-    n = n.toNumber()
+    n = toNumber(fromBytesBE(buffer.subarray(offset + 1, offset + 9), false))
+
     offset += 9
   }
   return [n, offset - initialOffset] as const
