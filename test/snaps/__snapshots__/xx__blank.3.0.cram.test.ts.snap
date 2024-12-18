@@ -1,0 +1,58 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole xx#blank.3.0.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 44,
+      "_size": 18,
+      "alignmentSpan": 0,
+      "crc32": 1304357715,
+      "landmarks": [
+        0,
+        33,
+      ],
+      "length": 58,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 44,
+        "_size": 18,
+        "alignmentSpan": 0,
+        "crc32": 1304357715,
+        "landmarks": [
+          0,
+          33,
+        ],
+        "length": 58,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [],
+      },
+      {
+        "samHeader": [],
+      },
+    ],
+  },
+]
+`;

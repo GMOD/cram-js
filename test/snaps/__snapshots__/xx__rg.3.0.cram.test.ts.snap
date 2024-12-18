@@ -1,0 +1,861 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole xx#rg.3.0.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 45,
+      "_size": 19,
+      "alignmentSpan": 0,
+      "crc32": 411314940,
+      "landmarks": [
+        0,
+        233,
+      ],
+      "length": 358,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 45,
+        "_size": 19,
+        "alignmentSpan": 0,
+        "crc32": 411314940,
+        "landmarks": [
+          0,
+          233,
+        ],
+        "length": 358,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.4",
+              },
+              {
+                "tag": "SO",
+                "value": "coordinate",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "emacs",
+              },
+              {
+                "tag": "PN",
+                "value": "emacs",
+              },
+              {
+                "tag": "VN",
+                "value": "23.1.1",
+              },
+            ],
+            "tag": "PG",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "xx",
+              },
+              {
+                "tag": "LN",
+                "value": "20",
+              },
+              {
+                "tag": "AS",
+                "value": "?",
+              },
+              {
+                "tag": "SP",
+                "value": "?",
+              },
+              {
+                "tag": "UR",
+                "value": "/home/vadim/bin/htslib/test/xx.fa",
+              },
+              {
+                "tag": "M5",
+                "value": "bbf4de6d8497a119dda6e074521643dc",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "also test",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+          {
+            "data": [
+              {
+                "tag": "other",
+                "value": "",
+              },
+              {
+                "tag": "headers",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "x1",
+              },
+              {
+                "tag": "SM",
+                "value": "x1",
+              },
+            ],
+            "tag": "RG",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "x2",
+              },
+              {
+                "tag": "SM",
+                "value": "x2",
+              },
+              {
+                "tag": "LB",
+                "value": "x",
+              },
+              {
+                "tag": "PG",
+                "value": "foo:bar",
+              },
+              {
+                "tag": "PI",
+                "value": "1111",
+              },
+            ],
+            "tag": "RG",
+          },
+        ],
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.4",
+              },
+              {
+                "tag": "SO",
+                "value": "coordinate",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "emacs",
+              },
+              {
+                "tag": "PN",
+                "value": "emacs",
+              },
+              {
+                "tag": "VN",
+                "value": "23.1.1",
+              },
+            ],
+            "tag": "PG",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "xx",
+              },
+              {
+                "tag": "LN",
+                "value": "20",
+              },
+              {
+                "tag": "AS",
+                "value": "?",
+              },
+              {
+                "tag": "SP",
+                "value": "?",
+              },
+              {
+                "tag": "UR",
+                "value": "/home/vadim/bin/htslib/test/xx.fa",
+              },
+              {
+                "tag": "M5",
+                "value": "bbf4de6d8497a119dda6e074521643dc",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "also test",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+          {
+            "data": [
+              {
+                "tag": "other",
+                "value": "",
+              },
+              {
+                "tag": "headers",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "x1",
+              },
+              {
+                "tag": "SM",
+                "value": "x1",
+              },
+            ],
+            "tag": "RG",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "x2",
+              },
+              {
+                "tag": "SM",
+                "value": "x2",
+              },
+              {
+                "tag": "LB",
+                "value": "x",
+              },
+              {
+                "tag": "PG",
+                "value": "foo:bar",
+              },
+              {
+                "tag": "PI",
+                "value": "1111",
+              },
+            ],
+            "tag": "RG",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "compressionScheme": {
+      "APdelta": true,
+      "dataSeriesEncoding": {
+        "AP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              1,
+            ],
+            "numCodes": 2,
+            "numLengths": 2,
+            "symbols": [
+              0,
+              10,
+            ],
+          },
+          "parametersBytes": 6,
+        },
+        "BB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 42,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 37,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              16,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "CF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              3,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FN": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "IN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 13,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "MF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "MQ": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "QS": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 12,
+          },
+          "parametersBytes": 1,
+        },
+        "RG": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              2,
+              2,
+            ],
+            "numCodes": 3,
+            "numLengths": 3,
+            "symbols": [
+              -1,
+              0,
+              1,
+            ],
+          },
+          "parametersBytes": 12,
+        },
+        "RI": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              10,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 11,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "SC": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 14,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "TL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "TS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+      },
+      "readNamesIncluded": true,
+      "referenceRequired": false,
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T",
+        ],
+      ],
+      "tagEncoding": {},
+      "tagIdsDictionary": [
+        [],
+      ],
+    },
+    "containerHeader": {
+      "_endPosition": 421,
+      "_size": 18,
+      "alignmentSpan": 20,
+      "crc32": 3584094390,
+      "landmarks": [
+        186,
+      ],
+      "length": 335,
+      "numBases": 60,
+      "numBlocks": 5,
+      "numLandmarks": 1,
+      "numRecords": 6,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 1,
+    },
+    "data": [
+      {
+        "_endPosition": 421,
+        "_size": 18,
+        "alignmentSpan": 20,
+        "crc32": 3584094390,
+        "landmarks": [
+          186,
+        ],
+        "length": 335,
+        "numBases": 60,
+        "numBlocks": 5,
+        "numLandmarks": 1,
+        "numRecords": 6,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 1,
+      },
+      {
+        "features": [
+          {
+            "alignmentStart": 1,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readGroupId": 0,
+            "readLength": 10,
+            "readName": "a1",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 613,
+          },
+          {
+            "alignmentStart": 1,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readGroupId": 1,
+            "readLength": 10,
+            "readName": "b1",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 614,
+          },
+          {
+            "alignmentStart": 1,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readGroupId": -1,
+            "readLength": 10,
+            "readName": "c1",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 615,
+          },
+          {
+            "alignmentStart": 11,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readGroupId": 0,
+            "readLength": 10,
+            "readName": "a2",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 616,
+          },
+          {
+            "alignmentStart": 11,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readGroupId": 1,
+            "readLength": 10,
+            "readName": "b2",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 617,
+          },
+          {
+            "alignmentStart": 11,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readGroupId": -1,
+            "readLength": 10,
+            "readName": "c2",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 618,
+          },
+        ],
+        "header": {
+          "_endPosition": 646,
+          "_size": 34,
+          "compressedSize": 30,
+          "compressionMethod": "raw",
+          "content": Uint8Array [
+            0,
+            1,
+            20,
+            6,
+            0,
+            3,
+            2,
+            11,
+            12,
+            255,
+            255,
+            255,
+            255,
+            15,
+            187,
+            244,
+            222,
+            109,
+            132,
+            151,
+            161,
+            25,
+            221,
+            166,
+            224,
+            116,
+            82,
+            22,
+            67,
+            220,
+          ],
+          "contentId": 0,
+          "contentPosition": 612,
+          "contentType": "MAPPED_SLICE_HEADER",
+          "crc32": 3312614476,
+          "parsedContent": {
+            "_endPosition": 451,
+            "_size": 30,
+            "contentIds": [
+              11,
+              12,
+            ],
+            "md5": [
+              187,
+              244,
+              222,
+              109,
+              132,
+              151,
+              161,
+              25,
+              221,
+              166,
+              224,
+              116,
+              82,
+              22,
+              67,
+              220,
+            ],
+            "numBlocks": 3,
+            "numContentIds": 2,
+            "numRecords": 6,
+            "recordCounter": 0,
+            "refBaseBlockId": -1,
+            "refSeqId": 0,
+            "refSeqSpan": 20,
+            "refSeqStart": 1,
+          },
+          "uncompressedSize": 30,
+        },
+      },
+    ],
+  },
+]
+`;

@@ -1,0 +1,920 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole ce#1.tmp.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 45,
+      "_size": 19,
+      "alignmentSpan": 0,
+      "crc32": 1632985953,
+      "landmarks": [
+        0,
+        133,
+      ],
+      "length": 208,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 45,
+        "_size": 19,
+        "alignmentSpan": 0,
+        "crc32": 1632985953,
+        "landmarks": [
+          0,
+          133,
+        ],
+        "length": 208,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "CHROMOSOME_I",
+              },
+              {
+                "tag": "LN",
+                "value": "1009800",
+              },
+              {
+                "tag": "M5",
+                "value": "8ede36131e0dbf3417807e48f77f3ebd",
+              },
+              {
+                "tag": "UR",
+                "value": "/Users/rbuels/dev/htslib/test/ce.fa",
+              },
+            ],
+            "tag": "SQ",
+          },
+        ],
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "CHROMOSOME_I",
+              },
+              {
+                "tag": "LN",
+                "value": "1009800",
+              },
+              {
+                "tag": "M5",
+                "value": "8ede36131e0dbf3417807e48f77f3ebd",
+              },
+              {
+                "tag": "UR",
+                "value": "/Users/rbuels/dev/htslib/test/ce.fa",
+              },
+            ],
+            "tag": "SQ",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "compressionScheme": {
+      "APdelta": true,
+      "dataSeriesEncoding": {
+        "AP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "BB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 42,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 37,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              16,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "BS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "CF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              3,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "DL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FC": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 27,
+          },
+          "parametersBytes": 1,
+        },
+        "FN": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              6,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FP": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 28,
+          },
+          "parametersBytes": 1,
+        },
+        "IN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 13,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "MF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "MQ": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "QS": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 12,
+          },
+          "parametersBytes": 1,
+        },
+        "RG": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "RI": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              100,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 11,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "SC": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 14,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "TL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "TS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+      },
+      "readNamesIncluded": true,
+      "referenceRequired": false,
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T",
+        ],
+      ],
+      "tagEncoding": {
+        "ASc": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 4281187,
+              },
+              "parametersBytes": 4,
+            },
+          },
+          "parametersBytes": 12,
+        },
+        "XGC": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 5785411,
+              },
+              "parametersBytes": 4,
+            },
+          },
+          "parametersBytes": 12,
+        },
+        "XMC": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 5786947,
+              },
+              "parametersBytes": 4,
+            },
+          },
+          "parametersBytes": 12,
+        },
+        "XNC": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 5787203,
+              },
+              "parametersBytes": 4,
+            },
+          },
+          "parametersBytes": 12,
+        },
+        "XOC": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 5787459,
+              },
+              "parametersBytes": 4,
+            },
+          },
+          "parametersBytes": 12,
+        },
+        "XSc": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 5788515,
+              },
+              "parametersBytes": 4,
+            },
+          },
+          "parametersBytes": 12,
+        },
+        "YTZ": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 5854298,
+            "stopByte": 9,
+          },
+          "parametersBytes": 5,
+        },
+      },
+      "tagIdsDictionary": [
+        [
+          "XGC",
+          "XMC",
+          "XNC",
+          "XOC",
+          "ASc",
+          "XSc",
+          "YTZ",
+        ],
+      ],
+    },
+    "containerHeader": {
+      "_endPosition": 271,
+      "_size": 18,
+      "alignmentSpan": 101,
+      "crc32": 2771432911,
+      "landmarks": [
+        346,
+      ],
+      "length": 831,
+      "numBases": 100,
+      "numBlocks": 14,
+      "numLandmarks": 1,
+      "numRecords": 1,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 2,
+    },
+    "data": [
+      {
+        "_endPosition": 271,
+        "_size": 18,
+        "alignmentSpan": 101,
+        "crc32": 2771432911,
+        "landmarks": [
+          346,
+        ],
+        "length": 831,
+        "numBases": 100,
+        "numBlocks": 14,
+        "numLandmarks": 1,
+        "numRecords": 1,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 2,
+      },
+      {
+        "features": [
+          {
+            "alignmentStart": 2,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 101,
+            "mappingQuality": 1,
+            "qualityScores": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              31,
+              33,
+              30,
+              23,
+              33,
+              30,
+              33,
+              32,
+              31,
+              31,
+              35,
+              35,
+              33,
+              34,
+              35,
+              35,
+              34,
+              33,
+              34,
+              31,
+              34,
+              35,
+              34,
+              35,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+              34,
+            ],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "X",
+                "data": 1,
+                "pos": 5,
+                "refPos": 6,
+              },
+              {
+                "code": "X",
+                "data": 1,
+                "pos": 6,
+                "refPos": 7,
+              },
+              {
+                "code": "X",
+                "data": 1,
+                "pos": 12,
+                "refPos": 13,
+              },
+              {
+                "code": "X",
+                "data": 1,
+                "pos": 18,
+                "refPos": 19,
+              },
+              {
+                "code": "X",
+                "data": 1,
+                "pos": 24,
+                "refPos": 25,
+              },
+              {
+                "code": "D",
+                "data": 1,
+                "pos": 28,
+                "refPos": 29,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 100,
+            "readName": "SRR065390.14978392",
+            "sequenceId": 0,
+            "tags": {
+              "AS": -18,
+              "XG": 1,
+              "XM": 5,
+              "XN": 0,
+              "XO": 1,
+              "XS": -18,
+              "YT": "UU",
+            },
+            "templateSize": 0,
+            "uniqueId": 623,
+          },
+        ],
+        "header": {
+          "_endPosition": 686,
+          "_size": 64,
+          "compressedSize": 60,
+          "compressionMethod": "raw",
+          "content": Uint8Array [
+            0,
+            2,
+            101,
+            1,
+            0,
+            12,
+            11,
+            11,
+            12,
+            27,
+            28,
+            224,
+            65,
+            83,
+            99,
+            224,
+            88,
+            79,
+            67,
+            224,
+            88,
+            77,
+            67,
+            224,
+            88,
+            71,
+            67,
+            224,
+            88,
+            78,
+            67,
+            224,
+            89,
+            84,
+            90,
+            224,
+            88,
+            83,
+            99,
+            255,
+            255,
+            255,
+            255,
+            15,
+            13,
+            53,
+            108,
+            132,
+            13,
+            170,
+            12,
+            148,
+            54,
+            102,
+            168,
+            225,
+            81,
+            162,
+            145,
+            130,
+          ],
+          "contentId": 0,
+          "contentPosition": 622,
+          "contentType": "MAPPED_SLICE_HEADER",
+          "crc32": 3312375516,
+          "parsedContent": {
+            "_endPosition": 331,
+            "_size": 60,
+            "contentIds": [
+              11,
+              12,
+              27,
+              28,
+              4281187,
+              5787459,
+              5786947,
+              5785411,
+              5787203,
+              5854298,
+              5788515,
+            ],
+            "md5": [
+              13,
+              53,
+              108,
+              132,
+              13,
+              170,
+              12,
+              148,
+              54,
+              102,
+              168,
+              225,
+              81,
+              162,
+              145,
+              130,
+            ],
+            "numBlocks": 12,
+            "numContentIds": 11,
+            "numRecords": 1,
+            "recordCounter": 0,
+            "refBaseBlockId": -1,
+            "refSeqId": 0,
+            "refSeqSpan": 101,
+            "refSeqStart": 2,
+          },
+          "uncompressedSize": 60,
+        },
+      },
+    ],
+  },
+]
+`;

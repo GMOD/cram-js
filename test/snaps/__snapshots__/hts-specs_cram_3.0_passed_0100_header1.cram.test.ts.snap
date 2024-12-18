@@ -1,0 +1,89 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole hts-specs/cram/3.0/passed/0100_header1.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 43,
+      "_size": 17,
+      "alignmentSpan": 0,
+      "crc32": 962068400,
+      "landmarks": [
+        0,
+      ],
+      "length": 95,
+      "numBases": 0,
+      "numBlocks": 1,
+      "numLandmarks": 1,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 43,
+        "_size": 17,
+        "alignmentSpan": 0,
+        "crc32": 962068400,
+        "landmarks": [
+          0,
+        ],
+        "length": 95,
+        "numBases": 0,
+        "numBlocks": 1,
+        "numLandmarks": 1,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.6",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "chr1",
+              },
+              {
+                "tag": "LN",
+                "value": "1000",
+              },
+              {
+                "tag": "M5",
+                "value": "258e88dcbd3cd44d8e7ab43f6ecb6af0",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "SAM header",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+        ],
+      },
+    ],
+  },
+]
+`;

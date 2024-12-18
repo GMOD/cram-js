@@ -1,0 +1,130 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole hts-specs/cram/3.0/passed/0101_header2.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 44,
+      "_size": 18,
+      "alignmentSpan": 0,
+      "crc32": 65949705,
+      "landmarks": [
+        0,
+        95,
+      ],
+      "length": 151,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 44,
+        "_size": 18,
+        "alignmentSpan": 0,
+        "crc32": 65949705,
+        "landmarks": [
+          0,
+          95,
+        ],
+        "length": 151,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.6",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "chr1",
+              },
+              {
+                "tag": "LN",
+                "value": "1000",
+              },
+              {
+                "tag": "M5",
+                "value": "258e88dcbd3cd44d8e7ab43f6ecb6af0",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "SAM header",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+        ],
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.6",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "chr1",
+              },
+              {
+                "tag": "LN",
+                "value": "1000",
+              },
+              {
+                "tag": "M5",
+                "value": "258e88dcbd3cd44d8e7ab43f6ecb6af0",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "SAM header",
+                "value": "",
+              },
+            ],
+            "tag": "CO",
+          },
+        ],
+      },
+    ],
+  },
+]
+`;

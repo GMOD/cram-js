@@ -1,0 +1,1209 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole xx#minimal.2.1.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 2,
+    "minorVersion": 1,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 39,
+      "_size": 13,
+      "alignmentSpan": 0,
+      "landmarks": [
+        0,
+      ],
+      "length": 10189,
+      "numBases": 0,
+      "numBlocks": 1,
+      "numLandmarks": 1,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 39,
+        "_size": 13,
+        "alignmentSpan": 0,
+        "landmarks": [
+          0,
+        ],
+        "length": 10189,
+        "numBases": 0,
+        "numBlocks": 1,
+        "numLandmarks": 1,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "xx",
+              },
+              {
+                "tag": "LN",
+                "value": "20",
+              },
+              {
+                "tag": "M5",
+                "value": "bbf4de6d8497a119dda6e074521643dc",
+              },
+              {
+                "tag": "UR",
+                "value": "/home/vadim/bin/htslib/test/xx.fa",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "yy",
+              },
+              {
+                "tag": "LN",
+                "value": "20",
+              },
+              {
+                "tag": "M5",
+                "value": "bbf4de6d8497a119dda6e074521643dc",
+              },
+              {
+                "tag": "UR",
+                "value": "/home/vadim/bin/htslib/test/xx.fa",
+              },
+            ],
+            "tag": "SQ",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "compressionScheme": {
+      "APdelta": true,
+      "dataSeriesEncoding": {
+        "AP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "BF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              16,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "CF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              3,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "DL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FC": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              2,
+              2,
+            ],
+            "numCodes": 3,
+            "numLengths": 3,
+            "symbols": [
+              72,
+              68,
+              73,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "FN": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              2,
+              2,
+            ],
+            "numCodes": 3,
+            "numLengths": 3,
+            "symbols": [
+              4,
+              1,
+              2,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "FP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              2,
+              2,
+            ],
+            "numCodes": 3,
+            "numLengths": 3,
+            "symbols": [
+              1,
+              0,
+              10,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "HC": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              1,
+            ],
+            "numCodes": 2,
+            "numLengths": 2,
+            "symbols": [
+              5,
+              10,
+            ],
+          },
+          "parametersBytes": 6,
+        },
+        "IN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 13,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "MF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "MQ": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "QS": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 12,
+          },
+          "parametersBytes": 1,
+        },
+        "RG": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "RI": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              1,
+            ],
+            "numCodes": 2,
+            "numLengths": 2,
+            "symbols": [
+              0,
+              10,
+            ],
+          },
+          "parametersBytes": 6,
+        },
+        "RN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 11,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "SC": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 14,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "TL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "TS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+      },
+      "readNamesIncluded": true,
+      "referenceRequired": false,
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T",
+        ],
+      ],
+      "tagEncoding": {},
+      "tagIdsDictionary": [
+        [],
+      ],
+    },
+    "containerHeader": {
+      "_endPosition": 10242,
+      "_size": 14,
+      "alignmentSpan": 10,
+      "landmarks": [
+        214,
+      ],
+      "length": 367,
+      "numBases": 0,
+      "numBlocks": 6,
+      "numLandmarks": 1,
+      "numRecords": 3,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 4,
+    },
+    "data": [
+      {
+        "_endPosition": 10242,
+        "_size": 14,
+        "alignmentSpan": 10,
+        "landmarks": [
+          214,
+        ],
+        "length": 367,
+        "numBases": 0,
+        "numBlocks": 6,
+        "numLandmarks": 1,
+        "numRecords": 3,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 4,
+      },
+      {
+        "features": [
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "H",
+                "data": 10,
+                "pos": 1,
+                "refPos": 4,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "a0",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10462,
+          },
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "H",
+                "data": 5,
+                "pos": 1,
+                "refPos": 4,
+              },
+              {
+                "code": "H",
+                "data": 5,
+                "pos": 1,
+                "refPos": 4,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "a1",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10463,
+          },
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 1,
+            "qualityScores": [
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+              255,
+            ],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "H",
+                "data": 5,
+                "pos": 1,
+                "refPos": 4,
+              },
+              {
+                "code": "I",
+                "data": "",
+                "pos": 1,
+                "refPos": 4,
+              },
+              {
+                "code": "D",
+                "data": 0,
+                "pos": 11,
+                "refPos": 14,
+              },
+              {
+                "code": "H",
+                "data": 5,
+                "pos": 11,
+                "refPos": 14,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 10,
+            "readName": "a2",
+            "sequenceId": 0,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10464,
+          },
+        ],
+        "header": {
+          "_endPosition": 10492,
+          "_size": 31,
+          "compressedSize": 31,
+          "compressionMethod": "raw",
+          "content": Uint8Array [
+            0,
+            4,
+            10,
+            3,
+            0,
+            4,
+            3,
+            11,
+            12,
+            13,
+            255,
+            255,
+            255,
+            255,
+            15,
+            90,
+            141,
+            55,
+            172,
+            186,
+            105,
+            213,
+            219,
+            77,
+            194,
+            200,
+            29,
+            80,
+            70,
+            210,
+            56,
+          ],
+          "contentId": 0,
+          "contentPosition": 10461,
+          "contentType": "MAPPED_SLICE_HEADER",
+          "parsedContent": {
+            "_endPosition": 10273,
+            "_size": 31,
+            "contentIds": [
+              11,
+              12,
+              13,
+            ],
+            "md5": [
+              90,
+              141,
+              55,
+              172,
+              186,
+              105,
+              213,
+              219,
+              77,
+              194,
+              200,
+              29,
+              80,
+              70,
+              210,
+              56,
+            ],
+            "numBlocks": 4,
+            "numContentIds": 3,
+            "numRecords": 3,
+            "recordCounter": 0,
+            "refBaseBlockId": -1,
+            "refSeqId": 0,
+            "refSeqSpan": 10,
+            "refSeqStart": 4,
+          },
+          "uncompressedSize": 31,
+        },
+      },
+    ],
+  },
+  {
+    "compressionScheme": {
+      "APdelta": true,
+      "dataSeriesEncoding": {
+        "AP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "BF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              16,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "CF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              3,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "DL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FC": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              2,
+              2,
+              2,
+              2,
+            ],
+            "numCodes": 4,
+            "numLengths": 4,
+            "symbols": [
+              68,
+              72,
+              73,
+              80,
+            ],
+          },
+          "parametersBytes": 10,
+        },
+        "FN": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              1,
+              1,
+            ],
+            "numCodes": 2,
+            "numLengths": 2,
+            "symbols": [
+              0,
+              1,
+            ],
+          },
+          "parametersBytes": 6,
+        },
+        "FP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "HC": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "IN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 13,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "MF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "MQ": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "PD": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "QS": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 12,
+          },
+          "parametersBytes": 1,
+        },
+        "RG": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "RI": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              1,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 11,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "SC": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 14,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "TL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "TS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+      },
+      "readNamesIncluded": true,
+      "referenceRequired": false,
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T",
+        ],
+      ],
+      "tagEncoding": {},
+      "tagIdsDictionary": [
+        [],
+      ],
+    },
+    "containerHeader": {
+      "_endPosition": 10623,
+      "_size": 14,
+      "alignmentSpan": 0,
+      "landmarks": [
+        214,
+      ],
+      "length": 342,
+      "numBases": 0,
+      "numBlocks": 5,
+      "numLandmarks": 1,
+      "numRecords": 5,
+      "recordCounter": 3,
+      "refSeqId": 1,
+      "refSeqStart": 4,
+    },
+    "data": [
+      {
+        "_endPosition": 10623,
+        "_size": 14,
+        "alignmentSpan": 0,
+        "landmarks": [
+          214,
+        ],
+        "length": 342,
+        "numBases": 0,
+        "numBlocks": 5,
+        "numLandmarks": 1,
+        "numRecords": 5,
+        "recordCounter": 3,
+        "refSeqId": 1,
+        "refSeqStart": 4,
+      },
+      {
+        "features": [
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "H",
+                "data": 0,
+                "pos": 1,
+                "refPos": 4,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "A0",
+            "sequenceId": 1,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10846,
+          },
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "I",
+                "data": "",
+                "pos": 1,
+                "refPos": 4,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "A1",
+            "sequenceId": 1,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10847,
+          },
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "D",
+                "data": 0,
+                "pos": 1,
+                "refPos": 4,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "A2",
+            "sequenceId": 1,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10848,
+          },
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "A3",
+            "sequenceId": 1,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10849,
+          },
+          {
+            "alignmentStart": 4,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 0,
+            "mappingQuality": 1,
+            "qualityScores": [],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "P",
+                "data": 0,
+                "pos": 1,
+                "refPos": 4,
+              },
+            ],
+            "readGroupId": -1,
+            "readLength": 0,
+            "readName": "A4",
+            "sequenceId": 1,
+            "tags": {},
+            "templateSize": 0,
+            "uniqueId": 10850,
+          },
+        ],
+        "header": {
+          "_endPosition": 10872,
+          "_size": 30,
+          "compressedSize": 30,
+          "compressionMethod": "raw",
+          "content": Uint8Array [
+            1,
+            4,
+            0,
+            5,
+            3,
+            3,
+            2,
+            11,
+            13,
+            255,
+            255,
+            255,
+            255,
+            15,
+            212,
+            29,
+            140,
+            217,
+            143,
+            0,
+            178,
+            4,
+            233,
+            128,
+            9,
+            152,
+            236,
+            248,
+            66,
+            126,
+          ],
+          "contentId": 0,
+          "contentPosition": 10842,
+          "contentType": "MAPPED_SLICE_HEADER",
+          "parsedContent": {
+            "_endPosition": 10653,
+            "_size": 30,
+            "contentIds": [
+              11,
+              13,
+            ],
+            "md5": [
+              212,
+              29,
+              140,
+              217,
+              143,
+              0,
+              178,
+              4,
+              233,
+              128,
+              9,
+              152,
+              236,
+              248,
+              66,
+              126,
+            ],
+            "numBlocks": 3,
+            "numContentIds": 2,
+            "numRecords": 5,
+            "recordCounter": 3,
+            "refBaseBlockId": -1,
+            "refSeqId": 1,
+            "refSeqSpan": 0,
+            "refSeqStart": 4,
+          },
+          "uncompressedSize": 30,
+        },
+      },
+    ],
+  },
+]
+`;

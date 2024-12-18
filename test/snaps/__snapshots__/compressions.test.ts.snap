@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`bzip2 1`] = `
+{
+  "code": "X",
+  "data": 1,
+  "pos": 51,
+  "ref": "A",
+  "refPos": 1050,
+  "sub": "G",
+}
+`;
+
+exports[`lzma 1`] = `
+{
+  "code": "X",
+  "data": 1,
+  "pos": 51,
+  "ref": "A",
+  "refPos": 1050,
+  "sub": "G",
+}
+`;

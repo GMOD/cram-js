@@ -1,0 +1,1819 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without error 1`] = `
+[
+  {
+    "fileId": "-",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 45,
+      "_size": 19,
+      "alignmentSpan": 0,
+      "crc32": 555182213,
+      "landmarks": [
+        0,
+        204,
+      ],
+      "length": 315,
+      "numBases": 0,
+      "numBlocks": 2,
+      "numLandmarks": 2,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 45,
+        "_size": 19,
+        "alignmentSpan": 0,
+        "crc32": 555182213,
+        "landmarks": [
+          0,
+          204,
+        ],
+        "length": 315,
+        "numBases": 0,
+        "numBlocks": 2,
+        "numLandmarks": 2,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.4",
+              },
+              {
+                "tag": "GO",
+                "value": "none",
+              },
+              {
+                "tag": "SO",
+                "value": "coordinate",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "Sheila",
+              },
+              {
+                "tag": "LN",
+                "value": "20",
+              },
+              {
+                "tag": "M5",
+                "value": "7ddd8a4b4f2c1dec43476a738b1a9b72",
+              },
+              {
+                "tag": "UR",
+                "value": "/Users/cnorman/projects/htsjdk/src/test/resources/htsjdk/samtools/cram/ambiguityCodes.fasta",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "ID",
+              },
+              {
+                "tag": "SM",
+                "value": "foo",
+              },
+            ],
+            "tag": "RG",
+          },
+        ],
+      },
+      {
+        "samHeader": [
+          {
+            "data": [
+              {
+                "tag": "VN",
+                "value": "1.4",
+              },
+              {
+                "tag": "GO",
+                "value": "none",
+              },
+              {
+                "tag": "SO",
+                "value": "coordinate",
+              },
+            ],
+            "tag": "HD",
+          },
+          {
+            "data": [
+              {
+                "tag": "SN",
+                "value": "Sheila",
+              },
+              {
+                "tag": "LN",
+                "value": "20",
+              },
+              {
+                "tag": "M5",
+                "value": "7ddd8a4b4f2c1dec43476a738b1a9b72",
+              },
+              {
+                "tag": "UR",
+                "value": "/Users/cnorman/projects/htsjdk/src/test/resources/htsjdk/samtools/cram/ambiguityCodes.fasta",
+              },
+            ],
+            "tag": "SQ",
+          },
+          {
+            "data": [
+              {
+                "tag": "ID",
+                "value": "ID",
+              },
+              {
+                "tag": "SM",
+                "value": "foo",
+              },
+            ],
+            "tag": "RG",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    "compressionScheme": {
+      "APdelta": true,
+      "dataSeriesEncoding": {
+        "AP": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 17,
+          },
+          "parametersBytes": 1,
+        },
+        "BB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 42,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 37,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              16,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "BS": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 31,
+          },
+          "parametersBytes": 1,
+        },
+        "CF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              3,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FC": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              88,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "FN": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 26,
+          },
+          "parametersBytes": 1,
+        },
+        "FP": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 28,
+          },
+          "parametersBytes": 1,
+        },
+        "IN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 13,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "MF": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "MQ": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 19,
+          },
+          "parametersBytes": 1,
+        },
+        "NP": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "NS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              -1,
+            ],
+          },
+          "parametersBytes": 8,
+        },
+        "QS": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 12,
+          },
+          "parametersBytes": 1,
+        },
+        "RG": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RI": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RL": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              10,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+        "RN": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 11,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "SC": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 14,
+            "stopByte": 0,
+          },
+          "parametersBytes": 2,
+        },
+        "TL": {
+          "codecId": 1,
+          "parameters": {
+            "blockContentId": 32,
+          },
+          "parametersBytes": 1,
+        },
+        "TS": {
+          "codecId": 3,
+          "parameters": {
+            "bitLengths": [
+              0,
+            ],
+            "numCodes": 1,
+            "numLengths": 1,
+            "symbols": [
+              0,
+            ],
+          },
+          "parametersBytes": 4,
+        },
+      },
+      "readNamesIncluded": true,
+      "referenceRequired": false,
+      "substitutionMatrix": [
+        [
+          "C",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "G",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "T",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "N",
+        ],
+        [
+          "A",
+          "C",
+          "G",
+          "T",
+        ],
+      ],
+      "tagEncoding": {
+        "A!A": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "ACA": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "AcA": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "BCB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BIB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BSB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BcB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BiB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "BsB": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "F0f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "F1f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "F2f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "F3f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "F4f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "F5f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "F6f": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "H0B": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "H1B": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 6,
+        },
+        "I0c": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I1c": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I2c": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I3C": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I4C": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I5s": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I6s": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I7S": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I8S": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "I9i": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "IAi": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "Z0Z": {
+          "codecId": 5,
+          "parameters": {
+            "blockContentId": 9,
+            "stopByte": 9,
+          },
+          "parametersBytes": 2,
+        },
+        "i1c": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i2c": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i3c": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  1,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i4s": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i5s": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i6s": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i7s": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  2,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i8i": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "i9i": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "iAi": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+        "iBi": {
+          "codecId": 4,
+          "parameters": {
+            "lengthsEncoding": {
+              "codecId": 3,
+              "parameters": {
+                "bitLengths": [
+                  0,
+                ],
+                "numCodes": 1,
+                "numLengths": 1,
+                "symbols": [
+                  4,
+                ],
+              },
+              "parametersBytes": 4,
+            },
+            "valuesEncoding": {
+              "codecId": 1,
+              "parameters": {
+                "blockContentId": 1,
+              },
+              "parametersBytes": 1,
+            },
+          },
+          "parametersBytes": 9,
+        },
+      },
+      "tagIdsDictionary": [
+        [
+          "A!A",
+          "ACA",
+          "AcA",
+          "F0f",
+          "F1f",
+          "F2f",
+          "F3f",
+          "F4f",
+          "F5f",
+          "F6f",
+          "H0B",
+          "H1B",
+          "I0c",
+          "I1c",
+          "I2c",
+          "I3C",
+          "I4C",
+          "I5s",
+          "I6s",
+          "I7S",
+          "I8S",
+          "I9i",
+          "IAi",
+          "Z0Z",
+          "i1c",
+          "i2c",
+          "i3c",
+          "i4s",
+          "i5s",
+          "i6s",
+          "i7s",
+          "i8i",
+          "i9i",
+          "iAi",
+          "iBi",
+        ],
+        [
+          "BCB",
+          "BIB",
+          "BSB",
+          "BcB",
+          "BiB",
+          "BsB",
+        ],
+      ],
+    },
+    "containerHeader": {
+      "_endPosition": 378,
+      "_size": 18,
+      "alignmentSpan": 20,
+      "crc32": 4182355479,
+      "landmarks": [
+        892,
+      ],
+      "length": 1410,
+      "numBases": 20,
+      "numBlocks": 13,
+      "numLandmarks": 1,
+      "numRecords": 2,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 1,
+    },
+    "data": [
+      {
+        "_endPosition": 378,
+        "_size": 18,
+        "alignmentSpan": 20,
+        "crc32": 4182355479,
+        "landmarks": [
+          892,
+        ],
+        "length": 1410,
+        "numBases": 20,
+        "numBlocks": 13,
+        "numLandmarks": 1,
+        "numRecords": 2,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 1,
+      },
+      {
+        "features": [
+          {
+            "alignmentStart": 1,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 86,
+            "qualityScores": [
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+              9,
+            ],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "X",
+                "data": 3,
+                "pos": 7,
+                "refPos": 7,
+              },
+              {
+                "code": "X",
+                "data": 1,
+                "pos": 8,
+                "refPos": 8,
+              },
+              {
+                "code": "X",
+                "data": 0,
+                "pos": 9,
+                "refPos": 9,
+              },
+            ],
+            "readGroupId": 0,
+            "readLength": 10,
+            "readName": "Fred",
+            "sequenceId": 0,
+            "tags": {
+              "A!": "!",
+              "AC": "C",
+              "Ac": "c",
+              "F0": -1,
+              "F1": 0,
+              "F2": 1,
+              "F3": 9.899999491958217e-19,
+              "F4": -9.899999491958217e-19,
+              "F5": 99000000576671970000,
+              "F6": -99000000576671970000,
+              "H0": [
+                -86,
+              ],
+              "H1": [
+                -34,
+                -83,
+                0,
+                -66,
+                -17,
+              ],
+              "I0": 0,
+              "I1": 1,
+              "I2": 127,
+              "I3": 128,
+              "I4": 255,
+              "I5": 256,
+              "I6": 32767,
+              "I7": 32768,
+              "I8": 65535,
+              "I9": 65536,
+              "IA": 2147483647,
+              "Z0": "space space",
+              "i1": -1,
+              "i2": -127,
+              "i3": -128,
+              "i4": -255,
+              "i5": -256,
+              "i6": -32767,
+              "i7": -32768,
+              "i8": -65535,
+              "i9": -65536,
+              "iA": -2147483647,
+              "iB": -2147483648,
+            },
+            "templateSize": 0,
+            "uniqueId": 1276,
+          },
+          {
+            "alignmentStart": 11,
+            "cramFlags": 3,
+            "flags": 16,
+            "lengthOnRef": 10,
+            "mappingQuality": 11,
+            "qualityScores": [
+              30,
+              30,
+              30,
+              30,
+              30,
+              30,
+              30,
+              30,
+              30,
+              30,
+            ],
+            "readBases": undefined,
+            "readFeatures": [
+              {
+                "code": "X",
+                "data": 0,
+                "pos": 2,
+                "refPos": 12,
+              },
+              {
+                "code": "X",
+                "data": 0,
+                "pos": 3,
+                "refPos": 13,
+              },
+            ],
+            "readGroupId": 0,
+            "readLength": 10,
+            "readName": "Jim",
+            "sequenceId": 0,
+            "tags": {
+              "BC": [
+                0,
+                127,
+                -128,
+                -1,
+              ],
+              "BI": [
+                0,
+                2147483647,
+                -2147483648,
+                -1,
+              ],
+              "BS": [
+                0,
+                32767,
+                -32768,
+                -1,
+              ],
+              "Bc": [
+                -128,
+                -127,
+                0,
+                127,
+              ],
+              "Bi": [
+                -2147483648,
+                -2147483647,
+                0,
+                2147483647,
+              ],
+              "Bs": [
+                -32768,
+                -32767,
+                0,
+                32767,
+              ],
+            },
+            "templateSize": 0,
+            "uniqueId": 1277,
+          },
+        ],
+        "header": {
+          "_endPosition": 1317,
+          "_size": 42,
+          "compressedSize": 38,
+          "compressionMethod": "raw",
+          "content": Uint8Array [
+            0,
+            1,
+            20,
+            2,
+            0,
+            11,
+            10,
+            1,
+            9,
+            11,
+            12,
+            17,
+            19,
+            26,
+            28,
+            31,
+            32,
+            255,
+            255,
+            255,
+            255,
+            15,
+            191,
+            200,
+            50,
+            5,
+            201,
+            16,
+            225,
+            105,
+            240,
+            96,
+            57,
+            67,
+            58,
+            32,
+            170,
+            73,
+          ],
+          "contentId": 0,
+          "contentPosition": 1275,
+          "contentType": "MAPPED_SLICE_HEADER",
+          "crc32": 3916993359,
+          "parsedContent": {
+            "_endPosition": 416,
+            "_size": 38,
+            "contentIds": [
+              1,
+              9,
+              11,
+              12,
+              17,
+              19,
+              26,
+              28,
+              31,
+              32,
+            ],
+            "md5": [
+              191,
+              200,
+              50,
+              5,
+              201,
+              16,
+              225,
+              105,
+              240,
+              96,
+              57,
+              67,
+              58,
+              32,
+              170,
+              73,
+            ],
+            "numBlocks": 11,
+            "numContentIds": 10,
+            "numRecords": 2,
+            "recordCounter": 0,
+            "refBaseBlockId": -1,
+            "refSeqId": 0,
+            "refSeqSpan": 20,
+            "refSeqStart": 1,
+          },
+          "uncompressedSize": 38,
+        },
+      },
+    ],
+  },
+]
+`;

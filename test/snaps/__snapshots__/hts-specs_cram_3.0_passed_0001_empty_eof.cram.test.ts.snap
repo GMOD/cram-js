@@ -1,0 +1,53 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`can dump the whole hts-specs/cram/3.0/passed/0001_empty_eof.cram without error 1`] = `
+[
+  {
+    "fileId": "empty.cram",
+    "magic": "CRAM",
+    "majorVersion": 3,
+    "minorVersion": 0,
+  },
+  {
+    "containerHeader": {
+      "_endPosition": 43,
+      "_size": 17,
+      "alignmentSpan": 0,
+      "crc32": 1350663562,
+      "landmarks": [
+        0,
+      ],
+      "length": 13,
+      "numBases": 0,
+      "numBlocks": 1,
+      "numLandmarks": 1,
+      "numRecords": 0,
+      "recordCounter": 0,
+      "refSeqId": 0,
+      "refSeqStart": 0,
+    },
+    "data": [
+      {
+        "_endPosition": 43,
+        "_size": 17,
+        "alignmentSpan": 0,
+        "crc32": 1350663562,
+        "landmarks": [
+          0,
+        ],
+        "length": 13,
+        "numBases": 0,
+        "numBlocks": 1,
+        "numLandmarks": 1,
+        "numRecords": 0,
+        "recordCounter": 0,
+        "refSeqId": 0,
+        "refSeqStart": 0,
+      },
+      {
+        "samHeader": [],
+      },
+    ],
+  },
+]
+`;
