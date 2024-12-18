@@ -1,7 +1,7 @@
-import { fromBytesBE, toNumber } from 'longfn'
 import md5 from 'md5'
 
 import { CramBufferOverrunError } from './codecs/getBits'
+import { longFromBytesToUnsigned } from './long'
 
 export function itf8Size(v: number) {
   if (!(v & ~0x7f)) {
@@ -116,11 +116,11 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
         buffer[offset + 6]!)
     offset += 7
   } else if (countFlags < 0xff) {
-    n = toNumber(fromBytesBE(buffer.slice(offset + 1, offset + 8), false))
+    n = longFromBytesToUnsigned(buffer.slice(offset + 1, offset + 8), false)
 
     offset += 8
   } else {
-    n = toNumber(fromBytesBE(buffer.subarray(offset + 1, offset + 9), false))
+    n = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 9), false)
 
     offset += 9
   }
