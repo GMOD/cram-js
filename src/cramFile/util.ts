@@ -116,12 +116,10 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
         buffer[offset + 6]!)
     offset += 7
   } else if (countFlags < 0xff) {
-    n = longFromBytesToUnsigned(buffer.slice(offset + 1, offset + 8), false)
-
+    n = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 8))
     offset += 8
   } else {
-    n = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 9), false)
-
+    n = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 9))
     offset += 9
   }
   return [n, offset - initialOffset] as const
