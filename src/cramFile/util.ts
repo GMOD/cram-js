@@ -1,6 +1,10 @@
 import md5 from 'md5'
 
-import { CramBufferOverrunError } from './codecs/getBits'
+export const TWO_PWR_16_DBL = 1 << 16
+export const TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL
+export const TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL
+export const TWO_PWR_24_DBL = 1 << 24
+export const TWO_PWR_56_DBL = TWO_PWR_24_DBL * TWO_PWR_32_DBL
 
 export function itf8Size(v: number) {
   if (!(v & ~0x7f)) {
@@ -99,7 +103,7 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
   // Five byte value < 0xF8
   else if (countFlags < 0xf8) {
     value =
-      (buffer[offset]! & 0x0f) * Math.pow(2, 32) +
+      (buffer[offset]! & 0x0f) * TWO_PWR_32_DBL +
       ((buffer[offset + 1]! << 24) |
         (buffer[offset + 2]! << 16) |
         (buffer[offset + 3]! << 8) |
@@ -109,8 +113,7 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
   // Six byte value < 0xFC
   else if (countFlags < 0xfc) {
     value =
-      (((buffer[offset]! & 0x07) << 8) | buffer[offset + 1]!) *
-        Math.pow(2, 32) +
+      (((buffer[offset]! & 0x07) << 8) | buffer[offset + 1]!) * TWO_PWR_32_DBL +
       ((buffer[offset + 2]! << 24) |
         (buffer[offset + 3]! << 16) |
         (buffer[offset + 4]! << 8) |
@@ -123,7 +126,7 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
       (((buffer[offset]! & 0x03) << 16) |
         (buffer[offset + 1]! << 8) |
         buffer[offset + 2]!) *
-        Math.pow(2, 32) +
+        TWO_PWR_32_DBL +
       ((buffer[offset + 3]! << 24) |
         (buffer[offset + 4]! << 16) |
         (buffer[offset + 5]! << 8) |
@@ -137,7 +140,7 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
         (buffer[offset + 2]! << 16) |
         (buffer[offset + 3]! << 8) |
         buffer[offset + 4]!) *
-        Math.pow(2, 32) +
+        TWO_PWR_32_DBL +
       ((buffer[offset + 5]! << 24) |
         (buffer[offset + 6]! << 16) |
         (buffer[offset + 7]! << 8) |
@@ -147,12 +150,12 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
   // Nine byte value
   else {
     value =
-      buffer[offset + 1]! * Math.pow(2, 56) +
+      buffer[offset + 1]! * TWO_PWR_56_DBL +
       ((buffer[offset + 2]! << 24) |
         (buffer[offset + 3]! << 16) |
         (buffer[offset + 4]! << 8) |
         buffer[offset + 5]!) *
-        Math.pow(2, 32) +
+        TWO_PWR_32_DBL +
       ((buffer[offset + 6]! << 24) |
         (buffer[offset + 7]! << 16) |
         (buffer[offset + 8]! << 8) |
