@@ -20,36 +20,52 @@ export function itf8Size(v: number) {
 }
 
 export function parseItf8(buffer: Uint8Array, initialOffset: number) {
+  if (initialOffset >= buffer.length) {
+    throw new CramBufferOverrunError(
+      'Attempted to read beyond end of buffer; this file seems truncated.',
+    )
+  }
+
   let offset = initialOffset
   const countFlags = buffer[offset]!
   let result: number
+
+  // Single byte value (0xxxxxxx)
   if (countFlags < 0x80) {
     result = countFlags
-    offset = offset + 1
-  } else if (countFlags < 0xc0) {
-    result = ((countFlags << 8) | buffer[offset + 1]!) & 0x3fff
-    offset = offset + 2
-  } else if (countFlags < 0xe0) {
+    offset += 1
+  }
+  // Two byte value (10xxxxxx)
+  else if (countFlags < 0xc0) {
+    result = ((countFlags & 0x3f) << 8) | buffer[offset + 1]!
+    offset += 2
+  }
+  // Three byte value (110xxxxx)
+  else if (countFlags < 0xe0) {
     result =
-      ((countFlags << 16) | (buffer[offset + 1]! << 8) | buffer[offset + 2]!) &
-      0x1fffff
-    offset = offset + 3
-  } else if (countFlags < 0xf0) {
+      ((countFlags & 0x1f) << 16) |
+      (buffer[offset + 1]! << 8) |
+      buffer[offset + 2]!
+    offset += 3
+  }
+  // Four byte value (1110xxxx)
+  else if (countFlags < 0xf0) {
     result =
-      ((countFlags << 24) |
-        (buffer[offset + 1]! << 16) |
-        (buffer[offset + 2]! << 8) |
-        buffer[offset + 3]!) &
-      0x0fffffff
-    offset = offset + 4
-  } else {
+      ((countFlags & 0x0f) << 24) |
+      (buffer[offset + 1]! << 16) |
+      (buffer[offset + 2]! << 8) |
+      buffer[offset + 3]!
+    offset += 4
+  }
+  // Five byte value (11110xxx)
+  else {
     result =
       ((countFlags & 0x0f) << 28) |
       (buffer[offset + 1]! << 20) |
       (buffer[offset + 2]! << 12) |
       (buffer[offset + 3]! << 4) |
       (buffer[offset + 4]! & 0x0f)
-    offset = offset + 5
+    offset += 5
   }
 
   return [result, offset - initialOffset] as const
@@ -130,12 +146,6 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
   else {
     value = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 9))
     offset += 9
-  }
-
-  if (offset > buffer.length) {
-    throw new CramBufferOverrunError(
-      'Attempted to read beyond end of buffer; this file seems truncated.',
-    )
   }
 
   return [value, offset - initialOffset] as const
