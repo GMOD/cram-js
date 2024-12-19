@@ -1,9 +1,0 @@
-.DS_Store
-node_modules
-coverage
-dist
-*.log
-.vscode/
-.nyc_output
-test/data/*.sam
-test/data/*.fai
