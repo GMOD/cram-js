@@ -7,7 +7,6 @@ dist
 .nyc_output
 test/data/*.sam
 test/data/*.fai
-errors.js
 built-tests/
 .eslintcache
 *.swp
