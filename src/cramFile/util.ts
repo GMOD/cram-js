@@ -1,7 +1,6 @@
 import md5 from 'md5'
 
 import { CramBufferOverrunError } from './codecs/getBits'
-import { longFromBytesToUnsigned } from './long'
 
 export function itf8Size(v: number) {
   if (!(v & ~0x7f)) {
@@ -20,12 +19,6 @@ export function itf8Size(v: number) {
 }
 
 export function parseItf8(buffer: Uint8Array, initialOffset: number) {
-  if (initialOffset >= buffer.length) {
-    throw new CramBufferOverrunError(
-      'Attempted to read beyond end of buffer; this file seems truncated.',
-    )
-  }
-
   let offset = initialOffset
   const countFlags = buffer[offset]!
   let result: number
@@ -139,12 +132,31 @@ export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
   }
   // Eight byte value < 0xFF
   else if (countFlags < 0xff) {
-    value = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 8))
+    value =
+      ((buffer[offset + 1]! << 24) |
+        (buffer[offset + 2]! << 16) |
+        (buffer[offset + 3]! << 8) |
+        buffer[offset + 4]!) *
+        Math.pow(2, 32) +
+      ((buffer[offset + 5]! << 24) |
+        (buffer[offset + 6]! << 16) |
+        (buffer[offset + 7]! << 8) |
+        buffer[offset + 8]!)
     offset += 8
   }
   // Nine byte value
   else {
-    value = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 9))
+    value =
+      buffer[offset + 1]! * Math.pow(2, 56) +
+      ((buffer[offset + 2]! << 24) |
+        (buffer[offset + 3]! << 16) |
+        (buffer[offset + 4]! << 8) |
+        buffer[offset + 5]!) *
+        Math.pow(2, 32) +
+      ((buffer[offset + 6]! << 24) |
+        (buffer[offset + 7]! << 16) |
+        (buffer[offset + 8]! << 8) |
+        buffer[offset + 9]!)
     offset += 9
   }
 
