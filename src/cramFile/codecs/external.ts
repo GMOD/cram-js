@@ -1,5 +1,5 @@
 import CramCodec, { Cursor, Cursors } from './_base'
-import { CramMalformedError, CramUnimplementedError } from '../../errors'
+import { CramUnimplementedError } from '../../errors'
 import { CramFileBlock } from '../file'
 import CramSlice from '../slice'
 import { parseItf8 } from '../util'
@@ -39,13 +39,9 @@ export default class ExternalCodec extends CramCodec<
   ) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
-    if (!contentBlock) {
-      throw new CramMalformedError(
-        `no block found with content ID ${blockContentId}}`,
-      )
-    }
+
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
-    return this._decodeData(contentBlock, cursor)
+    return contentBlock ? this._decodeData(contentBlock, cursor) : undefined
   }
 
   _decodeInt(contentBlock: CramFileBlock, cursor: Cursor) {

@@ -211,7 +211,7 @@ function decodeReadFeatures(
 
 export type DataSeriesDecoder = <T extends DataSeriesEncodingKey>(
   dataSeriesName: T,
-) => DataTypeMapping[DataSeriesTypes[T]]
+) => DataTypeMapping[DataSeriesTypes[T]] | undefined
 
 export default function decodeRecord(
   slice: CramSlice,
@@ -224,12 +224,11 @@ export default function decodeRecord(
   majorVersion: number,
   recordNumber: number,
 ) {
-  let flags = decodeDataSeries('BF')
+  let flags = decodeDataSeries('BF')!
 
-  // note: the C data type of compressionFlags is byte in cram v1
-  // and int32 in cram v2+, but that does not matter for us here
-  // in javascript land.
-  const cramFlags = decodeDataSeries('CF')
+  // note: the C data type of compressionFlags is byte in cram v1 and int32 in
+  // cram v2+, but that does not matter for us here in javascript land.
+  const cramFlags = decodeDataSeries('CF')!
 
   if (!isMappedSliceHeader(sliceHeader.parsedContent)) {
     throw new Error('slice header not mapped')
@@ -240,18 +239,18 @@ export default function decodeRecord(
       ? decodeDataSeries('RI')
       : sliceHeader.parsedContent.refSeqId
 
-  const readLength = decodeDataSeries('RL')
+  const readLength = decodeDataSeries('RL')!
   // if APDelta, will calculate the true start in a second pass
-  let alignmentStart = decodeDataSeries('AP')
+  let alignmentStart = decodeDataSeries('AP')!
   if (compressionScheme.APdelta) {
     alignmentStart = alignmentStart + cursors.lastAlignmentStart
   }
   cursors.lastAlignmentStart = alignmentStart
-  const readGroupId = decodeDataSeries('RG')
+  const readGroupId = decodeDataSeries('RG')!
 
   let readName: string | undefined
   if (compressionScheme.readNamesIncluded) {
-    readName = readNullTerminatedString(decodeDataSeries('RN'))
+    readName = readNullTerminatedString(decodeDataSeries('RN')!)
   }
 
   let mateToUse:
@@ -268,14 +267,14 @@ export default function decodeRecord(
   if (CramFlagsDecoder.isDetached(cramFlags)) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
     // matter for javascript
-    const mateFlags = decodeDataSeries('MF')
+    const mateFlags = decodeDataSeries('MF')!
     let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
-      mateReadName = readNullTerminatedString(decodeDataSeries('RN'))
+      mateReadName = readNullTerminatedString(decodeDataSeries('RN')!)
       readName = mateReadName
     }
-    const mateSequenceId = decodeDataSeries('NS')
-    const mateAlignmentStart = decodeDataSeries('NP')
+    const mateSequenceId = decodeDataSeries('NS')!
+    const mateAlignmentStart = decodeDataSeries('NP')!
     if (mateFlags || mateSequenceId > -1) {
       mateToUse = {
         mateFlags,
@@ -285,7 +284,7 @@ export default function decodeRecord(
       }
     }
 
-    templateSize = decodeDataSeries('TS')
+    templateSize = decodeDataSeries('TS')!
 
     // set mate unmapped if needed
     if (MateFlagsDecoder.isUnmapped(mateFlags)) {
@@ -298,12 +297,12 @@ export default function decodeRecord(
 
     // detachedCount++
   } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
-    mateRecordNumber = decodeDataSeries('NF') + recordNumber + 1
+    mateRecordNumber = decodeDataSeries('NF')! + recordNumber + 1
   }
 
   // TODO: the aux tag parsing will have to be refactored if we want to support
   // cram v1
-  const TLindex = decodeDataSeries('TL')
+  const TLindex = decodeDataSeries('TL')!
   if (TLindex < 0) {
     /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */
     throw new CramMalformedError('invalid TL index')
@@ -322,7 +321,11 @@ export default function decodeRecord(
       .getCodecForTag(tagId)
       .decode(slice, coreDataBlock, blocksByContentId, cursors)
     tags[tagName] =
-      typeof tagData === 'number' ? tagData : parseTagData(tagType, tagData)
+      tagData === undefined
+        ? undefined
+        : typeof tagData === 'number'
+          ? tagData
+          : parseTagData(tagType, tagData)
   }
 
   let readFeatures: ReadFeature[] | undefined
@@ -332,7 +335,7 @@ export default function decodeRecord(
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
-    const readFeatureCount = decodeDataSeries('FN')
+    const readFeatureCount = decodeDataSeries('FN')!
     if (readFeatureCount) {
       readFeatures = decodeReadFeatures(
         alignmentStart,
@@ -367,11 +370,11 @@ export default function decodeRecord(
     }
 
     // mapping quality
-    mappingQuality = decodeDataSeries('MQ')
+    mappingQuality = decodeDataSeries('MQ')!
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       qualityScores = new Array(readLength)
       for (let i = 0; i < qualityScores.length; i++) {
-        qualityScores[i] = decodeDataSeries('QS')
+        qualityScores[i] = decodeDataSeries('QS')!
       }
     }
   } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
@@ -380,14 +383,14 @@ export default function decodeRecord(
   } else {
     const bases = new Array(readLength) as number[]
     for (let i = 0; i < bases.length; i++) {
-      bases[i] = decodeDataSeries('BA')
+      bases[i] = decodeDataSeries('BA')!
     }
     readBases = String.fromCharCode(...bases)
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       qualityScores = new Array(readLength)
       for (let i = 0; i < bases.length; i++) {
-        qualityScores[i] = decodeDataSeries('QS')
+        qualityScores[i] = decodeDataSeries('QS')!
       }
     }
   }
