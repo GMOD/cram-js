@@ -652,11 +652,14 @@ function cramContainerHeader1(majorVersion: number) {
     parser: (buffer: Uint8Array, offset: number) => {
       const b = buffer
       const dataView = new DataView(b.buffer, b.byteOffset, b.length)
+
       // byte size of the container data (blocks)
       const length = dataView.getInt32(offset, true)
       offset += 4
-      // reference sequence identifier, -1 for unmapped reads, -2 for multiple
-      // reference sequences
+
+      // reference sequence identifier:
+      // -1 for unmapped reads,
+      // -2 for multiple reference sequences
       const [refSeqId, newOffset1] = parseItf8(buffer, offset)
       offset += newOffset1
       const [refSeqStart, newOffset2] = parseItf8(buffer, offset)

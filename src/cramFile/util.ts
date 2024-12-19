@@ -1,7 +1,10 @@
 import md5 from 'md5'
 
-import { CramBufferOverrunError } from './codecs/getBits'
-import { longFromBytesToUnsigned } from './long'
+export const TWO_PWR_16_DBL = 1 << 16
+export const TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL
+export const TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL
+export const TWO_PWR_24_DBL = 1 << 24
+export const TWO_PWR_56_DBL = TWO_PWR_24_DBL * TWO_PWR_32_DBL
 
 export function itf8Size(v: number) {
   if (!(v & ~0x7f)) {
@@ -23,106 +26,144 @@ export function parseItf8(buffer: Uint8Array, initialOffset: number) {
   let offset = initialOffset
   const countFlags = buffer[offset]!
   let result: number
+
+  // Single byte value (0xxxxxxx)
   if (countFlags < 0x80) {
     result = countFlags
-    offset = offset + 1
-  } else if (countFlags < 0xc0) {
-    result = ((countFlags << 8) | buffer[offset + 1]!) & 0x3fff
-    offset = offset + 2
-  } else if (countFlags < 0xe0) {
+    offset += 1
+  }
+  // Two byte value (10xxxxxx)
+  else if (countFlags < 0xc0) {
+    result = ((countFlags & 0x3f) << 8) | buffer[offset + 1]!
+    offset += 2
+  }
+  // Three byte value (110xxxxx)
+  else if (countFlags < 0xe0) {
     result =
-      ((countFlags << 16) | (buffer[offset + 1]! << 8) | buffer[offset + 2]!) &
-      0x1fffff
-    offset = offset + 3
-  } else if (countFlags < 0xf0) {
+      ((countFlags & 0x1f) << 16) |
+      (buffer[offset + 1]! << 8) |
+      buffer[offset + 2]!
+    offset += 3
+  }
+  // Four byte value (1110xxxx)
+  else if (countFlags < 0xf0) {
     result =
-      ((countFlags << 24) |
-        (buffer[offset + 1]! << 16) |
-        (buffer[offset + 2]! << 8) |
-        buffer[offset + 3]!) &
-      0x0fffffff
-    offset = offset + 4
-  } else {
+      ((countFlags & 0x0f) << 24) |
+      (buffer[offset + 1]! << 16) |
+      (buffer[offset + 2]! << 8) |
+      buffer[offset + 3]!
+    offset += 4
+  }
+  // Five byte value (11110xxx)
+  else {
     result =
       ((countFlags & 0x0f) << 28) |
       (buffer[offset + 1]! << 20) |
       (buffer[offset + 2]! << 12) |
       (buffer[offset + 3]! << 4) |
       (buffer[offset + 4]! & 0x0f)
-    // x=((0xff & 0x0f)<<28) | (0xff<<20) | (0xff<<12) | (0xff<<4) | (0x0f & 0x0f);
-    // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
-    offset = offset + 5
+    offset += 5
   }
-  if (offset > buffer.length) {
-    throw new CramBufferOverrunError(
-      'Attempted to read beyond end of buffer; this file seems truncated.',
-    )
-  }
+
   return [result, offset - initialOffset] as const
 }
 
 export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
-  const dataView = new DataView(buffer.buffer)
   let offset = initialOffset
   const countFlags = buffer[offset]!
-  let n: number
+  let value: number
+
+  // Single byte value < 0x80
   if (countFlags < 0x80) {
-    n = countFlags
+    value = countFlags
     offset += 1
-  } else if (countFlags < 0xc0) {
-    n = ((buffer[offset]! << 8) | buffer[offset + 1]!) & 0x3fff
+  }
+  // Two byte value < 0xC0
+  else if (countFlags < 0xc0) {
+    value = ((countFlags << 8) | buffer[offset + 1]!) & 0x3fff
     offset += 2
-  } else if (countFlags < 0xe0) {
-    n =
-      ((buffer[offset]! << 16) |
-        (buffer[offset + 1]! << 8) |
-        buffer[offset + 2]!) &
-      0x1fffff
-    n = ((countFlags & 63) << 16) | dataView.getUint16(offset + 1, true)
+  }
+  // Three byte value < 0xE0
+  else if (countFlags < 0xe0) {
+    value =
+      ((countFlags & 0x3f) << 16) |
+      (buffer[offset + 1]! << 8) |
+      buffer[offset + 2]!
     offset += 3
-  } else if (countFlags < 0xf0) {
-    n =
-      ((buffer[offset]! << 24) |
-        (buffer[offset + 1]! << 16) |
-        (buffer[offset + 2]! << 8) |
-        buffer[offset + 3]!) &
-      0x0fffffff
+  }
+  // Four byte value < 0xF0
+  else if (countFlags < 0xf0) {
+    value =
+      ((countFlags & 0x1f) << 24) |
+      (buffer[offset + 1]! << 16) |
+      (buffer[offset + 2]! << 8) |
+      buffer[offset + 3]!
     offset += 4
-  } else if (countFlags < 0xf8) {
-    n =
-      ((buffer[offset]! & 15) * 2 ** 32 + (buffer[offset + 1]! << 24)) |
-      ((buffer[offset + 2]! << 16) |
+  }
+  // Five byte value < 0xF8
+  else if (countFlags < 0xf8) {
+    value =
+      (buffer[offset]! & 0x0f) * TWO_PWR_32_DBL +
+      ((buffer[offset + 1]! << 24) |
+        (buffer[offset + 2]! << 16) |
         (buffer[offset + 3]! << 8) |
         buffer[offset + 4]!)
-    // TODO *val_p = uv < 0x80000000UL ? uv : -((int32_t) (0xffffffffUL - uv)) - 1;
     offset += 5
-  } else if (countFlags < 0xfc) {
-    n =
-      ((((buffer[offset]! & 7) << 8) | buffer[offset + 1]!) * 2 ** 32 +
-        (buffer[offset + 2]! << 24)) |
-      ((buffer[offset + 3]! << 16) |
+  }
+  // Six byte value < 0xFC
+  else if (countFlags < 0xfc) {
+    value =
+      (((buffer[offset]! & 0x07) << 8) | buffer[offset + 1]!) * TWO_PWR_32_DBL +
+      ((buffer[offset + 2]! << 24) |
+        (buffer[offset + 3]! << 16) |
         (buffer[offset + 4]! << 8) |
         buffer[offset + 5]!)
     offset += 6
-  } else if (countFlags < 0xfe) {
-    n =
-      ((((buffer[offset]! & 3) << 16) |
+  }
+  // Seven byte value < 0xFE
+  else if (countFlags < 0xfe) {
+    value =
+      (((buffer[offset]! & 0x03) << 16) |
         (buffer[offset + 1]! << 8) |
         buffer[offset + 2]!) *
-        2 ** 32 +
-        (buffer[offset + 3]! << 24)) |
-      ((buffer[offset + 4]! << 16) |
+        TWO_PWR_32_DBL +
+      ((buffer[offset + 3]! << 24) |
+        (buffer[offset + 4]! << 16) |
         (buffer[offset + 5]! << 8) |
         buffer[offset + 6]!)
     offset += 7
-  } else if (countFlags < 0xff) {
-    n = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 8))
+  }
+  // Eight byte value < 0xFF
+  else if (countFlags < 0xff) {
+    value =
+      ((buffer[offset + 1]! << 24) |
+        (buffer[offset + 2]! << 16) |
+        (buffer[offset + 3]! << 8) |
+        buffer[offset + 4]!) *
+        TWO_PWR_32_DBL +
+      ((buffer[offset + 5]! << 24) |
+        (buffer[offset + 6]! << 16) |
+        (buffer[offset + 7]! << 8) |
+        buffer[offset + 8]!)
     offset += 8
-  } else {
-    n = longFromBytesToUnsigned(buffer.subarray(offset + 1, offset + 9))
+  }
+  // Nine byte value
+  else {
+    value =
+      buffer[offset + 1]! * TWO_PWR_56_DBL +
+      ((buffer[offset + 2]! << 24) |
+        (buffer[offset + 3]! << 16) |
+        (buffer[offset + 4]! << 8) |
+        buffer[offset + 5]!) *
+        TWO_PWR_32_DBL +
+      ((buffer[offset + 6]! << 24) |
+        (buffer[offset + 7]! << 16) |
+        (buffer[offset + 8]! << 8) |
+        buffer[offset + 9]!)
     offset += 9
   }
-  return [n, offset - initialOffset] as const
+
+  return [value, offset - initialOffset] as const
 }
 
 export function parseItem<T>(
@@ -138,11 +179,6 @@ export function parseItem<T>(
     _size: offset - startBufferPosition,
   }
 }
-
-// this would be nice as a decorator, but i'm a little worried about babel
-// support for it going away or changing. memoizes a method in the stupidest
-// possible way, with no regard for the arguments.  actually, this only works
-// on methods that take no arguments
 export function tinyMemoize(_class: any, methodName: any) {
   const method = _class.prototype[methodName]
   const memoAttrName = `_memo_${methodName}`
