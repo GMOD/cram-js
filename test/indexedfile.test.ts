@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest'
+import { expect, test } from 'vitest'
 
 import { testDataFile } from './lib/util'
 import CraiIndex from '../src/craiIndex'
@@ -135,28 +135,26 @@ test('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async ()
   })
 })
 
-describe('paired read test', () => {
-  test('can read paired.cram', async () => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile('paired.cram'),
-      index: new CraiIndex({
-        filehandle: testDataFile('paired.cram.crai'),
-      }),
-    })
-    const cramResult = new IndexedCramFile({
-      cramFilehandle: testDataFile('paired-region.cram'),
-      index: new CraiIndex({
-        filehandle: testDataFile('paired-region.cram.crai'),
-      }),
-    })
-    const features = await cram.getRecordsForRange(19, 62501, 64500, {
-      viewAsPairs: true,
-    })
-    const features2 = await cramResult.getRecordsForRange(0, 1, 70000)
-    expect(features.map(f => f.readName).sort()).toEqual(
-      features2.map(f => f.readName).sort(),
-    )
+test('can read paired.cram', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('paired.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('paired.cram.crai'),
+    }),
   })
+  const cramResult = new IndexedCramFile({
+    cramFilehandle: testDataFile('paired-region.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('paired-region.cram.crai'),
+    }),
+  })
+  const features = await cram.getRecordsForRange(19, 62501, 64500, {
+    viewAsPairs: true,
+  })
+  const features2 = await cramResult.getRecordsForRange(0, 1, 70000)
+  expect(features.map(f => f.readName).sort()).toEqual(
+    features2.map(f => f.readName).sort(),
+  )
 })
 
 test('can read long_pair.cram', async () => {
