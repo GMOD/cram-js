@@ -371,6 +371,7 @@ export default function decodeRecord(
 
     // mapping quality
     mappingQuality = decodeDataSeries('MQ')!
+
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       qualityScores = new Array(readLength)
       for (let i = 0; i < qualityScores.length; i++) {

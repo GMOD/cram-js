@@ -26,7 +26,11 @@ test('archive', async () => {
   })
   // @ts-expect-error
   const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
-  expect(feats[0]!.qualityScores).toMatchSnapshot()
+  for (const f of feats) {
+    expect(quals(f.qualityScores!)).toBe(
+      '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
+    )
+  }
   expect(feats.length).toBe(10000)
 })
 
@@ -52,6 +56,20 @@ test('normal', async () => {
   })
   // @ts-expect-error
   const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
-  expect(feats[0]!.qualityScores).toMatchSnapshot()
+  for (const f of feats) {
+    expect(quals(f.qualityScores!)).toBe(
+      '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
+    )
+  }
   expect(feats.length).toBe(10000)
 })
+
+function quals(quals: number[]) {
+  if (quals.length === 0) {
+    return '*'
+  }
+
+  return quals
+    .map(q => String.fromCharCode(Math.min(Math.max(q, 0), 93) + 33))
+    .join('')
+}

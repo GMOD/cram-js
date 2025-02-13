@@ -1,6 +1,11 @@
-import bzip2 from 'bzip2'
+// import bzip2 from 'bzip2'
+// import BZip2 from 'bzip2-wasm'
+// import { decompress } from 'bz2'
+
+
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
+import Bunzip from 'seek-bzip'
 import { XzReadableStream } from 'xz-decompress'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
@@ -9,7 +14,6 @@ import { open } from '../io'
 import ransuncompress from '../rans'
 import { parseHeaderText } from '../sam'
 import { unzip } from '../unzip'
-import { concatUint8Array } from '../util'
 import CramContainer from './container'
 import CramRecord from './record'
 import {
@@ -281,21 +285,15 @@ export default class CramFile {
     inputBuffer: Uint8Array,
     uncompressedSize: number,
   ) {
+    // console.log({ compressionMethod })
     if (compressionMethod === 'gzip') {
-      return unzip(inputBuffer)
+      const ret = unzip(inputBuffer)
+      if (ret[0] === 24) {
+        // console.log(ret.slice(0, 500).join(','))
+      }
+      return ret
     } else if (compressionMethod === 'bzip2') {
-      const bits = bzip2.array(inputBuffer)
-      let size = bzip2.header(bits)
-      let chunk: Uint8Array | -1
-      const chunks = []
-      do {
-        chunk = bzip2.decompress(bits, size)
-        if (chunk !== -1) {
-          chunks.push(chunk)
-          size -= chunk.length
-        }
-      } while (chunk !== -1)
-      return concatUint8Array(chunks)
+      return Bunzip.decode(inputBuffer)
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),
