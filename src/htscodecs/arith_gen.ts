@@ -34,7 +34,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Bunzip from 'seek-bzip'
+import Bunzip from '../seek-bzip'
 
 import RangeCoder from './arith_sh'
 import ByteModel from './byte_model'

@@ -1,11 +1,6 @@
-// import bzip2 from 'bzip2'
-// import BZip2 from 'bzip2-wasm'
-// import { decompress } from 'bz2'
-
-
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
-import Bunzip from 'seek-bzip'
+import Bunzip from '../seek-bzip'
 import { XzReadableStream } from 'xz-decompress'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
