@@ -1,1 +1,1 @@
-declare module 'bz2'
+declare module 'seek-bzip'

@@ -34,7 +34,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { decompress } from 'bz2'
+import Bunzip from 'seek-bzip'
+
 import RangeCoder from './arith_sh'
 import ByteModel from './byte_model'
 import IOStream from './iostream'
@@ -153,19 +154,7 @@ export default class RangeCoderGen {
   // ----------------------------------------------------------------------
   // External codec
   decodeExt(stream, n_out) {
-    return decompress(stream.buf.slice(stream.pos))
-    // const bits = bzip2.array(stream.buf.slice(stream.pos))
-    // let size = bzip2.header(bits)
-    // let chunk
-    // const chunks = []
-    // do {
-    //   chunk = bzip2.decompress(bits, size)
-    //   if (chunk !== -1) {
-    //     chunks.push(chunk)
-    //     size -= chunk.length
-    //   }
-    // } while (chunk !== -1)
-    // return concatUint8Array(chunks)
+    return Bunzip.decode(stream.buf.slice(stream.pos))
   }
 
   // ----------------------------------------------------------------------
