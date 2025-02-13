@@ -1,1 +1,1 @@
-declare module 'bzip2'
+declare module 'bz2'

@@ -40,6 +40,7 @@
     "biojs"
   ],
   "dependencies": {
+    "bz2": "^1.0.1",
     "bzip2": "^0.1.1",
     "crc": "^4.3.2",
     "generic-filehandle2": "^1.0.0",

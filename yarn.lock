@@ -1266,6 +1266,11 @@ builtin-modules@^3.3.0:
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.3.0.tgz#cae62812b89801e9656336e46223e030386be7b6"
   integrity sha512-zhaCDicdLuWN5UbN5IMnFqNMhNfo919sH85y2/ea+5Yg9TsTkeZxpL+JLbp6cgYFS4sRLp3YV4S6yDuqVWHYOw==
 
+bz2@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bz2/-/bz2-1.0.1.tgz#c54c9de71b5188742ca28247f88f58bc05017249"
+  integrity sha512-TRUFsKDme+nCMKa1lMx3dkLGh4KvgmCq8/xh/MTMEXAtjPqSC/NqPTzpy5auBZxrJTJX/yjWM0pHxMbpVGc+UQ==
+
 bzip2@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/bzip2/-/bzip2-0.1.1.tgz#b0d232bd0f0f750d2023306d40a886ee51b901f4"

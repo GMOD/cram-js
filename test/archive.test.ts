@@ -27,6 +27,7 @@ test('archive', async () => {
   // @ts-expect-error
   const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
   expect(feats[0]!.qualityScores).toMatchSnapshot()
+  expect(feats.at(-1)!.qualityScores).toMatchSnapshot()
   expect(feats.length).toBe(10000)
 })
 
@@ -53,5 +54,6 @@ test('normal', async () => {
   // @ts-expect-error
   const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
   expect(feats[0]!.qualityScores).toMatchSnapshot()
+  expect(feats.at(-1)!.qualityScores).toMatchSnapshot()
   expect(feats.length).toBe(10000)
 })
