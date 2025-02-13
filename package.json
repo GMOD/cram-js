@@ -40,10 +40,6 @@
     "biojs"
   ],
   "dependencies": {
-    "@foxglove/wasm-bz2": "^0.1.1",
-    "bz2": "^1.0.1",
-    "bzip2": "^0.1.1",
-    "bzip2-wasm": "^1.0.1",
     "crc": "^4.3.2",
     "generic-filehandle2": "^1.0.0",
     "md5": "^2.2.1",
