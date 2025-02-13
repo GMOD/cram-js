@@ -1,11 +1,5 @@
-// import bzip2 from 'bzip2'
-// import BZip2 from 'bzip2-wasm'
-// import { decompress } from 'bz2'
-
-
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
-import Bunzip from 'seek-bzip'
 import { XzReadableStream } from 'xz-decompress'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors'
@@ -13,6 +7,7 @@ import * as htscodecs from '../htscodecs'
 import { open } from '../io'
 import ransuncompress from '../rans'
 import { parseHeaderText } from '../sam'
+import { decode } from '../seek-bzip'
 import { unzip } from '../unzip'
 import CramContainer from './container'
 import CramRecord from './record'
@@ -293,7 +288,7 @@ export default class CramFile {
       }
       return ret
     } else if (compressionMethod === 'bzip2') {
-      return Bunzip.decode(inputBuffer)
+      return decode(inputBuffer)
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),
