@@ -1,6 +1,6 @@
-//@ts-nocheck
-///* very simple input/output stream interface */
-var Stream = function () {}
+// @ts-nocheck
+/// * very simple input/output stream interface */
+const Stream = function () {}
 
 // input streams //////////////
 /** Returns the next byte, or -1 for EOF. */
@@ -10,9 +10,9 @@ Stream.prototype.readByte = function () {
 /** Attempts to fill the buffer; returns number of bytes read, or
  *  -1 for EOF. */
 Stream.prototype.read = function (buffer, bufOffset, length) {
-  var bytesRead = 0
+  let bytesRead = 0
   while (bytesRead < length) {
-    var c = this.readByte()
+    const c = this.readByte()
     if (c < 0) {
       // EOF
       return bytesRead === 0 ? -1 : bytesRead
@@ -31,7 +31,7 @@ Stream.prototype.writeByte = function (_byte) {
   throw new Error('abstract method readByte() not implemented')
 }
 Stream.prototype.write = function (buffer, bufOffset, length) {
-  var i
+  let i
   for (i = 0; i < length; i++) {
     this.writeByte(buffer[bufOffset++])
   }

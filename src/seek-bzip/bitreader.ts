@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
 
@@ -35,10 +35,10 @@ Robert Sedgewick, and Jon L. Bentley.
 
 import { toHex } from './toHex'
 
-var BITMASK = [0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff]
+const BITMASK = [0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff]
 
 // offset in bytes
-var BitReader = function (stream) {
+const BitReader = function (stream) {
   this.stream = stream
   this.bitOffset = 0
   this.curByte = 0
@@ -54,10 +54,10 @@ BitReader.prototype._ensureByte = function () {
 
 // reads bits from the buffer
 BitReader.prototype.read = function (bits) {
-  var result = 0
+  let result = 0
   while (bits > 0) {
     this._ensureByte()
-    var remaining = 8 - this.bitOffset
+    const remaining = 8 - this.bitOffset
     // if we're in a byte
     if (bits >= remaining) {
       result <<= remaining
@@ -67,7 +67,7 @@ BitReader.prototype.read = function (bits) {
       bits -= remaining
     } else {
       result <<= bits
-      var shift = remaining - bits
+      const shift = remaining - bits
       result |= (this.curByte & (BITMASK[bits] << shift)) >> shift
       this.bitOffset += bits
       bits = 0
@@ -78,8 +78,8 @@ BitReader.prototype.read = function (bits) {
 
 // seek to an arbitrary point in the buffer (expressed in bits)
 BitReader.prototype.seek = function (pos) {
-  var n_bit = pos % 8
-  var n_byte = (pos - n_bit) / 8
+  const n_bit = pos % 8
+  const n_byte = (pos - n_bit) / 8
   this.bitOffset = n_bit
   this.stream.seek(n_byte)
   this.hasByte = false
@@ -87,7 +87,7 @@ BitReader.prototype.seek = function (pos) {
 
 // reads 6 bytes worth of data using the read method
 BitReader.prototype.pi = function () {
-  var buf = new Uint8Array(6),
+  let buf = new Uint8Array(6),
     i
   for (i = 0; i < buf.length; i++) {
     buf[i] = this.read(8)

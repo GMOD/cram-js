@@ -1,3 +1,5 @@
+// from https://www.xaymar.com/articles/2020/12/08/fastest-uint8array-to-hex-string-conversion-in-javascript/
+
 // Pre-Init
 const LUT_HEX_4b = [
   '0',

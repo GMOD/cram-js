@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
 
@@ -37,22 +37,22 @@ Robert Sedgewick, and Jon L. Bentley.
 */
 
 import BitReader from './bitreader'
-import Stream from './stream'
 import CRC32 from './crc32'
+import Stream from './stream'
 
-var MAX_HUFCODE_BITS = 20
-var MAX_SYMBOLS = 258
-var SYMBOL_RUNA = 0
-var SYMBOL_RUNB = 1
-var MIN_GROUPS = 2
-var MAX_GROUPS = 6
-var GROUP_SIZE = 50
+const MAX_HUFCODE_BITS = 20
+const MAX_SYMBOLS = 258
+const SYMBOL_RUNA = 0
+const SYMBOL_RUNB = 1
+const MIN_GROUPS = 2
+const MAX_GROUPS = 6
+const GROUP_SIZE = 50
 
-var WHOLEPI = '314159265359'
-var SQRTPI = '177245385090'
+const WHOLEPI = '314159265359'
+const SQRTPI = '177245385090'
 
-var mtf = function (array, index) {
-  var src = array[index],
+const mtf = function (array, index) {
+  let src = array[index],
     i
   for (i = index; i > 0; i--) {
     array[i] = array[i - 1]
@@ -61,7 +61,7 @@ var mtf = function (array, index) {
   return src
 }
 
-var Err = {
+const Err = {
   OK: 0,
   LAST_BLOCK: -1,
   NOT_BZIP_DATA: -2,
@@ -72,7 +72,7 @@ var Err = {
   OBSOLETE_INPUT: -7,
   END_OF_BLOCK: -8,
 }
-var ErrorMessages = {}
+const ErrorMessages = {}
 ErrorMessages[Err.LAST_BLOCK] = 'Bad file checksum'
 ErrorMessages[Err.NOT_BZIP_DATA] = 'Not bzip data'
 ErrorMessages[Err.UNEXPECTED_INPUT_EOF] = 'Unexpected input EOF'
@@ -82,23 +82,23 @@ ErrorMessages[Err.OUT_OF_MEMORY] = 'Out of memory'
 ErrorMessages[Err.OBSOLETE_INPUT] =
   'Obsolete (pre 0.9.5) bzip format not supported.'
 
-var _throw = function (status, optDetail) {
-  var msg = ErrorMessages[status] || 'unknown error'
+const _throw = function (status, optDetail) {
+  let msg = ErrorMessages[status] || 'unknown error'
   if (optDetail) {
     msg += ': ' + optDetail
   }
-  var e = new TypeError(msg)
+  const e = new TypeError(msg)
   e.errorCode = status
   throw e
 }
 
-var Bunzip = function (inputStream, outputStream) {
+const Bunzip = function (inputStream, outputStream) {
   this.writePos = this.writeCurrent = this.writeCount = 0
 
   this._start_bunzip(inputStream, outputStream)
 }
 Bunzip.prototype._init_block = function () {
-  var moreBlocks = this._get_next_block()
+  const moreBlocks = this._get_next_block()
   if (!moreBlocks) {
     this.writeCount = -1
     return false /* no more blocks */
@@ -109,15 +109,15 @@ Bunzip.prototype._init_block = function () {
 /* XXX micro-bunzip uses (inputStream, inputBuffer, len) as arguments */
 Bunzip.prototype._start_bunzip = function (inputStream, outputStream) {
   /* Ensure that file starts with "BZh['1'-'9']." */
-  var buf = new Uint8Array(4)
+  const buf = new Uint8Array(4)
   if (
     inputStream.read(buf, 0, 4) !== 4 ||
     String.fromCharCode(buf[0], buf[1], buf[2]) !== 'BZh'
   )
-    _throw(Err.NOT_BZIP_DATA, 'bad magic')
+    {_throw(Err.NOT_BZIP_DATA, 'bad magic')}
 
-  var level = buf[3] - 0x30
-  if (level < 1 || level > 9) _throw(Err.NOT_BZIP_DATA, 'level out of range')
+  const level = buf[3] - 0x30
+  if (level < 1 || level > 9) {_throw(Err.NOT_BZIP_DATA, 'level out of range')}
 
   this.reader = new BitReader(inputStream)
 
@@ -129,17 +129,17 @@ Bunzip.prototype._start_bunzip = function (inputStream, outputStream) {
   this.streamCRC = 0
 }
 Bunzip.prototype._get_next_block = function () {
-  var i, j, k
-  var reader = this.reader
+  let i, j, k
+  const reader = this.reader
   // this is get_next_block() function from micro-bunzip:
   /* Read in header signature and CRC, then validate signature.
      (last block signature means CRC is for whole file, return now) */
-  var h = reader.pi()
+  const h = reader.pi()
   if (h === SQRTPI) {
     // last block
     return false /* no more blocks */
   }
-  if (h !== WHOLEPI) _throw(Err.NOT_BZIP_DATA)
+  if (h !== WHOLEPI) {_throw(Err.NOT_BZIP_DATA)}
   this.targetBlockCRC = reader.read(32) >>> 0 // (convert to unsigned)
   this.streamCRC =
     (this.targetBlockCRC ^
@@ -148,56 +148,56 @@ Bunzip.prototype._get_next_block = function () {
   /* We can add support for blockRandomised if anybody complains.  There was
      some code for this in busybox 1.0.0-pre3, but nobody ever noticed that
      it didn't actually work. */
-  if (reader.read(1)) _throw(Err.OBSOLETE_INPUT)
-  var origPointer = reader.read(24)
+  if (reader.read(1)) {_throw(Err.OBSOLETE_INPUT)}
+  const origPointer = reader.read(24)
   if (origPointer > this.dbufSize)
-    _throw(Err.DATA_ERROR, 'initial position out of bounds')
+    {_throw(Err.DATA_ERROR, 'initial position out of bounds')}
   /* mapping table: if some byte values are never used (encoding things
      like ascii text), the compression code removes the gaps to have fewer
      symbols to deal with, and writes a sparse bitfield indicating which
      values were present.  We make a translation table to convert the symbols
      back to the corresponding bytes. */
-  var t = reader.read(16)
-  var symToByte = new Uint8Array(256),
+  let t = reader.read(16)
+  let symToByte = new Uint8Array(256),
     symTotal = 0
   for (i = 0; i < 16; i++) {
     if (t & (1 << (0xf - i))) {
-      var o = i * 16
+      const o = i * 16
       k = reader.read(16)
       for (j = 0; j < 16; j++)
-        if (k & (1 << (0xf - j))) symToByte[symTotal++] = o + j
+        {if (k & (1 << (0xf - j))) {symToByte[symTotal++] = o + j}}
     }
   }
 
   /* How many different huffman coding groups does this block use? */
-  var groupCount = reader.read(3)
-  if (groupCount < MIN_GROUPS || groupCount > MAX_GROUPS) _throw(Err.DATA_ERROR)
+  const groupCount = reader.read(3)
+  if (groupCount < MIN_GROUPS || groupCount > MAX_GROUPS) {_throw(Err.DATA_ERROR)}
   /* nSelectors: Every GROUP_SIZE many symbols we select a new huffman coding
      group.  Read in the group selector list, which is stored as MTF encoded
      bit runs.  (MTF=Move To Front, as each value is used it's moved to the
      start of the list.) */
-  var nSelectors = reader.read(15)
-  if (nSelectors === 0) _throw(Err.DATA_ERROR)
+  const nSelectors = reader.read(15)
+  if (nSelectors === 0) {_throw(Err.DATA_ERROR)}
 
-  var mtfSymbol = new Uint8Array(256)
-  for (i = 0; i < groupCount; i++) mtfSymbol[i] = i
+  const mtfSymbol = new Uint8Array(256)
+  for (i = 0; i < groupCount; i++) {mtfSymbol[i] = i}
 
-  var selectors = new Uint8Array(nSelectors) // was 32768...
+  const selectors = new Uint8Array(nSelectors) // was 32768...
 
   for (i = 0; i < nSelectors; i++) {
     /* Get next value */
-    for (j = 0; reader.read(1); j++) if (j >= groupCount) _throw(Err.DATA_ERROR)
+    for (j = 0; reader.read(1); j++) {if (j >= groupCount) {_throw(Err.DATA_ERROR)}}
     /* Decode MTF to get the next selector */
     selectors[i] = mtf(mtfSymbol, j)
   }
 
   /* Read the huffman coding tables for each group, which code for symTotal
      literal symbols, plus two run symbols (RUNA, RUNB) */
-  var symCount = symTotal + 2
-  var groups = [],
+  let symCount = symTotal + 2
+  let groups = [],
     hufGroup
   for (j = 0; j < groupCount; j++) {
-    var length = new Uint8Array(symCount),
+    const length = new Uint8Array(symCount),
       temp = new Uint16Array(MAX_HUFCODE_BITS + 1)
     /* Read huffman code lengths for each symbol.  They're stored in
        a way similar to mtf; record a starting value for the first symbol,
@@ -205,12 +205,12 @@ Bunzip.prototype._get_next_block = function () {
     t = reader.read(5) // lengths
     for (i = 0; i < symCount; i++) {
       for (;;) {
-        if (t < 1 || t > MAX_HUFCODE_BITS) _throw(Err.DATA_ERROR)
+        if (t < 1 || t > MAX_HUFCODE_BITS) {_throw(Err.DATA_ERROR)}
         /* If first bit is 0, stop.  Else second bit indicates whether
            to increment or decrement the value. */
-        if (!reader.read(1)) break
-        if (!reader.read(1)) t++
-        else t--
+        if (!reader.read(1)) {break}
+        if (!reader.read(1)) {t++}
+        else {t--}
       }
       length[i] = t
     }
@@ -219,8 +219,8 @@ Bunzip.prototype._get_next_block = function () {
     var minLen, maxLen
     minLen = maxLen = length[0]
     for (i = 1; i < symCount; i++) {
-      if (length[i] > maxLen) maxLen = length[i]
-      else if (length[i] < minLen) minLen = length[i]
+      if (length[i] > maxLen) {maxLen = length[i]}
+      else if (length[i] < minLen) {minLen = length[i]}
     }
 
     /* Calculate permute[], base[], and limit[] tables from length[].
@@ -241,14 +241,14 @@ Bunzip.prototype._get_next_block = function () {
     hufGroup.minLen = minLen
     hufGroup.maxLen = maxLen
     /* Calculate permute[].  Concurently, initialize temp[] and limit[]. */
-    var pp = 0
+    let pp = 0
     for (i = minLen; i <= maxLen; i++) {
       temp[i] = hufGroup.limit[i] = 0
       for (t = 0; t < symCount; t++)
-        if (length[t] === i) hufGroup.permute[pp++] = t
+        {if (length[t] === i) {hufGroup.permute[pp++] = t}}
     }
     /* Count symbols coded for at each bit length */
-    for (i = 0; i < symCount; i++) temp[length[i]]++
+    for (i = 0; i < symCount; i++) {temp[length[i]]++}
     /* Calculate limit[] (the largest symbol-coding value at each bit
      * length, which is (previous limit<<1)+symbols at this level), and
      * base[] (number of symbols to ignore at each bit length, which is
@@ -277,14 +277,14 @@ Bunzip.prototype._get_next_block = function () {
      and run length encoding, saving the result into dbuf[dbufCount++]=uc */
 
   /* Initialize symbol occurrence counters and symbol Move To Front table */
-  var byteCount = new Uint32Array(256)
-  for (i = 0; i < 256; i++) mtfSymbol[i] = i
+  const byteCount = new Uint32Array(256)
+  for (i = 0; i < 256; i++) {mtfSymbol[i] = i}
   /* Loop through compressed symbols. */
-  var runPos = 0,
+  let runPos = 0,
     dbufCount = 0,
     selector = 0,
     uc
-  var dbuf = (this.dbuf = new Uint32Array(this.dbufSize))
+  const dbuf = (this.dbuf = new Uint32Array(this.dbufSize))
   symCount = 0
   for (;;) {
     /* Determine which huffman coding group to use. */
@@ -302,7 +302,7 @@ Bunzip.prototype._get_next_block = function () {
       if (i > hufGroup.maxLen) {
         _throw(Err.DATA_ERROR)
       }
-      if (j <= hufGroup.limit[i]) break
+      if (j <= hufGroup.limit[i]) {break}
       j = (j << 1) | reader.read(1)
     }
     /* Huffman decode value to get nextSym (with bounds checking) */
@@ -310,7 +310,7 @@ Bunzip.prototype._get_next_block = function () {
     if (j < 0 || j >= MAX_SYMBOLS) {
       _throw(Err.DATA_ERROR)
     }
-    var nextSym = hufGroup.permute[j]
+    const nextSym = hufGroup.permute[j]
     /* We have now decoded the symbol, which indicates either a new literal
        byte, or a repeated run of the most recent literal byte.  First,
        check if nextSym indicates a repeated run, and if so loop collecting
@@ -328,8 +328,7 @@ Bunzip.prototype._get_next_block = function () {
          the basic or 0/1 method (except all bits 0, which would use no
          symbols, but a run of length 0 doesn't mean anything in this
          context).  Thus space is saved. */
-      if (nextSym === SYMBOL_RUNA) t += runPos
-      else t += 2 * runPos
+      t += nextSym === SYMBOL_RUNA ? runPos : 2 * runPos
       runPos <<= 1
       continue
     }
@@ -344,10 +343,10 @@ Bunzip.prototype._get_next_block = function () {
       }
       uc = symToByte[mtfSymbol[0]]
       byteCount[uc] += t
-      while (t--) dbuf[dbufCount++] = uc
+      while (t--) {dbuf[dbufCount++] = uc}
     }
     /* Is this the terminating symbol? */
-    if (nextSym > symTotal) break
+    if (nextSym > symTotal) {break}
     /* At this point, nextSym indicates a new literal character.  Subtract
        one to get the position in the MTF array at which this literal is
        currently to be found.  (Note that the result can't be -1 or 0,
@@ -390,7 +389,7 @@ Bunzip.prototype._get_next_block = function () {
   /* Decode first byte by hand to initialize "previous" byte.  Note that it
      doesn't get output, and if the first three characters are identical
      it doesn't qualify as a run (hence writeRunCountdown=5). */
-  var pos = 0,
+  let pos = 0,
     current = 0,
     run = 0
   if (dbufCount) {
@@ -413,7 +412,7 @@ Bunzip.prototype._get_next_block = function () {
    are ignored, data is written to out_fd and return is RETVAL_OK or error.
 */
 Bunzip.prototype._read_bunzip = function (outputBuffer, len) {
-  var copies, previous, outbyte
+  let copies, previous, outbyte
   /* james@jamestaylor.org: writeCount goes to -1 when the buffer is fully
        decoded, which results in this returning RETVAL_LAST_BLOCK, also
        equal to -1... Confusing, I'm returning 0 here to indicate no
@@ -422,13 +421,13 @@ Bunzip.prototype._read_bunzip = function (outputBuffer, len) {
     return 0
   }
 
-  var gotcount = 0
-  var dbuf = this.dbuf,
+  const gotcount = 0
+  let dbuf = this.dbuf,
     pos = this.writePos,
     current = this.writeCurrent
-  var dbufCount = this.writeCount,
+  let dbufCount = this.writeCount,
     outputsize = this.outputsize
-  var run = this.writeRun
+  let run = this.writeRun
 
   while (dbufCount) {
     dbufCount--
@@ -449,7 +448,7 @@ Bunzip.prototype._read_bunzip = function (outputBuffer, len) {
       this.outputStream.writeByte(outbyte)
       this.nextoutput++
     }
-    if (current != previous) run = 0
+    if (current != previous) {run = 0}
   }
   this.writeCount = dbufCount
   // check CRC
@@ -467,11 +466,11 @@ Bunzip.prototype._read_bunzip = function (outputBuffer, len) {
   return this.nextoutput
 }
 
-var coerceInputStream = function (input) {
+const coerceInputStream = function (input) {
   if ('readByte' in input) {
     return input
   }
-  var inputStream = new Stream()
+  const inputStream = new Stream()
   inputStream.pos = 0
   inputStream.readByte = function () {
     return input[this.pos++]
@@ -484,9 +483,9 @@ var coerceInputStream = function (input) {
   }
   return inputStream
 }
-var coerceOutputStream = function (output) {
-  var outputStream = new Stream()
-  var resizeOk = true
+const coerceOutputStream = function (output) {
+  const outputStream = new Stream()
+  let resizeOk = true
   if (output) {
     if (typeof output === 'number') {
       outputStream.buffer = new Uint8Array(output)
@@ -503,7 +502,7 @@ var coerceOutputStream = function (output) {
   outputStream.pos = 0
   outputStream.writeByte = function (_byte) {
     if (resizeOk && this.pos >= this.buffer.length) {
-      var newBuffer = new Uint8Array(this.buffer.length * 2)
+      const newBuffer = new Uint8Array(this.buffer.length * 2)
       newBuffer.set(this.buffer)
       this.buffer = newBuffer
     }
@@ -513,8 +512,8 @@ var coerceOutputStream = function (output) {
     // trim buffer
     if (this.pos !== this.buffer.length) {
       if (!resizeOk)
-        throw new TypeError('outputsize does not match decoded input')
-      var newBuffer = new Uint8Array(this.pos)
+        {throw new TypeError('outputsize does not match decoded input')}
+      const newBuffer = new Uint8Array(this.pos)
       newBuffer.set(this.buffer.slice(0, this.pos))
       this.buffer = newBuffer
     }
@@ -530,16 +529,16 @@ Bunzip.Err = Err
 // 'output' can be a stream or a buffer or a number (buffer size)
 Bunzip.decode = function (input, output, multistream) {
   // make a stream from a buffer, if necessary
-  var inputStream = coerceInputStream(input)
-  var outputStream = coerceOutputStream(output)
+  const inputStream = coerceInputStream(input)
+  const outputStream = coerceOutputStream(output)
 
-  var bz = new Bunzip(inputStream, outputStream)
+  const bz = new Bunzip(inputStream, outputStream)
   while (true) {
-    if ('eof' in inputStream && inputStream.eof()) break
+    if ('eof' in inputStream && inputStream.eof()) {break}
     if (bz._init_block()) {
       bz._read_bunzip()
     } else {
-      var targetStreamCRC = bz.reader.read(32) >>> 0 // (convert to unsigned)
+      const targetStreamCRC = bz.reader.read(32) >>> 0 // (convert to unsigned)
       if (targetStreamCRC !== bz.streamCRC) {
         _throw(
           Err.DATA_ERROR,
@@ -554,19 +553,19 @@ Bunzip.decode = function (input, output, multistream) {
       if (multistream && 'eof' in inputStream && !inputStream.eof()) {
         // note that start_bunzip will also resync the bit reader to next byte
         bz._start_bunzip(inputStream, outputStream)
-      } else break
+      } else {break}
     }
   }
-  if ('getBuffer' in outputStream) return outputStream.getBuffer()
+  if ('getBuffer' in outputStream) {return outputStream.getBuffer()}
 }
 Bunzip.decodeBlock = function (input, pos, output) {
   // make a stream from a buffer, if necessary
-  var inputStream = coerceInputStream(input)
-  var outputStream = coerceOutputStream(output)
-  var bz = new Bunzip(inputStream, outputStream)
+  const inputStream = coerceInputStream(input)
+  const outputStream = coerceOutputStream(output)
+  const bz = new Bunzip(inputStream, outputStream)
   bz.reader.seek(pos)
   /* Fill the decode buffer for the block */
-  var moreBlocks = bz._get_next_block()
+  const moreBlocks = bz._get_next_block()
   if (moreBlocks) {
     /* Init the CRC for writing */
     bz.blockCRC = new CRC32()
@@ -578,7 +577,7 @@ Bunzip.decodeBlock = function (input, pos, output) {
     bz._read_bunzip()
     // XXX keep writing?
   }
-  if ('getBuffer' in outputStream) return outputStream.getBuffer()
+  if ('getBuffer' in outputStream) {return outputStream.getBuffer()}
 }
 /* Reads bzip2 file from stream or buffer `input`, and invoke
  * `callback(position, size)` once for each bzip2 block,
@@ -586,7 +585,7 @@ Bunzip.decodeBlock = function (input, pos, output) {
  * and size gives uncompressed size of the block (in *bytes*). */
 Bunzip.table = function (input, callback, multistream) {
   // make a stream from a buffer, if necessary
-  var inputStream = new Stream()
+  const inputStream = new Stream()
   inputStream.delegate = coerceInputStream(input)
   inputStream.pos = 0
   inputStream.readByte = function () {
@@ -596,28 +595,28 @@ Bunzip.table = function (input, callback, multistream) {
   if (inputStream.delegate.eof) {
     inputStream.eof = inputStream.delegate.eof.bind(inputStream.delegate)
   }
-  var outputStream = new Stream()
+  const outputStream = new Stream()
   outputStream.pos = 0
   outputStream.writeByte = function () {
     this.pos++
   }
 
-  var bz = new Bunzip(inputStream, outputStream)
-  var blockSize = bz.dbufSize
+  const bz = new Bunzip(inputStream, outputStream)
+  const blockSize = bz.dbufSize
   while (true) {
-    if ('eof' in inputStream && inputStream.eof()) break
+    if ('eof' in inputStream && inputStream.eof()) {break}
 
-    var position = inputStream.pos * 8 + bz.reader.bitOffset
+    let position = inputStream.pos * 8 + bz.reader.bitOffset
     if (bz.reader.hasByte) {
       position -= 8
     }
 
     if (bz._init_block()) {
-      var start = outputStream.pos
+      const start = outputStream.pos
       bz._read_bunzip()
       callback(position, outputStream.pos - start)
     } else {
-      var crc = bz.reader.read(32) // (but we ignore the crc)
+      const crc = bz.reader.read(32) // (but we ignore the crc)
       if (multistream && 'eof' in inputStream && !inputStream.eof()) {
         // note that start_bunzip will also resync the bit reader to next byte
         bz._start_bunzip(inputStream, outputStream)
@@ -625,7 +624,7 @@ Bunzip.table = function (input, callback, multistream) {
           bz.dbufSize === blockSize,
           "shouldn't change block size within multistream file",
         )
-      } else break
+      } else {break}
     }
   }
 }
