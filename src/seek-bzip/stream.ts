@@ -1,4 +1,5 @@
-/* very simple input/output stream interface */
+//@ts-nocheck
+///* very simple input/output stream interface */
 var Stream = function () {}
 
 // input streams //////////////

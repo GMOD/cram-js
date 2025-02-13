@@ -1,3 +1,4 @@
+//@ts-nocheck
 /*
 seek-bzip - a pure-javascript module for seeking within bzip2 data
 
@@ -35,9 +36,9 @@ Peter Fenwick, Alistair Moffat, Radford Neal, Ian H. Witten,
 Robert Sedgewick, and Jon L. Bentley.
 */
 
-var BitReader = require('./bitreader')
-var Stream = require('./stream')
-var CRC32 = require('./crc32')
+import BitReader from './bitreader'
+import Stream from './stream'
+import CRC32 from './crc32'
 
 var MAX_HUFCODE_BITS = 20
 var MAX_SYMBOLS = 258

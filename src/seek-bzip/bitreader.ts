@@ -1,3 +1,4 @@
+//@ts-nocheck
 /*
 node-bzip - a pure-javascript Node.JS module for decoding bzip2 data
 
@@ -31,6 +32,8 @@ which also acknowledges contributions by Mike Burrows, David Wheeler,
 Peter Fenwick, Alistair Moffat, Radford Neal, Ian H. Witten,
 Robert Sedgewick, and Jon L. Bentley.
 */
+
+import { toHex } from './toHex'
 
 var BITMASK = [0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff]
 
@@ -84,12 +87,12 @@ BitReader.prototype.seek = function (pos) {
 
 // reads 6 bytes worth of data using the read method
 BitReader.prototype.pi = function () {
-  var buf = new Buffer(6),
+  var buf = new Uint8Array(6),
     i
   for (i = 0; i < buf.length; i++) {
     buf[i] = this.read(8)
   }
-  return buf.toString('hex')
+  return toHex(buf)
 }
 
 module.exports = BitReader
