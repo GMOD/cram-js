@@ -34,7 +34,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import Bunzip from '../seek-bzip'
+import { decode } from '../seek-bzip'
 
 import RangeCoder from './arith_sh'
 import ByteModel from './byte_model'
@@ -154,7 +154,7 @@ export default class RangeCoderGen {
   // ----------------------------------------------------------------------
   // External codec
   decodeExt(stream, n_out) {
-    return Bunzip.decode(stream.buf.slice(stream.pos))
+    return decode(stream.buf.slice(stream.pos))
   }
 
   // ----------------------------------------------------------------------
