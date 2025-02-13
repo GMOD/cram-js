@@ -276,7 +276,7 @@ export default class CramFile {
     return data
   }
 
-  async _uncompress(
+  async _uncompressPre(
     compressionMethod: CompressionMethod,
     inputBuffer: Uint8Array,
     uncompressedSize: number,
@@ -295,10 +295,7 @@ export default class CramFile {
           size -= chunk.length
         }
       } while (chunk !== -1)
-      const ret = new Uint8Array(uncompressedSize)
-      const r2 = concatUint8Array(chunks)
-      ret.set(r2, 0)
-      return ret
+      return concatUint8Array(chunks)
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),
@@ -323,6 +320,24 @@ export default class CramFile {
         `${compressionMethod} decompression not yet implemented`,
       )
     }
+  }
+
+  async _uncompress(
+    compressionMethod: CompressionMethod,
+    inputBuffer: Uint8Array,
+    uncompressedSize: number,
+  ) {
+    const buf = await this._uncompressPre(
+      compressionMethod,
+      inputBuffer,
+      uncompressedSize,
+    )
+    if (buf.length !== uncompressedSize) {
+      const ret = new Uint8Array(uncompressedSize)
+      ret.set(buf, 0)
+      return ret
+    }
+    return buf
   }
 
   async readBlock(position: number) {
