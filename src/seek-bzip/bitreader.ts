@@ -87,9 +87,8 @@ BitReader.prototype.seek = function (pos) {
 
 // reads 6 bytes worth of data using the read method
 BitReader.prototype.pi = function () {
-  let buf = new Uint8Array(6),
-    i
-  for (i = 0; i < buf.length; i++) {
+  const buf = new Uint8Array(6)
+  for (let i = 0; i < buf.length; i++) {
     buf[i] = this.read(8)
   }
   return toHex(buf)

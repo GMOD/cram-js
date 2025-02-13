@@ -7,7 +7,7 @@ import * as htscodecs from '../htscodecs'
 import { open } from '../io'
 import ransuncompress from '../rans'
 import { parseHeaderText } from '../sam'
-import Bunzip from '../seek-bzip'
+import { decode } from '../seek-bzip'
 import { unzip } from '../unzip'
 import CramContainer from './container'
 import CramRecord from './record'
@@ -288,7 +288,7 @@ export default class CramFile {
       }
       return ret
     } else if (compressionMethod === 'bzip2') {
-      return Bunzip.decode(inputBuffer)
+      return decode(inputBuffer)
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),

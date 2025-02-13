@@ -12,6 +12,7 @@ export default tseslint.config(
       '*.mjs',
       'example/*',
       'src/htscodecs',
+      'src/seek-bzip',
       'coverage',
     ],
   },
