@@ -67,7 +67,7 @@
     "typescript-eslint": "^8.0.1",
     "vitest": "^3.0.1",
     "webpack": "^5.90.3",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^6.0.1"
   },
   "publishConfig": {
     "access": "public"
