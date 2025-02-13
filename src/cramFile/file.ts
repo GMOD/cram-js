@@ -295,7 +295,10 @@ export default class CramFile {
           size -= chunk.length
         }
       } while (chunk !== -1)
-      return concatUint8Array(chunks)
+      const ret = new Uint8Array(uncompressedSize)
+      const r2 = concatUint8Array(chunks)
+      ret.set(r2, 0)
+      return ret
     } else if (compressionMethod === 'lzma') {
       const decompressedResponse = new Response(
         new XzReadableStream(bufferToStream(inputBuffer)),
