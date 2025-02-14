@@ -34,7 +34,7 @@ const { IndexedFasta, BgzipIndexedFasta } = require('@gmod/indexedfasta')
 
 // this uses local file paths for node.js for IndexedFasta, for usages using
 // remote URLs see indexedfasta docs for filehandles and
-// https://github.com/gmod/generic-filehandle
+// https://github.com/gmod/generic-filehandle2
 const t = new IndexedFasta({
   path: '/filesystem/yourfile.fa',
   faiPath: '/filesystem/yourfile.fa.fai',
@@ -56,18 +56,18 @@ run = async () => {
   //
   // alternatively `cramFilehandle` (for the IndexedCramFile class) and
   // `filehandle` (for the CraiIndex) can be used,  see for examples
-  // https://github.com/gmod/generic-filehandle
+  // https://github.com/gmod/generic-filehandle2
 
   const indexedFile = new IndexedCramFile({
     cramPath: '/filesystem/yourfile.cram',
     //or
     //cramUrl: 'url/to/file.cram'
-    //cramFilehandle: a generic-filehandle or similar filehandle
+    //cramFilehandle: a generic-filehandle2 or similar filehandle
     index: new CraiIndex({
       path: '/filesystem/yourfile.cram.crai',
       // or
       // url: 'url/to/file.cram.crai'
-      // filehandle: a generic-filehandle or similar filehandle
+      // filehandle: a generic-filehandle2 or similar filehandle
     }),
     seqFetch: async (seqId, start, end) => {
       // note:
@@ -82,7 +82,7 @@ run = async () => {
   const samHeader = await indexedFile.cram.getSamHeader()
 
   // use the @SQ lines in the header to figure out the
-  // mapping between ref ref ID numbers and names
+  // mapping between ref ID numbers and names
 
   const sqLines = samHeader.filter(l => l.tag === 'SQ')
   sqLines.forEach((sqLine, refId) => {
@@ -120,7 +120,7 @@ run = async () => {
 run()
 
 // can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for the CraiIndex) params to open remote URLs
-// alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle
+// alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle2
 ```
 
 You can use cram-js without NPM also with the cram-bundle.js. See the example
