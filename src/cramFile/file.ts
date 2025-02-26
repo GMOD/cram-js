@@ -282,11 +282,7 @@ export default class CramFile {
   ) {
     // console.log({ compressionMethod })
     if (compressionMethod === 'gzip') {
-      const ret = unzip(inputBuffer)
-      if (ret[0] === 24) {
-        // console.log(ret.slice(0, 500).join(','))
-      }
-      return ret
+      return unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
       return decode(inputBuffer)
     } else if (compressionMethod === 'lzma') {
@@ -298,8 +294,6 @@ export default class CramFile {
       const outputBuffer = new Uint8Array(uncompressedSize)
       ransuncompress(inputBuffer, outputBuffer)
       return outputBuffer
-      // htscodecs r4x8 is slower, but compatible.
-      // htscodecs.r4x8_uncompress(inputBuffer, outputBuffer);
     } else if (compressionMethod === 'rans4x16') {
       return htscodecs.r4x16_uncompress(inputBuffer)
     } else if (compressionMethod === 'arith') {

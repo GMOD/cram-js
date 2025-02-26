@@ -58,7 +58,7 @@
     "documentation": "^14.0.3",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-unicorn": "^56.0.1",
+    "eslint-plugin-unicorn": "^57.0.0",
     "mock-fs": "^5.2.0",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
