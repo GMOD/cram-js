@@ -14,6 +14,7 @@ export default tseslint.config(
       'src/htscodecs',
       'src/seek-bzip',
       'coverage',
+      'vite.config.ts',
     ],
   },
   {
@@ -29,7 +30,7 @@ export default tseslint.config(
   ...tseslint.configs.stylisticTypeChecked,
   ...tseslint.configs.strictTypeChecked,
   importPlugin.flatConfigs.recommended,
-  eslintPluginUnicorn.configs['flat/recommended'],
+  eslintPluginUnicorn.configs.recommended,
   {
     rules: {
       'no-empty': 'off',
