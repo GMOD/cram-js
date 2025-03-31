@@ -4,8 +4,16 @@
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
   "repository": "GMOD/cram-js",
-  "main": "dist/index.js",
-  "module": "esm/index.js",
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "import": {
+      "import": "./esm/index.js"
+    },
+    "require": {
+      "require": "./dist/index.js"
+    }
+  },
   "author": {
     "name": "Robert Buels",
     "email": "rbuels@gmail.com",
