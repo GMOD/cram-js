@@ -36,9 +36,9 @@ Peter Fenwick, Alistair Moffat, Radford Neal, Ian H. Witten,
 Robert Sedgewick, and Jon L. Bentley.
 */
 
-import BitReader from './bitreader'
-import CRC32 from './crc32'
-import Stream from './stream'
+import BitReader from './bitreader.ts'
+import CRC32 from './crc32.ts'
+import Stream from './stream.ts'
 
 const MAX_HUFCODE_BITS = 20
 const MAX_SYMBOLS = 258

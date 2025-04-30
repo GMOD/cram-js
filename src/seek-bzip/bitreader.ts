@@ -32,7 +32,7 @@ Peter Fenwick, Alistair Moffat, Radford Neal, Ian H. Witten,
 Robert Sedgewick, and Jon L. Bentley.
 */
 
-import { toHex } from './toHex'
+import { toHex } from './toHex.ts'
 
 const BITMASK = [0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff]
 
