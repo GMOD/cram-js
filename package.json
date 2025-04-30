@@ -49,7 +49,7 @@
   ],
   "dependencies": {
     "crc": "^4.3.2",
-    "generic-filehandle2": "^1.0.0",
+    "generic-filehandle2": "^2.0.1",
     "md5": "^2.2.1",
     "pako": "^1.0.4",
     "quick-lru": "^4.0.1",
@@ -64,14 +64,14 @@
     "documentation": "^14.0.3",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-unicorn": "^58.0.0",
+    "eslint-plugin-unicorn": "^59.0.0",
     "mock-fs": "^5.2.0",
     "prettier": "^3.2.5",
     "rimraf": "^6.0.1",
     "typescript": "^5.7.0",
-    "typescript-eslint": "^8.0.1",
+    "typescript-eslint": "^8.31.1",
     "vitest": "^3.0.1",
-    "webpack": "^5.90.3",
+    "webpack": "^5.99.7",
     "webpack-cli": "^6.0.1"
   },
   "publishConfig": {
