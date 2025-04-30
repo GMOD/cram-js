@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { TF_SHIFT } from './constants'
-import Decoding from './decoding'
+import { TF_SHIFT } from './constants.ts'
+import Decoding from './decoding.ts'
 
 export default function uncompress(
   /* ByteBuffer */ input,

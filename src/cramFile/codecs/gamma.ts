@@ -1,9 +1,9 @@
-import CramCodec, { Cursors } from './_base'
-import { getBits } from './getBits'
-import { CramUnimplementedError } from '../../errors'
-import { GammaEncoding } from '../encoding'
-import { CramFileBlock } from '../file'
-import CramSlice from '../slice'
+import CramCodec, { Cursors } from './_base.ts'
+import { getBits } from './getBits.ts'
+import { CramUnimplementedError } from '../../errors.ts'
+import { GammaEncoding } from '../encoding.ts'
+import { CramFileBlock } from '../file.ts'
+import CramSlice from '../slice/index.ts'
 
 export default class GammaCodec extends CramCodec<
   'int',
@@ -19,9 +19,9 @@ export default class GammaCodec extends CramCodec<
   }
 
   decode(
-    slice: CramSlice,
+    _slice: CramSlice,
     coreDataBlock: CramFileBlock,
-    blocksByContentId: Record<number, CramFileBlock>,
+    _blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
     let length = 1

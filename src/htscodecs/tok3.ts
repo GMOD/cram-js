@@ -40,10 +40,10 @@
 // written specification as closely as possible.  It is *NOT*
 // an efficient implementation, but see comments below.
 
-import { concatUint8Array } from '../util'
-import arith_gen from './arith_gen'
-import IOStream from './iostream'
-import * as rans from './rans4x16'
+import { concatUint8Array } from '../util.ts'
+import arith_gen from './arith_gen.ts'
+import IOStream from './iostream.ts'
+import * as rans from './rans4x16.ts'
 
 const arith = new arith_gen()
 

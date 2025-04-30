@@ -1,7 +1,7 @@
-import { TupleOf } from '../typescript'
-import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes'
-import { CramEncoding } from './encoding'
-import { parseItf8, parseLtf8 } from './util'
+import { TupleOf } from '../typescript.ts'
+import { DataSeriesEncodingMap } from './codecs/dataSeriesTypes.ts'
+import { CramEncoding } from './encoding.ts'
+import { parseItf8, parseLtf8 } from './util.ts'
 
 export function cramFileDefinition() {
   return {

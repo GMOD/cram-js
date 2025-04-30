@@ -34,9 +34,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import RangeCoder from './arith_sh'
-import ByteModel from './byte_model'
-import IOStream from './iostream'
+import RangeCoder from './arith_sh.ts'
+import ByteModel from './byte_model.ts'
+import IOStream from './iostream.ts'
 
 // ----------------------------------------------------------------------
 // Main arithmetic entry function: decodes a compressed src and

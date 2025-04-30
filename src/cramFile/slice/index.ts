@@ -1,20 +1,20 @@
-import { CramArgumentError, CramMalformedError } from '../../errors'
-import { Cursors, DataTypeMapping } from '../codecs/_base'
-import { CramBufferOverrunError } from '../codecs/getBits'
-import Constants from '../constants'
-import decodeRecord, { DataSeriesDecoder } from './decodeRecord'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
-import CramContainer from '../container'
-import { DataSeriesTypes } from '../container/compressionScheme'
-import CramFile, { CramFileBlock } from '../file'
-import CramRecord from '../record'
+import { CramArgumentError, CramMalformedError } from '../../errors.ts'
+import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import { CramBufferOverrunError } from '../codecs/getBits.ts'
+import Constants from '../constants.ts'
+import decodeRecord, { DataSeriesDecoder } from './decodeRecord.ts'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import { DataSeriesTypes } from '../container/compressionScheme.ts'
+import CramContainer from '../container/index.ts'
+import CramFile, { CramFileBlock } from '../file.ts'
+import CramRecord from '../record.ts'
 import {
   MappedSliceHeader,
   UnmappedSliceHeader,
   getSectionParsers,
   isMappedSliceHeader,
-} from '../sectionParsers'
-import { parseItem, sequenceMD5, tinyMemoize } from '../util'
+} from '../sectionParsers.ts'
+import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -28,15 +28,12 @@ interface RefRegion {
 }
 
 /**
- * @private
- * Try to estimate the template length from a bunch of interrelated multi-segment reads.
- * @param {Array[CramRecord]} allRecords
- * @param {number} currentRecordNumber
- * @param {CramRecord} thisRecord
+ * Try to estimate the template length from a bunch of interrelated
+ * multi-segment reads.
  */
 function calculateMultiSegmentMatedTemplateLength(
   allRecords: CramRecord[],
-  currentRecordNumber: number,
+  _currentRecordNumber: number,
   thisRecord: CramRecord,
 ) {
   function getAllMatedRecords(startRecord: CramRecord) {
@@ -73,18 +70,16 @@ function calculateMultiSegmentMatedTemplateLength(
 }
 
 /**
- * @private
- * Attempt to calculate the `templateLength` for a pair of intra-slice paired reads.
- * Ported from htslib. Algorithm is imperfect.
- * @param {CramRecord} thisRecord
- * @param {CramRecord} mateRecord
+ * Attempt to calculate the `templateLength` for a pair of intra-slice paired
+ * reads. Ported from htslib. Algorithm is imperfect.
  */
 function calculateIntraSliceMatePairTemplateLength(
   thisRecord: CramRecord,
   mateRecord: CramRecord,
 ) {
-  // this just estimates the template length by using the simple (non-gapped) end coordinate of each
-  // read, because gapping in the alignment doesn't mean the template is longer or shorter
+  // this just estimates the template length by using the simple (non-gapped)
+  // end coordinate of each read, because gapping in the alignment doesn't mean
+  // the template is longer or shorter
   const start = Math.min(thisRecord.alignmentStart, mateRecord.alignmentStart)
   const end = Math.max(
     thisRecord.alignmentStart + thisRecord.readLength - 1,
@@ -96,10 +91,9 @@ function calculateIntraSliceMatePairTemplateLength(
 }
 
 /**
- * @private establishes a mate-pair relationship between two records in the
- * same slice. CRAM compresses mate-pair relationships between records in the
- * same slice down into just one record having the index in the slice of its
- * mate
+ * establishes a mate-pair relationship between two records in the same slice.
+ * CRAM compresses mate-pair relationships between records in the same slice
+ * down into just one record having the index in the slice of its mate
  */
 function associateIntraSliceMate(
   allRecords: CramRecord[],

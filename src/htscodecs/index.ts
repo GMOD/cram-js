@@ -39,11 +39,11 @@
 // This JavaScript file is not part of the reference implementation
 // and is simply and interface to get a consistent interface for cram-js.
 
-import arith from './arith_gen'
-import * as fqzcomp from './fqzcomp'
-import * as r4x8 from './rans'
-import * as r4x16 from './rans4x16'
-import * as tok3 from './tok3'
+import arith from './arith_gen.ts'
+import * as fqzcomp from './fqzcomp.ts'
+import * as r4x8 from './rans.ts'
+import * as r4x16 from './rans4x16.ts'
+import * as tok3 from './tok3.ts'
 
 export function r4x8_uncompress(inputBuffer: Uint8Array) {
   return r4x8.decode(inputBuffer)

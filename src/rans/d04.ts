@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { CramMalformedError } from '../errors'
-import { TF_SHIFT } from './constants'
-import Decoding from './decoding'
+import { CramMalformedError } from '../errors.ts'
+import { TF_SHIFT } from './constants.ts'
+import Decoding from './decoding.ts'
 
 export default function uncompress(
   /* ByteBuffer */ input,

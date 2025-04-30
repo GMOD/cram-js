@@ -1,9 +1,9 @@
-import CramCodec, { Cursor, Cursors } from './_base'
-import { getBits } from './getBits'
-import { CramMalformedError } from '../../errors'
-import { HuffmanEncoding } from '../encoding'
-import { CramFileBlock } from '../file'
-import CramSlice from '../slice'
+import CramCodec, { Cursor, Cursors } from './_base.ts'
+import { getBits } from './getBits.ts'
+import { CramMalformedError } from '../../errors.ts'
+import { HuffmanEncoding } from '../encoding.ts'
+import { CramFileBlock } from '../file.ts'
+import CramSlice from '../slice/index.ts'
 
 function numberOfSetBits(ii: number) {
   let i = (ii - (ii >> 1)) & 0x55555555
@@ -122,7 +122,7 @@ export default class HuffmanIntCodec extends CramCodec<
   decode(
     slice: CramSlice,
     coreDataBlock: CramFileBlock,
-    blocksByContentId: Record<number, CramFileBlock>,
+    _blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
     return this._decode(slice, coreDataBlock, cursors.coreBlock)
@@ -137,7 +137,7 @@ export default class HuffmanIntCodec extends CramCodec<
     return this.sortedCodes[0]!.value
   }
 
-  _decode(slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
+  _decode(_slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
     const input = coreDataBlock.content
 
     let prevLen = 0

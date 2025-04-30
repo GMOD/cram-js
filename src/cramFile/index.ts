@@ -1,3 +1,3 @@
-export { default as CramRecord } from './record'
+export { default as CramRecord } from './record.ts'
 
-export { default } from './file'
+export { default } from './file.ts'

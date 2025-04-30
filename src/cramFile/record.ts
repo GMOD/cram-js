@@ -1,7 +1,7 @@
-import Constants from './constants'
-import CramContainerCompressionScheme from './container/compressionScheme'
+import Constants from './constants.ts'
+import CramContainerCompressionScheme from './container/compressionScheme.ts'
 
-import type decodeRecord from './slice/decodeRecord'
+import type decodeRecord from './slice/decodeRecord.ts'
 
 export interface RefRegion {
   start: number
