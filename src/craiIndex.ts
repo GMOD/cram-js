@@ -1,7 +1,7 @@
-import { CramFileSource } from './cramFile/file'
-import { CramMalformedError } from './errors'
-import { open } from './io'
-import { unzip } from './unzip'
+import { CramFileSource } from './cramFile/file.ts'
+import { CramMalformedError } from './errors.ts'
+import { open } from './io.ts'
+import { unzip } from './unzip.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
 

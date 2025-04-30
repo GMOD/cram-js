@@ -1,17 +1,17 @@
-import CramCodec, { Cursor, Cursors } from './_base'
-import { CramMalformedError } from '../../errors'
-import { ByteArrayStopCramEncoding } from '../encoding'
-import { CramFileBlock } from '../file'
-import CramSlice from '../slice'
-import { CramBufferOverrunError } from './getBits'
+import CramCodec, { Cursor, Cursors } from './_base.ts'
+import { CramMalformedError } from '../../errors.ts'
+import { ByteArrayStopCramEncoding } from '../encoding.ts'
+import { CramFileBlock } from '../file.ts'
+import { CramBufferOverrunError } from './getBits.ts'
+import CramSlice from '../slice/index.ts'
 
 export default class ByteArrayStopCodec extends CramCodec<
   'byteArray',
   ByteArrayStopCramEncoding['parameters']
 > {
   decode(
-    slice: CramSlice,
-    coreDataBlock: CramFileBlock,
+    _slice: CramSlice,
+    _coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {

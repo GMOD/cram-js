@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { CramMalformedError } from '../errors'
-import { TOTFREQ } from './constants'
-import Decoding from './decoding'
+import { CramMalformedError } from '../errors.ts'
+import { TOTFREQ } from './constants.ts'
+import Decoding from './decoding.ts'
 
 function assert(result) {
   if (!result) {

@@ -1,10 +1,9 @@
-import { CramMalformedError } from '../../errors'
-// locals
-import CramSlice from '../slice'
-import { itf8Size, parseItem, tinyMemoize } from '../util'
-import CramContainerCompressionScheme from './compressionScheme'
-import CramFile from '../file'
-import { getSectionParsers } from '../sectionParsers'
+import { CramMalformedError } from '../../errors.ts'
+import CramSlice from '../slice/index.ts'
+import { itf8Size, parseItem, tinyMemoize } from '../util.ts'
+import CramContainerCompressionScheme from './compressionScheme.ts'
+import CramFile from '../file.ts'
+import { getSectionParsers } from '../sectionParsers.ts'
 
 export default class CramContainer {
   constructor(

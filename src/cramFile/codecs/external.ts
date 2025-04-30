@@ -1,10 +1,10 @@
-import CramCodec, { Cursor, Cursors } from './_base'
-import { CramUnimplementedError } from '../../errors'
-import { CramFileBlock } from '../file'
-import CramSlice from '../slice'
-import { parseItf8 } from '../util'
-import { CramBufferOverrunError } from './getBits'
-import { ExternalCramEncoding } from '../encoding'
+import CramCodec, { Cursor, Cursors } from './_base.ts'
+import { CramUnimplementedError } from '../../errors.ts'
+import { CramFileBlock } from '../file.ts'
+import CramSlice from '../slice/index.ts'
+import { parseItf8 } from '../util.ts'
+import { CramBufferOverrunError } from './getBits.ts'
+import { ExternalCramEncoding } from '../encoding.ts'
 
 export default class ExternalCodec extends CramCodec<
   'int' | 'byte',
@@ -32,16 +32,19 @@ export default class ExternalCodec extends CramCodec<
   }
 
   decode(
-    slice: CramSlice,
-    coreDataBlock: CramFileBlock,
+    _slice: CramSlice,
+    _coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
     const { blockContentId } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
-
-    const cursor = cursors.externalBlocks.getCursor(blockContentId)
-    return contentBlock ? this._decodeData(contentBlock, cursor) : undefined
+    return contentBlock
+      ? this._decodeData(
+          contentBlock,
+          cursors.externalBlocks.getCursor(blockContentId),
+        )
+      : undefined
   }
 
   _decodeInt(contentBlock: CramFileBlock, cursor: Cursor) {

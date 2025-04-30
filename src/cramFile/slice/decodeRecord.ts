@@ -1,18 +1,18 @@
-import { CramMalformedError } from '../../errors'
-import { Cursors, DataTypeMapping } from '../codecs/_base'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes'
+import { CramMalformedError } from '../../errors.ts'
+import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import CramContainerCompressionScheme, {
   DataSeriesTypes,
-} from '../container/compressionScheme'
+} from '../container/compressionScheme.ts'
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
   MateFlagsDecoder,
   ReadFeature,
-} from '../record'
-import CramSlice, { SliceHeader } from './index'
-import { CramFileBlock } from '../file'
-import { isMappedSliceHeader } from '../sectionParsers'
+} from '../record.ts'
+import CramSlice, { SliceHeader } from './index.ts'
+import { CramFileBlock } from '../file.ts'
+import { isMappedSliceHeader } from '../sectionParsers.ts'
 
 /**
  * given a Buffer, read a string up to the first null character

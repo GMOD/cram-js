@@ -1,8 +1,8 @@
-import { Slice } from './craiIndex'
-import CramFile from './cramFile'
-import { SeqFetch } from './cramFile/file'
-import CramRecord from './cramFile/record'
-import { CramUnimplementedError } from './errors'
+import { Slice } from './craiIndex.ts'
+import { SeqFetch } from './cramFile/file.ts'
+import CramFile from './cramFile/index.ts'
+import CramRecord from './cramFile/record.ts'
+import { CramUnimplementedError } from './errors.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
 

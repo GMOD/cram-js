@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { CramMalformedError } from '../errors'
-import { RANS_BYTE_L } from './constants'
+import { CramMalformedError } from '../errors.ts'
+import { RANS_BYTE_L } from './constants.ts'
 
 class FC {
   // int F, C;

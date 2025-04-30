@@ -1,9 +1,9 @@
-import CramCodec, { Cursors } from './_base'
-import { ByteArrayLengthEncoding, CramEncoding } from '../encoding'
-import { CramFileBlock } from '../file'
-import CramSlice from '../slice'
-import { DataType } from './dataSeriesTypes'
-import { tinyMemoize } from '../util'
+import CramCodec, { Cursors } from './_base.ts'
+import { ByteArrayLengthEncoding, CramEncoding } from '../encoding.ts'
+import { CramFileBlock } from '../file.ts'
+import { DataType } from './dataSeriesTypes.ts'
+import CramSlice from '../slice/index.ts'
+import { tinyMemoize } from '../util.ts'
 
 type CramCodecFactory = <TData extends DataType = DataType>(
   encodingData: CramEncoding,

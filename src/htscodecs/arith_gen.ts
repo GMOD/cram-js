@@ -34,12 +34,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { decode } from '../seek-bzip'
+import { decode } from '../seek-bzip/index.ts'
 
-import RangeCoder from './arith_sh'
-import ByteModel from './byte_model'
-import IOStream from './iostream'
-import { concatUint8Array } from '../util'
+import RangeCoder from './arith_sh.ts'
+import ByteModel from './byte_model.ts'
+import IOStream from './iostream.ts'
+import { concatUint8Array } from '../util.ts'
 
 const ARITH_ORDER = 1
 const ARITH_EXT = 4

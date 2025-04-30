@@ -1,6 +1,6 @@
-import { CramFileBlock } from '../file'
-import CramSlice from '../slice'
-import { DataType } from './dataSeriesTypes'
+import { CramFileBlock } from '../file.ts'
+import { DataType } from './dataSeriesTypes.ts'
+import CramSlice from '../slice/index.ts'
 
 export interface DataTypeMapping {
   byte: number
