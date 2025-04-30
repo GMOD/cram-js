@@ -345,21 +345,21 @@
     "@eslint/core" "^0.13.0"
     levn "^0.4.1"
 
-"@gmod/bgzf-filehandle@^2.0.0":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@gmod/bgzf-filehandle/-/bgzf-filehandle-2.0.4.tgz#64f88ff6ad48efaf69641e796db87f24bf5da9ab"
-  integrity sha512-MV1V3X2uF0vqN93dkEhL8TUiJMTHyaJQFuLZttKAl8vH5utN2gKJf/3PTW8f7r5X+GgyftuTcfIpHHD5+3mJiQ==
+"@gmod/bgzf-filehandle@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@gmod/bgzf-filehandle/-/bgzf-filehandle-3.0.2.tgz#d89f8b2d169c3be10737be165b06c4ac909e3850"
+  integrity sha512-P3t9S7rVQSxePF17W/k34+AThe61nK+rNEVlt9AV80a3XvnKRW/6tDS2Wch4sURcpe5arTGZBc41hyw9W5gkHw==
   dependencies:
-    generic-filehandle2 "^1.0.0"
+    generic-filehandle2 "^2.0.1"
     pako "^1.0.11"
 
-"@gmod/indexedfasta@^3.0.0":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@gmod/indexedfasta/-/indexedfasta-3.0.1.tgz#7af14f38236caecb365408a4f8995007028bd90a"
-  integrity sha512-i/YwSvF6kxbUL8lp+uL0UFpCynJu/9fZfWSGTVf7ANuQLtDcdTsfKt3wMEx61Lh45LCrjDeAoV1kN1ehFHVWww==
+"@gmod/indexedfasta@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@gmod/indexedfasta/-/indexedfasta-4.0.1.tgz#11cedd84c9ec4d0a7ae1632101d473104bdc7808"
+  integrity sha512-AxIhc2qwq1GY2DrJLBgVESe4Gq9jbtbzp+SaMQ6h+TGloCeLXM4IC6axaiCSCKAU5ukVbp5NbZzcddjq5scACQ==
   dependencies:
-    "@gmod/bgzf-filehandle" "^2.0.0"
-    generic-filehandle2 "^1.0.0"
+    "@gmod/bgzf-filehandle" "^3.0.2"
+    generic-filehandle2 "^2.0.1"
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"
@@ -2184,11 +2184,6 @@ functions-have-names@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
-
-generic-filehandle2@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/generic-filehandle2/-/generic-filehandle2-1.0.0.tgz#d7a216072467793e1e48c925f97162eab1b82efc"
-  integrity sha512-jXfyNk1zhsR0Xf2sLm4vgeYSP1q1XbeSVG0TRSnOCKLb2CojPNJyy57nKi6QWmt83yGSHZGay8qIn7YWyl2V5w==
 
 generic-filehandle2@^2.0.1:
   version "2.0.1"
