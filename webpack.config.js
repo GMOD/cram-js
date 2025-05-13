@@ -14,4 +14,9 @@ export default {
     library: 'gmodCRAM',
     libraryTarget: 'window',
   },
+  resolve: {
+    fallback: {
+      fs: false,
+    },
+  },
 }

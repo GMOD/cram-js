@@ -38,6 +38,7 @@
     "build:es5": "tsc --module commonjs --outDir dist",
     "build": "yarn build:esm && yarn build:es5",
     "postbuild": "webpack",
+    "postbuild:es5": "echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "preversion": "yarn test --run && yarn build",
     "postversion": "git push --follow-tags"
   },
@@ -76,9 +77,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "browser": {
-    "./dist/io/localFile.js": false,
-    "./esm/io/localFile.js": false
   }
 }
