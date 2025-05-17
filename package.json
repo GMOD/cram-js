@@ -6,14 +6,8 @@
   "repository": "GMOD/cram-js",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "exports": {
-    "import": {
-      "import": "./esm/index.js"
-    },
-    "require": {
-      "require": "./dist/index.js"
-    }
-  },
+  "main": "./esm/index.js",
+  "exports": "./esm/index.js",
   "author": {
     "name": "Robert Buels",
     "email": "rbuels@gmail.com",
@@ -49,10 +43,10 @@
     "biojs"
   ],
   "dependencies": {
+    "@progress/pako-esm": "^1.0.1",
     "crc": "^4.3.2",
     "generic-filehandle2": "^2.0.1",
     "md5": "^2.2.1",
-    "pako": "^1.0.4",
     "quick-lru": "^4.0.1",
     "xz-decompress": "^0.2.1"
   },
