@@ -271,7 +271,7 @@ class Bunzip {
       hufGroup.base = new Uint32Array(MAX_HUFCODE_BITS + 1)
       hufGroup.minLen = minLen
       hufGroup.maxLen = maxLen
-      /* Calculate permute[].  Concurently, initialize temp[] and limit[]. */
+      /* Calculate permute[].  Concurrently, initialize temp[] and limit[]. */
       let pp = 0
       for (i = minLen; i <= maxLen; i++) {
         temp[i] = hufGroup.limit[i] = 0
@@ -304,7 +304,7 @@ class Bunzip {
         hufGroup.base[i + 1] = pp - t
       }
       hufGroup.limit[maxLen + 1] =
-        Number.MAX_VALUE /* Sentinal value for reading next sym. */
+        Number.MAX_VALUE /* Sentinel value for reading next sym. */
       hufGroup.limit[maxLen] = pp + temp[maxLen] - 1
       hufGroup.base[minLen] = 0
     }

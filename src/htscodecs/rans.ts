@@ -95,7 +95,7 @@ export function decode(src) {
 // ----------------------------------------------------------------------
 // Order-0 decoder
 
-// Decode a single table of order-0 frequences,
+// Decode a single table of order-0 frequencies,
 // filling out the F and C arrays.
 function ReadFrequencies0(src, F, C) {
   // Initialise; not in the specification - implicit?
@@ -163,7 +163,7 @@ function RansDecode0(src, nbytes) {
 // ----------------------------------------------------------------------
 // Order-1 decoder
 
-// Decode a table of order-1 frequences,
+// Decode a table of order-1 frequencies,
 // filling out the F and C arrays.
 function ReadFrequencies1(src, F, C) {
   // Initialise; not in the specification - implicit?
