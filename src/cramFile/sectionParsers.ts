@@ -166,7 +166,7 @@ export interface CramPreservationMap {
   PI: boolean
   RN: boolean
   AP: boolean
-  RR: boolean
+  RR: boolean | undefined
   SM: [number, number, number, number, number]
   TD: CramTagDictionary
 }

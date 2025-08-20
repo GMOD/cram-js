@@ -100,6 +100,7 @@ export default class CramContainerCompressionScheme {
     // interpret some of the preservation map tags for convenient use
     this.readNamesIncluded = content.preservation.RN
     this.APdelta = content.preservation.AP
+     
     this.referenceRequired = !!content.preservation.RR
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)

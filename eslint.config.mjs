@@ -15,6 +15,7 @@ export default tseslint.config(
       'src/seek-bzip',
       'coverage',
       'vite.config.ts',
+      'vitest.config.ts',
     ],
   },
   {
@@ -40,6 +41,8 @@ export default tseslint.config(
           allow: ['error', 'warn'],
         },
       ],
+
+      'unicorn/no-array-reverse': 'off',
       'no-underscore-dangle': 'off',
       curly: 'error',
       semi: ['error', 'never'],
