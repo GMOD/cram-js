@@ -110,12 +110,15 @@ export default class CramFile {
     const { maxLength, parser } = cramFileDefinition()
     const headbytes = await this.file.read(maxLength, 0)
     const definition = parser(headbytes).value
-    if (definition.majorVersion !== 2 && definition.majorVersion !== 3) {
+    if (definition.magic !== 'CRAM') {
+      throw new Error('Not a CRAM file, does not match magic string')
+    } else if (definition.majorVersion !== 2 && definition.majorVersion !== 3) {
       throw new CramUnimplementedError(
         `CRAM version ${definition.majorVersion} not supported`,
       )
+    } else {
+      return definition
     }
-    return definition
   }
 
   // memoize

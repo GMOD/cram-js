@@ -4,7 +4,6 @@ Try to test in order, so early tests don't require correct interpretation of
 later tests. This gives an ordering for software development and testing.
 
 - Data types
-
   - ITF8
   - Strings
   - Arrays
@@ -65,7 +64,6 @@ An empty file to check the file definition can be read. We require a SAM header
 too, but this is also empty (using one block, see below).
 
 - Empty CRAM file (failed/0000_empty_noref.cram)
-
   - File definition
   - SAM header container (zero content)
   - [End of file; no EOF block so may emit warning]
@@ -79,7 +77,6 @@ too, but this is also empty (using one block, see below).
   warning or a hard error.)
 
 - Empty CRAM file with EOF block (0001_empty_eof.cram)
-
   - As above, but with official EOF block.
 
     This EOF block can be decoded either by checking for a specific series of
@@ -127,23 +124,19 @@ c->num_landmarks=0 set c->curr_slice=0 set c->length=181 c ]
 Files with 1 or more sequences. These are all unmapped with no auxiliary tags.
 
 - Single read (0300_unmapped.cram)
-
   - Tests decoded data via EXTERNAL, HUFFMAN, BYTE_ARRAY_STOP and BYTE_ARRAY_LEN
     encodings.
   - 4 blocks in slice (CORE - empty, RN, QS, BA).
 
 - Two unpaired reads, of differing length (0301_unmapped_cram)
-
   - As above, but RL is no longer a constant and is in its own block.
 
 - Three reads, including a pair (0302_unmapped_cram)
-
   - Also contains BF and MF blocks. All still CF "detached".
   - BF 77 & 141 match the input SAM, but this is redundant as it's
   - also set in MF bit 2.
 
 - Three reads, including a pair (0303_unmapped_cram)
-
   - As above, but the SAM FLAGs of 77 and 141 are stored as 69 and 133 (clearing
     mate unmapped flag). BF + MF are sufficient to regenerate the correct FLAG
     field.
@@ -154,7 +147,6 @@ Files with 1 or more sequences. These are all unmapped with no auxiliary tags.
 ## Slice basics, mapped reads, no reference
 
 - Single read (0400_mapped.cram)
-
   - Container ref id, pos and span, number of records and number of bases fields
     are changed.
   - Checks that mapped data can process MD5 0, provided container RR=0.
@@ -162,13 +154,11 @@ Files with 1 or more sequences. These are all unmapped with no auxiliary tags.
   - One feature of type 'b', with sequence stored in BB.
 
 - Paired reads, but detached (0401_mapped.cram)
-
   - RNEXT/PNEXT/TLEN of \*/0/0
   - Explicit TS, NP, NS with constant values as they would disagree with
     auto-computed values.
 
 - Paired reads, but detached (0402_mapped.cram)
-
   - RNEXT/PNEXT/TLEN filled out.
   - Explicit TS, NP, NS, with non-constant values [ Edit htslib to force
     bam_ins_size check to fail and hence "goto detached". ]
@@ -183,7 +173,6 @@ Testing of the FC (Feature Codes) data series types and their associated
 type-specific data series.
 
 - External reference, CIGAR ops (0500_mapped.cram)
-
   - No edits: entirely match reference
   - No FP/FC needed (and FN=0).
   - Sequence is implicitly assumed to entirely match reference
@@ -191,7 +180,6 @@ type-specific data series.
     transferable to other systems.
 
 - External reference, CIGAR ops (0501_mapped.cram)
-
   - Mismatching first and last base on first seq and first / last 3 bases on
     second seq.
   - Adds use of FC "X" and the BS (base substitution) data series. This tests
@@ -199,7 +187,6 @@ type-specific data series.
     encoding in the compression header, but is not used here.
 
 - As above, but R/Y bases (0502_mapped.cram).
-
   - Test of the BA data series and FC "B" code. BS (base substitution) only
     applies for A, C, G, T, N.
 
@@ -213,7 +200,6 @@ type-specific data series.
     s->block[12]->data[0].]
 
 - As above with R/Y bases, using using "b" FC (0503_mapped.cram).
-
   - Unlike FC "B", "b" is a string instead of a single character and doesn't
     require storing quality data.
 
@@ -221,11 +207,9 @@ type-specific data series.
     process_one_read().]
 
 - Soft/hard clips (0504_mapped.cram)
-
   - FC codes S and H, with associated SC and HC data series.
 
 - Indels (0505_mapped.cram)
-
   - Tests FC codes and data-series: D (DL), I (IN) and i (BA). The table below
     shows cigar ops, with "m" being lowercase as it's not explicitly stored in
     CRAM. The FC row shows the associated CRAM feature code. REF
@@ -237,7 +221,6 @@ type-specific data series.
     FC D D I i
 
 - As above, but explicit padding in the 5bp indel (0506_mapped.cram)
-
   - Tests FC code P and data series PD REF
     ATTTTTCGGGTTTTTTGAAATGAATATCGTAGCTACAGAAACGGTTGTGCACTCATCTGAAAGTTTGTTT T
     TCTTGTTTTCTTGCACTTTGTGCAGAATT SEQ ATTTTTCGGGTTTTTTGAAA AT
@@ -405,15 +388,12 @@ examples produced by some current implementations.
 - BETA (already tested in 1101_BETA.cram)
 
 - SUBEXPONENTIAL
-
   - I have no code to write this data format. Exists in htsjdk though?
 
 - GAMMA
-
   - I have no code to write this data format. Exists in htsjdk though?
 
 - GOLOMB (deprecated)
-
   - I have no code to read nor write this data format
 
 - GOLOMB-RICE (deprecated)
@@ -422,19 +402,16 @@ examples produced by some current implementations.
 ## Index
 
 - Simple mapped case (1400_index_simple.cram)
-
   - 10bp reads starting one per base. Read name indicates bases covered.
   - 77 reads per container
   - Index query CHROMOSOME_I:333-444 should return 121 records, from s324-333 to
     s444-453
 
 - Unmapped data (1401_index_unmapped.cram)
-
   - As above, but all data is unmapped
   - Index query for unmapped (eg ref `*`) should return all 1000 records.
 
 - Multiple references + unmapped (1402_index_3ref.cram)
-
   - 300 for first ref, 10 for second, 300 for third, and 300 unmapped.
   - Only one reference per slice.
   - CHROMOSOME_I:100-200 returns 110 records
@@ -445,7 +422,6 @@ examples produced by some current implementations.
   - `*` (unmapped) returns 300 records
 
 - Multi-ref mode (1403_index_multiref.cram)
-
   - As above, but containers / slices use the RI data series with multiple
     references per container. The same queries will work as above.
   - Hence index reports reference IDs, but multiple references can occur at the
@@ -459,17 +435,14 @@ examples produced by some current implementations.
     container as the last reads in ref 2.
 
 - Multi-slice containers (1404_index_multislice.cram)
-
   - As 1402_index_3ref.cram, but 3 slices per container.
   - Same queries will work as above.
 
 - Multi-slice multi-ref containers (1405_index_multisliceref.cram)
-
   - As above, but with multiple references permitted per slice.
   - Same queries will work as above.
 
 - Mix of long and short reads
-
   - 10bp reads starting every position
   - 350bp reads starting every 300 positions
 

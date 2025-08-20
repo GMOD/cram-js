@@ -171,7 +171,6 @@ Class of each CRAM record returned by this API.
 ##### Parameters
 
 - `$0` **any**&#x20;
-
   - `$0.flags` &#x20;
   - `$0.cramFlags` &#x20;
   - `$0.readLength` &#x20;
@@ -313,7 +312,6 @@ the actual substituted and reference base pairs, and will make the
 
 - `refRegion`
   **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-
   - `refRegion.start`
     **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)**&#x20;
   - `refRegion.end`
@@ -360,7 +358,6 @@ that show insertions, deletions, substitutions, etc.
 
 - `args`
   **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-
   - `args.cram` **CramFile**&#x20;
   - `args.index` **Index-like** object that supports
     getEntriesForRange(seqId,start,end) -> Promise\[Array\[index entries]]
@@ -440,7 +437,6 @@ Returns
 
 - `args`
   **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-
   - `args.path`
     **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?**&#x20;
   - `args.url`
