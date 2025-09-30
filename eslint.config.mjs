@@ -1,6 +1,7 @@
 import eslint from '@eslint/js'
 import importPlugin from 'eslint-plugin-import'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
+i
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
@@ -42,7 +43,6 @@ export default tseslint.config(
         },
       ],
 
-      'unicorn/no-array-reverse': 'off',
       'no-underscore-dangle': 'off',
       curly: 'error',
       semi: ['error', 'never'],
@@ -54,6 +54,8 @@ export default tseslint.config(
         },
       ],
 
+      'unicorn/no-array-reverse': 'off',
+      'unicorn/no-array-sort': 'off',
       'unicorn/prefer-structured-clone': 'off',
       'unicorn/no-new-array': 'off',
       'unicorn/no-empty-file': 'off',
