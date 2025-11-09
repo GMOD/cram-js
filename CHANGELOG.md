@@ -64,7 +64,7 @@
 
 # v1.6.1
 
-- Explicitly use pako for browser bundle to help avoid buggy zlib polyfills
+- Explicitly use pako-esm2 for browser bundle to help avoid buggy zlib polyfills
 
 # v1.6.0
 

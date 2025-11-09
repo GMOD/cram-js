@@ -1,6 +1,5 @@
-import * as pkg from 'pako'
-const { inflate } = pkg
+import { inflate } from 'pako-esm2'
 
 export function unzip(input: Uint8Array) {
-  return inflate(input)
+  return inflate(input, undefined)
 }

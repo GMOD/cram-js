@@ -54,6 +54,7 @@ export default defineConfig(
         },
       ],
 
+      'unicorn/text-encoding-identifier-case': 'off',
       'unicorn/no-array-reverse': 'off',
       'unicorn/no-array-sort': 'off',
       'unicorn/prefer-structured-clone': 'off',
@@ -132,6 +133,7 @@ export default defineConfig(
       ],
 
       'import/no-unresolved': 'off',
+      'import/extensions': ['error', 'ignorePackages'],
       'import/order': [
         'error',
         {
@@ -148,6 +150,12 @@ export default defineConfig(
           ],
         },
       ],
+    },
+  },
+  {
+    files: ['test/**/*'],
+    rules: {
+      'import/extensions': 'off',
     },
   },
 )
