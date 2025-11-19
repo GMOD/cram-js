@@ -1,12 +1,12 @@
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
-import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import ransuncompress from '../rans/index.ts'
 import { parseHeaderText } from '../sam.ts'
+import { parseItem, tinyMemoize } from './util.ts'
 import { decode } from '../seek-bzip/index.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
@@ -17,7 +17,7 @@ import {
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers.ts'
-import { parseItem, tinyMemoize } from './util.ts'
+import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
 
