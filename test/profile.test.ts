@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { test } from 'vitest'
 import { Session } from 'node:inspector'
 import { writeFileSync } from 'node:fs'
@@ -33,7 +34,9 @@ test('generate CPU profile for SRR396637.sorted.clip.cram parsing', async () => 
     totalRecords += ret.length
   }
 
-  console.log(`Completed ${iterations} iterations, total records: ${totalRecords}`)
+  console.log(
+    `Completed ${iterations} iterations, total records: ${totalRecords}`,
+  )
 
   session.post('Profiler.stop', (err, { profile }) => {
     if (err) {

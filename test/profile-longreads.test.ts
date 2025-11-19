@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { test } from 'vitest'
 import { Session } from 'node:inspector'
 import { writeFileSync } from 'node:fs'
