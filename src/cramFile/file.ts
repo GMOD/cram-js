@@ -80,7 +80,7 @@ export default class CramFile {
   }
   public featureCache: QuickLRU<string, Promise<CramRecord[]>>
   private header: string | undefined
-  private _sectionParsers: any
+  private _sectionParsers?: ReturnType<typeof getSectionParsers>
 
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
@@ -252,7 +252,9 @@ export default class CramFile {
     return new CramContainer(this, position)
   }
 
-  async readBlockHeader(position: number) {
+  async readBlockHeader(
+    position: number,
+  ): Promise<BlockHeader & { _endPosition: number; _size: number }> {
     if (!this._sectionParsers) {
       const { majorVersion } = await this.getDefinition()
       this._sectionParsers = getSectionParsers(majorVersion)
@@ -274,7 +276,7 @@ export default class CramFile {
     position: number,
     size = section.maxLength,
     preReadBuffer?: Uint8Array,
-  ) {
+  ): Promise<T & { _endPosition: number; _size: number }> {
     const buffer = preReadBuffer ?? (await this.file.read(size, position))
     const data = parseItem(buffer, section.parser, 0, position)
     if (data._size !== size) {
