@@ -35,7 +35,11 @@ export function readStatsO0(
     if (!decoder.R) {
       decoder.R = new Array(TOTFREQ)
     }
-    decoder.R.fill(j, x, x + decoder.fc[j].F)
+    const R = decoder.R
+    const end = x + decoder.fc[j].F
+    for (let k = x; k < end; k++) {
+      R[k] = j
+    }
 
     x += decoder.fc[j].F
 
@@ -92,7 +96,11 @@ export function readStatsO1(
       if (D[i].R == null) {
         D[i].R = new Array(TOTFREQ)
       }
-      D[i].R.fill(j, x, x + D[i].fc[j].F)
+      const R = D[i].R
+      const end = x + D[i].fc[j].F
+      for (let k = x; k < end; k++) {
+        R[k] = j
+      }
 
       x += D[i].fc[j].F
       assert(x <= TOTFREQ)

@@ -5,6 +5,68 @@ import D14 from './d14.ts'
 import Decoding from './decoding.ts'
 import { readStatsO0, readStatsO1 } from './frequencies.ts'
 
+class RansDecoderPool {
+  constructor() {
+    this.order0Decoders = []
+    this.order1Decoders = []
+  }
+
+  getOrder0Objects() {
+    let D = this.order0Decoders.pop()
+    if (!D) {
+      D = new Decoding.AriDecoder()
+    }
+
+    let syms = new Array(256)
+    for (let i = 0; i < 256; i += 1) {
+      syms[i] = new Decoding.DecodingSymbol()
+    }
+
+    return { D, syms }
+  }
+
+  returnOrder0Objects(D) {
+    if (D.R) {
+      D.R = null
+    }
+    this.order0Decoders.push(D)
+  }
+
+  getOrder1Objects() {
+    let result = this.order1Decoders.pop()
+
+    if (!result) {
+      const D = new Array(256)
+      for (let i = 0; i < 256; i += 1) {
+        D[i] = new Decoding.AriDecoder()
+      }
+
+      const syms = new Array(256)
+      for (let i = 0; i < 256; i += 1) {
+        syms[i] = new Array(256)
+        for (let j = 0; j < 256; j += 1) {
+          syms[i][j] = new Decoding.DecodingSymbol()
+        }
+      }
+
+      result = { D, syms }
+    }
+
+    return result
+  }
+
+  returnOrder1Objects(obj) {
+    for (let i = 0; i < 256; i += 1) {
+      if (obj.D[i] && obj.D[i].R) {
+        obj.D[i].R = null
+      }
+    }
+    this.order1Decoders.push(obj)
+  }
+}
+
+const decoderPool = new RansDecoderPool()
+
 // const /* int */ ORDER_BYTE_LENGTH = 1
 // const /* int */ COMPRESSED_BYTE_LENGTH = 4
 const /* int */ RAW_BYTE_LENGTH = 4
@@ -113,15 +175,13 @@ function /* static ByteBuffer */ uncompressOrder0Way4(
   /* const ByteBuffer  */ out,
 ) {
   // input.order(ByteOrder.LITTLE_ENDIAN);
-  const D = new Decoding.AriDecoder()
-  const syms = new Array(256)
-  for (let i = 0; i < syms.length; i += 1) {
-    syms[i] = new Decoding.DecodingSymbol()
-  }
+  const { D, syms } = decoderPool.getOrder0Objects()
 
   readStatsO0(input, D, syms)
 
   D04(input, D, syms, out)
+
+  decoderPool.returnOrder0Objects(D)
 
   return out
 }
@@ -130,20 +190,13 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
   /* const ByteBuffer */ input,
   /* const ByteBuffer */ output,
 ) {
-  const D = new Array(256)
-  for (let i = 0; i < D.length; i += 1) {
-    D[i] = new Decoding.AriDecoder()
-  }
-  const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
-  for (let i = 0; i < syms.length; i += 1) {
-    syms[i] = new Array(256)
-    for (let j = 0; j < syms[i].length; j += 1) {
-      syms[i][j] = new Decoding.DecodingSymbol()
-    }
-  }
-  readStatsO1(input, D, syms)
+  const obj = decoderPool.getOrder1Objects()
 
-  D14(input, output, D, syms)
+  readStatsO1(input, obj.D, obj.syms)
+
+  D14(input, output, obj.D, obj.syms)
+
+  decoderPool.returnOrder1Objects(obj)
 
   return output
 }
@@ -158,13 +211,11 @@ class ByteBuffer {
   }
 
   get() {
-    const b = this._buffer[this._position]
-    this._position += 1
-    return b
+    return this._buffer[this._position++]
   }
 
   getByte() {
-    return this.get()
+    return this._buffer[this._position++]
   }
 
   getByteAt(position) {
@@ -176,8 +227,7 @@ class ByteBuffer {
   }
 
   put(val) {
-    this._buffer[this._position] = val
-    this._position += 1
+    this._buffer[this._position++] = val
     return val
   }
 
@@ -198,7 +248,7 @@ class ByteBuffer {
   }
 
   remaining() {
-    return this._buffer.length - this._position
+    return this.length - this._position
   }
 }
 

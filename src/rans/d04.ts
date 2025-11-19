@@ -16,21 +16,29 @@ export default function uncompress(
 
   const /* int */ outputSize = out.remaining()
   const /* int */ outputEnd = outputSize & ~3
+  const mask = (1 << TF_SHIFT) - 1
+  const D_R = D.R
+
   for (let i = 0; i < outputEnd; i += 4) {
-    const /* byte */ c0 = D.R[Decoding.get(rans0, TF_SHIFT)]
-    const /* byte */ c1 = D.R[Decoding.get(rans1, TF_SHIFT)]
-    const /* byte */ c2 = D.R[Decoding.get(rans2, TF_SHIFT)]
-    const /* byte */ c3 = D.R[Decoding.get(rans3, TF_SHIFT)]
+    const /* byte */ c0 = D_R[rans0 & mask]
+    const /* byte */ c1 = D_R[rans1 & mask]
+    const /* byte */ c2 = D_R[rans2 & mask]
+    const /* byte */ c3 = D_R[rans3 & mask]
 
     out.putAt(i, c0)
     out.putAt(i + 1, c1)
     out.putAt(i + 2, c2)
     out.putAt(i + 3, c3)
 
-    rans0 = Decoding.advanceSymbolStep(rans0, syms[0xff & c0], TF_SHIFT)
-    rans1 = Decoding.advanceSymbolStep(rans1, syms[0xff & c1], TF_SHIFT)
-    rans2 = Decoding.advanceSymbolStep(rans2, syms[0xff & c2], TF_SHIFT)
-    rans3 = Decoding.advanceSymbolStep(rans3, syms[0xff & c3], TF_SHIFT)
+    const sym0 = syms[0xff & c0]
+    const sym1 = syms[0xff & c1]
+    const sym2 = syms[0xff & c2]
+    const sym3 = syms[0xff & c3]
+
+    rans0 = sym0.freq * (rans0 >> TF_SHIFT) + (rans0 & mask) - sym0.start
+    rans1 = sym1.freq * (rans1 >> TF_SHIFT) + (rans1 & mask) - sym1.start
+    rans2 = sym2.freq * (rans2 >> TF_SHIFT) + (rans2 & mask) - sym2.start
+    rans3 = sym3.freq * (rans3 >> TF_SHIFT) + (rans3 & mask) - sym3.start
 
     rans0 = Decoding.renormalize(rans0, input)
     rans1 = Decoding.renormalize(rans1, input)
