@@ -25,9 +25,9 @@ profile_branch() {
   echo "Profiling $branch..."
   echo "=========================================================================="
   git checkout "$branch"
-  yarn test profile --run
-  if [ -f "SRR396637-parsing.cpuprofile" ]; then
-    mv SRR396637-parsing.cpuprofile "$output_file"
+  yarn test profile-longreads --run
+  if [ -f "HG002_ONTrel2_16x_RG_HP10xtrioRTG-parsing.cpuprofile" ]; then
+    mv HG002_ONTrel2_16x_RG_HP10xtrioRTG-parsing.cpuprofile "$output_file"
     echo "✓ Saved $branch profile to $output_file"
   else
     echo "✗ Error: Profile not generated for $branch"
@@ -38,8 +38,8 @@ profile_branch() {
 }
 
 # Profile both branches
-profile_branch "$BRANCH1" "SRR396637-parsing-$BRANCH1.cpuprofile"
-profile_branch "$BRANCH2" "SRR396637-parsing-$BRANCH2.cpuprofile"
+profile_branch "$BRANCH1" "longreads-parsing-$BRANCH1.cpuprofile"
+profile_branch "$BRANCH2" "longreads-parsing-$BRANCH2.cpuprofile"
 
 # Switch back to original branch
 git checkout "$ORIGINAL_BRANCH"
@@ -50,8 +50,8 @@ echo ""
 echo "=========================================================================="
 echo "Analyzing profiles..."
 echo "=========================================================================="
-node analyze-profile.mjs "SRR396637-parsing-$BRANCH1.cpuprofile" > "profile-$BRANCH1.txt"
-node analyze-profile.mjs "SRR396637-parsing-$BRANCH2.cpuprofile" > "profile-$BRANCH2.txt"
+node benchmarks/analyze-profile.mjs "longreads-parsing-$BRANCH1.cpuprofile" > "profile-$BRANCH1.txt"
+node benchmarks/analyze-profile.mjs "longreads-parsing-$BRANCH2.cpuprofile" > "profile-$BRANCH2.txt"
 echo "✓ Analysis complete"
 echo ""
 
@@ -121,8 +121,8 @@ echo "Comparison complete!"
 echo "=========================================================================="
 echo ""
 echo "Files:"
-echo "  - SRR396637-parsing-$BRANCH1.cpuprofile"
-echo "  - SRR396637-parsing-$BRANCH2.cpuprofile"
+echo "  - longreads-parsing-$BRANCH1.cpuprofile"
+echo "  - longreads-parsing-$BRANCH2.cpuprofile"
 echo "  - profile-$BRANCH1.txt"
 echo "  - profile-$BRANCH2.txt"
 echo ""
