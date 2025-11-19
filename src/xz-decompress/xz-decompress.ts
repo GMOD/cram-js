@@ -1,5 +1,5 @@
 /*!
- * This is a copy of the compiled output of the xz-decompress NPM package.
+ * This is adapted from the xz-decompress NPM package.
  * https://github.com/httptoolkit/xz-decompress/ License MIT
  *
  * That codebase in turn had these citations
@@ -8,10 +8,7 @@
  * and walloc (c) 2020 Igalia, S.L. License: MIT - https://github.com/wingo/walloc
  */
 
-import { ReadableStream as NodeReadableStream } from 'stream/web'
 import { xzdecompressWasm as wasmBase64 } from './wasm'
-
-const ReadableStream = globalThis.ReadableStream || NodeReadableStream
 
 const XZ_OK = 0
 const XZ_STREAM_END = 1
@@ -39,7 +36,6 @@ class XzContext {
   outStart: number
   mem8?: Uint8Array
   mem32?: Uint32Array
-  outPos?: number
 
   constructor(moduleInstance: WebAssembly.Instance) {
     this.exports = moduleInstance.exports as unknown as WasmExports
@@ -76,12 +72,8 @@ class XzContext {
     return /* inPos */ this.mem32![2]! === /* inSize */ this.mem32![3]!
   }
 
-  outputBufferIsFull() {
-    return /* outPos */ this.mem32![5]! === this.bufSize
-  }
-
   resetOutputBuffer() {
-    this.outPos = this.mem32![5]! = 0
+    this.mem32![5]! = 0
   }
 
   dispose() {
@@ -128,91 +120,82 @@ class ContextMutex {
   }
 }
 
-export class XzReadableStream extends ReadableStream<Uint8Array> {
-  static _moduleInstancePromise: Promise<void> | undefined
-  static _moduleInstance: WebAssembly.Instance | undefined
-  static _contextMutex = new ContextMutex()
+let _moduleInstancePromise: Promise<void> | undefined
+let _moduleInstance: WebAssembly.Instance | undefined
+const _mutex = new ContextMutex()
 
-  static async _getModuleInstance() {
-    const base64Wasm = wasmBase64.replace('data:application/wasm;base64,', '')
-    const binaryString = atob(base64Wasm)
-    const len = binaryString.length
-    const wasmBytes = new Uint8Array(len)
-    for (let i = 0; i < len; i++) {
-      wasmBytes[i] = binaryString.charCodeAt(i)
-    }
-    const module = await WebAssembly.instantiate(wasmBytes.buffer, {})
-    XzReadableStream._moduleInstance = module.instance
+async function _getModuleInstance() {
+  const base64Wasm = wasmBase64.replace('data:application/wasm;base64,', '')
+  const binaryString = atob(base64Wasm)
+  const len = binaryString.length
+  const wasmBytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    wasmBytes[i] = binaryString.charCodeAt(i)
   }
+  const module = await WebAssembly.instantiate(wasmBytes.buffer, {})
+  _moduleInstance = module.instance
+}
 
-  constructor(compressedStream: ReadableStream<Uint8Array>) {
-    let xzContext: XzContext | undefined
-    let unconsumedInput: Uint8Array | null = null
-    const compressedReader = compressedStream.getReader()
+export async function xzDecompress(input: Uint8Array): Promise<Uint8Array> {
+  await _mutex.acquire()
 
-    super({
-      async start(controller) {
-        await XzReadableStream._contextMutex.acquire()
+  try {
+    if (!_moduleInstance) {
+      await (_moduleInstancePromise ||
+        (_moduleInstancePromise = _getModuleInstance()))
+    }
 
-        try {
-          if (!XzReadableStream._moduleInstance) {
-            await (XzReadableStream._moduleInstancePromise ||
-              (XzReadableStream._moduleInstancePromise =
-                XzReadableStream._getModuleInstance()))
-          }
-          xzContext = new XzContext(XzReadableStream._moduleInstance!)
-        } catch (error) {
-          XzReadableStream._contextMutex.release()
-          throw error
-        }
-      },
+    const context = new XzContext(_moduleInstance!)
+    const chunks: Uint8Array[] = []
+    let offset = 0
+    let eofSignaled = false
 
-      async pull(controller) {
-        try {
-          const ctx = xzContext!
-          ctx._refresh()
-          if (ctx.needsMoreInput()) {
-            if (unconsumedInput === null || unconsumedInput.byteLength === 0) {
-              const { done, value } = await compressedReader.read()
-              if (!done) {
-                unconsumedInput = value
-              }
-            }
-            const nextInputLength = Math.min(
-              ctx.bufSize,
-              unconsumedInput!.byteLength,
+    try {
+      while (true) {
+        if (context.needsMoreInput()) {
+          if (offset < input.length) {
+            const chunkSize = Math.min(context.bufSize, input.length - offset)
+            context.supplyInput(input.subarray(offset, offset + chunkSize))
+            offset += chunkSize
+          } else if (!eofSignaled) {
+            // Signal EOF by supplying empty input once
+            context.supplyInput(new Uint8Array(0))
+            eofSignaled = true
+          } else {
+            // Stuck in a loop - WASM needs more input but we're at EOF
+            throw new Error(
+              'XZ decompression error: unexpected end of input',
             )
-            ctx.supplyInput(unconsumedInput!.subarray(0, nextInputLength))
-            unconsumedInput = unconsumedInput!.subarray(nextInputLength)
           }
-
-          const nextOutputResult = ctx.getNextOutput()
-          controller.enqueue(nextOutputResult.outChunk)
-          ctx.resetOutputBuffer()
-
-          if (nextOutputResult.finished) {
-            ctx.dispose()
-            XzReadableStream._contextMutex.release()
-            controller.close()
-          }
-        } catch (error) {
-          if (xzContext) {
-            xzContext.dispose()
-          }
-          XzReadableStream._contextMutex.release()
-          throw error
         }
-      },
-      cancel() {
-        try {
-          if (xzContext) {
-            xzContext.dispose()
-          }
-          return compressedReader.cancel()
-        } finally {
-          XzReadableStream._contextMutex.release()
+
+        const result = context.getNextOutput()
+        if (result.outChunk.length > 0) {
+          chunks.push(result.outChunk)
         }
-      },
-    })
+        context.resetOutputBuffer()
+
+        if (result.finished) {
+          break
+        }
+      }
+
+      if (chunks.length === 1) {
+        return chunks[0]!
+      }
+
+      const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)
+      const output = new Uint8Array(totalLength)
+      let position = 0
+      for (const chunk of chunks) {
+        output.set(chunk, position)
+        position += chunk.length
+      }
+      return output
+    } finally {
+      context.dispose()
+    }
+  } finally {
+    _mutex.release()
   }
 }
