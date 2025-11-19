@@ -15,11 +15,9 @@ class AriDecoder {
   // byte[] R;
 
   constructor() {
-    this.fc = new Array(256)
-    for (let i = 0; i < 256; i += 1) {
-      // Use plain objects instead of class instances to reduce allocation overhead
-      this.fc[i] = { F: undefined, C: undefined }
-    }
+    // Use two parallel arrays instead of array of objects for better cache efficiency
+    this.fcF = new Array(256)
+    this.fcC = new Array(256)
     this.R = null
   }
 }

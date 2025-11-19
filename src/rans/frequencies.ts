@@ -19,25 +19,22 @@ export function readStatsO0(
   let x = 0
   let j = cp.get() & 0xff
   do {
-    if (decoder.fc[j] == null) {
-      decoder.fc[j] = new Decoding.FC()
+    decoder.fcF[j] = cp.get() & 0xff
+    if (decoder.fcF[j] >= 128) {
+      decoder.fcF[j] &= ~128
+      decoder.fcF[j] = ((decoder.fcF[j] & 127) << 8) | (cp.get() & 0xff)
     }
-    decoder.fc[j].F = cp.get() & 0xff
-    if (decoder.fc[j].F >= 128) {
-      decoder.fc[j].F &= ~128
-      decoder.fc[j].F = ((decoder.fc[j].F & 127) << 8) | (cp.get() & 0xff)
-    }
-    decoder.fc[j].C = x
+    decoder.fcC[j] = x
 
-    Decoding.symbolInit(syms[j], decoder.fc[j].C, decoder.fc[j].F)
+    Decoding.symbolInit(syms[j], decoder.fcC[j], decoder.fcF[j])
 
     /* Build reverse lookup table */
     if (!decoder.R) {
       decoder.R = new Array(TOTFREQ)
     }
-    decoder.R.fill(j, x, x + decoder.fc[j].F)
+    decoder.R.fill(j, x, x + decoder.fcF[j])
 
-    x += decoder.fc[j].F
+    x += decoder.fcF[j]
 
     if (rle === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
       j = cp.get() & 0xff
@@ -68,33 +65,30 @@ export function readStatsO1(
       D[i] = new Decoding.AriDecoder()
     }
     do {
-      if (D[i].fc[j] == null) {
-        D[i].fc[j] = new Decoding.FC()
+      D[i].fcF[j] = 0xff & cp.get()
+      if (D[i].fcF[j] >= 128) {
+        D[i].fcF[j] &= ~128
+        D[i].fcF[j] = ((D[i].fcF[j] & 127) << 8) | (0xff & cp.get())
       }
-      D[i].fc[j].F = 0xff & cp.get()
-      if (D[i].fc[j].F >= 128) {
-        D[i].fc[j].F &= ~128
-        D[i].fc[j].F = ((D[i].fc[j].F & 127) << 8) | (0xff & cp.get())
-      }
-      D[i].fc[j].C = x
+      D[i].fcC[j] = x
 
-      if (D[i].fc[j].F === 0) {
-        D[i].fc[j].F = TOTFREQ
+      if (D[i].fcF[j] === 0) {
+        D[i].fcF[j] = TOTFREQ
       }
 
       if (syms[i][j] == null) {
         syms[i][j] = new Decoding.RansDecSymbol()
       }
 
-      Decoding.symbolInit(syms[i][j], D[i].fc[j].C, D[i].fc[j].F)
+      Decoding.symbolInit(syms[i][j], D[i].fcC[j], D[i].fcF[j])
 
       /* Build reverse lookup table */
       if (D[i].R == null) {
         D[i].R = new Array(TOTFREQ)
       }
-      D[i].R.fill(j, x, x + D[i].fc[j].F)
+      D[i].R.fill(j, x, x + D[i].fcF[j])
 
-      x += D[i].fc[j].F
+      x += D[i].fcF[j]
       assert(x <= TOTFREQ)
 
       if (rlej === 0 && j + 1 === (0xff & cp.getByteAt(cp.position()))) {
