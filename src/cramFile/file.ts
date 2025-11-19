@@ -1,12 +1,12 @@
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
-import { XzReadableStream } from 'xz-decompress'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import ransuncompress from '../rans/index.ts'
 import { parseHeaderText } from '../sam.ts'
+import { parseItem, tinyMemoize } from './util.ts'
 import { decode } from '../seek-bzip/index.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
@@ -17,18 +17,9 @@ import {
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers.ts'
-import { parseItem, tinyMemoize } from './util.ts'
+import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
-
-function bufferToStream(buf: Uint8Array) {
-  return new ReadableStream({
-    start(controller) {
-      controller.enqueue(buf)
-      controller.close()
-    },
-  })
-}
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 function getEndianness() {
@@ -298,10 +289,7 @@ export default class CramFile {
     } else if (compressionMethod === 'bzip2') {
       return decode(inputBuffer)
     } else if (compressionMethod === 'lzma') {
-      const decompressedResponse = new Response(
-        new XzReadableStream(bufferToStream(inputBuffer)),
-      )
-      return new Uint8Array(await decompressedResponse.arrayBuffer())
+      return xzDecompress(inputBuffer)
     } else if (compressionMethod === 'rans') {
       const outputBuffer = new Uint8Array(uncompressedSize)
       ransuncompress(inputBuffer, outputBuffer)
