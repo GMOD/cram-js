@@ -12,6 +12,7 @@ export default defineConfig(
       '*.js',
       '*.mjs',
       'example/*',
+      'benchmarks/*',
       'src/htscodecs',
       'src/seek-bzip',
       'coverage',

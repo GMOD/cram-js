@@ -1,10 +1,12 @@
 /* eslint-disable no-console */
-import { test } from 'vitest'
-import { Session } from 'node:inspector'
 import { writeFileSync } from 'node:fs'
-import { testDataFile } from '../test/lib/util'
+import { Session } from 'node:inspector'
+
+import { test } from 'vitest'
+
 import CraiIndex from '../src/craiIndex'
 import { IndexedCramFile } from '../src/index'
+import { testDataFile } from '../test/lib/util'
 
 test('generate CPU profile for longreads parsing', async () => {
   const session = new Session()

@@ -52,7 +52,7 @@
     "crc": "^4.3.2",
     "generic-filehandle2": "^2.0.12",
     "md5": "^2.2.1",
-    "pako-esm2": "^1.0.1",
+    "pako-esm2": "^1.0.15",
     "quick-lru": "^4.0.1",
     "xz-decompress": "^0.2.1"
   },

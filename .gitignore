@@ -12,3 +12,5 @@ built-tests/
 *.swp
 esm
 .idea
+*.cpuprofile
+*.txt
