@@ -80,6 +80,7 @@ export default class CramFile {
   }
   public featureCache: QuickLRU<string, Promise<CramRecord[]>>
   private header: string | undefined
+  private _sectionParsers: any
 
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
@@ -148,9 +149,11 @@ export default class CramFile {
   }
 
   async getContainerById(containerNumber: number) {
-    const { majorVersion } = await this.getDefinition()
-    const sectionParsers = getSectionParsers(majorVersion)
-    let position = sectionParsers.cramFileDefinition.maxLength
+    if (!this._sectionParsers) {
+      const { majorVersion } = await this.getDefinition()
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
+    let position = this._sectionParsers.cramFileDefinition.maxLength
 
     // skip with a series of reads to the proper container
     let currentContainer: CramContainer | undefined
@@ -208,11 +211,13 @@ export default class CramFile {
    * length check, relies on a try catch to read return an error to break
    */
   async containerCount(): Promise<number | undefined> {
-    const { majorVersion } = await this.getDefinition()
-    const sectionParsers = getSectionParsers(majorVersion)
+    if (!this._sectionParsers) {
+      const { majorVersion } = await this.getDefinition()
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
 
     let containerCount = 0
-    let position = sectionParsers.cramFileDefinition.maxLength
+    let position = this._sectionParsers.cramFileDefinition.maxLength
     try {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       while (true) {
@@ -248,9 +253,11 @@ export default class CramFile {
   }
 
   async readBlockHeader(position: number) {
-    const { majorVersion } = await this.getDefinition()
-    const sectionParsers = getSectionParsers(majorVersion)
-    const { cramBlockHeader } = sectionParsers
+    if (!this._sectionParsers) {
+      const { majorVersion } = await this.getDefinition()
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
+    const { cramBlockHeader } = this._sectionParsers
 
     const buffer = await this.file.read(cramBlockHeader.maxLength, position)
     return parseItem(buffer, cramBlockHeader.parser, 0, position)
@@ -332,7 +339,10 @@ export default class CramFile {
 
   async readBlock(position: number) {
     const { majorVersion } = await this.getDefinition()
-    const sectionParsers = getSectionParsers(majorVersion)
+    if (!this._sectionParsers) {
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
+    const sectionParsers = this._sectionParsers
     const blockHeader = await this.readBlockHeader(position)
     const blockContentPosition = blockHeader._endPosition
 

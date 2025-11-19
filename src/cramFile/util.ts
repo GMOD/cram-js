@@ -183,14 +183,15 @@ export function tinyMemoize(_class: any, methodName: any) {
   const method = _class.prototype[methodName]
   const memoAttrName = `_memo_${methodName}`
   _class.prototype[methodName] = function _tinyMemoized() {
-    if (!(memoAttrName in this)) {
-      const res = method.call(this)
+    let res = this[memoAttrName]
+    if (res === undefined) {
+      res = method.call(this)
       this[memoAttrName] = res
       Promise.resolve(res).catch(() => {
         delete this[memoAttrName]
       })
     }
-    return this[memoAttrName]
+    return res
   }
 }
 
