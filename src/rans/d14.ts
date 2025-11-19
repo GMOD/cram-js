@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { TF_SHIFT } from './constants.ts'
-import Decoding from './decoding.ts'
 
 // Inline constants for performance
 const RANS_BYTE_L = 8388608 // 1 << 23
