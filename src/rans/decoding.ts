@@ -16,8 +16,9 @@ class AriDecoder {
 
   constructor() {
     this.fc = new Array(256)
-    for (let i = 0; i < this.fc.length; i += 1) {
-      this.fc[i] = new FC()
+    for (let i = 0; i < 256; i += 1) {
+      // Use plain objects instead of class instances to reduce allocation overhead
+      this.fc[i] = { F: undefined, C: undefined }
     }
     this.R = null
   }
