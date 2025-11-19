@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { CramMalformedError } from '../errors.ts'
-import { TF_SHIFT } from './constants.ts'
+import { TF_SHIFT, RANS_BYTE_L } from './constants.ts'
 import Decoding from './decoding.ts'
 
 export default function uncompress(
@@ -40,10 +40,27 @@ export default function uncompress(
     rans2 = sym2.freq * (rans2 >> TF_SHIFT) + (rans2 & mask) - sym2.start
     rans3 = sym3.freq * (rans3 >> TF_SHIFT) + (rans3 & mask) - sym3.start
 
-    rans0 = Decoding.renormalize(rans0, input)
-    rans1 = Decoding.renormalize(rans1, input)
-    rans2 = Decoding.renormalize(rans2, input)
-    rans3 = Decoding.renormalize(rans3, input)
+    // Inline renormalize to avoid function call overhead
+    if (rans0 < RANS_BYTE_L) {
+      do {
+        rans0 = (rans0 << 8) | (0xff & input.get())
+      } while (rans0 < RANS_BYTE_L)
+    }
+    if (rans1 < RANS_BYTE_L) {
+      do {
+        rans1 = (rans1 << 8) | (0xff & input.get())
+      } while (rans1 < RANS_BYTE_L)
+    }
+    if (rans2 < RANS_BYTE_L) {
+      do {
+        rans2 = (rans2 << 8) | (0xff & input.get())
+      } while (rans2 < RANS_BYTE_L)
+    }
+    if (rans3 < RANS_BYTE_L) {
+      do {
+        rans3 = (rans3 << 8) | (0xff & input.get())
+      } while (rans3 < RANS_BYTE_L)
+    }
   }
 
   out.setPosition(outputEnd)

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { TF_SHIFT } from './constants.ts'
+import { TF_SHIFT, RANS_BYTE_L } from './constants.ts'
 import Decoding from './decoding.ts'
 
 export default function uncompress(
@@ -56,10 +56,27 @@ export default function uncompress(
     rans7 =
       sym_l7_c7.freq * (rans7 >> TF_SHIFT) + (rans7 & mask) - sym_l7_c7.start
 
-    rans0 = Decoding.renormalize(rans0, input)
-    rans1 = Decoding.renormalize(rans1, input)
-    rans2 = Decoding.renormalize(rans2, input)
-    rans7 = Decoding.renormalize(rans7, input)
+    // Inline renormalize to avoid function call overhead
+    if (rans0 < RANS_BYTE_L) {
+      do {
+        rans0 = (rans0 << 8) | (0xff & input.get())
+      } while (rans0 < RANS_BYTE_L)
+    }
+    if (rans1 < RANS_BYTE_L) {
+      do {
+        rans1 = (rans1 << 8) | (0xff & input.get())
+      } while (rans1 < RANS_BYTE_L)
+    }
+    if (rans2 < RANS_BYTE_L) {
+      do {
+        rans2 = (rans2 << 8) | (0xff & input.get())
+      } while (rans2 < RANS_BYTE_L)
+    }
+    if (rans7 < RANS_BYTE_L) {
+      do {
+        rans7 = (rans7 << 8) | (0xff & input.get())
+      } while (rans7 < RANS_BYTE_L)
+    }
 
     l0 = c0
     l1 = c1
@@ -71,7 +88,16 @@ export default function uncompress(
   for (; i7 < outputSize; i7 += 1) {
     const /* int */ c7 = 0xff & D[l7].R[rans7 & mask]
     output.putAt(i7, c7)
-    rans7 = Decoding.advanceSymbol(rans7, input, syms[l7][c7], TF_SHIFT)
+
+    // Inline advanceSymbol to avoid function call overhead
+    const sym = syms[l7][c7]
+    rans7 = sym.freq * (rans7 >> TF_SHIFT) + (rans7 & mask) - sym.start
+    if (rans7 < RANS_BYTE_L) {
+      do {
+        rans7 = (rans7 << 8) | (0xff & input.get())
+      } while (rans7 < RANS_BYTE_L)
+    }
+
     l7 = c7
   }
 }
