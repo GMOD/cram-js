@@ -176,12 +176,10 @@ class ByteBuffer {
 
   put(val) {
     this._buffer[this._position++] = val
-    return val
   }
 
   putAt(position, val) {
     this._buffer[position] = val
-    return val
   }
 
   setPosition(pos) {

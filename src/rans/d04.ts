@@ -1,7 +1,11 @@
 // @ts-nocheck
 import { CramMalformedError } from '../errors.ts'
-import { TF_SHIFT, RANS_BYTE_L } from './constants.ts'
+import { TF_SHIFT } from './constants.ts'
 import Decoding from './decoding.ts'
+
+// Inline constants for performance
+const RANS_BYTE_L = 8388608 // 1 << 23
+const MASK = 4095 // (1 << 12) - 1
 
 export default function uncompress(
   /* ByteBuffer */ input,
@@ -16,14 +20,13 @@ export default function uncompress(
 
   const /* int */ outputSize = out.remaining()
   const /* int */ outputEnd = outputSize & ~3
-  const mask = (1 << TF_SHIFT) - 1
   const D_R = D.R
 
   for (let i = 0; i < outputEnd; i += 4) {
-    const /* byte */ c0 = D_R[rans0 & mask]
-    const /* byte */ c1 = D_R[rans1 & mask]
-    const /* byte */ c2 = D_R[rans2 & mask]
-    const /* byte */ c3 = D_R[rans3 & mask]
+    const /* byte */ c0 = D_R[rans0 & MASK]
+    const /* byte */ c1 = D_R[rans1 & MASK]
+    const /* byte */ c2 = D_R[rans2 & MASK]
+    const /* byte */ c3 = D_R[rans3 & MASK]
 
     out.putAt(i, c0)
     out.putAt(i + 1, c1)
@@ -35,10 +38,10 @@ export default function uncompress(
     const sym2 = syms[0xff & c2]
     const sym3 = syms[0xff & c3]
 
-    rans0 = sym0.freq * (rans0 >> TF_SHIFT) + (rans0 & mask) - sym0.start
-    rans1 = sym1.freq * (rans1 >> TF_SHIFT) + (rans1 & mask) - sym1.start
-    rans2 = sym2.freq * (rans2 >> TF_SHIFT) + (rans2 & mask) - sym2.start
-    rans3 = sym3.freq * (rans3 >> TF_SHIFT) + (rans3 & mask) - sym3.start
+    rans0 = sym0.freq * (rans0 >> TF_SHIFT) + (rans0 & MASK) - sym0.start
+    rans1 = sym1.freq * (rans1 >> TF_SHIFT) + (rans1 & MASK) - sym1.start
+    rans2 = sym2.freq * (rans2 >> TF_SHIFT) + (rans2 & MASK) - sym2.start
+    rans3 = sym3.freq * (rans3 >> TF_SHIFT) + (rans3 & MASK) - sym3.start
 
     // Inline renormalize to avoid function call overhead
     if (rans0 < RANS_BYTE_L) {
