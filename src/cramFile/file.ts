@@ -1,6 +1,6 @@
 import crc32 from 'crc/calculators/crc32'
 import QuickLRU from 'quick-lru'
-import { XzReadableStream } from '../xz-decompress/xz-decompress.js'
+import { XzReadableStream } from '../xz-decompress/xz-decompress.ts'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
