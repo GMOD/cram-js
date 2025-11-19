@@ -39,10 +39,11 @@ export default function uncompress(
     const /* int */ c2 = 0xff & D_l2_R[rans2 & MASK]
     const /* int */ c7 = 0xff & D_l7_R[rans7 & MASK]
 
-    output.putAt(i0, c0)
-    output.putAt(i1, c1)
-    output.putAt(i2, c2)
-    output.putAt(i7, c7)
+    // Inline putAt to avoid function call overhead
+    output._buffer[i0] = c0
+    output._buffer[i1] = c1
+    output._buffer[i2] = c2
+    output._buffer[i7] = c7
 
     const sym_l0_c0 = syms[l0][c0]
     const sym_l1_c1 = syms[l1][c1]
@@ -89,7 +90,8 @@ export default function uncompress(
   // Remainder
   for (; i7 < outputSize; i7 += 1) {
     const /* int */ c7 = 0xff & D[l7].R[rans7 & MASK]
-    output.putAt(i7, c7)
+    // Inline putAt to avoid function call overhead
+    output._buffer[i7] = c7
 
     // Inline advanceSymbol to avoid function call overhead
     const sym = syms[l7][c7]

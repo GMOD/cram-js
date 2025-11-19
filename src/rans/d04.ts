@@ -28,10 +28,11 @@ export default function uncompress(
     const /* byte */ c2 = D_R[rans2 & MASK]
     const /* byte */ c3 = D_R[rans3 & MASK]
 
-    out.putAt(i, c0)
-    out.putAt(i + 1, c1)
-    out.putAt(i + 2, c2)
-    out.putAt(i + 3, c3)
+    // Inline putAt to avoid function call overhead
+    out._buffer[i] = c0
+    out._buffer[i + 1] = c1
+    out._buffer[i + 2] = c2
+    out._buffer[i + 3] = c3
 
     const sym0 = syms[0xff & c0]
     const sym1 = syms[0xff & c1]

@@ -1,8 +1,8 @@
 # CRAM-JS Optimization Session Summary
 
 **Date**: 2025-11-18
-**Final Branch**: init4
-**Total Improvement**: **9.5% faster** from init2 baseline
+**Final Branch**: init7
+**Total Improvement**: **19.6% faster** from init2 baseline
 
 ---
 
@@ -43,6 +43,41 @@ This session focused on profiling-driven optimization of the CRAM-JS library, wi
 
 ---
 
+### Init6: Direct inflate Usage
+**Result**: ✓ **2.8% improvement**
+
+**Changes**:
+- Switched from `unzip` to `inflate` directly from pako-esm2
+- Eliminated format detection and wrapper overhead
+- Raw deflate decompression is more appropriate for CRAM files
+
+**Files**: `src/unzip.ts`
+
+**Impact**: 8,355ms → 8,090ms (234ms saved)
+
+**Attempts**:
+1. Node.js zlib - 9.4% improvement, rejected (breaks browser compatibility)
+2. DecompressionStream - Failed (async API, needs major refactoring)
+3. Direct inflate - Accepted (2.8% improvement, cross-platform)
+
+---
+
+### Init7: Inline putAt Calls
+**Result**: ✓ **7.3% improvement**
+
+**Changes**:
+- Inlined `putAt()` method calls in d04.ts and d14.ts hot loops
+- Replaced `output.putAt(i, val)` with `output._buffer[i] = val`
+- Eliminated function call overhead for millions of iterations
+
+**Files**: `src/rans/d04.ts`, `src/rans/d14.ts`
+
+**Impact**: 8,461ms → 7,842ms (618ms saved)
+
+**Key win**: Eliminated the #1 hotspot (putAt: 1,765ms → 0ms, 23% of time eliminated!)
+
+---
+
 ## Failed/Reverted Optimizations
 
 ### Init5: External Block Caching (FAILED - Test Failures)
@@ -69,29 +104,37 @@ This session focused on profiling-driven optimization of the CRAM-JS library, wi
 |--------|-------------|-------------|------------|
 | init2 (baseline) | 9,229 ms | - | - |
 | init3 | 8,988 ms | -2.6% | 2.6% |
-| **init4 (final)** | **8,355 ms** | **-7.0%** | **9.5%** |
+| init4 | 8,355 ms | -7.0% | 9.5% |
 | init5 (reverted) | 7,855 ms | +4.4% regression | - |
+| init6 | 8,090 ms | -2.8% | 12.3% |
+| **init7 (final)** | **7,842 ms** | **-7.3%** | **19.6%** |
 
 ---
 
 ## Workload Analysis
 
-### Short Reads (SRR396637 - 8.4s after optimization)
+### Short Reads (SRR396637 - 7.8s after optimization)
 
-**Top hotspots after init4**:
-1. unzip (external gzip) - 1.54s (18.4%) - **Hard to optimize**
-2. getRecords - 305ms (3.6%)
-3. getSectionParsers - 102ms (1.2%)
+**Top hotspots after init7**:
+1. _uncompressPre - 498ms (6.3%) - Gzip/compression dispatch
+2. IndexedCramFile - 94ms (1.2%) - Initialization
+3. rans/constants anonymous - 14ms (0.2%) - Nearly eliminated
+4. parser - 10ms (0.1%)
+5. uncompress (d14) - 7ms (0.1%)
 
-**Key achievement**: RANS overhead essentially eliminated (rans/constants: 1.6s → 13ms)
+**Key achievements**:
+- putAt overhead ELIMINATED (1.77s → 0ms via init7)
+- RANS constants overhead nearly eliminated (1.6s → 14ms)
+- Unzip overhead minimized (1.54s → minimal via init6)
+- **Profile is now well-balanced** - no single dominant hotspot
 
-### Long Reads (HG002 ONT - 3.8s)
+### Long Reads (HG002 ONT - 4.0s)
 
-**Top hotspots after init4**:
-1. decode (external codec) - 996ms (25.6%) - **Optimization attempted but failed**
-2. _parseSection - 750ms (19.3%)
-3. unzip (external gzip) - 394ms (10.1%)
-4. uncompress (d14) - 232ms (6.0%)
+**Top hotspots after init6**:
+1. uncompressOrder1Way4 - 847ms (21.2%) - Order-1 RANS decompression
+2. checkCrc32 - 695ms (17.4%) - CRC32 validation
+3. getCompressionHeaderBlock - 166ms (4.2%)
+4. _parseSection - 59ms (1.5%)
 
 ---
 
