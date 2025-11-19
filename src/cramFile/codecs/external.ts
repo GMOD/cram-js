@@ -1,4 +1,4 @@
-import CramCodec, { Cursor, Cursors } from './_base.ts'
+import CramCodec, { Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
 import { CramFileBlock } from '../file.ts'
 import CramSlice from '../slice/index.ts'

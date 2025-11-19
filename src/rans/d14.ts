@@ -47,10 +47,14 @@ export default function uncompress(
     const sym_l2_c2 = syms[l2][c2]
     const sym_l7_c7 = syms[l7][c7]
 
-    rans0 = sym_l0_c0.freq * (rans0 >> TF_SHIFT) + (rans0 & mask) - sym_l0_c0.start
-    rans1 = sym_l1_c1.freq * (rans1 >> TF_SHIFT) + (rans1 & mask) - sym_l1_c1.start
-    rans2 = sym_l2_c2.freq * (rans2 >> TF_SHIFT) + (rans2 & mask) - sym_l2_c2.start
-    rans7 = sym_l7_c7.freq * (rans7 >> TF_SHIFT) + (rans7 & mask) - sym_l7_c7.start
+    rans0 =
+      sym_l0_c0.freq * (rans0 >> TF_SHIFT) + (rans0 & mask) - sym_l0_c0.start
+    rans1 =
+      sym_l1_c1.freq * (rans1 >> TF_SHIFT) + (rans1 & mask) - sym_l1_c1.start
+    rans2 =
+      sym_l2_c2.freq * (rans2 >> TF_SHIFT) + (rans2 & mask) - sym_l2_c2.start
+    rans7 =
+      sym_l7_c7.freq * (rans7 >> TF_SHIFT) + (rans7 & mask) - sym_l7_c7.start
 
     rans0 = Decoding.renormalize(rans0, input)
     rans1 = Decoding.renormalize(rans1, input)
