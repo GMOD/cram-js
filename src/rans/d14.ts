@@ -17,6 +17,9 @@ export default function uncompress(
   let rans2 = input.getInt()
   let rans7 = input.getInt()
 
+  const inputBuffer = input._buffer
+  let inputPos = input.position()
+  const outputBuffer = output._buffer
   const /* int */ isz4 = outputSize >> 2
   let /* int */ i0 = 0
   let /* int */ i1 = isz4
@@ -33,16 +36,16 @@ export default function uncompress(
     const D_l2_R = D[l2].R
     const D_l7_R = D[l7].R
 
-    const /* int */ c0 = 0xff & D_l0_R[rans0 & MASK]
-    const /* int */ c1 = 0xff & D_l1_R[rans1 & MASK]
-    const /* int */ c2 = 0xff & D_l2_R[rans2 & MASK]
-    const /* int */ c7 = 0xff & D_l7_R[rans7 & MASK]
+    const /* int */ c0 = D_l0_R[rans0 & MASK]
+    const /* int */ c1 = D_l1_R[rans1 & MASK]
+    const /* int */ c2 = D_l2_R[rans2 & MASK]
+    const /* int */ c7 = D_l7_R[rans7 & MASK]
 
     // Inline putAt to avoid function call overhead
-    output._buffer[i0] = c0
-    output._buffer[i1] = c1
-    output._buffer[i2] = c2
-    output._buffer[i7] = c7
+    outputBuffer[i0] = c0
+    outputBuffer[i1] = c1
+    outputBuffer[i2] = c2
+    outputBuffer[i7] = c7
 
     const sym_l0_c0 = syms[l0][c0]
     const sym_l1_c1 = syms[l1][c1]
@@ -61,22 +64,22 @@ export default function uncompress(
     // Inline renormalize to avoid function call overhead
     if (rans0 < RANS_BYTE_L) {
       do {
-        rans0 = (rans0 << 8) | (0xff & input.get())
+        rans0 = (rans0 << 8) | inputBuffer[inputPos++]
       } while (rans0 < RANS_BYTE_L)
     }
     if (rans1 < RANS_BYTE_L) {
       do {
-        rans1 = (rans1 << 8) | (0xff & input.get())
+        rans1 = (rans1 << 8) | inputBuffer[inputPos++]
       } while (rans1 < RANS_BYTE_L)
     }
     if (rans2 < RANS_BYTE_L) {
       do {
-        rans2 = (rans2 << 8) | (0xff & input.get())
+        rans2 = (rans2 << 8) | inputBuffer[inputPos++]
       } while (rans2 < RANS_BYTE_L)
     }
     if (rans7 < RANS_BYTE_L) {
       do {
-        rans7 = (rans7 << 8) | (0xff & input.get())
+        rans7 = (rans7 << 8) | inputBuffer[inputPos++]
       } while (rans7 < RANS_BYTE_L)
     }
 
@@ -88,16 +91,16 @@ export default function uncompress(
 
   // Remainder
   for (; i7 < outputSize; i7 += 1) {
-    const /* int */ c7 = 0xff & D[l7].R[rans7 & MASK]
+    const /* int */ c7 = D[l7].R[rans7 & MASK]
     // Inline putAt to avoid function call overhead
-    output._buffer[i7] = c7
+    outputBuffer[i7] = c7
 
     // Inline advanceSymbol to avoid function call overhead
     const sym = syms[l7][c7]
     rans7 = sym.freq * (rans7 >> TF_SHIFT) + (rans7 & MASK) - sym.start
     if (rans7 < RANS_BYTE_L) {
       do {
-        rans7 = (rans7 << 8) | (0xff & input.get())
+        rans7 = (rans7 << 8) | inputBuffer[inputPos++]
       } while (rans7 < RANS_BYTE_L)
     }
 

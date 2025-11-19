@@ -21,6 +21,9 @@ export default function uncompress(
   const /* int */ outputSize = out.remaining()
   const /* int */ outputEnd = outputSize & ~3
   const D_R = D.R
+  const inputBuffer = input._buffer
+  let inputPos = input.position()
+  const outputBuffer = out._buffer
 
   for (let i = 0; i < outputEnd; i += 4) {
     const /* byte */ c0 = D_R[rans0 & MASK]
@@ -29,15 +32,15 @@ export default function uncompress(
     const /* byte */ c3 = D_R[rans3 & MASK]
 
     // Inline putAt to avoid function call overhead
-    out._buffer[i] = c0
-    out._buffer[i + 1] = c1
-    out._buffer[i + 2] = c2
-    out._buffer[i + 3] = c3
+    outputBuffer[i] = c0
+    outputBuffer[i + 1] = c1
+    outputBuffer[i + 2] = c2
+    outputBuffer[i + 3] = c3
 
-    const sym0 = syms[0xff & c0]
-    const sym1 = syms[0xff & c1]
-    const sym2 = syms[0xff & c2]
-    const sym3 = syms[0xff & c3]
+    const sym0 = syms[c0]
+    const sym1 = syms[c1]
+    const sym2 = syms[c2]
+    const sym3 = syms[c3]
 
     rans0 = sym0.freq * (rans0 >> TF_SHIFT) + (rans0 & MASK) - sym0.start
     rans1 = sym1.freq * (rans1 >> TF_SHIFT) + (rans1 & MASK) - sym1.start
@@ -47,25 +50,28 @@ export default function uncompress(
     // Inline renormalize to avoid function call overhead
     if (rans0 < RANS_BYTE_L) {
       do {
-        rans0 = (rans0 << 8) | (0xff & input.get())
+        rans0 = (rans0 << 8) | inputBuffer[inputPos++]
       } while (rans0 < RANS_BYTE_L)
     }
     if (rans1 < RANS_BYTE_L) {
       do {
-        rans1 = (rans1 << 8) | (0xff & input.get())
+        rans1 = (rans1 << 8) | inputBuffer[inputPos++]
       } while (rans1 < RANS_BYTE_L)
     }
     if (rans2 < RANS_BYTE_L) {
       do {
-        rans2 = (rans2 << 8) | (0xff & input.get())
+        rans2 = (rans2 << 8) | inputBuffer[inputPos++]
       } while (rans2 < RANS_BYTE_L)
     }
     if (rans3 < RANS_BYTE_L) {
       do {
-        rans3 = (rans3 << 8) | (0xff & input.get())
+        rans3 = (rans3 << 8) | inputBuffer[inputPos++]
       } while (rans3 < RANS_BYTE_L)
     }
   }
+
+  // Update input position before remainder
+  input.setPosition(inputPos)
 
   out.setPosition(outputEnd)
   let /* byte */ c: number
