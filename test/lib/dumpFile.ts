@@ -25,7 +25,7 @@ async function dumpContainerById(file, containerId) {
   }
   const data = [containerHeader]
   for (let blockNum = 0; blockNum < numBlocks; blockNum += 1) {
-    const block = await file.readBlock(blockPosition)
+    let block = await file.readBlock(blockPosition)
     if (
       block.contentType === 'MAPPED_SLICE_HEADER' ||
       block.contentType === 'UNMAPPED_SLICE_HEADER'
@@ -35,8 +35,14 @@ async function dumpContainerById(file, containerId) {
         blockPosition - container.filePosition - containerHeader._size,
       )
       data.push(slice)
-      // numBlocks is the count of blocks AFTER the header, so no need to subtract
-      blockNum += slice.header.parsedContent.numBlocks
+      // Skip the data blocks that belong to this slice
+      // The slice header's numBlocks tells us how many data blocks follow
+      const numSliceBlocks = slice.header.parsedContent.numBlocks
+      for (let i = 0; i < numSliceBlocks; i++) {
+        blockPosition = block._endPosition
+        block = await file.readBlock(blockPosition)
+      }
+      blockNum += numSliceBlocks
     } else if (block.contentType === 'FILE_HEADER') {
       // use the getSamHeader
       data.push({ samHeader: await file.getSamHeader() })
