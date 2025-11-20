@@ -438,10 +438,13 @@ export default class CramSlice {
         })
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
-          console.warn(
-            'read attempted beyond end of buffer, file seems truncated.',
+          const recordsDecoded = i
+          const recordsExpected = sliceHeader.parsedContent.numRecords
+          throw new CramMalformedError(
+            `Failed to decode all records in slice. Decoded ${recordsDecoded} of ${recordsExpected} expected records. ` +
+            `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
+            `or (3) there's a bug in the decoder. Original error: ${e.message}`,
           )
-          break
         } else {
           throw e
         }

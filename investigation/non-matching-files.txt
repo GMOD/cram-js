@@ -1,0 +1,131 @@
+CRAM Files That Don't Match Samtools Exactly
+==============================================
+
+EXCLUDED FROM VALIDATION (11 files with known issues):
+-------------------------------------------------------
+
+1. c1#noseq.tmp.cram
+   - Issue: 7 records decoded vs 9 expected by samtools
+   - Category: Records with no sequence data
+   - Notes: Special handling for missing sequence data may differ
+
+2. ce#1000.tmp.cram
+   - Issue: Large file with record count discrepancy
+   - Category: Large file edge case
+   - Notes: Needs investigation
+
+3. ce#tag_depadded.tmp.cram
+   - Issue: Tag padding edge case
+   - Category: Tag handling
+   - Notes: Depadding operation may differ
+
+4. ce#tag_padded.tmp.cram
+   - Issue: Tag padding edge case (8 vs 7 in region test)
+   - Category: Tag handling
+   - Notes: Padding operation boundary handling
+
+5. ce#unmap2.tmp.cram
+   - Issue: Unmapped records edge case
+   - Category: Unmapped reads
+   - Notes: Mix of mapped and unmapped records
+
+6. hg19mini#cramQueryTest.cram
+   - Issue: Samtools itself fails with "negative values not permitted for header sequence start or span fields"
+   - Category: Invalid file for samtools
+   - Notes: File format issue that samtools cannot handle
+
+7. human_g1k_v37.20.21.10M-10M200k#cramQueryWithBAI.cram
+   - Issue: Samtools itself fails with "negative values not permitted for header sequence start or span fields"
+   - Category: Invalid file for samtools
+   - Notes: File format issue that samtools cannot handle
+
+8. md#1.tmp.cram
+   - Issue: MD tag handling difference
+   - Category: Tag handling
+   - Notes: MD tag computation may differ
+
+9. hts-specs/cram/3.0/passed/0802_ctr.cram
+   - Issue: HTS-SPECS compliance edge case
+   - Category: Spec compliance
+   - Notes: Container-level edge case
+
+10. hts-specs/cram/3.0/passed/1404_index_multislice.cram
+    - Issue: Multi-slice indexing edge case
+    - Category: Indexing
+    - Notes: Multiple slices per container
+
+11. hts-specs/cram/3.0/passed/1405_index_multisliceref.cram
+    - Issue: Multi-slice multi-reference edge case
+    - Category: Indexing
+    - Notes: Multiple slices with multiple references
+
+
+BOUNDARY HANDLING DISCREPANCIES (3 region-based tests):
+--------------------------------------------------------
+
+1. SRR396636.sorted.clip.cram region 25999-26499
+   - Decoded: 406 records
+   - Samtools: 404 records
+   - Difference: +2 records (0.5%)
+   - Notes: Likely due to how overlapping reads at region boundaries are handled
+
+2. SRR396637.sorted.clip.cram region 163504-175473
+   - Decoded: 5941 records
+   - Samtools: 5962 records
+   - Difference: -21 records (0.35%)
+   - Notes: Likely due to how overlapping reads at region boundaries are handled
+
+3. ce#tag_padded.tmp.cram region 2-200
+   - Decoded: 8 records
+   - Samtools: 7 records
+   - Difference: +1 record (14%)
+   - Notes: Small region with padding, boundary handling difference
+
+
+ADDITIONAL EDGE CASES (not currently validated):
+-------------------------------------------------
+
+4. human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram first ref
+   - Decoded: 6 records
+   - Samtools: 7 records
+   - Difference: -1 record (14%)
+   - Notes: Test currently uses range check (6-7 accepted)
+
+
+ANALYSIS:
+=========
+
+Total CRAM files in test suite: ~183
+Files with exact match: ~169 (92%)
+Files excluded due to known issues: 11 (6%)
+Files with boundary handling differences: 3-4 (2%)
+
+RECOMMENDATIONS:
+================
+
+1. Investigate c1#noseq.tmp.cram - Missing sequence data handling
+2. Investigate ce#1000.tmp.cram - Large file discrepancy
+3. Investigate tag padding files - Depadded and padded tag handling
+4. Investigate unmapped record handling in ce#unmap2.tmp.cram
+5. Review boundary handling logic for region queries
+6. Review MD tag computation in md#1.tmp.cram
+7. Review multi-slice and multi-slice-multi-ref indexing edge cases
+
+FILES TO FOCUS ON FOR 100% MATCH:
+==================================
+
+Priority 1 (Likely decoder bugs):
+- c1#noseq.tmp.cram (7 vs 9 = 2 missing records)
+- human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram (6 vs 7 = 1 missing record)
+- ce#1000.tmp.cram (large file, needs investigation)
+
+Priority 2 (Boundary handling):
+- SRR396636.sorted.clip.cram region (406 vs 404 = +2 extra records)
+- SRR396637.sorted.clip.cram region (5941 vs 5962 = -21 missing records)
+- ce#tag_padded.tmp.cram region (8 vs 7 = +1 extra record)
+
+Priority 3 (Edge cases):
+- Tag padding/depadding files
+- Unmapped record handling
+- Multi-slice indexing
+- MD tag computation

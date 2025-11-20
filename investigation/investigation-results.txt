@@ -1,0 +1,149 @@
+INVESTIGATION RESULTS FOR TOP PRIORITY FILES
+=============================================
+Generated: 2025-11-19
+
+FINDINGS:
+=========
+
+1. c1#noseq.tmp.cram - CRITICAL BUG FOUND
+------------------------------------------
+   Decoded: 7 records
+   Samtools: 9 records
+   Missing: 2 records (22% failure rate)
+
+   ROOT CAUSE:
+   The decoder fails to read records with missing or partial quality scores and/or missing sequence data.
+   
+   Specifically missing:
+   - sQ3: Has sequence "AACCCGGTT" but quality is only "*" (1 char instead of 9)
+   - SQ3: Has NO sequence "*" and NO quality "*"
+   
+   Records successfully decoded:
+   - sq1, sQ1, SQ1: All have full sequence (10bp) and full quality (10 chars)
+   - sq2, sQ2, SQ2: All have full sequence (9bp) and full quality (9 chars)
+   - sq3: Has full sequence (9bp) and full quality (9 chars)
+   
+   BUG LOCATION:
+   The decoder likely has code that expects quality scores to match sequence length,
+   and/or code that cannot handle completely missing sequence data ("*" in SAM format).
+   
+   Files: test/data/c1#noseq.tmp.cram
+   Priority: CRITICAL - This is a decoder bug
+   Fix Required: Handle records where:
+     - Quality string length != sequence length
+     - Sequence is completely absent (represented as "*")
+     - Quality is completely absent (represented as "*")
+
+
+2. ce#1000.tmp.cram - CRITICAL BUG FOUND  
+-----------------------------------------
+   Decoded: 602 records
+   Samtools: 1000 records
+   Missing: 398 records (40% failure rate!!!)
+
+   ROOT CAUSE:
+   Unknown - needs deeper investigation. This is a massive failure affecting
+   nearly half the records in the file.
+   
+   Possible causes:
+   - Bug in handling multi-container files
+   - Bug in handling specific CRAM encoding features
+   - Bug in slice decoding that causes early termination
+   - Memory/buffer overflow causing data loss
+   
+   Files: test/data/ce#1000.tmp.cram
+   Priority: CRITICAL - 40% data loss is catastrophic
+   Fix Required: Debug why 398 records are not being decoded
+   
+   Next steps:
+   - Check how many containers/slices are in the file
+   - Compare container headers with samtools
+   - Check if decoding stops at a specific point
+
+
+3. human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram
+-----------------------------------------------------------
+   Decoded: 6 records (from first reference)
+   Samtools: 7 records (from reference "20")
+   Missing: 1 record (14% failure rate)
+
+   ROOT CAUSE:
+   Cannot fully investigate as samtools requires external reference FASTA file
+   that is not available in the test data directory. The file references:
+   /home/chris/projects/htsjdk/testdata/htsjdk/samtools/cram/human_g1k_v37.20.21.10M-10M200k.fasta
+   
+   However, the decoder managed to read 6 records without the reference,
+   suggesting either:
+   - The decoder has embedded sequence fallback
+   - One record requires reference sequence to decode properly
+   
+   Files: test/data/human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram
+   Priority: HIGH - Need reference FASTA to investigate properly
+   Fix Required: Unknown until investigation with proper reference
+
+
+SUMMARY OF BUGS FOUND:
+=======================
+
+BUG #1: Missing Quality Score / Sequence Handling
+   Severity: CRITICAL
+   Impact: Records with non-standard quality scores or missing sequence are silently dropped
+   Affected: c1#noseq.tmp.cram (2 records lost)
+   Likely affects: Any CRAM file with similar edge cases
+
+BUG #2: Massive Record Loss in Large Files
+   Severity: CRITICAL  
+   Impact: 40% of records missing in ce#1000.tmp.cram
+   Affected: ce#1000.tmp.cram (398 records lost out of 1000)
+   Likely affects: Other large files or files with specific encoding patterns
+
+BUG #3: Reference-Dependent Record Decoding
+   Severity: HIGH
+   Impact: 1 record missing when reference not available
+   Affected: human_g1k_v37 files
+   Likely affects: Files that require external reference sequences
+
+
+RECOMMENDED ACTIONS:
+====================
+
+IMMEDIATE (Critical):
+1. Fix Bug #1: Add handling for records with:
+   - Quality scores shorter than sequence length
+   - Missing sequence (represented as "*")
+   - Missing quality (represented as "*")
+   
+2. Investigate Bug #2: Debug ce#1000.tmp.cram to find why 398 records are missing:
+   - Add logging to see how many containers/slices are processed
+   - Check if decoding stops early or skips certain containers
+   - Compare with samtools dump of container structure
+   
+3. Add test for reference file: Copy or generate the required reference FASTA
+   for human_g1k_v37 testing
+
+FOLLOW-UP:
+4. Test the other excluded files after Bug #1 is fixed:
+   - ce#tag_depadded.tmp.cram
+   - ce#tag_padded.tmp.cram  
+   - ce#unmap2.tmp.cram
+   - md#1.tmp.cram
+   
+5. Review boundary handling for region queries (low priority)
+
+6. Review HTS-SPECS compliance edge cases
+
+
+IMPACT ASSESSMENT:
+==================
+
+Current decoder accuracy: ~92% for whole files
+Critical bugs affect: ~8% of test files
+Estimated production impact: 
+- Bug #1: Could cause silent data loss for any file with quality/sequence edge cases
+- Bug #2: Could cause 40%+ data loss for files with certain encoding patterns
+- Bug #3: Affects files requiring external references
+
+Both Bug #1 and Bug #2 represent SILENT FAILURES - the decoder doesn't error,
+it just returns fewer records than expected. This is extremely dangerous as
+users may not notice they're getting incomplete data.
+

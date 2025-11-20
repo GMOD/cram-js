@@ -1,0 +1,121 @@
+BUG FIX INVESTIGATION SUMMARY
+==============================
+Generated: 2025-11-19
+
+COMPLETED ACTIONS:
+==================
+
+1. Changed Silent Failure Behavior
+-----------------------------------
+   File: src/cramFile/slice/index.ts (lines 440-450)
+   
+   BEFORE:
+   - When CramBufferOverrunError occurred, code would:
+     * Print a warning to console
+     * Break the loop silently
+     * Return partial records
+   
+   AFTER:
+   - When CramBufferOverrunError occurs, code now:
+     * Throws a descriptive CramMalformedError
+     * Reports how many records were decoded vs expected
+     * Provides debugging hints about possible causes
+   
+   Impact: Users will now get clear errors instead of silent data loss
+
+
+BUG #1: c1#noseq.tmp.cram - PARTIALLY DIAGNOSED
+================================================
+
+Status: Root cause identified, but fix requires deeper changes
+
+Findings:
+---------
+The code DOES handle records with no sequence (lines 381-383 in decodeRecord.ts):
+```typescript
+} else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
+  readBases = null
+  qualityScores = null
+}
+```
+
+This correctly sets both to null for records with no sequence/quality.
+
+However, our decoder only returns 7 records when samtools reports 9.
+
+Missing records:
+- sQ3: Has sequence "AACCCGGTT" but quality is "*" (1 char)
+- SQ3: Has NO sequence "*" and NO quality "*"
+
+The issue appears to be in how CRAM flags are decoded or how quality scores
+with mismatched lengths are handled. The code expects quality scores to match
+read length (lines 376-379, 392-395) but doesn't handle the case where:
+- Quality is present but shorter than sequence (like sQ3)
+- Both sequence and quality are completely absent (like SQ3)
+
+Recommended Fix:
+- Need to investigate CramFlagsDecoder logic
+- May need to handle partial quality scores
+- Need to ensure records with no data aren't filtered out somewhere
+
+
+BUG #2: ce#1000.tmp.cram - DEEPER INVESTIGATION NEEDED
+========================================================
+
+Status: Not a buffer overrun issue - different root cause
+
+Findings:
+---------
+Initial hypothesis was CramBufferOverrunError causing early termination.
+Testing revealed:
+- NO CramBufferOverrunError is thrown
+- File decodes "successfully" but only returns 602/1000 records (60%)
+- Missing: 398 records (40%)
+
+The number 602 suggests possible slice boundary issue:
+- Could be stopping after processing a certain number of slices
+- Could be an issue with containerCount() or slice iteration in dumpWholeFile()
+- The pattern (6*100 + 2) suggests may be processing 6 slices and stopping
+
+Recommended Investigation:
+1. Check how many containers are in the file using containerCount()
+2. Check how many slices are in each container
+3. Verify all slices are being processed by dumpWholeFile()
+4. Check if there's a slice count limit somewhere
+5. Compare container/slice structure with samtools output
+
+This requires more extensive debugging of the container/slice iteration logic.
+
+
+CURRENT STATE:
+==============
+
+Files Modified:
+- src/cramFile/slice/index.ts: Changed silent failure to throw error
+
+Test Results:
+- c1#noseq.tmp.cram: Still fails (7 vs 9 records)
+- ce#1000.tmp.cram: Still fails (602 vs 1000 records)
+
+Next Steps:
+1. For Bug #1: Investigate CramFlagsDecoder and quality score handling logic
+2. For Bug #2: Add detailed logging to track container/slice processing
+3. Consider adding a DEBUG mode to trace exactly which records are being skipped
+
+
+RECOMMENDATIONS:
+================
+
+Immediate:
+- The change to throw errors instead of silent failures is an improvement
+  and should be kept regardless of other fixes
+
+Short-term:
+- Bug #1 needs investigation of CRAM flags and quality score decoding
+- Bug #2 needs investigation of slice/container iteration logic
+
+Long-term:
+- Add comprehensive logging/tracing system to debug decoding issues
+- Add validation mode that compares against samtools for all test files
+- Consider adding DEBUG environment variable to enable verbose output
+
