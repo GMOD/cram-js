@@ -35,6 +35,7 @@ async function dumpContainerById(file, containerId) {
         blockPosition - container.filePosition - containerHeader._size,
       )
       data.push(slice)
+      // numBlocks is the count of blocks AFTER the header, so no need to subtract
       blockNum += slice.header.parsedContent.numBlocks
     } else if (block.contentType === 'FILE_HEADER') {
       // use the getSamHeader
