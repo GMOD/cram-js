@@ -21,7 +21,9 @@ for (const container of fileData) {
         for (const feature of item.features) {
           recordCount++
           const seq = feature.getReadBases ? feature.getReadBases() : 'N/A'
-          console.log(`${recordCount}. ${feature.readName} - seq: ${seq} - flags: ${feature.flags}`)
+          console.log(
+            `${recordCount}. ${feature.readName} - seq: ${seq} - flags: ${feature.flags}`,
+          )
         }
       }
     }

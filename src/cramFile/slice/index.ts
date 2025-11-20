@@ -442,8 +442,8 @@ export default class CramSlice {
           const recordsExpected = sliceHeader.parsedContent.numRecords
           throw new CramMalformedError(
             `Failed to decode all records in slice. Decoded ${recordsDecoded} of ${recordsExpected} expected records. ` +
-            `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
-            `or (3) there's a bug in the decoder. Original error: ${e.message}`,
+              `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
+              `or (3) there's a bug in the decoder. Original error: ${e.message}`,
           )
         } else {
           throw e

@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util'
 import { CramFile } from '../src'
 import { FetchableSmallFasta } from './lib/fasta'
+import { testDataFile } from './lib/util'
 
 test('investigate ce#1000.tmp.cram containers', async () => {
   const fasta = new FetchableSmallFasta(testDataFile('ce.fa'))

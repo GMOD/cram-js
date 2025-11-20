@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util'
 import { CramFile } from '../src'
-import { FetchableSmallFasta } from './lib/fasta'
 import { dumpWholeFile } from './lib/dumpFile'
+import { FetchableSmallFasta } from './lib/fasta'
+import { testDataFile } from './lib/util'
 
 test('investigate c1#noseq.tmp.cram', async () => {
   const fasta = new FetchableSmallFasta(testDataFile('c1.fa'))
@@ -33,7 +33,9 @@ test('investigate c1#noseq.tmp.cram', async () => {
               flags: feature.flags,
               qualLen: qualityScores.length,
             })
-            console.log(`${recordCount}. ${feature.readName} - seq: ${seq} (len=${feature.readLength}) - flags: ${feature.flags} - qual: ${qualityScores.length}`)
+            console.log(
+              `${recordCount}. ${feature.readName} - seq: ${seq} (len=${feature.readLength}) - flags: ${feature.flags} - qual: ${qualityScores.length}`,
+            )
           }
         }
       }

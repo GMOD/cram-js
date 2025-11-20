@@ -104,14 +104,26 @@ export default class IndexedCramFile {
     // fetch all the slices and parse the feature data
     const sliceResults = await Promise.all(
       slices.map(slice =>
-        this.getRecordsInSlice(
-          slice,
-          feature =>
-            feature.sequenceId === seq &&
+        this.getRecordsInSlice(slice, feature => {
+          // Check if feature belongs to this sequence
+          if (feature.sequenceId !== seq) {
+            return false
+          }
+
+          // For unmapped reads (lengthOnRef is undefined), they are placed at their
+          // mate's position. Include them if that position is within the range.
+          if (feature.lengthOnRef === undefined) {
+            return (
+              feature.alignmentStart >= start && feature.alignmentStart <= end
+            )
+          }
+
+          // For mapped reads, check if they overlap the requested range
+          return (
             feature.alignmentStart <= end &&
-            feature.lengthOnRef !== undefined &&
-            feature.alignmentStart + feature.lengthOnRef - 1 >= start,
-        ),
+            feature.alignmentStart + feature.lengthOnRef - 1 >= start
+          )
+        }),
       ),
     )
 
