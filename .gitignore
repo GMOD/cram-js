@@ -13,4 +13,3 @@ built-tests/
 esm
 .idea
 *.cpuprofile
-*.txt

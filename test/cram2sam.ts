@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { IndexedFasta } from '@gmod/indexedfasta'
 
 import { CraiIndex, IndexedCramFile } from '../src'
