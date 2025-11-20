@@ -28,7 +28,10 @@ function getSamtoolsCount(cramPath: string, region?: string): number {
 function getRefNames(cramPath: string): string[] {
   try {
     const cmd = `samtools view -H "${cramPath}" | grep "^@SQ" | sed 's/.*SN:\\([^\\t]*\\).*/\\1/'`
-    const result = execSync(cmd, { encoding: 'utf8', shell: '/bin/bash' }).trim()
+    const result = execSync(cmd, {
+      encoding: 'utf8',
+      shell: '/bin/bash',
+    }).trim()
     return result.split('\n').filter(Boolean)
   } catch (error) {
     console.error(`Failed to get ref names from ${cramPath}:`, error)

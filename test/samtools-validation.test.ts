@@ -1,6 +1,7 @@
 import { execSync } from 'child_process'
-import { describe, expect, it } from 'vitest'
 import { join } from 'path'
+
+import { describe, expect, it } from 'vitest'
 
 import { testDataFile } from './lib/util'
 import CraiIndex from '../src/craiIndex'
@@ -20,9 +21,12 @@ function getSamtoolsCount(filename: string, region?: string): number {
 
 function getRefNames(filename: string): string[] {
   const cramPath = join(process.cwd(), 'test', 'data', filename)
-  const cmd = `samtools view -H "${cramPath}" | grep "^@SQ" | sed 's/.*SN:\\([^\\t]*\\).*/\\1/'`
+  const cmd = String.raw`samtools view -H "${cramPath}" | grep "^@SQ" | sed 's/.*SN:\([^\t]*\).*/\1/'`
   try {
-    const result = execSync(cmd, { encoding: 'utf8', shell: '/bin/bash' }).trim()
+    const result = execSync(cmd, {
+      encoding: 'utf8',
+      shell: '/bin/bash',
+    }).trim()
     return result.split('\n').filter(Boolean)
   } catch (error) {
     return []
@@ -74,7 +78,9 @@ describe('CRAM record count validation against samtools', () => {
       it('whole file record count matches samtools', async () => {
         const cram = new IndexedCramFile({
           cramFilehandle: testDataFile(filename),
-          index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
+          index: new CraiIndex({
+            filehandle: testDataFile(`${filename}.crai`),
+          }),
         })
 
         const samHeader = await cram.cram.getSamHeader()
@@ -110,7 +116,9 @@ describe('CRAM record count validation against samtools', () => {
 
         const cram = new IndexedCramFile({
           cramFilehandle: testDataFile(filename),
-          index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
+          index: new CraiIndex({
+            filehandle: testDataFile(`${filename}.crai`),
+          }),
         })
 
         const features = await cram.getRecordsForRange(
@@ -131,7 +139,9 @@ describe('CRAM record count validation against samtools', () => {
 
         const cram = new IndexedCramFile({
           cramFilehandle: testDataFile(filename),
-          index: new CraiIndex({ filehandle: testDataFile(`${filename}.crai`) }),
+          index: new CraiIndex({
+            filehandle: testDataFile(`${filename}.crai`),
+          }),
         })
 
         const features = await cram.getRecordsForRange(
@@ -363,17 +373,13 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
       sqLines.forEach((sqLine, refId) => {
         sqLine.data.forEach(item => {
           if (item.tag === 'SN') {
-            const refName = item.value as string
+            const refName = item.value
             nameToId[refName] = refId
           }
         })
       })
 
-      const feats = await cram.getRecordsForRange(
-        nameToId.chr9!,
-        0,
-        200000000,
-      )
+      const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
       const samtoolsCount = getSamtoolsCount('igv-js-bug/archived.cram', 'chr9')
 
       expect(feats.length).toEqual(samtoolsCount)
@@ -393,17 +399,13 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
       sqLines.forEach((sqLine, refId) => {
         sqLine.data.forEach(item => {
           if (item.tag === 'SN') {
-            const refName = item.value as string
+            const refName = item.value
             nameToId[refName] = refId
           }
         })
       })
 
-      const feats = await cram.getRecordsForRange(
-        nameToId.chr9!,
-        0,
-        200000000,
-      )
+      const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
       const samtoolsCount = getSamtoolsCount('igv-js-bug/normal.cram', 'chr9')
 
       expect(feats.length).toEqual(samtoolsCount)

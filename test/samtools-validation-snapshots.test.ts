@@ -1,12 +1,13 @@
 import { execSync } from 'child_process'
-import { describe, expect, it } from 'vitest'
-import { join } from 'path'
 import { readFileSync } from 'fs'
+import { join } from 'path'
 
-import { testDataFile } from './lib/util'
+import { describe, expect, it } from 'vitest'
+
 import { CramFile } from '../src'
-import { FetchableSmallFasta } from './lib/fasta'
 import { dumpWholeFile } from './lib/dumpFile'
+import { FetchableSmallFasta } from './lib/fasta'
+import { testDataFile } from './lib/util'
 
 function getSamtoolsCount(filename: string): number {
   const cramPath = join(process.cwd(), 'test', 'data', filename)
@@ -100,12 +101,13 @@ describe('CRAM snapshot test validation against samtools', () => {
     htsSpecsFiles.forEach(filename => {
       it(`${filename} record count matches samtools`, async () => {
         // Most hts-specs files use ce.fa
-        const fastaFile = filename.includes('0902_comp_bz2') ||
+        const fastaFile =
+          filename.includes('0902_comp_bz2') ||
           filename.includes('0903_comp_lzma')
-          ? 'ce.fa'
-          : filename.includes('level-')
-          ? 'ce.fa'
-          : undefined
+            ? 'ce.fa'
+            : filename.includes('level-')
+              ? 'ce.fa'
+              : undefined
 
         const fasta = fastaFile
           ? new FetchableSmallFasta(testDataFile(fastaFile))
