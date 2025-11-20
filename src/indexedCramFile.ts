@@ -119,9 +119,10 @@ export default class IndexedCramFile {
           }
 
           // For mapped reads, check if they overlap the requested range
+          // Use > instead of >= for start boundary to match samtools behavior
           return (
             feature.alignmentStart <= end &&
-            feature.alignmentStart + feature.lengthOnRef - 1 >= start
+            feature.alignmentStart + feature.lengthOnRef - 1 > start
           )
         }),
       ),
