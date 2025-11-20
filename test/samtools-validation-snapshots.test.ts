@@ -1,6 +1,6 @@
 import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
-import { join } from 'path'
+import path from 'path'
 
 import { describe, expect, it } from 'vitest'
 
@@ -10,7 +10,7 @@ import { FetchableSmallFasta } from './lib/fasta'
 import { testDataFile } from './lib/util'
 
 function getSamtoolsCount(filename: string): number {
-  const cramPath = join(process.cwd(), 'test', 'data', filename)
+  const cramPath = path.join(process.cwd(), 'test', 'data', filename)
   const cmd = `samtools view -c "${cramPath}"`
   try {
     const result = execSync(cmd, { encoding: 'utf8' }).trim()
@@ -59,7 +59,7 @@ describe('CRAM snapshot test validation against samtools', () => {
     .filter(filename => {
       // Filter out files that don't exist
       try {
-        const cramPath = join(process.cwd(), 'test', 'data', filename)
+        const cramPath = path.join(process.cwd(), 'test', 'data', filename)
         execSync(`test -f "${cramPath}"`, { encoding: 'utf8' })
         return true
       } catch {

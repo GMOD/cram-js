@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { writeFileSync } from 'node:fs'
 import { Session } from 'node:inspector'
 

@@ -1,5 +1,5 @@
 import { execSync } from 'child_process'
-import { join } from 'path'
+import path from 'path'
 
 import { describe, expect, it } from 'vitest'
 
@@ -8,7 +8,7 @@ import CraiIndex from '../src/craiIndex'
 import { IndexedCramFile } from '../src/index'
 
 function getSamtoolsCount(filename: string, region?: string): number {
-  const cramPath = join(process.cwd(), 'test', 'data', filename)
+  const cramPath = path.join(process.cwd(), 'test', 'data', filename)
   const regionArg = region ? ` "${region}"` : ''
   const cmd = `samtools view -c "${cramPath}"${regionArg}`
   try {
@@ -20,7 +20,7 @@ function getSamtoolsCount(filename: string, region?: string): number {
 }
 
 function getRefNames(filename: string): string[] {
-  const cramPath = join(process.cwd(), 'test', 'data', filename)
+  const cramPath = path.join(process.cwd(), 'test', 'data', filename)
   const cmd = String.raw`samtools view -H "${cramPath}" | grep "^@SQ" | sed 's/.*SN:\([^\t]*\).*/\1/'`
   try {
     const result = execSync(cmd, {

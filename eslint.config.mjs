@@ -11,6 +11,7 @@ export default defineConfig(
       'dist/**/*',
       '*.js',
       '*.mjs',
+      'scripts/*',
       'example/*',
       'benchmarks/*',
       'src/htscodecs',
@@ -157,6 +158,7 @@ export default defineConfig(
     files: ['test/**/*'],
     rules: {
       'import/extensions': 'off',
+      'no-console': 'off',
     },
   },
 )
