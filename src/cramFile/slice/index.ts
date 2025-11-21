@@ -392,23 +392,16 @@ export default class CramSlice {
       },
     }
 
-    // Pre-resolve all codecs to avoid repeated lookups
-    const codecCache = new Map<DataSeriesEncodingKey, any>()
-
     const decodeDataSeries: DataSeriesDecoder = <
       T extends DataSeriesEncodingKey,
     >(
       dataSeriesName: T,
     ): DataTypeMapping[DataSeriesTypes[T]] | undefined => {
-      let codec = codecCache.get(dataSeriesName)
-      if (codec === undefined) {
-        codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
-        if (!codec) {
-          throw new CramMalformedError(
-            `no codec defined for ${dataSeriesName} data series`,
-          )
-        }
-        codecCache.set(dataSeriesName, codec)
+      const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
+      if (!codec) {
+        throw new CramMalformedError(
+          `no codec defined for ${dataSeriesName} data series`,
+        )
       }
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }

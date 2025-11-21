@@ -115,7 +115,7 @@ function /* static ByteBuffer */ uncompressOrder0Way4(
   // input.order(ByteOrder.LITTLE_ENDIAN);
   const D = new Decoding.AriDecoder()
   const syms = new Array(256)
-  for (let i = 0; i < 256; i += 1) {
+  for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Decoding.DecodingSymbol()
   }
 
@@ -131,17 +131,16 @@ function /* static ByteBuffer */ uncompressOrder1Way4(
   /* const ByteBuffer */ output,
 ) {
   const D = new Array(256)
-  for (let i = 0; i < 256; i += 1) {
+  for (let i = 0; i < D.length; i += 1) {
     D[i] = new Decoding.AriDecoder()
   }
-  const syms = new Array(256)
-  for (let i = 0; i < 256; i += 1) {
+  const /* Decoding.RansDecSymbol[][]  */ syms = new Array(256)
+  for (let i = 0; i < syms.length; i += 1) {
     syms[i] = new Array(256)
-    for (let j = 0; j < 256; j += 1) {
+    for (let j = 0; j < syms[i].length; j += 1) {
       syms[i][j] = new Decoding.DecodingSymbol()
     }
   }
-
   readStatsO1(input, D, syms)
 
   D14(input, output, D, syms)
@@ -159,11 +158,13 @@ class ByteBuffer {
   }
 
   get() {
-    return this._buffer[this._position++]
+    const b = this._buffer[this._position]
+    this._position += 1
+    return b
   }
 
   getByte() {
-    return this._buffer[this._position++]
+    return this.get()
   }
 
   getByteAt(position) {
@@ -175,11 +176,14 @@ class ByteBuffer {
   }
 
   put(val) {
-    this._buffer[this._position++] = val
+    this._buffer[this._position] = val
+    this._position += 1
+    return val
   }
 
   putAt(position, val) {
     this._buffer[position] = val
+    return val
   }
 
   setPosition(pos) {
@@ -194,7 +198,7 @@ class ByteBuffer {
   }
 
   remaining() {
-    return this.length - this._position
+    return this._buffer.length - this._position
   }
 }
 

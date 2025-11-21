@@ -1,12 +1,10 @@
 /* eslint-disable no-console */
-import { writeFileSync } from 'node:fs'
-import { Session } from 'node:inspector'
-
 import { test } from 'vitest'
-
+import { Session } from 'node:inspector'
+import { writeFileSync } from 'node:fs'
+import { testDataFile } from '../test/lib/util'
 import CraiIndex from '../src/craiIndex'
 import { IndexedCramFile } from '../src/index'
-import { testDataFile } from '../test/lib/util'
 
 test('generate CPU profile for SRR396637.sorted.clip.cram parsing', async () => {
   const session = new Session()

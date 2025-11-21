@@ -15,9 +15,10 @@ class AriDecoder {
   // byte[] R;
 
   constructor() {
-    // Use two parallel arrays instead of array of objects for better cache efficiency
-    this.fcF = new Array(256)
-    this.fcC = new Array(256)
+    this.fc = new Array(256)
+    for (let i = 0; i < this.fc.length; i += 1) {
+      this.fc[i] = new FC()
+    }
     this.R = null
   }
 }

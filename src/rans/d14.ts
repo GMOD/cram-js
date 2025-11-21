@@ -1,9 +1,6 @@
 // @ts-nocheck
 import { TF_SHIFT } from './constants.ts'
-
-// Inline constants for performance
-const RANS_BYTE_L = 8388608 // 1 << 23
-const MASK = 4095 // (1 << 12) - 1
+import Decoding from './decoding.ts'
 
 export default function uncompress(
   /* ByteBuffer */ input,
@@ -26,59 +23,26 @@ export default function uncompress(
   let /* int */ l1 = 0
   let /* int */ l2 = 0
   let /* int */ l7 = 0
-
   for (; i0 < isz4; i0 += 1, i1 += 1, i2 += 1, i7 += 1) {
-    const D_l0_R = D[l0].R
-    const D_l1_R = D[l1].R
-    const D_l2_R = D[l2].R
-    const D_l7_R = D[l7].R
+    const /* int */ c0 = 0xff & D[l0].R[Decoding.get(rans0, TF_SHIFT)]
+    const /* int */ c1 = 0xff & D[l1].R[Decoding.get(rans1, TF_SHIFT)]
+    const /* int */ c2 = 0xff & D[l2].R[Decoding.get(rans2, TF_SHIFT)]
+    const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, TF_SHIFT)]
 
-    const /* int */ c0 = 0xff & D_l0_R[rans0 & MASK]
-    const /* int */ c1 = 0xff & D_l1_R[rans1 & MASK]
-    const /* int */ c2 = 0xff & D_l2_R[rans2 & MASK]
-    const /* int */ c7 = 0xff & D_l7_R[rans7 & MASK]
+    output.putAt(i0, c0)
+    output.putAt(i1, c1)
+    output.putAt(i2, c2)
+    output.putAt(i7, c7)
 
-    // Inline putAt to avoid function call overhead
-    output._buffer[i0] = c0
-    output._buffer[i1] = c1
-    output._buffer[i2] = c2
-    output._buffer[i7] = c7
+    rans0 = Decoding.advanceSymbolStep(rans0, syms[l0][c0], TF_SHIFT)
+    rans1 = Decoding.advanceSymbolStep(rans1, syms[l1][c1], TF_SHIFT)
+    rans2 = Decoding.advanceSymbolStep(rans2, syms[l2][c2], TF_SHIFT)
+    rans7 = Decoding.advanceSymbolStep(rans7, syms[l7][c7], TF_SHIFT)
 
-    const sym_l0_c0 = syms[l0][c0]
-    const sym_l1_c1 = syms[l1][c1]
-    const sym_l2_c2 = syms[l2][c2]
-    const sym_l7_c7 = syms[l7][c7]
-
-    rans0 =
-      sym_l0_c0.freq * (rans0 >> TF_SHIFT) + (rans0 & MASK) - sym_l0_c0.start
-    rans1 =
-      sym_l1_c1.freq * (rans1 >> TF_SHIFT) + (rans1 & MASK) - sym_l1_c1.start
-    rans2 =
-      sym_l2_c2.freq * (rans2 >> TF_SHIFT) + (rans2 & MASK) - sym_l2_c2.start
-    rans7 =
-      sym_l7_c7.freq * (rans7 >> TF_SHIFT) + (rans7 & MASK) - sym_l7_c7.start
-
-    // Inline renormalize to avoid function call overhead
-    if (rans0 < RANS_BYTE_L) {
-      do {
-        rans0 = (rans0 << 8) | (0xff & input.get())
-      } while (rans0 < RANS_BYTE_L)
-    }
-    if (rans1 < RANS_BYTE_L) {
-      do {
-        rans1 = (rans1 << 8) | (0xff & input.get())
-      } while (rans1 < RANS_BYTE_L)
-    }
-    if (rans2 < RANS_BYTE_L) {
-      do {
-        rans2 = (rans2 << 8) | (0xff & input.get())
-      } while (rans2 < RANS_BYTE_L)
-    }
-    if (rans7 < RANS_BYTE_L) {
-      do {
-        rans7 = (rans7 << 8) | (0xff & input.get())
-      } while (rans7 < RANS_BYTE_L)
-    }
+    rans0 = Decoding.renormalize(rans0, input)
+    rans1 = Decoding.renormalize(rans1, input)
+    rans2 = Decoding.renormalize(rans2, input)
+    rans7 = Decoding.renormalize(rans7, input)
 
     l0 = c0
     l1 = c1
@@ -88,19 +52,9 @@ export default function uncompress(
 
   // Remainder
   for (; i7 < outputSize; i7 += 1) {
-    const /* int */ c7 = 0xff & D[l7].R[rans7 & MASK]
-    // Inline putAt to avoid function call overhead
-    output._buffer[i7] = c7
-
-    // Inline advanceSymbol to avoid function call overhead
-    const sym = syms[l7][c7]
-    rans7 = sym.freq * (rans7 >> TF_SHIFT) + (rans7 & MASK) - sym.start
-    if (rans7 < RANS_BYTE_L) {
-      do {
-        rans7 = (rans7 << 8) | (0xff & input.get())
-      } while (rans7 < RANS_BYTE_L)
-    }
-
+    const /* int */ c7 = 0xff & D[l7].R[Decoding.get(rans7, TF_SHIFT)]
+    output.putAt(i7, c7)
+    rans7 = Decoding.advanceSymbol(rans7, input, syms[l7][c7], TF_SHIFT)
     l7 = c7
   }
 }
