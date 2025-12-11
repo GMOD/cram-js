@@ -61,36 +61,44 @@ EXPORTS=(
 EXPORT_STR=$(printf "'%s'," "${EXPORTS[@]}")
 EXPORT_STR="[${EXPORT_STR%,}]"
 
-emcc \
-    -O3 \
-    -flto \
-    -s WASM=1 \
-    -s MODULARIZE=1 \
-    -s EXPORT_NAME='createHtsCodecsModule' \
-    -s EXPORTED_FUNCTIONS="$EXPORT_STR" \
-    -s EXPORTED_RUNTIME_METHODS='["getValue","HEAPU8"]' \
-    -s ALLOW_MEMORY_GROWTH=1 \
-    -s INITIAL_MEMORY=16MB \
-    -s MAXIMUM_MEMORY=2GB \
-    -s ENVIRONMENT='web,node,worker' \
-    -s SINGLE_FILE=1 \
-    -s USE_BZIP2=1 \
-    -s USE_ZLIB=1 \
-    -s FILESYSTEM=0 \
-    -s TEXTDECODER=2 \
-    -s SUPPORT_LONGJMP=0 \
-    --closure 1 \
-    -I htscodecs \
-    -I htscodecs/htscodecs \
-    -DHAVE_BUILTIN_PREFETCH \
-    -DNDEBUG \
-    "${SOURCES[@]}" \
-    -o htscodecs.js
+# Common emcc flags
+COMMON_FLAGS=(
+    -O3
+    -flto
+    -s WASM=1
+    -s MODULARIZE=1
+    -s EXPORT_NAME='createHtsCodecsModule'
+    -s EXPORTED_FUNCTIONS="$EXPORT_STR"
+    -s EXPORTED_RUNTIME_METHODS='["getValue","HEAPU8"]'
+    -s ALLOW_MEMORY_GROWTH=1
+    -s INITIAL_MEMORY=16MB
+    -s MAXIMUM_MEMORY=2GB
+    -s ENVIRONMENT='web,node,worker'
+    -s SINGLE_FILE=1
+    -s USE_BZIP2=1
+    -s USE_ZLIB=1
+    -s FILESYSTEM=0
+    -s TEXTDECODER=2
+    -s SUPPORT_LONGJMP=0
+    --closure 1
+    -I htscodecs
+    -I htscodecs/htscodecs
+    -DHAVE_BUILTIN_PREFETCH
+    -DNDEBUG
+)
+
+# Build ESM version (for esm/ directory)
+echo "Building ESM version..."
+emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 "${SOURCES[@]}" -o htscodecs.esm.js
+
+# Build CommonJS version (for dist/ directory)
+echo "Building CommonJS version..."
+emcc "${COMMON_FLAGS[@]}" "${SOURCES[@]}" -o htscodecs.cjs.js
 
 echo "Build complete!"
 
-# Copy to src/wasm
+# Copy ESM version to src/wasm (used during development and for ESM build)
 mkdir -p ../src/wasm
-cp htscodecs.js ../src/wasm/htscodecs.js
+cp htscodecs.esm.js ../src/wasm/htscodecs.js
 
-echo "Copied to src/wasm/htscodecs.js"
+echo "Copied ESM version to src/wasm/htscodecs.js"
