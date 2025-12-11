@@ -17,15 +17,10 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Clone or update htscodecs
-if [ ! -d "htscodecs" ]; then
-    echo "Cloning htscodecs..."
-    git clone --depth 1 https://github.com/samtools/htscodecs.git
-else
-    echo "Updating htscodecs..."
-    cd htscodecs
-    git pull
-    cd ..
+# Verify htscodecs source exists
+if [ ! -d "htscodecs/htscodecs" ]; then
+    echo "Error: htscodecs source not found. Run ./update-htscodecs.sh first."
+    exit 1
 fi
 
 echo "Compiling with Emscripten..."
