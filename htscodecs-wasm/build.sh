@@ -61,7 +61,7 @@ EXPORTS=(
 EXPORT_STR=$(printf "'%s'," "${EXPORTS[@]}")
 EXPORT_STR="[${EXPORT_STR%,}]"
 
-# Common emcc flags
+# Common emcc flags (without ENVIRONMENT, set per-build)
 COMMON_FLAGS=(
     -O3
     -flto
@@ -73,7 +73,6 @@ COMMON_FLAGS=(
     -s ALLOW_MEMORY_GROWTH=1
     -s INITIAL_MEMORY=16MB
     -s MAXIMUM_MEMORY=2GB
-    -s ENVIRONMENT='web,node,worker'
     -s SINGLE_FILE=1
     -s USE_BZIP2=1
     -s USE_ZLIB=1
@@ -87,13 +86,13 @@ COMMON_FLAGS=(
     -DNDEBUG
 )
 
-# Build ESM version (for esm/ directory)
+# Build ESM version (for esm/ directory) - web/worker only, no Node.js require()
 echo "Building ESM version..."
-emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 "${SOURCES[@]}" -o htscodecs.esm.js
+emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,worker' "${SOURCES[@]}" -o htscodecs.esm.js
 
-# Build CommonJS version (for dist/ directory)
+# Build CommonJS version (for dist/ directory) - includes Node.js support
 echo "Building CommonJS version..."
-emcc "${COMMON_FLAGS[@]}" "${SOURCES[@]}" -o htscodecs.cjs.js
+emcc "${COMMON_FLAGS[@]}" -s ENVIRONMENT='web,node,worker' "${SOURCES[@]}" -o htscodecs.cjs.js
 
 echo "Build complete!"
 
