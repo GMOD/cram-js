@@ -68,12 +68,13 @@ EXPORT_STR="[${EXPORT_STR%,}]"
 
 emcc \
     -O3 \
+    -flto \
     -s WASM=1 \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
     -s EXPORT_NAME='createHtsCodecsModule' \
     -s EXPORTED_FUNCTIONS="$EXPORT_STR" \
-    -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap","getValue","setValue","HEAPU8","HEAP32"]' \
+    -s EXPORTED_RUNTIME_METHODS='["getValue","HEAPU8"]' \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s INITIAL_MEMORY=16MB \
     -s MAXIMUM_MEMORY=2GB \
@@ -81,9 +82,14 @@ emcc \
     -s SINGLE_FILE=1 \
     -s USE_BZIP2=1 \
     -s USE_ZLIB=1 \
+    -s FILESYSTEM=0 \
+    -s TEXTDECODER=2 \
+    -s SUPPORT_LONGJMP=0 \
+    --closure 1 \
     -I htscodecs \
     -I htscodecs/htscodecs \
     -DHAVE_BUILTIN_PREFETCH \
+    -DNDEBUG \
     "${SOURCES[@]}" \
     -o htscodecs.js
 

@@ -51,7 +51,7 @@
   ],
   "dependencies": {
     "crc": "^4.3.2",
-    "generic-filehandle2": "^2.0.12",
+    "generic-filehandle2": "^2.0.15",
     "md5": "^2.2.1",
     "quick-lru": "^4.0.1"
   },
