@@ -35,6 +35,7 @@
 // The WASM module is built from the official samtools/htscodecs C library.
 
 export {
+  rans_uncompress,
   rans_uncompress as r4x8_uncompress,
   r4x16_uncompress,
   arith_uncompress,

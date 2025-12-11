@@ -31,6 +31,11 @@ function copyFromWasm(module: HtsCodecsModule, ptr: number, size: number) {
 }
 
 export async function rans_uncompress(input: Uint8Array) {
+  // Handle empty input - C implementation returns NULL for in_size < 9
+  if (input.length === 0) {
+    return new Uint8Array(0)
+  }
+
   const module = await getModule()
 
   const inPtr = copyToWasm(module, input)

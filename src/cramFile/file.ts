@@ -4,7 +4,6 @@ import QuickLRU from 'quick-lru'
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
-import ransuncompress from '../rans/index.ts'
 import { parseHeaderText } from '../sam.ts'
 import { parseItem, tinyMemoize } from './util.ts'
 import { decode } from '../seek-bzip/index.ts'
@@ -291,9 +290,7 @@ export default class CramFile {
     } else if (compressionMethod === 'lzma') {
       return xzDecompress(inputBuffer)
     } else if (compressionMethod === 'rans') {
-      const outputBuffer = new Uint8Array(uncompressedSize)
-      ransuncompress(inputBuffer, outputBuffer)
-      return outputBuffer
+      return await htscodecs.rans_uncompress(inputBuffer)
     } else if (compressionMethod === 'rans4x16') {
       return await htscodecs.r4x16_uncompress(inputBuffer)
     } else if (compressionMethod === 'arith') {
