@@ -156,10 +156,7 @@ export async function zlib_uncompress(input: Uint8Array) {
   }
 }
 
-export async function bz2_uncompress(
-  input: Uint8Array,
-  expectedSize: number,
-) {
+export async function bz2_uncompress(input: Uint8Array, expectedSize: number) {
   if (input.length === 0) {
     return new Uint8Array(0)
   }

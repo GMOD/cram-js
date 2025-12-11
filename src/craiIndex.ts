@@ -68,7 +68,9 @@ export default class CraiIndex {
 
   async parseIndex() {
     const index: ParsedIndex = {}
-    const uncompressedBuffer = await maybeUnzip(await this.filehandle.readFile())
+    const uncompressedBuffer = await maybeUnzip(
+      await this.filehandle.readFile(),
+    )
     const dataView = new DataView(uncompressedBuffer.buffer)
     if (
       uncompressedBuffer.length > 4 &&
