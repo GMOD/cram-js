@@ -285,7 +285,7 @@ export default class CramFile {
   ) {
     // console.log({ compressionMethod })
     if (compressionMethod === 'gzip') {
-      return unzip(inputBuffer)
+      return await unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
       return decode(inputBuffer)
     } else if (compressionMethod === 'lzma') {

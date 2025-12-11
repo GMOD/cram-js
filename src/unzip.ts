@@ -1,5 +1,5 @@
-import { inflate } from 'pako-esm2'
+import { inflate } from './wasm/inflate-wasm-inlined.js'
 
-export function unzip(input: Uint8Array): Uint8Array {
-  return inflate(input, undefined)
+export async function unzip(input: Uint8Array): Promise<Uint8Array> {
+  return inflate(input)
 }
