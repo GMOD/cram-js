@@ -2174,10 +2174,15 @@ generator-function@^2.0.0:
   resolved "https://registry.yarnpkg.com/generator-function/-/generator-function-2.0.1.tgz#0e75dd410d1243687a0ba2e951b94eedb8f737a2"
   integrity sha512-SFdFmIJi+ybC0vjlHN0ZGVGHc3lgE0DxPAT0djjVg+kjOnSqclqmj0KQ7ykTOLP6YxoqOvuAODGdcHJn+43q3g==
 
-generic-filehandle2@^2.0.1, generic-filehandle2@^2.0.12, generic-filehandle2@^2.0.5:
+generic-filehandle2@^2.0.1, generic-filehandle2@^2.0.5:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/generic-filehandle2/-/generic-filehandle2-2.0.14.tgz#bf56dbba9bd39ae8375d5c6b0b9bf8d070ca8180"
   integrity sha512-Gg0EQY2Rd3wlusat7wbmAozxADzmsHKcko+b3/hRM/mh6eGheeyyVEpXoYpFbhlov2QTbjnBOSsPCP8gwywJHQ==
+
+generic-filehandle2@^2.0.15:
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/generic-filehandle2/-/generic-filehandle2-2.0.15.tgz#0602193ddc48d2596ff019a67baaf0b113a6125c"
+  integrity sha512-G5DiLxckyFAEH9Prsidiao+1CGUk7gDjVO8BUBXuaYXlNfsl4en9yGhG8mk+BcKXAwo/asS/9935lk3evg1HjA==
 
 gensync@^1.0.0-beta.2:
   version "1.0.0-beta.2"
@@ -3749,11 +3754,6 @@ package-json-from-dist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz#4f1471a010827a86f94cfd9b0727e36d267de505"
   integrity sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==
-
-pako-esm2@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/pako-esm2/-/pako-esm2-2.0.2.tgz#495108895ed70fc7caaf5faa99ec375d1cc307eb"
-  integrity sha512-bm+PwddAyroj8Ny8tNuLepGW28OUdI2b/PkvhaW2jHBVZ5fgcR1xsrLPiOKwk8LoXyc1az2NdHlvICBN2BjR6Q==
 
 parent-module@^1.0.0:
   version "1.0.1"

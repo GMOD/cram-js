@@ -34,7 +34,7 @@ function addRecordToIndex(index: ParsedIndex, record: number[]) {
   })
 }
 
-function maybeUnzip(data: Uint8Array) {
+async function maybeUnzip(data: Uint8Array) {
   return data[0] === 31 && data[1] === 139 ? unzip(data) : data
 }
 
@@ -68,7 +68,9 @@ export default class CraiIndex {
 
   async parseIndex() {
     const index: ParsedIndex = {}
-    const uncompressedBuffer = maybeUnzip(await this.filehandle.readFile())
+    const uncompressedBuffer = await maybeUnzip(
+      await this.filehandle.readFile(),
+    )
     const dataView = new DataView(uncompressedBuffer.buffer)
     if (
       uncompressedBuffer.length > 4 &&

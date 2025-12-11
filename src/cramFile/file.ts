@@ -4,10 +4,8 @@ import QuickLRU from 'quick-lru'
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
-import ransuncompress from '../rans/index.ts'
 import { parseHeaderText } from '../sam.ts'
 import { parseItem, tinyMemoize } from './util.ts'
-import { decode } from '../seek-bzip/index.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
 import CramRecord from './record.ts'
@@ -285,23 +283,21 @@ export default class CramFile {
   ) {
     // console.log({ compressionMethod })
     if (compressionMethod === 'gzip') {
-      return unzip(inputBuffer)
+      return await unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
-      return decode(inputBuffer)
+      return await htscodecs.bz2_uncompress(inputBuffer, uncompressedSize)
     } else if (compressionMethod === 'lzma') {
       return xzDecompress(inputBuffer)
     } else if (compressionMethod === 'rans') {
-      const outputBuffer = new Uint8Array(uncompressedSize)
-      ransuncompress(inputBuffer, outputBuffer)
-      return outputBuffer
+      return await htscodecs.rans_uncompress(inputBuffer)
     } else if (compressionMethod === 'rans4x16') {
-      return htscodecs.r4x16_uncompress(inputBuffer)
+      return await htscodecs.r4x16_uncompress(inputBuffer)
     } else if (compressionMethod === 'arith') {
-      return htscodecs.arith_uncompress(inputBuffer)
+      return await htscodecs.arith_uncompress(inputBuffer)
     } else if (compressionMethod === 'fqzcomp') {
-      return htscodecs.fqzcomp_uncompress(inputBuffer)
+      return await htscodecs.fqzcomp_uncompress(inputBuffer)
     } else if (compressionMethod === 'tok3') {
-      return htscodecs.tok3_uncompress(inputBuffer)
+      return await htscodecs.tok3_uncompress(inputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,

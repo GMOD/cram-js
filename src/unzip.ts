@@ -1,5 +1,5 @@
-import { inflate } from 'pako-esm2'
+import { zlib_uncompress } from './htscodecs-wasm.ts'
 
-export function unzip(input: Uint8Array): Uint8Array {
-  return inflate(input, undefined)
+export async function unzip(input: Uint8Array): Promise<Uint8Array> {
+  return zlib_uncompress(input)
 }

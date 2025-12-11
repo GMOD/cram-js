@@ -1,5 +1,3 @@
-// @ts-nocheck
-//
 /*
  * Copyright (c) 2020 Genome Research Ltd.
  * Author(s): James Bonfield
@@ -33,39 +31,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// This is an interface to the htscodecs reference implementation of
-// the CRAM 3.1 codecs.
+// This is an interface to the htscodecs library compiled to WASM.
+// The WASM module is built from the official samtools/htscodecs C library.
 
-// This JavaScript file is not part of the reference implementation
-// and is simply and interface to get a consistent interface for cram-js.
-
-import arith from './arith_gen.ts'
-import * as fqzcomp from './fqzcomp.ts'
-import * as r4x8 from './rans.ts'
-import * as r4x16 from './rans4x16.ts'
-import * as tok3 from './tok3.ts'
-
-export function r4x8_uncompress(inputBuffer: Uint8Array) {
-  return r4x8.decode(inputBuffer)
-}
-
-export function r4x16_uncompress(inputBuffer: Uint8Array) {
-  return r4x16.decode(inputBuffer)
-}
-
-export function arith_uncompress(inputBuffer: Uint8Array) {
-  // fix by @cmdcolin for CRAM 3.1
-  // xref https://github.com/jkbonfield/htscodecs/pull/1/files
-  return new arith().decode(inputBuffer)
-}
-
-export function fqzcomp_uncompress(inputBuffer: Uint8Array) {
-  const q_lens = []
-  return fqzcomp.decode(inputBuffer, q_lens)
-}
-
-export function tok3_uncompress(inputBuffer: Uint8Array) {
-  // Returns in string form instead of buffer
-  const out = tok3.decode(inputBuffer, 0, '\0')
-  return Uint8Array.from(Array.from(out).map(letter => letter.charCodeAt(0)))
-}
+export {
+  rans_uncompress,
+  rans_uncompress as r4x8_uncompress,
+  r4x16_uncompress,
+  arith_uncompress,
+  fqzcomp_uncompress,
+  tok3_uncompress,
+  bz2_uncompress,
+} from '../htscodecs-wasm.ts'
