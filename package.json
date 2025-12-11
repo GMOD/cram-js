@@ -34,11 +34,10 @@
     "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
     "prebuild": "yarn clean",
     "clean": "rimraf dist esm",
-    "build:wasm": "./scripts/build-wasm.sh",
-    "build:htscodecs-wasm": "./htscodecs-wasm/build.sh",
+    "build:wasm": "./htscodecs-wasm/build.sh",
     "build:esm": "tsc --outDir esm",
     "build:es5": "tsc --module commonjs --outDir dist",
-    "build": "yarn build:wasm && yarn build:htscodecs-wasm && yarn build:esm && yarn build:es5",
+    "build": "yarn build:wasm && yarn build:esm && yarn build:es5",
     "postbuild": "webpack",
     "postbuild:es5": "echo '{\"type\": \"commonjs\"}' > dist/package.json",
     "preversion": "yarn test --run && yarn build",
@@ -54,7 +53,6 @@
     "crc": "^4.3.2",
     "generic-filehandle2": "^2.0.12",
     "md5": "^2.2.1",
-    "pako-esm2": "^2.0.2",
     "quick-lru": "^4.0.1"
   },
   "devDependencies": {

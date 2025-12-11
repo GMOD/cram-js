@@ -130,6 +130,32 @@ export async function fqzcomp_uncompress(input: Uint8Array) {
   }
 }
 
+export async function zlib_uncompress(input: Uint8Array) {
+  if (input.length === 0) {
+    return new Uint8Array(0)
+  }
+
+  const module = await getModule()
+
+  const inPtr = copyToWasm(module, input)
+  const outSizePtr = module._malloc(4)
+
+  try {
+    const outPtr = module._zlib_uncompress(inPtr, input.length, outSizePtr)
+    if (outPtr === 0) {
+      throw new Error('zlib_uncompress failed')
+    }
+
+    const outSize = module.getValue(outSizePtr, 'i32')
+    const result = copyFromWasm(module, outPtr, outSize)
+    module._free(outPtr)
+    return result
+  } finally {
+    module._free(inPtr)
+    module._free(outSizePtr)
+  }
+}
+
 export async function bz2_uncompress(
   input: Uint8Array,
   expectedSize: number,

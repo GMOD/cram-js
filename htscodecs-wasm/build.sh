@@ -47,6 +47,7 @@ SOURCES=(
     "htscodecs/htscodecs/tokenise_name3.c"
     "htscodecs/htscodecs/utils.c"
     "bz2_wrapper.c"
+    "zlib_wrapper.c"
 )
 
 # Functions to export
@@ -57,6 +58,7 @@ EXPORTS=(
     "_fqz_decompress"
     "_tok3_decode_names"
     "_bz2_uncompress"
+    "_zlib_uncompress"
     "_malloc"
     "_free"
 )
@@ -78,6 +80,7 @@ emcc \
     -s ENVIRONMENT='web,node,worker' \
     -s SINGLE_FILE=1 \
     -s USE_BZIP2=1 \
+    -s USE_ZLIB=1 \
     -I htscodecs \
     -I htscodecs/htscodecs \
     -DHAVE_BUILTIN_PREFETCH \

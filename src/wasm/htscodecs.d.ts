@@ -33,6 +33,11 @@ interface HtsCodecsModule {
     expectedSize: number,
     outSizePtr: number,
   ) => number
+  _zlib_uncompress: (
+    inPtr: number,
+    inSize: number,
+    outSizePtr: number,
+  ) => number
   ccall: (
     name: string,
     returnType: string | null,

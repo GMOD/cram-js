@@ -1,5 +1,5 @@
-import { inflate } from './wasm/inflate-wasm-inlined.js'
+import { zlib_uncompress } from './htscodecs-wasm.ts'
 
 export async function unzip(input: Uint8Array): Promise<Uint8Array> {
-  return inflate(input)
+  return zlib_uncompress(input)
 }

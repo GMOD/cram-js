@@ -3750,11 +3750,6 @@ package-json-from-dist@^1.0.1:
   resolved "https://registry.yarnpkg.com/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz#4f1471a010827a86f94cfd9b0727e36d267de505"
   integrity sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==
 
-pako-esm2@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/pako-esm2/-/pako-esm2-2.0.2.tgz#495108895ed70fc7caaf5faa99ec375d1cc307eb"
-  integrity sha512-bm+PwddAyroj8Ny8tNuLepGW28OUdI2b/PkvhaW2jHBVZ5fgcR1xsrLPiOKwk8LoXyc1az2NdHlvICBN2BjR6Q==
-
 parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
