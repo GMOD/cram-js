@@ -18,6 +18,10 @@ jobs:
           targets: wasm32-unknown-unknown
       - name: Install wasm-bindgen-cli
         run: cargo install wasm-bindgen-cli
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: latest
       - name: Install deps (with cache)
         uses: bahmutov/npm-install@v1
       - name: Install samtools

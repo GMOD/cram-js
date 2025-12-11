@@ -295,13 +295,13 @@ export default class CramFile {
       ransuncompress(inputBuffer, outputBuffer)
       return outputBuffer
     } else if (compressionMethod === 'rans4x16') {
-      return htscodecs.r4x16_uncompress(inputBuffer)
+      return await htscodecs.r4x16_uncompress(inputBuffer)
     } else if (compressionMethod === 'arith') {
-      return htscodecs.arith_uncompress(inputBuffer)
+      return await htscodecs.arith_uncompress(inputBuffer)
     } else if (compressionMethod === 'fqzcomp') {
-      return htscodecs.fqzcomp_uncompress(inputBuffer)
+      return await htscodecs.fqzcomp_uncompress(inputBuffer)
     } else if (compressionMethod === 'tok3') {
-      return htscodecs.tok3_uncompress(inputBuffer)
+      return await htscodecs.tok3_uncompress(inputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,

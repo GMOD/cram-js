@@ -13,3 +13,4 @@ built-tests/
 esm
 .idea
 *.cpuprofile
+crate/target
