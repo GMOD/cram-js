@@ -130,6 +130,40 @@ export async function fqzcomp_uncompress(input: Uint8Array) {
   }
 }
 
+export async function bz2_uncompress(
+  input: Uint8Array,
+  expectedSize: number,
+) {
+  if (input.length === 0) {
+    return new Uint8Array(0)
+  }
+
+  const module = await getModule()
+
+  const inPtr = copyToWasm(module, input)
+  const outSizePtr = module._malloc(4)
+
+  try {
+    const outPtr = module._bz2_uncompress(
+      inPtr,
+      input.length,
+      expectedSize,
+      outSizePtr,
+    )
+    if (outPtr === 0) {
+      throw new Error('bz2_uncompress failed')
+    }
+
+    const outSize = module.getValue(outSizePtr, 'i32')
+    const result = copyFromWasm(module, outPtr, outSize)
+    module._free(outPtr)
+    return result
+  } finally {
+    module._free(inPtr)
+    module._free(outSizePtr)
+  }
+}
+
 export async function tok3_uncompress(input: Uint8Array) {
   const module = await getModule()
 
@@ -139,10 +173,7 @@ export async function tok3_uncompress(input: Uint8Array) {
   try {
     const outPtr = module._tok3_decode_names(inPtr, input.length, outSizePtr)
     if (outPtr === 0) {
-      // Fallback to JS implementation if WASM fails
-      // This can happen if tok3 data uses bz2 internally (WASM compiled without libbz2)
-      const { tok3_uncompress_js } = await import('./htscodecs/tok3-fallback.ts')
-      return tok3_uncompress_js(input)
+      throw new Error('tok3_decode_names failed')
     }
 
     const outSize = module.getValue(outSizePtr, 'i32')

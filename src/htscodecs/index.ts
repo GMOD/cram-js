@@ -41,4 +41,5 @@ export {
   arith_uncompress,
   fqzcomp_uncompress,
   tok3_uncompress,
+  bz2_uncompress,
 } from '../htscodecs-wasm.ts'

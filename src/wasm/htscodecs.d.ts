@@ -27,6 +27,12 @@ interface HtsCodecsModule {
     inSize: number,
     outSizePtr: number,
   ) => number
+  _bz2_uncompress: (
+    inPtr: number,
+    inSize: number,
+    expectedSize: number,
+    outSizePtr: number,
+  ) => number
   ccall: (
     name: string,
     returnType: string | null,

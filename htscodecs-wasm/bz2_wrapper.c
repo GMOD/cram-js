@@ -2,21 +2,22 @@
 #include <bzlib.h>
 #include <stdlib.h>
 
+/* Decompress bzip2 data. Caller provides expected uncompressed size. */
 unsigned char *bz2_uncompress(unsigned char *in, unsigned int in_size,
+                              unsigned int expected_size,
                               unsigned int *out_size) {
-    if (in_size < 4)
-        return NULL;
+    if (in_size == 0) {
+        *out_size = 0;
+        return malloc(1); /* Return non-NULL for empty input */
+    }
 
-    /* First 4 bytes contain the uncompressed size (little-endian) */
-    unsigned int usize = in[0] | (in[1] << 8) | (in[2] << 16) | (in[3] << 24);
-
-    unsigned char *out = malloc(usize);
+    unsigned char *out = malloc(expected_size);
     if (!out)
         return NULL;
 
-    unsigned int dest_len = usize;
+    unsigned int dest_len = expected_size;
     int ret = BZ2_bzBuffToBuffDecompress((char *)out, &dest_len,
-                                         (char *)in + 4, in_size - 4,
+                                         (char *)in, in_size,
                                          0, 0);
     if (ret != BZ_OK) {
         free(out);

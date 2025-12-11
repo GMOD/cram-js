@@ -46,6 +46,7 @@ SOURCES=(
     "htscodecs/htscodecs/rle.c"
     "htscodecs/htscodecs/tokenise_name3.c"
     "htscodecs/htscodecs/utils.c"
+    "bz2_wrapper.c"
 )
 
 # Functions to export
@@ -55,6 +56,7 @@ EXPORTS=(
     "_arith_uncompress"
     "_fqz_decompress"
     "_tok3_decode_names"
+    "_bz2_uncompress"
     "_malloc"
     "_free"
 )

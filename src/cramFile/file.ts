@@ -6,7 +6,6 @@ import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import { parseHeaderText } from '../sam.ts'
 import { parseItem, tinyMemoize } from './util.ts'
-import { decode } from '../seek-bzip/index.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
 import CramRecord from './record.ts'
@@ -286,7 +285,7 @@ export default class CramFile {
     if (compressionMethod === 'gzip') {
       return await unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
-      return decode(inputBuffer)
+      return await htscodecs.bz2_uncompress(inputBuffer, uncompressedSize)
     } else if (compressionMethod === 'lzma') {
       return xzDecompress(inputBuffer)
     } else if (compressionMethod === 'rans') {
