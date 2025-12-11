@@ -140,6 +140,7 @@ export async function tok3_uncompress(input: Uint8Array) {
     const outPtr = module._tok3_decode_names(inPtr, input.length, outSizePtr)
     if (outPtr === 0) {
       // Fallback to JS implementation if WASM fails
+      // This can happen if tok3 data uses bz2 internally (WASM compiled without libbz2)
       const { tok3_uncompress_js } = await import('./htscodecs/tok3-fallback.ts')
       return tok3_uncompress_js(input)
     }

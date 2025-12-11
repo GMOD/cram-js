@@ -75,6 +75,7 @@ emcc \
     -s MAXIMUM_MEMORY=2GB \
     -s ENVIRONMENT='web,node,worker' \
     -s SINGLE_FILE=1 \
+    -s USE_BZIP2=1 \
     -I htscodecs \
     -I htscodecs/htscodecs \
     -DHAVE_BUILTIN_PREFETCH \

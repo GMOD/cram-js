@@ -6,8 +6,8 @@
 /* Define if you have __builtin_prefetch */
 #define HAVE_BUILTIN_PREFETCH 1
 
-/* We don't have bz2 in WASM */
-/* #undef HAVE_LIBBZ2 */
+/* bz2 support via emscripten port */
+#define HAVE_LIBBZ2 1
 
 /* No SIMD in WASM (yet) */
 /* #undef HAVE_AVX2 */
