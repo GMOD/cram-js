@@ -15,7 +15,7 @@ export default defineConfig(
       'crate/*',
       'scripts/*',
       'example/*',
-      'htscodecs-wasm',
+      'htscodecs-wasm/*',
       'benchmarks/*',
       'src/htscodecs',
       'src/seek-bzip',

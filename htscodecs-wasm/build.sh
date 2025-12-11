@@ -66,14 +66,13 @@ emcc \
     -flto \
     -s WASM=1 \
     -s MODULARIZE=1 \
-    -s EXPORT_ES6=1 \
     -s EXPORT_NAME='createHtsCodecsModule' \
     -s EXPORTED_FUNCTIONS="$EXPORT_STR" \
     -s EXPORTED_RUNTIME_METHODS='["getValue","HEAPU8"]' \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s INITIAL_MEMORY=16MB \
     -s MAXIMUM_MEMORY=2GB \
-    -s ENVIRONMENT='web,worker' \
+    -s ENVIRONMENT='web,node,worker' \
     -s SINGLE_FILE=1 \
     -s USE_BZIP2=1 \
     -s USE_ZLIB=1 \
