@@ -109,37 +109,32 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   return bases.toUpperCase()
 }
 
-const baseNumbers = {
-  a: 0,
-  A: 0,
-  c: 1,
-  C: 1,
-  g: 2,
-  G: 2,
-  t: 3,
-  T: 3,
-  n: 4,
-  N: 4,
-}
+// Dense Uint8Array indexed by charCode for fast base->number lookup
+// Default 4 (N), with A/a=0, C/c=1, G/g=2, T/t=3
+const baseNumberByCharCode = new Uint8Array(128).fill(4)
+baseNumberByCharCode[65] = 0 // A
+baseNumberByCharCode[97] = 0 // a
+baseNumberByCharCode[67] = 1 // C
+baseNumberByCharCode[99] = 1 // c
+baseNumberByCharCode[71] = 2 // G
+baseNumberByCharCode[103] = 2 // g
+baseNumberByCharCode[84] = 3 // T
+baseNumberByCharCode[116] = 3 // t
 
 function decodeBaseSubstitution(
-  cramRecord: CramRecord,
+  _cramRecord: CramRecord,
   refRegion: RefRegion,
   compressionScheme: CramContainerCompressionScheme,
   readFeature: ReadFeature,
 ) {
-  // decode base substitution code using the substitution matrix
   const refCoord = readFeature.refPos - refRegion.start
-  const refBase = refRegion.seq.charAt(refCoord)
+  const seq = refRegion.seq
+  const refBase = seq[refCoord]
   if (refBase) {
     readFeature.ref = refBase
   }
-  let baseNumber = (baseNumbers as any)[refBase]
-  if (baseNumber === undefined) {
-    baseNumber = 4
-  }
-  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]!
-  const base = substitutionScheme[readFeature.data]
+  const baseNumber = baseNumberByCharCode[seq.charCodeAt(refCoord)] ?? 4
+  const base = compressionScheme.substitutionMatrix[baseNumber]![readFeature.data]
   if (base) {
     readFeature.sub = base
   }
