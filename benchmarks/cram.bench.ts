@@ -57,7 +57,7 @@ benchCram(
   0,
   0,
   10000,
-  { iterations: 5000, warmupIterations: 500 },
+  { iterations: 500, warmupIterations: 50 },
 )
 
 benchCram(
@@ -66,7 +66,7 @@ benchCram(
   0,
   0,
   100000,
-  { iterations: 1000, warmupIterations: 100 },
+  { iterations: 100, warmupIterations: 10 },
 )
 
 benchCram(
@@ -75,7 +75,7 @@ benchCram(
   0,
   0,
   100000000,
-  { iterations: 200, warmupIterations: 20 },
+  { iterations: 20, warmupIterations: 2 },
 )
 
 benchCram(
@@ -84,5 +84,5 @@ benchCram(
   0,
   0,
   100000000,
-  { iterations: 200, warmupIterations: 20 },
+  { iterations: 20, warmupIterations: 2 },
 )
