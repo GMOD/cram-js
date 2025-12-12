@@ -11,5 +11,7 @@ built-tests/
 .eslintcache
 *.swp
 esm
+esm_branch1
+esm_branch2
 .idea
 *.cpuprofile

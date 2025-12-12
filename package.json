@@ -29,6 +29,8 @@
   ],
   "scripts": {
     "test": "vitest",
+    "benchonly": "vitest bench",
+    "bench": "./scripts/build-both-branches.sh \"$BRANCH1\" \"$BRANCH2\" && vitest bench",
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "docs": "documentation readme --shallow src/indexedCramFile.ts --section=IndexedCramFile; documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/craiIndex.ts --section=CraiIndex;  documentation readme --shallow src/cramFile/file.ts --section=CramFile; documentation readme --shallow src/cramFile/record.ts --section=CramRecord",
