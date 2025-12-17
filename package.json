@@ -53,7 +53,7 @@
     "crc": "^4.3.2",
     "generic-filehandle2": "^2.0.16",
     "md5": "^2.2.1",
-    "quick-lru": "^4.0.1"
+    "@jbrowse/quick-lru": "^7.0.0"
   },
   "devDependencies": {
     "@gmod/indexedfasta": "^5.0.0",
