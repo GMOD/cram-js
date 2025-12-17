@@ -1,6 +1,6 @@
 {
   "name": "@gmod/cram",
-  "version": "7.0.2",
+  "version": "7.0.3",
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
   "repository": "GMOD/cram-js",
@@ -50,10 +50,10 @@
     "biojs"
   ],
   "dependencies": {
+    "@jbrowse/quick-lru": "^7.0.0",
     "crc": "^4.3.2",
     "generic-filehandle2": "^2.0.16",
-    "md5": "^2.2.1",
-    "@jbrowse/quick-lru": "^7.0.0"
+    "md5": "^2.2.1"
   },
   "devDependencies": {
     "@gmod/indexedfasta": "^5.0.0",
