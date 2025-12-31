@@ -1,5 +1,5 @@
-import crc32 from 'crc/calculators/crc32'
 import QuickLRU from '@jbrowse/quick-lru'
+import crc32 from 'crc/calculators/crc32'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
