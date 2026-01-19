@@ -19,14 +19,11 @@ export interface ReadFeature {
 }
 
 export interface DecodeOptions {
-  /** Whether to decode quality scores. Default true. */
-  decodeQualityScores?: boolean
   /** Whether to parse tags. If false, raw tag data is stored for lazy parsing. Default true. */
   decodeTags?: boolean
 }
 
 export const defaultDecodeOptions: Required<DecodeOptions> = {
-  decodeQualityScores: true,
   decodeTags: true,
 }
 
@@ -315,7 +312,6 @@ export default class CramRecord {
    */
   get qualityScores(): number[] | null | undefined {
     if (this._qualityScores === undefined && this._qualityScoresRaw) {
-      console.log('qualityScores: full decode from raw bytes for', this.readName)
       this._qualityScores = Array.from(this._qualityScoresRaw)
     }
     return this._qualityScores
@@ -335,11 +331,9 @@ export default class CramRecord {
    */
   qualityScoreAt(index: number): number | undefined {
     if (this._qualityScoresRaw) {
-      console.log('qualityScoreAt: indexed access from raw bytes for', this.readName, 'at', index)
       return this._qualityScoresRaw[index]
     }
     if (this._qualityScores) {
-      console.log('qualityScoreAt: indexed access from decoded array for', this.readName, 'at', index)
       return this._qualityScores[index]
     }
     return undefined

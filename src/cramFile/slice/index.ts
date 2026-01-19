@@ -554,7 +554,7 @@ export default class CramSlice {
 
     // fetch the features if necessary, using the file-level feature cache
     // Include decode options in cache key so different decode configs are cached separately
-    const optionsKey = `${opts.decodeQualityScores ? 1 : 0}${opts.decodeTags ? 1 : 0}`
+    const optionsKey = `${opts.decodeTags ? 1 : 0}`
     const cacheKey = `${this.container.filePosition}:${this.containerPosition}:${optionsKey}`
     let recordsPromise = this.file.featureCache.get(cacheKey)
     if (!recordsPromise) {

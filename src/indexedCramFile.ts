@@ -92,7 +92,6 @@ export default class IndexedCramFile {
     const pairAcrossChr = opts.pairAcrossChr || false
     const maxInsertSize = opts.maxInsertSize || 200000
     const decodeOptions: DecodeOptions = {
-      decodeQualityScores: opts.decodeQualityScores,
       decodeTags: opts.decodeTags,
     }
 
