@@ -1,9 +1,13 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
 import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
-import decodeRecord, { DataSeriesDecoder } from './decodeRecord.ts'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import decodeRecord, {
+  BulkByteDecoder,
+  DataSeriesDecoder,
+} from './decodeRecord.ts'
+import ExternalCodec from '../codecs/external.ts'
 import { DataSeriesTypes } from '../container/compressionScheme.ts'
 import CramContainer from '../container/index.ts'
 import CramFile, { CramFileBlock } from '../file.ts'
@@ -412,6 +416,34 @@ export default class CramSlice {
       }
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
+
+    // Create bulk byte decoder for QS and BA data series if they use External codec
+    const qsCodec = compressionScheme.getCodecForDataSeries('QS')
+    const baCodec = compressionScheme.getCodecForDataSeries('BA')
+    const qsIsExternal = qsCodec instanceof ExternalCodec
+    const baIsExternal = baCodec instanceof ExternalCodec
+    const decodeBulkBytes: BulkByteDecoder | undefined =
+      qsIsExternal || baIsExternal
+        ? (dataSeriesName, length) => {
+            if (dataSeriesName === 'QS' && qsIsExternal) {
+              return qsCodec.getBytesAsNumberArray(
+                blocksByContentId,
+                cursors,
+                length,
+              )
+            }
+            if (dataSeriesName === 'BA' && baIsExternal) {
+              return baCodec.getBytesAsNumberArray(
+                blocksByContentId,
+                cursors,
+                length,
+              )
+            }
+            // Return undefined to signal fallback to single-byte decoding
+            return undefined
+          }
+        : undefined
+
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
     )
@@ -427,6 +459,7 @@ export default class CramSlice {
           cursors,
           majorVersion,
           i,
+          decodeBulkBytes,
         )
         records[i] = new CramRecord({
           ...init,

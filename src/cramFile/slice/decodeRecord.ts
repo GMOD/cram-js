@@ -213,6 +213,11 @@ export type DataSeriesDecoder = <T extends DataSeriesEncodingKey>(
   dataSeriesName: T,
 ) => DataTypeMapping[DataSeriesTypes[T]] | undefined
 
+export type BulkByteDecoder = (
+  dataSeriesName: 'QS' | 'BA',
+  length: number,
+) => number[] | undefined
+
 export default function decodeRecord(
   slice: CramSlice,
   decodeDataSeries: DataSeriesDecoder,
@@ -223,6 +228,7 @@ export default function decodeRecord(
   cursors: Cursors,
   majorVersion: number,
   recordNumber: number,
+  decodeBulkBytes?: BulkByteDecoder,
 ) {
   let flags = decodeDataSeries('BF')!
 
@@ -373,25 +379,44 @@ export default function decodeRecord(
     mappingQuality = decodeDataSeries('MQ')!
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      qualityScores = new Array(readLength)
-      for (let i = 0; i < qualityScores.length; i++) {
-        qualityScores[i] = decodeDataSeries('QS')!
+      const bulkQS = decodeBulkBytes?.('QS', readLength)
+      if (bulkQS) {
+        qualityScores = bulkQS
+      } else {
+        qualityScores = new Array(readLength)
+        for (let i = 0; i < qualityScores.length; i++) {
+          qualityScores[i] = decodeDataSeries('QS')!
+        }
       }
     }
   } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
     readBases = null
     qualityScores = null
   } else {
-    const bases = new Array(readLength) as number[]
-    for (let i = 0; i < bases.length; i++) {
-      bases[i] = decodeDataSeries('BA')!
+    const bulkBA = decodeBulkBytes?.('BA', readLength)
+    if (bulkBA) {
+      let s = ''
+      for (let i = 0; i < bulkBA.length; i++) {
+        s += String.fromCharCode(bulkBA[i]!)
+      }
+      readBases = s
+    } else {
+      let s = ''
+      for (let i = 0; i < readLength; i++) {
+        s += String.fromCharCode(decodeDataSeries('BA')!)
+      }
+      readBases = s
     }
-    readBases = String.fromCharCode(...bases)
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      qualityScores = new Array(readLength)
-      for (let i = 0; i < bases.length; i++) {
-        qualityScores[i] = decodeDataSeries('QS')!
+      const bulkQS = decodeBulkBytes?.('QS', readLength)
+      if (bulkQS) {
+        qualityScores = bulkQS
+      } else {
+        qualityScores = new Array(readLength)
+        for (let i = 0; i < readLength; i++) {
+          qualityScores[i] = decodeDataSeries('QS')!
+        }
       }
     }
   }

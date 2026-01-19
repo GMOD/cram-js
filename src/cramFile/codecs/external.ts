@@ -52,4 +52,29 @@ export default class ExternalCodec extends CramCodec<
       return contentBlock.content[cursor.bytePosition++]!
     }
   }
+
+  getBytesAsNumberArray(
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+    length: number,
+  ): number[] {
+    const { blockContentId } = this.parameters
+    const contentBlock = blocksByContentId[blockContentId]
+    if (!contentBlock) {
+      return []
+    }
+
+    const cursor = cursors.externalBlocks.getCursor(blockContentId)
+    const start = cursor.bytePosition
+    const end = start + length
+
+    if (end > contentBlock.content.length) {
+      throw new CramBufferOverrunError(
+        'attempted to read beyond end of block. this file seems truncated.',
+      )
+    }
+
+    cursor.bytePosition = end
+    return Array.from(contentBlock.content.subarray(start, end))
+  }
 }
