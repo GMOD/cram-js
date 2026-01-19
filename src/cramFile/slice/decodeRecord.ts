@@ -7,6 +7,7 @@ import CramContainerCompressionScheme, {
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
+  DecodeOptions,
   MateFlagsDecoder,
   ReadFeature,
 } from '../record.ts'
@@ -218,6 +219,16 @@ export type BulkByteDecoder = (
   length: number,
 ) => number[] | undefined
 
+export type BulkByteSkipper = (
+  dataSeriesName: 'QS' | 'BA',
+  length: number,
+) => boolean
+
+export type BulkByteRawDecoder = (
+  dataSeriesName: 'QS' | 'BA',
+  length: number,
+) => Uint8Array | undefined
+
 export default function decodeRecord(
   slice: CramSlice,
   decodeDataSeries: DataSeriesDecoder,
@@ -229,6 +240,9 @@ export default function decodeRecord(
   majorVersion: number,
   recordNumber: number,
   decodeBulkBytes?: BulkByteDecoder,
+  decodeOptions?: Required<DecodeOptions>,
+  skipBulkBytes?: BulkByteSkipper,
+  decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
   let flags = decodeDataSeries('BF')!
 
@@ -338,6 +352,7 @@ export default function decodeRecord(
   let lengthOnRef: number | undefined
   let mappingQuality: number | undefined
   let qualityScores: number[] | undefined | null
+  let qualityScoresRaw: Uint8Array | undefined
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
@@ -379,13 +394,20 @@ export default function decodeRecord(
     mappingQuality = decodeDataSeries('MQ')!
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      const bulkQS = decodeBulkBytes?.('QS', readLength)
-      if (bulkQS) {
-        qualityScores = bulkQS
+      // Try to store raw bytes for lazy decoding (most efficient)
+      const rawQS = decodeBulkBytesRaw?.('QS', readLength)
+      if (rawQS) {
+        qualityScoresRaw = rawQS
       } else {
-        qualityScores = new Array(readLength)
-        for (let i = 0; i < qualityScores.length; i++) {
-          qualityScores[i] = decodeDataSeries('QS')!
+        // Fallback to immediate decoding for non-external codecs
+        const bulkQS = decodeBulkBytes?.('QS', readLength)
+        if (bulkQS) {
+          qualityScores = bulkQS
+        } else {
+          qualityScores = new Array(readLength)
+          for (let i = 0; i < qualityScores.length; i++) {
+            qualityScores[i] = decodeDataSeries('QS')!
+          }
         }
       }
     }
@@ -409,13 +431,20 @@ export default function decodeRecord(
     }
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      const bulkQS = decodeBulkBytes?.('QS', readLength)
-      if (bulkQS) {
-        qualityScores = bulkQS
+      // Try to store raw bytes for lazy decoding (most efficient)
+      const rawQS = decodeBulkBytesRaw?.('QS', readLength)
+      if (rawQS) {
+        qualityScoresRaw = rawQS
       } else {
-        qualityScores = new Array(readLength)
-        for (let i = 0; i < readLength; i++) {
-          qualityScores[i] = decodeDataSeries('QS')!
+        // Fallback to immediate decoding for non-external codecs
+        const bulkQS = decodeBulkBytes?.('QS', readLength)
+        if (bulkQS) {
+          qualityScores = bulkQS
+        } else {
+          qualityScores = new Array(readLength)
+          for (let i = 0; i < readLength; i++) {
+            qualityScores[i] = decodeDataSeries('QS')!
+          }
         }
       }
     }
@@ -436,6 +465,7 @@ export default function decodeRecord(
     lengthOnRef,
     mappingQuality,
     qualityScores,
+    qualityScoresRaw,
     readBases,
     tags,
   }

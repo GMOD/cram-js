@@ -18,6 +18,18 @@ export interface ReadFeature {
   sub?: string
 }
 
+export interface DecodeOptions {
+  /** Whether to decode quality scores. Default true. */
+  decodeQualityScores?: boolean
+  /** Whether to parse tags. If false, raw tag data is stored for lazy parsing. Default true. */
+  decodeTags?: boolean
+}
+
+export const defaultDecodeOptions: Required<DecodeOptions> = {
+  decodeQualityScores: true,
+  decodeTags: true,
+}
+
 function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   // if it has no length, it has no sequence
   if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
@@ -238,7 +250,8 @@ export default class CramRecord {
   public sequenceId: number
   public readGroupId: number
   public mappingQuality: number | undefined
-  public qualityScores: number[] | null | undefined
+  private _qualityScores: number[] | null | undefined
+  private _qualityScoresRaw: Uint8Array | undefined
 
   constructor({
     flags,
@@ -247,6 +260,7 @@ export default class CramRecord {
     mappingQuality,
     lengthOnRef,
     qualityScores,
+    qualityScoresRaw,
     mateRecordNumber,
     readBases,
     readFeatures,
@@ -264,7 +278,8 @@ export default class CramRecord {
     this.readLength = readLength
     this.mappingQuality = mappingQuality
     this.lengthOnRef = lengthOnRef
-    this.qualityScores = qualityScores
+    this._qualityScores = qualityScores
+    this._qualityScoresRaw = qualityScoresRaw
     if (readBases) {
       this.readBases = readBases
     }
@@ -292,6 +307,42 @@ export default class CramRecord {
     if (mateRecordNumber) {
       this.mateRecordNumber = mateRecordNumber
     }
+  }
+
+  /**
+   * Get quality scores, lazily decoding from raw bytes if needed.
+   * @returns quality scores array, null if explicitly set to null, or undefined if unavailable
+   */
+  get qualityScores(): number[] | null | undefined {
+    if (this._qualityScores === undefined && this._qualityScoresRaw) {
+      console.log('qualityScores: full decode from raw bytes for', this.readName)
+      this._qualityScores = Array.from(this._qualityScoresRaw)
+    }
+    return this._qualityScores
+  }
+
+  /**
+   * Set quality scores directly.
+   */
+  set qualityScores(value: number[] | null | undefined) {
+    this._qualityScores = value
+  }
+
+  /**
+   * Get a single quality score at the given index without decoding the full array.
+   * @param index 0-based index into the quality scores
+   * @returns the quality score at that index, or undefined if not available
+   */
+  qualityScoreAt(index: number): number | undefined {
+    if (this._qualityScoresRaw) {
+      console.log('qualityScoreAt: indexed access from raw bytes for', this.readName, 'at', index)
+      return this._qualityScoresRaw[index]
+    }
+    if (this._qualityScores) {
+      console.log('qualityScoreAt: indexed access from decoded array for', this.readName, 'at', index)
+      return this._qualityScores[index]
+    }
+    return undefined
   }
 
   /**
@@ -493,6 +544,7 @@ export default class CramRecord {
     })
 
     data.readBases = this.getReadBases()
+    data.qualityScores = this.qualityScores
 
     return data
   }
