@@ -83,7 +83,13 @@ function parseTagValueArray(buffer: Uint8Array) {
   return array
 }
 
-function parseTagData(tagType: string, buffer: Uint8Array) {
+export interface RawTagData {
+  tagName: string
+  tagType: string
+  tagData: Uint8Array | number
+}
+
+export function parseTagData(tagType: string, buffer: Uint8Array) {
   if (tagType === 'Z') {
     return readNullTerminatedString(buffer)
   }
@@ -322,24 +328,45 @@ export default function decodeRecord(
     throw new CramMalformedError('invalid TL index')
   }
 
-  const tags: Record<string, any> = {}
+  let tags: Record<string, any> | undefined
+  let tagsRaw: RawTagData[] | undefined
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
-  for (let i = 0; i < ntags; i++) {
-    const tagId = TN[i]!
-    const tagName = tagId.slice(0, 2)
-    const tagType = tagId.slice(2, 3)
 
-    const tagData = compressionScheme
-      .getCodecForTag(tagId)
-      .decode(slice, coreDataBlock, blocksByContentId, cursors)
-    tags[tagName] =
-      tagData === undefined
-        ? undefined
-        : typeof tagData === 'number'
-          ? tagData
-          : parseTagData(tagType, tagData)
+  if (decodeOptions?.decodeTags !== false) {
+    // Parse tags immediately
+    tags = {}
+    for (let i = 0; i < ntags; i++) {
+      const tagId = TN[i]!
+      const tagName = tagId.slice(0, 2)
+      const tagType = tagId.slice(2, 3)
+
+      const tagData = compressionScheme
+        .getCodecForTag(tagId)
+        .decode(slice, coreDataBlock, blocksByContentId, cursors)
+      tags[tagName] =
+        tagData === undefined
+          ? undefined
+          : typeof tagData === 'number'
+            ? tagData
+            : parseTagData(tagType, tagData)
+    }
+  } else {
+    // Store raw tag data for lazy parsing
+    tagsRaw = []
+    for (let i = 0; i < ntags; i++) {
+      const tagId = TN[i]!
+      const tagName = tagId.slice(0, 2)
+      const tagType = tagId.slice(2, 3)
+
+      const tagData = compressionScheme
+        .getCodecForTag(tagId)
+        .decode(slice, coreDataBlock, blocksByContentId, cursors)
+      if (tagData !== undefined) {
+        tagsRaw.push({ tagName, tagType, tagData })
+      }
+    }
   }
 
   let readFeatures: ReadFeature[] | undefined
@@ -462,5 +489,6 @@ export default function decodeRecord(
     qualityScoresRaw,
     readBases,
     tags,
+    tagsRaw,
   }
 }

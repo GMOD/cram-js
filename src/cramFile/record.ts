@@ -2,6 +2,7 @@ import Constants from './constants.ts'
 import CramContainerCompressionScheme from './container/compressionScheme.ts'
 
 import type decodeRecord from './slice/decodeRecord.ts'
+import { parseTagData, type RawTagData } from './slice/decodeRecord.ts'
 
 export interface RefRegion {
   start: number
@@ -229,7 +230,8 @@ export const MateFlagsDecoder = makeFlagsHelper(MateFlags)
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
-  public tags: Record<string, string>
+  private _tags: Record<string, any> | undefined
+  private _tagsRaw: RawTagData[] | undefined
   public flags: number
   public cramFlags: number
   public readBases?: string | null
@@ -269,6 +271,7 @@ export default class CramRecord {
     templateSize,
     alignmentStart,
     tags,
+    tagsRaw,
   }: ReturnType<typeof decodeRecord> & { uniqueId: number }) {
     this.flags = flags
     this.cramFlags = cramFlags
@@ -287,7 +290,8 @@ export default class CramRecord {
     this.uniqueId = uniqueId
     this.templateSize = templateSize
     this.alignmentStart = alignmentStart
-    this.tags = tags
+    this._tags = tags
+    this._tagsRaw = tagsRaw
 
     // backwards compatibility
     if (readFeatures) {
@@ -335,6 +339,52 @@ export default class CramRecord {
     }
     if (this._qualityScores) {
       return this._qualityScores[index]
+    }
+    return undefined
+  }
+
+  /**
+   * Get tags, lazily parsing from raw data if needed.
+   */
+  get tags(): Record<string, any> {
+    if (this._tags === undefined && this._tagsRaw) {
+      this._tags = {}
+      for (const { tagName, tagType, tagData } of this._tagsRaw) {
+        this._tags[tagName] =
+          typeof tagData === 'number'
+            ? tagData
+            : parseTagData(tagType, tagData)
+      }
+    }
+    return this._tags || {}
+  }
+
+  /**
+   * Set tags directly.
+   */
+  set tags(value: Record<string, any>) {
+    this._tags = value
+  }
+
+  /**
+   * Get a single tag by name without parsing all tags.
+   * @param tagName 2-character tag name (e.g., 'RG', 'MD')
+   * @returns the tag value, or undefined if not found
+   */
+  getTag(tagName: string): any {
+    // If tags are already parsed, use them
+    if (this._tags) {
+      return this._tags[tagName]
+    }
+    // Otherwise search raw tags
+    if (this._tagsRaw) {
+      for (const { tagName: name, tagType, tagData } of this._tagsRaw) {
+        if (name === tagName) {
+          return typeof tagData === 'number'
+            ? tagData
+            : parseTagData(tagType, tagData)
+        }
+      }
     }
     return undefined
   }
@@ -539,6 +589,7 @@ export default class CramRecord {
 
     data.readBases = this.getReadBases()
     data.qualityScores = this.qualityScores
+    data.tags = this.tags
 
     return data
   }
