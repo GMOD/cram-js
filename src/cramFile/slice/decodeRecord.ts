@@ -219,11 +219,6 @@ export type BulkByteDecoder = (
   length: number,
 ) => number[] | undefined
 
-export type BulkByteSkipper = (
-  dataSeriesName: 'QS' | 'BA',
-  length: number,
-) => boolean
-
 export type BulkByteRawDecoder = (
   dataSeriesName: 'QS' | 'BA',
   length: number,
@@ -241,7 +236,6 @@ export default function decodeRecord(
   recordNumber: number,
   decodeBulkBytes?: BulkByteDecoder,
   decodeOptions?: Required<DecodeOptions>,
-  skipBulkBytes?: BulkByteSkipper,
   decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
   let flags = decodeDataSeries('BF')!

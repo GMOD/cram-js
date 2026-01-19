@@ -6,7 +6,6 @@ import Constants from '../constants.ts'
 import decodeRecord, {
   BulkByteDecoder,
   BulkByteRawDecoder,
-  BulkByteSkipper,
   DataSeriesDecoder,
 } from './decodeRecord.ts'
 import ExternalCodec from '../codecs/external.ts'
@@ -449,22 +448,6 @@ export default class CramSlice {
           }
         : undefined
 
-    // Create bulk byte skipper for skipping QS/BA when not needed
-    const skipBulkBytes: BulkByteSkipper | undefined =
-      qsIsExternal || baIsExternal
-        ? (dataSeriesName, length) => {
-            if (dataSeriesName === 'QS' && qsIsExternal) {
-              qsCodec.skipBytes(blocksByContentId, cursors, length)
-              return true
-            }
-            if (dataSeriesName === 'BA' && baIsExternal) {
-              baCodec.skipBytes(blocksByContentId, cursors, length)
-              return true
-            }
-            return false
-          }
-        : undefined
-
     // Create raw byte decoder for lazy QS/BA decoding
     const decodeBulkBytesRaw: BulkByteRawDecoder | undefined =
       qsIsExternal || baIsExternal
@@ -496,7 +479,6 @@ export default class CramSlice {
           i,
           decodeBulkBytes,
           decodeOptions,
-          skipBulkBytes,
           decodeBulkBytesRaw,
         )
         records[i] = new CramRecord({
