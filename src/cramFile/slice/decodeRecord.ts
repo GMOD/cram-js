@@ -342,8 +342,9 @@ export default function decodeRecord(
   const ntags = TN.length
   for (let i = 0; i < ntags; i++) {
     const tagId = TN[i]!
-    const tagName = tagId.slice(0, 2)
-    const tagType = tagId.slice(2, 3)
+    // Use direct character access instead of slice() to avoid string allocation
+    const tagName = tagId[0]! + tagId[1]!
+    const tagType = tagId[2]!
 
     const tagData = compressionScheme
       .getCodecForTag(tagId)
