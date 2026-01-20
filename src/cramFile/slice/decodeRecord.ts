@@ -194,12 +194,7 @@ function decodeReadFeatures(
       throw new CramMalformedError(`invalid read feature code "${code}"`)
     }
 
-    let data = decodeRFData(schema)
-
-    // if this is a tag with two data items, make the data an array and add the second item
-    if (schema2) {
-      data = [data, decodeRFData(schema2)]
-    }
+    const data = decodeRFData(schema)
 
     currentReadPos += readPosDelta
     const pos = currentReadPos
