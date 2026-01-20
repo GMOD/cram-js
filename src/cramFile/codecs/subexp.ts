@@ -3,6 +3,7 @@ import { CramUnimplementedError } from '../../errors.ts'
 import { SubexpEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
 import CramSlice from '../slice/index.ts'
+import { wasmDecodeSubexpBulk } from './wasmCodecs.ts'
 
 export default class SubexpCodec extends CramCodec<
   'int',
@@ -29,6 +30,24 @@ export default class SubexpCodec extends CramCodec<
       this.parameters.K,
       this.parameters.offset,
     )
+  }
+
+  decodeBulk(
+    coreDataBlock: CramFileBlock,
+    cursors: Cursors,
+    count: number,
+  ): Int32Array {
+    const result = wasmDecodeSubexpBulk(
+      coreDataBlock.content,
+      cursors.coreBlock,
+      this.parameters.K,
+      this.parameters.offset,
+      count,
+    )
+    if (!result) {
+      throw new Error('WASM subexp decode failed')
+    }
+    return result
   }
 }
 
@@ -79,3 +98,4 @@ function decodeSubexpInline(
   const n = numLeadingOnes === 0 ? bits : (1 << b) | bits
   return n - offset
 }
+

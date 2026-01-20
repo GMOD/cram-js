@@ -208,3 +208,188 @@ export async function tok3_uncompress(input: Uint8Array) {
     module._free(outSizePtr)
   }
 }
+
+// =============================================================================
+// CRAM Core Block Codecs (WASM implementations)
+// =============================================================================
+
+export interface CramCursor {
+  bytePosition: number
+  bitPosition: number
+}
+
+/**
+ * WASM-based gamma decoder for bulk decoding multiple values.
+ * More efficient than JS implementation for large counts.
+ *
+ * @param data - Core data block content
+ * @param cursor - Current cursor position (will be updated)
+ * @param offset - Offset to subtract from decoded values
+ * @param count - Number of values to decode
+ * @returns Int32Array of decoded values
+ */
+export async function wasm_decode_gamma_bulk(
+  data: Uint8Array,
+  cursor: CramCursor,
+  offset: number,
+  count: number,
+): Promise<Int32Array> {
+  const module = await getModule() as any // Cast to any until WASM module is rebuilt
+
+  const dataPtr = copyToWasm(module, data)
+  const bytePosPtr = module._malloc(4)
+  const bitPosPtr = module._malloc(1)
+  const outputPtr = module._malloc(count * 4)
+
+  try {
+    // Write cursor position to WASM memory
+    module.setValue(bytePosPtr, cursor.bytePosition, 'i32')
+    module.setValue(bitPosPtr, cursor.bitPosition, 'i8')
+
+    const decoded = module._decode_gamma_bulk(
+      dataPtr,
+      data.length,
+      bytePosPtr,
+      bitPosPtr,
+      offset,
+      outputPtr,
+      count,
+    )
+
+    if (decoded !== count) {
+      throw new Error(`decode_gamma_bulk failed: decoded ${decoded} of ${count}`)
+    }
+
+    // Read updated cursor position
+    cursor.bytePosition = module.getValue(bytePosPtr, 'i32')
+    cursor.bitPosition = module.getValue(bitPosPtr, 'i8')
+
+    // Copy output array
+    const result = new Int32Array(count)
+    for (let i = 0; i < count; i++) {
+      result[i] = module.getValue(outputPtr + i * 4, 'i32')
+    }
+    return result
+  } finally {
+    module._free(dataPtr)
+    module._free(bytePosPtr)
+    module._free(bitPosPtr)
+    module._free(outputPtr)
+  }
+}
+
+/**
+ * WASM-based beta decoder for bulk decoding multiple values.
+ */
+export async function wasm_decode_beta_bulk(
+  data: Uint8Array,
+  cursor: CramCursor,
+  numBits: number,
+  offset: number,
+  count: number,
+): Promise<Int32Array> {
+  const module = await getModule() as any // Cast to any until WASM module is rebuilt
+
+  const dataPtr = copyToWasm(module, data)
+  const bytePosPtr = module._malloc(4)
+  const bitPosPtr = module._malloc(1)
+  const outputPtr = module._malloc(count * 4)
+
+  try {
+    module.setValue(bytePosPtr, cursor.bytePosition, 'i32')
+    module.setValue(bitPosPtr, cursor.bitPosition, 'i8')
+
+    const decoded = module._decode_beta_bulk(
+      dataPtr,
+      data.length,
+      bytePosPtr,
+      bitPosPtr,
+      numBits,
+      offset,
+      outputPtr,
+      count,
+    )
+
+    if (decoded !== count) {
+      throw new Error(`decode_beta_bulk failed: decoded ${decoded} of ${count}`)
+    }
+
+    cursor.bytePosition = module.getValue(bytePosPtr, 'i32')
+    cursor.bitPosition = module.getValue(bitPosPtr, 'i8')
+
+    const result = new Int32Array(count)
+    for (let i = 0; i < count; i++) {
+      result[i] = module.getValue(outputPtr + i * 4, 'i32')
+    }
+    return result
+  } finally {
+    module._free(dataPtr)
+    module._free(bytePosPtr)
+    module._free(bitPosPtr)
+    module._free(outputPtr)
+  }
+}
+
+/**
+ * WASM-based subexp decoder for bulk decoding multiple values.
+ */
+export async function wasm_decode_subexp_bulk(
+  data: Uint8Array,
+  cursor: CramCursor,
+  K: number,
+  offset: number,
+  count: number,
+): Promise<Int32Array> {
+  const module = await getModule() as any // Cast to any until WASM module is rebuilt
+
+  const dataPtr = copyToWasm(module, data)
+  const bytePosPtr = module._malloc(4)
+  const bitPosPtr = module._malloc(1)
+  const outputPtr = module._malloc(count * 4)
+
+  try {
+    module.setValue(bytePosPtr, cursor.bytePosition, 'i32')
+    module.setValue(bitPosPtr, cursor.bitPosition, 'i8')
+
+    const decoded = module._decode_subexp_bulk(
+      dataPtr,
+      data.length,
+      bytePosPtr,
+      bitPosPtr,
+      K,
+      offset,
+      outputPtr,
+      count,
+    )
+
+    if (decoded !== count) {
+      throw new Error(`decode_subexp_bulk failed: decoded ${decoded} of ${count}`)
+    }
+
+    cursor.bytePosition = module.getValue(bytePosPtr, 'i32')
+    cursor.bitPosition = module.getValue(bitPosPtr, 'i8')
+
+    const result = new Int32Array(count)
+    for (let i = 0; i < count; i++) {
+      result[i] = module.getValue(outputPtr + i * 4, 'i32')
+    }
+    return result
+  } finally {
+    module._free(dataPtr)
+    module._free(bytePosPtr)
+    module._free(bitPosPtr)
+    module._free(outputPtr)
+  }
+}
+
+/**
+ * Check if WASM CRAM codecs are available
+ */
+export async function wasmCodecsAvailable(): Promise<boolean> {
+  try {
+    const module = await getModule() as any
+    return typeof module._decode_gamma_bulk === 'function'
+  } catch {
+    return false
+  }
+}

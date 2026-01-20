@@ -3,6 +3,7 @@ import { CramUnimplementedError } from '../../errors.ts'
 import { GammaEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
 import CramSlice from '../slice/index.ts'
+import { wasmDecodeGammaBulk } from './wasmCodecs.ts'
 
 export default class GammaCodec extends CramCodec<
   'int',
@@ -28,6 +29,23 @@ export default class GammaCodec extends CramCodec<
       cursors.coreBlock,
       this.parameters.offset,
     )
+  }
+
+  decodeBulk(
+    coreDataBlock: CramFileBlock,
+    cursors: Cursors,
+    count: number,
+  ): Int32Array {
+    const result = wasmDecodeGammaBulk(
+      coreDataBlock.content,
+      cursors.coreBlock,
+      this.parameters.offset,
+      count,
+    )
+    if (!result) {
+      throw new Error('WASM gamma decode failed')
+    }
+    return result
   }
 }
 
@@ -82,54 +100,3 @@ function decodeGammaInline(
   return value - offset
 }
 
-/**
- * Bulk decode multiple gamma values at once.
- * More efficient than calling decode() in a loop due to reduced overhead.
- */
-export function decodeGammaBulk(
-  data: Uint8Array,
-  cursor: Cursor,
-  offset: number,
-  count: number,
-): Int32Array {
-  const results = new Int32Array(count)
-  let { bytePosition, bitPosition } = cursor
-
-  for (let n = 0; n < count; n++) {
-    let length = 1
-
-    // Count leading zeros
-    while (true) {
-      const bit = (data[bytePosition]! >> bitPosition) & 1
-      bitPosition -= 1
-      if (bitPosition < 0) {
-        bytePosition += 1
-        bitPosition = 7
-      }
-      if (bit === 1) {
-        break
-      }
-      length += 1
-    }
-
-    // Read (length - 1) more bits
-    let readBits = 0
-    const bitsToRead = length - 1
-    for (let i = 0; i < bitsToRead; i++) {
-      readBits <<= 1
-      readBits |= (data[bytePosition]! >> bitPosition) & 1
-      bitPosition -= 1
-      if (bitPosition < 0) {
-        bytePosition += 1
-        bitPosition = 7
-      }
-    }
-
-    results[n] = (readBits | (1 << (length - 1))) - offset
-  }
-
-  cursor.bytePosition = bytePosition
-  cursor.bitPosition = bitPosition as Cursor['bitPosition']
-
-  return results
-}

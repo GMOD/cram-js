@@ -3,6 +3,7 @@ import { CramUnimplementedError } from '../../errors.ts'
 import { BetaEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
 import CramSlice from '../slice/index.ts'
+import { wasmDecodeBetaBulk } from './wasmCodecs.ts'
 
 export default class BetaCodec extends CramCodec<
   'int',
@@ -29,6 +30,24 @@ export default class BetaCodec extends CramCodec<
       this.parameters.length,
       this.parameters.offset,
     )
+  }
+
+  decodeBulk(
+    coreDataBlock: CramFileBlock,
+    cursors: Cursors,
+    count: number,
+  ): Int32Array {
+    const result = wasmDecodeBetaBulk(
+      coreDataBlock.content,
+      cursors.coreBlock,
+      this.parameters.length,
+      this.parameters.offset,
+      count,
+    )
+    if (!result) {
+      throw new Error('WASM beta decode failed')
+    }
+    return result
   }
 }
 
@@ -66,3 +85,4 @@ function decodeBetaInline(
   cursor.bitPosition = bitPosition as Cursor['bitPosition']
   return val - offset
 }
+

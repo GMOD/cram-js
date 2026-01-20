@@ -43,6 +43,7 @@ SOURCES=(
     "htscodecs/htscodecs/utils.c"
     "bz2_wrapper.c"
     "zlib_wrapper.c"
+    "cram_codecs.c"
 )
 
 # Functions to export
@@ -54,6 +55,13 @@ EXPORTS=(
     "_tok3_decode_names"
     "_bz2_uncompress"
     "_zlib_uncompress"
+    "_decode_gamma"
+    "_decode_gamma_bulk"
+    "_decode_beta"
+    "_decode_beta_bulk"
+    "_decode_subexp"
+    "_decode_subexp_bulk"
+    "_read_bits_direct"
     "_malloc"
     "_free"
 )

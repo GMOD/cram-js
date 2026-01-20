@@ -23,6 +23,7 @@ import {
   isMappedSliceHeader,
 } from '../sectionParsers.ts'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
+import { initWasmCodecs } from '../codecs/wasmCodecs.ts'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -346,6 +347,9 @@ export default class CramSlice {
   async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
     const { majorVersion } = await this.file.getDefinition()
 
+    // Initialize WASM codecs (runs once, subsequent calls are no-op)
+    await initWasmCodecs()
+
     const compressionScheme = await this.container.getCompressionScheme()
     if (compressionScheme === undefined) {
       throw new Error('compression scheme undefined')
@@ -400,8 +404,26 @@ export default class CramSlice {
       },
     }
 
-    // Pre-resolve all codecs to avoid repeated lookups
+    // Pre-resolve common codecs to avoid repeated lookups during decoding
     const codecCache = new Map<DataSeriesEncodingKey, any>()
+
+    // Pre-warm cache with codecs that are always used for every record
+    // Use try-catch since some files may not have all data series defined
+    const commonDataSeries: DataSeriesEncodingKey[] = [
+      'BF', 'CF', 'RL', 'AP', 'RG', 'TL', // always decoded
+      'FN', 'MQ', // decoded for mapped reads
+      'FC', 'FP', // decoded for read features
+    ]
+    for (const ds of commonDataSeries) {
+      try {
+        const codec = compressionScheme.getCodecForDataSeries(ds)
+        if (codec) {
+          codecCache.set(ds, codec)
+        }
+      } catch {
+        // Codec doesn't exist or failed to instantiate - will be handled lazily
+      }
+    }
 
     const decodeDataSeries: DataSeriesDecoder = <
       T extends DataSeriesEncodingKey,
