@@ -162,6 +162,8 @@ function decodeReadFeatures(
   decodeDataSeries: any,
   compressionScheme: CramContainerCompressionScheme,
   majorVersion: number,
+  preFetchedFC?: Uint8Array,
+  preFetchedFP?: Int32Array,
 ) {
   let currentReadPos = 0
   let currentRefPos = alignmentStart - 1
@@ -186,9 +188,15 @@ function decodeReadFeatures(
   }
 
   for (let i = 0; i < readFeatureCount; i++) {
-    const code = String.fromCharCode(decodeDataSeries('FC'))
+    // Use pre-fetched FC if available, otherwise decode
+    const code = preFetchedFC
+      ? String.fromCharCode(preFetchedFC[i]!)
+      : String.fromCharCode(decodeDataSeries('FC'))
 
-    const readPosDelta = decodeDataSeries('FP')
+    // Use pre-fetched FP if available, otherwise decode
+    const readPosDelta = preFetchedFP
+      ? preFetchedFP[i]!
+      : decodeDataSeries('FP')
 
     const schema = data1Schema[code]
 
@@ -238,6 +246,8 @@ export type BulkByteRawDecoder = (
   length: number,
 ) => Uint8Array | undefined
 
+export type BulkFCDecoder = (length: number) => Uint8Array | undefined
+
 export default function decodeRecord(
   slice: CramSlice,
   decodeDataSeries: DataSeriesDecoder,
@@ -251,6 +261,7 @@ export default function decodeRecord(
   decodeBulkBytes?: BulkByteDecoder,
   decodeOptions?: Required<DecodeOptions>,
   decodeBulkBytesRaw?: BulkByteRawDecoder,
+  decodeBulkFC?: BulkFCDecoder,
 ) {
   let flags = decodeDataSeries('BF')!
 
@@ -367,12 +378,17 @@ export default function decodeRecord(
     // reading read features
     const readFeatureCount = decodeDataSeries('FN')!
     if (readFeatureCount) {
+      // Use bulk FC decoder if available (set up at slice level)
+      const preFetchedFC = decodeBulkFC?.(readFeatureCount)
+
       readFeatures = decodeReadFeatures(
         alignmentStart,
         readFeatureCount,
         decodeDataSeries,
         compressionScheme,
         majorVersion,
+        preFetchedFC,
+        undefined, // FP bulk decode not used (most files use external codec for FP)
       )
     }
 

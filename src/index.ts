@@ -10,4 +10,3 @@ export {
   wasmCodecsAvailable,
 } from './htscodecs-wasm.ts'
 export type { CramCursor } from './htscodecs-wasm.ts'
-console.log('H2')

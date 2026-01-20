@@ -6,6 +6,7 @@ import Constants from '../constants.ts'
 import decodeRecord, {
   BulkByteDecoder,
   BulkByteRawDecoder,
+  BulkFCDecoder,
   DataSeriesDecoder,
 } from './decodeRecord.ts'
 import ExternalCodec from '../codecs/external.ts'
@@ -23,7 +24,6 @@ import {
   isMappedSliceHeader,
 } from '../sectionParsers.ts'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
-import { initWasmCodecs } from '../codecs/wasmCodecs.ts'
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -347,9 +347,6 @@ export default class CramSlice {
   async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
     const { majorVersion } = await this.file.getDefinition()
 
-    // Initialize WASM codecs (runs once, subsequent calls are no-op)
-    await initWasmCodecs()
-
     const compressionScheme = await this.container.getCompressionScheme()
     if (compressionScheme === undefined) {
       throw new Error('compression scheme undefined')
@@ -484,6 +481,13 @@ export default class CramSlice {
           }
         : undefined
 
+    // Create bulk FC decoder if FC uses external byte codec
+    const fcCodec = compressionScheme.getCodecForDataSeries('FC')
+    const decodeBulkFC: BulkFCDecoder | undefined =
+      fcCodec instanceof ExternalCodec && fcCodec.dataType === 'byte'
+        ? length => fcCodec.getBytesSubarray(blocksByContentId, cursors, length)
+        : undefined
+
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
     )
@@ -502,6 +506,7 @@ export default class CramSlice {
           decodeBulkBytes,
           decodeOptions,
           decodeBulkBytesRaw,
+          decodeBulkFC,
         )
         records[i] = new CramRecord({
           ...init,
