@@ -7,6 +7,7 @@ import CramContainerCompressionScheme, {
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
+  DecodeOptions,
   MateFlagsDecoder,
   ReadFeature,
 } from '../record.ts'
@@ -14,16 +15,21 @@ import CramSlice, { SliceHeader } from './index.ts'
 import { CramFileBlock } from '../file.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
 
+// Reusable TextDecoder instance for string decoding (ASCII/Latin1)
+const textDecoder = new TextDecoder('latin1')
+
 /**
  * given a Buffer, read a string up to the first null character
  * @private
  */
 function readNullTerminatedString(buffer: Uint8Array) {
-  let r = ''
-  for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
-    r += String.fromCharCode(buffer[i]!)
+  // Find the null terminator
+  let end = 0
+  while (end < buffer.length && buffer[end] !== 0) {
+    end++
   }
-  return r
+  // Decode using TextDecoder (faster than char-by-char concatenation)
+  return textDecoder.decode(buffer.subarray(0, end))
 }
 
 /**
@@ -123,16 +129,49 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
+// Pre-defined schema lookup tables (version-independent entries)
+const data1SchemaBase = {
+  B: ['character', 'BA'] as const,
+  X: ['number', 'BS'] as const,
+  D: ['number', 'DL'] as const,
+  I: ['string', 'IN'] as const,
+  i: ['character', 'BA'] as const,
+  b: ['string', 'BB'] as const,
+  q: ['numArray', 'QQ'] as const,
+  Q: ['number', 'QS'] as const,
+  H: ['number', 'HC'] as const,
+  P: ['number', 'PD'] as const,
+  N: ['number', 'RS'] as const,
+} as const
+
+// Version-specific S entry
+const data1SchemaV1: Record<string, readonly [string, string]> = {
+  ...data1SchemaBase,
+  S: ['string', 'IN'] as const,
+}
+const data1SchemaV2Plus: Record<string, readonly [string, string]> = {
+  ...data1SchemaBase,
+  S: ['string', 'SC'] as const,
+}
+
+// Second data item schema for read features that have two values
+const data2Schema: Record<string, readonly [string, string]> = {
+  B: ['number', 'QS'] as const,
+}
+
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
   decodeDataSeries: any,
-  compressionScheme: CramContainerCompressionScheme,
+  _compressionScheme: CramContainerCompressionScheme,
   majorVersion: number,
 ) {
   let currentReadPos = 0
   let currentRefPos = alignmentStart - 1
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
+
+  // Select the appropriate schema based on version (once per call, not per iteration)
+  const data1Schema = majorVersion > 1 ? data1SchemaV2Plus : data1SchemaV1
 
   function decodeRFData([type, dataSeriesName]: readonly [
     type: string,
@@ -142,17 +181,10 @@ function decodeReadFeatures(
     if (type === 'character') {
       return String.fromCharCode(data)
     } else if (type === 'string') {
-      let r = ''
-      for (let i = 0; i < data.byteLength; i++) {
-        r += String.fromCharCode(data[i])
-      }
-      return r
+      return textDecoder.decode(data)
     } else if (type === 'numArray') {
       return Array.from(data)
     }
-    // else if (type === 'number') {
-    //   return data[0]
-    // }
     return data
   }
 
@@ -161,32 +193,18 @@ function decodeReadFeatures(
 
     const readPosDelta = decodeDataSeries('FP')
 
-    // map of operator name -> data series name
-    const data1Schema = {
-      B: ['character', 'BA'] as const,
-      S: ['string', majorVersion > 1 ? 'SC' : 'IN'] as const, // IN if cram v1, SC otherwise
-      X: ['number', 'BS'] as const,
-      D: ['number', 'DL'] as const,
-      I: ['string', 'IN'] as const,
-      i: ['character', 'BA'] as const,
-      b: ['string', 'BB'] as const,
-      q: ['numArray', 'QQ'] as const,
-      Q: ['number', 'QS'] as const,
-      H: ['number', 'HC'] as const,
-      P: ['number', 'PD'] as const,
-      N: ['number', 'RS'] as const,
-    }[code]
+    const schema = data1Schema[code]
 
-    if (!data1Schema) {
+    if (!schema) {
       throw new CramMalformedError(`invalid read feature code "${code}"`)
     }
 
-    let data = decodeRFData(data1Schema)
+    let data: any = decodeRFData(schema)
 
-    // if this is a tag with two data items, make the data an array and add the second item
-    const data2Schema = { B: ['number', 'QS'] as const }[code]
-    if (data2Schema) {
-      data = [data, decodeRFData(data2Schema)]
+    // if this is a read feature with two data items, make the data an array
+    const schema2 = data2Schema[code]
+    if (schema2) {
+      data = [data, decodeRFData(schema2)]
     }
 
     currentReadPos += readPosDelta
@@ -213,6 +231,11 @@ export type DataSeriesDecoder = <T extends DataSeriesEncodingKey>(
   dataSeriesName: T,
 ) => DataTypeMapping[DataSeriesTypes[T]] | undefined
 
+export type BulkByteRawDecoder = (
+  dataSeriesName: 'QS' | 'BA',
+  length: number,
+) => Uint8Array | undefined
+
 export default function decodeRecord(
   slice: CramSlice,
   decodeDataSeries: DataSeriesDecoder,
@@ -223,6 +246,8 @@ export default function decodeRecord(
   cursors: Cursors,
   majorVersion: number,
   recordNumber: number,
+  decodeOptions?: Required<DecodeOptions>,
+  decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
   let flags = decodeDataSeries('BF')!
 
@@ -312,26 +337,32 @@ export default function decodeRecord(
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
+  const shouldDecodeTags = decodeOptions?.decodeTags !== false
   for (let i = 0; i < ntags; i++) {
     const tagId = TN[i]!
-    const tagName = tagId.slice(0, 2)
-    const tagType = tagId.slice(2, 3)
-
+    // Always decode to advance cursor position
     const tagData = compressionScheme
       .getCodecForTag(tagId)
       .decode(slice, coreDataBlock, blocksByContentId, cursors)
-    tags[tagName] =
-      tagData === undefined
-        ? undefined
-        : typeof tagData === 'number'
-          ? tagData
-          : parseTagData(tagType, tagData)
+
+    // Only parse tags if requested (default: true)
+    if (shouldDecodeTags) {
+      // Use direct character access instead of slice() to avoid string allocation
+      const tagName = tagId[0]! + tagId[1]!
+      const tagType = tagId[2]!
+      tags[tagName] =
+        tagData === undefined
+          ? undefined
+          : typeof tagData === 'number'
+            ? tagData
+            : parseTagData(tagType, tagData)
+    }
   }
 
   let readFeatures: ReadFeature[] | undefined
   let lengthOnRef: number | undefined
   let mappingQuality: number | undefined
-  let qualityScores: number[] | undefined | null
+  let qualityScores: Uint8Array | undefined | null
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
@@ -373,25 +404,46 @@ export default function decodeRecord(
     mappingQuality = decodeDataSeries('MQ')!
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      qualityScores = new Array(readLength)
-      for (let i = 0; i < qualityScores.length; i++) {
-        qualityScores[i] = decodeDataSeries('QS')!
+      // Try raw bytes first (most efficient - just a subarray view)
+      const rawQS = decodeBulkBytesRaw?.('QS', readLength)
+      if (rawQS) {
+        qualityScores = rawQS
+      } else {
+        // Fallback to single-byte decoding into new Uint8Array
+        qualityScores = new Uint8Array(readLength)
+        for (let i = 0; i < readLength; i++) {
+          qualityScores[i] = decodeDataSeries('QS')!
+        }
       }
     }
   } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
     readBases = null
     qualityScores = null
   } else {
-    const bases = new Array(readLength) as number[]
-    for (let i = 0; i < bases.length; i++) {
-      bases[i] = decodeDataSeries('BA')!
+    // Try raw bytes first for TextDecoder (most efficient)
+    const rawBA = decodeBulkBytesRaw?.('BA', readLength)
+    if (rawBA) {
+      readBases = textDecoder.decode(rawBA)
+    } else {
+      // Fallback to single-byte decoding
+      let s = ''
+      for (let i = 0; i < readLength; i++) {
+        s += String.fromCharCode(decodeDataSeries('BA')!)
+      }
+      readBases = s
     }
-    readBases = String.fromCharCode(...bases)
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      qualityScores = new Array(readLength)
-      for (let i = 0; i < bases.length; i++) {
-        qualityScores[i] = decodeDataSeries('QS')!
+      // Try raw bytes first (most efficient - just a subarray view)
+      const rawQS = decodeBulkBytesRaw?.('QS', readLength)
+      if (rawQS) {
+        qualityScores = rawQS
+      } else {
+        // Fallback to single-byte decoding into new Uint8Array
+        qualityScores = new Uint8Array(readLength)
+        for (let i = 0; i < readLength; i++) {
+          qualityScores[i] = decodeDataSeries('QS')!
+        }
       }
     }
   }

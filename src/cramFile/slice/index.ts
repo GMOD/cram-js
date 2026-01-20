@@ -1,13 +1,17 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
 import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
-import decodeRecord, { DataSeriesDecoder } from './decodeRecord.ts'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import decodeRecord, {
+  BulkByteRawDecoder,
+  DataSeriesDecoder,
+} from './decodeRecord.ts'
+import ExternalCodec from '../codecs/external.ts'
 import { DataSeriesTypes } from '../container/compressionScheme.ts'
 import CramContainer from '../container/index.ts'
 import CramFile, { CramFileBlock } from '../file.ts'
-import CramRecord from '../record.ts'
+import CramRecord, { DecodeOptions, defaultDecodeOptions } from '../record.ts'
 import {
   MappedSliceHeader,
   UnmappedSliceHeader,
@@ -335,7 +339,7 @@ export default class CramSlice {
     return this.getRecords(() => true)
   }
 
-  async _fetchRecords() {
+  async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
     const { majorVersion } = await this.file.getDefinition()
 
     const compressionScheme = await this.container.getCompressionScheme()
@@ -412,6 +416,34 @@ export default class CramSlice {
       }
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
+
+    // Create bulk byte decoder for QS and BA data series if they use External codec
+    const qsCodec = compressionScheme.getCodecForDataSeries('QS')
+    const baCodec = compressionScheme.getCodecForDataSeries('BA')
+    const qsIsExternal = qsCodec instanceof ExternalCodec
+    const baIsExternal = baCodec instanceof ExternalCodec
+    // Create raw byte decoder for QS/BA decoding
+    const decodeBulkBytesRaw: BulkByteRawDecoder | undefined =
+      qsIsExternal || baIsExternal
+        ? (dataSeriesName, length) => {
+            if (dataSeriesName === 'QS' && qsIsExternal) {
+              return qsCodec.getBytesSubarray(
+                blocksByContentId,
+                cursors,
+                length,
+              )
+            }
+            if (dataSeriesName === 'BA' && baIsExternal) {
+              return baCodec.getBytesSubarray(
+                blocksByContentId,
+                cursors,
+                length,
+              )
+            }
+            return undefined
+          }
+        : undefined
+
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
     )
@@ -427,6 +459,8 @@ export default class CramSlice {
           cursors,
           majorVersion,
           i,
+          decodeOptions,
+          decodeBulkBytesRaw,
         )
         records[i] = new CramRecord({
           ...init,
@@ -474,13 +508,21 @@ export default class CramSlice {
     return records
   }
 
-  async getRecords(filterFunction: (r: CramRecord) => boolean) {
+  async getRecords(
+    filterFunction: (r: CramRecord) => boolean,
+    decodeOptions?: DecodeOptions,
+  ) {
+    // Merge with defaults
+    const opts = { ...defaultDecodeOptions, ...decodeOptions }
+
     // fetch the features if necessary, using the file-level feature cache
-    const cacheKey = this.container.filePosition + this.containerPosition
-    let recordsPromise = this.file.featureCache.get(cacheKey.toString())
+    // Include decode options in cache key so different decode configs are cached separately
+    const optionsKey = `${opts.decodeTags ? 1 : 0}`
+    const cacheKey = `${this.container.filePosition}:${this.containerPosition}:${optionsKey}`
+    let recordsPromise = this.file.featureCache.get(cacheKey)
     if (!recordsPromise) {
-      recordsPromise = this._fetchRecords()
-      this.file.featureCache.set(cacheKey.toString(), recordsPromise)
+      recordsPromise = this._fetchRecords(opts)
+      this.file.featureCache.set(cacheKey, recordsPromise)
     }
 
     const unfiltered = await recordsPromise

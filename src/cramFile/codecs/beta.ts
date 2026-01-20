@@ -1,5 +1,4 @@
-import CramCodec, { Cursors } from './_base.ts'
-import { getBits } from './getBits.ts'
+import CramCodec, { Cursor, Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
 import { BetaEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
@@ -24,11 +23,46 @@ export default class BetaCodec extends CramCodec<
     _blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    const fromBits = getBits(
+    return decodeBetaInline(
       coreDataBlock.content,
       cursors.coreBlock,
       this.parameters.length,
+      this.parameters.offset,
     )
-    return fromBits - this.parameters.offset
   }
+}
+
+/**
+ * Optimized beta decoder with inlined bit reading.
+ */
+function decodeBetaInline(
+  data: Uint8Array,
+  cursor: Cursor,
+  numBits: number,
+  offset: number,
+): number {
+  let { bytePosition, bitPosition } = cursor
+
+  // Fast path: reading exactly 8 bits when byte-aligned
+  if (numBits === 8 && bitPosition === 7) {
+    const val = data[bytePosition]!
+    cursor.bytePosition = bytePosition + 1
+    return val - offset
+  }
+
+  // General case
+  let val = 0
+  for (let i = 0; i < numBits; i++) {
+    val <<= 1
+    val |= (data[bytePosition]! >> bitPosition) & 1
+    bitPosition -= 1
+    if (bitPosition < 0) {
+      bytePosition += 1
+      bitPosition = 7
+    }
+  }
+
+  cursor.bytePosition = bytePosition
+  cursor.bitPosition = bitPosition
+  return val - offset
 }

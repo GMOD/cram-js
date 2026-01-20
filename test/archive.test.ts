@@ -64,12 +64,12 @@ test('normal', async () => {
   expect(feats.length).toBe(10000)
 })
 
-function quals(quals: number[]) {
+function quals(quals: Uint8Array | number[]) {
   if (quals.length === 0) {
     return '*'
   }
 
-  return quals
+  return Array.from(quals)
     .map(q => String.fromCharCode(Math.min(Math.max(q, 0), 93) + 33))
     .join('')
 }

@@ -1,7 +1,7 @@
 import { Slice } from './craiIndex.ts'
 import { SeqFetch } from './cramFile/file.ts'
 import CramFile from './cramFile/index.ts'
-import CramRecord from './cramFile/record.ts'
+import CramRecord, { DecodeOptions } from './cramFile/record.ts'
 import { CramUnimplementedError } from './errors.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
@@ -86,11 +86,14 @@ export default class IndexedCramFile {
       viewAsPairs?: boolean
       pairAcrossChr?: boolean
       maxInsertSize?: number
-    } = {},
+    } & DecodeOptions = {},
   ) {
-    opts.viewAsPairs = opts.viewAsPairs || false
-    opts.pairAcrossChr = opts.pairAcrossChr || false
-    opts.maxInsertSize = opts.maxInsertSize || 200000
+    const viewAsPairs = opts.viewAsPairs || false
+    const pairAcrossChr = opts.pairAcrossChr || false
+    const maxInsertSize = opts.maxInsertSize || 200000
+    const decodeOptions: DecodeOptions = {
+      decodeTags: opts.decodeTags,
+    }
 
     if (typeof seq === 'string') {
       // TODO: support string reference sequence names somehow
@@ -104,32 +107,36 @@ export default class IndexedCramFile {
     // fetch all the slices and parse the feature data
     const sliceResults = await Promise.all(
       slices.map(slice =>
-        this.getRecordsInSlice(slice, feature => {
-          // Check if feature belongs to this sequence
-          if (feature.sequenceId !== seq) {
-            return false
-          }
+        this.getRecordsInSlice(
+          slice,
+          feature => {
+            // Check if feature belongs to this sequence
+            if (feature.sequenceId !== seq) {
+              return false
+            }
 
-          // For unmapped reads (lengthOnRef is undefined), they are placed at their
-          // mate's position. Include them if that position is within the range.
-          if (feature.lengthOnRef === undefined) {
+            // For unmapped reads (lengthOnRef is undefined), they are placed at their
+            // mate's position. Include them if that position is within the range.
+            if (feature.lengthOnRef === undefined) {
+              return (
+                feature.alignmentStart >= start && feature.alignmentStart <= end
+              )
+            }
+
+            // For mapped reads, check if they overlap the requested range
+            // Use > instead of >= for start boundary to match samtools behavior
             return (
-              feature.alignmentStart >= start && feature.alignmentStart <= end
+              feature.alignmentStart <= end &&
+              feature.alignmentStart + feature.lengthOnRef - 1 > start
             )
-          }
-
-          // For mapped reads, check if they overlap the requested range
-          // Use > instead of >= for start boundary to match samtools behavior
-          return (
-            feature.alignmentStart <= end &&
-            feature.alignmentStart + feature.lengthOnRef - 1 > start
-          )
-        }),
+          },
+          decodeOptions,
+        ),
       ),
     )
 
     let ret: CramRecord[] = Array.prototype.concat(...sliceResults)
-    if (opts.viewAsPairs) {
+    if (viewAsPairs) {
       const readNames: Record<string, number> = {}
       const readIds: Record<string, number> = {}
       for (const read of ret) {
@@ -159,9 +166,9 @@ export default class IndexedCramFile {
         if (
           unmatedPairs[name] &&
           cramRecord.mate &&
-          (cramRecord.mate.sequenceId === seqId || opts.pairAcrossChr) &&
+          (cramRecord.mate.sequenceId === seqId || pairAcrossChr) &&
           Math.abs(cramRecord.alignmentStart - cramRecord.mate.alignmentStart) <
-            opts.maxInsertSize
+            maxInsertSize
         ) {
           const mateSlices = this.index.getEntriesForRange(
             cramRecord.mate.sequenceId,
@@ -225,10 +232,11 @@ export default class IndexedCramFile {
       sliceBytes,
     }: { containerStart: number; sliceStart: number; sliceBytes: number },
     filterFunction: (r: CramRecord) => boolean,
+    decodeOptions?: DecodeOptions,
   ) {
     const container = this.cram.getContainerAtPosition(containerStart)
     const slice = container.getSlice(sliceStart, sliceBytes)
-    return slice.getRecords(filterFunction)
+    return slice.getRecords(filterFunction, decodeOptions)
   }
 
   /**

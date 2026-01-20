@@ -18,6 +18,15 @@ export interface ReadFeature {
   sub?: string
 }
 
+export interface DecodeOptions {
+  /** Whether to parse tags. If false, raw tag data is stored for lazy parsing. Default true. */
+  decodeTags?: boolean
+}
+
+export const defaultDecodeOptions: Required<DecodeOptions> = {
+  decodeTags: true,
+}
+
 function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   // if it has no length, it has no sequence
   if (!cramRecord.lengthOnRef && !cramRecord.readLength) {
@@ -238,7 +247,7 @@ export default class CramRecord {
   public sequenceId: number
   public readGroupId: number
   public mappingQuality: number | undefined
-  public qualityScores: number[] | null | undefined
+  public qualityScores: Uint8Array | null | undefined
 
   constructor({
     flags,
@@ -292,6 +301,15 @@ export default class CramRecord {
     if (mateRecordNumber) {
       this.mateRecordNumber = mateRecordNumber
     }
+  }
+
+  /**
+   * Get a single quality score at the given index.
+   * @param index 0-based index into the quality scores
+   * @returns the quality score at that index, or undefined if not available
+   */
+  qualityScoreAt(index: number): number | undefined {
+    return this.qualityScores?.[index]
   }
 
   /**
@@ -459,16 +477,11 @@ export default class CramRecord {
     if (this.readFeatures) {
       // use the reference bases to decode the bases substituted in each base
       // substitution
-      this.readFeatures.forEach(readFeature => {
+      for (const readFeature of this.readFeatures) {
         if (readFeature.code === 'X') {
-          decodeBaseSubstitution(
-            this,
-            refRegion,
-            compressionScheme,
-            readFeature,
-          )
+          decodeBaseSubstitution(this, refRegion, compressionScheme, readFeature)
         }
-      })
+      }
     }
 
     // if this region completely covers this read,
@@ -493,6 +506,9 @@ export default class CramRecord {
     })
 
     data.readBases = this.getReadBases()
+    data.qualityScores = this.qualityScores
+      ? Array.from(this.qualityScores)
+      : this.qualityScores
 
     return data
   }

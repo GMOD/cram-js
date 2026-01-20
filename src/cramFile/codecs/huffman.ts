@@ -1,9 +1,48 @@
 import CramCodec, { Cursor, Cursors } from './_base.ts'
-import { getBits } from './getBits.ts'
 import { CramMalformedError } from '../../errors.ts'
 import { HuffmanEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
 import CramSlice from '../slice/index.ts'
+
+/**
+ * Inlined getBits for huffman decoding - avoids function call overhead
+ */
+function getBitsInline(
+  data: Uint8Array,
+  cursor: Cursor,
+  numBits: number,
+): number {
+  let { bytePosition, bitPosition } = cursor
+
+  // Fast path for single bit (common in huffman)
+  if (numBits === 1) {
+    const val = (data[bytePosition]! >> bitPosition) & 1
+    bitPosition -= 1
+    if (bitPosition < 0) {
+      bytePosition += 1
+      bitPosition = 7
+    }
+    cursor.bytePosition = bytePosition
+    cursor.bitPosition = bitPosition as Cursor['bitPosition']
+    return val
+  }
+
+  // General case
+  let val = 0
+  for (let i = 0; i < numBits; i++) {
+    val <<= 1
+    val |= (data[bytePosition]! >> bitPosition) & 1
+    bitPosition -= 1
+    if (bitPosition < 0) {
+      bytePosition += 1
+      bitPosition = 7
+    }
+  }
+
+  cursor.bytePosition = bytePosition
+  cursor.bitPosition = bitPosition
+  return val
+}
 
 function numberOfSetBits(ii: number) {
   let i = (ii - (ii >> 1)) & 0x55555555
@@ -144,8 +183,11 @@ export default class HuffmanIntCodec extends CramCodec<
     let bits = 0
     for (let i = 0; i < this.sortedCodes.length; i += 1) {
       const length = this.sortedCodes[i]!.bitLength
-      bits <<= length - prevLen
-      bits |= getBits(input, coreCursor, length - prevLen)
+      const bitsToRead = length - prevLen
+      if (bitsToRead > 0) {
+        bits <<= bitsToRead
+        bits |= getBitsInline(input, coreCursor, bitsToRead)
+      }
       prevLen = length
       {
         const index = this.bitCodeToValue[bits]!
