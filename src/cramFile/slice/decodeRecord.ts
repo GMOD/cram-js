@@ -154,13 +154,11 @@ const data1SchemaV2Plus: Record<string, readonly [string, string]> = {
   S: ['string', 'SC'] as const,
 }
 
-const data2Schema = { B: ['number', 'QS'] as const } as const
-
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
   decodeDataSeries: any,
-  compressionScheme: CramContainerCompressionScheme,
+  _compressionScheme: CramContainerCompressionScheme,
   majorVersion: number,
 ) {
   let currentReadPos = 0
@@ -199,7 +197,6 @@ function decodeReadFeatures(
     let data = decodeRFData(schema)
 
     // if this is a tag with two data items, make the data an array and add the second item
-    const schema2 = data2Schema[code as keyof typeof data2Schema]
     if (schema2) {
       data = [data, decodeRFData(schema2)]
     }
@@ -342,8 +339,9 @@ export default function decodeRecord(
   const ntags = TN.length
   for (let i = 0; i < ntags; i++) {
     const tagId = TN[i]!
-    const tagName = tagId.slice(0, 2)
-    const tagType = tagId.slice(2, 3)
+    // Use direct character access instead of slice() to avoid string allocation
+    const tagName = tagId[0]! + tagId[1]!
+    const tagType = tagId[2]!
 
     const tagData = compressionScheme
       .getCodecForTag(tagId)

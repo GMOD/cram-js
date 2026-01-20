@@ -45,6 +45,7 @@ function decodeGammaInline(
 
   // Count leading zeros (each 0 bit increases length)
   // Inline single-bit reads for the while loop
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
     const bit = (data[bytePosition]! >> bitPosition) & 1
     bitPosition -= 1
@@ -99,6 +100,7 @@ export function decodeGammaBulk(
     let length = 1
 
     // Count leading zeros
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       const bit = (data[bytePosition]! >> bitPosition) & 1
       bitPosition -= 1
@@ -129,7 +131,7 @@ export function decodeGammaBulk(
   }
 
   cursor.bytePosition = bytePosition
-  cursor.bitPosition = bitPosition as Cursor['bitPosition']
+  cursor.bitPosition = bitPosition
 
   return results
 }

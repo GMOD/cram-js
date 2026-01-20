@@ -48,7 +48,9 @@ async function runBenchmark(label: string, decodeQualityScores: boolean) {
     })
 
     const start = performance.now()
-    const records = await file.getRecordsForRange(0, minStart, maxEnd, { decodeQualityScores })
+    const records = await file.getRecordsForRange(0, minStart, maxEnd, {
+      decodeQualityScores,
+    })
     const duration = performance.now() - start
 
     times.push(duration)
@@ -81,10 +83,17 @@ async function main() {
   console.log('')
   console.log('Results:')
   console.log('-'.repeat(60))
-  console.log(`With QS:    Median ${withQS.median.toFixed(2)}ms, ${(withQS.recordCount / (withQS.median / 1000)).toFixed(0)} rec/s`)
-  console.log(`Without QS: Median ${withoutQS.median.toFixed(2)}ms, ${(withoutQS.recordCount / (withoutQS.median / 1000)).toFixed(0)} rec/s`)
+  console.log(
+    `With QS:    Median ${withQS.median.toFixed(2)}ms, ${(withQS.recordCount / (withQS.median / 1000)).toFixed(0)} rec/s`,
+  )
+  console.log(
+    `Without QS: Median ${withoutQS.median.toFixed(2)}ms, ${(withoutQS.recordCount / (withoutQS.median / 1000)).toFixed(0)} rec/s`,
+  )
   console.log('')
-  const improvement = ((withQS.median - withoutQS.median) / withQS.median * 100).toFixed(1)
+  const improvement = (
+    ((withQS.median - withoutQS.median) / withQS.median) *
+    100
+  ).toFixed(1)
   console.log(`Improvement: ${improvement}% faster without QS decoding`)
 
   // Memory comparison

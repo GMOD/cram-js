@@ -45,6 +45,7 @@ function decodeSubexpInline(
 
   // Count leading ones (inline single-bit reads)
   let numLeadingOnes = 0
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
     const bit = (data[bytePosition]! >> bitPosition) & 1
     bitPosition -= 1

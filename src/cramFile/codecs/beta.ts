@@ -63,6 +63,6 @@ function decodeBetaInline(
   }
 
   cursor.bytePosition = bytePosition
-  cursor.bitPosition = bitPosition as Cursor['bitPosition']
+  cursor.bitPosition = bitPosition
   return val - offset
 }

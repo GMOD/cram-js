@@ -12,10 +12,7 @@ import ExternalCodec from '../codecs/external.ts'
 import { DataSeriesTypes } from '../container/compressionScheme.ts'
 import CramContainer from '../container/index.ts'
 import CramFile, { CramFileBlock } from '../file.ts'
-import CramRecord, {
-  DecodeOptions,
-  defaultDecodeOptions,
-} from '../record.ts'
+import CramRecord, { DecodeOptions, defaultDecodeOptions } from '../record.ts'
 import {
   MappedSliceHeader,
   UnmappedSliceHeader,
@@ -453,10 +450,18 @@ export default class CramSlice {
       qsIsExternal || baIsExternal
         ? (dataSeriesName, length) => {
             if (dataSeriesName === 'QS' && qsIsExternal) {
-              return qsCodec.getBytesSubarray(blocksByContentId, cursors, length)
+              return qsCodec.getBytesSubarray(
+                blocksByContentId,
+                cursors,
+                length,
+              )
             }
             if (dataSeriesName === 'BA' && baIsExternal) {
-              return baCodec.getBytesSubarray(blocksByContentId, cursors, length)
+              return baCodec.getBytesSubarray(
+                blocksByContentId,
+                cursors,
+                length,
+              )
             }
             return undefined
           }
