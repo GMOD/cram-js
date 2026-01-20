@@ -247,8 +247,7 @@ export default class CramRecord {
   public sequenceId: number
   public readGroupId: number
   public mappingQuality: number | undefined
-  private _qualityScores: number[] | null | undefined
-  private _qualityScoresRaw: Uint8Array | undefined
+  public qualityScores: Uint8Array | null | undefined
 
   constructor({
     flags,
@@ -257,7 +256,6 @@ export default class CramRecord {
     mappingQuality,
     lengthOnRef,
     qualityScores,
-    qualityScoresRaw,
     mateRecordNumber,
     readBases,
     readFeatures,
@@ -275,8 +273,7 @@ export default class CramRecord {
     this.readLength = readLength
     this.mappingQuality = mappingQuality
     this.lengthOnRef = lengthOnRef
-    this._qualityScores = qualityScores
-    this._qualityScoresRaw = qualityScoresRaw
+    this.qualityScores = qualityScores
     if (readBases) {
       this.readBases = readBases
     }
@@ -307,36 +304,12 @@ export default class CramRecord {
   }
 
   /**
-   * Get quality scores, lazily decoding from raw bytes if needed.
-   * @returns quality scores array, null if explicitly set to null, or undefined if unavailable
-   */
-  get qualityScores(): number[] | null | undefined {
-    if (this._qualityScores === undefined && this._qualityScoresRaw) {
-      this._qualityScores = Array.from(this._qualityScoresRaw)
-    }
-    return this._qualityScores
-  }
-
-  /**
-   * Set quality scores directly.
-   */
-  set qualityScores(value: number[] | null | undefined) {
-    this._qualityScores = value
-  }
-
-  /**
-   * Get a single quality score at the given index without decoding the full array.
+   * Get a single quality score at the given index.
    * @param index 0-based index into the quality scores
    * @returns the quality score at that index, or undefined if not available
    */
   qualityScoreAt(index: number): number | undefined {
-    if (this._qualityScoresRaw) {
-      return this._qualityScoresRaw[index]
-    }
-    if (this._qualityScores) {
-      return this._qualityScores[index]
-    }
-    return undefined
+    return this.qualityScores?.[index]
   }
 
   /**
@@ -504,16 +477,11 @@ export default class CramRecord {
     if (this.readFeatures) {
       // use the reference bases to decode the bases substituted in each base
       // substitution
-      this.readFeatures.forEach(readFeature => {
+      for (const readFeature of this.readFeatures) {
         if (readFeature.code === 'X') {
-          decodeBaseSubstitution(
-            this,
-            refRegion,
-            compressionScheme,
-            readFeature,
-          )
+          decodeBaseSubstitution(this, refRegion, compressionScheme, readFeature)
         }
-      })
+      }
     }
 
     // if this region completely covers this read,
@@ -539,6 +507,8 @@ export default class CramRecord {
 
     data.readBases = this.getReadBases()
     data.qualityScores = this.qualityScores
+      ? Array.from(this.qualityScores)
+      : this.qualityScores
 
     return data
   }

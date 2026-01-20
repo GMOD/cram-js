@@ -4,7 +4,6 @@ import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
-  BulkByteDecoder,
   BulkByteRawDecoder,
   DataSeriesDecoder,
 } from './decodeRecord.ts'
@@ -423,29 +422,7 @@ export default class CramSlice {
     const baCodec = compressionScheme.getCodecForDataSeries('BA')
     const qsIsExternal = qsCodec instanceof ExternalCodec
     const baIsExternal = baCodec instanceof ExternalCodec
-    const decodeBulkBytes: BulkByteDecoder | undefined =
-      qsIsExternal || baIsExternal
-        ? (dataSeriesName, length) => {
-            if (dataSeriesName === 'QS' && qsIsExternal) {
-              return qsCodec.getBytesAsNumberArray(
-                blocksByContentId,
-                cursors,
-                length,
-              )
-            }
-            if (dataSeriesName === 'BA' && baIsExternal) {
-              return baCodec.getBytesAsNumberArray(
-                blocksByContentId,
-                cursors,
-                length,
-              )
-            }
-            // Return undefined to signal fallback to single-byte decoding
-            return undefined
-          }
-        : undefined
-
-    // Create raw byte decoder for lazy QS/BA decoding
+    // Create raw byte decoder for QS/BA decoding
     const decodeBulkBytesRaw: BulkByteRawDecoder | undefined =
       qsIsExternal || baIsExternal
         ? (dataSeriesName, length) => {
@@ -482,7 +459,6 @@ export default class CramSlice {
           cursors,
           majorVersion,
           i,
-          decodeBulkBytes,
           decodeOptions,
           decodeBulkBytesRaw,
         )

@@ -231,11 +231,6 @@ export type DataSeriesDecoder = <T extends DataSeriesEncodingKey>(
   dataSeriesName: T,
 ) => DataTypeMapping[DataSeriesTypes[T]] | undefined
 
-export type BulkByteDecoder = (
-  dataSeriesName: 'QS' | 'BA',
-  length: number,
-) => number[] | undefined
-
 export type BulkByteRawDecoder = (
   dataSeriesName: 'QS' | 'BA',
   length: number,
@@ -251,7 +246,6 @@ export default function decodeRecord(
   cursors: Cursors,
   majorVersion: number,
   recordNumber: number,
-  decodeBulkBytes?: BulkByteDecoder,
   decodeOptions?: Required<DecodeOptions>,
   decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
@@ -343,28 +337,32 @@ export default function decodeRecord(
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
+  const shouldDecodeTags = decodeOptions?.decodeTags !== false
   for (let i = 0; i < ntags; i++) {
     const tagId = TN[i]!
-    // Use direct character access instead of slice() to avoid string allocation
-    const tagName = tagId[0]! + tagId[1]!
-    const tagType = tagId[2]!
-
+    // Always decode to advance cursor position
     const tagData = compressionScheme
       .getCodecForTag(tagId)
       .decode(slice, coreDataBlock, blocksByContentId, cursors)
-    tags[tagName] =
-      tagData === undefined
-        ? undefined
-        : typeof tagData === 'number'
-          ? tagData
-          : parseTagData(tagType, tagData)
+
+    // Only parse tags if requested (default: true)
+    if (shouldDecodeTags) {
+      // Use direct character access instead of slice() to avoid string allocation
+      const tagName = tagId[0]! + tagId[1]!
+      const tagType = tagId[2]!
+      tags[tagName] =
+        tagData === undefined
+          ? undefined
+          : typeof tagData === 'number'
+            ? tagData
+            : parseTagData(tagType, tagData)
+    }
   }
 
   let readFeatures: ReadFeature[] | undefined
   let lengthOnRef: number | undefined
   let mappingQuality: number | undefined
-  let qualityScores: number[] | undefined | null
-  let qualityScoresRaw: Uint8Array | undefined
+  let qualityScores: Uint8Array | undefined | null
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
@@ -406,20 +404,15 @@ export default function decodeRecord(
     mappingQuality = decodeDataSeries('MQ')!
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      // Try to store raw bytes for lazy decoding (most efficient)
+      // Try raw bytes first (most efficient - just a subarray view)
       const rawQS = decodeBulkBytesRaw?.('QS', readLength)
       if (rawQS) {
-        qualityScoresRaw = rawQS
+        qualityScores = rawQS
       } else {
-        // Fallback to immediate decoding for non-external codecs
-        const bulkQS = decodeBulkBytes?.('QS', readLength)
-        if (bulkQS) {
-          qualityScores = bulkQS
-        } else {
-          qualityScores = new Array(readLength)
-          for (let i = 0; i < qualityScores.length; i++) {
-            qualityScores[i] = decodeDataSeries('QS')!
-          }
+        // Fallback to single-byte decoding into new Uint8Array
+        qualityScores = new Uint8Array(readLength)
+        for (let i = 0; i < readLength; i++) {
+          qualityScores[i] = decodeDataSeries('QS')!
         }
       }
     }
@@ -441,20 +434,15 @@ export default function decodeRecord(
     }
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      // Try to store raw bytes for lazy decoding (most efficient)
+      // Try raw bytes first (most efficient - just a subarray view)
       const rawQS = decodeBulkBytesRaw?.('QS', readLength)
       if (rawQS) {
-        qualityScoresRaw = rawQS
+        qualityScores = rawQS
       } else {
-        // Fallback to immediate decoding for non-external codecs
-        const bulkQS = decodeBulkBytes?.('QS', readLength)
-        if (bulkQS) {
-          qualityScores = bulkQS
-        } else {
-          qualityScores = new Array(readLength)
-          for (let i = 0; i < readLength; i++) {
-            qualityScores[i] = decodeDataSeries('QS')!
-          }
+        // Fallback to single-byte decoding into new Uint8Array
+        qualityScores = new Uint8Array(readLength)
+        for (let i = 0; i < readLength; i++) {
+          qualityScores[i] = decodeDataSeries('QS')!
         }
       }
     }
@@ -475,7 +463,6 @@ export default function decodeRecord(
     lengthOnRef,
     mappingQuality,
     qualityScores,
-    qualityScoresRaw,
     readBases,
     tags,
   }
