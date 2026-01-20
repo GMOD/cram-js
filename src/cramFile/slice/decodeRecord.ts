@@ -154,6 +154,11 @@ const data1SchemaV2Plus: Record<string, readonly [string, string]> = {
   S: ['string', 'SC'] as const,
 }
 
+// Second data item schema for read features that have two values
+const data2Schema: Record<string, readonly [string, string]> = {
+  B: ['number', 'QS'] as const,
+}
+
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
@@ -194,7 +199,13 @@ function decodeReadFeatures(
       throw new CramMalformedError(`invalid read feature code "${code}"`)
     }
 
-    const data = decodeRFData(schema)
+    let data: any = decodeRFData(schema)
+
+    // if this is a read feature with two data items, make the data an array
+    const schema2 = data2Schema[code]
+    if (schema2) {
+      data = [data, decodeRFData(schema2)]
+    }
 
     currentReadPos += readPosDelta
     const pos = currentReadPos
