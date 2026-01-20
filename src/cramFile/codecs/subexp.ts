@@ -1,5 +1,4 @@
-import CramCodec, { Cursors } from './_base.ts'
-import { getBits } from './getBits.ts'
+import CramCodec, { Cursor, Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
 import { SubexpEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
@@ -24,22 +23,59 @@ export default class SubexpCodec extends CramCodec<
     _blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    let numLeadingOnes = 0
-    while (getBits(coreDataBlock.content, cursors.coreBlock, 1)) {
-      numLeadingOnes = numLeadingOnes + 1
-    }
-
-    let b: number
-    let n: number
-    if (numLeadingOnes === 0) {
-      b = this.parameters.K
-      n = getBits(coreDataBlock.content, cursors.coreBlock, b)
-    } else {
-      b = numLeadingOnes + this.parameters.K - 1
-      const bits = getBits(coreDataBlock.content, cursors.coreBlock, b)
-      n = (1 << b) | bits
-    }
-
-    return n - this.parameters.offset
+    return decodeSubexpInline(
+      coreDataBlock.content,
+      cursors.coreBlock,
+      this.parameters.K,
+      this.parameters.offset,
+    )
   }
+}
+
+/**
+ * Optimized subexp decoder with inlined bit reading.
+ */
+function decodeSubexpInline(
+  data: Uint8Array,
+  cursor: Cursor,
+  K: number,
+  offset: number,
+): number {
+  let { bytePosition, bitPosition } = cursor
+
+  // Count leading ones (inline single-bit reads)
+  let numLeadingOnes = 0
+  while (true) {
+    const bit = (data[bytePosition]! >> bitPosition) & 1
+    bitPosition -= 1
+    if (bitPosition < 0) {
+      bytePosition += 1
+      bitPosition = 7
+    }
+    if (bit === 0) {
+      break
+    }
+    numLeadingOnes += 1
+  }
+
+  // Determine how many bits to read for the value
+  const b = numLeadingOnes === 0 ? K : numLeadingOnes + K - 1
+
+  // Read b bits
+  let bits = 0
+  for (let i = 0; i < b; i++) {
+    bits <<= 1
+    bits |= (data[bytePosition]! >> bitPosition) & 1
+    bitPosition -= 1
+    if (bitPosition < 0) {
+      bytePosition += 1
+      bitPosition = 7
+    }
+  }
+
+  cursor.bytePosition = bytePosition
+  cursor.bitPosition = bitPosition as Cursor['bitPosition']
+
+  const n = numLeadingOnes === 0 ? bits : (1 << b) | bits
+  return n - offset
 }

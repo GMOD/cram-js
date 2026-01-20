@@ -15,16 +15,21 @@ import CramSlice, { SliceHeader } from './index.ts'
 import { CramFileBlock } from '../file.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
 
+// Reusable TextDecoder instance for string decoding (ASCII/Latin1)
+const textDecoder = new TextDecoder('latin1')
+
 /**
  * given a Buffer, read a string up to the first null character
  * @private
  */
 function readNullTerminatedString(buffer: Uint8Array) {
-  let r = ''
-  for (let i = 0; i < buffer.length && buffer[i] !== 0; i++) {
-    r += String.fromCharCode(buffer[i]!)
+  // Find the null terminator
+  let end = 0
+  while (end < buffer.length && buffer[end] !== 0) {
+    end++
   }
-  return r
+  // Decode using TextDecoder (faster than char-by-char concatenation)
+  return textDecoder.decode(buffer.subarray(0, end))
 }
 
 /**
@@ -124,6 +129,33 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
+// Pre-defined schema lookup tables (version-independent entries)
+const data1SchemaBase = {
+  B: ['character', 'BA'] as const,
+  X: ['number', 'BS'] as const,
+  D: ['number', 'DL'] as const,
+  I: ['string', 'IN'] as const,
+  i: ['character', 'BA'] as const,
+  b: ['string', 'BB'] as const,
+  q: ['numArray', 'QQ'] as const,
+  Q: ['number', 'QS'] as const,
+  H: ['number', 'HC'] as const,
+  P: ['number', 'PD'] as const,
+  N: ['number', 'RS'] as const,
+} as const
+
+// Version-specific S entry
+const data1SchemaV1: Record<string, readonly [string, string]> = {
+  ...data1SchemaBase,
+  S: ['string', 'IN'] as const,
+}
+const data1SchemaV2Plus: Record<string, readonly [string, string]> = {
+  ...data1SchemaBase,
+  S: ['string', 'SC'] as const,
+}
+
+const data2Schema = { B: ['number', 'QS'] as const } as const
+
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
@@ -135,6 +167,9 @@ function decodeReadFeatures(
   let currentRefPos = alignmentStart - 1
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
 
+  // Select the appropriate schema based on version (once per call, not per iteration)
+  const data1Schema = majorVersion > 1 ? data1SchemaV2Plus : data1SchemaV1
+
   function decodeRFData([type, dataSeriesName]: readonly [
     type: string,
     dataSeriesName: string,
@@ -143,17 +178,10 @@ function decodeReadFeatures(
     if (type === 'character') {
       return String.fromCharCode(data)
     } else if (type === 'string') {
-      let r = ''
-      for (let i = 0; i < data.byteLength; i++) {
-        r += String.fromCharCode(data[i])
-      }
-      return r
+      return textDecoder.decode(data)
     } else if (type === 'numArray') {
       return Array.from(data)
     }
-    // else if (type === 'number') {
-    //   return data[0]
-    // }
     return data
   }
 
@@ -162,32 +190,18 @@ function decodeReadFeatures(
 
     const readPosDelta = decodeDataSeries('FP')
 
-    // map of operator name -> data series name
-    const data1Schema = {
-      B: ['character', 'BA'] as const,
-      S: ['string', majorVersion > 1 ? 'SC' : 'IN'] as const, // IN if cram v1, SC otherwise
-      X: ['number', 'BS'] as const,
-      D: ['number', 'DL'] as const,
-      I: ['string', 'IN'] as const,
-      i: ['character', 'BA'] as const,
-      b: ['string', 'BB'] as const,
-      q: ['numArray', 'QQ'] as const,
-      Q: ['number', 'QS'] as const,
-      H: ['number', 'HC'] as const,
-      P: ['number', 'PD'] as const,
-      N: ['number', 'RS'] as const,
-    }[code]
+    const schema = data1Schema[code]
 
-    if (!data1Schema) {
+    if (!schema) {
       throw new CramMalformedError(`invalid read feature code "${code}"`)
     }
 
-    let data = decodeRFData(data1Schema)
+    let data = decodeRFData(schema)
 
     // if this is a tag with two data items, make the data an array and add the second item
-    const data2Schema = { B: ['number', 'QS'] as const }[code]
-    if (data2Schema) {
-      data = [data, decodeRFData(data2Schema)]
+    const schema2 = data2Schema[code as keyof typeof data2Schema]
+    if (schema2) {
+      data = [data, decodeRFData(schema2)]
     }
 
     currentReadPos += readPosDelta
@@ -409,14 +423,12 @@ export default function decodeRecord(
     readBases = null
     qualityScores = null
   } else {
-    const bulkBA = decodeBulkBytes?.('BA', readLength)
-    if (bulkBA) {
-      let s = ''
-      for (let i = 0; i < bulkBA.length; i++) {
-        s += String.fromCharCode(bulkBA[i]!)
-      }
-      readBases = s
+    // Try raw bytes first for TextDecoder (most efficient)
+    const rawBA = decodeBulkBytesRaw?.('BA', readLength)
+    if (rawBA) {
+      readBases = textDecoder.decode(rawBA)
     } else {
+      // Fallback to single-byte decoding
       let s = ''
       for (let i = 0; i < readLength; i++) {
         s += String.fromCharCode(decodeDataSeries('BA')!)
