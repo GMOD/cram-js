@@ -380,6 +380,88 @@ export default class CramFile {
 
     return block
   }
+
+  async readBlockFromBuffer(
+    buffer: Uint8Array,
+    bufferOffset: number,
+    filePosition: number,
+  ) {
+    const { majorVersion } = await this.getDefinition()
+    if (!this._sectionParsers) {
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
+    const sectionParsers = this._sectionParsers
+    const { cramBlockHeader } = sectionParsers
+
+    const headerBytes = buffer.subarray(
+      bufferOffset,
+      bufferOffset + cramBlockHeader.maxLength,
+    )
+    const blockHeader = parseItem(
+      headerBytes,
+      cramBlockHeader.parser,
+      0,
+      filePosition,
+    )
+    const blockContentPosition = blockHeader._endPosition
+    const contentOffset = bufferOffset + blockHeader._size
+
+    const d = buffer.subarray(
+      contentOffset,
+      contentOffset + blockHeader.compressedSize,
+    )
+    const uncompressedData =
+      blockHeader.compressionMethod !== 'raw'
+        ? await this._uncompress(
+            blockHeader.compressionMethod,
+            d,
+            blockHeader.uncompressedSize,
+          )
+        : d
+
+    const block: CramFileBlock = {
+      ...blockHeader,
+      _endPosition: blockContentPosition,
+      contentPosition: blockContentPosition,
+      content: uncompressedData,
+    }
+    if (majorVersion >= 3) {
+      const crcOffset = contentOffset + blockHeader.compressedSize
+      const crcBytes = buffer.subarray(
+        crcOffset,
+        crcOffset + sectionParsers.cramBlockCrc32.maxLength,
+      )
+      const crc = parseItem(
+        crcBytes,
+        sectionParsers.cramBlockCrc32.parser,
+        0,
+        blockContentPosition + blockHeader.compressedSize,
+      )
+      block.crc32 = crc.crc32
+
+      if (this.validateChecksums) {
+        const blockData = buffer.subarray(
+          bufferOffset,
+          bufferOffset + blockHeader._size + blockHeader.compressedSize,
+        )
+        const calculatedCrc32 = crc32(blockData) >>> 0
+        if (calculatedCrc32 !== crc.crc32) {
+          throw new CramMalformedError(
+            `crc mismatch in block data: recorded CRC32 = ${crc.crc32}, but calculated CRC32 = ${calculatedCrc32}`,
+          )
+        }
+      }
+
+      block._endPosition = crc._endPosition
+      block._size =
+        block.compressedSize + sectionParsers.cramBlockCrc32.maxLength
+    } else {
+      block._endPosition = blockContentPosition + block.compressedSize
+      block._size = block.compressedSize
+    }
+
+    return block
+  }
 }
 
 'getDefinition getSectionParsers getSamHeader'.split(' ').forEach(method => {

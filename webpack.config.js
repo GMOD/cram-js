@@ -17,6 +17,7 @@ export default {
   resolve: {
     fallback: {
       fs: false,
+      'node:fs': false,
     },
   },
 }
