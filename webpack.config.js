@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename)
 
 export default {
   mode: 'production',
-  entry: './dist/index.js',
+  entry: './esm/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'cram-bundle.js',
@@ -17,6 +17,7 @@ export default {
   resolve: {
     fallback: {
       fs: false,
+      'node:fs': false,
     },
   },
 }

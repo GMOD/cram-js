@@ -16,6 +16,7 @@ export default defineConfig(
       'scripts/*',
       'example/*',
       'htscodecs-wasm/*',
+      'esm_*',
       'benchmarks/*',
       'src/htscodecs',
       'src/seek-bzip',

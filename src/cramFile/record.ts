@@ -479,7 +479,12 @@ export default class CramRecord {
       // substitution
       for (const readFeature of this.readFeatures) {
         if (readFeature.code === 'X') {
-          decodeBaseSubstitution(this, refRegion, compressionScheme, readFeature)
+          decodeBaseSubstitution(
+            this,
+            refRegion,
+            compressionScheme,
+            readFeature,
+          )
         }
       }
     }

@@ -226,7 +226,37 @@ export default class CramSlice {
   // memoize
   async getBlocks() {
     const header = await this.getHeader()
-    // read all the blocks into memory and store them
+
+    if (this.sliceSize) {
+      // if we know the slice size (from the index), do one big read for all
+      // blocks and parse from the in-memory buffer
+      const containerHeader = await this.container.getHeader()
+      const sliceFilePosition =
+        containerHeader._endPosition + this.containerPosition
+      const blocksFilePosition = header._endPosition
+      const headerSize = blocksFilePosition - sliceFilePosition
+      const remainingBytes = this.sliceSize - headerSize
+
+      const allBlocksBuffer = await this.file.read(
+        remainingBytes,
+        blocksFilePosition,
+      )
+
+      const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
+      let bufferOffset = 0
+      for (let i = 0; i < blocks.length; i++) {
+        const block = await this.file.readBlockFromBuffer(
+          allBlocksBuffer,
+          bufferOffset,
+          blocksFilePosition + bufferOffset,
+        )
+        blocks[i] = block
+        bufferOffset = block._endPosition - blocksFilePosition
+      }
+      return blocks
+    }
+
+    // fallback: read blocks one at a time (non-indexed access)
     let blockPosition = header._endPosition
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i++) {
@@ -234,7 +264,6 @@ export default class CramSlice {
       blocks[i] = block
       blockPosition = blocks[i]!._endPosition
     }
-
     return blocks
   }
 
