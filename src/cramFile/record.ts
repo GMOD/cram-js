@@ -1,17 +1,8 @@
 import Constants from './constants.ts'
 import CramContainerCompressionScheme from './container/compressionScheme.ts'
+import { readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type decodeRecord from './slice/decodeRecord.ts'
-
-const textDecoder = new TextDecoder('latin1')
-
-function decodeNullTerminatedString(buffer: Uint8Array) {
-  let end = 0
-  while (end < buffer.length && buffer[end] !== 0) {
-    end++
-  }
-  return textDecoder.decode(buffer.subarray(0, end))
-}
 
 // precomputed pair orientation strings indexed by ((flags >> 4) & 0xF) | (isize > 0 ? 16 : 0)
 // bits 0-3 encode flag bits 0x10(reverse),0x20(mate reverse),0x40(read1),0x80(read2)
@@ -147,7 +138,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   return bases.toUpperCase()
 }
 
-const baseNumbers = {
+const baseNumbers: Record<string, number | undefined> = {
   a: 0,
   A: 0,
   c: 1,
@@ -177,7 +168,7 @@ function decodeBaseSubstitution(
   if (refBase) {
     readFeature.ref = refBase
   }
-  let baseNumber = (baseNumbers as any)[refBase]
+  let baseNumber = baseNumbers[refBase]
   if (baseNumber === undefined) {
     baseNumber = 4
   }
@@ -263,7 +254,7 @@ export const MateFlagsDecoder = makeFlagsHelper(MateFlags)
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
-  public tags: Record<string, string>
+  public tags: Record<string, string | number | number[] | undefined>
   public flags: number
   public cramFlags: number
   public readBases?: string | null
@@ -272,10 +263,13 @@ export default class CramRecord {
   public alignmentStart: number
   public lengthOnRef: number | undefined
   public readLength: number
+  // templateLength is computed post-hoc for intra-slice mate pairs,
+  // templateSize is the raw CRAM-encoded TS data series value
   public templateLength?: number
   public templateSize?: number
   private _readName?: string
   private _readNameRaw?: Uint8Array
+  public _syntheticReadName?: string
   public mateRecordNumber?: number
   public mate?: MateRecord
   public uniqueId: number
@@ -285,16 +279,15 @@ export default class CramRecord {
   public qualityScores: Uint8Array | null | undefined
 
   get readName() {
-    if (this._readName === undefined && this._readNameRaw) {
-      this._readName = decodeNullTerminatedString(this._readNameRaw)
-      this._readNameRaw = undefined
+    if (this._readName === undefined) {
+      if (this._readNameRaw) {
+        this._readName = readNullTerminatedStringFromBuffer(this._readNameRaw)
+        this._readNameRaw = undefined
+      } else {
+        return this._syntheticReadName
+      }
     }
     return this._readName
-  }
-
-  set readName(val: string | undefined) {
-    this._readName = val
-    this._readNameRaw = undefined
   }
 
   constructor({
@@ -322,19 +315,18 @@ export default class CramRecord {
     this.mappingQuality = mappingQuality
     this.lengthOnRef = lengthOnRef
     this.qualityScores = qualityScores
+    this.readGroupId = readGroupId
+    this.sequenceId = sequenceId!
+    this.uniqueId = uniqueId
+    this.alignmentStart = alignmentStart
+    this.tags = tags
+    if (readNameRaw) {
+      this._readNameRaw = readNameRaw
+    }
     if (readBases) {
       this.readBases = readBases
     }
-
-    this.readGroupId = readGroupId
-    this._readNameRaw = readNameRaw
-    this.sequenceId = sequenceId!
-    this.uniqueId = uniqueId
     this.templateSize = templateSize
-    this.alignmentStart = alignmentStart
-    this.tags = tags
-
-    // backwards compatibility
     if (readFeatures) {
       this.readFeatures = readFeatures
     }

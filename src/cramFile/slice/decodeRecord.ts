@@ -14,23 +14,7 @@ import {
 import CramSlice, { SliceHeader } from './index.ts'
 import { CramFileBlock } from '../file.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
-
-// Reusable TextDecoder instance for string decoding (ASCII/Latin1)
-const textDecoder = new TextDecoder('latin1')
-
-/**
- * given a Buffer, read a string up to the first null character
- * @private
- */
-function readNullTerminatedString(buffer: Uint8Array) {
-  // Find the null terminator
-  let end = 0
-  while (end < buffer.length && buffer[end] !== 0) {
-    end++
-  }
-  // Decode using TextDecoder (faster than char-by-char concatenation)
-  return textDecoder.decode(buffer.subarray(0, end))
-}
+import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 /**
  * parse a BAM tag's array value from a binary buffer
@@ -88,7 +72,7 @@ function parseTagValueArray(buffer: Uint8Array) {
 
 function parseTagData(tagType: string, buffer: Uint8Array) {
   if (tagType === 'Z') {
-    return readNullTerminatedString(buffer)
+    return readNullTerminatedStringFromBuffer(buffer)
   }
   if (tagType === 'A') {
     return String.fromCharCode(buffer[0]!)
@@ -117,7 +101,7 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   }
   if (tagType === 'H') {
     return Number.parseInt(
-      readNullTerminatedString(buffer).replace(/^0x/, ''),
+      readNullTerminatedStringFromBuffer(buffer).replace(/^0x/, ''),
       16,
     )
   }
@@ -164,8 +148,7 @@ const data2Schema: Record<string, readonly [string, string]> = {
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
-  decodeDataSeries: any,
-  _compressionScheme: CramContainerCompressionScheme,
+  decodeDataSeries: DataSeriesDecoder,
   majorVersion: number,
 ) {
   let currentReadPos = 0
@@ -178,22 +161,22 @@ function decodeReadFeatures(
   function decodeRFData([type, dataSeriesName]: readonly [
     type: string,
     dataSeriesName: string,
-  ]) {
-    const data = decodeDataSeries(dataSeriesName)
+  ]): string | number | number[] {
+    const data = decodeDataSeries(dataSeriesName as DataSeriesEncodingKey)
     if (type === 'character') {
-      return String.fromCharCode(data)
+      return String.fromCharCode(data as number)
     } else if (type === 'string') {
-      return textDecoder.decode(data)
+      return decodeLatin1(data as Uint8Array)
     } else if (type === 'numArray') {
-      return Array.from(data)
+      return Array.from(data as Uint8Array)
     }
-    return data
+    return data as number
   }
 
   for (let i = 0; i < readFeatureCount; i++) {
-    const code = String.fromCharCode(decodeDataSeries('FC'))
+    const code = String.fromCharCode(decodeDataSeries('FC')!)
 
-    const readPosDelta = decodeDataSeries('FP')
+    const readPosDelta = decodeDataSeries('FP')!
 
     const schema = data1Schema[code]
 
@@ -201,12 +184,13 @@ function decodeReadFeatures(
       throw new CramMalformedError(`invalid read feature code "${code}"`)
     }
 
-    let data: any = decodeRFData(schema)
+    let data: string | number | number[] | [string, number] =
+      decodeRFData(schema)
 
-    // if this is a read feature with two data items, make the data an array
+    // if this is a read feature with two data items, make the data a tuple
     const schema2 = data2Schema[code]
     if (schema2) {
-      data = [data, decodeRFData(schema2)]
+      data = [data as string, decodeRFData(schema2) as number]
     }
 
     currentReadPos += readPosDelta
@@ -217,9 +201,9 @@ function decodeReadFeatures(
 
     // for gapping features, adjust the reference position for read features that follow
     if (code === 'D' || code === 'N') {
-      currentRefPos += data
+      currentRefPos += data as number
     } else if (code === 'I' || code === 'S') {
-      currentRefPos -= data.length
+      currentRefPos -= (data as string).length
     } else if (code === 'i') {
       currentRefPos -= 1
     }
@@ -299,7 +283,7 @@ export default function decodeRecord(
     let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
       readNameRaw = decodeDataSeries('RN')!
-      mateReadName = readNullTerminatedString(readNameRaw)
+      mateReadName = readNullTerminatedStringFromBuffer(readNameRaw)
     }
     const mateSequenceId = decodeDataSeries('NS')!
     const mateAlignmentStart = decodeDataSeries('NP')!
@@ -322,8 +306,6 @@ export default function decodeRecord(
     if (MateFlagsDecoder.isOnNegativeStrand(mateFlags)) {
       flags = BamFlagsDecoder.setMateReverseComplemented(flags)
     }
-
-    // detachedCount++
   } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
     mateRecordNumber = decodeDataSeries('NF')! + recordNumber + 1
   }
@@ -336,7 +318,8 @@ export default function decodeRecord(
     throw new CramMalformedError('invalid TL index')
   }
 
-  const tags: Record<string, any> = {}
+  type TagValue = string | number | number[] | undefined
+  const tags: Record<string, TagValue> = {}
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
@@ -372,7 +355,6 @@ export default function decodeRecord(
         alignmentStart,
         readFeatureCount,
         decodeDataSeries,
-        compressionScheme,
         majorVersion,
       )
     }
@@ -421,7 +403,7 @@ export default function decodeRecord(
     // Try raw bytes first for TextDecoder (most efficient)
     const rawBA = decodeBulkBytesRaw?.('BA', readLength)
     if (rawBA) {
-      readBases = textDecoder.decode(rawBA)
+      readBases = decodeLatin1(rawBA)
     } else {
       // Fallback to single-byte decoding
       let s = ''

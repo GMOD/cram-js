@@ -2,7 +2,6 @@ import CramCodec, { Cursors } from './_base.ts'
 import { ByteArrayLengthEncoding, CramEncoding } from '../encoding.ts'
 import { CramFileBlock } from '../file.ts'
 import { DataType } from './dataSeriesTypes.ts'
-import ExternalCodec from './external.ts'
 import CramSlice from '../slice/index.ts'
 import { tinyMemoize } from '../util.ts'
 
@@ -38,23 +37,29 @@ export default class ByteArrayStopCodec extends CramCodec<
 
     if (arrayLength > 0) {
       const dataCodec = this._getDataCodec()
-      if (dataCodec instanceof ExternalCodec) {
-        return dataCodec.getBytesSubarray(
-          blocksByContentId,
-          cursors,
-          arrayLength,
-        )!
+      const subarray = dataCodec.getBytesSubarray(
+        blocksByContentId,
+        cursors,
+        arrayLength,
+      )
+      if (subarray) {
+        return subarray
+      } else {
+        const data = new Uint8Array(arrayLength)
+        for (let i = 0; i < arrayLength; i += 1) {
+          data[i] =
+            dataCodec.decode(
+              slice,
+              coreDataBlock,
+              blocksByContentId,
+              cursors,
+            ) || 0
+        }
+        return data
       }
-      const data = new Uint8Array(arrayLength)
-      for (let i = 0; i < arrayLength; i += 1) {
-        data[i] =
-          dataCodec.decode(slice, coreDataBlock, blocksByContentId, cursors) ||
-          0
-      }
-      return data
+    } else {
+      return new Uint8Array(0)
     }
-
-    return new Uint8Array(arrayLength)
   }
 
   // memoize

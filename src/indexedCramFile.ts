@@ -65,10 +65,6 @@ export default class IndexedCramFile {
         cacheSize: args.cacheSize,
       })
 
-    if (!(this.cram instanceof CramFile)) {
-      throw new Error('invalid arguments: no cramfile')
-    }
-
     this.index = args.index
   }
 
