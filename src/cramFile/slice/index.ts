@@ -478,27 +478,25 @@ export default class CramSlice {
     )
     for (let i = 0; i < records.length; i += 1) {
       try {
-        const init = decodeRecord(
-          this,
-          decodeDataSeries,
-          compressionScheme,
-          sliceHeader,
-          coreDataBlock,
-          blocksByContentId,
-          cursors,
-          majorVersion,
-          i,
-          decodeOptions,
-          decodeBulkBytesRaw,
-        )
-        records[i] = new CramRecord({
-          ...init,
-          uniqueId:
+        records[i] = new CramRecord(
+          decodeRecord(
+            this,
+            decodeDataSeries,
+            compressionScheme,
+            sliceHeader,
+            coreDataBlock,
+            blocksByContentId,
+            cursors,
+            majorVersion,
+            i,
             sliceHeader.contentPosition +
-            sliceHeader.parsedContent.recordCounter +
-            i +
-            1,
-        })
+              sliceHeader.parsedContent.recordCounter +
+              i +
+              1,
+            decodeOptions,
+            decodeBulkBytesRaw,
+          ),
+        )
       } catch (e) {
         if (e instanceof CramBufferOverrunError) {
           const recordsDecoded = i

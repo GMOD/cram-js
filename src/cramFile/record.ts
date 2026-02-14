@@ -30,14 +30,32 @@ export interface RefRegion {
   seq: string
 }
 
-export interface ReadFeature {
-  code: string
+interface ReadFeatureBase {
   pos: number
   refPos: number
-  data: any
-  ref?: string
-  sub?: string
 }
+
+/**
+ * Read features describe differences between a read and the reference sequence.
+ * Each feature has a code indicating the type of difference, a position in the
+ * read (pos), and a position on the reference (refPos).
+ */
+export type ReadFeature =
+  /** I=insertion, S=soft clip, b=bases, i=single-base insertion — all carry a sequence string */
+  | (ReadFeatureBase & { code: 'I' | 'S' | 'b' | 'i'; data: string })
+  /** B=base and quality pair — [substituted base, quality score] */
+  | (ReadFeatureBase & { code: 'B'; data: [string, number] })
+  /** X=base substitution — data is the substitution matrix index, ref/sub filled in by addReferenceSequence */
+  | (ReadFeatureBase & {
+      code: 'X'
+      data: number
+      ref?: string
+      sub?: string
+    })
+  /** D=deletion, N=reference skip, H=hard clip, P=padding, Q=single quality score */
+  | (ReadFeatureBase & { code: 'D' | 'N' | 'H' | 'P' | 'Q'; data: number })
+  /** q=quality scores for a stretch of bases */
+  | (ReadFeatureBase & { code: 'q'; data: number[] })
 
 export interface DecodeOptions {
   /** Whether to parse tags. If false, raw tag data is stored for lazy parsing. Default true. */
@@ -80,40 +98,30 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
         currentReadFeature += 1
 
         if (feature.code === 'b') {
-          // specify a base pair for some reason
           const added = feature.data
           bases += added
           regionPos += added.length
         } else if (feature.code === 'B') {
-          // base pair and associated quality
-          // TODO: do we need to set the quality in the qual scores?
           bases += feature.data[0]
           regionPos += 1
         } else if (feature.code === 'X') {
-          // base substitution
           bases += feature.sub
           regionPos += 1
         } else if (feature.code === 'I') {
-          // insertion
           bases += feature.data
         } else if (feature.code === 'D') {
-          // deletion
           regionPos += feature.data
         } else if (feature.code === 'i') {
-          // insert single base
           bases += feature.data
         } else if (feature.code === 'N') {
-          // reference skip. delete some bases
-          // do nothing
-          // seqBases.splice(feature.pos - 1, feature.data)
           regionPos += feature.data
         } else if (feature.code === 'S') {
-          // soft clipped bases that should be present in the read seq
-          // seqBases.splice(feature.pos - 1, 0, ...feature.data.split(''))
           bases += feature.data
         } else if (feature.code === 'P') {
           // padding, do nothing
-        } else if (feature.code === 'H') {
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        else if (feature.code === 'H') {
           // hard clip, do nothing
         }
       } else if (currentReadFeature < cramRecord.readFeatures.length) {
@@ -156,7 +164,12 @@ function decodeBaseSubstitution(
   cramRecord: CramRecord,
   refRegion: RefRegion,
   compressionScheme: CramContainerCompressionScheme,
-  readFeature: ReadFeature,
+  readFeature: ReadFeatureBase & {
+    code: 'X'
+    data: number
+    ref?: string
+    sub?: string
+  },
 ) {
   // decode base substitution code using the substitution matrix
   const refCoord = readFeature.refPos - refRegion.start
@@ -302,7 +315,7 @@ export default class CramRecord {
     templateSize,
     alignmentStart,
     tags,
-  }: ReturnType<typeof decodeRecord> & { uniqueId: number }) {
+  }: ReturnType<typeof decodeRecord>) {
     this.flags = flags
     this.cramFlags = cramFlags
     this.readLength = readLength
@@ -454,9 +467,7 @@ export default class CramRecord {
       return undefined
     }
     const isize = this.templateLength || this.templateSize || 0
-    return PAIR_ORIENTATION_TABLE[
-      ((f >> 4) & 0xf) | (isize > 0 ? 16 : 0)
-    ]
+    return PAIR_ORIENTATION_TABLE[((f >> 4) & 0xf) | (isize > 0 ? 16 : 0)]
   }
 
   /**
