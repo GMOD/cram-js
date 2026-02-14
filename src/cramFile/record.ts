@@ -410,51 +410,30 @@ export default class CramRecord {
     return this.readBases
   }
 
-  /**
-   * Get the pair orientation of a paired read. Adapted from igv.js
-   * @returns {String} of paired orientatin
-   */
+  // adapted from igv.js
+  // inlines flag checks and uses template literal instead of array+join
   getPairOrientation() {
-    if (
-      !this.isSegmentUnmapped() &&
-      this.isPaired() &&
-      !this.isMateUnmapped() &&
-      this.sequenceId === this.mate?.sequenceId
-    ) {
-      const s1 = this.isReverseComplemented() ? 'R' : 'F'
-      const s2 = this.isMateReverseComplemented() ? 'R' : 'F'
-      let o1 = ' '
-      let o2 = ' '
-      if (this.isRead1()) {
-        o1 = '1'
-        o2 = '2'
-      } else if (this.isRead2()) {
-        o1 = '2'
-        o2 = '1'
-      }
-
-      const tmp = []
-      let isize = this.templateLength || this.templateSize
-      if (isize === undefined) {
-        throw new Error('One of templateSize and templateLength must be set')
-      }
-      if (this.alignmentStart > this.mate.alignmentStart && isize > 0) {
-        isize = -isize
-      }
-      if (isize > 0) {
-        tmp[0] = s1
-        tmp[1] = o1
-        tmp[2] = s2
-        tmp[3] = o2
-      } else {
-        tmp[2] = s1
-        tmp[3] = o1
-        tmp[0] = s2
-        tmp[1] = o2
-      }
-      return tmp.join('')
+    const f = this.flags
+    // combined check: paired (0x1) set, unmapped (0x4) clear, mate unmapped (0x8) clear
+    if ((f & 0xd) !== 0x1 || this.sequenceId !== this.mate?.sequenceId) {
+      return undefined
     }
-    return null
+    const s1 = f & 0x10 ? 'R' : 'F'
+    const s2 = f & 0x20 ? 'R' : 'F'
+    let o1 = ' '
+    let o2 = ' '
+    if (f & 0x40) {
+      o1 = '1'
+      o2 = '2'
+    } else if (f & 0x80) {
+      o1 = '2'
+      o2 = '1'
+    }
+
+    const isize = this.templateLength || this.templateSize || 0
+    return isize > 0
+      ? `${s1}${o1}${s2}${o2}`
+      : `${s2}${o2}${s1}${o1}`
   }
 
   /**
