@@ -1,4 +1,6 @@
-export class CramBufferOverrunError extends Error {}
+export class CramBufferOverrunError extends Error {
+  readonly code = 'CRAM_BUFFER_OVERRUN' as const
+}
 
 export function getBits(
   data: Uint8Array,

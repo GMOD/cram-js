@@ -1,10 +1,47 @@
 import CramCodec, { Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
-import { CramFileBlock } from '../file.ts'
-import CramSlice from '../slice/index.ts'
-import { parseItf8 } from '../util.ts'
-import { CramBufferOverrunError } from './getBits.ts'
 import { ExternalCramEncoding } from '../encoding.ts'
+import { CramFileBlock } from '../file.ts'
+import { CramBufferOverrunError } from './getBits.ts'
+import CramSlice from '../slice/index.ts'
+
+function parseItf8Inline(buffer: Uint8Array, cursor: { bytePosition: number }) {
+  const offset = cursor.bytePosition
+  const countFlags = buffer[offset]!
+  if (countFlags < 0x80) {
+    cursor.bytePosition = offset + 1
+    return countFlags
+  }
+  if (countFlags < 0xc0) {
+    cursor.bytePosition = offset + 2
+    return ((countFlags & 0x3f) << 8) | buffer[offset + 1]!
+  }
+  if (countFlags < 0xe0) {
+    cursor.bytePosition = offset + 3
+    return (
+      ((countFlags & 0x1f) << 16) |
+      (buffer[offset + 1]! << 8) |
+      buffer[offset + 2]!
+    )
+  }
+  if (countFlags < 0xf0) {
+    cursor.bytePosition = offset + 4
+    return (
+      ((countFlags & 0x0f) << 24) |
+      (buffer[offset + 1]! << 16) |
+      (buffer[offset + 2]! << 8) |
+      buffer[offset + 3]!
+    )
+  }
+  cursor.bytePosition = offset + 5
+  return (
+    ((countFlags & 0x0f) << 28) |
+    (buffer[offset + 1]! << 20) |
+    (buffer[offset + 2]! << 12) |
+    (buffer[offset + 3]! << 4) |
+    (buffer[offset + 4]! & 0x0f)
+  )
+}
 
 export default class ExternalCodec extends CramCodec<
   'int' | 'byte',
@@ -37,12 +74,7 @@ export default class ExternalCodec extends CramCodec<
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
 
     if (this.dataType === 'int') {
-      const [result, bytesRead] = parseItf8(
-        contentBlock.content,
-        cursor.bytePosition,
-      )
-      cursor.bytePosition += bytesRead
-      return result
+      return parseItf8Inline(contentBlock.content, cursor)
     } else {
       if (cursor.bytePosition >= contentBlock.content.length) {
         throw new CramBufferOverrunError(

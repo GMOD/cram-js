@@ -42,4 +42,12 @@ export default abstract class CramCodec<
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ): DataTypeMapping[TResult] | undefined
+
+  getBytesSubarray(
+    _blocksByContentId: Record<number, CramFileBlock>,
+    _cursors: Cursors,
+    _length: number,
+  ): Uint8Array | undefined {
+    return undefined
+  }
 }

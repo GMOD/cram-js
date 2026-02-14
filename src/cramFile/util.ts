@@ -1,5 +1,19 @@
 import md5 from 'md5'
 
+const textDecoder = new TextDecoder('latin1')
+
+export function readNullTerminatedStringFromBuffer(buffer: Uint8Array) {
+  let end = 0
+  while (end < buffer.length && buffer[end] !== 0) {
+    end++
+  }
+  return textDecoder.decode(buffer.subarray(0, end))
+}
+
+export function decodeLatin1(buffer: Uint8Array) {
+  return textDecoder.decode(buffer)
+}
+
 export const TWO_PWR_16_DBL = 1 << 16
 export const TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL
 export const TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL

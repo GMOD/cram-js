@@ -14,72 +14,54 @@ import {
 import CramSlice, { SliceHeader } from './index.ts'
 import { CramFileBlock } from '../file.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
-
-// Reusable TextDecoder instance for string decoding (ASCII/Latin1)
-const textDecoder = new TextDecoder('latin1')
-
-/**
- * given a Buffer, read a string up to the first null character
- * @private
- */
-function readNullTerminatedString(buffer: Uint8Array) {
-  // Find the null terminator
-  let end = 0
-  while (end < buffer.length && buffer[end] !== 0) {
-    end++
-  }
-  // Decode using TextDecoder (faster than char-by-char concatenation)
-  return textDecoder.decode(buffer.subarray(0, end))
-}
+import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 /**
  * parse a BAM tag's array value from a binary buffer
  * @private
  */
+// Uses DataView instead of typed arrays (e.g. new Int32Array(buffer.buffer))
+// because the buffer may be a subarray of a larger ArrayBuffer. Typed array
+// constructors like Int32Array interpret .buffer as the entire underlying
+// ArrayBuffer starting at byte 0, ignoring the subarray's byteOffset. This
+// caused silent data corruption when reading tag values. DataView with explicit
+// byteOffset reads from the correct position within the parent buffer.
 function parseTagValueArray(buffer: Uint8Array) {
   const arrayType = String.fromCharCode(buffer[0]!)
 
-  const dataView = new DataView(buffer.buffer)
-  const littleEndian = true
-  const length = dataView.getUint32(1, littleEndian)
+  const dv = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength)
+  const length = dv.getUint32(1, true)
 
   const array: number[] = new Array(length)
-  buffer = buffer.slice(5)
+  const dataOffset = 5
 
   if (arrayType === 'c') {
-    const arr = new Int8Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getInt8(dataOffset + i)
     }
   } else if (arrayType === 'C') {
-    const arr = new Uint8Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getUint8(dataOffset + i)
     }
   } else if (arrayType === 's') {
-    const arr = new Int16Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getInt16(dataOffset + i * 2, true)
     }
   } else if (arrayType === 'S') {
-    const arr = new Uint16Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getUint16(dataOffset + i * 2, true)
     }
   } else if (arrayType === 'i') {
-    const arr = new Int32Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getInt32(dataOffset + i * 4, true)
     }
   } else if (arrayType === 'I') {
-    const arr = new Uint32Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getUint32(dataOffset + i * 4, true)
     }
   } else if (arrayType === 'f') {
-    const arr = new Float32Array(buffer.buffer)
     for (let i = 0; i < length; i++) {
-      array[i] = arr[i]!
+      array[i] = dv.getFloat32(dataOffset + i * 4, true)
     }
   } else {
     throw new Error(`unknown type: ${arrayType}`)
@@ -90,35 +72,36 @@ function parseTagValueArray(buffer: Uint8Array) {
 
 function parseTagData(tagType: string, buffer: Uint8Array) {
   if (tagType === 'Z') {
-    return readNullTerminatedString(buffer)
+    return readNullTerminatedStringFromBuffer(buffer)
   }
   if (tagType === 'A') {
     return String.fromCharCode(buffer[0]!)
   }
+  const dv = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength)
   if (tagType === 'I') {
-    return new Uint32Array(buffer.buffer)[0]
+    return dv.getUint32(0, true)
   }
   if (tagType === 'i') {
-    return new Int32Array(buffer.buffer)[0]
+    return dv.getInt32(0, true)
   }
   if (tagType === 's') {
-    return new Int16Array(buffer.buffer)[0]
+    return dv.getInt16(0, true)
   }
   if (tagType === 'S') {
-    return new Uint16Array(buffer.buffer)[0]
+    return dv.getUint16(0, true)
   }
   if (tagType === 'c') {
-    return new Int8Array(buffer.buffer)[0]
+    return dv.getInt8(0)
   }
   if (tagType === 'C') {
     return buffer[0]!
   }
   if (tagType === 'f') {
-    return new Float32Array(buffer.buffer)[0]
+    return dv.getFloat32(0, true)
   }
   if (tagType === 'H') {
     return Number.parseInt(
-      readNullTerminatedString(buffer).replace(/^0x/, ''),
+      readNullTerminatedStringFromBuffer(buffer).replace(/^0x/, ''),
       16,
     )
   }
@@ -129,22 +112,25 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-// Pre-defined schema lookup tables (version-independent entries)
+// Read feature schema lookup tables. Each entry maps a feature code to
+// [dataType, dataSeriesName] where dataType controls how the raw codec
+// output is converted (character→fromCharCode, string→TextDecoder,
+// numArray→Array.from, number→as-is).
 const data1SchemaBase = {
-  B: ['character', 'BA'] as const,
-  X: ['number', 'BS'] as const,
-  D: ['number', 'DL'] as const,
-  I: ['string', 'IN'] as const,
-  i: ['character', 'BA'] as const,
-  b: ['string', 'BB'] as const,
-  q: ['numArray', 'QQ'] as const,
-  Q: ['number', 'QS'] as const,
-  H: ['number', 'HC'] as const,
-  P: ['number', 'PD'] as const,
-  N: ['number', 'RS'] as const,
+  B: ['character', 'BA'] as const, // base substitution (base component)
+  X: ['number', 'BS'] as const, // base substitution matrix index
+  D: ['number', 'DL'] as const, // deletion length
+  I: ['string', 'IN'] as const, // insertion bases
+  i: ['character', 'BA'] as const, // single-base insertion
+  b: ['string', 'BB'] as const, // stretch of bases
+  q: ['numArray', 'QQ'] as const, // stretch of quality scores
+  Q: ['number', 'QS'] as const, // single quality score
+  H: ['number', 'HC'] as const, // hard clip length
+  P: ['number', 'PD'] as const, // padding length
+  N: ['number', 'RS'] as const, // reference skip length
 } as const
 
-// Version-specific S entry
+// Soft clip data series changed between CRAM v1 (IN) and v2+ (SC)
 const data1SchemaV1: Record<string, readonly [string, string]> = {
   ...data1SchemaBase,
   S: ['string', 'IN'] as const,
@@ -154,7 +140,7 @@ const data1SchemaV2Plus: Record<string, readonly [string, string]> = {
   S: ['string', 'SC'] as const,
 }
 
-// Second data item schema for read features that have two values
+// Features with a second data item (B has both a base and a quality score)
 const data2Schema: Record<string, readonly [string, string]> = {
   B: ['number', 'QS'] as const,
 }
@@ -162,8 +148,7 @@ const data2Schema: Record<string, readonly [string, string]> = {
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
-  decodeDataSeries: any,
-  _compressionScheme: CramContainerCompressionScheme,
+  decodeDataSeries: DataSeriesDecoder,
   majorVersion: number,
 ) {
   let currentReadPos = 0
@@ -176,22 +161,22 @@ function decodeReadFeatures(
   function decodeRFData([type, dataSeriesName]: readonly [
     type: string,
     dataSeriesName: string,
-  ]) {
-    const data = decodeDataSeries(dataSeriesName)
+  ]): string | number | number[] {
+    const data = decodeDataSeries(dataSeriesName as DataSeriesEncodingKey)
     if (type === 'character') {
-      return String.fromCharCode(data)
+      return String.fromCharCode(data as number)
     } else if (type === 'string') {
-      return textDecoder.decode(data)
+      return decodeLatin1(data as Uint8Array)
     } else if (type === 'numArray') {
-      return Array.from(data)
+      return Array.from(data as Uint8Array)
     }
-    return data
+    return data as number
   }
 
   for (let i = 0; i < readFeatureCount; i++) {
-    const code = String.fromCharCode(decodeDataSeries('FC'))
+    const code = String.fromCharCode(decodeDataSeries('FC')!)
 
-    const readPosDelta = decodeDataSeries('FP')
+    const readPosDelta = decodeDataSeries('FP')!
 
     const schema = data1Schema[code]
 
@@ -199,12 +184,13 @@ function decodeReadFeatures(
       throw new CramMalformedError(`invalid read feature code "${code}"`)
     }
 
-    let data: any = decodeRFData(schema)
+    let data: string | number | number[] | [string, number] =
+      decodeRFData(schema)
 
-    // if this is a read feature with two data items, make the data an array
+    // if this is a read feature with two data items, make the data a tuple
     const schema2 = data2Schema[code]
     if (schema2) {
-      data = [data, decodeRFData(schema2)]
+      data = [data as string, decodeRFData(schema2) as number]
     }
 
     currentReadPos += readPosDelta
@@ -215,14 +201,14 @@ function decodeReadFeatures(
 
     // for gapping features, adjust the reference position for read features that follow
     if (code === 'D' || code === 'N') {
-      currentRefPos += data
+      currentRefPos += data as number
     } else if (code === 'I' || code === 'S') {
-      currentRefPos -= data.length
+      currentRefPos -= (data as string).length
     } else if (code === 'i') {
       currentRefPos -= 1
     }
 
-    readFeatures[i] = { code, pos, refPos, data }
+    readFeatures[i] = { code, pos, refPos, data } as ReadFeature
   }
   return readFeatures
 }
@@ -246,6 +232,7 @@ export default function decodeRecord(
   cursors: Cursors,
   majorVersion: number,
   recordNumber: number,
+  uniqueId: number,
   decodeOptions?: Required<DecodeOptions>,
   decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
@@ -273,9 +260,9 @@ export default function decodeRecord(
   cursors.lastAlignmentStart = alignmentStart
   const readGroupId = decodeDataSeries('RG')!
 
-  let readName: string | undefined
+  let readNameRaw: Uint8Array | undefined
   if (compressionScheme.readNamesIncluded) {
-    readName = readNullTerminatedString(decodeDataSeries('RN')!)
+    readNameRaw = decodeDataSeries('RN')!
   }
 
   let mateToUse:
@@ -295,8 +282,8 @@ export default function decodeRecord(
     const mateFlags = decodeDataSeries('MF')!
     let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
-      mateReadName = readNullTerminatedString(decodeDataSeries('RN')!)
-      readName = mateReadName
+      readNameRaw = decodeDataSeries('RN')!
+      mateReadName = readNullTerminatedStringFromBuffer(readNameRaw)
     }
     const mateSequenceId = decodeDataSeries('NS')!
     const mateAlignmentStart = decodeDataSeries('NP')!
@@ -319,8 +306,6 @@ export default function decodeRecord(
     if (MateFlagsDecoder.isOnNegativeStrand(mateFlags)) {
       flags = BamFlagsDecoder.setMateReverseComplemented(flags)
     }
-
-    // detachedCount++
   } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
     mateRecordNumber = decodeDataSeries('NF')! + recordNumber + 1
   }
@@ -333,21 +318,19 @@ export default function decodeRecord(
     throw new CramMalformedError('invalid TL index')
   }
 
-  const tags: Record<string, any> = {}
+  type TagValue = string | number | number[] | undefined
+  const tags: Record<string, TagValue> = {}
   // TN = tag names
   const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
   const shouldDecodeTags = decodeOptions?.decodeTags !== false
-  for (let i = 0; i < ntags; i++) {
-    const tagId = TN[i]!
-    // Always decode to advance cursor position
-    const tagData = compressionScheme
-      .getCodecForTag(tagId)
-      .decode(slice, coreDataBlock, blocksByContentId, cursors)
+  if (shouldDecodeTags) {
+    for (let i = 0; i < ntags; i++) {
+      const tagId = TN[i]!
+      const tagData = compressionScheme
+        .getCodecForTag(tagId)
+        .decode(slice, coreDataBlock, blocksByContentId, cursors)
 
-    // Only parse tags if requested (default: true)
-    if (shouldDecodeTags) {
-      // Use direct character access instead of slice() to avoid string allocation
       const tagName = tagId[0]! + tagId[1]!
       const tagType = tagId[2]!
       tags[tagName] =
@@ -372,7 +355,6 @@ export default function decodeRecord(
         alignmentStart,
         readFeatureCount,
         decodeDataSeries,
-        compressionScheme,
         majorVersion,
       )
     }
@@ -393,9 +375,7 @@ export default function decodeRecord(
     }
     if (Number.isNaN(lengthOnRef)) {
       console.warn(
-        `${
-          readName || `${sequenceId}:${alignmentStart}`
-        } record has invalid read features`,
+        `${sequenceId}:${alignmentStart} record has invalid read features`,
       )
       lengthOnRef = readLength
     }
@@ -423,7 +403,7 @@ export default function decodeRecord(
     // Try raw bytes first for TextDecoder (most efficient)
     const rawBA = decodeBulkBytesRaw?.('BA', readLength)
     if (rawBA) {
-      readBases = textDecoder.decode(rawBA)
+      readBases = decodeLatin1(rawBA)
     } else {
       // Fallback to single-byte decoding
       let s = ''
@@ -455,7 +435,7 @@ export default function decodeRecord(
     flags,
     alignmentStart,
     readGroupId,
-    readName,
+    readNameRaw,
     mateToUse,
     templateSize,
     mateRecordNumber,
@@ -465,5 +445,6 @@ export default function decodeRecord(
     qualityScores,
     readBases,
     tags,
+    uniqueId,
   }
 }

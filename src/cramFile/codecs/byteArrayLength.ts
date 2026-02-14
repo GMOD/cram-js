@@ -35,18 +35,31 @@ export default class ByteArrayStopCodec extends CramCodec<
     const arrayLength =
       lengthCodec.decode(slice, coreDataBlock, blocksByContentId, cursors) || 0
 
-    const data = new Uint8Array(arrayLength)
     if (arrayLength > 0) {
       const dataCodec = this._getDataCodec()
-      // Call decode directly on codec to avoid repeated lookups
-      for (let i = 0; i < arrayLength; i += 1) {
-        data[i] =
-          dataCodec.decode(slice, coreDataBlock, blocksByContentId, cursors) ||
-          0
+      const subarray = dataCodec.getBytesSubarray(
+        blocksByContentId,
+        cursors,
+        arrayLength,
+      )
+      if (subarray) {
+        return subarray
+      } else {
+        const data = new Uint8Array(arrayLength)
+        for (let i = 0; i < arrayLength; i += 1) {
+          data[i] =
+            dataCodec.decode(
+              slice,
+              coreDataBlock,
+              blocksByContentId,
+              cursors,
+            ) || 0
+        }
+        return data
       }
+    } else {
+      return new Uint8Array(0)
     }
-
-    return data
   }
 
   // memoize

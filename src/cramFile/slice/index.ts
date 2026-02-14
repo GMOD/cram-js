@@ -1,13 +1,11 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
 import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
 import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
-import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
   BulkByteRawDecoder,
   DataSeriesDecoder,
 } from './decodeRecord.ts'
-import ExternalCodec from '../codecs/external.ts'
 import { DataSeriesTypes } from '../container/compressionScheme.ts'
 import CramContainer from '../container/index.ts'
 import CramFile, { CramFileBlock } from '../file.ts'
@@ -111,10 +109,12 @@ function associateIntraSliceMate(
       mateRecord.mateRecordNumber !== currentRecordNumber)
   )
 
-  // Deal with lossy read names
+  // Deal with lossy read names — assign a synthetic name from uniqueId
+  // so that paired records share the same name
   if (!thisRecord.readName) {
-    thisRecord.readName = String(thisRecord.uniqueId)
-    mateRecord.readName = thisRecord.readName
+    const syntheticName = String(thisRecord.uniqueId)
+    thisRecord._syntheticReadName = syntheticName
+    mateRecord._syntheticReadName = syntheticName
   }
 
   thisRecord.mate = {
@@ -446,30 +446,15 @@ export default class CramSlice {
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
 
-    // Create bulk byte decoder for QS and BA data series if they use External codec
+    // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray
+    // view when the codec supports it (e.g. ExternalCodec), or undefined otherwise
     const qsCodec = compressionScheme.getCodecForDataSeries('QS')
     const baCodec = compressionScheme.getCodecForDataSeries('BA')
-    const qsIsExternal = qsCodec instanceof ExternalCodec
-    const baIsExternal = baCodec instanceof ExternalCodec
-    // Create raw byte decoder for QS/BA decoding
     const decodeBulkBytesRaw: BulkByteRawDecoder | undefined =
-      qsIsExternal || baIsExternal
+      qsCodec || baCodec
         ? (dataSeriesName, length) => {
-            if (dataSeriesName === 'QS' && qsIsExternal) {
-              return qsCodec.getBytesSubarray(
-                blocksByContentId,
-                cursors,
-                length,
-              )
-            }
-            if (dataSeriesName === 'BA' && baIsExternal) {
-              return baCodec.getBytesSubarray(
-                blocksByContentId,
-                cursors,
-                length,
-              )
-            }
-            return undefined
+            const codec = dataSeriesName === 'QS' ? qsCodec : baCodec
+            return codec?.getBytesSubarray(blocksByContentId, cursors, length)
           }
         : undefined
 
@@ -478,35 +463,34 @@ export default class CramSlice {
     )
     for (let i = 0; i < records.length; i += 1) {
       try {
-        const init = decodeRecord(
-          this,
-          decodeDataSeries,
-          compressionScheme,
-          sliceHeader,
-          coreDataBlock,
-          blocksByContentId,
-          cursors,
-          majorVersion,
-          i,
-          decodeOptions,
-          decodeBulkBytesRaw,
-        )
-        records[i] = new CramRecord({
-          ...init,
-          uniqueId:
+        records[i] = new CramRecord(
+          decodeRecord(
+            this,
+            decodeDataSeries,
+            compressionScheme,
+            sliceHeader,
+            coreDataBlock,
+            blocksByContentId,
+            cursors,
+            majorVersion,
+            i,
             sliceHeader.contentPosition +
-            sliceHeader.parsedContent.recordCounter +
-            i +
-            1,
-        })
+              sliceHeader.parsedContent.recordCounter +
+              i +
+              1,
+            decodeOptions,
+            decodeBulkBytesRaw,
+          ),
+        )
       } catch (e) {
-        if (e instanceof CramBufferOverrunError) {
+        const err = e as { code?: string; message?: string }
+        if (err.code === 'CRAM_BUFFER_OVERRUN') {
           const recordsDecoded = i
           const recordsExpected = sliceHeader.parsedContent.numRecords
           throw new CramMalformedError(
             `Failed to decode all records in slice. Decoded ${recordsDecoded} of ${recordsExpected} expected records. ` +
               `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
-              `or (3) there's a bug in the decoder. Original error: ${e.message}`,
+              `or (3) there's a bug in the decoder. Original error: ${err.message}`,
           )
         } else {
           throw e
