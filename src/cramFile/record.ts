@@ -3,6 +3,16 @@ import CramContainerCompressionScheme from './container/compressionScheme.ts'
 
 import type decodeRecord from './slice/decodeRecord.ts'
 
+const textDecoder = new TextDecoder('latin1')
+
+function decodeNullTerminatedString(buffer: Uint8Array) {
+  let end = 0
+  while (end < buffer.length && buffer[end] !== 0) {
+    end++
+  }
+  return textDecoder.decode(buffer.subarray(0, end))
+}
+
 // precomputed pair orientation strings indexed by ((flags >> 4) & 0xF) | (isize > 0 ? 16 : 0)
 // bits 0-3 encode flag bits 0x10(reverse),0x20(mate reverse),0x40(read1),0x80(read2)
 // bit 4 encodes whether isize > 0
@@ -251,7 +261,8 @@ export default class CramRecord {
   public readLength: number
   public templateLength?: number
   public templateSize?: number
-  public readName?: string
+  private _readName?: string
+  private _readNameRaw?: Uint8Array
   public mateRecordNumber?: number
   public mate?: MateRecord
   public uniqueId: number
@@ -259,6 +270,19 @@ export default class CramRecord {
   public readGroupId: number
   public mappingQuality: number | undefined
   public qualityScores: Uint8Array | null | undefined
+
+  get readName() {
+    if (this._readName === undefined && this._readNameRaw) {
+      this._readName = decodeNullTerminatedString(this._readNameRaw)
+      this._readNameRaw = undefined
+    }
+    return this._readName
+  }
+
+  set readName(val: string | undefined) {
+    this._readName = val
+    this._readNameRaw = undefined
+  }
 
   constructor({
     flags,
@@ -272,7 +296,7 @@ export default class CramRecord {
     readFeatures,
     mateToUse,
     readGroupId,
-    readName,
+    readNameRaw,
     sequenceId,
     uniqueId,
     templateSize,
@@ -290,7 +314,7 @@ export default class CramRecord {
     }
 
     this.readGroupId = readGroupId
-    this.readName = readName
+    this._readNameRaw = readNameRaw
     this.sequenceId = sequenceId!
     this.uniqueId = uniqueId
     this.templateSize = templateSize
@@ -488,6 +512,7 @@ export default class CramRecord {
       data[k] = (this as any)[k]
     })
 
+    data.readName = this.readName
     data.readBases = this.getReadBases()
     data.qualityScores = this.qualityScores
       ? Array.from(this.qualityScores)

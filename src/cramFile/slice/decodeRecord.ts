@@ -273,9 +273,9 @@ export default function decodeRecord(
   cursors.lastAlignmentStart = alignmentStart
   const readGroupId = decodeDataSeries('RG')!
 
-  let readName: string | undefined
+  let readNameRaw: Uint8Array | undefined
   if (compressionScheme.readNamesIncluded) {
-    readName = readNullTerminatedString(decodeDataSeries('RN')!)
+    readNameRaw = decodeDataSeries('RN')!
   }
 
   let mateToUse:
@@ -295,8 +295,8 @@ export default function decodeRecord(
     const mateFlags = decodeDataSeries('MF')!
     let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
-      mateReadName = readNullTerminatedString(decodeDataSeries('RN')!)
-      readName = mateReadName
+      readNameRaw = decodeDataSeries('RN')!
+      mateReadName = readNullTerminatedString(readNameRaw)
     }
     const mateSequenceId = decodeDataSeries('NS')!
     const mateAlignmentStart = decodeDataSeries('NP')!
@@ -393,9 +393,7 @@ export default function decodeRecord(
     }
     if (Number.isNaN(lengthOnRef)) {
       console.warn(
-        `${
-          readName || `${sequenceId}:${alignmentStart}`
-        } record has invalid read features`,
+        `${sequenceId}:${alignmentStart} record has invalid read features`,
       )
       lengthOnRef = readLength
     }
@@ -455,7 +453,7 @@ export default function decodeRecord(
     flags,
     alignmentStart,
     readGroupId,
-    readName,
+    readNameRaw,
     mateToUse,
     templateSize,
     mateRecordNumber,
