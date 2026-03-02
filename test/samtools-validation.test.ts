@@ -15,7 +15,9 @@ function getSamtoolsCount(filename: string, region?: string): number {
     const result = execSync(cmd, { encoding: 'utf8' }).trim()
     return parseInt(result, 10)
   } catch (error) {
-    throw new Error(`Failed to run samtools: ${cmd}\n${error}`)
+    throw new Error(`Failed to run samtools: ${cmd}\n${error}`, {
+      cause: error,
+    })
   }
 }
 

@@ -126,8 +126,6 @@ function decodeSeqCigar(record: CramRecord) {
         oplen = 0
       } // else q or Q
     })
-  } else {
-    sublen = record.readLength - seq.length
   }
   if (seq.length !== record.readLength) {
     sublen = record.readLength - seq.length
