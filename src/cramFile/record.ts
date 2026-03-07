@@ -458,7 +458,10 @@ export default class CramRecord {
     if ((f & 0xd) !== 0x1 || this.sequenceId !== this.mate?.sequenceId) {
       return undefined
     }
-    const isize = this.templateLength || this.templateSize || 0
+    let isize = this.templateLength || this.templateSize || 0
+    if (this.alignmentStart > this.mate!.alignmentStart && isize > 0) {
+      isize = -isize
+    }
     return PAIR_ORIENTATION_TABLE[((f >> 4) & 0xf) | (isize > 0 ? 16 : 0)]
   }
 
