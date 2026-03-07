@@ -706,7 +706,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0504_mapped.cram without e
             "readName": "match",
             "sequenceId": 0,
             "tags": {},
-            "templateLength": 299,
+            "templateLength": -299,
             "templateSize": undefined,
             "uniqueId": 493,
           },

@@ -643,7 +643,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1007_seq.cram without erro
             "readName": "match",
             "sequenceId": 0,
             "tags": {},
-            "templateLength": 300,
+            "templateLength": -300,
             "templateSize": undefined,
             "uniqueId": 480,
           },

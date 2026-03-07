@@ -1260,7 +1260,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0703_tag.cram without erro
               "iA": -2147483647,
               "iB": -2147483648,
             },
-            "templateLength": 300,
+            "templateLength": -300,
             "templateSize": undefined,
             "uniqueId": 948,
           },

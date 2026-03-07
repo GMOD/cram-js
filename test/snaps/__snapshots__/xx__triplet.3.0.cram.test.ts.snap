@@ -991,7 +991,7 @@ exports[`can dump the whole xx#triplet.3.0.cram without error 1`] = `
             "readName": "a1",
             "sequenceId": 1,
             "tags": {},
-            "templateLength": 15,
+            "templateLength": -15,
             "templateSize": undefined,
             "uniqueId": 787,
           },

@@ -58,7 +58,8 @@ function calculateMultiSegmentMatedTemplateLength(
   const matedRecords = getAllMatedRecords(thisRecord)
   const starts = matedRecords.map(r => r.alignmentStart)
   const ends = matedRecords.map(r => r.alignmentStart + r.readLength - 1)
-  const estimatedTemplateLength = Math.max(...ends) - Math.min(...starts) + 1
+  const minStart = Math.min(...starts)
+  const estimatedTemplateLength = Math.max(...ends) - minStart + 1
   if (estimatedTemplateLength >= 0) {
     matedRecords.forEach(r => {
       if (r.templateLength !== undefined) {
@@ -66,7 +67,11 @@ function calculateMultiSegmentMatedTemplateLength(
           'mate pair group has some members that have template lengths already, this file seems malformed',
         )
       }
-      r.templateLength = estimatedTemplateLength
+      // sign per SAM spec: positive for leftmost, negative for rightmost
+      r.templateLength =
+        r.alignmentStart === minStart
+          ? estimatedTemplateLength
+          : -estimatedTemplateLength
     })
   }
 }
@@ -88,8 +93,15 @@ function calculateIntraSliceMatePairTemplateLength(
     mateRecord.alignmentStart + mateRecord.readLength - 1,
   )
   const lengthEstimate = end - start + 1
-  thisRecord.templateLength = lengthEstimate
-  mateRecord.templateLength = lengthEstimate
+  // sign per SAM spec: positive for leftmost, negative for rightmost
+  thisRecord.templateLength =
+    thisRecord.alignmentStart <= mateRecord.alignmentStart
+      ? lengthEstimate
+      : -lengthEstimate
+  mateRecord.templateLength =
+    mateRecord.alignmentStart <= thisRecord.alignmentStart
+      ? lengthEstimate
+      : -lengthEstimate
 }
 
 /**

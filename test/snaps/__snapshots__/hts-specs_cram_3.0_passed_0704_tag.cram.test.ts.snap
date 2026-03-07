@@ -628,7 +628,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0704_tag.cram without erro
             "tags": {
               "a0": "~",
             },
-            "templateLength": 300,
+            "templateLength": -300,
             "templateSize": undefined,
             "uniqueId": 485,
           },

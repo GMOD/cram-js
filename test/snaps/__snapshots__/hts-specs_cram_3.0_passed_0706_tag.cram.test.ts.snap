@@ -815,7 +815,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0706_tag.cram without erro
                 32767,
               ],
             },
-            "templateLength": 300,
+            "templateLength": -300,
             "templateSize": undefined,
             "uniqueId": 631,
           },

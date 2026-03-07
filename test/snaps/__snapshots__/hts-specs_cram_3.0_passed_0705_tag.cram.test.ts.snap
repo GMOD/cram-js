@@ -625,7 +625,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0705_tag.cram without erro
               "H1": NaN,
               "ZZ": "empty",
             },
-            "templateLength": 300,
+            "templateLength": -300,
             "templateSize": undefined,
             "uniqueId": 507,
           },

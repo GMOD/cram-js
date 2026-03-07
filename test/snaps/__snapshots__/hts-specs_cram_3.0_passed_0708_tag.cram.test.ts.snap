@@ -707,7 +707,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0708_tag.cram without erro
               "MD": "50A0T48",
               "NM": 2,
             },
-            "templateLength": 300,
+            "templateLength": -300,
             "templateSize": undefined,
             "uniqueId": 517,
           },
