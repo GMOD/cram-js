@@ -1,7 +1,7 @@
-import CramCodec, { Cursors } from './_base.ts'
+import CramCodec, { type Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
-import { ExternalCramEncoding } from '../encoding.ts'
-import { CramFileBlock } from '../file.ts'
+import type { ExternalCramEncoding } from '../encoding.ts'
+import type { CramFileBlock } from '../file.ts'
 import { CramBufferOverrunError } from './getBits.ts'
 import CramSlice from '../slice/index.ts'
 
@@ -47,11 +47,14 @@ export default class ExternalCodec extends CramCodec<
   'int' | 'byte',
   ExternalCramEncoding['parameters']
 > {
+  private blockContentId: number
+
   constructor(
     parameters: ExternalCramEncoding['parameters'],
     dataType: 'int' | 'byte',
   ) {
     super(parameters, dataType)
+    this.blockContentId = parameters.blockContentId
     if (this.dataType !== 'int' && this.dataType !== 'byte') {
       throw new CramUnimplementedError(
         `${this.dataType} decoding not yet implemented by EXTERNAL codec`,
@@ -65,13 +68,12 @@ export default class ExternalCodec extends CramCodec<
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    const { blockContentId } = this.parameters
-    const contentBlock = blocksByContentId[blockContentId]
+    const contentBlock = blocksByContentId[this.blockContentId]
     if (!contentBlock) {
       return undefined
     }
 
-    const cursor = cursors.externalBlocks.getCursor(blockContentId)
+    const cursor = cursors.externalBlocks.getCursor(this.blockContentId)
 
     if (this.dataType === 'int') {
       return parseItf8Inline(contentBlock.content, cursor)

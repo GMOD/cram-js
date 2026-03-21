@@ -1,5 +1,5 @@
-import { CramFileBlock } from '../file.ts'
-import { DataType } from './dataSeriesTypes.ts'
+import type { CramFileBlock } from '../file.ts'
+import type { DataType } from './dataSeriesTypes.ts'
 import CramSlice from '../slice/index.ts'
 
 export interface DataTypeMapping {

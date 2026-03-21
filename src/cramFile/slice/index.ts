@@ -1,18 +1,18 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
-import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import type { Cursor, Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
-  BulkByteRawDecoder,
-  DataSeriesDecoder,
+  type BulkByteRawDecoder,
+  type DataSeriesDecoder,
 } from './decodeRecord.ts'
-import { DataSeriesTypes } from '../container/compressionScheme.ts'
+import type { DataSeriesTypes } from '../container/compressionScheme.ts'
 import CramContainer from '../container/index.ts'
-import CramFile, { CramFileBlock } from '../file.ts'
-import CramRecord, { DecodeOptions, defaultDecodeOptions } from '../record.ts'
+import CramFile, { type CramFileBlock } from '../file.ts'
+import CramRecord, { type DecodeOptions, defaultDecodeOptions } from '../record.ts'
 import {
-  MappedSliceHeader,
-  UnmappedSliceHeader,
+  type MappedSliceHeader,
+  type UnmappedSliceHeader,
   getSectionParsers,
   isMappedSliceHeader,
 } from '../sectionParsers.ts'
@@ -193,13 +193,15 @@ function associateIntraSliceMate(
 
 export default class CramSlice {
   private file: CramFile
+  container: CramContainer
+  containerPosition: number
+  sliceSize: number
 
-  constructor(
-    public container: CramContainer,
-    public containerPosition: number,
-    public sliceSize: number,
-  ) {
+  constructor(container: CramContainer, containerPosition: number, sliceSize: number) {
     this.file = container.file
+    this.container = container
+    this.containerPosition = containerPosition
+    this.sliceSize = sliceSize
   }
 
   // memoize
@@ -419,33 +421,34 @@ export default class CramSlice {
     // data note that we are only decoding a single block here, the core
     // data block
     const coreDataBlock = await this.getCoreDataBlock()
+    const externalCursorMap = new Map<number, Cursor>()
     const cursors: Cursors = {
       lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
         ? sliceHeader.parsedContent.refSeqStart
         : 0,
       coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
-        map: new Map(),
+        map: externalCursorMap,
         getCursor(contentId: number) {
-          let r = this.map.get(contentId)
+          let r = externalCursorMap.get(contentId)
           if (r === undefined) {
             r = { bitPosition: 7, bytePosition: 0 }
-            this.map.set(contentId, r)
+            externalCursorMap.set(contentId, r)
           }
           return r
         },
       },
     }
 
-    // Pre-resolve all codecs to avoid repeated lookups
-    const codecCache = new Map<DataSeriesEncodingKey, any>()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const codecCache: Record<string, any> = {}
 
     const decodeDataSeries: DataSeriesDecoder = <
       T extends DataSeriesEncodingKey,
     >(
       dataSeriesName: T,
     ): DataTypeMapping[DataSeriesTypes[T]] | undefined => {
-      let codec = codecCache.get(dataSeriesName)
+      let codec = codecCache[dataSeriesName]
       if (codec === undefined) {
         codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
         if (!codec) {
@@ -453,7 +456,7 @@ export default class CramSlice {
             `no codec defined for ${dataSeriesName} data series`,
           )
         }
-        codecCache.set(dataSeriesName, codec)
+        codecCache[dataSeriesName] = codec
       }
       return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }

@@ -1,12 +1,12 @@
 import { CramMalformedError } from '../../errors.ts'
 import CramCodec from '../codecs/_base.ts'
-import {
+import type {
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
 } from '../codecs/dataSeriesTypes.ts'
 import { instantiateCodec } from '../codecs/index.ts'
-import { CramEncoding } from '../encoding.ts'
-import { CramCompressionHeader } from '../sectionParsers.ts'
+import type { CramEncoding } from '../encoding.ts'
+import type { CramCompressionHeader } from '../sectionParsers.ts'
 
 // the hardcoded data type to be decoded for each core
 // data field

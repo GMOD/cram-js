@@ -6,10 +6,13 @@ import CramFile from '../file.ts'
 import { getSectionParsers } from '../sectionParsers.ts'
 
 export default class CramContainer {
-  constructor(
-    public file: CramFile,
-    public filePosition: number,
-  ) {}
+  file: CramFile
+  filePosition: number
+
+  constructor(file: CramFile, filePosition: number) {
+    this.file = file
+    this.filePosition = filePosition
+  }
 
   getHeader() {
     return this._readContainerHeader(this.filePosition)

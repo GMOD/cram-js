@@ -1,7 +1,7 @@
-import { Slice } from './craiIndex.ts'
-import { SeqFetch } from './cramFile/file.ts'
+import type { Slice } from './craiIndex.ts'
+import type { SeqFetch } from './cramFile/file.ts'
 import CramFile from './cramFile/index.ts'
-import CramRecord, { DecodeOptions } from './cramFile/record.ts'
+import CramRecord, { type DecodeOptions } from './cramFile/record.ts'
 import { CramUnimplementedError } from './errors.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
@@ -50,6 +50,7 @@ export default class IndexedCramFile {
           cram?: undefined
           seqFetch?: SeqFetch
           checkSequenceMD5?: boolean
+          validateChecksums?: boolean
           cacheSize?: number
         } & CramFileSource)
     ),
@@ -62,6 +63,7 @@ export default class IndexedCramFile {
         filehandle: args.cramFilehandle,
         seqFetch: args.seqFetch,
         checkSequenceMD5: args.checkSequenceMD5,
+        validateChecksums: args.validateChecksums,
         cacheSize: args.cacheSize,
       })
 
@@ -131,7 +133,7 @@ export default class IndexedCramFile {
       ),
     )
 
-    let ret: CramRecord[] = Array.prototype.concat(...sliceResults)
+    let ret: CramRecord[] = sliceResults.flat()
     if (viewAsPairs) {
       const readNames: Record<string, number> = {}
       const readIds: Record<string, number> = {}
@@ -175,10 +177,7 @@ export default class IndexedCramFile {
         }
       }
       const mateBlocks = await Promise.all(matePromises)
-      let mateChunks = [] as Slice[]
-      for (const block of mateBlocks) {
-        mateChunks.push(...block)
-      }
+      let mateChunks: Slice[] = mateBlocks.flat()
       // filter out duplicates
       mateChunks = mateChunks
         .sort((a, b) => a.toString().localeCompare(b.toString()))
