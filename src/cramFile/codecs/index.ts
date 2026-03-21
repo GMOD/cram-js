@@ -1,13 +1,14 @@
-import CramCodec from './_base.ts'
 import BetaCodec from './beta.ts'
 import ByteArrayLengthCodec from './byteArrayLength.ts'
 import ByteArrayStopCodec from './byteArrayStop.ts'
-import type { DataType } from './dataSeriesTypes.ts'
 import ExternalCodec from './external.ts'
 import GammaCodec from './gamma.ts'
 import HuffmanIntCodec from './huffman.ts'
 import SubexpCodec from './subexp.ts'
 import { CramUnimplementedError } from '../../errors.ts'
+
+import type CramCodec from './_base.ts'
+import type { DataType } from './dataSeriesTypes.ts'
 import type { CramEncoding } from '../encoding.ts'
 
 const codecClasses = {

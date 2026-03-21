@@ -1,8 +1,9 @@
 import CramCodec, { type Cursor, type Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
+
 import type { BetaEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import CramSlice from '../slice/index.ts'
+import type CramSlice from '../slice/index.ts'
 
 export default class BetaCodec extends CramCodec<
   'int',

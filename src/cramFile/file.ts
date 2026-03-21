@@ -8,7 +8,6 @@ import { parseHeaderText } from '../sam.ts'
 import { parseItem, tinyMemoize } from './util.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
-import CramRecord from './record.ts'
 import {
   type BlockHeader,
   type CompressionMethod,
@@ -17,6 +16,7 @@ import {
 } from './sectionParsers.ts'
 import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
+import type CramRecord from './record.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/

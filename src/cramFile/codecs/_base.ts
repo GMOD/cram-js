@@ -1,6 +1,6 @@
 import type { CramFileBlock } from '../file.ts'
 import type { DataType } from './dataSeriesTypes.ts'
-import CramSlice from '../slice/index.ts'
+import type CramSlice from '../slice/index.ts'
 
 export interface DataTypeMapping {
   byte: number
@@ -14,6 +14,11 @@ export interface Cursor {
   bytePosition: number
 }
 
+export interface PreDecodedIntBlock {
+  values: Int32Array
+  index: number
+}
+
 export interface Cursors {
   lastAlignmentStart: number
   coreBlock: Cursor
@@ -21,6 +26,7 @@ export interface Cursors {
     map: Map<any, any>
     getCursor: (contentId: number) => Cursor
   }
+  preDecodedIntBlocks?: Map<number, PreDecodedIntBlock>
 }
 
 // codec base class

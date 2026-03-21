@@ -1,7 +1,5 @@
 import { CramMalformedError } from '../../errors.ts'
-import type { Cursors, DataTypeMapping } from '../codecs/_base.ts'
-import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
-import CramContainerCompressionScheme, {
+import {
   type DataSeriesTypes,
 } from '../container/compressionScheme.ts'
 import {
@@ -11,10 +9,15 @@ import {
   MateFlagsDecoder,
   type ReadFeature,
 } from '../record.ts'
-import CramSlice, { type SliceHeader } from './index.ts'
-import type { CramFileBlock } from '../file.ts'
+import { type SliceHeader } from './index.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
+
+import type { CramFileBlock } from '../file.ts'
+import type CramSlice from './index.ts'
+import type { Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import type CramContainerCompressionScheme from '../container/compressionScheme.ts'
 
 /**
  * parse a BAM tag's array value from a binary buffer

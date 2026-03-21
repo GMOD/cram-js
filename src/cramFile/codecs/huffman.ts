@@ -1,8 +1,9 @@
 import CramCodec, { type Cursor, type Cursors } from './_base.ts'
 import { CramMalformedError } from '../../errors.ts'
+
 import type { HuffmanEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import CramSlice from '../slice/index.ts'
+import type CramSlice from '../slice/index.ts'
 
 /**
  * Inlined getBits for huffman decoding - avoids function call overhead

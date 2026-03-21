@@ -1,10 +1,11 @@
 import { CramMalformedError } from '../../errors.ts'
-import CramCodec from '../codecs/_base.ts'
+import { instantiateCodec } from '../codecs/index.ts'
+
+import type CramCodec from '../codecs/_base.ts'
 import type {
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
 } from '../codecs/dataSeriesTypes.ts'
-import { instantiateCodec } from '../codecs/index.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type { CramCompressionHeader } from '../sectionParsers.ts'
 

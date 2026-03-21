@@ -1,9 +1,10 @@
 import CramCodec, { type Cursor, type Cursors } from './_base.ts'
+import { CramBufferOverrunError } from './getBits.ts'
 import { CramMalformedError } from '../../errors.ts'
+
 import type { ByteArrayStopCramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import { CramBufferOverrunError } from './getBits.ts'
-import CramSlice from '../slice/index.ts'
+import type CramSlice from '../slice/index.ts'
 
 export default class ByteArrayStopCodec extends CramCodec<
   'byteArray',

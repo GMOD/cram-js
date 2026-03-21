@@ -1,9 +1,10 @@
-import type { Slice } from './craiIndex.ts'
-import type { SeqFetch } from './cramFile/file.ts'
 import CramFile from './cramFile/index.ts'
-import CramRecord, { type DecodeOptions } from './cramFile/record.ts'
+import { type DecodeOptions } from './cramFile/record.ts'
 import { CramUnimplementedError } from './errors.ts'
 
+import type { Slice } from './craiIndex.ts'
+import type { SeqFetch } from './cramFile/file.ts'
+import type CramRecord from './cramFile/record.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 export interface CramFileSource {

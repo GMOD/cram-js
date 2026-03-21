@@ -1,7 +1,7 @@
 import Constants from './constants.ts'
-import CramContainerCompressionScheme from './container/compressionScheme.ts'
 import { readNullTerminatedStringFromBuffer } from './util.ts'
 
+import type CramContainerCompressionScheme from './container/compressionScheme.ts'
 import type decodeRecord from './slice/decodeRecord.ts'
 
 // precomputed pair orientation strings indexed by ((flags >> 4) & 0xF) | (isize > 0 ? 16 : 0)

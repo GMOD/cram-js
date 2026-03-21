@@ -43,6 +43,7 @@ SOURCES=(
     "htscodecs/htscodecs/utils.c"
     "bz2_wrapper.c"
     "zlib_wrapper.c"
+    "itf8_batch.c"
 )
 
 # Functions to export
@@ -54,6 +55,7 @@ EXPORTS=(
     "_tok3_decode_names"
     "_bz2_uncompress"
     "_zlib_uncompress"
+    "_batch_itf8_decode"
     "_malloc"
     "_free"
 )
@@ -69,7 +71,7 @@ COMMON_FLAGS=(
     -s MODULARIZE=1
     -s EXPORT_NAME='createHtsCodecsModule'
     -s EXPORTED_FUNCTIONS="$EXPORT_STR"
-    -s EXPORTED_RUNTIME_METHODS='["getValue","HEAPU8"]'
+    -s EXPORTED_RUNTIME_METHODS='["getValue","HEAPU8","HEAP32"]'
     -s ALLOW_MEMORY_GROWTH=1
     -s INITIAL_MEMORY=16MB
     -s MAXIMUM_MEMORY=2GB
