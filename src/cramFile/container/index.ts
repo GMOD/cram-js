@@ -2,14 +2,18 @@ import { CramMalformedError } from '../../errors.ts'
 import CramSlice from '../slice/index.ts'
 import { itf8Size, parseItem, tinyMemoize } from '../util.ts'
 import CramContainerCompressionScheme from './compressionScheme.ts'
-import CramFile from '../file.ts'
 import { getSectionParsers } from '../sectionParsers.ts'
 
+import type CramFile from '../file.ts'
+
 export default class CramContainer {
-  constructor(
-    public file: CramFile,
-    public filePosition: number,
-  ) {}
+  file: CramFile
+  filePosition: number
+
+  constructor(file: CramFile, filePosition: number) {
+    this.file = file
+    this.filePosition = filePosition
+  }
 
   getHeader() {
     return this._readContainerHeader(this.filePosition)

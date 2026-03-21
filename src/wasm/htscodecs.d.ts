@@ -38,6 +38,11 @@ interface HtsCodecsModule {
     inSize: number,
     outSizePtr: number,
   ) => number
+  _batch_itf8_decode: (
+    inPtr: number,
+    inSize: number,
+    outPtr: number,
+  ) => number
   ccall: (
     name: string,
     returnType: string | null,

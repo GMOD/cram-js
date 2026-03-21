@@ -1,8 +1,9 @@
-import CramCodec, { Cursor, Cursors } from './_base.ts'
+import CramCodec, { type Cursor, type Cursors } from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
-import { SubexpEncoding } from '../encoding.ts'
-import { CramFileBlock } from '../file.ts'
-import CramSlice from '../slice/index.ts'
+
+import type { SubexpEncoding } from '../encoding.ts'
+import type { CramFileBlock } from '../file.ts'
+import type CramSlice from '../slice/index.ts'
 
 export default class SubexpCodec extends CramCodec<
   'int',

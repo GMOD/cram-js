@@ -1,4 +1,4 @@
-import { CramFileSource } from './cramFile/file.ts'
+import type { CramFileSource } from './cramFile/file.ts'
 import { CramMalformedError } from './errors.ts'
 import { open } from './io.ts'
 import { unzip } from './unzip.ts'

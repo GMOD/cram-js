@@ -1,8 +1,7 @@
 import Constants from './constants.ts'
-import CramContainerCompressionScheme from './container/compressionScheme.ts'
 import { readNullTerminatedStringFromBuffer } from './util.ts'
 
-import type decodeRecord from './slice/decodeRecord.ts'
+import type CramContainerCompressionScheme from './container/compressionScheme.ts'
 
 // precomputed pair orientation strings indexed by ((flags >> 4) & 0xF) | (isize > 0 ? 16 : 0)
 // bits 0-3 encode flag bits 0x10(reverse),0x20(mate reverse),0x40(read1),0x80(read2)
@@ -254,27 +253,27 @@ export const MateFlagsDecoder = makeFlagsHelper(MateFlags)
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
-  public tags: Record<string, string | number | number[] | undefined>
-  public flags: number
-  public cramFlags: number
+  public tags!: Record<string, string | number | number[] | undefined>
+  public flags!: number
+  public cramFlags!: number
   public readBases?: string | null
   public _refRegion?: RefRegion
   public readFeatures?: ReadFeature[]
-  public alignmentStart: number
+  public alignmentStart!: number
   public lengthOnRef: number | undefined
-  public readLength: number
+  public readLength!: number
   // templateLength is computed post-hoc for intra-slice mate pairs,
   // templateSize is the raw CRAM-encoded TS data series value
   public templateLength?: number
   public templateSize?: number
-  private _readName?: string
-  private _readNameRaw?: Uint8Array
+  public _readName?: string
+  public _readNameRaw?: Uint8Array
   public _syntheticReadName?: string
   public mateRecordNumber?: number
   public mate?: MateRecord
-  public uniqueId: number
-  public sequenceId: number
-  public readGroupId: number
+  public uniqueId!: number
+  public sequenceId!: number
+  public readGroupId!: number
   public mappingQuality: number | undefined
   public qualityScores: Uint8Array | null | undefined
 
@@ -288,59 +287,6 @@ export default class CramRecord {
       }
     }
     return this._readName
-  }
-
-  constructor({
-    flags,
-    cramFlags,
-    readLength,
-    mappingQuality,
-    lengthOnRef,
-    qualityScores,
-    mateRecordNumber,
-    readBases,
-    readFeatures,
-    mateToUse,
-    readGroupId,
-    readNameRaw,
-    sequenceId,
-    uniqueId,
-    templateSize,
-    alignmentStart,
-    tags,
-  }: ReturnType<typeof decodeRecord>) {
-    this.flags = flags
-    this.cramFlags = cramFlags
-    this.readLength = readLength
-    this.mappingQuality = mappingQuality
-    this.lengthOnRef = lengthOnRef
-    this.qualityScores = qualityScores
-    this.readGroupId = readGroupId
-    this.sequenceId = sequenceId!
-    this.uniqueId = uniqueId
-    this.alignmentStart = alignmentStart
-    this.tags = tags
-    if (readNameRaw) {
-      this._readNameRaw = readNameRaw
-    }
-    if (readBases) {
-      this.readBases = readBases
-    }
-    this.templateSize = templateSize
-    if (readFeatures) {
-      this.readFeatures = readFeatures
-    }
-    if (mateToUse) {
-      this.mate = {
-        flags: mateToUse.mateFlags,
-        readName: mateToUse.mateReadName,
-        sequenceId: mateToUse.mateSequenceId,
-        alignmentStart: mateToUse.mateAlignmentStart,
-      }
-    }
-    if (mateRecordNumber) {
-      this.mateRecordNumber = mateRecordNumber
-    }
   }
 
   /**
