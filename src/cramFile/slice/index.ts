@@ -571,24 +571,22 @@ export default class CramSlice {
     )
     for (let i = 0; i < records.length; i += 1) {
       try {
-        records[i] = new CramRecord(
-          decodeRecord(
-            this,
-            decodeDataSeries,
-            compressionScheme,
-            sliceHeader,
-            coreDataBlock,
-            blocksByContentId,
-            cursors,
-            majorVersion,
-            i,
-            sliceHeader.contentPosition +
-              sliceHeader.parsedContent.recordCounter +
-              i +
-              1,
-            decodeOptions,
-            decodeBulkBytesRaw,
-          ),
+        records[i] = decodeRecord(
+          this,
+          decodeDataSeries,
+          compressionScheme,
+          sliceHeader,
+          coreDataBlock,
+          blocksByContentId,
+          cursors,
+          majorVersion,
+          i,
+          sliceHeader.contentPosition +
+            sliceHeader.parsedContent.recordCounter +
+            i +
+            1,
+          decodeOptions,
+          decodeBulkBytesRaw,
         )
       } catch (e) {
         const err = e as { code?: string; message?: string }

@@ -2,7 +2,7 @@ import { CramMalformedError } from '../../errors.ts'
 import {
   type DataSeriesTypes,
 } from '../container/compressionScheme.ts'
-import {
+import CramRecord, {
   BamFlagsDecoder,
   CramFlagsDecoder,
   type DecodeOptions,
@@ -281,14 +281,7 @@ export default function decodeRecord(
     readNameRaw = decodeDataSeries('RN')!
   }
 
-  let mateToUse:
-    | {
-        mateFlags: number
-        mateSequenceId: number
-        mateAlignmentStart: number
-        mateReadName: string | undefined
-      }
-    | undefined
+  let mate: CramRecord['mate']
   let templateSize: number | undefined
   let mateRecordNumber: number | undefined
   // mate record
@@ -304,11 +297,11 @@ export default function decodeRecord(
     const mateSequenceId = decodeDataSeries('NS')!
     const mateAlignmentStart = decodeDataSeries('NP')!
     if (mateFlags || mateSequenceId > -1) {
-      mateToUse = {
-        mateFlags,
-        mateSequenceId,
-        mateAlignmentStart,
-        mateReadName,
+      mate = {
+        flags: mateFlags,
+        sequenceId: mateSequenceId,
+        alignmentStart: mateAlignmentStart,
+        readName: mateReadName,
       }
     }
 
@@ -444,23 +437,33 @@ export default function decodeRecord(
     }
   }
 
-  return {
-    readLength,
-    sequenceId,
-    cramFlags,
-    flags,
-    alignmentStart,
-    readGroupId,
-    readNameRaw,
-    mateToUse,
-    templateSize,
-    mateRecordNumber,
-    readFeatures,
-    lengthOnRef,
-    mappingQuality,
-    qualityScores,
-    readBases,
-    tags,
-    uniqueId,
+  const record = new CramRecord()
+  record.flags = flags
+  record.cramFlags = cramFlags
+  record.readLength = readLength
+  record.mappingQuality = mappingQuality
+  record.lengthOnRef = lengthOnRef
+  record.qualityScores = qualityScores
+  record.readGroupId = readGroupId
+  record.sequenceId = sequenceId!
+  record.uniqueId = uniqueId
+  record.alignmentStart = alignmentStart
+  record.tags = tags
+  record.templateSize = templateSize
+  if (readNameRaw) {
+    record._readNameRaw = readNameRaw
   }
+  if (readBases) {
+    record.readBases = readBases
+  }
+  if (readFeatures) {
+    record.readFeatures = readFeatures
+  }
+  if (mate) {
+    record.mate = mate
+  }
+  if (mateRecordNumber) {
+    record.mateRecordNumber = mateRecordNumber
+  }
+  return record
 }
