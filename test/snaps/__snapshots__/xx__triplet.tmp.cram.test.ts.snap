@@ -872,7 +872,6 @@ exports[`can dump the whole xx#triplet.tmp.cram without error 1`] = `
               "sequenceId": 1,
               "uniqueId": 892,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -892,7 +891,6 @@ exports[`can dump the whole xx#triplet.tmp.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": 15,
-            "templateSize": undefined,
             "uniqueId": 891,
           },
           {
@@ -926,7 +924,6 @@ exports[`can dump the whole xx#triplet.tmp.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": -15,
-            "templateSize": undefined,
             "uniqueId": 892,
           },
         ],

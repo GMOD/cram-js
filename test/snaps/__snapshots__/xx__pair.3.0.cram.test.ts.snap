@@ -388,7 +388,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 418,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -408,7 +407,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 415,
           },
           {
@@ -423,7 +421,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 419,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -443,7 +440,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 416,
           },
           {
@@ -458,7 +454,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 420,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -478,7 +473,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 417,
           },
           {
@@ -512,7 +506,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 418,
           },
           {
@@ -546,7 +539,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 419,
           },
           {
@@ -580,7 +572,6 @@ exports[`can dump the whole xx#pair.3.0.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 420,
           },
         ],

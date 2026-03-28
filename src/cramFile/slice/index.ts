@@ -29,6 +29,7 @@ import type {
 } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
+import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import type CramContainer from '../container/index.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type CramFile from '../file.ts'
@@ -465,6 +466,10 @@ export default class CramSlice {
     const externalIntBlockIds = new Set<number>()
     const externalByteBlockIds = new Set<number>()
 
+    // Recurse through codec encodings to find which external block IDs are
+    // used as int vs byte. codecId 1 = EXTERNAL, 4 = BYTE_ARRAY_LENGTH
+    // (whose lengths sub-codec is int, values sub-codec is byte),
+    // 5 = BYTE_ARRAY_STOP (always byte).
     function collectExternalBlockIds(
       enc: CramEncoding | undefined,
       isInt: boolean,
@@ -486,42 +491,11 @@ export default class CramSlice {
       }
     }
 
-    const dataSeriesIsInt: Record<string, boolean> = {
-      BF: true,
-      CF: true,
-      RI: true,
-      RL: true,
-      AP: true,
-      RG: true,
-      MF: true,
-      NS: true,
-      NP: true,
-      TS: true,
-      NF: true,
-      TN: true,
-      FN: true,
-      FP: true,
-      DL: true,
-      RS: true,
-      PD: true,
-      HC: true,
-      MQ: true,
-      TL: true,
-      TC: false,
-      FC: false,
-      BS: false,
-      BA: false,
-      QS: false,
-      IN: false,
-      SC: false,
-      BB: false,
-      QQ: false,
-      RN: false,
-    }
     for (const [ds, enc] of Object.entries(
       compressionScheme.dataSeriesEncoding,
     )) {
-      collectExternalBlockIds(enc, !!dataSeriesIsInt[ds])
+      const dsType = dataSeriesTypes[ds as keyof typeof dataSeriesTypes]
+      collectExternalBlockIds(enc, dsType === 'int')
     }
     for (const tagEnc of Object.values(compressionScheme.tagEncoding)) {
       collectExternalBlockIds(tagEnc, false)
@@ -564,6 +538,8 @@ export default class CramSlice {
         const bid = codec.parameters.blockContentId
         const preDecoded = preDecodedIntBlocks.get(bid)
         if (preDecoded) {
+          // closure captures the shared preDecoded object; index is mutated
+          // in place so multiple data series sharing a block advance together
           const { values } = preDecoded
           return () => values[preDecoded.index++]!
         }

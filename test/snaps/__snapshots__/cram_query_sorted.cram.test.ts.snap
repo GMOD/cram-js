@@ -3350,8 +3350,6 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 165,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 1,
               "flags": 1,

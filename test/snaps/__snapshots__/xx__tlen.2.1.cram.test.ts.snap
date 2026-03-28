@@ -484,7 +484,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 10793,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -499,7 +498,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 10792,
           },
           {
@@ -528,7 +526,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 10793,
           },
           {
@@ -543,7 +540,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 10795,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -558,7 +554,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 8,
-            "templateSize": undefined,
             "uniqueId": 10794,
           },
           {
@@ -587,7 +582,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -8,
-            "templateSize": undefined,
             "uniqueId": 10795,
           },
           {
@@ -602,7 +596,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 10797,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -617,7 +610,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 8,
-            "templateSize": undefined,
             "uniqueId": 10796,
           },
           {
@@ -646,7 +638,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -8,
-            "templateSize": undefined,
             "uniqueId": 10797,
           },
           {
@@ -661,7 +652,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 10799,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -676,7 +666,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 10798,
           },
           {
@@ -705,7 +694,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 10799,
           },
         ],
@@ -1120,7 +1108,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
               "sequenceId": 1,
               "uniqueId": 11153,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -1135,7 +1122,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 11152,
           },
           {
@@ -1164,7 +1150,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 11153,
           },
           {
@@ -1179,7 +1164,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
               "sequenceId": 1,
               "uniqueId": 11155,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -1194,7 +1178,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": 8,
-            "templateSize": undefined,
             "uniqueId": 11154,
           },
           {
@@ -1223,7 +1206,6 @@ exports[`can dump the whole xx#tlen.2.1.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": -8,
-            "templateSize": undefined,
             "uniqueId": 11155,
           },
           {

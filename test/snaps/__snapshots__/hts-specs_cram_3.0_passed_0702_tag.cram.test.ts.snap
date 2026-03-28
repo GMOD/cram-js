@@ -445,7 +445,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0702_tag.cram without erro
               "sequenceId": 0,
               "uniqueId": 554,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -558,7 +557,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0702_tag.cram without erro
               "PI": 3.141590118408203,
             },
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 552,
           },
           {
@@ -573,7 +571,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0702_tag.cram without erro
               "sequenceId": 0,
               "uniqueId": 555,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -686,7 +683,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0702_tag.cram without erro
               "PI": 3.141590118408203,
             },
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 553,
           },
           {
@@ -813,7 +809,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0702_tag.cram without erro
               "Z0": "299792458 Ohms",
             },
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 554,
           },
           {
@@ -941,7 +936,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0702_tag.cram without erro
               "Z0": "299792458 Ohms",
             },
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 555,
           },
         ],

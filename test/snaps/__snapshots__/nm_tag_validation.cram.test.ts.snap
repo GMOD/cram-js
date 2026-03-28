@@ -71905,8 +71905,6 @@ exports[`can dump the whole nm_tag_validation.cram without error 1`] = `
             "alignmentStart": 3771,
             "cramFlags": 3,
             "flags": 133,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 3771,
               "flags": 0,

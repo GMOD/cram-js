@@ -46,6 +46,7 @@ const dataSeriesTypes = {
   // TV: 'ignore',
 } as const
 
+export { dataSeriesTypes }
 export type DataSeriesTypes = typeof dataSeriesTypes
 
 function parseSubstitutionMatrix(byteArray: number[]) {

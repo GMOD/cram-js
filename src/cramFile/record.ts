@@ -516,7 +516,10 @@ export default class CramRecord {
       if (k.startsWith('_')) {
         return
       }
-      data[k] = (this as Record<string, unknown>)[k]
+      const val = (this as Record<string, unknown>)[k]
+      if (val !== undefined) {
+        data[k] = val
+      }
     })
 
     data.readName = this.readName

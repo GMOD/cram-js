@@ -22,9 +22,6 @@
     "email": "rbuels@gmail.com",
     "url": "https://github.com/rbuels"
   },
-  "engines": {
-    "node": ">=6"
-  },
   "files": [
     "src",
     "dist",
@@ -45,7 +42,7 @@
     "clean": "rimraf dist esm",
     "build:wasm": "./htscodecs-wasm/build.sh",
     "build:esm": "tsc --outDir esm",
-    "build:es5": "tsc --module commonjs --outDir dist",
+    "build:es5": "tsc --module commonjs --moduleResolution bundler --outDir dist",
     "build": "yarn build:wasm && yarn build:esm && yarn build:es5",
     "postbuild": "webpack",
     "postbuild:es5": "cp htscodecs-wasm/htscodecs.cjs.js dist/wasm/htscodecs.js && echo '{\"type\": \"commonjs\"}' > dist/package.json",

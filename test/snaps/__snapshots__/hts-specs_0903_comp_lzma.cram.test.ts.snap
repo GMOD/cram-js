@@ -435,7 +435,6 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 513,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -565,7 +564,6 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 512,
           },
           {
@@ -709,7 +707,6 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 513,
           },
           {
@@ -724,7 +721,6 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 515,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -854,7 +850,6 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 514,
           },
           {
@@ -998,7 +993,6 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 515,
           },
         ],

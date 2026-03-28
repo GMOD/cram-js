@@ -1546,8 +1546,6 @@ exports[`can dump the whole amb#amb.3.0.cram without error 1`] = `
             "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               9,
               9,

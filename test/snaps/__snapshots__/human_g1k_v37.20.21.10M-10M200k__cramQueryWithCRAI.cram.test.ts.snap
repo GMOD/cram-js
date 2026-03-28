@@ -4703,8 +4703,6 @@ exports[`can dump the whole human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cr
             "alignmentStart": 100013,
             "cramFlags": 3,
             "flags": 69,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 100013,
               "flags": 0,
@@ -5581,8 +5579,6 @@ exports[`can dump the whole human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cr
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 141,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 0,
               "flags": 2,
@@ -5708,8 +5704,6 @@ exports[`can dump the whole human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cr
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 77,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 0,
               "flags": 2,
@@ -5835,8 +5829,6 @@ exports[`can dump the whole human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cr
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 141,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 0,
               "flags": 2,
@@ -5962,8 +5954,6 @@ exports[`can dump the whole human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cr
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 77,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 0,
               "flags": 2,
@@ -6089,8 +6079,6 @@ exports[`can dump the whole human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cr
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 141,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "mate": {
               "alignmentStart": 0,
               "flags": 2,

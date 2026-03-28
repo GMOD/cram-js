@@ -382,7 +382,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0503_mapped.cram without e
               "sequenceId": 0,
               "uniqueId": 477,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -506,7 +505,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0503_mapped.cram without e
             "sequenceId": 0,
             "tags": {},
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 476,
           },
           {
@@ -644,7 +642,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0503_mapped.cram without e
             "sequenceId": 0,
             "tags": {},
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 477,
           },
         ],
