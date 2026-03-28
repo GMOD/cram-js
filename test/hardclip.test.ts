@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 
 import { dumpWholeFile } from './lib/dumpFile.ts'
 import { CramFile } from '../src/index.ts'
-import { FetchableSmallFasta } from './lib/fasta.ts'
+import { FetchableSmallFasta } from './lib/fasta/index.ts'
 import { testDataFile } from './lib/util.ts'
 
 test('works with hard clipping', async () => {

@@ -71,7 +71,11 @@ export default class CraiIndex {
     const uncompressedBuffer = await maybeUnzip(
       await this.filehandle.readFile(),
     )
-    const dataView = new DataView(uncompressedBuffer.buffer)
+    const dataView = new DataView(
+      uncompressedBuffer.buffer,
+      uncompressedBuffer.byteOffset,
+      uncompressedBuffer.byteLength,
+    )
     if (
       uncompressedBuffer.length > 4 &&
       dataView.getUint32(0, true) === BAI_MAGIC

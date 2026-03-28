@@ -1,7 +1,7 @@
 import { test } from 'vitest'
 
-import { CramFile } from '../src.ts'
-import { FetchableSmallFasta } from './lib/fasta.ts'
+import { CramFile } from '../src/index.ts'
+import { FetchableSmallFasta } from './lib/fasta/index.ts'
 import { testDataFile } from './lib/util.ts'
 
 test('debug dumpFile logic for noseq', async () => {
