@@ -112,7 +112,6 @@ records.forEach(record => {
     })
   }
 })
-
 ```
 
 You can use cram-js without NPM also with the cram-bundle.js. See the example
