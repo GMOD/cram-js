@@ -5,7 +5,7 @@ import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import { parseHeaderText } from '../sam.ts'
-import { parseItem, tinyMemoize } from './util.ts'
+import { parseItem } from './util.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
 import {
@@ -71,6 +71,8 @@ export default class CramFile {
   public featureCache: QuickLRU<string, Promise<CramRecord[]>>
   private header: string | undefined
   private _sectionParsers?: ReturnType<typeof getSectionParsers>
+  private _definitionResult?: ReturnType<CramFile['_fetchDefinition']>
+  private _samHeaderResult?: ReturnType<CramFile['_fetchSamHeader']>
 
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
@@ -96,8 +98,17 @@ export default class CramFile {
     return this.file.read(length, position)
   }
 
-  // memoized
   async getDefinition() {
+    if (this._definitionResult === undefined) {
+      this._definitionResult = this._fetchDefinition()
+      this._definitionResult.catch(() => {
+        this._definitionResult = undefined
+      })
+    }
+    return this._definitionResult
+  }
+
+  private async _fetchDefinition() {
     const { maxLength, parser } = cramFileDefinition()
     const headbytes = await this.file.read(maxLength, 0)
     const definition = parser(headbytes).value
@@ -112,8 +123,17 @@ export default class CramFile {
     }
   }
 
-  // memoize
   async getSamHeader() {
+    if (this._samHeaderResult === undefined) {
+      this._samHeaderResult = this._fetchSamHeader()
+      this._samHeaderResult.catch(() => {
+        this._samHeaderResult = undefined
+      })
+    }
+    return this._samHeaderResult
+  }
+
+  private async _fetchSamHeader() {
     const firstContainer = await this.getContainerById(0)
     if (!firstContainer) {
       throw new CramMalformedError('file contains no containers')
@@ -474,6 +494,3 @@ export default class CramFile {
   }
 }
 
-'getDefinition getSectionParsers getSamHeader'.split(' ').forEach(method => {
-  tinyMemoize(CramFile, method)
-})

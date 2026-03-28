@@ -1,29 +1,31 @@
-// @ts-nocheck
-async function dumpSlice(container, sliceOffset) {
-  const slice = container.getSlice(sliceOffset)
+import type CramContainer from '../../src/cramFile/container/index.ts'
+import type CramFile from '../../src/cramFile/file.ts'
+
+async function dumpSlice(container: CramContainer, sliceOffset: number) {
+  const slice = container.getSlice(sliceOffset, 0)
   const header = await slice.getHeader()
   const features = await slice.getAllRecords()
   return { header, features }
 }
 
-async function dumpContainerById(file, containerId) {
+async function dumpContainerById(file: CramFile, containerId: number) {
   const container = await file.getContainerById(containerId)
   const containerHeader = await container.getHeader()
-  const returnData = { containerHeader }
-  let blockPosition
+  const returnData: Record<string, unknown> = { containerHeader }
+  let blockPosition: number
   let { numBlocks } = containerHeader
   // if this is not the first container, and the container has records in it,
   // there should be a compression header as the next block.
   if (containerId > 0 && containerHeader.numRecords) {
     const compressionHeader = await container.getCompressionHeaderBlock()
     const compressionScheme = await container.getCompressionScheme()
-    blockPosition = compressionHeader._endPosition
+    blockPosition = compressionHeader!._endPosition
     returnData.compressionScheme = compressionScheme
     numBlocks -= 1
   } else {
     blockPosition = containerHeader._endPosition
   }
-  const data = [containerHeader]
+  const data: unknown[] = [containerHeader]
   for (let blockNum = 0; blockNum < numBlocks; blockNum += 1) {
     let block = await file.readBlock(blockPosition)
     if (
@@ -56,9 +58,9 @@ async function dumpContainerById(file, containerId) {
   return returnData
 }
 
-async function dumpWholeFile(file) {
+async function dumpWholeFile(file: CramFile) {
   // iterate through each container
-  const items = [await file.getDefinition()]
+  const items: unknown[] = [await file.getDefinition()]
   const containerCount = await file.containerCount()
   const dumpsP = [...new Array(containerCount).keys()].map((x, i) =>
     dumpContainerById(file, i),

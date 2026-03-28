@@ -13,7 +13,7 @@ test('archive', async () => {
   })
   const samHeader = await cram.cram.getSamHeader()
 
-  const nameToId = {}
+  const nameToId: Record<string, number> = {}
   const sqLines = samHeader.filter(l => l.tag === 'SQ')
   sqLines.forEach((sqLine, refId) => {
     sqLine.data.forEach(item => {
@@ -24,8 +24,7 @@ test('archive', async () => {
       }
     })
   })
-  // @ts-expect-error
-  const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
+  const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
   for (const f of feats) {
     expect(quals(f.qualityScores!)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
@@ -43,7 +42,7 @@ test('normal', async () => {
   })
   const samHeader = await cram.cram.getSamHeader()
 
-  const nameToId = {}
+  const nameToId: Record<string, number> = {}
   const sqLines = samHeader.filter(l => l.tag === 'SQ')
   sqLines.forEach((sqLine, refId) => {
     sqLine.data.forEach(item => {
@@ -54,8 +53,7 @@ test('normal', async () => {
       }
     })
   })
-  // @ts-expect-error
-  const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
+  const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
   for (const f of feats) {
     expect(quals(f.qualityScores!)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',

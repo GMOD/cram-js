@@ -23,8 +23,19 @@ const codecClasses = {
   9: GammaCodec,
 }
 
-function getCodecClassWithId(id: number) {
-  return (codecClasses as any)[id]
+type CramCodecFactory = <TData extends DataType = DataType>(
+  encodingData: CramEncoding,
+  dataType: TData | 'ignore',
+) => CramCodec<TData>
+
+type CramCodecConstructor = new (
+  parameters: unknown,
+  dataType: DataType,
+  factory: CramCodecFactory,
+) => CramCodec
+
+function getCodecClassWithId(id: number): CramCodecConstructor | undefined {
+  return (codecClasses as Record<number, CramCodecConstructor | undefined>)[id]
 }
 
 export function instantiateCodec<TResult extends DataType = DataType>(
@@ -40,5 +51,9 @@ export function instantiateCodec<TResult extends DataType = DataType>(
     )
   }
 
-  return new CodecClass(encodingData.parameters, dataType, instantiateCodec)
+  return new CodecClass(
+    encodingData.parameters,
+    dataType as DataType,
+    instantiateCodec,
+  ) as CramCodec<TResult>
 }

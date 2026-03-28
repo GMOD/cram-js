@@ -237,13 +237,13 @@ type FlagsEncoder<Type> = {
 function makeFlagsHelper<T>(
   x: readonly (readonly [number, T])[],
 ): FlagsDecoder<T> & FlagsEncoder<T> {
-  const r: any = {}
+  const r: Record<string, (flags: number) => boolean | number> = {}
   for (const [code, name] of x) {
     r[`is${name}`] = (flags: number) => !!(flags & code)
     r[`set${name}`] = (flags: number) => flags | code
   }
 
-  return r
+  return r as unknown as FlagsDecoder<T> & FlagsEncoder<T>
 }
 
 export const BamFlagsDecoder = makeFlagsHelper(BamFlags)
@@ -507,12 +507,12 @@ export default class CramRecord {
   }
 
   toJSON() {
-    const data: any = {}
+    const data: Record<string, unknown> = {}
     Object.keys(this).forEach(k => {
       if (k.startsWith('_')) {
         return
       }
-      data[k] = (this as any)[k]
+      data[k] = (this as Record<string, unknown>)[k]
     })
 
     data.readName = this.readName

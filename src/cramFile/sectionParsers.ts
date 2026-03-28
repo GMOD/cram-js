@@ -272,7 +272,7 @@ export interface UnmappedSliceHeader {
 export function isMappedSliceHeader(
   header: unknown,
 ): header is MappedSliceHeader {
-  return typeof (header as any).refSeqId === 'number'
+  return typeof (header as { refSeqId?: unknown }).refSeqId === 'number'
 }
 
 interface Value {

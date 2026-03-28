@@ -28,7 +28,7 @@ test('debug dumpFile logic for noseq', async () => {
     `Will iterate through ${numBlocks} blocks (0 to ${numBlocks - 1})`,
   )
 
-  const slicesFound: any[] = []
+  const slicesFound: { blockNum: number; records: number; blocks: number }[] = []
 
   // Simulate the dumpFile logic
   for (let blockNum = 0; blockNum < numBlocks; blockNum += 1) {

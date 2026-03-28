@@ -88,7 +88,7 @@ describe('CRAM record count validation against samtools', () => {
         const samHeader = await cram.cram.getSamHeader()
         const sqLines = samHeader.filter(l => l.tag === 'SQ')
 
-        let allFeatures: any[] = []
+        let allFeatures: Awaited<ReturnType<typeof cram.getRecordsForRange>> = []
         for (let refId = 0; refId < sqLines.length; refId++) {
           const features = await cram.getRecordsForRange(
             refId,

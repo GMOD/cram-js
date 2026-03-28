@@ -357,8 +357,7 @@ export default class CramSlice {
 
       // TODO verify
       return {
-        // @ts-expect-error
-        seq: decoder.decode(refBlock.data),
+        seq: decoder.decode(refBlock.content),
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
@@ -547,7 +546,7 @@ export default class CramSlice {
     // captures the content buffer and cursor directly, eliminating per-call
     // Map.get() and Record lookup overhead.
 
-    const boundDecoders: Record<string, () => any> = {}
+    const boundDecoders: Record<string, () => number | Uint8Array | undefined> = {}
 
     const createBoundDecoder = (dataSeriesName: string) => {
       const codec = compressionScheme.getCodecForDataSeries(
@@ -593,7 +592,7 @@ export default class CramSlice {
         decoder = createBoundDecoder(dataSeriesName)
         boundDecoders[dataSeriesName] = decoder
       }
-      return decoder()
+      return decoder() as DataTypeMapping[DataSeriesTypes[T]] | undefined
     }
 
     // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray

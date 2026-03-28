@@ -158,19 +158,19 @@ export default class CramContainerCompressionScheme {
         }
         r = instantiateCodec(encodingData, dataType)
         // didn't find a way to make TS understand this
-        this.dataSeriesCodecCache[dataSeriesName] = r as CramCodec<any>
+        ;(this.dataSeriesCodecCache as Record<DataSeriesEncodingKey, CramCodec>)[dataSeriesName] = r
       }
     }
     return r
   }
 
   toJSON() {
-    const data: any = {}
+    const data: Record<string, unknown> = {}
     Object.keys(this).forEach(k => {
       if (k.endsWith('Cache')) {
         return
       }
-      data[k] = (this as any)[k]
+      data[k] = (this as Record<string, unknown>)[k]
     })
     return data
   }
