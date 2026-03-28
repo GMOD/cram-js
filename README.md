@@ -113,8 +113,6 @@ records.forEach(record => {
   }
 })
 
-// can also pass `cramUrl` (for the IndexedCramFile class), and `url` (for the CraiIndex) params to open remote URLs
-// alternatively `cramFilehandle` (for the IndexedCramFile class) and `filehandle` (for the CraiIndex) can be used,  see for examples https://github.com/gmod/generic-filehandle2
 ```
 
 You can use cram-js without NPM also with the cram-bundle.js. See the example
@@ -174,7 +172,6 @@ Class of each CRAM record returned by this API.
   - `$0.mateRecordNumber` &#x20;
   - `$0.readBases` &#x20;
   - `$0.readFeatures` &#x20;
-  - `$0.mateToUse` &#x20;
   - `$0.readGroupId` &#x20;
   - `$0.readName` &#x20;
   - `$0.sequenceId` &#x20;
@@ -293,7 +290,7 @@ Get the pair orientation of a paired read. Adapted from igv.js
 
 Returns
 **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)**
-of paired orientatin
+of paired orientation
 
 ##### addReferenceSequence
 
