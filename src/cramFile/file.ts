@@ -8,15 +8,15 @@ import { parseHeaderText } from '../sam.ts'
 import { parseItem, tinyMemoize } from './util.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
-import CramRecord from './record.ts'
 import {
-  BlockHeader,
-  CompressionMethod,
+  type BlockHeader,
+  type CompressionMethod,
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers.ts'
 import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
+import type CramRecord from './record.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
@@ -49,6 +49,7 @@ export type CramFileArgs = CramFileSource & {
   checkSequenceMD5?: boolean
   cacheSize?: number
   seqFetch?: SeqFetch
+  validateChecksums?: boolean
 }
 
 export type CramFileBlock = BlockHeader & {
@@ -73,7 +74,7 @@ export default class CramFile {
 
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
-    this.validateChecksums = true
+    this.validateChecksums = args.validateChecksums ?? false
     this.fetchReferenceSequenceCallback = args.seqFetch
     this.options = {
       checkSequenceMD5: args.checkSequenceMD5,
@@ -329,7 +330,18 @@ export default class CramFile {
       this._sectionParsers = getSectionParsers(majorVersion)
     }
     const sectionParsers = this._sectionParsers
-    const blockHeader = await this.readBlockHeader(position)
+    const { cramBlockHeader } = sectionParsers
+
+    const headerBuf = await this.file.read(
+      cramBlockHeader.maxLength,
+      position,
+    )
+    const blockHeader = parseItem(
+      headerBuf,
+      cramBlockHeader.parser,
+      0,
+      position,
+    )
     const blockContentPosition = blockHeader._endPosition
 
     const d = await this.file.read(
@@ -352,24 +364,25 @@ export default class CramFile {
       content: uncompressedData,
     }
     if (majorVersion >= 3) {
-      // parse the crc32
       const crc = await this._parseSection(
         sectionParsers.cramBlockCrc32,
         blockContentPosition + blockHeader.compressedSize,
       )
       block.crc32 = crc.crc32
 
-      // check the block data crc32
       if (this.validateChecksums) {
-        await this.checkCrc32(
-          position,
-          blockHeader._size + blockHeader.compressedSize,
-          crc.crc32,
-          'block data',
-        )
+        // compute CRC32 over header+compressed data without re-reading from
+        // disk: read the full span once, then checksum the buffer
+        const fullBlockSize = blockHeader._size + blockHeader.compressedSize
+        const fullBlockData = await this.file.read(fullBlockSize, position)
+        const calculatedCrc32 = crc32(fullBlockData) >>> 0
+        if (calculatedCrc32 !== crc.crc32) {
+          throw new CramMalformedError(
+            `crc mismatch in block data: recorded CRC32 = ${crc.crc32}, but calculated CRC32 = ${calculatedCrc32}`,
+          )
+        }
       }
 
-      // make the endposition and size reflect the whole block
       block._endPosition = crc._endPosition
       block._size =
         block.compressedSize + sectionParsers.cramBlockCrc32.maxLength

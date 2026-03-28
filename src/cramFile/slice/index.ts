@@ -1,22 +1,27 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
-import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import ExternalCodec, { batchDecodeItf8, parseItf8 } from '../codecs/external.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
-  BulkByteRawDecoder,
-  DataSeriesDecoder,
+  type BulkByteRawDecoder,
+  type DataSeriesDecoder,
 } from './decodeRecord.ts'
-import { DataSeriesTypes } from '../container/compressionScheme.ts'
-import CramContainer from '../container/index.ts'
-import CramFile, { CramFileBlock } from '../file.ts'
-import CramRecord, { DecodeOptions, defaultDecodeOptions } from '../record.ts'
+import { type CramFileBlock } from '../file.ts'
+import CramRecord, { type DecodeOptions, defaultDecodeOptions } from '../record.ts'
 import {
-  MappedSliceHeader,
-  UnmappedSliceHeader,
+  type MappedSliceHeader,
+  type UnmappedSliceHeader,
   getSectionParsers,
   isMappedSliceHeader,
 } from '../sectionParsers.ts'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
+
+import type { Cursor, Cursors, DataTypeMapping, PreDecodedIntBlock } from '../codecs/_base.ts'
+import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import type { DataSeriesTypes } from '../container/compressionScheme.ts'
+import type CramContainer from '../container/index.ts'
+import type { CramEncoding } from '../encoding.ts'
+import type CramFile from '../file.ts'
+
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -193,13 +198,15 @@ function associateIntraSliceMate(
 
 export default class CramSlice {
   private file: CramFile
+  container: CramContainer
+  containerPosition: number
+  sliceSize: number
 
-  constructor(
-    public container: CramContainer,
-    public containerPosition: number,
-    public sliceSize: number,
-  ) {
+  constructor(container: CramContainer, containerPosition: number, sliceSize: number) {
     this.file = container.file
+    this.container = container
+    this.containerPosition = containerPosition
+    this.sliceSize = sliceSize
   }
 
   // memoize
@@ -419,43 +426,132 @@ export default class CramSlice {
     // data note that we are only decoding a single block here, the core
     // data block
     const coreDataBlock = await this.getCoreDataBlock()
+    const externalCursorMap = new Map<number, Cursor>()
     const cursors: Cursors = {
       lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
         ? sliceHeader.parsedContent.refSeqStart
         : 0,
       coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
-        map: new Map(),
+        map: externalCursorMap,
         getCursor(contentId: number) {
-          let r = this.map.get(contentId)
+          let r = externalCursorMap.get(contentId)
           if (r === undefined) {
             r = { bitPosition: 7, bytePosition: 0 }
-            this.map.set(contentId, r)
+            externalCursorMap.set(contentId, r)
           }
           return r
         },
       },
     }
 
-    // Pre-resolve all codecs to avoid repeated lookups
-    const codecCache = new Map<DataSeriesEncodingKey, any>()
+    // Pre-decode external int blocks: batch ITF8 decode via WASM so that
+    // ExternalCodec.decode() becomes a simple array index read.
+    // A block can only be pre-decoded if ALL accessors use int type.
+    // If any byte-type accessor shares the same block, skip it.
+    const externalIntBlockIds = new Set<number>()
+    const externalByteBlockIds = new Set<number>()
+
+    function collectExternalBlockIds(enc: CramEncoding | undefined, isInt: boolean) {
+      if (!enc) {
+        return
+      }
+      if (enc.codecId === 1) {
+        if (isInt) {
+          externalIntBlockIds.add(enc.parameters.blockContentId)
+        } else {
+          externalByteBlockIds.add(enc.parameters.blockContentId)
+        }
+      } else if (enc.codecId === 4) {
+        collectExternalBlockIds(enc.parameters.lengthsEncoding, true)
+        collectExternalBlockIds(enc.parameters.valuesEncoding, false)
+      } else if (enc.codecId === 5) {
+        externalByteBlockIds.add(enc.parameters.blockContentId)
+      }
+    }
+
+    const dataSeriesIsInt: Record<string, boolean> = {
+      BF: true, CF: true, RI: true, RL: true, AP: true, RG: true,
+      MF: true, NS: true, NP: true, TS: true, NF: true, TN: true,
+      FN: true, FP: true, DL: true, RS: true, PD: true, HC: true,
+      MQ: true, TL: true,
+      TC: false, FC: false, BS: false, BA: false, QS: false,
+      IN: false, SC: false, BB: false, QQ: false, RN: false,
+    }
+    for (const [ds, enc] of Object.entries(compressionScheme.dataSeriesEncoding)) {
+      collectExternalBlockIds(enc, !!dataSeriesIsInt[ds])
+    }
+    for (const tagEnc of Object.values(compressionScheme.tagEncoding)) {
+      collectExternalBlockIds(tagEnc, false)
+    }
+
+    // Remove any int block that is also used as byte
+    for (const id of externalByteBlockIds) {
+      externalIntBlockIds.delete(id)
+    }
+
+    const preDecodedIntBlocks = new Map<number, PreDecodedIntBlock>()
+    for (const contentId of externalIntBlockIds) {
+      const block = blocksByContentId[contentId]
+      if (block?.content.length) {
+        const values = batchDecodeItf8(block.content)
+        preDecodedIntBlocks.set(contentId, { values, index: 0 })
+      }
+    }
+    cursors.preDecodedIntBlocks = preDecodedIntBlocks
+
+    // Create bound decode functions per data series. For ExternalCodec, this
+    // captures the content buffer and cursor directly, eliminating per-call
+    // Map.get() and Record lookup overhead.
+     
+    const boundDecoders: Record<string, () => any> = {}
+    const slice = this
+
+    const createBoundDecoder = (dataSeriesName: string) => {
+      const codec = compressionScheme.getCodecForDataSeries(
+        dataSeriesName as DataSeriesEncodingKey,
+      )
+      if (!codec) {
+        return () => {
+          throw new CramMalformedError(
+            `no codec defined for ${dataSeriesName} data series`,
+          )
+        }
+      }
+      if (codec instanceof ExternalCodec) {
+        const bid = codec.parameters.blockContentId
+        const preDecoded = preDecodedIntBlocks.get(bid)
+        if (preDecoded) {
+          const { values } = preDecoded
+          return () => values[preDecoded.index++]!
+        }
+        const contentBlock = blocksByContentId[bid]
+        if (!contentBlock) {
+          return () => undefined
+        }
+        const cursor = cursors.externalBlocks.getCursor(bid)
+        if (codec.dataType === 'int') {
+          const content = contentBlock.content
+          return () => parseItf8(content, cursor)
+        }
+        const content = contentBlock.content
+        return () => content[cursor.bytePosition++]!
+      }
+      return () =>
+        codec.decode(slice, coreDataBlock, blocksByContentId, cursors)
+    }
 
     const decodeDataSeries: DataSeriesDecoder = <
       T extends DataSeriesEncodingKey,
     >(
       dataSeriesName: T,
     ): DataTypeMapping[DataSeriesTypes[T]] | undefined => {
-      let codec = codecCache.get(dataSeriesName)
-      if (codec === undefined) {
-        codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
-        if (!codec) {
-          throw new CramMalformedError(
-            `no codec defined for ${dataSeriesName} data series`,
-          )
-        }
-        codecCache.set(dataSeriesName, codec)
+      let decoder = boundDecoders[dataSeriesName]
+      if (decoder === undefined) {
+        decoder = createBoundDecoder(dataSeriesName)
+        boundDecoders[dataSeriesName] = decoder
       }
-      return codec.decode(this, coreDataBlock, blocksByContentId, cursors)
+      return decoder()
     }
 
     // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray

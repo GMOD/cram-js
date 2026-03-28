@@ -1,20 +1,23 @@
 import { CramMalformedError } from '../../errors.ts'
-import { Cursors, DataTypeMapping } from '../codecs/_base.ts'
-import { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
-import CramContainerCompressionScheme, {
-  DataSeriesTypes,
+import {
+  type DataSeriesTypes,
 } from '../container/compressionScheme.ts'
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
-  DecodeOptions,
+  type DecodeOptions,
   MateFlagsDecoder,
-  ReadFeature,
+  type ReadFeature,
 } from '../record.ts'
-import CramSlice, { SliceHeader } from './index.ts'
-import { CramFileBlock } from '../file.ts'
+import { type SliceHeader } from './index.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
+
+import type { CramFileBlock } from '../file.ts'
+import type CramSlice from './index.ts'
+import type { Cursors, DataTypeMapping } from '../codecs/_base.ts'
+import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import type CramContainerCompressionScheme from '../container/compressionScheme.ts'
 
 /**
  * parse a BAM tag's array value from a binary buffer
@@ -77,6 +80,21 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   if (tagType === 'A') {
     return String.fromCharCode(buffer[0]!)
   }
+  if (tagType === 'C') {
+    return buffer[0]!
+  }
+  if (tagType === 'c') {
+    return buffer[0]! > 127 ? buffer[0]! - 256 : buffer[0]!
+  }
+  if (tagType === 'B') {
+    return parseTagValueArray(buffer)
+  }
+  if (tagType === 'H') {
+    return Number.parseInt(
+      readNullTerminatedStringFromBuffer(buffer).replace(/^0x/, ''),
+      16,
+    )
+  }
   const dv = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength)
   if (tagType === 'I') {
     return dv.getUint32(0, true)
@@ -90,23 +108,8 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   if (tagType === 'S') {
     return dv.getUint16(0, true)
   }
-  if (tagType === 'c') {
-    return dv.getInt8(0)
-  }
-  if (tagType === 'C') {
-    return buffer[0]!
-  }
   if (tagType === 'f') {
     return dv.getFloat32(0, true)
-  }
-  if (tagType === 'H') {
-    return Number.parseInt(
-      readNullTerminatedStringFromBuffer(buffer).replace(/^0x/, ''),
-      16,
-    )
-  }
-  if (tagType === 'B') {
-    return parseTagValueArray(buffer)
   }
 
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
@@ -145,6 +148,28 @@ const data2Schema: Record<string, readonly [string, string]> = {
   B: ['number', 'QS'] as const,
 }
 
+// Pre-computed lookup: charCode -> feature code string
+const featureCodeFromCharCode: string[] = new Array(128)
+for (const c of 'BXDIibqQHPNS') {
+  featureCodeFromCharCode[c.charCodeAt(0)] = c
+}
+
+function decodeRFData(
+  type: string,
+  dataSeriesName: string,
+  decodeDataSeries: DataSeriesDecoder,
+): string | number | number[] {
+  const data = decodeDataSeries(dataSeriesName as DataSeriesEncodingKey)
+  if (type === 'character') {
+    return String.fromCharCode(data as number)
+  } else if (type === 'string') {
+    return decodeLatin1(data as Uint8Array)
+  } else if (type === 'numArray') {
+    return Array.from(data as Uint8Array)
+  }
+  return data as number
+}
+
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
@@ -155,42 +180,34 @@ function decodeReadFeatures(
   let currentRefPos = alignmentStart - 1
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
 
-  // Select the appropriate schema based on version (once per call, not per iteration)
   const data1Schema = majorVersion > 1 ? data1SchemaV2Plus : data1SchemaV1
 
-  function decodeRFData([type, dataSeriesName]: readonly [
-    type: string,
-    dataSeriesName: string,
-  ]): string | number | number[] {
-    const data = decodeDataSeries(dataSeriesName as DataSeriesEncodingKey)
-    if (type === 'character') {
-      return String.fromCharCode(data as number)
-    } else if (type === 'string') {
-      return decodeLatin1(data as Uint8Array)
-    } else if (type === 'numArray') {
-      return Array.from(data as Uint8Array)
-    }
-    return data as number
-  }
-
   for (let i = 0; i < readFeatureCount; i++) {
-    const code = String.fromCharCode(decodeDataSeries('FC')!)
+    const codeNum = decodeDataSeries('FC')!
+    const code = featureCodeFromCharCode[codeNum]
 
     const readPosDelta = decodeDataSeries('FP')!
 
-    const schema = data1Schema[code]
+    const schema = data1Schema[code!]
 
     if (!schema) {
-      throw new CramMalformedError(`invalid read feature code "${code}"`)
+      throw new CramMalformedError(
+        `invalid read feature code "${String.fromCharCode(codeNum)}"`,
+      )
     }
 
-    let data: string | number | number[] | [string, number] =
-      decodeRFData(schema)
+    let data: string | number | number[] | [string, number] = decodeRFData(
+      schema[0],
+      schema[1],
+      decodeDataSeries,
+    )
 
-    // if this is a read feature with two data items, make the data a tuple
-    const schema2 = data2Schema[code]
+    const schema2 = data2Schema[code!]
     if (schema2) {
-      data = [data as string, decodeRFData(schema2) as number]
+      data = [
+        data as string,
+        decodeRFData(schema2[0], schema2[1], decodeDataSeries) as number,
+      ]
     }
 
     currentReadPos += readPosDelta
@@ -199,7 +216,6 @@ function decodeReadFeatures(
     currentRefPos += readPosDelta
     const refPos = currentRefPos
 
-    // for gapping features, adjust the reference position for read features that follow
     if (code === 'D' || code === 'N') {
       currentRefPos += data as number
     } else if (code === 'I' || code === 'S') {

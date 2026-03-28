@@ -1,4 +1,4 @@
-import { CramEncoding } from '../encoding.ts'
+import type { CramEncoding } from '../encoding.ts'
 
 export type DataType = 'int' | 'byte' | 'long' | 'byteArray'
 
