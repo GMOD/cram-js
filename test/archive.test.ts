@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util'
-import CraiIndex from '../src/craiIndex'
-import { IndexedCramFile } from '../src/index'
+import { testDataFile } from './lib/util.ts'
+import CraiIndex from '../src/craiIndex.ts'
+import { IndexedCramFile } from '../src/index.ts'
 
 test('archive', async () => {
   const cram = new IndexedCramFile({
@@ -26,7 +26,7 @@ test('archive', async () => {
   })
   const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
   for (const f of feats) {
-    expect(quals(f.qualityScores!)).toBe(
+    expect(quals(f.qualityScores)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
     )
   }
@@ -55,7 +55,7 @@ test('normal', async () => {
   })
   const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
   for (const f of feats) {
-    expect(quals(f.qualityScores!)).toBe(
+    expect(quals(f.qualityScores)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
     )
   }

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { CraiIndex, IndexedCramFile } from '../src'
+import { CraiIndex, IndexedCramFile } from '../src.ts'
 
 test('runs without error', async () => {
   const messages = [] as string[]

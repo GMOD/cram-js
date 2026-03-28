@@ -1,8 +1,8 @@
 import { test } from 'vitest'
 
-import { CramFile } from '../src'
-import { FetchableSmallFasta } from './lib/fasta'
-import { testDataFile } from './lib/util'
+import { CramFile } from '../src.ts'
+import { FetchableSmallFasta } from './lib/fasta.ts'
+import { testDataFile } from './lib/util.ts'
 
 test('debug dumpFile logic for noseq', async () => {
   const fasta = new FetchableSmallFasta(testDataFile('c1.fa'))
@@ -28,7 +28,8 @@ test('debug dumpFile logic for noseq', async () => {
     `Will iterate through ${numBlocks} blocks (0 to ${numBlocks - 1})`,
   )
 
-  const slicesFound: { blockNum: number; records: number; blocks: number }[] = []
+  const slicesFound: { blockNum: number; records: number; blocks: number }[] =
+    []
 
   // Simulate the dumpFile logic
   for (let blockNum = 0; blockNum < numBlocks; blockNum += 1) {

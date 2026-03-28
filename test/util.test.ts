@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { sequenceMD5 } from '../src/cramFile/util'
+import { sequenceMD5 } from '../src/cramFile/util.ts'
 
 describe('util.sequenceMD5', () => {
   ;[

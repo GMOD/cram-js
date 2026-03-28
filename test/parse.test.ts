@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { CramFile } from '../src'
-import { testDataFile } from './lib/util'
+import { CramFile } from '../src.ts'
+import { testDataFile } from './lib/util.ts'
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {

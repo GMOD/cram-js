@@ -38,8 +38,7 @@ export default class CramContainer {
 
   async getCompressionHeaderBlock() {
     if (this._compressionHeaderBlockResult === undefined) {
-      this._compressionHeaderBlockResult =
-        this._fetchCompressionHeaderBlock()
+      this._compressionHeaderBlockResult = this._fetchCompressionHeaderBlock()
       this._compressionHeaderBlockResult.catch(() => {
         this._compressionHeaderBlockResult = undefined
       })

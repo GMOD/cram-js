@@ -158,7 +158,9 @@ export default class CramContainerCompressionScheme {
         }
         r = instantiateCodec(encodingData, dataType)
         // didn't find a way to make TS understand this
-        ;(this.dataSeriesCodecCache as Record<DataSeriesEncodingKey, CramCodec>)[dataSeriesName] = r
+        ;(
+          this.dataSeriesCodecCache as Record<DataSeriesEncodingKey, CramCodec>
+        )[dataSeriesName] = r
       }
     }
     return r

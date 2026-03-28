@@ -133,7 +133,6 @@ export default defineConfig(
   {
     files: ['test/**/*'],
     rules: {
-      'import/extensions': 'off',
       'no-console': 'off',
       'unicorn/no-process-exit': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',

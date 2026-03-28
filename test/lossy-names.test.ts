@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { CraiIndex, IndexedCramFile } from '../src'
+import { CraiIndex, IndexedCramFile } from '../src.ts'
 
 describe('1kg mate test', () => {
   it('runs without error', async () => {

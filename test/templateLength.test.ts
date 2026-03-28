@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 
-import CraiIndex from '../src/craiIndex'
-import { IndexedCramFile } from '../src/index'
-import { testDataFile } from './lib/util'
+import CraiIndex from '../src/craiIndex.ts'
+import { IndexedCramFile } from '../src/index.ts'
+import { testDataFile } from './lib/util.ts'
 
 // seqFetch stub — both xx and yy refs are this same 20bp sequence
 const seqFetch = async () => 'AAAAAAAAAATTTTTTTTTT'

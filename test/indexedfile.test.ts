@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util'
-import CraiIndex from '../src/craiIndex'
-import { IndexedCramFile } from '../src/index'
+import { testDataFile } from './lib/util.ts'
+import CraiIndex from '../src/craiIndex.ts'
+import { IndexedCramFile } from '../src/index.ts'
 
-import type { CramRecord } from '../src/index'
+import type { CramRecord } from '../src/index.ts'
 
 test('can read ce#tag_padded.tmp.cram', async () => {
   const cram = new IndexedCramFile({

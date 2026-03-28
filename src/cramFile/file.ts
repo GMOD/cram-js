@@ -493,4 +493,3 @@ export default class CramFile {
     return block
   }
 }
-

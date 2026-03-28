@@ -546,7 +546,8 @@ export default class CramSlice {
     // captures the content buffer and cursor directly, eliminating per-call
     // Map.get() and Record lookup overhead.
 
-    const boundDecoders: Record<string, () => number | Uint8Array | undefined> = {}
+    const boundDecoders: Record<string, () => number | Uint8Array | undefined> =
+      {}
 
     const createBoundDecoder = (dataSeriesName: string) => {
       const codec = compressionScheme.getCodecForDataSeries(
@@ -578,8 +579,7 @@ export default class CramSlice {
         const content = contentBlock.content
         return () => content[cursor.bytePosition++]!
       }
-      return () =>
-        codec.decode(this, coreDataBlock, blocksByContentId, cursors)
+      return () => codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
 
     const decodeDataSeries: DataSeriesDecoder = <

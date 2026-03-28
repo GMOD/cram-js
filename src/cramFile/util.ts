@@ -193,16 +193,11 @@ export function parseItem<T>(
     _size: offset - startBufferPosition,
   }
 }
-export function tinyMemoize(
-  _class: { prototype: object },
-  methodName: string,
-) {
+export function tinyMemoize(_class: { prototype: object }, methodName: string) {
   const proto = _class.prototype as Record<string, unknown>
   const method = proto[methodName] as (() => unknown) | undefined
   const memoAttrName = `_memo_${methodName}`
-  proto[methodName] = function _tinyMemoized(
-    this: Record<string, unknown>,
-  ) {
+  proto[methodName] = function _tinyMemoized(this: Record<string, unknown>) {
     let res = this[memoAttrName]
     if (res === undefined) {
       res = method!.call(this)
