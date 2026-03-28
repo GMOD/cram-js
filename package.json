@@ -3,7 +3,10 @@
   "version": "8.0.5",
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
-  "repository": "GMOD/cram-js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GMOD/cram-js.git"
+  },
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -58,7 +61,7 @@
   "dependencies": {
     "@jbrowse/quick-lru": "^7.3.5",
     "crc": "^4.3.2",
-    "generic-filehandle2": "^2.0.18",
+    "generic-filehandle2": "^2.1.4",
     "md5": "^2.3.0"
   },
   "devDependencies": {
