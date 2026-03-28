@@ -1,7 +1,5 @@
 import { CramMalformedError } from '../../errors.ts'
-import {
-  type DataSeriesTypes,
-} from '../container/compressionScheme.ts'
+import { type DataSeriesTypes } from '../container/compressionScheme.ts'
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,

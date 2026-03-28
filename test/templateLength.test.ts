@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
-import { IndexedCramFile } from '../src/index'
+
 import CraiIndex from '../src/craiIndex'
+import { IndexedCramFile } from '../src/index'
 import { testDataFile } from './lib/util'
 
 // seqFetch stub — both xx and yy refs are this same 20bp sequence

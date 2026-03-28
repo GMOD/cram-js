@@ -332,10 +332,7 @@ export default class CramFile {
     const sectionParsers = this._sectionParsers
     const { cramBlockHeader } = sectionParsers
 
-    const headerBuf = await this.file.read(
-      cramBlockHeader.maxLength,
-      position,
-    )
+    const headerBuf = await this.file.read(cramBlockHeader.maxLength, position)
     const blockHeader = parseItem(
       headerBuf,
       cramBlockHeader.parser,

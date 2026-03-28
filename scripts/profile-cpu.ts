@@ -36,10 +36,7 @@ const cases: ProfileCase[] = [
   },
 ]
 
-async function profileCase(
-  session: Session,
-  c: ProfileCase,
-) {
+async function profileCase(session: Session, c: ProfileCase) {
   console.log(`Profiling ${c.name}...`)
 
   // warmup

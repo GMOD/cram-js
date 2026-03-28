@@ -45,7 +45,10 @@ export function batchDecodeItf8(buffer: Uint8Array) {
   return result.subarray(0, count)
 }
 
-export function parseItf8(buffer: Uint8Array, cursor: { bytePosition: number }) {
+export function parseItf8(
+  buffer: Uint8Array,
+  cursor: { bytePosition: number },
+) {
   const offset = cursor.bytePosition
   const countFlags = buffer[offset]!
   if (countFlags < 0x80) {

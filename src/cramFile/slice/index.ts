@@ -1,12 +1,18 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
-import ExternalCodec, { batchDecodeItf8, parseItf8 } from '../codecs/external.ts'
+import ExternalCodec, {
+  batchDecodeItf8,
+  parseItf8,
+} from '../codecs/external.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
   type BulkByteRawDecoder,
   type DataSeriesDecoder,
 } from './decodeRecord.ts'
 import { type CramFileBlock } from '../file.ts'
-import CramRecord, { type DecodeOptions, defaultDecodeOptions } from '../record.ts'
+import CramRecord, {
+  type DecodeOptions,
+  defaultDecodeOptions,
+} from '../record.ts'
 import {
   type MappedSliceHeader,
   type UnmappedSliceHeader,
@@ -15,13 +21,17 @@ import {
 } from '../sectionParsers.ts'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
 
-import type { Cursor, Cursors, DataTypeMapping, PreDecodedIntBlock } from '../codecs/_base.ts'
+import type {
+  Cursor,
+  Cursors,
+  DataTypeMapping,
+  PreDecodedIntBlock,
+} from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
 import type CramContainer from '../container/index.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type CramFile from '../file.ts'
-
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -202,7 +212,11 @@ export default class CramSlice {
   containerPosition: number
   sliceSize: number
 
-  constructor(container: CramContainer, containerPosition: number, sliceSize: number) {
+  constructor(
+    container: CramContainer,
+    containerPosition: number,
+    sliceSize: number,
+  ) {
     this.file = container.file
     this.container = container
     this.containerPosition = containerPosition
@@ -452,7 +466,10 @@ export default class CramSlice {
     const externalIntBlockIds = new Set<number>()
     const externalByteBlockIds = new Set<number>()
 
-    function collectExternalBlockIds(enc: CramEncoding | undefined, isInt: boolean) {
+    function collectExternalBlockIds(
+      enc: CramEncoding | undefined,
+      isInt: boolean,
+    ) {
       if (!enc) {
         return
       }
@@ -471,14 +488,40 @@ export default class CramSlice {
     }
 
     const dataSeriesIsInt: Record<string, boolean> = {
-      BF: true, CF: true, RI: true, RL: true, AP: true, RG: true,
-      MF: true, NS: true, NP: true, TS: true, NF: true, TN: true,
-      FN: true, FP: true, DL: true, RS: true, PD: true, HC: true,
-      MQ: true, TL: true,
-      TC: false, FC: false, BS: false, BA: false, QS: false,
-      IN: false, SC: false, BB: false, QQ: false, RN: false,
+      BF: true,
+      CF: true,
+      RI: true,
+      RL: true,
+      AP: true,
+      RG: true,
+      MF: true,
+      NS: true,
+      NP: true,
+      TS: true,
+      NF: true,
+      TN: true,
+      FN: true,
+      FP: true,
+      DL: true,
+      RS: true,
+      PD: true,
+      HC: true,
+      MQ: true,
+      TL: true,
+      TC: false,
+      FC: false,
+      BS: false,
+      BA: false,
+      QS: false,
+      IN: false,
+      SC: false,
+      BB: false,
+      QQ: false,
+      RN: false,
     }
-    for (const [ds, enc] of Object.entries(compressionScheme.dataSeriesEncoding)) {
+    for (const [ds, enc] of Object.entries(
+      compressionScheme.dataSeriesEncoding,
+    )) {
       collectExternalBlockIds(enc, !!dataSeriesIsInt[ds])
     }
     for (const tagEnc of Object.values(compressionScheme.tagEncoding)) {
@@ -503,9 +546,8 @@ export default class CramSlice {
     // Create bound decode functions per data series. For ExternalCodec, this
     // captures the content buffer and cursor directly, eliminating per-call
     // Map.get() and Record lookup overhead.
-     
+
     const boundDecoders: Record<string, () => any> = {}
-    const slice = this
 
     const createBoundDecoder = (dataSeriesName: string) => {
       const codec = compressionScheme.getCodecForDataSeries(
@@ -538,7 +580,7 @@ export default class CramSlice {
         return () => content[cursor.bytePosition++]!
       }
       return () =>
-        codec.decode(slice, coreDataBlock, blocksByContentId, cursors)
+        codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
 
     const decodeDataSeries: DataSeriesDecoder = <

@@ -1,7 +1,8 @@
 import { IndexedFasta } from '@gmod/indexedfasta'
 
 import { CraiIndex, IndexedCramFile } from '../src'
-import CramRecord from '../src/cramFile/record'
+
+import type CramRecord from '../src/cramFile/record'
 
 if (process.argv.length !== 7) {
   process.stderr.write(

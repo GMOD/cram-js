@@ -1,5 +1,5 @@
-import { execSync } from 'child_process'
-import path from 'path'
+import { execSync } from 'node:child_process'
+import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
@@ -13,7 +13,7 @@ function getSamtoolsCount(filename: string, region?: string): number {
   const cmd = `samtools view -c "${cramPath}"${regionArg}`
   try {
     const result = execSync(cmd, { encoding: 'utf8' }).trim()
-    return parseInt(result, 10)
+    return Number.parseInt(result, 10)
   } catch (error) {
     throw new Error(`Failed to run samtools: ${cmd}\n${error}`, {
       cause: error,

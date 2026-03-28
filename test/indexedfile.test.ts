@@ -2,7 +2,9 @@ import { expect, test } from 'vitest'
 
 import { testDataFile } from './lib/util'
 import CraiIndex from '../src/craiIndex'
-import { CramRecord, IndexedCramFile } from '../src/index'
+import { IndexedCramFile } from '../src/index'
+
+import type { CramRecord } from '../src/index'
 
 test('can read ce#tag_padded.tmp.cram', async () => {
   const cram = new IndexedCramFile({
@@ -278,9 +280,9 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
   })
 
   const features = await cram.getRecordsForRange(0, 0, 500)
-  const feat = features
-    .reverse()
-    .find(f => f.readName === 'NB500904:194:H3HNVBGXB:1:21110:9045:16767')
+  const feat = features.findLast(
+    f => f.readName === 'NB500904:194:H3HNVBGXB:1:21110:9045:16767',
+  )
 
   expect(feat?.getReadBases()).toEqual(
     'ATTACAGGCGAACATACTTAATAAAGTGTGTTAATTAATTAATGCTTGTAGTAAATAATAATAACAATTTAATGTCTGCTCAGCCGCTTTCCACACAGACATCATAACAAAAAATTTCCACCAAACCCCCCCCTCCCCCCGCTTCTGGC',

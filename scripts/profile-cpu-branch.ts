@@ -73,14 +73,18 @@ async function profileCase(session: Session, c: ProfileCase) {
 
   const filename = `${c.name}-${branchName}.cpuprofile`
   writeFileSync(filename, JSON.stringify(profile))
-  console.log(`  Wrote ${filename} (${iterations} iters, ${recordCount} records)`)
+  console.log(
+    `  Wrote ${filename} (${iterations} iters, ${recordCount} records)`,
+  )
 }
 
 async function main() {
   const session = new Session()
   session.connect()
 
-  console.log(`Profiling ${branchName} (${branchDir}) - ${iterations} iterations\n`)
+  console.log(
+    `Profiling ${branchName} (${branchDir}) - ${iterations} iterations\n`,
+  )
   for (const c of cases) {
     console.log(`Profiling ${c.name}...`)
     await profileCase(session, c)
