@@ -8,6 +8,7 @@ import decodeRecord, {
   type BulkByteRawDecoder,
   type DataSeriesDecoder,
 } from './decodeRecord.ts'
+import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import { type CramFileBlock } from '../file.ts'
 import CramRecord, {
   type DecodeOptions,
@@ -29,7 +30,6 @@ import type {
 } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
-import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import type CramContainer from '../container/index.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type CramFile from '../file.ts'
