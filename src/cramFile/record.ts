@@ -300,7 +300,7 @@ export default class CramRecord {
     mateRecordNumber,
     readBases,
     readFeatures,
-    mateToUse,
+    mate,
     readGroupId,
     readNameRaw,
     sequenceId,
@@ -330,13 +330,8 @@ export default class CramRecord {
     if (readFeatures) {
       this.readFeatures = readFeatures
     }
-    if (mateToUse) {
-      this.mate = {
-        flags: mateToUse.mateFlags,
-        readName: mateToUse.mateReadName,
-        sequenceId: mateToUse.mateSequenceId,
-        alignmentStart: mateToUse.mateAlignmentStart,
-      }
+    if (mate) {
+      this.mate = mate
     }
     if (mateRecordNumber) {
       this.mateRecordNumber = mateRecordNumber

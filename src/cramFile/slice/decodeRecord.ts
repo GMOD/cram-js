@@ -5,6 +5,7 @@ import {
   CramFlagsDecoder,
   type DecodeOptions,
   MateFlagsDecoder,
+  type MateRecord,
   type ReadFeature,
 } from '../record.ts'
 import { type SliceHeader } from './index.ts'
@@ -279,14 +280,7 @@ export default function decodeRecord(
     readNameRaw = decodeDataSeries('RN')!
   }
 
-  let mateToUse:
-    | {
-        mateFlags: number
-        mateSequenceId: number
-        mateAlignmentStart: number
-        mateReadName: string | undefined
-      }
-    | undefined
+  let mate: MateRecord | undefined
   let templateSize: number | undefined
   let mateRecordNumber: number | undefined
   // mate record
@@ -302,11 +296,11 @@ export default function decodeRecord(
     const mateSequenceId = decodeDataSeries('NS')!
     const mateAlignmentStart = decodeDataSeries('NP')!
     if (mateFlags || mateSequenceId > -1) {
-      mateToUse = {
-        mateFlags,
-        mateSequenceId,
-        mateAlignmentStart,
-        mateReadName,
+      mate = {
+        flags: mateFlags,
+        sequenceId: mateSequenceId,
+        alignmentStart: mateAlignmentStart,
+        readName: mateReadName,
       }
     }
 
@@ -450,7 +444,7 @@ export default function decodeRecord(
     alignmentStart,
     readGroupId,
     readNameRaw,
-    mateToUse,
+    mate,
     templateSize,
     mateRecordNumber,
     readFeatures,
