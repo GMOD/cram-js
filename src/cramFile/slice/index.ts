@@ -38,13 +38,6 @@ export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
 }
 
-interface RefRegion {
-  id: number
-  start: number
-  end: number
-  seq: string | null
-}
-
 /**
  * Try to estimate the template length from a bunch of interrelated
  * multi-segment reads.
@@ -66,16 +59,27 @@ function calculateMultiSegmentMatedTemplateLength(
           'intra-slice mate record not found, this file seems malformed',
         )
       }
-      records.push(...getAllMatedRecords(mateRecord))
+      for (const r of getAllMatedRecords(mateRecord)) {
+        records.push(r)
+      }
     }
     return records
   }
 
   const matedRecords = getAllMatedRecords(thisRecord)
-  const starts = matedRecords.map(r => r.alignmentStart)
-  const ends = matedRecords.map(r => r.alignmentStart + r.readLength - 1)
-  const minStart = Math.min(...starts)
-  const estimatedTemplateLength = Math.max(...ends) - minStart + 1
+  let minStart = matedRecords[0]!.alignmentStart
+  let maxEnd = matedRecords[0]!.alignmentStart + matedRecords[0]!.readLength - 1
+  for (let i = 1; i < matedRecords.length; i++) {
+    const r = matedRecords[i]!
+    if (r.alignmentStart < minStart) {
+      minStart = r.alignmentStart
+    }
+    const end = r.alignmentStart + r.readLength - 1
+    if (end > maxEnd) {
+      maxEnd = end
+    }
+  }
+  const estimatedTemplateLength = maxEnd - minStart + 1
   if (estimatedTemplateLength >= 0) {
     matedRecords.forEach(r => {
       if (r.templateLength !== undefined) {
@@ -588,25 +592,26 @@ export default class CramSlice {
     )
     for (let i = 0; i < records.length; i += 1) {
       try {
-        records[i] = new CramRecord(
-          decodeRecord(
-            this,
-            decodeDataSeries,
-            compressionScheme,
-            sliceHeader,
-            coreDataBlock,
-            blocksByContentId,
-            cursors,
-            majorVersion,
-            i,
-            sliceHeader.contentPosition +
-              sliceHeader.parsedContent.recordCounter +
-              i +
-              1,
-            decodeOptions,
-            decodeBulkBytesRaw,
-          ),
+        const r = new CramRecord()
+        decodeRecord(
+          r,
+          this,
+          decodeDataSeries,
+          compressionScheme,
+          sliceHeader,
+          coreDataBlock,
+          blocksByContentId,
+          cursors,
+          majorVersion,
+          i,
+          sliceHeader.contentPosition +
+            sliceHeader.parsedContent.recordCounter +
+            i +
+            1,
+          decodeOptions,
+          decodeBulkBytesRaw,
         )
+        records[i] = r
       } catch (e) {
         const err = e as { code?: string; message?: string }
         if (err.code === 'CRAM_BUFFER_OVERRUN') {
@@ -682,64 +687,71 @@ export default class CramSlice {
         if (compressionScheme === undefined) {
           throw new Error('compression scheme undefined')
         }
-        const refRegions: Record<string, RefRegion> = {}
-
-        // iterate over the records to find the spans of the reference
-        // sequences we need to fetch
+        // Collect spans needed per seqId
+        const refSpans: Record<
+          string,
+          { id: number; start: number; end: number }
+        > = {}
         for (const record of records) {
           const seqId =
             singleRefId !== undefined ? singleRefId : record.sequenceId
-          let refRegion = refRegions[seqId]
-          if (!refRegion) {
-            refRegion = {
+          let span = refSpans[seqId]
+          if (!span) {
+            span = {
               id: seqId,
               start: record.alignmentStart,
               end: Number.NEGATIVE_INFINITY,
-              seq: null,
             }
-            refRegions[seqId] = refRegion
+            refSpans[seqId] = span
           }
 
           const end =
             record.alignmentStart +
             (record.lengthOnRef || record.readLength) -
             1
-          if (end > refRegion.end) {
-            refRegion.end = end
+          if (end > span.end) {
+            span.end = end
           }
-          if (record.alignmentStart < refRegion.start) {
-            refRegion.start = record.alignmentStart
+          if (record.alignmentStart < span.start) {
+            span.start = record.alignmentStart
           }
         }
 
-        // fetch the `seq` for all of the ref regions
+        // Fetch seqs and build completed ref regions (one object per seqId,
+        // shared across all records — avoids per-record object allocation)
+        const completedRefRegions: Record<
+          string,
+          { start: number; end: number; seq: string }
+        > = {}
         await Promise.all(
-          Object.values(refRegions).map(async refRegion => {
+          Object.values(refSpans).map(async span => {
             if (
-              refRegion.id !== -1 &&
-              refRegion.start <= refRegion.end &&
+              span.id !== -1 &&
+              span.start <= span.end &&
               this.file.fetchReferenceSequenceCallback
             ) {
-              refRegion.seq = await this.file.fetchReferenceSequenceCallback(
-                refRegion.id,
-                refRegion.start,
-                refRegion.end,
+              const seq = await this.file.fetchReferenceSequenceCallback(
+                span.id,
+                span.start,
+                span.end,
               )
+              // uppercase once here so decodeReadSequence never needs toUpperCase
+              completedRefRegions[span.id] = {
+                start: span.start,
+                end: span.end,
+                seq: seq.toUpperCase(),
+              }
             }
           }),
         )
 
-        // now decorate all the records with them
+        // decorate all the records with their ref region
         for (const record of records) {
           const seqId =
             singleRefId !== undefined ? singleRefId : record.sequenceId
-          const refRegion = refRegions[seqId]
-          if (refRegion?.seq) {
-            const seq = refRegion.seq
-            record.addReferenceSequence(
-              { ...refRegion, seq },
-              compressionScheme,
-            )
+          const refRegion = completedRefRegions[seqId]
+          if (refRegion) {
+            record.addReferenceSequence(refRegion, compressionScheme)
           }
         }
       }

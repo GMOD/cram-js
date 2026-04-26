@@ -84,24 +84,31 @@ export default class CraiIndex {
         'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
       )
     }
-    // interpret the text as regular ascii, since it is supposed to be only
-    // digits and whitespace characters this is written in a deliberately
-    // low-level fashion for performance, because some .crai files can be
-    // pretty large.
+    // Parse ascii text directly to integers without string intermediates.
+    // Written in a deliberately low-level fashion for performance — some .crai
+    // files can be pretty large.
     let currentRecord: number[] = []
-    let currentString = ''
-    for (const charCode of uncompressedBuffer) {
-      if (
-        (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
-        (!currentString && charCode === 45) /* leading - */
-      ) {
-        currentString += String.fromCharCode(charCode)
+    let currentNum = 0
+    let negative = false
+    let inField = false
+    const len = uncompressedBuffer.length
+    for (let i = 0; i < len; i++) {
+      const charCode = uncompressedBuffer[i]!
+      if (charCode >= 48 && charCode <= 57) /* 0-9 */ {
+        currentNum = currentNum * 10 + (charCode - 48)
+        inField = true
+      } else if (charCode === 45 && !inField) /* leading - */ {
+        negative = true
       } else if (charCode === 9 /* \t */) {
-        currentRecord.push(Number.parseInt(currentString, 10))
-        currentString = ''
+        currentRecord.push(negative ? -currentNum : currentNum)
+        currentNum = 0
+        negative = false
+        inField = false
       } else if (charCode === 10 /* \n */) {
-        currentRecord.push(Number.parseInt(currentString, 10))
-        currentString = ''
+        currentRecord.push(negative ? -currentNum : currentNum)
+        currentNum = 0
+        negative = false
+        inField = false
         addRecordToIndex(index, currentRecord)
         currentRecord = []
       } else if (charCode !== 13 /* \r */ && charCode !== 32 /* space */) {
@@ -111,9 +118,9 @@ export default class CraiIndex {
       }
     }
 
-    // if the file ends without a \n, we need to flush our buffers
-    if (currentString) {
-      currentRecord.push(Number.parseInt(currentString, 10))
+    // if the file ends without a \n, flush buffers
+    if (inField) {
+      currentRecord.push(negative ? -currentNum : currentNum)
     }
     if (currentRecord.length === 6) {
       addRecordToIndex(index, currentRecord)

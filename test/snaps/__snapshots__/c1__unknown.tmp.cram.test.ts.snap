@@ -659,7 +659,7 @@ exports[`can dump the whole c1#unknown.tmp.cram without error 1`] = `
             "cramFlags": 11,
             "flags": 4,
             "qualityScores": null,
-            "readBases": undefined,
+            "readBases": null,
             "readGroupId": -1,
             "readLength": 0,
             "readName": "_u",

@@ -715,7 +715,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [],
-            "readBases": undefined,
+            "readBases": "",
             "readGroupId": -1,
             "readLength": 0,
             "readName": "SQ3",

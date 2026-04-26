@@ -134,28 +134,24 @@ export default class IndexedCramFile {
       ),
     )
 
-    let ret: CramRecord[] = sliceResults.flat()
+    const ret: CramRecord[] = sliceResults.flat()
     if (viewAsPairs) {
-      const readNames: Record<string, number> = {}
-      const readIds: Record<string, number> = {}
+      const readNameCounts = new Map<string, number>()
+      const readIds = new Set<number>()
       for (const read of ret) {
         const name = read.readName
         if (name === undefined) {
           throw new Error('readName undefined')
         }
-        const id = read.uniqueId
-        if (!readNames[name]) {
-          readNames[name] = 0
-        }
-        readNames[name] += 1
-        readIds[id] = 1
+        readNameCounts.set(name, (readNameCounts.get(name) ?? 0) + 1)
+        readIds.add(read.uniqueId)
       }
-      const unmatedPairs: Record<string, boolean> = {}
-      Object.entries(readNames).forEach(([k, v]) => {
-        if (v === 1) {
-          unmatedPairs[k] = true
+      const unmatedPairs = new Set<string>()
+      for (const [name, count] of readNameCounts) {
+        if (count === 1) {
+          unmatedPairs.add(name)
         }
-      })
+      }
       const matePromises = []
       for (const cramRecord of ret) {
         const name = cramRecord.readName
@@ -163,7 +159,7 @@ export default class IndexedCramFile {
           throw new Error('readName undefined')
         }
         if (
-          unmatedPairs[name] &&
+          unmatedPairs.has(name) &&
           cramRecord.mate &&
           (cramRecord.mate.sequenceId === seqId || pairAcrossChr) &&
           Math.abs(cramRecord.alignmentStart - cramRecord.mate.alignmentStart) <
@@ -202,7 +198,10 @@ export default class IndexedCramFile {
             if (feature.readName === undefined) {
               throw new Error('readName undefined')
             }
-            if (unmatedPairs[feature.readName] && !readIds[feature.uniqueId]) {
+            if (
+              unmatedPairs.has(feature.readName) &&
+              !readIds.has(feature.uniqueId)
+            ) {
               mateRecs.push(feature)
             }
           }
@@ -211,11 +210,10 @@ export default class IndexedCramFile {
         mateFeatPromises.push(featPromise)
       }
       const newMateFeats = await Promise.all(mateFeatPromises)
-      if (newMateFeats.length) {
-        const newMates = newMateFeats.reduce((result, current) =>
-          result.concat(current),
-        )
-        ret = ret.concat(newMates)
+      for (const feats of newMateFeats) {
+        for (const feat of feats) {
+          ret.push(feat)
+        }
       }
     }
     return ret

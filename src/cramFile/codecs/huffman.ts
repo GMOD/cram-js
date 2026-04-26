@@ -151,7 +151,12 @@ export default class HuffmanIntCodec extends CramCodec<
     this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
     this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
     this.sortedBitLengthsByBitCode = this.sortedCodes.map(c => c.bitLength)
-    const maxBitCode = Math.max(...this.sortedBitCodes)
+    let maxBitCode = 0
+    for (const bc of this.sortedBitCodes) {
+      if (bc > maxBitCode) {
+        maxBitCode = bc
+      }
+    }
 
     this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
     for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
@@ -198,8 +203,8 @@ export default class HuffmanIntCodec extends CramCodec<
 
         for (
           let j = i;
-          this.sortedCodes[j + 1]!.bitLength === length &&
-          j < this.sortedCodes.length;
+          j < this.sortedCodes.length - 1 &&
+          this.sortedCodes[j + 1]!.bitLength === length;
           j += 1
         ) {
           i += 1

@@ -13,6 +13,7 @@ import { isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { CramFileBlock } from '../file.ts'
+import type CramRecord from '../record.ts'
 import type CramSlice from './index.ts'
 import type { Cursors, DataTypeMapping } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
@@ -160,9 +161,11 @@ function decodeRFData(
 ): string | number | number[] {
   const data = decodeDataSeries(dataSeriesName as DataSeriesEncodingKey)
   if (type === 'character') {
-    return String.fromCharCode(data as number)
+    // uppercase at decode time so getReadBases() never needs toUpperCase
+    return String.fromCharCode(data as number).toUpperCase()
   } else if (type === 'string') {
-    return decodeLatin1(data as Uint8Array)
+    // uppercase at decode time so getReadBases() never needs toUpperCase
+    return decodeLatin1(data as Uint8Array).toUpperCase()
   } else if (type === 'numArray') {
     return Array.from(data as Uint8Array)
   }
@@ -238,6 +241,7 @@ export type BulkByteRawDecoder = (
 ) => Uint8Array | undefined
 
 export default function decodeRecord(
+  out: CramRecord,
   slice: CramSlice,
   decodeDataSeries: DataSeriesDecoder,
   compressionScheme: CramContainerCompressionScheme,
@@ -354,7 +358,7 @@ export default function decodeRecord(
   let lengthOnRef: number | undefined
   let mappingQuality: number | undefined
   let qualityScores: Uint8Array | undefined | null
-  let readBases = undefined
+  let readBases: string | null | undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
     const readFeatureCount = decodeDataSeries('FN')!
@@ -436,23 +440,21 @@ export default function decodeRecord(
     }
   }
 
-  return {
-    readLength,
-    sequenceId,
-    cramFlags,
-    flags,
-    alignmentStart,
-    readGroupId,
-    readNameRaw,
-    mate,
-    templateSize,
-    mateRecordNumber,
-    readFeatures,
-    lengthOnRef,
-    mappingQuality,
-    qualityScores,
-    readBases,
-    tags,
-    uniqueId,
-  }
+  out.flags = flags
+  out.cramFlags = cramFlags
+  out.readLength = readLength
+  out.sequenceId = sequenceId!
+  out.alignmentStart = alignmentStart
+  out.readGroupId = readGroupId
+  out.uniqueId = uniqueId
+  out.tags = tags
+  out._readNameRaw = readNameRaw
+  out.readBases = readBases
+  out.templateSize = templateSize
+  out.readFeatures = readFeatures
+  out.lengthOnRef = lengthOnRef
+  out.mappingQuality = mappingQuality
+  out.qualityScores = qualityScores
+  out.mate = mate
+  out.mateRecordNumber = mateRecordNumber
 }
