@@ -3,12 +3,15 @@
 ## Status
 
 **Block-level compression (9/9)**: ✅ All working
+
 - raw, gzip, bzip2, lzma, rans, rans4x16, arith, fqzcomp, tok3
 
 **Data-level codecs (7/9)**: ✅ Implemented
+
 - Missing: Golomb (ID 2), Golomb-Rice (ID 8) - never used in practice
 
 **Advanced features**
+
 - ✅ rANS 4x16 with order-0/1
 - ⚠️ rANS 32x16 - not explicitly exposed (probably works implicitly)
 - ⚠️ Striped variants - not exposed
@@ -16,6 +19,7 @@
 ## Why Missing Codecs Don't Matter
 
 65KB threshold applies to individual **compression blocks**, not files:
+
 - 1GB file = ~10,000 blocks
 - Typical block size: 50-100KB
 - r32x16 triggered: Only when single block >65KB
@@ -23,26 +27,31 @@
 
 ## Tests
 
-✅ **430 tests pass** (2 new test files added)
-❌ **Striped variants** - Not tested (requires C code or BCF data)
+✅ **430 tests pass** (2 new test files added) ❌ **Striped variants** - Not
+tested (requires C code or BCF data)
 
 ### Test Files Created
 
 **samtools 1.21**
+
 ```bash
 samtools view -C -T /path/to/volvox.fa test_input.sam > test-r4x16.cram
 ```
+
 Size: 134KB | Methods: 2,4,5,6,7
 
 **samtools 1.23.1** (with tok3 - from IGV.js issue #2078)
+
 ```bash
 ~/.local/bin/samtools view -C -T /path/to/volvox.fa test_input.sam > test-samtools-123.cram
 ```
+
 Size: 123KB | Methods: 2,4,5,6,7,**8** (tok3)
 
 Both files: ✅ Read perfectly with cram-js
 
 **Striped variants**: ❌ Not tested
+
 - Requires structured multi-byte data or C code to generate
 - samtools doesn't expose via CLI
 - Auto-triggers only on specific data patterns (rare)
@@ -56,10 +65,11 @@ Both files: ✅ Read perfectly with cram-js
 
 ## Conclusion
 
-cram-js supports all practical CRAM codecs. Missing r32x16/striped variants affect <1% of files. IGV.js issue #2078 (tok3 codec) is fully resolved.
+cram-js supports all practical CRAM codecs. Missing r32x16/striped variants
+affect <1% of files. IGV.js issue #2078 (tok3 codec) is fully resolved.
 
-| Version | htscodecs | Status |
-|---------|-----------|--------|
-| samtools 1.21 | 1.6.1 | ✅ Works |
-| samtools 1.23.1 | 1.6.6 | ✅ Works (with tok3) |
-| cram-js | 1.6.6 WASM | ✅ Reads both |
+| Version         | htscodecs  | Status               |
+| --------------- | ---------- | -------------------- |
+| samtools 1.21   | 1.6.1      | ✅ Works             |
+| samtools 1.23.1 | 1.6.6      | ✅ Works (with tok3) |
+| cram-js         | 1.6.6 WASM | ✅ Reads both        |
