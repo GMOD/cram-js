@@ -48,7 +48,7 @@ function decodeSubexpInline(
   let numLeadingOnes = 0
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
-    const bit = (data[bytePosition]! >> bitPosition) & 1
+    const bit = (data[bytePosition] >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
       bytePosition += 1
@@ -67,7 +67,7 @@ function decodeSubexpInline(
   let bits = 0
   for (let i = 0; i < b; i++) {
     bits <<= 1
-    bits |= (data[bytePosition]! >> bitPosition) & 1
+    bits |= (data[bytePosition] >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
       bytePosition += 1

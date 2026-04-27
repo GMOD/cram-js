@@ -17,7 +17,7 @@ function getBitsInline(
 
   // Fast path for single bit (common in huffman)
   if (numBits === 1) {
-    const val = (data[bytePosition]! >> bitPosition) & 1
+    const val = (data[bytePosition] >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
       bytePosition += 1
@@ -32,7 +32,7 @@ function getBitsInline(
   let val = 0
   for (let i = 0; i < numBits; i++) {
     val <<= 1
-    val |= (data[bytePosition]! >> bitPosition) & 1
+    val |= (data[bytePosition] >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
       bytePosition += 1
@@ -87,7 +87,7 @@ export default class HuffmanIntCodec extends CramCodec<
     // degenerate zero-length huffman code: special-case the decoding.
     // empty codeBook (no codes at all) is also valid for unused data series;
     // decode() will throw 'Huffman symbol not found' if such a codec is used.
-    if (this.sortedCodes.length > 0 && this.sortedCodes[0]!.bitLength === 0) {
+    if (this.sortedCodes.length > 0 && this.sortedCodes[0].bitLength === 0) {
       this._decode = this._decodeZeroLengthCode
     }
   }
@@ -99,8 +99,8 @@ export default class HuffmanIntCodec extends CramCodec<
     )
     for (let i = 0; i < this.parameters.numCodes; i++) {
       codes[i] = {
-        symbol: this.parameters.symbols[i]!,
-        bitLength: this.parameters.bitLengths[i]!,
+        symbol: this.parameters.symbols[i],
+        bitLength: this.parameters.bitLengths[i],
       }
     }
     // sort the codes by bit length and symbol value
@@ -113,7 +113,7 @@ export default class HuffmanIntCodec extends CramCodec<
       if (!this.codeBook[code.bitLength]) {
         this.codeBook[code.bitLength] = []
       }
-      this.codeBook[code.bitLength]!.push(code.symbol)
+      this.codeBook[code.bitLength].push(code.symbol)
     })
   }
 
@@ -159,7 +159,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
     this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
     for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
-      this.bitCodeToValue[this.sortedCodes[i]!.bitCode] = i
+      this.bitCodeToValue[this.sortedCodes[i].bitCode] = i
     }
   }
 
@@ -178,7 +178,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
   // the special case for zero-length codes
   _decodeZeroLengthCode() {
-    return this.sortedCodes[0]!.value
+    return this.sortedCodes[0].value
   }
 
   _decode(_slice: CramSlice, coreDataBlock: CramFileBlock, coreCursor: Cursor) {
@@ -187,7 +187,7 @@ export default class HuffmanIntCodec extends CramCodec<
     let prevLen = 0
     let bits = 0
     for (let i = 0; i < this.sortedCodes.length; i += 1) {
-      const length = this.sortedCodes[i]!.bitLength
+      const length = this.sortedCodes[i].bitLength
       const bitsToRead = length - prevLen
       if (bitsToRead > 0) {
         bits <<= bitsToRead
@@ -195,14 +195,14 @@ export default class HuffmanIntCodec extends CramCodec<
       }
       prevLen = length
       {
-        const index = this.bitCodeToValue[bits]!
+        const index = this.bitCodeToValue[bits]
         if (index > -1 && this.sortedBitLengthsByBitCode[index] === length) {
-          return this.sortedValuesByBitCode[index]!
+          return this.sortedValuesByBitCode[index]
         }
 
         for (
           let j = i;
-          this.sortedCodes[j + 1]!.bitLength === length &&
+          this.sortedCodes[j + 1].bitLength === length &&
           j < this.sortedCodes.length;
           j += 1
         ) {

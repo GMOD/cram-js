@@ -63,7 +63,7 @@ export interface BoundDecoders {
 // caused silent data corruption when reading tag values. DataView with explicit
 // byteOffset reads from the correct position within the parent buffer.
 function parseTagValueArray(buffer: Uint8Array) {
-  const arrayType = String.fromCharCode(buffer[0]!)
+  const arrayType = String.fromCharCode(buffer[0])
 
   const dv = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength)
   const length = dv.getUint32(1, true)
@@ -111,13 +111,13 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
     return readNullTerminatedStringFromBuffer(buffer)
   }
   if (tagType === 'A') {
-    return String.fromCharCode(buffer[0]!)
+    return String.fromCharCode(buffer[0])
   }
   if (tagType === 'C') {
-    return buffer[0]!
+    return buffer[0]
   }
   if (tagType === 'c') {
-    return buffer[0]! > 127 ? buffer[0]! - 256 : buffer[0]!
+    return buffer[0] > 127 ? buffer[0] - 256 : buffer[0]
   }
   if (tagType === 'B') {
     return parseTagValueArray(buffer)
@@ -148,116 +148,92 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-// Read feature schema: maps a feature code to [transformKind, decoder] where
-// transformKind controls how the raw codec output is converted
-// (character→fromCharCode, string→TextDecoder, numArray→Array.from,
-// number→as-is). Built once per slice from the BoundDecoders, so the inner
-// loop is just a direct decoder call + transform.
-type RFTransform = 'character' | 'string' | 'numArray' | 'number'
-type RFDecoder = () => number | Uint8Array | undefined
-type RFEntry = readonly [RFTransform, RFDecoder]
+// Read-feature schema: a charCode-indexed array of [letter, fn] tuples where
+// fn() decodes one feature datum and applies its transform
+// (character → fromCharCode, string → decodeLatin1, numArray → Array.from,
+// number → identity). Built once per slice; the inner loop becomes a
+// charCode lookup + monomorphic call.
+type RFFn = () => string | number | number[]
+export type RFEntry = readonly [code: string, fn: RFFn]
 
-export interface RFSchemas {
-  data1: Record<string, RFEntry | undefined>
-  data2: Record<string, RFEntry | undefined>
-}
-
-export function buildRFSchemas(
+export function buildRFSchema(
   bd: BoundDecoders,
   majorVersion: number,
-): RFSchemas {
+): (RFEntry | undefined)[] {
   const SC = majorVersion > 1 ? bd.SC : bd.IN
-  return {
-    data1: {
-      B: ['character', bd.BA], // base substitution (base component)
-      X: ['number', bd.BS], // base substitution matrix index
-      D: ['number', bd.DL], // deletion length
-      I: ['string', bd.IN], // insertion bases
-      i: ['character', bd.BA], // single-base insertion
-      b: ['string', bd.BB], // stretch of bases
-      q: ['numArray', bd.QQ], // stretch of quality scores
-      Q: ['number', bd.QS], // single quality score
-      H: ['number', bd.HC], // hard clip length
-      P: ['number', bd.PD], // padding length
-      N: ['number', bd.RS], // reference skip length
-      S: ['string', SC],
-    },
-    // features with a second data item (B has both base and quality score)
-    data2: {
-      B: ['number', bd.QS],
-    },
-  }
-}
+  const ch = (d: () => number | undefined): RFFn => () =>
+    String.fromCharCode(d()!)
+  const str = (d: () => Uint8Array | undefined): RFFn => () =>
+    decodeLatin1(d()!)
+  const numArr = (d: () => Uint8Array | undefined): RFFn => () =>
+    Array.from(d()!)
+  const num = (d: () => number | undefined): RFFn => () => d()!
 
-// Pre-computed lookup: charCode -> feature code string
-const featureCodeFromCharCode: string[] = new Array(128)
-for (const c of 'BXDIibqQHPNS') {
-  featureCodeFromCharCode[c.charCodeAt(0)] = c
-}
-
-function decodeRFData(entry: RFEntry): string | number | number[] {
-  const data = entry[1]()
-  const type = entry[0]
-  if (type === 'character') {
-    return String.fromCharCode(data as number)
-  } else if (type === 'string') {
-    return decodeLatin1(data as Uint8Array)
-  } else if (type === 'numArray') {
-    return Array.from(data as Uint8Array)
-  }
-  return data as number
+  const arr: (RFEntry | undefined)[] = new Array(128)
+  arr['B'.charCodeAt(0)] = ['B', ch(bd.BA)]
+  arr['X'.charCodeAt(0)] = ['X', num(bd.BS)]
+  arr['D'.charCodeAt(0)] = ['D', num(bd.DL)]
+  arr['I'.charCodeAt(0)] = ['I', str(bd.IN)]
+  arr['i'.charCodeAt(0)] = ['i', ch(bd.BA)]
+  arr['b'.charCodeAt(0)] = ['b', str(bd.BB)]
+  arr['q'.charCodeAt(0)] = ['q', numArr(bd.QQ)]
+  arr['Q'.charCodeAt(0)] = ['Q', num(bd.QS)]
+  arr['H'.charCodeAt(0)] = ['H', num(bd.HC)]
+  arr['P'.charCodeAt(0)] = ['P', num(bd.PD)]
+  arr['N'.charCodeAt(0)] = ['N', num(bd.RS)]
+  arr['S'.charCodeAt(0)] = ['S', str(SC)]
+  return arr
 }
 
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
   bd: BoundDecoders,
-  schemas: RFSchemas,
+  schema: (RFEntry | undefined)[],
 ) {
-  let currentReadPos = 0
-  let currentRefPos = alignmentStart - 1
+  // Track the running offset between ref and read coordinates so that
+  // refPos = readPos + refOffset. Deletions advance ref past consumed
+  // ref bases (offset goes up); insertions advance read past consumed
+  // read bases (offset goes down). This mirrors CIGAR consume-ref vs
+  // consume-read semantics.
+  let readPos = 0
+  let refOffset = alignmentStart - 1
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
   const decodeFC = bd.FC
   const decodeFP = bd.FP
-  const { data1, data2 } = schemas
+  const decodeQS = bd.QS
 
   for (let i = 0; i < readFeatureCount; i++) {
     const codeNum = decodeFC()!
-    const code = featureCodeFromCharCode[codeNum]
+    readPos += decodeFP()!
+    const entry = schema[codeNum]
 
-    const readPosDelta = decodeFP()!
-
-    const schema = data1[code!]
-
-    if (!schema) {
+    if (!entry) {
       throw new CramMalformedError(
         `invalid read feature code "${String.fromCharCode(codeNum)}"`,
       )
     }
 
-    let data: string | number | number[] | [string, number] =
-      decodeRFData(schema)
-
-    const schema2 = data2[code!]
-    if (schema2) {
-      data = [data as string, decodeRFData(schema2) as number]
+    const code = entry[0]
+    let data: string | number | number[] | [string, number] = entry[1]()
+    if (code === 'B') {
+      data = [data as string, decodeQS()!]
     }
 
-    currentReadPos += readPosDelta
-    const pos = currentReadPos
-
-    currentRefPos += readPosDelta
-    const refPos = currentRefPos
+    readFeatures[i] = {
+      code,
+      pos: readPos,
+      refPos: readPos + refOffset,
+      data,
+    } as ReadFeature
 
     if (code === 'D' || code === 'N') {
-      currentRefPos += data as number
+      refOffset += data as number
     } else if (code === 'I' || code === 'S') {
-      currentRefPos -= (data as string).length
+      refOffset -= (data as string).length
     } else if (code === 'i') {
-      currentRefPos -= 1
+      refOffset -= 1
     }
-
-    readFeatures[i] = { code, pos, refPos, data } as ReadFeature
   }
   return readFeatures
 }
@@ -275,7 +251,7 @@ export type BoundTagDecoders = Record<
 export default function decodeRecord(
   slice: CramSlice,
   bd: BoundDecoders,
-  rfSchemas: RFSchemas,
+  rfSchema: (RFEntry | undefined)[],
   boundTagDecoders: BoundTagDecoders,
   compressionScheme: CramContainerCompressionScheme,
   sliceHeader: SliceHeader,
@@ -366,16 +342,16 @@ export default function decodeRecord(
   type TagValue = string | number | number[] | undefined
   const tags: Record<string, TagValue> = {}
   // TN = tag names
-  const TN = compressionScheme.getTagNames(TLindex)!
+  const TN = compressionScheme.getTagNames(TLindex)
   const ntags = TN.length
   const shouldDecodeTags = decodeOptions?.decodeTags !== false
   if (shouldDecodeTags) {
     for (let i = 0; i < ntags; i++) {
-      const tagId = TN[i]!
-      const tagData = boundTagDecoders[tagId]!()
+      const tagId = TN[i]
+      const tagData = boundTagDecoders[tagId]()
 
-      const tagName = tagId[0]! + tagId[1]!
-      const tagType = tagId[2]!
+      const tagName = tagId[0] + tagId[1]
+      const tagType = tagId[2]
       tags[tagName] =
         tagData === undefined
           ? undefined
@@ -398,7 +374,7 @@ export default function decodeRecord(
         alignmentStart,
         readFeatureCount,
         bd,
-        rfSchemas,
+        rfSchema,
       )
     }
 

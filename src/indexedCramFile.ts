@@ -192,7 +192,7 @@ export default class IndexedCramFile {
         .sort((a, b) => a.toString().localeCompare(b.toString()))
         .filter(
           (item, pos, ary) =>
-            !pos || item.toString() !== ary[pos - 1]!.toString(),
+            !pos || item.toString() !== ary[pos - 1].toString(),
         )
 
       const mateRecordPromises = []

@@ -37,8 +37,8 @@ class XzContext {
     this.ptr = this.exports.create_context()
     this._refresh()
     this.bufSize = this.mem32![0]!
-    this.inStart = this.mem32![1]! - this.ptr
-    this.outStart = this.mem32![4]! - this.ptr
+    this.inStart = this.mem32![1] - this.ptr
+    this.outStart = this.mem32![4] - this.ptr
   }
 
   supplyInput(sourceDataUint8Array: Uint8Array) {
@@ -59,7 +59,7 @@ class XzContext {
     }
     const outChunk = this.mem8!.slice(
       this.outStart,
-      this.outStart + /* outPos */ this.mem32![5]!,
+      this.outStart + /* outPos */ this.mem32![5],
     )
     return { outChunk, finished: result === XZ_STREAM_END }
   }
@@ -108,8 +108,8 @@ export async function xzDecompress(input: Uint8Array): Promise<Uint8Array> {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       // Check if WASM needs more input (inPos === inSize)
-      // eslint-disable-next-line @typescript-eslint/no-confusing-non-null-assertion
-      if (context.mem32![2]! === context.mem32![3]!) {
+       
+      if (context.mem32![2] === context.mem32![3]) {
         if (offset < input.length) {
           const chunkSize = Math.min(context.bufSize, input.length - offset)
           context.supplyInput(input.subarray(offset, offset + chunkSize))
@@ -137,7 +137,7 @@ export async function xzDecompress(input: Uint8Array): Promise<Uint8Array> {
     }
 
     if (chunks.length === 1) {
-      return chunks[0]!
+      return chunks[0]
     }
 
     const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)

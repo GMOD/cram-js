@@ -46,7 +46,7 @@ function decodeBetaInline(
 
   // Fast path: reading exactly 8 bits when byte-aligned
   if (numBits === 8 && bitPosition === 7) {
-    const val = data[bytePosition]!
+    const val = data[bytePosition]
     cursor.bytePosition = bytePosition + 1
     return val - offset
   }
@@ -55,7 +55,7 @@ function decodeBetaInline(
   let val = 0
   for (let i = 0; i < numBits; i++) {
     val <<= 1
-    val |= (data[bytePosition]! >> bitPosition) & 1
+    val |= (data[bytePosition] >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
       bytePosition += 1
