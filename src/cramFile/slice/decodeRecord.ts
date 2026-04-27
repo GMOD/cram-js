@@ -1,5 +1,4 @@
 import { CramMalformedError } from '../../errors.ts'
-import { type DataSeriesTypes } from '../container/compressionScheme.ts'
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
@@ -14,9 +13,44 @@ import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { CramFileBlock } from '../file.ts'
 import type CramSlice from './index.ts'
-import type { Cursors, DataTypeMapping } from '../codecs/_base.ts'
-import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
+import type { Cursors } from '../codecs/_base.ts'
 import type CramContainerCompressionScheme from '../container/compressionScheme.ts'
+
+// Each method returns the next decoded value for that data series, advancing
+// the underlying cursor. Built once per slice in slice/index.ts as a fixed-
+// shape object literal so call sites get monomorphic property access.
+export interface BoundDecoders {
+  BF(): number | undefined
+  CF(): number | undefined
+  RI(): number | undefined
+  RL(): number | undefined
+  AP(): number | undefined
+  RG(): number | undefined
+  RN(): Uint8Array | undefined
+  MF(): number | undefined
+  NS(): number | undefined
+  NP(): number | undefined
+  TS(): number | undefined
+  NF(): number | undefined
+  TL(): number | undefined
+  FN(): number | undefined
+  FC(): number | undefined
+  FP(): number | undefined
+  DL(): number | undefined
+  BB(): Uint8Array | undefined
+  QQ(): Uint8Array | undefined
+  BS(): number | undefined
+  IN(): Uint8Array | undefined
+  RS(): number | undefined
+  PD(): number | undefined
+  HC(): number | undefined
+  SC(): Uint8Array | undefined
+  MQ(): number | undefined
+  BA(): number | undefined
+  QS(): number | undefined
+  TC(): number | undefined
+  TN(): number | undefined
+}
 
 /**
  * parse a BAM tag's array value from a binary buffer
@@ -114,37 +148,45 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-// Read feature schema lookup tables. Each entry maps a feature code to
-// [dataType, dataSeriesName] where dataType controls how the raw codec
-// output is converted (character→fromCharCode, string→TextDecoder,
-// numArray→Array.from, number→as-is).
-const data1SchemaBase = {
-  B: ['character', 'BA'] as const, // base substitution (base component)
-  X: ['number', 'BS'] as const, // base substitution matrix index
-  D: ['number', 'DL'] as const, // deletion length
-  I: ['string', 'IN'] as const, // insertion bases
-  i: ['character', 'BA'] as const, // single-base insertion
-  b: ['string', 'BB'] as const, // stretch of bases
-  q: ['numArray', 'QQ'] as const, // stretch of quality scores
-  Q: ['number', 'QS'] as const, // single quality score
-  H: ['number', 'HC'] as const, // hard clip length
-  P: ['number', 'PD'] as const, // padding length
-  N: ['number', 'RS'] as const, // reference skip length
-} as const
+// Read feature schema: maps a feature code to [transformKind, decoder] where
+// transformKind controls how the raw codec output is converted
+// (character→fromCharCode, string→TextDecoder, numArray→Array.from,
+// number→as-is). Built once per slice from the BoundDecoders, so the inner
+// loop is just a direct decoder call + transform.
+type RFTransform = 'character' | 'string' | 'numArray' | 'number'
+type RFDecoder = () => number | Uint8Array | undefined
+type RFEntry = readonly [RFTransform, RFDecoder]
 
-// Soft clip data series changed between CRAM v1 (IN) and v2+ (SC)
-const data1SchemaV1: Record<string, readonly [string, string]> = {
-  ...data1SchemaBase,
-  S: ['string', 'IN'] as const,
-}
-const data1SchemaV2Plus: Record<string, readonly [string, string]> = {
-  ...data1SchemaBase,
-  S: ['string', 'SC'] as const,
+export interface RFSchemas {
+  data1: Record<string, RFEntry | undefined>
+  data2: Record<string, RFEntry | undefined>
 }
 
-// Features with a second data item (B has both a base and a quality score)
-const data2Schema: Record<string, readonly [string, string]> = {
-  B: ['number', 'QS'] as const,
+export function buildRFSchemas(
+  bd: BoundDecoders,
+  majorVersion: number,
+): RFSchemas {
+  const SC = majorVersion > 1 ? bd.SC : bd.IN
+  return {
+    data1: {
+      B: ['character', bd.BA], // base substitution (base component)
+      X: ['number', bd.BS], // base substitution matrix index
+      D: ['number', bd.DL], // deletion length
+      I: ['string', bd.IN], // insertion bases
+      i: ['character', bd.BA], // single-base insertion
+      b: ['string', bd.BB], // stretch of bases
+      q: ['numArray', bd.QQ], // stretch of quality scores
+      Q: ['number', bd.QS], // single quality score
+      H: ['number', bd.HC], // hard clip length
+      P: ['number', bd.PD], // padding length
+      N: ['number', bd.RS], // reference skip length
+      S: ['string', SC],
+    },
+    // features with a second data item (B has both base and quality score)
+    data2: {
+      B: ['number', bd.QS],
+    },
+  }
 }
 
 // Pre-computed lookup: charCode -> feature code string
@@ -153,12 +195,9 @@ for (const c of 'BXDIibqQHPNS') {
   featureCodeFromCharCode[c.charCodeAt(0)] = c
 }
 
-function decodeRFData(
-  type: string,
-  dataSeriesName: string,
-  decodeDataSeries: DataSeriesDecoder,
-): string | number | number[] {
-  const data = decodeDataSeries(dataSeriesName as DataSeriesEncodingKey)
+function decodeRFData(entry: RFEntry): string | number | number[] {
+  const data = entry[1]()
+  const type = entry[0]
   if (type === 'character') {
     return String.fromCharCode(data as number)
   } else if (type === 'string') {
@@ -172,22 +211,23 @@ function decodeRFData(
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
-  decodeDataSeries: DataSeriesDecoder,
-  majorVersion: number,
+  bd: BoundDecoders,
+  schemas: RFSchemas,
 ) {
   let currentReadPos = 0
   let currentRefPos = alignmentStart - 1
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
-
-  const data1Schema = majorVersion > 1 ? data1SchemaV2Plus : data1SchemaV1
+  const decodeFC = bd.FC
+  const decodeFP = bd.FP
+  const { data1, data2 } = schemas
 
   for (let i = 0; i < readFeatureCount; i++) {
-    const codeNum = decodeDataSeries('FC')!
+    const codeNum = decodeFC()!
     const code = featureCodeFromCharCode[codeNum]
 
-    const readPosDelta = decodeDataSeries('FP')!
+    const readPosDelta = decodeFP()!
 
-    const schema = data1Schema[code!]
+    const schema = data1[code!]
 
     if (!schema) {
       throw new CramMalformedError(
@@ -195,18 +235,12 @@ function decodeReadFeatures(
       )
     }
 
-    let data: string | number | number[] | [string, number] = decodeRFData(
-      schema[0],
-      schema[1],
-      decodeDataSeries,
-    )
+    let data: string | number | number[] | [string, number] =
+      decodeRFData(schema)
 
-    const schema2 = data2Schema[code!]
+    const schema2 = data2[code!]
     if (schema2) {
-      data = [
-        data as string,
-        decodeRFData(schema2[0], schema2[1], decodeDataSeries) as number,
-      ]
+      data = [data as string, decodeRFData(schema2) as number]
     }
 
     currentReadPos += readPosDelta
@@ -228,10 +262,6 @@ function decodeReadFeatures(
   return readFeatures
 }
 
-export type DataSeriesDecoder = <T extends DataSeriesEncodingKey>(
-  dataSeriesName: T,
-) => DataTypeMapping[DataSeriesTypes[T]] | undefined
-
 export type BulkByteRawDecoder = (
   dataSeriesName: 'QS' | 'BA',
   length: number,
@@ -239,7 +269,8 @@ export type BulkByteRawDecoder = (
 
 export default function decodeRecord(
   slice: CramSlice,
-  decodeDataSeries: DataSeriesDecoder,
+  bd: BoundDecoders,
+  rfSchemas: RFSchemas,
   compressionScheme: CramContainerCompressionScheme,
   sliceHeader: SliceHeader,
   coreDataBlock: CramFileBlock,
@@ -251,11 +282,11 @@ export default function decodeRecord(
   decodeOptions?: Required<DecodeOptions>,
   decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
-  let flags = decodeDataSeries('BF')!
+  let flags = bd.BF()!
 
   // note: the C data type of compressionFlags is byte in cram v1 and int32 in
   // cram v2+, but that does not matter for us here in javascript land.
-  const cramFlags = decodeDataSeries('CF')!
+  const cramFlags = bd.CF()!
 
   if (!isMappedSliceHeader(sliceHeader.parsedContent)) {
     throw new Error('slice header not mapped')
@@ -263,21 +294,21 @@ export default function decodeRecord(
 
   const sequenceId =
     majorVersion > 1 && sliceHeader.parsedContent.refSeqId === -2
-      ? decodeDataSeries('RI')
+      ? bd.RI()
       : sliceHeader.parsedContent.refSeqId
 
-  const readLength = decodeDataSeries('RL')!
+  const readLength = bd.RL()!
   // if APDelta, will calculate the true start in a second pass
-  let alignmentStart = decodeDataSeries('AP')!
+  let alignmentStart = bd.AP()!
   if (compressionScheme.APdelta) {
     alignmentStart = alignmentStart + cursors.lastAlignmentStart
   }
   cursors.lastAlignmentStart = alignmentStart
-  const readGroupId = decodeDataSeries('RG')!
+  const readGroupId = bd.RG()!
 
   let readNameRaw: Uint8Array | undefined
   if (compressionScheme.readNamesIncluded) {
-    readNameRaw = decodeDataSeries('RN')!
+    readNameRaw = bd.RN()!
   }
 
   let mate: MateRecord | undefined
@@ -287,14 +318,14 @@ export default function decodeRecord(
   if (CramFlagsDecoder.isDetached(cramFlags)) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
     // matter for javascript
-    const mateFlags = decodeDataSeries('MF')!
+    const mateFlags = bd.MF()!
     let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
-      readNameRaw = decodeDataSeries('RN')!
+      readNameRaw = bd.RN()!
       mateReadName = readNullTerminatedStringFromBuffer(readNameRaw)
     }
-    const mateSequenceId = decodeDataSeries('NS')!
-    const mateAlignmentStart = decodeDataSeries('NP')!
+    const mateSequenceId = bd.NS()!
+    const mateAlignmentStart = bd.NP()!
     if (mateFlags || mateSequenceId > -1) {
       mate = {
         flags: mateFlags,
@@ -304,7 +335,7 @@ export default function decodeRecord(
       }
     }
 
-    templateSize = decodeDataSeries('TS')!
+    templateSize = bd.TS()!
 
     // set mate unmapped if needed
     if (MateFlagsDecoder.isUnmapped(mateFlags)) {
@@ -315,12 +346,12 @@ export default function decodeRecord(
       flags = BamFlagsDecoder.setMateReverseComplemented(flags)
     }
   } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
-    mateRecordNumber = decodeDataSeries('NF')! + recordNumber + 1
+    mateRecordNumber = bd.NF()! + recordNumber + 1
   }
 
   // TODO: the aux tag parsing will have to be refactored if we want to support
   // cram v1
-  const TLindex = decodeDataSeries('TL')!
+  const TLindex = bd.TL()!
   if (TLindex < 0) {
     /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */
     throw new CramMalformedError('invalid TL index')
@@ -357,13 +388,13 @@ export default function decodeRecord(
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
-    const readFeatureCount = decodeDataSeries('FN')!
+    const readFeatureCount = bd.FN()!
     if (readFeatureCount) {
       readFeatures = decodeReadFeatures(
         alignmentStart,
         readFeatureCount,
-        decodeDataSeries,
-        majorVersion,
+        bd,
+        rfSchemas,
       )
     }
 
@@ -389,7 +420,7 @@ export default function decodeRecord(
     }
 
     // mapping quality
-    mappingQuality = decodeDataSeries('MQ')!
+    mappingQuality = bd.MQ()!
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       // Try raw bytes first (most efficient - just a subarray view)
@@ -399,8 +430,9 @@ export default function decodeRecord(
       } else {
         // Fallback to single-byte decoding into new Uint8Array
         qualityScores = new Uint8Array(readLength)
+        const decodeQS = bd.QS
         for (let i = 0; i < readLength; i++) {
-          qualityScores[i] = decodeDataSeries('QS')!
+          qualityScores[i] = decodeQS()!
         }
       }
     }
@@ -415,8 +447,9 @@ export default function decodeRecord(
     } else {
       // Fallback to single-byte decoding
       let s = ''
+      const decodeBA = bd.BA
       for (let i = 0; i < readLength; i++) {
-        s += String.fromCharCode(decodeDataSeries('BA')!)
+        s += String.fromCharCode(decodeBA()!)
       }
       readBases = s
     }
@@ -429,8 +462,9 @@ export default function decodeRecord(
       } else {
         // Fallback to single-byte decoding into new Uint8Array
         qualityScores = new Uint8Array(readLength)
+        const decodeQS = bd.QS
         for (let i = 0; i < readLength; i++) {
-          qualityScores[i] = decodeDataSeries('QS')!
+          qualityScores[i] = decodeQS()!
         }
       }
     }

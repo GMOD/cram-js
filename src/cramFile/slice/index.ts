@@ -5,8 +5,9 @@ import ExternalCodec, {
 } from '../codecs/external.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
+  type BoundDecoders,
   type BulkByteRawDecoder,
-  type DataSeriesDecoder,
+  buildRFSchemas,
 } from './decodeRecord.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import { type CramFileBlock } from '../file.ts'
@@ -25,11 +26,9 @@ import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
 import type {
   Cursor,
   Cursors,
-  DataTypeMapping,
   PreDecodedIntBlock,
 } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
-import type { DataSeriesTypes } from '../container/compressionScheme.ts'
 import type CramContainer from '../container/index.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type CramFile from '../file.ts'
@@ -516,14 +515,13 @@ export default class CramSlice {
     }
     cursors.preDecodedIntBlocks = preDecodedIntBlocks
 
-    // Create bound decode functions per data series. For ExternalCodec, this
+    // Build bound decode functions per data series. For ExternalCodec this
     // captures the content buffer and cursor directly, eliminating per-call
-    // Map.get() and Record lookup overhead.
-
-    const boundDecoders: Record<string, () => number | Uint8Array | undefined> =
-      {}
-
-    const createBoundDecoder = (dataSeriesName: string) => {
+    // Record/Map lookup overhead. The bound decoders are assembled into a
+    // single object literal with all data series present so V8 sees a stable
+    // hidden class — call sites in decodeRecord then become direct property
+    // accesses with monomorphic inline caches.
+    const bind = (dataSeriesName: string) => {
       const codec = compressionScheme.getCodecForDataSeries(
         dataSeriesName as DataSeriesEncodingKey,
       )
@@ -538,8 +536,6 @@ export default class CramSlice {
         const bid = codec.parameters.blockContentId
         const preDecoded = preDecodedIntBlocks.get(bid)
         if (preDecoded) {
-          // closure captures the shared preDecoded object; index is mutated
-          // in place so multiple data series sharing a block advance together
           const { values } = preDecoded
           return () => values[preDecoded.index++]!
         }
@@ -558,18 +554,16 @@ export default class CramSlice {
       return () => codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
 
-    const decodeDataSeries: DataSeriesDecoder = <
-      T extends DataSeriesEncodingKey,
-    >(
-      dataSeriesName: T,
-    ): DataTypeMapping[DataSeriesTypes[T]] | undefined => {
-      let decoder = boundDecoders[dataSeriesName]
-      if (decoder === undefined) {
-        decoder = createBoundDecoder(dataSeriesName)
-        boundDecoders[dataSeriesName] = decoder
-      }
-      return decoder() as DataTypeMapping[DataSeriesTypes[T]] | undefined
-    }
+    const bd: BoundDecoders = {
+      BF: bind('BF'), CF: bind('CF'), RI: bind('RI'), RL: bind('RL'),
+      AP: bind('AP'), RG: bind('RG'), RN: bind('RN'), MF: bind('MF'),
+      NS: bind('NS'), NP: bind('NP'), TS: bind('TS'), NF: bind('NF'),
+      TL: bind('TL'), FN: bind('FN'), FC: bind('FC'), FP: bind('FP'),
+      DL: bind('DL'), BB: bind('BB'), QQ: bind('QQ'), BS: bind('BS'),
+      IN: bind('IN'), RS: bind('RS'), PD: bind('PD'), HC: bind('HC'),
+      SC: bind('SC'), MQ: bind('MQ'), BA: bind('BA'), QS: bind('QS'),
+      TC: bind('TC'), TN: bind('TN'),
+    } as BoundDecoders
 
     // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray
     // view when the codec supports it (e.g. ExternalCodec), or undefined otherwise
@@ -586,12 +580,14 @@ export default class CramSlice {
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
     )
+    const rfSchemas = buildRFSchemas(bd, majorVersion)
     for (let i = 0; i < records.length; i += 1) {
       try {
         records[i] = new CramRecord(
           decodeRecord(
             this,
-            decodeDataSeries,
+            bd,
+            rfSchemas,
             compressionScheme,
             sliceHeader,
             coreDataBlock,

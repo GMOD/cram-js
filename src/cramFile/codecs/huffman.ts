@@ -84,9 +84,10 @@ export default class HuffmanIntCodec extends CramCodec<
     this.buildCodes()
     this.buildCaches()
 
-    // if this is a degenerate zero-length huffman code, special-case the
-    // decoding
-    if (this.sortedCodes[0]!.bitLength === 0) {
+    // degenerate zero-length huffman code: special-case the decoding.
+    // empty codeBook (no codes at all) is also valid for unused data series;
+    // decode() will throw 'Huffman symbol not found' if such a codec is used.
+    if (this.sortedCodes.length > 0 && this.sortedCodes[0]!.bitLength === 0) {
       this._decode = this._decodeZeroLengthCode
     }
   }
@@ -151,6 +152,9 @@ export default class HuffmanIntCodec extends CramCodec<
     this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
     this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
     this.sortedBitLengthsByBitCode = this.sortedCodes.map(c => c.bitLength)
+    if (this.sortedBitCodes.length === 0) {
+      return
+    }
     const maxBitCode = Math.max(...this.sortedBitCodes)
 
     this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
