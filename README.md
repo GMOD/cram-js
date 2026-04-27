@@ -6,7 +6,7 @@
 Read CRAM files (indexed or unindexed) with pure JS, works in node or in the
 browser.
 
-- Reads CRAM 3.x and 2.x (3.1 added in v1.6.0)
+- Reads CRAM 3.x and 2.x
 - Does not read CRAM 1.x
 - Can use .crai indexes out of the box, for efficient sequence fetching, but
   also has an [index API](#craiindex) that would allow use with other index
@@ -18,9 +18,11 @@ browser.
 ## Install
 
 ```bash
-$ npm install --save @gmod/cram
+$ npm install @gmod/cram
 # or
 $ yarn add @gmod/cram
+# or
+$ pnpm add @gmod/cram
 ```
 
 ## Usage
@@ -114,8 +116,8 @@ records.forEach(record => {
 })
 ```
 
-You can use cram-js without NPM also with the cram-bundle.js. See the example
-directory for usage with script tag
+You can use cram-js without NPM also with the cram-bundle.js. See the
+[example directory](./example) for usage with script tag.
 
 ## API (auto-generated)
 
