@@ -316,7 +316,7 @@ export default class CramRecord {
     return !!(this.flags & Constants.BAM_FUNMAP)
   }
 
-  /** @returns {boolean} true if the read itself is unmapped; conflictive with isProperlyPaired */
+  /** @returns {boolean} true if the mate is unmapped; conflictive with isProperlyPaired */
   isMateUnmapped() {
     return !!(this.flags & Constants.BAM_FMUNMAP)
   }
@@ -417,7 +417,7 @@ export default class CramRecord {
    * Annotates this feature with the given reference sequence basepair
    * information. This will add a `sub` and a `ref` item to base
    * substitution read features given the actual substituted and reference
-   * base pairs, and will make the `getReadSequence()` method work.
+   * base pairs, and will make the `getReadBases()` method work.
    *
    * @param {object} refRegion
    * @param {number} refRegion.start

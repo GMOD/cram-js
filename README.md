@@ -201,7 +201,7 @@ true if the read itself is unmapped; conflictive with isProperlyPaired
 
 Returns
 **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**
-true if the read itself is unmapped; conflictive with isProperlyPaired
+true if the mate is unmapped; conflictive with isProperlyPaired
 
 ##### isReverseComplemented
 
@@ -296,7 +296,7 @@ of paired orientation
 Annotates this feature with the given reference sequence basepair information.
 This will add a `sub` and a `ref` item to base substitution read features given
 the actual substituted and reference base pairs, and will make the
-`getReadSequence()` method work.
+`getReadBases()` method work.
 
 ###### Parameters
 
@@ -348,9 +348,16 @@ that show insertions, deletions, substitutions, etc.
 
 - `args`
   **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-  - `args.cram` **CramFile**&#x20;
   - `args.index` **Index-like** object that supports
     getEntriesForRange(seqId,start,end) -> Promise\[Array\[index entries]]
+  - `args.cram` **CramFile?** pre-constructed CramFile instance. If omitted,
+    provide `cramPath`, `cramUrl`, or `cramFilehandle` instead.
+  - `args.cramPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** local file path to the CRAM file
+  - `args.cramUrl` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** remote URL of the CRAM file
+  - `args.cramFilehandle` **FileHandle?** generic-filehandle2 or similar
+  - `args.seqFetch` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Function)?**
+    async function `(seqId, start, end) => string` that returns the reference
+    sequence for a region. seqId is a numeric ID, coordinates are 1-based.
   - `args.cacheSize`
     **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?**
     optional maximum number of CRAM records to cache. default 20,000

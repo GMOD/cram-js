@@ -29,10 +29,18 @@ export default class IndexedCramFile {
   /**
    *
    * @param {object} args
-   * @param {CramFile} args.cram
-   *
    * @param {Index-like} args.index object that supports
    * getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
+   *
+   * @param {CramFile} [args.cram] pre-constructed CramFile. If omitted,
+   * provide cramPath, cramUrl, or cramFilehandle instead.
+   *
+   * @param {string} [args.cramPath] local file path to the CRAM file
+   * @param {string} [args.cramUrl] remote URL of the CRAM file
+   * @param {FileHandle} [args.cramFilehandle] generic-filehandle2 or similar
+   *
+   * @param {Function} [args.seqFetch] async (seqId, start, end) => string
+   * returning reference sequence for a region; seqId is numeric, coords 1-based
    *
    * @param {number} [args.cacheSize] optional maximum number of CRAM records
    * to cache.  default 20,000
