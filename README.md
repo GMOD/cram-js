@@ -493,7 +493,7 @@ An error caused by attempting to read beyond the end of the defined data.
 
 ## Publishing
 
-Releases are published to npm using [npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements) via GitHub Actions — no npm token is required.
+Releases are published to npm using [npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements) via GitHub Actions — push a git tag to trigger a release, no npm token required.
 
 ## Academic Use
 
