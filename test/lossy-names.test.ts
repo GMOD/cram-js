@@ -1,7 +1,6 @@
-// @ts-nocheck
 import { describe, expect, it } from 'vitest'
 
-import { CraiIndex, IndexedCramFile } from '../src'
+import { CraiIndex, IndexedCramFile } from '../src/index.ts'
 
 describe('1kg mate test', () => {
   it('runs without error', async () => {

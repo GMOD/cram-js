@@ -435,7 +435,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0900_comp_raw.cram without
               "sequenceId": 0,
               "uniqueId": 531,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -565,7 +564,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0900_comp_raw.cram without
             "sequenceId": 0,
             "tags": {},
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 530,
           },
           {
@@ -709,7 +707,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0900_comp_raw.cram without
             "sequenceId": 0,
             "tags": {},
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 531,
           },
           {
@@ -724,7 +721,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0900_comp_raw.cram without
               "sequenceId": 0,
               "uniqueId": 533,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -854,7 +850,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0900_comp_raw.cram without
             "sequenceId": 0,
             "tags": {},
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 532,
           },
           {
@@ -998,7 +993,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0900_comp_raw.cram without
             "sequenceId": 0,
             "tags": {},
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 533,
           },
         ],

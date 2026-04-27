@@ -490,7 +490,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1100_HUFFMAN.cram without 
               "sequenceId": 0,
               "uniqueId": 557,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -626,7 +625,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1100_HUFFMAN.cram without 
             "sequenceId": 0,
             "tags": {},
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 556,
           },
           {
@@ -788,7 +786,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1100_HUFFMAN.cram without 
             "sequenceId": 0,
             "tags": {},
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 557,
           },
         ],

@@ -745,7 +745,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 799,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -760,7 +759,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 798,
           },
           {
@@ -789,7 +787,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 799,
           },
           {
@@ -804,7 +801,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 801,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -819,7 +815,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -8,
-            "templateSize": undefined,
             "uniqueId": 800,
           },
           {
@@ -848,7 +843,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 8,
-            "templateSize": undefined,
             "uniqueId": 801,
           },
           {
@@ -863,7 +857,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 803,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -878,7 +871,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -8,
-            "templateSize": undefined,
             "uniqueId": 802,
           },
           {
@@ -907,7 +899,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 8,
-            "templateSize": undefined,
             "uniqueId": 803,
           },
           {
@@ -1449,7 +1440,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
               "sequenceId": 1,
               "uniqueId": 1613,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -1464,7 +1454,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 1612,
           },
           {
@@ -1493,7 +1482,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 1613,
           },
           {
@@ -1508,7 +1496,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
               "sequenceId": 1,
               "uniqueId": 1615,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -1523,7 +1510,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": -8,
-            "templateSize": undefined,
             "uniqueId": 1614,
           },
           {
@@ -1552,7 +1538,6 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "sequenceId": 1,
             "tags": {},
             "templateLength": 8,
-            "templateSize": undefined,
             "uniqueId": 1615,
           },
           {

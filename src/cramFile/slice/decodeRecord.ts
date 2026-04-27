@@ -1,12 +1,11 @@
 import { CramMalformedError } from '../../errors.ts'
+import { type DataSeriesTypes } from '../container/compressionScheme.ts'
 import {
-  type DataSeriesTypes,
-} from '../container/compressionScheme.ts'
-import CramRecord, {
   BamFlagsDecoder,
   CramFlagsDecoder,
   type DecodeOptions,
   MateFlagsDecoder,
+  type MateRecord,
   type ReadFeature,
 } from '../record.ts'
 import { type SliceHeader } from './index.ts'
@@ -281,7 +280,7 @@ export default function decodeRecord(
     readNameRaw = decodeDataSeries('RN')!
   }
 
-  let mate: CramRecord['mate']
+  let mate: MateRecord | undefined
   let templateSize: number | undefined
   let mateRecordNumber: number | undefined
   // mate record
@@ -437,33 +436,23 @@ export default function decodeRecord(
     }
   }
 
-  const record = new CramRecord()
-  record.flags = flags
-  record.cramFlags = cramFlags
-  record.readLength = readLength
-  record.mappingQuality = mappingQuality
-  record.lengthOnRef = lengthOnRef
-  record.qualityScores = qualityScores
-  record.readGroupId = readGroupId
-  record.sequenceId = sequenceId!
-  record.uniqueId = uniqueId
-  record.alignmentStart = alignmentStart
-  record.tags = tags
-  record.templateSize = templateSize
-  if (readNameRaw) {
-    record._readNameRaw = readNameRaw
+  return {
+    readLength,
+    sequenceId,
+    cramFlags,
+    flags,
+    alignmentStart,
+    readGroupId,
+    readNameRaw,
+    mate,
+    templateSize,
+    mateRecordNumber,
+    readFeatures,
+    lengthOnRef,
+    mappingQuality,
+    qualityScores,
+    readBases,
+    tags,
+    uniqueId,
   }
-  if (readBases) {
-    record.readBases = readBases
-  }
-  if (readFeatures) {
-    record.readFeatures = readFeatures
-  }
-  if (mate) {
-    record.mate = mate
-  }
-  if (mateRecordNumber) {
-    record.mateRecordNumber = mateRecordNumber
-  }
-  return record
 }

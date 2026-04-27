@@ -755,7 +755,6 @@ exports[`can dump the whole xx#unsorted.2.1.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 10666,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -775,7 +774,6 @@ exports[`can dump the whole xx#unsorted.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 10665,
           },
           {
@@ -809,7 +807,6 @@ exports[`can dump the whole xx#unsorted.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 10666,
           },
         ],
@@ -1245,7 +1242,6 @@ exports[`can dump the whole xx#unsorted.2.1.cram without error 1`] = `
               "sequenceId": 0,
               "uniqueId": 10984,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               9,
               9,
@@ -1265,7 +1261,6 @@ exports[`can dump the whole xx#unsorted.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": 20,
-            "templateSize": undefined,
             "uniqueId": 10983,
           },
           {
@@ -1299,7 +1294,6 @@ exports[`can dump the whole xx#unsorted.2.1.cram without error 1`] = `
             "sequenceId": 0,
             "tags": {},
             "templateLength": -20,
-            "templateSize": undefined,
             "uniqueId": 10984,
           },
         ],

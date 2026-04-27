@@ -4,25 +4,22 @@ on: push
 
 jobs:
   test:
-    name: Lint, build, and test on node 24.x and ubuntu-latest
+    name: Lint, build, and test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - name: Use Node.js 24.x
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
-        with:
-          node-version: 24.x
-      - name: Setup Emscripten
-        uses: mymindstorm/setup-emsdk@6ab9eb1bda2574c4ddb79809fc9247783eaf9021 # v14
+      - uses: actions/checkout@v4
+      - uses: mymindstorm/setup-emsdk@v14
         with:
           version: latest
-      - name: Install deps (with cache)
-        uses: bahmutov/npm-install@3e063b974f0d209807684aa23e534b3dde517fd9 # v1.11.2
-      - name: Install samtools
-        run: sudo apt-get update && sudo apt-get install -y samtools
-      - name: Lint codebase
-        run: yarn lint
-      - name: Build codebase
-        run: yarn build
-      - name: Test codebase
-        run: yarn test --coverage
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: sudo apt-get update && sudo apt-get install -y samtools
+      - run: pnpm lint
+      - run: pnpm build
+      - run: pnpm test

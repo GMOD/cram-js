@@ -365,8 +365,6 @@ exports[`can dump the whole ce#unmap.tmp.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
@@ -482,8 +480,6 @@ exports[`can dump the whole ce#unmap.tmp.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
@@ -599,8 +595,6 @@ exports[`can dump the whole ce#unmap.tmp.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
@@ -716,8 +710,6 @@ exports[`can dump the whole ce#unmap.tmp.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
@@ -833,8 +825,6 @@ exports[`can dump the whole ce#unmap.tmp.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
@@ -950,8 +940,6 @@ exports[`can dump the whole ce#unmap.tmp.cram without error 1`] = `
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,

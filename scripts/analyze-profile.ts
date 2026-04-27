@@ -2,7 +2,9 @@ import { readFileSync } from 'node:fs'
 
 const files = process.argv.slice(2)
 if (files.length === 0) {
-  console.error('Usage: node --experimental-strip-types scripts/analyze-profile.ts <file1.cpuprofile> [file2.cpuprofile ...]')
+  console.error(
+    'Usage: node --experimental-strip-types scripts/analyze-profile.ts <file1.cpuprofile> [file2.cpuprofile ...]',
+  )
   process.exit(1)
 }
 

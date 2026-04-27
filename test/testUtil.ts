@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import { CramFile } from '../src'
-import { dumpWholeFile } from './lib/dumpFile'
-import { FetchableSmallFasta } from './lib/fasta'
-import { testDataFile } from './lib/util'
+import { CramFile } from '../src/index.ts'
+import { dumpWholeFile } from './lib/dumpFile.ts'
+import { FetchableSmallFasta } from './lib/fasta/index.ts'
+import { testDataFile } from './lib/util.ts'
 
 export function testFile(filename: string) {
   test(`can dump the whole ${filename} without error`, async () => {

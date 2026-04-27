@@ -1,5 +1,4 @@
 import CramCodec, { type Cursors } from './_base.ts'
-import { tinyMemoize } from '../util.ts'
 
 import type { ByteArrayLengthEncoding, CramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
@@ -16,6 +15,8 @@ export default class ByteArrayStopCodec extends CramCodec<
   ByteArrayLengthEncoding['parameters']
 > {
   private instantiateCodec: CramCodecFactory
+  private _lengthCodecCache?: CramCodec<'int'>
+  private _dataCodecCache?: CramCodec<'byte'>
 
   constructor(
     parameters: ByteArrayLengthEncoding['parameters'],
@@ -63,19 +64,19 @@ export default class ByteArrayStopCodec extends CramCodec<
     }
   }
 
-  // memoize
   _getLengthCodec() {
-    const encodingParams = this.parameters.lengthsEncoding
-    return this.instantiateCodec(encodingParams, 'int')
+    this._lengthCodecCache ??= this.instantiateCodec(
+      this.parameters.lengthsEncoding,
+      'int',
+    )
+    return this._lengthCodecCache
   }
 
-  // memoize
   _getDataCodec() {
-    const encodingParams = this.parameters.valuesEncoding
-    return this.instantiateCodec(encodingParams, 'byte')
+    this._dataCodecCache ??= this.instantiateCodec(
+      this.parameters.valuesEncoding,
+      'byte',
+    )
+    return this._dataCodecCache
   }
 }
-
-'_getLengthCodec _getDataCodec'.split(' ').forEach(method => {
-  tinyMemoize(ByteArrayStopCodec, method)
-})

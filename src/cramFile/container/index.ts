@@ -1,6 +1,6 @@
 import { CramMalformedError } from '../../errors.ts'
 import CramSlice from '../slice/index.ts'
-import { itf8Size, parseItem, tinyMemoize } from '../util.ts'
+import { itf8Size, parseItem } from '../util.ts'
 import CramContainerCompressionScheme from './compressionScheme.ts'
 import { getSectionParsers } from '../sectionParsers.ts'
 
@@ -9,6 +9,13 @@ import type CramFile from '../file.ts'
 export default class CramContainer {
   file: CramFile
   filePosition: number
+  private _headerResult?: ReturnType<CramContainer['_fetchHeader']>
+  private _compressionHeaderBlockResult?: ReturnType<
+    CramContainer['_fetchCompressionHeaderBlock']
+  >
+  private _compressionSchemeResult?: ReturnType<
+    CramContainer['_fetchCompressionScheme']
+  >
 
   constructor(file: CramFile, filePosition: number) {
     this.file = file
@@ -16,10 +23,30 @@ export default class CramContainer {
   }
 
   getHeader() {
+    if (this._headerResult === undefined) {
+      this._headerResult = this._fetchHeader()
+      this._headerResult.catch(() => {
+        this._headerResult = undefined
+      })
+    }
+    return this._headerResult
+  }
+
+  private _fetchHeader() {
     return this._readContainerHeader(this.filePosition)
   }
 
   async getCompressionHeaderBlock() {
+    if (this._compressionHeaderBlockResult === undefined) {
+      this._compressionHeaderBlockResult = this._fetchCompressionHeaderBlock()
+      this._compressionHeaderBlockResult.catch(() => {
+        this._compressionHeaderBlockResult = undefined
+      })
+    }
+    return this._compressionHeaderBlockResult
+  }
+
+  private async _fetchCompressionHeaderBlock() {
     const containerHeader = await this.getHeader()
 
     // if there are no records in the container, there will be no compression
@@ -57,6 +84,16 @@ export default class CramContainer {
   // parses the compression header data into a CramContainerCompressionScheme
   // object
   async getCompressionScheme() {
+    if (this._compressionSchemeResult === undefined) {
+      this._compressionSchemeResult = this._fetchCompressionScheme()
+      this._compressionSchemeResult.catch(() => {
+        this._compressionSchemeResult = undefined
+      })
+    }
+    return this._compressionSchemeResult
+  }
+
+  private async _fetchCompressionScheme() {
     const header = await this.getCompressionHeaderBlock()
     if (!header) {
       return undefined
@@ -108,9 +145,3 @@ export default class CramContainer {
     }
   }
 }
-
-'getHeader getCompressionHeaderBlock getCompressionScheme'
-  .split(' ')
-  .forEach(method => {
-    tinyMemoize(CramContainer, method)
-  })

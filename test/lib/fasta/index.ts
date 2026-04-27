@@ -6,7 +6,7 @@ function parseSmallFasta(text: string) {
       const [defLine, ...seq] = entryText.split('\n')
       const [id, ...des] = defLine!.split(' ')
       const description = des.join(' ')
-      const sequence = seq.join('').replace(/\s/g, '')
+      const sequence = seq.join('').replaceAll(/\s/g, '')
       return { id, description, sequence }
     })
 }

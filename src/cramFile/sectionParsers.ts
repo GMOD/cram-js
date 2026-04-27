@@ -1,7 +1,8 @@
+import { parseItf8, parseLtf8 } from './util.ts'
+
 import type { TupleOf } from '../typescript.ts'
 import type { DataSeriesEncodingMap } from './codecs/dataSeriesTypes.ts'
 import type { CramEncoding } from './encoding.ts'
-import { parseItf8, parseLtf8 } from './util.ts'
 
 export function cramFileDefinition() {
   return {
@@ -271,7 +272,7 @@ export interface UnmappedSliceHeader {
 export function isMappedSliceHeader(
   header: unknown,
 ): header is MappedSliceHeader {
-  return typeof (header as any).refSeqId === 'number'
+  return typeof (header as { refSeqId?: unknown }).refSeqId === 'number'
 }
 
 interface Value {

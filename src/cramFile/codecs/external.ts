@@ -6,6 +6,10 @@ import type { ExternalCramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
 import type CramSlice from '../slice/index.ts'
 
+// Decode an entire buffer of ITF8 (variable-length int) values at once into
+// an Int32Array. ITF8 uses the high bits of the first byte to encode length:
+// 0xxxxxxx (1 byte, 7 bits), 10xxxxxx (2 bytes, 14 bits), 110xxxxx (3 bytes,
+// 21 bits), 1110xxxx (4 bytes, 28 bits), 1111xxxx (5 bytes, 32 bits).
 export function batchDecodeItf8(buffer: Uint8Array) {
   const result = new Int32Array(buffer.length)
   let count = 0
@@ -45,7 +49,10 @@ export function batchDecodeItf8(buffer: Uint8Array) {
   return result.subarray(0, count)
 }
 
-export function parseItf8(buffer: Uint8Array, cursor: { bytePosition: number }) {
+export function parseItf8(
+  buffer: Uint8Array,
+  cursor: { bytePosition: number },
+) {
   const offset = cursor.bytePosition
   const countFlags = buffer[offset]!
   if (countFlags < 0x80) {

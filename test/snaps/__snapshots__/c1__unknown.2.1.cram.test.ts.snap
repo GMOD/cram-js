@@ -655,8 +655,6 @@ exports[`can dump the whole c1#unknown.2.1.cram without error 1`] = `
             "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               40,
               40,
@@ -682,8 +680,6 @@ exports[`can dump the whole c1#unknown.2.1.cram without error 1`] = `
             "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               255,
               255,
@@ -709,8 +705,6 @@ exports[`can dump the whole c1#unknown.2.1.cram without error 1`] = `
             "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [],
             "readBases": undefined,
             "readGroupId": -1,

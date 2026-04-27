@@ -3,9 +3,9 @@ import { Session } from 'node:inspector'
 
 import { test } from 'vitest'
 
-import CraiIndex from '../src/craiIndex'
-import { IndexedCramFile } from '../src/index'
-import { testDataFile } from '../test/lib/util'
+import CraiIndex from '../src/craiIndex.ts'
+import { IndexedCramFile } from '../src/index.ts'
+import { testDataFile } from '../test/lib/util.ts'
 
 test('generate CPU profile for longreads parsing', async () => {
   const session = new Session()

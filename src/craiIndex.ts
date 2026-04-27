@@ -1,8 +1,8 @@
-import type { CramFileSource } from './cramFile/file.ts'
 import { CramMalformedError } from './errors.ts'
 import { open } from './io.ts'
 import { unzip } from './unzip.ts'
 
+import type { CramFileSource } from './cramFile/file.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 const BAI_MAGIC = 21_578_050 // BAI\1
@@ -71,7 +71,11 @@ export default class CraiIndex {
     const uncompressedBuffer = await maybeUnzip(
       await this.filehandle.readFile(),
     )
-    const dataView = new DataView(uncompressedBuffer.buffer)
+    const dataView = new DataView(
+      uncompressedBuffer.buffer,
+      uncompressedBuffer.byteOffset,
+      uncompressedBuffer.byteLength,
+    )
     if (
       uncompressedBuffer.length > 4 &&
       dataView.getUint32(0, true) === BAI_MAGIC

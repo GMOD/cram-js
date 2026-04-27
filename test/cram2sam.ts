@@ -1,7 +1,8 @@
 import { IndexedFasta } from '@gmod/indexedfasta'
 
-import { CraiIndex, IndexedCramFile } from '../src'
-import CramRecord from '../src/cramFile/record'
+import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+
+import type CramRecord from '../src/cramFile/record.ts'
 
 if (process.argv.length !== 7) {
   process.stderr.write(
@@ -199,7 +200,7 @@ async function run() {
 
   // Region to query on.  NB gets mapped reads only
   if (typeof tid === 'string') {
-    tid = parseInt(tid)
+    tid = Number.parseInt(tid)
   }
   const records = await indexedFile.getRecordsForRange(tid >>> 0, start, end)
 
@@ -226,7 +227,7 @@ async function run() {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _rnext =
-      record.sequenceId == record.mate!.sequenceId
+      record.sequenceId === record.mate!.sequenceId
         ? '='
         : seqList[record.sequenceId]
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

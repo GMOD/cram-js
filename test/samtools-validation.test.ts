@@ -1,11 +1,11 @@
-import { execSync } from 'child_process'
-import path from 'path'
+import { execSync } from 'node:child_process'
+import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { testDataFile } from './lib/util'
-import CraiIndex from '../src/craiIndex'
-import { IndexedCramFile } from '../src/index'
+import { testDataFile } from './lib/util.ts'
+import CraiIndex from '../src/craiIndex.ts'
+import { IndexedCramFile } from '../src/index.ts'
 
 function getSamtoolsCount(filename: string, region?: string): number {
   const cramPath = path.join(process.cwd(), 'test', 'data', filename)
@@ -13,7 +13,7 @@ function getSamtoolsCount(filename: string, region?: string): number {
   const cmd = `samtools view -c "${cramPath}"${regionArg}`
   try {
     const result = execSync(cmd, { encoding: 'utf8' }).trim()
-    return parseInt(result, 10)
+    return Number.parseInt(result, 10)
   } catch (error) {
     throw new Error(`Failed to run samtools: ${cmd}\n${error}`, {
       cause: error,
@@ -88,7 +88,8 @@ describe('CRAM record count validation against samtools', () => {
         const samHeader = await cram.cram.getSamHeader()
         const sqLines = samHeader.filter(l => l.tag === 'SQ')
 
-        let allFeatures: any[] = []
+        let allFeatures: Awaited<ReturnType<typeof cram.getRecordsForRange>> =
+          []
         for (let refId = 0; refId < sqLines.length; refId++) {
           const features = await cram.getRecordsForRange(
             refId,

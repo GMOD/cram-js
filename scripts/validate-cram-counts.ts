@@ -1,6 +1,6 @@
-import { execSync } from 'child_process'
-import { readFileSync, readdirSync, existsSync } from 'fs'
-import { join } from 'path'
+import { execSync } from 'node:child_process'
+import { readFileSync, readdirSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
 
 const testDataDir = join(process.cwd(), 'test', 'data')
 
@@ -18,7 +18,7 @@ function getSamtoolsCount(cramPath: string, region?: string): number {
     const regionArg = region || ''
     const cmd = `samtools view -c "${cramPath}" ${regionArg}`.trim()
     const result = execSync(cmd, { encoding: 'utf8' }).trim()
-    return parseInt(result, 10)
+    return Number.parseInt(result, 10)
   } catch (error) {
     console.error(`Failed to run samtools on ${cramPath}:`, error)
     return -1

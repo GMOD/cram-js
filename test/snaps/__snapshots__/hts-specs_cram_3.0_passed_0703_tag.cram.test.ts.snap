@@ -1002,7 +1002,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0703_tag.cram without erro
               "sequenceId": 0,
               "uniqueId": 948,
             },
-            "mateRecordNumber": undefined,
             "qualityScores": [
               2,
               2,
@@ -1125,7 +1124,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0703_tag.cram without erro
               "IB": 4294967295,
             },
             "templateLength": 300,
-            "templateSize": undefined,
             "uniqueId": 947,
           },
           {
@@ -1261,7 +1259,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0703_tag.cram without erro
               "iB": -2147483648,
             },
             "templateLength": -300,
-            "templateSize": undefined,
             "uniqueId": 948,
           },
         ],

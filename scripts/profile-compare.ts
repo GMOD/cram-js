@@ -41,10 +41,7 @@ function stats(timings: number[]) {
   }
 }
 
-async function benchBranch(
-  branchDir: string,
-  c: BenchCase,
-) {
+async function benchBranch(branchDir: string, c: BenchCase) {
   const mod = await import(`../${branchDir}/index.js`)
   const { IndexedCramFile, CraiIndex } = mod
 
@@ -86,9 +83,7 @@ async function main() {
   const branch1Name = readFileSync('esm_branch1/branchname.txt', 'utf8').trim()
   const branch2Name = readFileSync('esm_branch2/branchname.txt', 'utf8').trim()
 
-  console.log(
-    `cram-js branch comparison - ${iterations} iterations per case`,
-  )
+  console.log(`cram-js branch comparison - ${iterations} iterations per case`)
   console.log(`  branch1: ${branch1Name}`)
   console.log(`  branch2: ${branch2Name}\n`)
 
@@ -107,9 +102,7 @@ async function main() {
       `  ${branch2Name.padEnd(20)} p50=${s2.p50.toFixed(1)}ms  mean=${s2.mean.toFixed(1)}ms  min=${s2.min.toFixed(1)}ms  max=${s2.max.toFixed(1)}ms`,
     )
     if (ratio > 1.05) {
-      console.log(
-        `  => ${branch2Name} is ${ratio.toFixed(2)}x faster (p50)`,
-      )
+      console.log(`  => ${branch2Name} is ${ratio.toFixed(2)}x faster (p50)`)
     } else if (ratio < 0.95) {
       console.log(
         `  => ${branch1Name} is ${(1 / ratio).toFixed(2)}x faster (p50)`,

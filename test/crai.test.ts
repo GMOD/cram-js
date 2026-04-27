@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util'
-import CraiIndex from '../src/craiIndex'
+import { testDataFile } from './lib/util.ts'
+import CraiIndex from '../src/craiIndex.ts'
 
 test('can read xx#unsorted.tmp.cram.crai', async () => {
   const filehandle = testDataFile('xx#unsorted.tmp.cram.crai')

@@ -66,7 +66,6 @@ class XzContext {
 
   dispose() {
     this.exports.destroy_context(this.ptr)
-    this.exports = null as any
   }
 
   _refresh() {

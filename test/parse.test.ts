@@ -1,8 +1,7 @@
-// @ts-nocheck
 import { describe, expect, it } from 'vitest'
 
-import { CramFile } from '../src'
-import { testDataFile } from './lib/util'
+import { CramFile } from '../src/index.ts'
+import { testDataFile } from './lib/util.ts'
 
 describe('CRAM reader', () => {
   it('can read a cram file definition', async () => {
@@ -143,11 +142,11 @@ describe('CRAM reader', () => {
       uncompressedSize: 372,
       crc32: 1246026486,
     })
-    expect(Object.keys(compressionBlockData).includes(['tagEncoding']))
-    expect(Object.keys(compressionBlockData).includes(['preservation']))
-    expect(Object.keys(compressionBlockData).includes(['dataSeriesEncoding']))
-    expect(Object.keys(compressionBlockData).includes(['_size']))
-    expect(Object.keys(compressionBlockData).includes(['_endPosition']))
+    expect(Object.keys(compressionBlockData).includes('tagEncoding'))
+    expect(Object.keys(compressionBlockData).includes('preservation'))
+    expect(Object.keys(compressionBlockData).includes('dataSeriesEncoding'))
+    expect(Object.keys(compressionBlockData).includes('_size'))
+    expect(Object.keys(compressionBlockData).includes('_endPosition'))
     expect(compressionBlockData.preservation).toEqual({
       TD: [
         ['ASC', 'XSC', 'XNC', 'XMC', 'XOC', 'XGC', 'YTZ'],

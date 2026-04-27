@@ -2,6 +2,7 @@ import Constants from './constants.ts'
 import { readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type CramContainerCompressionScheme from './container/compressionScheme.ts'
+import type decodeRecord from './slice/decodeRecord.ts'
 
 // precomputed pair orientation strings indexed by ((flags >> 4) & 0xF) | (isize > 0 ? 16 : 0)
 // bits 0-3 encode flag bits 0x10(reverse),0x20(mate reverse),0x40(read1),0x80(read2)
@@ -236,13 +237,13 @@ type FlagsEncoder<Type> = {
 function makeFlagsHelper<T>(
   x: readonly (readonly [number, T])[],
 ): FlagsDecoder<T> & FlagsEncoder<T> {
-  const r: any = {}
+  const r: Record<string, (flags: number) => boolean | number> = {}
   for (const [code, name] of x) {
     r[`is${name}`] = (flags: number) => !!(flags & code)
     r[`set${name}`] = (flags: number) => flags | code
   }
 
-  return r
+  return r as unknown as FlagsDecoder<T> & FlagsEncoder<T>
 }
 
 export const BamFlagsDecoder = makeFlagsHelper(BamFlags)
@@ -253,27 +254,27 @@ export const MateFlagsDecoder = makeFlagsHelper(MateFlags)
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
-  public tags!: Record<string, string | number | number[] | undefined>
-  public flags!: number
-  public cramFlags!: number
+  public tags: Record<string, string | number | number[] | undefined>
+  public flags: number
+  public cramFlags: number
   public readBases?: string | null
   public _refRegion?: RefRegion
   public readFeatures?: ReadFeature[]
-  public alignmentStart!: number
+  public alignmentStart: number
   public lengthOnRef: number | undefined
-  public readLength!: number
+  public readLength: number
   // templateLength is computed post-hoc for intra-slice mate pairs,
   // templateSize is the raw CRAM-encoded TS data series value
   public templateLength?: number
   public templateSize?: number
-  public _readName?: string
-  public _readNameRaw?: Uint8Array
+  private _readName?: string
+  private _readNameRaw?: Uint8Array
   public _syntheticReadName?: string
   public mateRecordNumber?: number
   public mate?: MateRecord
-  public uniqueId!: number
-  public sequenceId!: number
-  public readGroupId!: number
+  public uniqueId: number
+  public sequenceId: number
+  public readGroupId: number
   public mappingQuality: number | undefined
   public qualityScores: Uint8Array | null | undefined
 
@@ -287,6 +288,54 @@ export default class CramRecord {
       }
     }
     return this._readName
+  }
+
+  constructor({
+    flags,
+    cramFlags,
+    readLength,
+    mappingQuality,
+    lengthOnRef,
+    qualityScores,
+    mateRecordNumber,
+    readBases,
+    readFeatures,
+    mate,
+    readGroupId,
+    readNameRaw,
+    sequenceId,
+    uniqueId,
+    templateSize,
+    alignmentStart,
+    tags,
+  }: ReturnType<typeof decodeRecord>) {
+    this.flags = flags
+    this.cramFlags = cramFlags
+    this.readLength = readLength
+    this.mappingQuality = mappingQuality
+    this.lengthOnRef = lengthOnRef
+    this.qualityScores = qualityScores
+    this.readGroupId = readGroupId
+    this.sequenceId = sequenceId!
+    this.uniqueId = uniqueId
+    this.alignmentStart = alignmentStart
+    this.tags = tags
+    if (readNameRaw) {
+      this._readNameRaw = readNameRaw
+    }
+    if (readBases) {
+      this.readBases = readBases
+    }
+    this.templateSize = templateSize
+    if (readFeatures) {
+      this.readFeatures = readFeatures
+    }
+    if (mate) {
+      this.mate = mate
+    }
+    if (mateRecordNumber) {
+      this.mateRecordNumber = mateRecordNumber
+    }
   }
 
   /**
@@ -315,7 +364,7 @@ export default class CramRecord {
     return !!(this.flags & Constants.BAM_FUNMAP)
   }
 
-  /** @returns {boolean} true if the read itself is unmapped; conflictive with isProperlyPaired */
+  /** @returns {boolean} true if the mate is unmapped; conflictive with isProperlyPaired */
   isMateUnmapped() {
     return !!(this.flags & Constants.BAM_FMUNMAP)
   }
@@ -397,10 +446,14 @@ export default class CramRecord {
   }
 
   // adapted from igv.js
-  // uses precomputed lookup table indexed by flag bits + isize sign
+  // uses precomputed lookup table indexed by flag bits + isize sign.
+  // the BAM spec defines tlen as positive for the leftmost segment and
+  // negative for the rightmost, so isize > 0 reliably indicates which
+  // read comes first without needing position-based correction
+  // (see also: gmod/bam-js src/record.ts pair_orientation getter)
   getPairOrientation() {
     const f = this.flags
-    // combined check: paired (0x1) set, unmapped (0x4) clear, mate unmapped (0x8) clear
+    // paired (0x1) set, unmapped (0x4) clear, mate unmapped (0x8) clear
     if ((f & 0xd) !== 0x1 || this.sequenceId !== this.mate?.sequenceId) {
       return undefined
     }
@@ -412,7 +465,7 @@ export default class CramRecord {
    * Annotates this feature with the given reference sequence basepair
    * information. This will add a `sub` and a `ref` item to base
    * substitution read features given the actual substituted and reference
-   * base pairs, and will make the `getReadSequence()` method work.
+   * base pairs, and will make the `getReadBases()` method work.
    *
    * @param {object} refRegion
    * @param {number} refRegion.start
@@ -453,12 +506,15 @@ export default class CramRecord {
   }
 
   toJSON() {
-    const data: any = {}
+    const data: Record<string, unknown> = {}
     Object.keys(this).forEach(k => {
       if (k.startsWith('_')) {
         return
       }
-      data[k] = (this as any)[k]
+      const val = (this as Record<string, unknown>)[k]
+      if (val !== undefined) {
+        data[k] = val
+      }
     })
 
     data.readName = this.readName
@@ -470,3 +526,5 @@ export default class CramRecord {
     return data
   }
 }
+
+export { CramRecord }

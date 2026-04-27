@@ -430,8 +430,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0301_unmapped.cram without
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
@@ -547,8 +545,6 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0301_unmapped.cram without
             "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
-            "lengthOnRef": undefined,
-            "mappingQuality": undefined,
             "qualityScores": [
               2,
               2,
