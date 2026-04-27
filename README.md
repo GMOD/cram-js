@@ -85,7 +85,8 @@ for (const record of records) {
 See the [example directory](./example) for browser usage with `<script>` tag and
 the bundled `cram-bundle.js`.
 
-For more complex operations like generating CIGAR strings from read features, see the JBrowse
+For more complex operations like generating CIGAR strings from read features,
+see the JBrowse
 [readFeaturesToNumericCIGAR](https://github.com/GMOD/jbrowse-components/blob/main/plugins/alignments/src/CramAdapter/readFeaturesToNumericCIGAR.ts)
 implementation.
 
@@ -141,7 +142,9 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 **Methods:**
 
-- `getReadBases()` → `string` — returns the read sequence string. Requires `seqFetch` to be configured and is populated automatically by `getRecordsForRange`.
+- `getReadBases()` → `string` — returns the read sequence string. Requires
+  `seqFetch` to be configured and is populated automatically by
+  `getRecordsForRange`.
 
 ### ReadFeatures
 
@@ -157,11 +160,6 @@ Each entry in `record.readFeatures`:
 - `CramUnimplementedError` — unimplemented spec feature
 - `CramMalformedError` — malformed file data
 - `CramBufferOverrunError` — read past end of data
-
-## Publishing
-
-Push a git tag to trigger a release via GitHub Actions and
-[npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements).
 
 ## Academic Use
 
@@ -181,3 +179,7 @@ Actions.
 ```bash
 npm version patch  # or minor/major
 ```
+
+## Codec support
+
+See [CODEC_SUPPORT.md](CODEC_SUPPORT.md)
