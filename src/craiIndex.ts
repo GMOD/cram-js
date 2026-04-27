@@ -20,17 +20,17 @@ type ParsedIndex = Record<string, Slice[] | undefined>
 function addRecordToIndex(index: ParsedIndex, record: number[]) {
   const [seqId, start, span, containerStart, sliceStart, sliceBytes] = record
 
-  const s = seqId
+  const s = seqId!
   if (!index[s]) {
     index[s] = []
   }
 
-  index[s].push({
-    start: start,
-    span: span,
-    containerStart: containerStart,
-    sliceStart: sliceStart,
-    sliceBytes: sliceBytes,
+  index[s]!.push({
+    start: start!,
+    span: span!,
+    containerStart: containerStart!,
+    sliceStart: sliceStart!,
+    sliceBytes: sliceBytes!,
   })
 }
 

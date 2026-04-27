@@ -299,8 +299,8 @@ export default class CramSlice {
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i++) {
       const block = await this.file.readBlock(blockPosition)
-      blocks[i] = block
-      blockPosition = blocks[i]._endPosition
+      blocks[i]! = block
+      blockPosition = blocks[i]!._endPosition
     }
     return blocks
   }
@@ -580,7 +580,7 @@ export default class CramSlice {
           return content.subarray(start, pos)
         }
       }
-      return () => codec.decode(this, coreDataBlock, blocksByContentId, cursors)
+      return () => codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
     }
 
     const bd: BoundDecoders = {
@@ -617,17 +617,17 @@ export default class CramSlice {
     > = {}
     const bindTagFallback = (tagId: string) => {
       const codec = compressionScheme.getCodecForTag(tagId)
-      return () => codec.decode(this, coreDataBlock, blocksByContentId, cursors)
+      return () => codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
     }
     for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
-      const enc = compressionScheme.tagEncoding[tagId]
+      const enc = compressionScheme.tagEncoding[tagId]!
       if (
-        enc.codecId === 4 &&
-        enc.parameters.lengthsEncoding.codecId === 1 &&
-        enc.parameters.valuesEncoding.codecId === 1
+        enc!.codecId === 4 &&
+        enc!.parameters.lengthsEncoding.codecId === 1 &&
+        enc!.parameters.valuesEncoding.codecId === 1
       ) {
-        const lenBid = enc.parameters.lengthsEncoding.parameters.blockContentId
-        const valBid = enc.parameters.valuesEncoding.parameters.blockContentId
+        const lenBid = enc!.parameters.lengthsEncoding.parameters.blockContentId
+        const valBid = enc!.parameters.valuesEncoding.parameters.blockContentId
         const lenContentBlock = blocksByContentId[lenBid]
         const valContentBlock = blocksByContentId[valBid]
         if (!lenContentBlock || !valContentBlock) {
@@ -639,7 +639,7 @@ export default class CramSlice {
         const lenPreDecoded = preDecodedIntBlocks.get(lenBid)
         if (lenPreDecoded) {
           boundTagDecoders[tagId] = () => {
-            const length = lenPreDecoded.values[lenPreDecoded.index++]
+            const length = lenPreDecoded.values[lenPreDecoded.index++]!
             if (length === 0) {
               return EMPTY_BYTES
             }
@@ -691,7 +691,7 @@ export default class CramSlice {
             boundTagDecoders,
             compressionScheme,
             sliceHeader,
-            coreDataBlock,
+            coreDataBlock!,
             blocksByContentId,
             cursors,
             majorVersion,

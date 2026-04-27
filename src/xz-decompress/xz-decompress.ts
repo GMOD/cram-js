@@ -37,15 +37,15 @@ class XzContext {
     this.ptr = this.exports.create_context()
     this._refresh()
     this.bufSize = this.mem32![0]!
-    this.inStart = this.mem32![1] - this.ptr
-    this.outStart = this.mem32![4] - this.ptr
+    this.inStart = this.mem32![1]! - this.ptr
+    this.outStart = this.mem32![4]! - this.ptr
   }
 
   supplyInput(sourceDataUint8Array: Uint8Array) {
     this._refresh()
     const inBuffer = this.mem8!.subarray(
       this.inStart,
-      this.inStart + this.bufSize,
+      this.inStart + this.bufSize!,
     )
     inBuffer.set(sourceDataUint8Array, 0)
     this.exports.supply_input(this.ptr, sourceDataUint8Array.byteLength)
@@ -59,7 +59,7 @@ class XzContext {
     }
     const outChunk = this.mem8!.slice(
       this.outStart,
-      this.outStart + /* outPos */ this.mem32![5],
+      this.outStart + /* outPos */ this.mem32![5]!,
     )
     return { outChunk, finished: result === XZ_STREAM_END }
   }
@@ -137,7 +137,7 @@ export async function xzDecompress(input: Uint8Array): Promise<Uint8Array> {
     }
 
     if (chunks.length === 1) {
-      return chunks[0]
+      return chunks[0]!
     }
 
     const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0)

@@ -55,30 +55,30 @@ function parseSubstitutionMatrix(byteArray: number[]) {
     matrix[i] = new Array(4)
   }
 
-  matrix[0][(byteArray[0] >> 6) & 3] = 'C'
-  matrix[0][(byteArray[0] >> 4) & 3] = 'G'
-  matrix[0][(byteArray[0] >> 2) & 3] = 'T'
-  matrix[0][(byteArray[0] >> 0) & 3] = 'N'
+  matrix[0]![(byteArray[0]! >> 6) & 3] = 'C'
+  matrix[0]![(byteArray[0]! >> 4) & 3] = 'G'
+  matrix[0]![(byteArray[0]! >> 2) & 3] = 'T'
+  matrix[0]![(byteArray[0]! >> 0) & 3] = 'N'
 
-  matrix[1][(byteArray[1] >> 6) & 3] = 'A'
-  matrix[1][(byteArray[1] >> 4) & 3] = 'G'
-  matrix[1][(byteArray[1] >> 2) & 3] = 'T'
-  matrix[1][(byteArray[1] >> 0) & 3] = 'N'
+  matrix[1]![(byteArray[1]! >> 6) & 3] = 'A'
+  matrix[1]![(byteArray[1]! >> 4) & 3] = 'G'
+  matrix[1]![(byteArray[1]! >> 2) & 3] = 'T'
+  matrix[1]![(byteArray[1]! >> 0) & 3] = 'N'
 
-  matrix[2][(byteArray[2] >> 6) & 3] = 'A'
-  matrix[2][(byteArray[2] >> 4) & 3] = 'C'
-  matrix[2][(byteArray[2] >> 2) & 3] = 'T'
-  matrix[2][(byteArray[2] >> 0) & 3] = 'N'
+  matrix[2]![(byteArray[2]! >> 6) & 3] = 'A'
+  matrix[2]![(byteArray[2]! >> 4) & 3] = 'C'
+  matrix[2]![(byteArray[2]! >> 2) & 3] = 'T'
+  matrix[2]![(byteArray[2]! >> 0) & 3] = 'N'
 
-  matrix[3][(byteArray[3] >> 6) & 3] = 'A'
-  matrix[3][(byteArray[3] >> 4) & 3] = 'C'
-  matrix[3][(byteArray[3] >> 2) & 3] = 'G'
-  matrix[3][(byteArray[3] >> 0) & 3] = 'N'
+  matrix[3]![(byteArray[3]! >> 6) & 3] = 'A'
+  matrix[3]![(byteArray[3]! >> 4) & 3] = 'C'
+  matrix[3]![(byteArray[3]! >> 2) & 3] = 'G'
+  matrix[3]![(byteArray[3]! >> 0) & 3] = 'N'
 
-  matrix[4][(byteArray[4] >> 6) & 3] = 'A'
-  matrix[4][(byteArray[4] >> 4) & 3] = 'C'
-  matrix[4][(byteArray[4] >> 2) & 3] = 'G'
-  matrix[4][(byteArray[4] >> 0) & 3] = 'T'
+  matrix[4]![(byteArray[4]! >> 6) & 3] = 'A'
+  matrix[4]![(byteArray[4]! >> 4) & 3] = 'C'
+  matrix[4]![(byteArray[4]! >> 2) & 3] = 'G'
+  matrix[4]![(byteArray[4]! >> 0) & 3] = 'T'
 
   return matrix
 }

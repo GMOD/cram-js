@@ -15,6 +15,7 @@
     "rewriteRelativeImportExtensions": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
     "allowJs": true
   }
 }

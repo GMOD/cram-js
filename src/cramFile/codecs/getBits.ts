@@ -18,14 +18,14 @@ export function getBits(
 
   // Fast path: reading exactly 8 bits when byte-aligned
   if (numBits === 8 && cursor.bitPosition === 7) {
-    const val = data[cursor.bytePosition]
+    const val = data[cursor.bytePosition]!
     cursor.bytePosition += 1
     return val
   }
 
   // Fast path: reading exactly 1 bit
   if (numBits === 1) {
-    const val = (data[cursor.bytePosition] >> cursor.bitPosition) & 1
+    const val = (data[cursor.bytePosition]! >> cursor.bitPosition) & 1
     cursor.bitPosition -= 1
     if (cursor.bitPosition < 0) {
       cursor.bytePosition += 1
@@ -38,7 +38,7 @@ export function getBits(
   let val = 0
   for (let dlen = numBits; dlen; dlen--) {
     val <<= 1
-    val |= (data[cursor.bytePosition] >> cursor.bitPosition) & 1
+    val |= (data[cursor.bytePosition]! >> cursor.bitPosition) & 1
     cursor.bitPosition -= 1
     if (cursor.bitPosition < 0) {
       cursor.bytePosition += 1

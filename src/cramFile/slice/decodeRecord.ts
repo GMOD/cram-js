@@ -63,7 +63,7 @@ export interface BoundDecoders {
 // caused silent data corruption when reading tag values. DataView with explicit
 // byteOffset reads from the correct position within the parent buffer.
 function parseTagValueArray(buffer: Uint8Array) {
-  const arrayType = String.fromCharCode(buffer[0])
+  const arrayType = String.fromCharCode(buffer[0]!)
 
   const dv = new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength)
   const length = dv.getUint32(1, true)
@@ -111,13 +111,13 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
     return readNullTerminatedStringFromBuffer(buffer)
   }
   if (tagType === 'A') {
-    return String.fromCharCode(buffer[0])
+    return String.fromCharCode(buffer[0]!)
   }
   if (tagType === 'C') {
-    return buffer[0]
+    return buffer[0]!
   }
   if (tagType === 'c') {
-    return buffer[0] > 127 ? buffer[0] - 256 : buffer[0]
+    return buffer[0]! > 127 ? buffer[0]! - 256 : buffer[0]!
   }
   if (tagType === 'B') {
     return parseTagValueArray(buffer)
@@ -149,11 +149,12 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
 }
 
 // Read-feature schema: a charCode-indexed array of [letter, fn] tuples where
-// fn() decodes one feature datum and applies its transform
+// fn() decodes the feature's data, fully transformed
 // (character → fromCharCode, string → decodeLatin1, numArray → Array.from,
-// number → identity). Built once per slice; the inner loop becomes a
-// charCode lookup + monomorphic call.
-type RFFn = () => string | number | number[]
+// number → identity, B → [base, qualityScore]). Built once per slice; the
+// inner loop becomes a charCode lookup + monomorphic call.
+type RFData = string | number | number[] | [string, number]
+type RFFn = () => RFData
 export type RFEntry = readonly [code: string, fn: RFFn]
 
 export function buildRFSchema(
@@ -161,27 +162,22 @@ export function buildRFSchema(
   majorVersion: number,
 ): (RFEntry | undefined)[] {
   const SC = majorVersion > 1 ? bd.SC : bd.IN
-  const ch = (d: () => number | undefined): RFFn => () =>
-    String.fromCharCode(d()!)
-  const str = (d: () => Uint8Array | undefined): RFFn => () =>
-    decodeLatin1(d()!)
-  const numArr = (d: () => Uint8Array | undefined): RFFn => () =>
-    Array.from(d()!)
-  const num = (d: () => number | undefined): RFFn => () => d()!
-
   const arr: (RFEntry | undefined)[] = new Array(128)
-  arr['B'.charCodeAt(0)] = ['B', ch(bd.BA)]
-  arr['X'.charCodeAt(0)] = ['X', num(bd.BS)]
-  arr['D'.charCodeAt(0)] = ['D', num(bd.DL)]
-  arr['I'.charCodeAt(0)] = ['I', str(bd.IN)]
-  arr['i'.charCodeAt(0)] = ['i', ch(bd.BA)]
-  arr['b'.charCodeAt(0)] = ['b', str(bd.BB)]
-  arr['q'.charCodeAt(0)] = ['q', numArr(bd.QQ)]
-  arr['Q'.charCodeAt(0)] = ['Q', num(bd.QS)]
-  arr['H'.charCodeAt(0)] = ['H', num(bd.HC)]
-  arr['P'.charCodeAt(0)] = ['P', num(bd.PD)]
-  arr['N'.charCodeAt(0)] = ['N', num(bd.RS)]
-  arr['S'.charCodeAt(0)] = ['S', str(SC)]
+  arr['B'.charCodeAt(0)] = [
+    'B',
+    () => [String.fromCharCode(bd.BA()!), bd.QS()!],
+  ]
+  arr['X'.charCodeAt(0)] = ['X', () => bd.BS()!]
+  arr['D'.charCodeAt(0)] = ['D', () => bd.DL()!]
+  arr['I'.charCodeAt(0)] = ['I', () => decodeLatin1(bd.IN()!)]
+  arr['i'.charCodeAt(0)] = ['i', () => String.fromCharCode(bd.BA()!)]
+  arr['b'.charCodeAt(0)] = ['b', () => decodeLatin1(bd.BB()!)]
+  arr['q'.charCodeAt(0)] = ['q', () => Array.from(bd.QQ()!)]
+  arr['Q'.charCodeAt(0)] = ['Q', () => bd.QS()!]
+  arr['H'.charCodeAt(0)] = ['H', () => bd.HC()!]
+  arr['P'.charCodeAt(0)] = ['P', () => bd.PD()!]
+  arr['N'.charCodeAt(0)] = ['N', () => bd.RS()!]
+  arr['S'.charCodeAt(0)] = ['S', () => decodeLatin1(SC()!)]
   return arr
 }
 
@@ -201,7 +197,6 @@ function decodeReadFeatures(
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
   const decodeFC = bd.FC
   const decodeFP = bd.FP
-  const decodeQS = bd.QS
 
   for (let i = 0; i < readFeatureCount; i++) {
     const codeNum = decodeFC()!
@@ -215,10 +210,7 @@ function decodeReadFeatures(
     }
 
     const code = entry[0]
-    let data: string | number | number[] | [string, number] = entry[1]()
-    if (code === 'B') {
-      data = [data as string, decodeQS()!]
-    }
+    const data = entry[1]()
 
     readFeatures[i] = {
       code,
@@ -242,6 +234,38 @@ export type BulkByteRawDecoder = (
   dataSeriesName: 'QS' | 'BA',
   length: number,
 ) => Uint8Array | undefined
+
+function decodeQualityScores(
+  readLength: number,
+  decodeBulkBytesRaw: BulkByteRawDecoder | undefined,
+  decodeQS: () => number | undefined,
+) {
+  const raw = decodeBulkBytesRaw?.('QS', readLength)
+  if (raw) {
+    return raw
+  }
+  const out = new Uint8Array(readLength)
+  for (let i = 0; i < readLength; i++) {
+    out[i] = decodeQS()!
+  }
+  return out
+}
+
+function decodeReadBases(
+  readLength: number,
+  decodeBulkBytesRaw: BulkByteRawDecoder | undefined,
+  decodeBA: () => number | undefined,
+) {
+  const raw = decodeBulkBytesRaw?.('BA', readLength)
+  if (raw) {
+    return decodeLatin1(raw)
+  }
+  let s = ''
+  for (let i = 0; i < readLength; i++) {
+    s += String.fromCharCode(decodeBA()!)
+  }
+  return s
+}
 
 export type BoundTagDecoders = Record<
   string,
@@ -342,16 +366,16 @@ export default function decodeRecord(
   type TagValue = string | number | number[] | undefined
   const tags: Record<string, TagValue> = {}
   // TN = tag names
-  const TN = compressionScheme.getTagNames(TLindex)
+  const TN = compressionScheme.getTagNames(TLindex)!
   const ntags = TN.length
   const shouldDecodeTags = decodeOptions?.decodeTags !== false
   if (shouldDecodeTags) {
     for (let i = 0; i < ntags; i++) {
-      const tagId = TN[i]
-      const tagData = boundTagDecoders[tagId]()
+      const tagId = TN[i]!
+      const tagData = boundTagDecoders[tagId]!()
 
-      const tagName = tagId[0] + tagId[1]
-      const tagType = tagId[2]
+      const tagName = tagId[0]! + tagId[1]!
+      const tagType = tagId[2]!
       tags[tagName] =
         tagData === undefined
           ? undefined
@@ -403,50 +427,15 @@ export default function decodeRecord(
     mappingQuality = bd.MQ()!
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      // Try raw bytes first (most efficient - just a subarray view)
-      const rawQS = decodeBulkBytesRaw?.('QS', readLength)
-      if (rawQS) {
-        qualityScores = rawQS
-      } else {
-        // Fallback to single-byte decoding into new Uint8Array
-        qualityScores = new Uint8Array(readLength)
-        const decodeQS = bd.QS
-        for (let i = 0; i < readLength; i++) {
-          qualityScores[i] = decodeQS()!
-        }
-      }
+      qualityScores = decodeQualityScores(readLength, decodeBulkBytesRaw, bd.QS)
     }
   } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
     readBases = null
     qualityScores = null
   } else {
-    // Try raw bytes first for TextDecoder (most efficient)
-    const rawBA = decodeBulkBytesRaw?.('BA', readLength)
-    if (rawBA) {
-      readBases = decodeLatin1(rawBA)
-    } else {
-      // Fallback to single-byte decoding
-      let s = ''
-      const decodeBA = bd.BA
-      for (let i = 0; i < readLength; i++) {
-        s += String.fromCharCode(decodeBA()!)
-      }
-      readBases = s
-    }
-
+    readBases = decodeReadBases(readLength, decodeBulkBytesRaw, bd.BA)
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      // Try raw bytes first (most efficient - just a subarray view)
-      const rawQS = decodeBulkBytesRaw?.('QS', readLength)
-      if (rawQS) {
-        qualityScores = rawQS
-      } else {
-        // Fallback to single-byte decoding into new Uint8Array
-        qualityScores = new Uint8Array(readLength)
-        const decodeQS = bd.QS
-        for (let i = 0; i < readLength; i++) {
-          qualityScores[i] = decodeQS()!
-        }
-      }
+      qualityScores = decodeQualityScores(readLength, decodeBulkBytesRaw, bd.QS)
     }
   }
 

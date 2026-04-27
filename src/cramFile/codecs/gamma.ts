@@ -48,7 +48,7 @@ function decodeGammaInline(
   // Inline single-bit reads for the while loop
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
-    const bit = (data[bytePosition] >> bitPosition) & 1
+    const bit = (data[bytePosition]! >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
       bytePosition += 1
@@ -67,7 +67,7 @@ function decodeGammaInline(
     // Optimized multi-bit read
     for (let i = 0; i < bitsToRead; i++) {
       readBits <<= 1
-      readBits |= (data[bytePosition] >> bitPosition) & 1
+      readBits |= (data[bytePosition]! >> bitPosition) & 1
       bitPosition -= 1
       if (bitPosition < 0) {
         bytePosition += 1

@@ -192,13 +192,13 @@ export default class IndexedCramFile {
         .sort((a, b) => a.toString().localeCompare(b.toString()))
         .filter(
           (item, pos, ary) =>
-            !pos || item.toString() !== ary[pos - 1].toString(),
+            !pos || item.toString() !== ary[pos - 1]!.toString(),
         )
 
       const mateRecordPromises = []
       const mateFeatPromises: Promise<CramRecord[]>[] = []
       for (const c of mateChunks) {
-        let recordPromise = this.cram.featureCache.get(c.toString())
+        let recordPromise = this.cram.featureCache.get(c.toString())!
         if (!recordPromise) {
           recordPromise = this.getRecordsInSlice(c, () => true)
           this.cram.featureCache.set(c.toString(), recordPromise)
