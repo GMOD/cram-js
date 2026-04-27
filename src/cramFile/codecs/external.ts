@@ -118,7 +118,7 @@ export default class ExternalCodec extends CramCodec<
     if (this.dataType === 'int') {
       const preDecoded = cursors.preDecodedIntBlocks?.get(this.blockContentId)
       if (preDecoded) {
-        return preDecoded.values[preDecoded.index++]!
+        return preDecoded.values[preDecoded.index++]
       }
       const contentBlock = blocksByContentId[this.blockContentId]
       if (!contentBlock) {
@@ -137,7 +137,7 @@ export default class ExternalCodec extends CramCodec<
           'attempted to read beyond end of block. this file seems truncated.',
         )
       }
-      return contentBlock.content[cursor.bytePosition++]!
+      return contentBlock.content[cursor.bytePosition++]
     }
   }
 

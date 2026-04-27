@@ -1,6 +1,9 @@
 import md5 from 'md5'
 
-const textDecoder = new TextDecoder('latin1')
+// Default TextDecoder (utf-8) is faster than 'latin1' in V8 and works
+// identically on the ASCII content CRAM stores here (read names, sequence
+// bases, BAM Z tag values).
+const textDecoder = new TextDecoder()
 
 export function readNullTerminatedStringFromBuffer(buffer: Uint8Array) {
   let end = 0

@@ -1,6 +1,6 @@
 import eslint from '@eslint/js'
 import { defineConfig } from 'eslint/config'
-import importPlugin from 'eslint-plugin-import'
+import importPlugin from 'eslint-plugin-import-x'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
 import tseslint from 'typescript-eslint'
 
@@ -110,9 +110,9 @@ export default defineConfig(
         },
       ],
 
-      'import/no-unresolved': 'off',
-      'import/extensions': ['error', 'ignorePackages'],
-      'import/order': [
+      'import-x/no-unresolved': 'off',
+      'import-x/extensions': ['error', 'ignorePackages'],
+      'import-x/order': [
         'error',
         {
           named: true,

@@ -382,7 +382,7 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
         })
       })
 
-      const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+      const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
       const samtoolsCount = getSamtoolsCount('igv-js-bug/archived.cram', 'chr9')
 
       expect(feats.length).toEqual(samtoolsCount)
@@ -408,7 +408,7 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
         })
       })
 
-      const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+      const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
       const samtoolsCount = getSamtoolsCount('igv-js-bug/normal.cram', 'chr9')
 
       expect(feats.length).toEqual(samtoolsCount)

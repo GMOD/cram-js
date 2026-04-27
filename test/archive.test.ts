@@ -24,7 +24,7 @@ test('archive', async () => {
       }
     })
   })
-  const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+  const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
   for (const f of feats) {
     expect(quals(f.qualityScores)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
@@ -53,7 +53,7 @@ test('normal', async () => {
       }
     })
   })
-  const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+  const feats = await cram.getRecordsForRange(nameToId.chr9, 0, 200000000)
   for (const f of feats) {
     expect(quals(f.qualityScores)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',

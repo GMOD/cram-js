@@ -3,7 +3,8 @@
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/push.yml?branch=main)](https://github.com/GMOD/cram-js/actions?query=branch%3Amain+workflow%3APush+)
 
-Read CRAM files with pure JS, works in node or the browser. Supports CRAM 2.x and 3.x, `.crai` indexes, and bzip2/lzma codecs.
+Read CRAM files with pure JS, works in node or the browser. Supports CRAM 2.x
+and 3.x, `.crai` indexes, and bzip2/lzma codecs.
 
 ## Install
 
@@ -53,7 +54,11 @@ samHeader
   })
 
 // Fetch records for a range (1-based, closed coordinates)
-const records = await indexedFile.getRecordsForRange(nameToId['chr1'], 10000, 20000)
+const records = await indexedFile.getRecordsForRange(
+  nameToId['chr1'],
+  10000,
+  20000,
+)
 
 for (const record of records) {
   console.log(record.readName, record.alignmentStart, record.mappingQuality)
@@ -66,7 +71,8 @@ for (const record of records) {
 }
 ```
 
-See the [example directory](./example) for browser usage with `<script>` tag and the bundled `cram-bundle.js`.
+See the [example directory](./example) for browser usage with `<script>` tag and
+the bundled `cram-bundle.js`.
 
 ## API
 
@@ -74,17 +80,18 @@ See the [example directory](./example) for browser usage with `<script>` tag and
 
 ```js
 new IndexedCramFile({
-  cramPath,         // local path
-  cramUrl,          // remote URL
-  cramFilehandle,   // generic-filehandle2 compatible handle
-  index,            // CraiIndex instance (or any object with getEntriesForRange)
-  seqFetch,         // async (seqId, start, end) => string
+  cramPath, // local path
+  cramUrl, // remote URL
+  cramFilehandle, // generic-filehandle2 compatible handle
+  index, // CraiIndex instance (or any object with getEntriesForRange)
+  seqFetch, // async (seqId, start, end) => string
   checkSequenceMD5, // default true; set false to avoid large reference fetches
-  cacheSize,        // max cached records, default 20000
+  cacheSize, // max cached records, default 20000
 })
 ```
 
-- `getRecordsForRange(seqId, start, end, opts?)` → `Promise<CramRecord[]>` — 1-based closed coords. `opts`: `{ viewAsPairs, pairAcrossChr, maxInsertSize }`
+- `getRecordsForRange(seqId, start, end, opts?)` → `Promise<CramRecord[]>` —
+  1-based closed coords. `opts`: `{ viewAsPairs, pairAcrossChr, maxInsertSize }`
 - `hasDataForReferenceSequence(seqId)` → `Promise<boolean>`
 
 ### `CraiIndex`
@@ -93,29 +100,33 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 ### `CramRecord`
 
-| Field | Description |
-|---|---|
-| `readName` | read name |
-| `sequenceId` | numeric reference ID |
-| `alignmentStart` | 1-based start |
-| `qualityScores` | `Int8Array` of per-base quality scores |
-| `readFeatures` | array of read features (see below) |
-| `tags` | auxiliary tags object |
+| Field            | Description                            |
+| ---------------- | -------------------------------------- |
+| `readName`       | read name                              |
+| `sequenceId`     | numeric reference ID                   |
+| `alignmentStart` | 1-based start                          |
+| `qualityScores`  | `Int8Array` of per-base quality scores |
+| `readFeatures`   | array of read features (see below)     |
+| `tags`           | auxiliary tags object                  |
 
-Flag methods (return `boolean`): `isPaired`, `isProperlyPaired`, `isSegmentUnmapped`, `isMateUnmapped`, `isReverseComplemented`, `isMateReverseComplemented`, `isRead1`, `isRead2`, `isSecondary`, `isFailedQc`, `isDuplicate`, `isSupplementary`
+Flag methods (return `boolean`): `isPaired`, `isProperlyPaired`,
+`isSegmentUnmapped`, `isMateUnmapped`, `isReverseComplemented`,
+`isMateReverseComplemented`, `isRead1`, `isRead2`, `isSecondary`, `isFailedQc`,
+`isDuplicate`, `isSupplementary`
 
-`getReadBases()` — returns the read sequence string. Requires `seqFetch` and is populated automatically by `getRecordsForRange`.
+`getReadBases()` — returns the read sequence string. Requires `seqFetch` and is
+populated automatically by `getRecordsForRange`.
 
 ### ReadFeatures
 
 Each entry in `record.readFeatures`:
 
-| Field | Description |
-|---|---|
-| `code` | feature type — one of `bqBXIDiQNSPH` (see CRAM spec §8) |
-| `pos` | read position (1-based) |
-| `refPos` | reference position (1-based) |
-| `ref` / `sub` | reference and substituted base (code `X` only) |
+| Field         | Description                                             |
+| ------------- | ------------------------------------------------------- |
+| `code`        | feature type — one of `bqBXIDiQNSPH` (see CRAM spec §8) |
+| `pos`         | read position (1-based)                                 |
+| `refPos`      | reference position (1-based)                            |
+| `ref` / `sub` | reference and substituted base (code `X` only)          |
 
 ### Error classes
 
@@ -125,12 +136,24 @@ Each entry in `record.readFeatures`:
 
 ## Publishing
 
-Push a git tag to trigger a release via GitHub Actions and [npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements).
+Push a git tag to trigger a release via GitHub Actions and
+[npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements).
 
 ## Academic Use
 
-Written with [NHGRI](http://genome.gov) funding as part of [JBrowse](http://jbrowse.org). If you use this in a publication, please cite the most recent JBrowse paper at [jbrowse.org](http://jbrowse.org).
+Written with [NHGRI](http://genome.gov) funding as part of
+[JBrowse](http://jbrowse.org). If you use this in a publication, please cite the
+most recent JBrowse paper at [jbrowse.org](http://jbrowse.org).
 
 ## License
 
 MIT © [Robert Buels](https://github.com/rbuels)
+
+## Publishing
+
+[Trusted publishing](https://docs.npmjs.com/about-trusted-publishing) via GitHub
+Actions.
+
+```bash
+npm version patch  # or minor/major
+```
