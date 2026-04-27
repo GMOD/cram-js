@@ -63,9 +63,20 @@ const records = await indexedFile.getRecordsForRange(
 for (const record of records) {
   console.log(record.readName, record.alignmentStart, record.mappingQuality)
 
+  // Extract variants from read features
   for (const feature of record.readFeatures ?? []) {
     if (feature.code === 'X') {
-      console.log(`${feature.ref}->${feature.sub} at ref pos ${feature.refPos}`)
+      // SNP: single base substitution
+      console.log(`SNP at ${feature.refPos}: ${feature.ref}->${feature.sub}`)
+    } else if (feature.code === 'I') {
+      // Insertion: full inserted sequence
+      console.log(`Insertion at ${feature.refPos}: ${feature.data}`)
+    } else if (feature.code === 'i') {
+      // Insertion: padding only (no sequence stored)
+      console.log(`Insertion at ${feature.refPos} (no sequence)`)
+    } else if (feature.code === 'D') {
+      // Deletion: bases deleted from reference
+      console.log(`Deletion at ${feature.refPos}: ${feature.data} bases`)
     }
   }
 }
@@ -73,6 +84,10 @@ for (const record of records) {
 
 See the [example directory](./example) for browser usage with `<script>` tag and
 the bundled `cram-bundle.js`.
+
+For more complex operations like generating CIGAR strings from read features, see the JBrowse
+[readFeaturesToNumericCIGAR](https://github.com/GMOD/jbrowse-components/blob/main/plugins/alignments/src/CramAdapter/readFeaturesToNumericCIGAR.ts)
+implementation.
 
 ## API
 
@@ -136,55 +151,6 @@ Each entry in `record.readFeatures`:
 - `pos` — read position (1-based)
 - `refPos` — reference position (1-based)
 - `ref` / `sub` — reference and substituted base (code `X` only)
-
-### Parsing Read Features
-
-Common use case: extracting SNPs, insertions, and deletions from a record:
-
-```js
-const records = await indexedFile.getRecordsForRange(seqId, start, end)
-
-for (const record of records) {
-  const snps = []
-  const insertions = []
-  const deletions = []
-
-  if (record.readFeatures) {
-    for (const feature of record.readFeatures) {
-      if (feature.code === 'X') {
-        // SNP: single base substitution
-        snps.push({
-          position: feature.refPos,
-          ref: feature.ref,
-          alt: feature.sub,
-        })
-      } else if (feature.code === 'I') {
-        // Insertion: full inserted sequence
-        insertions.push({
-          position: feature.refPos,
-          seq: feature.data,
-        })
-      } else if (feature.code === 'i') {
-        // Insertion: single base padding (no sequence stored)
-        insertions.push({
-          position: feature.refPos,
-          padded: true,
-        })
-      } else if (feature.code === 'D') {
-        // Deletion: bases deleted from reference
-        deletions.push({
-          position: feature.refPos,
-          length: feature.data,
-        })
-      }
-    }
-  }
-}
-```
-
-For more complex CIGAR string generation from read features, see the JBrowse
-[readFeaturesToNumericCIGAR](https://github.com/GMOD/jbrowse-components/blob/main/plugins/alignments/src/CramAdapter/readFeaturesToNumericCIGAR.ts)
-implementation.
 
 ### Error classes
 
