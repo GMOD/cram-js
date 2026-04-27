@@ -1,5 +1,6 @@
-import CramCodec, { type Cursors } from './_base.ts'
+import CramCodec from './_base.ts'
 
+import type { Cursors } from './_base.ts'
 import type { ByteArrayLengthEncoding, CramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
 import type { DataType } from './dataSeriesTypes.ts'

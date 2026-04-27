@@ -6,30 +6,20 @@ import ExternalCodec, {
 } from '../codecs/external.ts'
 import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
-import decodeRecord, {
-  type BoundDecoders,
-  type BulkByteRawDecoder,
-  buildRFSchema,
-} from './decodeRecord.ts'
+import decodeRecord, { buildRFSchema } from './decodeRecord.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import { type CramFileBlock } from '../file.ts'
-import CramRecord, {
-  type DecodeOptions,
-  defaultDecodeOptions,
-} from '../record.ts'
-import {
-  type MappedSliceHeader,
-  type UnmappedSliceHeader,
-  getSectionParsers,
-  isMappedSliceHeader,
-} from '../sectionParsers.ts'
+import CramRecord, { defaultDecodeOptions } from '../record.ts'
+import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
 
+import type { DecodeOptions } from '../record.ts'
 import type {
-  Cursor,
-  Cursors,
-  PreDecodedIntBlock,
-} from '../codecs/_base.ts'
+  MappedSliceHeader,
+  UnmappedSliceHeader,
+} from '../sectionParsers.ts'
+import type { BoundDecoders, BulkByteRawDecoder } from './decodeRecord.ts'
+import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type CramContainer from '../container/index.ts'
 import type { CramEncoding } from '../encoding.ts'
@@ -70,7 +60,9 @@ function calculateMultiSegmentMatedTemplateLength(
           'intra-slice mate record not found, this file seems malformed',
         )
       }
-      records.push(...getAllMatedRecords(mateRecord))
+      for (const r of getAllMatedRecords(mateRecord)) {
+        records.push(r)
+      }
     }
     return records
   }
@@ -299,8 +291,8 @@ export default class CramSlice {
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i++) {
       const block = await this.file.readBlock(blockPosition)
-      blocks[i]! = block
-      blockPosition = blocks[i]!._endPosition
+      blocks[i] = block
+      blockPosition = block._endPosition
     }
     return blocks
   }
@@ -549,11 +541,10 @@ export default class CramSlice {
           return () => undefined
         }
         const cursor = cursors.externalBlocks.getCursor(bid)
+        const content = contentBlock.content
         if (codec.dataType === 'int') {
-          const content = contentBlock.content
           return () => parseItf8(content, cursor)
         }
-        const content = contentBlock.content
         return () => content[cursor.bytePosition++]
       }
       if (codec instanceof ByteArrayStopCodec) {
@@ -580,18 +571,41 @@ export default class CramSlice {
           return content.subarray(start, pos)
         }
       }
-      return () => codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
+      return () =>
+        codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
     }
 
     const bd: BoundDecoders = {
-      BF: bind('BF'), CF: bind('CF'), RI: bind('RI'), RL: bind('RL'),
-      AP: bind('AP'), RG: bind('RG'), RN: bind('RN'), MF: bind('MF'),
-      NS: bind('NS'), NP: bind('NP'), TS: bind('TS'), NF: bind('NF'),
-      TL: bind('TL'), FN: bind('FN'), FC: bind('FC'), FP: bind('FP'),
-      DL: bind('DL'), BB: bind('BB'), QQ: bind('QQ'), BS: bind('BS'),
-      IN: bind('IN'), RS: bind('RS'), PD: bind('PD'), HC: bind('HC'),
-      SC: bind('SC'), MQ: bind('MQ'), BA: bind('BA'), QS: bind('QS'),
-      TC: bind('TC'), TN: bind('TN'),
+      BF: bind('BF'),
+      CF: bind('CF'),
+      RI: bind('RI'),
+      RL: bind('RL'),
+      AP: bind('AP'),
+      RG: bind('RG'),
+      RN: bind('RN'),
+      MF: bind('MF'),
+      NS: bind('NS'),
+      NP: bind('NP'),
+      TS: bind('TS'),
+      NF: bind('NF'),
+      TL: bind('TL'),
+      FN: bind('FN'),
+      FC: bind('FC'),
+      FP: bind('FP'),
+      DL: bind('DL'),
+      BB: bind('BB'),
+      QQ: bind('QQ'),
+      BS: bind('BS'),
+      IN: bind('IN'),
+      RS: bind('RS'),
+      PD: bind('PD'),
+      HC: bind('HC'),
+      SC: bind('SC'),
+      MQ: bind('MQ'),
+      BA: bind('BA'),
+      QS: bind('QS'),
+      TC: bind('TC'),
+      TN: bind('TN'),
     } as BoundDecoders
 
     // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray
@@ -617,17 +631,18 @@ export default class CramSlice {
     > = {}
     const bindTagFallback = (tagId: string) => {
       const codec = compressionScheme.getCodecForTag(tagId)
-      return () => codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
+      return () =>
+        codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
     }
     for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
       const enc = compressionScheme.tagEncoding[tagId]!
       if (
-        enc!.codecId === 4 &&
-        enc!.parameters.lengthsEncoding.codecId === 1 &&
-        enc!.parameters.valuesEncoding.codecId === 1
+        enc.codecId === 4 &&
+        enc.parameters.lengthsEncoding.codecId === 1 &&
+        enc.parameters.valuesEncoding.codecId === 1
       ) {
-        const lenBid = enc!.parameters.lengthsEncoding.parameters.blockContentId
-        const valBid = enc!.parameters.valuesEncoding.parameters.blockContentId
+        const lenBid = enc.parameters.lengthsEncoding.parameters.blockContentId
+        const valBid = enc.parameters.valuesEncoding.parameters.blockContentId
         const lenContentBlock = blocksByContentId[lenBid]
         const valContentBlock = blocksByContentId[valBid]
         if (!lenContentBlock || !valContentBlock) {
@@ -637,40 +652,25 @@ export default class CramSlice {
         const valContent = valContentBlock.content
         const valCursor = cursors.externalBlocks.getCursor(valBid)
         const lenPreDecoded = preDecodedIntBlocks.get(lenBid)
-        if (lenPreDecoded) {
-          boundTagDecoders[tagId] = () => {
-            const length = lenPreDecoded.values[lenPreDecoded.index++]!
-            if (length === 0) {
-              return EMPTY_BYTES
-            }
-            const start = valCursor.bytePosition
-            const end = start + length
-            if (end > valContent.length) {
-              throw new CramBufferOverrunError(
-                'attempted to read beyond end of block. this file seems truncated.',
-              )
-            }
-            valCursor.bytePosition = end
-            return valContent.subarray(start, end)
+        const lenContent = lenContentBlock.content
+        const lenCursor = cursors.externalBlocks.getCursor(lenBid)
+        const readTagLen = lenPreDecoded
+          ? () => lenPreDecoded.values[lenPreDecoded.index++]!
+          : () => parseItf8(lenContent, lenCursor)
+        boundTagDecoders[tagId] = () => {
+          const length = readTagLen()
+          if (length === 0) {
+            return EMPTY_BYTES
           }
-        } else {
-          const lenContent = lenContentBlock.content
-          const lenCursor = cursors.externalBlocks.getCursor(lenBid)
-          boundTagDecoders[tagId] = () => {
-            const length = parseItf8(lenContent, lenCursor)
-            if (length === 0) {
-              return EMPTY_BYTES
-            }
-            const start = valCursor.bytePosition
-            const end = start + length
-            if (end > valContent.length) {
-              throw new CramBufferOverrunError(
-                'attempted to read beyond end of block. this file seems truncated.',
-              )
-            }
-            valCursor.bytePosition = end
-            return valContent.subarray(start, end)
+          const start = valCursor.bytePosition
+          const end = start + length
+          if (end > valContent.length) {
+            throw new CramBufferOverrunError(
+              'attempted to read beyond end of block. this file seems truncated.',
+            )
           }
+          valCursor.bytePosition = end
+          return valContent.subarray(start, end)
         }
       } else {
         boundTagDecoders[tagId] = bindTagFallback(tagId)

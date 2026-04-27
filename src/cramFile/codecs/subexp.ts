@@ -1,6 +1,7 @@
-import CramCodec, { type Cursor, type Cursors } from './_base.ts'
+import CramCodec from './_base.ts'
 import { CramUnimplementedError } from '../../errors.ts'
 
+import type { Cursor, Cursors } from './_base.ts'
 import type { SubexpEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
 import type CramSlice from '../slice/index.ts'

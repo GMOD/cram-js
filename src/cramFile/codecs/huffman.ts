@@ -1,6 +1,7 @@
-import CramCodec, { type Cursor, type Cursors } from './_base.ts'
+import CramCodec from './_base.ts'
 import { CramMalformedError } from '../../errors.ts'
 
+import type { Cursor, Cursors } from './_base.ts'
 import type { HuffmanEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
 import type CramSlice from '../slice/index.ts'
@@ -152,14 +153,17 @@ export default class HuffmanIntCodec extends CramCodec<
     this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
     this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
     this.sortedBitLengthsByBitCode = this.sortedCodes.map(c => c.bitLength)
-    if (this.sortedBitCodes.length === 0) {
-      return
-    }
-    const maxBitCode = Math.max(...this.sortedBitCodes)
-
-    this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
-    for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
-      this.bitCodeToValue[this.sortedCodes[i]!.bitCode] = i
+    if (this.sortedBitCodes.length > 0) {
+      let maxBitCode = 0
+      for (const code of this.sortedBitCodes) {
+        if (code > maxBitCode) {
+          maxBitCode = code
+        }
+      }
+      this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
+      for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
+        this.bitCodeToValue[this.sortedCodes[i]!.bitCode] = i
+      }
     }
   }
 
@@ -171,10 +175,6 @@ export default class HuffmanIntCodec extends CramCodec<
   ) {
     return this._decode(slice, coreDataBlock, cursors.coreBlock)
   }
-
-  // _decodeNull() {
-  //   return -1
-  // }
 
   // the special case for zero-length codes
   _decodeZeroLengthCode() {
@@ -194,20 +194,15 @@ export default class HuffmanIntCodec extends CramCodec<
         bits |= getBitsInline(input, coreCursor, bitsToRead)
       }
       prevLen = length
-      {
-        const index = this.bitCodeToValue[bits]!
-        if (index > -1 && this.sortedBitLengthsByBitCode[index] === length) {
-          return this.sortedValuesByBitCode[index]!
-        }
-
-        for (
-          let j = i;
-          this.sortedCodes[j + 1]!.bitLength! === length &&
-          j < this.sortedCodes.length;
-          j += 1
-        ) {
-          i += 1
-        }
+      const index = this.bitCodeToValue[bits] ?? -1
+      if (index > -1 && this.sortedBitLengthsByBitCode[index] === length) {
+        return this.sortedValuesByBitCode[index]!
+      }
+      while (
+        i + 1 < this.sortedCodes.length &&
+        this.sortedCodes[i + 1]!.bitLength === length
+      ) {
+        i += 1
       }
     }
     throw new CramMalformedError('Huffman symbol not found.')

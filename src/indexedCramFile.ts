@@ -198,7 +198,7 @@ export default class IndexedCramFile {
       const mateRecordPromises = []
       const mateFeatPromises: Promise<CramRecord[]>[] = []
       for (const c of mateChunks) {
-        let recordPromise = this.cram.featureCache.get(c.toString())!
+        let recordPromise = this.cram.featureCache.get(c.toString())
         if (!recordPromise) {
           recordPromise = this.getRecordsInSlice(c, () => true)
           this.cram.featureCache.set(c.toString(), recordPromise)

@@ -45,7 +45,7 @@ class XzContext {
     this._refresh()
     const inBuffer = this.mem8!.subarray(
       this.inStart,
-      this.inStart + this.bufSize!,
+      this.inStart + this.bufSize,
     )
     inBuffer.set(sourceDataUint8Array, 0)
     this.exports.supply_input(this.ptr, sourceDataUint8Array.byteLength)
@@ -108,7 +108,7 @@ export async function xzDecompress(input: Uint8Array): Promise<Uint8Array> {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       // Check if WASM needs more input (inPos === inSize)
-       
+
       if (context.mem32![2] === context.mem32![3]) {
         if (offset < input.length) {
           const chunkSize = Math.min(context.bufSize, input.length - offset)

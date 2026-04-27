@@ -25,7 +25,7 @@ function addRecordToIndex(index: ParsedIndex, record: number[]) {
     index[s] = []
   }
 
-  index[s]!.push({
+  index[s].push({
     start: start!,
     span: span!,
     containerStart: containerStart!,

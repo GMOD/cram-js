@@ -52,16 +52,9 @@ export interface BoundDecoders {
   TN(): number | undefined
 }
 
-/**
- * parse a BAM tag's array value from a binary buffer
- * @private
- */
-// Uses DataView instead of typed arrays (e.g. new Int32Array(buffer.buffer))
-// because the buffer may be a subarray of a larger ArrayBuffer. Typed array
-// constructors like Int32Array interpret .buffer as the entire underlying
-// ArrayBuffer starting at byte 0, ignoring the subarray's byteOffset. This
-// caused silent data corruption when reading tag values. DataView with explicit
-// byteOffset reads from the correct position within the parent buffer.
+// Uses DataView rather than typed arrays because the buffer is a subarray of a
+// larger ArrayBuffer. Int32Array(buffer.buffer) would start at byte 0 of the
+// parent, ignoring buffer.byteOffset, causing silent data corruption.
 function parseTagValueArray(buffer: Uint8Array) {
   const arrayType = String.fromCharCode(buffer[0]!)
 
@@ -148,14 +141,13 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-// Read-feature schema: a charCode-indexed array of [letter, fn] tuples where
-// fn() decodes the feature's data, fully transformed
-// (character → fromCharCode, string → decodeLatin1, numArray → Array.from,
-// number → identity, B → [base, qualityScore]). Built once per slice; the
-// inner loop becomes a charCode lookup + monomorphic call.
+// Read-feature schema: a charCode-indexed array of [code, fn] tuples where
+// fn() decodes and transforms the feature's data (character → fromCharCode,
+// string → decodeLatin1, numArray → Array.from, number → identity,
+// B → [base, qualityScore]). Built once per slice; the inner loop becomes
+// a charCode lookup + monomorphic call with no per-feature allocation.
 type RFData = string | number | number[] | [string, number]
-type RFFn = () => RFData
-export type RFEntry = readonly [code: string, fn: RFFn]
+export type RFEntry = readonly [code: string, fn: () => RFData]
 
 export function buildRFSchema(
   bd: BoundDecoders,
@@ -165,7 +157,7 @@ export function buildRFSchema(
   const arr: (RFEntry | undefined)[] = new Array(128)
   arr['B'.charCodeAt(0)] = [
     'B',
-    () => [String.fromCharCode(bd.BA()!), bd.QS()!],
+    () => [String.fromCharCode(bd.BA()!), bd.QS()!] as [string, number],
   ]
   arr['X'.charCodeAt(0)] = ['X', () => bd.BS()!]
   arr['D'.charCodeAt(0)] = ['D', () => bd.DL()!]
@@ -186,14 +178,10 @@ function decodeReadFeatures(
   readFeatureCount: number,
   bd: BoundDecoders,
   schema: (RFEntry | undefined)[],
-) {
-  // Track the running offset between ref and read coordinates so that
-  // refPos = readPos + refOffset. Deletions advance ref past consumed
-  // ref bases (offset goes up); insertions advance read past consumed
-  // read bases (offset goes down). This mirrors CIGAR consume-ref vs
-  // consume-read semantics.
+): [ReadFeature[], number] {
   let readPos = 0
-  let refOffset = alignmentStart - 1
+  let refDelta = 0
+  const base = alignmentStart - 1
   const readFeatures: ReadFeature[] = new Array(readFeatureCount)
   const decodeFC = bd.FC
   const decodeFP = bd.FP
@@ -215,19 +203,19 @@ function decodeReadFeatures(
     readFeatures[i] = {
       code,
       pos: readPos,
-      refPos: readPos + refOffset,
+      refPos: readPos + base + refDelta,
       data,
     } as ReadFeature
 
     if (code === 'D' || code === 'N') {
-      refOffset += data as number
+      refDelta += data as number
     } else if (code === 'I' || code === 'S') {
-      refOffset -= (data as string).length
+      refDelta -= (data as string).length
     } else if (code === 'i') {
-      refOffset -= 1
+      refDelta -= 1
     }
   }
-  return readFeatures
+  return [readFeatures, refDelta]
 }
 
 export type BulkByteRawDecoder = (
@@ -260,11 +248,11 @@ function decodeReadBases(
   if (raw) {
     return decodeLatin1(raw)
   }
-  let s = ''
+  const buf = new Uint8Array(readLength)
   for (let i = 0; i < readLength; i++) {
-    s += String.fromCharCode(decodeBA()!)
+    buf[i] = decodeBA()!
   }
-  return s
+  return decodeLatin1(buf)
 }
 
 export type BoundTagDecoders = Record<
@@ -304,7 +292,7 @@ export default function decodeRecord(
       : sliceHeader.parsedContent.refSeqId
 
   const readLength = bd.RL()!
-  // if APDelta, will calculate the true start in a second pass
+  // if APDelta, AP is a delta from the previous record's alignmentStart
   let alignmentStart = bd.AP()!
   if (compressionScheme.APdelta) {
     alignmentStart = alignmentStart + cursors.lastAlignmentStart
@@ -393,28 +381,16 @@ export default function decodeRecord(
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
     const readFeatureCount = bd.FN()!
+    lengthOnRef = readLength
     if (readFeatureCount) {
-      readFeatures = decodeReadFeatures(
+      const [features, refDelta] = decodeReadFeatures(
         alignmentStart,
         readFeatureCount,
         bd,
         rfSchema,
       )
-    }
-
-    // compute the read's true span on the reference sequence, and the end
-    // coordinate of the alignment on the reference
-    lengthOnRef = readLength
-    if (readFeatures) {
-      for (const { code, data } of readFeatures) {
-        if (code === 'D' || code === 'N') {
-          lengthOnRef += data
-        } else if (code === 'I' || code === 'S') {
-          lengthOnRef = lengthOnRef - data.length
-        } else if (code === 'i') {
-          lengthOnRef = lengthOnRef - 1
-        }
-      }
+      readFeatures = features
+      lengthOnRef += refDelta
     }
     if (Number.isNaN(lengthOnRef)) {
       console.warn(
