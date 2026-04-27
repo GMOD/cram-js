@@ -489,6 +489,10 @@ An error caused by malformed data.
 
 An error caused by attempting to read beyond the end of the defined data.
 
+## Publishing
+
+Releases are published to npm using [npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements) via GitHub Actions — no npm token is required.
+
 ## Academic Use
 
 This package was written with funding from the [NHGRI](http://genome.gov) as
