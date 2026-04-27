@@ -6,7 +6,7 @@
 Read CRAM files (indexed or unindexed) with pure JS, works in node or in the
 browser.
 
-- Reads CRAM 3.x and 2.x (3.1 added in v1.6.0)
+- Reads CRAM 3.x and 2.x
 - Does not read CRAM 1.x
 - Can use .crai indexes out of the box, for efficient sequence fetching, but
   also has an [index API](#craiindex) that would allow use with other index
@@ -18,9 +18,11 @@ browser.
 ## Install
 
 ```bash
-$ npm install --save @gmod/cram
+$ npm install @gmod/cram
 # or
 $ yarn add @gmod/cram
+# or
+$ pnpm add @gmod/cram
 ```
 
 ## Usage
@@ -114,8 +116,8 @@ records.forEach(record => {
 })
 ```
 
-You can use cram-js without NPM also with the cram-bundle.js. See the example
-directory for usage with script tag
+You can use cram-js without NPM also with the cram-bundle.js. See the
+[example directory](./example) for usage with script tag.
 
 ## API (auto-generated)
 
@@ -201,7 +203,7 @@ true if the read itself is unmapped; conflictive with isProperlyPaired
 
 Returns
 **[boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)**
-true if the read itself is unmapped; conflictive with isProperlyPaired
+true if the mate is unmapped; conflictive with isProperlyPaired
 
 ##### isReverseComplemented
 
@@ -296,7 +298,7 @@ of paired orientation
 Annotates this feature with the given reference sequence basepair information.
 This will add a `sub` and a `ref` item to base substitution read features given
 the actual substituted and reference base pairs, and will make the
-`getReadSequence()` method work.
+`getReadBases()` method work.
 
 ###### Parameters
 
@@ -348,9 +350,16 @@ that show insertions, deletions, substitutions, etc.
 
 - `args`
   **[object](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object)**&#x20;
-  - `args.cram` **CramFile**&#x20;
   - `args.index` **Index-like** object that supports
     getEntriesForRange(seqId,start,end) -> Promise\[Array\[index entries]]
+  - `args.cram` **CramFile?** pre-constructed CramFile instance. If omitted,
+    provide `cramPath`, `cramUrl`, or `cramFilehandle` instead.
+  - `args.cramPath` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** local file path to the CRAM file
+  - `args.cramUrl` **[string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)?** remote URL of the CRAM file
+  - `args.cramFilehandle` **FileHandle?** generic-filehandle2 or similar
+  - `args.seqFetch` **[Function](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Function)?**
+    async function `(seqId, start, end) => string` that returns the reference
+    sequence for a region. seqId is a numeric ID, coordinates are 1-based.
   - `args.cacheSize`
     **[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?**
     optional maximum number of CRAM records to cache. default 20,000
@@ -481,6 +490,10 @@ An error caused by malformed data.
 **Extends CramMalformedError**
 
 An error caused by attempting to read beyond the end of the defined data.
+
+## Publishing
+
+Releases are published to npm using [npm trusted publishing](https://docs.npmjs.com/generating-provenance-statements) via GitHub Actions — push a git tag to trigger a release, no npm token required.
 
 ## Academic Use
 
