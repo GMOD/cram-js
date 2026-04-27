@@ -100,33 +100,91 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 ### `CramRecord`
 
-| Field            | Description                            |
-| ---------------- | -------------------------------------- |
-| `readName`       | read name                              |
-| `sequenceId`     | numeric reference ID                   |
-| `alignmentStart` | 1-based start                          |
-| `qualityScores`  | `Int8Array` of per-base quality scores |
-| `readFeatures`   | array of read features (see below)     |
-| `tags`           | auxiliary tags object                  |
+**Properties:**
 
-Flag methods (return `boolean`): `isPaired`, `isProperlyPaired`,
-`isSegmentUnmapped`, `isMateUnmapped`, `isReverseComplemented`,
-`isMateReverseComplemented`, `isRead1`, `isRead2`, `isSecondary`, `isFailedQc`,
-`isDuplicate`, `isSupplementary`
+- `readName` — read name
+- `sequenceId` — numeric reference ID
+- `alignmentStart` — 1-based start position
+- `qualityScores` — `Int8Array` of per-base quality scores
+- `readFeatures` — array of read features (see below)
+- `tags` — auxiliary tags object
 
-`getReadBases()` — returns the read sequence string. Requires `seqFetch` and is
-populated automatically by `getRecordsForRange`.
+**Flag methods** (all return `boolean`):
+
+- `isPaired()`
+- `isProperlyPaired()`
+- `isSegmentUnmapped()`
+- `isMateUnmapped()`
+- `isReverseComplemented()`
+- `isMateReverseComplemented()`
+- `isRead1()`
+- `isRead2()`
+- `isSecondary()`
+- `isFailedQc()`
+- `isDuplicate()`
+- `isSupplementary()`
+
+**Methods:**
+
+- `getReadBases()` → `string` — returns the read sequence string. Requires `seqFetch` to be configured and is populated automatically by `getRecordsForRange`.
 
 ### ReadFeatures
 
 Each entry in `record.readFeatures`:
 
-| Field         | Description                                             |
-| ------------- | ------------------------------------------------------- |
-| `code`        | feature type — one of `bqBXIDiQNSPH` (see CRAM spec §8) |
-| `pos`         | read position (1-based)                                 |
-| `refPos`      | reference position (1-based)                            |
-| `ref` / `sub` | reference and substituted base (code `X` only)          |
+- `code` — feature type (one of `bqBXIDiQNSPH`, see CRAM spec §8)
+- `pos` — read position (1-based)
+- `refPos` — reference position (1-based)
+- `ref` / `sub` — reference and substituted base (code `X` only)
+
+### Parsing Read Features
+
+Common use case: extracting SNPs, insertions, and deletions from a record:
+
+```js
+const records = await indexedFile.getRecordsForRange(seqId, start, end)
+
+for (const record of records) {
+  const snps = []
+  const insertions = []
+  const deletions = []
+
+  if (record.readFeatures) {
+    for (const feature of record.readFeatures) {
+      if (feature.code === 'X') {
+        // SNP: single base substitution
+        snps.push({
+          position: feature.refPos,
+          ref: feature.ref,
+          alt: feature.sub,
+        })
+      } else if (feature.code === 'I') {
+        // Insertion: full inserted sequence
+        insertions.push({
+          position: feature.refPos,
+          seq: feature.data,
+        })
+      } else if (feature.code === 'i') {
+        // Insertion: single base padding (no sequence stored)
+        insertions.push({
+          position: feature.refPos,
+          padded: true,
+        })
+      } else if (feature.code === 'D') {
+        // Deletion: bases deleted from reference
+        deletions.push({
+          position: feature.refPos,
+          length: feature.data,
+        })
+      }
+    }
+  }
+}
+```
+
+For more complex CIGAR string generation from read features, see the JBrowse
+[readFeaturesToNumericCIGAR](https://github.com/GMOD/jbrowse-components/blob/main/plugins/alignments/src/CramAdapter/readFeaturesToNumericCIGAR.ts)
+implementation.
 
 ### Error classes
 
