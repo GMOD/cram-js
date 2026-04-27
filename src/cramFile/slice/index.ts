@@ -1,8 +1,10 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
+import ByteArrayStopCodec from '../codecs/byteArrayStop.ts'
 import ExternalCodec, {
   batchDecodeItf8,
   parseItf8,
 } from '../codecs/external.ts'
+import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
 import decodeRecord, {
   type BoundDecoders,
@@ -32,6 +34,9 @@ import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type CramContainer from '../container/index.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type CramFile from '../file.ts'
+
+// shared zero-length sentinel returned by bound tag decoders when length=0
+const EMPTY_BYTES = new Uint8Array(0)
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -551,6 +556,30 @@ export default class CramSlice {
         const content = contentBlock.content
         return () => content[cursor.bytePosition++]!
       }
+      if (codec instanceof ByteArrayStopCodec) {
+        const { blockContentId, stopByte } = codec.parameters
+        const contentBlock = blocksByContentId[blockContentId]
+        if (!contentBlock) {
+          return () => undefined
+        }
+        const content = contentBlock.content
+        const cursor = cursors.externalBlocks.getCursor(blockContentId)
+        return () => {
+          const start = cursor.bytePosition
+          const len = content.length
+          let pos = start
+          while (pos < len && content[pos] !== stopByte) {
+            pos++
+          }
+          if (pos >= len) {
+            throw new CramBufferOverrunError(
+              'byteArrayStop reading beyond length of data buffer?',
+            )
+          }
+          cursor.bytePosition = pos + 1
+          return content.subarray(start, pos)
+        }
+      }
       return () => codec.decode(this, coreDataBlock, blocksByContentId, cursors)
     }
 
@@ -577,6 +606,77 @@ export default class CramSlice {
           }
         : undefined
 
+    // Bound tag decoders — tags are typically encoded as byteArrayLength
+    // (codecId=4) wrapping External-int lengths + External-byte values. We
+    // build a fast closure per tagId that inlines the length read and value
+    // subarray, eliminating per-call dispatch through ByteArrayLengthCodec
+    // and the inner codecs. Other encodings fall back to the generic dispatch.
+    const boundTagDecoders: Record<
+      string,
+      () => Uint8Array | number | undefined
+    > = {}
+    const bindTagFallback = (tagId: string) => () =>
+      compressionScheme
+        .getCodecForTag(tagId)
+        .decode(this, coreDataBlock, blocksByContentId, cursors)
+    for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
+      const enc = compressionScheme.tagEncoding[tagId]!
+      if (
+        enc.codecId === 4 &&
+        enc.parameters.lengthsEncoding.codecId === 1 &&
+        enc.parameters.valuesEncoding.codecId === 1
+      ) {
+        const lenBid = enc.parameters.lengthsEncoding.parameters.blockContentId
+        const valBid = enc.parameters.valuesEncoding.parameters.blockContentId
+        const lenContentBlock = blocksByContentId[lenBid]
+        const valContentBlock = blocksByContentId[valBid]
+        if (!lenContentBlock || !valContentBlock) {
+          boundTagDecoders[tagId] = bindTagFallback(tagId)
+          continue
+        }
+        const valContent = valContentBlock.content
+        const valCursor = cursors.externalBlocks.getCursor(valBid)
+        const lenPreDecoded = preDecodedIntBlocks.get(lenBid)
+        if (lenPreDecoded) {
+          boundTagDecoders[tagId] = () => {
+            const length = lenPreDecoded.values[lenPreDecoded.index++]!
+            if (length === 0) {
+              return EMPTY_BYTES
+            }
+            const start = valCursor.bytePosition
+            const end = start + length
+            if (end > valContent.length) {
+              throw new CramBufferOverrunError(
+                'attempted to read beyond end of block. this file seems truncated.',
+              )
+            }
+            valCursor.bytePosition = end
+            return valContent.subarray(start, end)
+          }
+        } else {
+          const lenContent = lenContentBlock.content
+          const lenCursor = cursors.externalBlocks.getCursor(lenBid)
+          boundTagDecoders[tagId] = () => {
+            const length = parseItf8(lenContent, lenCursor)
+            if (length === 0) {
+              return EMPTY_BYTES
+            }
+            const start = valCursor.bytePosition
+            const end = start + length
+            if (end > valContent.length) {
+              throw new CramBufferOverrunError(
+                'attempted to read beyond end of block. this file seems truncated.',
+              )
+            }
+            valCursor.bytePosition = end
+            return valContent.subarray(start, end)
+          }
+        }
+      } else {
+        boundTagDecoders[tagId] = bindTagFallback(tagId)
+      }
+    }
+
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
     )
@@ -588,6 +688,7 @@ export default class CramSlice {
             this,
             bd,
             rfSchemas,
+            boundTagDecoders,
             compressionScheme,
             sliceHeader,
             coreDataBlock,

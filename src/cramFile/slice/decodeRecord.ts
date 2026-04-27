@@ -267,10 +267,16 @@ export type BulkByteRawDecoder = (
   length: number,
 ) => Uint8Array | undefined
 
+export type BoundTagDecoders = Record<
+  string,
+  () => Uint8Array | number | undefined
+>
+
 export default function decodeRecord(
   slice: CramSlice,
   bd: BoundDecoders,
   rfSchemas: RFSchemas,
+  boundTagDecoders: BoundTagDecoders,
   compressionScheme: CramContainerCompressionScheme,
   sliceHeader: SliceHeader,
   coreDataBlock: CramFileBlock,
@@ -366,9 +372,7 @@ export default function decodeRecord(
   if (shouldDecodeTags) {
     for (let i = 0; i < ntags; i++) {
       const tagId = TN[i]!
-      const tagData = compressionScheme
-        .getCodecForTag(tagId)
-        .decode(slice, coreDataBlock, blocksByContentId, cursors)
+      const tagData = boundTagDecoders[tagId]!()
 
       const tagName = tagId[0]! + tagId[1]!
       const tagType = tagId[2]!
