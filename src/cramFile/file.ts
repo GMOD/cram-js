@@ -5,7 +5,7 @@ import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import { parseHeaderText } from '../sam.ts'
-import { parseItem } from './util.ts'
+import { decodeUtf8, parseItem } from './util.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
 import {
@@ -20,17 +20,13 @@ import type CramRecord from './record.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
-function getEndianness() {
-  const uInt32 = new Uint32Array([0x11223344])
-  const uInt8 = new Uint8Array(uInt32.buffer)
-
-  if (uInt8[0] === 0x44) {
-    return 0 // little-endian
-  } else if (uInt8[0] === 0x11) {
-    return 1 // big-endian
-  } else {
-    return 2 // mixed-endian?
+let isLittleEndian: boolean | undefined
+function checkLittleEndian() {
+  if (isLittleEndian === undefined) {
+    isLittleEndian =
+      new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44
   }
+  return isLittleEndian
 }
 
 export interface CramFileSource {
@@ -89,13 +85,21 @@ export default class CramFile {
     this.featureCache = new QuickLRU({
       maxSize: this.options.cacheSize,
     })
-    if (getEndianness() > 0) {
+    if (!checkLittleEndian()) {
       throw new Error('Detected big-endian machine, may be unable to run')
     }
   }
 
   read(length: number, position: number) {
     return this.file.read(length, position)
+  }
+
+  private async _getSectionParsers() {
+    if (!this._sectionParsers) {
+      const { majorVersion } = await this.getDefinition()
+      this._sectionParsers = getSectionParsers(majorVersion)
+    }
+    return this._sectionParsers
   }
 
   async getDefinition() {
@@ -149,8 +153,7 @@ export default class CramFile {
     )
     const headerLength = dataView.getInt32(0, true)
     const textStart = 4
-    const decoder = new TextDecoder('utf8')
-    const text = decoder.decode(
+    const text = decodeUtf8(
       content.subarray(textStart, textStart + headerLength),
     )
     this.header = text
@@ -163,11 +166,8 @@ export default class CramFile {
   }
 
   async getContainerById(containerNumber: number) {
-    if (!this._sectionParsers) {
-      const { majorVersion } = await this.getDefinition()
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
-    let position = this._sectionParsers.cramFileDefinition.maxLength
+    const sectionParsers = await this._getSectionParsers()
+    let position = sectionParsers.cramFileDefinition.maxLength
 
     // skip with a series of reads to the proper container
     let currentContainer: CramContainer | undefined
@@ -225,13 +225,10 @@ export default class CramFile {
    * length check, relies on a try catch to read return an error to break
    */
   async containerCount(): Promise<number | undefined> {
-    if (!this._sectionParsers) {
-      const { majorVersion } = await this.getDefinition()
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
+    const sectionParsers = await this._getSectionParsers()
 
     let containerCount = 0
-    let position = this._sectionParsers.cramFileDefinition.maxLength
+    let position = sectionParsers.cramFileDefinition.maxLength
     try {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       while (true) {
@@ -269,11 +266,7 @@ export default class CramFile {
   async readBlockHeader(
     position: number,
   ): Promise<BlockHeader & { _endPosition: number; _size: number }> {
-    if (!this._sectionParsers) {
-      const { majorVersion } = await this.getDefinition()
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
-    const { cramBlockHeader } = this._sectionParsers
+    const { cramBlockHeader } = await this._getSectionParsers()
 
     const buffer = await this.file.read(cramBlockHeader.maxLength, position)
     return parseItem(buffer, cramBlockHeader.parser, 0, position)
@@ -350,10 +343,7 @@ export default class CramFile {
 
   async readBlock(position: number) {
     const { majorVersion } = await this.getDefinition()
-    if (!this._sectionParsers) {
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
-    const { cramBlockHeader, cramBlockCrc32 } = this._sectionParsers
+    const { cramBlockHeader, cramBlockCrc32 } = await this._getSectionParsers()
 
     const headerBuf = await this.file.read(cramBlockHeader.maxLength, position)
     const blockHeader = parseItem(
@@ -378,10 +368,7 @@ export default class CramFile {
     filePosition: number,
   ) {
     const { majorVersion } = await this.getDefinition()
-    if (!this._sectionParsers) {
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
-    const sectionParsers = this._sectionParsers
+    const sectionParsers = await this._getSectionParsers()
     const { cramBlockHeader } = sectionParsers
 
     const headerBytes = buffer.subarray(

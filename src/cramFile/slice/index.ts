@@ -11,7 +11,7 @@ import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import { type CramFileBlock } from '../file.ts'
 import CramRecord, { defaultDecodeOptions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
-import { parseItem, sequenceMD5, tinyMemoize } from '../util.ts'
+import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
 
 import type { DecodeOptions } from '../record.ts'
 import type {
@@ -48,30 +48,32 @@ function calculateMultiSegmentMatedTemplateLength(
   _currentRecordNumber: number,
   thisRecord: CramRecord,
 ) {
-  function getAllMatedRecords(startRecord: CramRecord) {
-    const records = [startRecord]
-    if (
-      startRecord.mateRecordNumber !== undefined &&
-      startRecord.mateRecordNumber >= 0
-    ) {
-      const mateRecord = allRecords[startRecord.mateRecordNumber]
-      if (!mateRecord) {
-        throw new CramMalformedError(
-          'intra-slice mate record not found, this file seems malformed',
-        )
-      }
-      for (const r of getAllMatedRecords(mateRecord)) {
-        records.push(r)
-      }
+  const matedRecords: CramRecord[] = [thisRecord]
+  let cur = thisRecord
+  while (cur.mateRecordNumber !== undefined && cur.mateRecordNumber >= 0) {
+    const mateRecord = allRecords[cur.mateRecordNumber]
+    if (!mateRecord) {
+      throw new CramMalformedError(
+        'intra-slice mate record not found, this file seems malformed',
+      )
     }
-    return records
+    matedRecords.push(mateRecord)
+    cur = mateRecord
   }
 
-  const matedRecords = getAllMatedRecords(thisRecord)
-  const starts = matedRecords.map(r => r.alignmentStart)
-  const ends = matedRecords.map(r => r.alignmentStart + r.readLength - 1)
-  const minStart = Math.min(...starts)
-  const estimatedTemplateLength = Math.max(...ends) - minStart + 1
+  let minStart = matedRecords[0]!.alignmentStart
+  let maxEnd = minStart + matedRecords[0]!.readLength - 1
+  for (let i = 1; i < matedRecords.length; i++) {
+    const r = matedRecords[i]!
+    if (r.alignmentStart < minStart) {
+      minStart = r.alignmentStart
+    }
+    const end = r.alignmentStart + r.readLength - 1
+    if (end > maxEnd) {
+      maxEnd = end
+    }
+  }
+  const estimatedTemplateLength = maxEnd - minStart + 1
   if (estimatedTemplateLength >= 0) {
     matedRecords.forEach(r => {
       if (r.templateLength !== undefined) {
@@ -208,6 +210,11 @@ export default class CramSlice {
   container: CramContainer
   containerPosition: number
   sliceSize: number
+  private _headerResult?: ReturnType<CramSlice['_fetchHeader']>
+  private _blocksResult?: ReturnType<CramSlice['_fetchBlocks']>
+  private _blocksContentIdIndexResult?: ReturnType<
+    CramSlice['_fetchBlocksContentIdIndex']
+  >
 
   constructor(
     container: CramContainer,
@@ -220,8 +227,17 @@ export default class CramSlice {
     this.sliceSize = sliceSize
   }
 
-  // memoize
-  async getHeader() {
+  getHeader() {
+    if (this._headerResult === undefined) {
+      this._headerResult = this._fetchHeader()
+      this._headerResult.catch(() => {
+        this._headerResult = undefined
+      })
+    }
+    return this._headerResult
+  }
+
+  private async _fetchHeader() {
     // fetch and parse the slice header
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
@@ -253,8 +269,17 @@ export default class CramSlice {
     }
   }
 
-  // memoize
-  async getBlocks() {
+  getBlocks() {
+    if (this._blocksResult === undefined) {
+      this._blocksResult = this._fetchBlocks()
+      this._blocksResult.catch(() => {
+        this._blocksResult = undefined
+      })
+    }
+    return this._blocksResult
+  }
+
+  private async _fetchBlocks() {
     const header = await this.getHeader()
 
     if (this.sliceSize) {
@@ -303,8 +328,19 @@ export default class CramSlice {
     return blocks[0]
   }
 
-  // memoize
-  async _getBlocksContentIdIndex(): Promise<Record<number, CramFileBlock>> {
+  _getBlocksContentIdIndex() {
+    if (this._blocksContentIdIndexResult === undefined) {
+      this._blocksContentIdIndexResult = this._fetchBlocksContentIdIndex()
+      this._blocksContentIdIndexResult.catch(() => {
+        this._blocksContentIdIndexResult = undefined
+      })
+    }
+    return this._blocksContentIdIndexResult
+  }
+
+  private async _fetchBlocksContentIdIndex(): Promise<
+    Record<number, CramFileBlock>
+  > {
     const blocks = await this.getBlocks()
     const blocksByContentId: Record<number, CramFileBlock> = {}
     blocks.forEach(block => {
@@ -322,7 +358,6 @@ export default class CramSlice {
 
   async getReferenceRegion() {
     // read the slice header
-    const decoder = new TextDecoder('utf8')
     const sliceHeader = (await this.getHeader()).parsedContent
     if (!isMappedSliceHeader(sliceHeader)) {
       throw new Error('slice header not mapped')
@@ -354,7 +389,7 @@ export default class CramSlice {
 
       // TODO verify
       return {
-        seq: decoder.decode(refBlock.content),
+        seq: decodeUtf8(refBlock.content),
         start: sliceHeader.refSeqStart,
         end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
         span: sliceHeader.refSeqSpan,
@@ -845,8 +880,3 @@ export default class CramSlice {
     return records
   }
 }
-
-// memoize several methods in the class for performance
-'getHeader getBlocks _getBlocksContentIdIndex'.split(' ').forEach(method => {
-  tinyMemoize(CramSlice, method)
-})

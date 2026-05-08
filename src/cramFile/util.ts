@@ -2,19 +2,26 @@ import md5 from 'md5'
 
 // Default TextDecoder (utf-8) is faster than 'latin1' in V8 and works
 // identically on the ASCII content CRAM stores here (read names, sequence
-// bases, BAM Z tag values).
-const textDecoder = new TextDecoder()
+// bases, BAM Z tag values). Lazy so that consumers (e.g. older Node) have a
+// chance to set up the global before first decode.
+let textDecoder: TextDecoder | undefined
+function getTextDecoder() {
+  if (!textDecoder) {
+    textDecoder = new TextDecoder()
+  }
+  return textDecoder
+}
 
 export function readNullTerminatedStringFromBuffer(buffer: Uint8Array) {
   let end = 0
   while (end < buffer.length && buffer[end] !== 0) {
     end++
   }
-  return textDecoder.decode(buffer.subarray(0, end))
+  return getTextDecoder().decode(buffer.subarray(0, end))
 }
 
-export function decodeLatin1(buffer: Uint8Array) {
-  return textDecoder.decode(buffer)
+export function decodeUtf8(buffer: Uint8Array) {
+  return getTextDecoder().decode(buffer)
 }
 
 export const TWO_PWR_16_DBL = 1 << 16
@@ -196,23 +203,6 @@ export function parseItem<T>(
     _size: offset - startBufferPosition,
   }
 }
-export function tinyMemoize(_class: { prototype: object }, methodName: string) {
-  const proto = _class.prototype as Record<string, unknown>
-  const method = proto[methodName] as (() => unknown) | undefined
-  const memoAttrName = `_memo_${methodName}`
-  proto[methodName] = function _tinyMemoized(this: Record<string, unknown>) {
-    let res = this[memoAttrName]
-    if (res === undefined) {
-      res = method!.call(this)
-      this[memoAttrName] = res
-      Promise.resolve(res).catch(() => {
-        delete this[memoAttrName]
-      })
-    }
-    return res
-  }
-}
-
 export function sequenceMD5(seq: string) {
   return md5(seq.toUpperCase().replaceAll(/[^\u0021-\u007e]/g, ''))
 }

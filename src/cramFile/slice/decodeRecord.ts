@@ -9,7 +9,7 @@ import {
 } from '../record.ts'
 import { type SliceHeader } from './index.ts'
 import { isMappedSliceHeader } from '../sectionParsers.ts'
-import { decodeLatin1, readNullTerminatedStringFromBuffer } from '../util.ts'
+import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { CramFileBlock } from '../file.ts'
 import type CramSlice from './index.ts'
@@ -143,7 +143,7 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
 
 // Read-feature schema: a charCode-indexed array of [code, fn] tuples where
 // fn() decodes and transforms the feature's data (character → fromCharCode,
-// string → decodeLatin1, numArray → Array.from, number → identity,
+// string → decodeUtf8, numArray → Array.from, number → identity,
 // B → [base, qualityScore]). Built once per slice; the inner loop becomes
 // a charCode lookup + monomorphic call with no per-feature allocation.
 type RFData = string | number | number[] | [string, number]
@@ -161,15 +161,15 @@ export function buildRFSchema(
   ]
   arr['X'.charCodeAt(0)] = ['X', () => bd.BS()!]
   arr['D'.charCodeAt(0)] = ['D', () => bd.DL()!]
-  arr['I'.charCodeAt(0)] = ['I', () => decodeLatin1(bd.IN()!)]
+  arr['I'.charCodeAt(0)] = ['I', () => decodeUtf8(bd.IN()!)]
   arr['i'.charCodeAt(0)] = ['i', () => String.fromCharCode(bd.BA()!)]
-  arr['b'.charCodeAt(0)] = ['b', () => decodeLatin1(bd.BB()!)]
+  arr['b'.charCodeAt(0)] = ['b', () => decodeUtf8(bd.BB()!)]
   arr['q'.charCodeAt(0)] = ['q', () => Array.from(bd.QQ()!)]
   arr['Q'.charCodeAt(0)] = ['Q', () => bd.QS()!]
   arr['H'.charCodeAt(0)] = ['H', () => bd.HC()!]
   arr['P'.charCodeAt(0)] = ['P', () => bd.PD()!]
   arr['N'.charCodeAt(0)] = ['N', () => bd.RS()!]
-  arr['S'.charCodeAt(0)] = ['S', () => decodeLatin1(SC()!)]
+  arr['S'.charCodeAt(0)] = ['S', () => decodeUtf8(SC()!)]
   return arr
 }
 
@@ -246,13 +246,13 @@ function decodeReadBases(
 ) {
   const raw = decodeBulkBytesRaw?.('BA', readLength)
   if (raw) {
-    return decodeLatin1(raw)
+    return decodeUtf8(raw)
   }
   const buf = new Uint8Array(readLength)
   for (let i = 0; i < readLength; i++) {
     buf[i] = decodeBA()!
   }
-  return decodeLatin1(buf)
+  return decodeUtf8(buf)
 }
 
 export type BoundTagDecoders = Record<

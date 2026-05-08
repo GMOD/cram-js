@@ -1,2 +1,4 @@
 packages:
   - htscodecs-wasm
+allowBuilds:
+  unrs-resolver: true

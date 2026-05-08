@@ -195,15 +195,14 @@ export default class IndexedCramFile {
             !pos || item.toString() !== ary[pos - 1]!.toString(),
         )
 
-      const mateRecordPromises = []
       const mateFeatPromises: Promise<CramRecord[]>[] = []
       for (const c of mateChunks) {
-        let recordPromise = this.cram.featureCache.get(c.toString())
+        const key = c.toString()
+        let recordPromise = this.cram.featureCache.get(key)
         if (!recordPromise) {
           recordPromise = this.getRecordsInSlice(c, () => true)
-          this.cram.featureCache.set(c.toString(), recordPromise)
+          this.cram.featureCache.set(key, recordPromise)
         }
-        mateRecordPromises.push(recordPromise)
         const featPromise = recordPromise.then(feats => {
           const mateRecs = []
           for (const feature of feats) {
@@ -220,10 +219,7 @@ export default class IndexedCramFile {
       }
       const newMateFeats = await Promise.all(mateFeatPromises)
       if (newMateFeats.length) {
-        const newMates = newMateFeats.reduce((result, current) =>
-          result.concat(current),
-        )
-        ret = ret.concat(newMates)
+        ret = ret.concat(newMateFeats.flat())
       }
     }
     return ret
