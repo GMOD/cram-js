@@ -165,39 +165,41 @@ export default class CramFile {
     return this.header
   }
 
-  async getContainerById(containerNumber: number) {
+  // Walk containers from the start of the file. Yields each container along
+  // with its parsed header. The first container's length is recomputed by
+  // reading all of its blocks because the recorded length cannot be trusted
+  // (htslib bug); subsequent containers use header._size + header.length.
+  private async *iterContainers() {
     const sectionParsers = await this._getSectionParsers()
     let position = sectionParsers.cramFileDefinition.maxLength
-
-    // skip with a series of reads to the proper container
-    let currentContainer: CramContainer | undefined
-    for (let i = 0; i <= containerNumber; i++) {
-      // if we are about to go off the end of the file
-      // and have not found that container, it does not exist
-      // if (position + cramContainerHeader1.maxLength + 8 >= fileSize) {
-      //   return undefined
-      // }
-
-      currentContainer = this.getContainerAtPosition(position)
-      const currentHeader = await currentContainer.getHeader()
-
-      // if this is the first container, read all the blocks in the container
-      // to determine its length, because we cannot trust the container
-      // header's given length due to a bug somewhere in htslib
+    let i = 0
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    while (true) {
+      const container = this.getContainerAtPosition(position)
+      const header = await container.getHeader()
+      yield container
       if (i === 0) {
-        position = currentHeader._endPosition
-        for (let j = 0; j < currentHeader.numBlocks; j++) {
+        position = header._endPosition
+        for (let j = 0; j < header.numBlocks; j++) {
           const block = await this.readBlock(position)
           position = block._endPosition
         }
       } else {
-        // otherwise, just traverse to the next container using the container's
-        // length
-        position += currentHeader._size + currentHeader.length
+        position += header._size + header.length
       }
+      i++
     }
+  }
 
-    return currentContainer
+  async getContainerById(containerNumber: number) {
+    let i = 0
+    for await (const container of this.iterContainers()) {
+      if (i === containerNumber) {
+        return container
+      }
+      i++
+    }
+    return undefined
   }
 
   async checkCrc32(
@@ -225,37 +227,15 @@ export default class CramFile {
    * length check, relies on a try catch to read return an error to break
    */
   async containerCount(): Promise<number | undefined> {
-    const sectionParsers = await this._getSectionParsers()
-
     let containerCount = 0
-    let position = sectionParsers.cramFileDefinition.maxLength
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      while (true) {
-        const currentHeader =
-          await this.getContainerAtPosition(position).getHeader()
-
-        // if this is the first container, read all the blocks in the container,
-        // because we cannot trust the container header's given length due to a
-        // bug somewhere in htslib
-        if (containerCount === 0) {
-          position = currentHeader._endPosition
-          for (let j = 0; j < currentHeader.numBlocks; j++) {
-            const block = await this.readBlock(position)
-            position = block._endPosition
-          }
-        } else {
-          // otherwise, just traverse to the next container using the container's
-          // length
-          position += currentHeader._size + currentHeader.length
-        }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      for await (const _container of this.iterContainers()) {
         containerCount += 1
       }
     } catch (e) {
       containerCount--
-      /* do nothing */
     }
-
     return containerCount
   }
 
