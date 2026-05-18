@@ -177,7 +177,7 @@ MIT © [Robert Buels](https://github.com/rbuels)
 Actions.
 
 ```bash
-npm version patch  # or minor/major
+pnpm version patch  # or minor/major
 ```
 
 ## Codec support
