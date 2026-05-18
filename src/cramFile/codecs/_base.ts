@@ -23,7 +23,6 @@ export interface Cursors {
   lastAlignmentStart: number
   coreBlock: Cursor
   externalBlocks: {
-    map: Map<number, Cursor>
     getCursor: (contentId: number) => Cursor
   }
   preDecodedIntBlocks?: Map<number, PreDecodedIntBlock>

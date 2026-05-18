@@ -1,6 +1,6 @@
 import {
   decodeUtf8,
-  parseItf8,
+  parseItf8Sized as parseItf8,
   parseLtf8,
   readNullTerminatedStringFromBuffer,
 } from './util.ts'

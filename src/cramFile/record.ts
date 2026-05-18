@@ -76,6 +76,8 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
       .toUpperCase()
   }
 
+  // Walk read features against the reference to reconstruct the read sequence.
+  // See CRAMv3 §10.2 (Read features): https://samtools.github.io/hts-specs/CRAMv3.pdf
   let bases = ''
   let regionPos = regionSeqOffset
   let currentReadFeature = 0
@@ -85,38 +87,38 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
       if (feature.code === 'Q' || feature.code === 'q') {
         currentReadFeature += 1
       } else if (feature.pos === bases.length + 1) {
-        // process the read feature
         currentReadFeature += 1
-
-        if (feature.code === 'b') {
-          const added = feature.data
-          bases += added
-          regionPos += added.length
-        } else if (feature.code === 'B') {
-          bases += feature.data[0]
-          regionPos += 1
-        } else if (feature.code === 'X') {
-          bases += feature.sub
-          regionPos += 1
-        } else if (feature.code === 'I') {
-          bases += feature.data
-        } else if (feature.code === 'D') {
-          regionPos += feature.data
-        } else if (feature.code === 'i') {
-          bases += feature.data
-        } else if (feature.code === 'N') {
-          regionPos += feature.data
-        } else if (feature.code === 'S') {
-          bases += feature.data
-        } else if (feature.code === 'P') {
-          // padding, do nothing
+        switch (feature.code) {
+          case 'b': {
+            bases += feature.data
+            regionPos += feature.data.length
+            break
+          }
+          case 'B': {
+            bases += feature.data[0]
+            regionPos += 1
+            break
+          }
+          case 'X': {
+            bases += feature.sub
+            regionPos += 1
+            break
+          }
+          case 'I':
+          case 'i':
+          case 'S': {
+            bases += feature.data
+            break
+          }
+          case 'D':
+          case 'N': {
+            regionPos += feature.data
+            break
+          }
+          // H (hard clip), P (padding): do nothing
         }
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        else if (feature.code === 'H') {
-          // hard clip, do nothing
-        }
-      } else if (currentReadFeature < cramRecord.readFeatures.length) {
-        // put down a chunk of sequence up to the next read feature
+      } else {
+        // put down a chunk of reference up to the next read feature
         const chunk = refRegion.seq.slice(
           regionPos,
           regionPos + feature.pos - bases.length - 1,
@@ -347,86 +349,62 @@ export default class CramRecord {
     return this.qualityScores?.[index]
   }
 
-  /**
-   * @returns {boolean} true if the read is paired, regardless of whether both segments are mapped
-   */
+  // BAM flags — see SAM/BAM spec §1.4 (Flag field):
+  // https://samtools.github.io/hts-specs/SAMv1.pdf
+  /** @returns {boolean} true if the read is paired, regardless of whether both segments are mapped */
   isPaired() {
     return !!(this.flags & Constants.BAM_FPAIRED)
   }
-
   /** @returns {boolean} true if the read is paired, and both segments are mapped */
   isProperlyPaired() {
     return !!(this.flags & Constants.BAM_FPROPER_PAIR)
   }
-
   /** @returns {boolean} true if the read itself is unmapped; conflictive with isProperlyPaired */
   isSegmentUnmapped() {
     return !!(this.flags & Constants.BAM_FUNMAP)
   }
-
   /** @returns {boolean} true if the mate is unmapped; conflictive with isProperlyPaired */
   isMateUnmapped() {
     return !!(this.flags & Constants.BAM_FMUNMAP)
   }
-
   /** @returns {boolean} true if the read is mapped to the reverse strand */
   isReverseComplemented() {
     return !!(this.flags & Constants.BAM_FREVERSE)
   }
-
   /** @returns {boolean} true if the mate is mapped to the reverse strand */
   isMateReverseComplemented() {
     return !!(this.flags & Constants.BAM_FMREVERSE)
   }
-
-  /** @returns {boolean} true if this is read number 1 in a pair */
   isRead1() {
     return !!(this.flags & Constants.BAM_FREAD1)
   }
-
-  /** @returns {boolean} true if this is read number 2 in a pair */
   isRead2() {
     return !!(this.flags & Constants.BAM_FREAD2)
   }
-
-  /** @returns {boolean} true if this is a secondary alignment */
   isSecondary() {
     return !!(this.flags & Constants.BAM_FSECONDARY)
   }
-
-  /** @returns {boolean} true if this read has failed QC checks */
   isFailedQc() {
     return !!(this.flags & Constants.BAM_FQCFAIL)
   }
-
-  /** @returns {boolean} true if the read is an optical or PCR duplicate */
   isDuplicate() {
     return !!(this.flags & Constants.BAM_FDUP)
   }
-
-  /** @returns {boolean} true if this is a supplementary alignment */
   isSupplementary() {
     return !!(this.flags & Constants.BAM_FSUPPLEMENTARY)
   }
 
-  /**
-   * @returns {boolean} true if the read is detached
-   */
+  // CRAM-specific compression flags — see CRAMv3 §8.4 (Bit Flags):
+  // https://samtools.github.io/hts-specs/CRAMv3.pdf
   isDetached() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_DETACHED)
   }
-
-  /** @returns {boolean} true if the read has a mate in this same CRAM segment */
   hasMateDownStream() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM)
   }
-
-  /** @returns {boolean} true if the read contains qual scores */
   isPreservingQualityScores() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES)
   }
-
-  /** @returns {boolean} true if the read has no sequence bases */
   isUnknownBases() {
     return !!(this.cramFlags & Constants.CRAM_FLAG_NO_SEQ)
   }
@@ -505,24 +483,47 @@ export default class CramRecord {
     }
   }
 
+  // Serializer used by snapshot tests and consumers that JSON.stringify a
+  // record. qualityScores (Uint8Array) is converted to number[] so snapshots
+  // stay diffable. Optional fields are added only when defined to match the
+  // historical shape of the output.
   toJSON() {
-    const data: Record<string, unknown> = {}
-    Object.keys(this).forEach(k => {
-      if (k.startsWith('_')) {
-        return
-      }
-      const val = (this as Record<string, unknown>)[k]
-      if (val !== undefined) {
-        data[k] = val
-      }
-    })
-
-    data.readName = this.readName
-    data.readBases = this.getReadBases()
-    data.qualityScores = this.qualityScores
-      ? Array.from(this.qualityScores)
-      : this.qualityScores
-
+    const data: Record<string, unknown> = {
+      alignmentStart: this.alignmentStart,
+      cramFlags: this.cramFlags,
+      flags: this.flags,
+      readGroupId: this.readGroupId,
+      readLength: this.readLength,
+      sequenceId: this.sequenceId,
+      tags: this.tags,
+      uniqueId: this.uniqueId,
+      readName: this.readName,
+      readBases: this.getReadBases(),
+      qualityScores: this.qualityScores
+        ? Array.from(this.qualityScores)
+        : this.qualityScores,
+    }
+    if (this.lengthOnRef !== undefined) {
+      data.lengthOnRef = this.lengthOnRef
+    }
+    if (this.mappingQuality !== undefined) {
+      data.mappingQuality = this.mappingQuality
+    }
+    if (this.templateSize !== undefined) {
+      data.templateSize = this.templateSize
+    }
+    if (this.templateLength !== undefined) {
+      data.templateLength = this.templateLength
+    }
+    if (this.readFeatures !== undefined) {
+      data.readFeatures = this.readFeatures
+    }
+    if (this.mate !== undefined) {
+      data.mate = this.mate
+    }
+    if (this.mateRecordNumber !== undefined) {
+      data.mateRecordNumber = this.mateRecordNumber
+    }
     return data
   }
 }

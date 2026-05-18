@@ -476,7 +476,6 @@ export default class CramSlice {
         : 0,
       coreBlock: { bitPosition: 7, bytePosition: 0 },
       externalBlocks: {
-        map: externalCursorMap,
         getCursor(contentId: number) {
           let r = externalCursorMap.get(contentId)
           if (r === undefined) {
@@ -578,7 +577,18 @@ export default class CramSlice {
         if (codec.dataType === 'int') {
           return () => parseItf8(content, cursor)
         }
-        return () => content[cursor.bytePosition++]
+        // Mirror the bounds check in ExternalCodec.decode — without it,
+        // a truncated/corrupt block silently yields `undefined` for byte
+        // reads, which downstream `bd.XX()!` lies about and propagates as
+        // NaN/0 (silent data corruption) rather than a clear error.
+        return () => {
+          if (cursor.bytePosition >= content.length) {
+            throw new CramBufferOverrunError(
+              'attempted to read beyond end of block. this file seems truncated.',
+            )
+          }
+          return content[cursor.bytePosition++]
+        }
       }
       if (codec instanceof ByteArrayStopCodec) {
         const { blockContentId, stopByte } = codec.parameters
@@ -754,22 +764,19 @@ export default class CramSlice {
     }
 
     // interpret `recordsToNextFragment` attributes to make standard `mate`
-    // objects
-    //
-    // Resolve mate pair cross-references between records in this slice
+    // objects. The records loop above fills every slot or throws — by the
+    // time we get here, records[i] is always defined. The records[mate]
+    // guard protects against malformed mateRecordNumber pointing past the
+    // slice.
     for (let i = 0; i < records.length; i += 1) {
-      const r = records[i]
-      // check for !!r added after removal  of "stat" file size check: found
-      // some undefined entries
-      if (r) {
-        const { mateRecordNumber } = r
-        if (
-          mateRecordNumber !== undefined &&
-          mateRecordNumber >= 0 &&
-          records[mateRecordNumber]
-        ) {
-          associateIntraSliceMate(records, i, r, records[mateRecordNumber])
-        }
+      const r = records[i]!
+      const { mateRecordNumber } = r
+      if (
+        mateRecordNumber !== undefined &&
+        mateRecordNumber >= 0 &&
+        records[mateRecordNumber]
+      ) {
+        associateIntraSliceMate(records, i, r, records[mateRecordNumber])
       }
     }
 

@@ -46,50 +46,65 @@ export function itf8Size(v: number) {
   return 5
 }
 
-export function parseItf8(buffer: Uint8Array, initialOffset: number) {
-  let offset = initialOffset
-  const countFlags = buffer[offset]!
-  let result: number
+// Cursor object used by the no-allocation hot-path parseItf8/parseLtf8 callers
+// (codecs/external.ts). The cursor is just `{ bytePosition: number }` —
+// matches the shape used elsewhere in the decode pipeline.
+export interface ByteCursor {
+  bytePosition: number
+}
 
-  // Single byte value (0xxxxxxx)
+// Canonical ITF8 parser — cursor-mutating, no per-call allocation. Used by
+// the hot path. The tuple-returning parseItf8Sized below is a thin wrapper
+// for section parsers that work in terms of `let offset` arithmetic.
+// See CRAMv3 §2.3 (Integer types): https://samtools.github.io/hts-specs/CRAMv3.pdf
+export function parseItf8(buffer: Uint8Array, cursor: ByteCursor): number {
+  const offset = cursor.bytePosition
+  const countFlags = buffer[offset]!
   if (countFlags < 0x80) {
-    result = countFlags
-    offset += 1
+    cursor.bytePosition = offset + 1
+    return countFlags
   }
-  // Two byte value (10xxxxxx)
-  else if (countFlags < 0xc0) {
-    result = ((countFlags & 0x3f) << 8) | buffer[offset + 1]!
-    offset += 2
+  if (countFlags < 0xc0) {
+    cursor.bytePosition = offset + 2
+    return ((countFlags & 0x3f) << 8) | buffer[offset + 1]!
   }
-  // Three byte value (110xxxxx)
-  else if (countFlags < 0xe0) {
-    result =
+  if (countFlags < 0xe0) {
+    cursor.bytePosition = offset + 3
+    return (
       ((countFlags & 0x1f) << 16) |
       (buffer[offset + 1]! << 8) |
       buffer[offset + 2]!
-    offset += 3
+    )
   }
-  // Four byte value (1110xxxx)
-  else if (countFlags < 0xf0) {
-    result =
+  if (countFlags < 0xf0) {
+    cursor.bytePosition = offset + 4
+    return (
       ((countFlags & 0x0f) << 24) |
       (buffer[offset + 1]! << 16) |
       (buffer[offset + 2]! << 8) |
       buffer[offset + 3]!
-    offset += 4
+    )
   }
-  // Five byte value (11110xxx)
-  else {
-    result =
-      ((countFlags & 0x0f) << 28) |
-      (buffer[offset + 1]! << 20) |
-      (buffer[offset + 2]! << 12) |
-      (buffer[offset + 3]! << 4) |
-      (buffer[offset + 4]! & 0x0f)
-    offset += 5
-  }
+  cursor.bytePosition = offset + 5
+  return (
+    ((countFlags & 0x0f) << 28) |
+    (buffer[offset + 1]! << 20) |
+    (buffer[offset + 2]! << 12) |
+    (buffer[offset + 3]! << 4) |
+    (buffer[offset + 4]! & 0x0f)
+  )
+}
 
-  return [result, offset - initialOffset] as const
+// Tuple-returning wrapper for callers that prefer offset arithmetic
+// (sectionParsers.ts). Allocates one cursor + one tuple per call — fine for
+// section parsing (called O(slices) times) but not for the byte-decode loop.
+export function parseItf8Sized(
+  buffer: Uint8Array,
+  offset: number,
+): readonly [number, number] {
+  const cursor = { bytePosition: offset }
+  const value = parseItf8(buffer, cursor)
+  return [value, cursor.bytePosition - offset] as const
 }
 
 export function parseLtf8(buffer: Uint8Array, initialOffset: number) {

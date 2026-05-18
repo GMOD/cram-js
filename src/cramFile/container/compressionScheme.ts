@@ -104,21 +104,15 @@ export default class CramContainerCompressionScheme {
    * @private
    */
   getCodecForTag(tagName: string): CramCodec {
-    const test = this.tagCodecCache[tagName]
-    if (!test) {
+    if (!this.tagCodecCache[tagName]) {
       const encodingData = this.tagEncoding[tagName]
       if (!encodingData) {
         throw new Error('Error, no tag encoding')
       }
-      const ret = instantiateCodec(
-        encodingData,
-        'byteArray', // all tags are byte array data
-      )
-      this.tagCodecCache[tagName] = ret
-      return ret
-    } else {
-      return test
+      // all tags are byte array data
+      this.tagCodecCache[tagName] = instantiateCodec(encodingData, 'byteArray')
     }
+    return this.tagCodecCache[tagName]
   }
 
   /**
@@ -148,6 +142,8 @@ export default class CramContainerCompressionScheme {
     return r
   }
 
+  // Used implicitly by snapshot tests to keep the codec caches (which contain
+  // class instances and are noisy/non-stable) out of the serialized form.
   toJSON() {
     const data: Record<string, unknown> = {}
     Object.keys(this).forEach(k => {
