@@ -356,14 +356,19 @@ export default class CramFile {
       contentOffset,
       contentOffset + blockHeader.compressedSize,
     )
+    // Per CRAM spec (PR #681), blocks with uncompressed size 0 are treated as
+    // empty regardless of the method byte — htsjdk has produced invalid empty
+    // RANS blocks that would otherwise fail to decompress.
     const uncompressedData =
-      blockHeader.compressionMethod !== 'raw'
-        ? await this._uncompress(
-            blockHeader.compressionMethod,
-            d,
-            blockHeader.uncompressedSize,
-          )
-        : d
+      blockHeader.uncompressedSize === 0
+        ? new Uint8Array(0)
+        : blockHeader.compressionMethod !== 'raw'
+          ? await this._uncompress(
+              blockHeader.compressionMethod,
+              d,
+              blockHeader.uncompressedSize,
+            )
+          : d
 
     const block: CramFileBlock = {
       ...blockHeader,
