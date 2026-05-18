@@ -36,4 +36,8 @@ export type DataSeriesEncodingKey =
 // | 'TM'
 // | 'TV'
 
-export type DataSeriesEncodingMap = Record<DataSeriesEncodingKey, CramEncoding>
+// Partial because a given CRAM file's compression header only includes
+// encodings for the data series it actually uses
+export type DataSeriesEncodingMap = Partial<
+  Record<DataSeriesEncodingKey, CramEncoding>
+>

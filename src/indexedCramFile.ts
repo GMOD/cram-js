@@ -1,6 +1,5 @@
 import CramFile from './cramFile/index.ts'
 import { type DecodeOptions } from './cramFile/record.ts'
-import { CramUnimplementedError } from './errors.ts'
 
 import type { Slice } from './craiIndex.ts'
 import type { SeqFetch } from './cramFile/file.ts'
@@ -95,19 +94,13 @@ export default class IndexedCramFile {
       maxInsertSize?: number
     } & DecodeOptions = {},
   ) {
-    const viewAsPairs = opts.viewAsPairs || false
-    const pairAcrossChr = opts.pairAcrossChr || false
-    const maxInsertSize = opts.maxInsertSize || 200000
+    const viewAsPairs = opts.viewAsPairs ?? false
+    const pairAcrossChr = opts.pairAcrossChr ?? false
+    const maxInsertSize = opts.maxInsertSize ?? 200000
     const decodeOptions: DecodeOptions = {
       decodeTags: opts.decodeTags,
     }
 
-    if (typeof seq === 'string') {
-      // TODO: support string reference sequence names somehow
-      throw new CramUnimplementedError(
-        'string sequence names not yet supported',
-      )
-    }
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
 
@@ -186,24 +179,21 @@ export default class IndexedCramFile {
         }
       }
       const mateBlocks = await Promise.all(matePromises)
-      let mateChunks: Slice[] = mateBlocks.flat()
-      // filter out duplicates
-      mateChunks = mateChunks
-        .sort((a, b) => a.toString().localeCompare(b.toString()))
-        .filter(
-          (item, pos, ary) =>
-            !pos || item.toString() !== ary[pos - 1]!.toString(),
+      // Dedupe slices by their identifying triple. Earlier this used
+      // Slice.toString(), but Slice is a plain interface — every value
+      // stringified to "[object Object]", silently collapsing all mate
+      // slices to one. slice.getRecords() caches internally, so we don't
+      // need our own cache layer here.
+      const uniqueMateSlices = new Map<string, Slice>()
+      for (const s of mateBlocks.flat()) {
+        uniqueMateSlices.set(
+          `${s.containerStart}:${s.sliceStart}:${s.sliceBytes}`,
+          s,
         )
+      }
 
-      const mateFeatPromises: Promise<CramRecord[]>[] = []
-      for (const c of mateChunks) {
-        const key = c.toString()
-        let recordPromise = this.cram.featureCache.get(key)
-        if (!recordPromise) {
-          recordPromise = this.getRecordsInSlice(c, () => true)
-          this.cram.featureCache.set(key, recordPromise)
-        }
-        const featPromise = recordPromise.then(feats => {
+      const mateFeatPromises = [...uniqueMateSlices.values()].map(c =>
+        this.getRecordsInSlice(c, () => true).then(feats => {
           const mateRecs = []
           for (const feature of feats) {
             if (feature.readName === undefined) {
@@ -214,9 +204,8 @@ export default class IndexedCramFile {
             }
           }
           return mateRecs
-        })
-        mateFeatPromises.push(featPromise)
-      }
+        }),
+      )
       const newMateFeats = await Promise.all(mateFeatPromises)
       if (newMateFeats.length) {
         ret = ret.concat(newMateFeats.flat())

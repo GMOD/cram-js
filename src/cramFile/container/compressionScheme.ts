@@ -1,4 +1,3 @@
-import { CramMalformedError } from '../../errors.ts'
 import { instantiateCodec } from '../codecs/index.ts'
 
 import type CramCodec from '../codecs/_base.ts'
@@ -138,20 +137,12 @@ export default class CramContainerCompressionScheme {
       this.dataSeriesCodecCache[dataSeriesName]
     if (r === undefined) {
       const encodingData = this.dataSeriesEncoding[dataSeriesName]
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (encodingData) {
-        const dataType = dataSeriesTypes[dataSeriesName]
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!dataType) {
-          throw new CramMalformedError(
-            `data series name ${dataSeriesName} not defined in file compression header`,
-          )
-        }
-        r = instantiateCodec(encodingData, dataType)
-        // didn't find a way to make TS understand this
-        ;(
-          this.dataSeriesCodecCache as Record<DataSeriesEncodingKey, CramCodec>
-        )[dataSeriesName] = r
+        r = instantiateCodec(encodingData, dataSeriesTypes[dataSeriesName])
+        // TS can't unify the per-key cache value type with the generic
+        // TDataSeries — store via an untyped slot.
+        this.dataSeriesCodecCache[dataSeriesName] =
+          r as DataSeriesCache[TDataSeries]
       }
     }
     return r
