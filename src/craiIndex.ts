@@ -163,27 +163,11 @@ export default class CraiIndex {
     queryEnd: number,
   ): Promise<Slice[]> {
     const seqEntries = (await this.getIndex())[seqId]
-    if (!seqEntries) {
-      return []
-    }
-
-    const compare = (entry: Slice) => {
-      const entryStart = entry.start
-      const entryEnd = entry.start + entry.span
-      if (entryStart > queryEnd) {
-        return -1
-      } // entry is ahead of query
-      if (entryEnd <= queryStart) {
-        return 1
-      } // entry is behind query
-      return 0 // entry overlaps query
-    }
-    const bins = [] as Slice[]
-    for (const entry of seqEntries) {
-      if (compare(entry) === 0) {
-        bins.push(entry)
-      }
-    }
-    return bins
+    return seqEntries
+      ? seqEntries.filter(
+          entry =>
+            entry.start <= queryEnd && entry.start + entry.span > queryStart,
+        )
+      : []
   }
 }

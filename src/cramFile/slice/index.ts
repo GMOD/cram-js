@@ -246,18 +246,16 @@ export default class CramSlice {
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
     )
-    if (header.contentType === 'MAPPED_SLICE_HEADER') {
+    const parser =
+      header.contentType === 'MAPPED_SLICE_HEADER'
+        ? sectionParsers.cramMappedSliceHeader.parser
+        : header.contentType === 'UNMAPPED_SLICE_HEADER'
+          ? sectionParsers.cramUnmappedSliceHeader.parser
+          : undefined
+    if (parser) {
       const content = parseItem(
         header.content,
-        sectionParsers.cramMappedSliceHeader.parser,
-        0,
-        containerHeader._endPosition,
-      )
-      return { ...header, parsedContent: content }
-    } else if (header.contentType === 'UNMAPPED_SLICE_HEADER') {
-      const content = parseItem(
-        header.content,
-        sectionParsers.cramUnmappedSliceHeader.parser,
+        parser,
         0,
         containerHeader._endPosition,
       )

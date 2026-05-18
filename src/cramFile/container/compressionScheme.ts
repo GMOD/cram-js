@@ -49,37 +49,27 @@ const dataSeriesTypes = {
 export { dataSeriesTypes }
 export type DataSeriesTypes = typeof dataSeriesTypes
 
+// For each reference base index 0..4 (A,C,G,T,N), the three other bases plus N
+// (or T for ref=N), in the order they're packed into the 2-bit substitution code
+const SUBSTITUTIONS = [
+  ['C', 'G', 'T', 'N'],
+  ['A', 'G', 'T', 'N'],
+  ['A', 'C', 'T', 'N'],
+  ['A', 'C', 'G', 'N'],
+  ['A', 'C', 'G', 'T'],
+] as const
+
 function parseSubstitutionMatrix(byteArray: number[]) {
   const matrix: string[][] = new Array(5)
-  for (let i = 0; i < 5; i += 1) {
-    matrix[i] = new Array(4)
+  for (let i = 0; i < 5; i++) {
+    const row = new Array<string>(4)
+    const byte = byteArray[i]!
+    const subs = SUBSTITUTIONS[i]!
+    for (let j = 0; j < 4; j++) {
+      row[(byte >> (6 - 2 * j)) & 3] = subs[j]!
+    }
+    matrix[i] = row
   }
-
-  matrix[0]![(byteArray[0]! >> 6) & 3] = 'C'
-  matrix[0]![(byteArray[0]! >> 4) & 3] = 'G'
-  matrix[0]![(byteArray[0]! >> 2) & 3] = 'T'
-  matrix[0]![(byteArray[0]! >> 0) & 3] = 'N'
-
-  matrix[1]![(byteArray[1]! >> 6) & 3] = 'A'
-  matrix[1]![(byteArray[1]! >> 4) & 3] = 'G'
-  matrix[1]![(byteArray[1]! >> 2) & 3] = 'T'
-  matrix[1]![(byteArray[1]! >> 0) & 3] = 'N'
-
-  matrix[2]![(byteArray[2]! >> 6) & 3] = 'A'
-  matrix[2]![(byteArray[2]! >> 4) & 3] = 'C'
-  matrix[2]![(byteArray[2]! >> 2) & 3] = 'T'
-  matrix[2]![(byteArray[2]! >> 0) & 3] = 'N'
-
-  matrix[3]![(byteArray[3]! >> 6) & 3] = 'A'
-  matrix[3]![(byteArray[3]! >> 4) & 3] = 'C'
-  matrix[3]![(byteArray[3]! >> 2) & 3] = 'G'
-  matrix[3]![(byteArray[3]! >> 0) & 3] = 'N'
-
-  matrix[4]![(byteArray[4]! >> 6) & 3] = 'A'
-  matrix[4]![(byteArray[4]! >> 4) & 3] = 'C'
-  matrix[4]![(byteArray[4]! >> 2) & 3] = 'G'
-  matrix[4]![(byteArray[4]! >> 0) & 3] = 'T'
-
   return matrix
 }
 

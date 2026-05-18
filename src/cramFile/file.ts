@@ -274,45 +274,33 @@ export default class CramFile {
     return data
   }
 
-  async _uncompressPre(
+  async _uncompress(
     compressionMethod: CompressionMethod,
     inputBuffer: Uint8Array,
     uncompressedSize: number,
-  ) {
-    // console.log({ compressionMethod })
+  ): Promise<Uint8Array> {
+    let buf: Uint8Array
     if (compressionMethod === 'gzip') {
-      return await unzip(inputBuffer)
+      buf = await unzip(inputBuffer)
     } else if (compressionMethod === 'bzip2') {
-      return await htscodecs.bz2_uncompress(inputBuffer, uncompressedSize)
+      buf = await htscodecs.bz2_uncompress(inputBuffer, uncompressedSize)
     } else if (compressionMethod === 'lzma') {
-      return xzDecompress(inputBuffer)
+      buf = await xzDecompress(inputBuffer)
     } else if (compressionMethod === 'rans') {
-      return await htscodecs.rans_uncompress(inputBuffer)
+      buf = await htscodecs.rans_uncompress(inputBuffer)
     } else if (compressionMethod === 'rans4x16') {
-      return await htscodecs.r4x16_uncompress(inputBuffer)
+      buf = await htscodecs.r4x16_uncompress(inputBuffer)
     } else if (compressionMethod === 'arith') {
-      return await htscodecs.arith_uncompress(inputBuffer)
+      buf = await htscodecs.arith_uncompress(inputBuffer)
     } else if (compressionMethod === 'fqzcomp') {
-      return await htscodecs.fqzcomp_uncompress(inputBuffer)
+      buf = await htscodecs.fqzcomp_uncompress(inputBuffer)
     } else if (compressionMethod === 'tok3') {
-      return await htscodecs.tok3_uncompress(inputBuffer)
+      buf = await htscodecs.tok3_uncompress(inputBuffer)
     } else {
       throw new CramUnimplementedError(
         `${compressionMethod} decompression not yet implemented`,
       )
     }
-  }
-
-  async _uncompress(
-    compressionMethod: CompressionMethod,
-    inputBuffer: Uint8Array,
-    uncompressedSize: number,
-  ) {
-    const buf = await this._uncompressPre(
-      compressionMethod,
-      inputBuffer,
-      uncompressedSize,
-    )
     if (buf.length !== uncompressedSize) {
       const ret = new Uint8Array(uncompressedSize)
       ret.set(buf, 0)

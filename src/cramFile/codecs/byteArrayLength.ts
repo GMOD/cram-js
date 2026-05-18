@@ -11,7 +11,7 @@ type CramCodecFactory = <TData extends DataType = DataType>(
   dataType: TData | 'ignore',
 ) => CramCodec<TData>
 
-export default class ByteArrayStopCodec extends CramCodec<
+export default class ByteArrayLengthCodec extends CramCodec<
   'byteArray',
   ByteArrayLengthEncoding['parameters']
 > {

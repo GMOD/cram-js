@@ -65,10 +65,12 @@ export default class HuffmanIntCodec extends CramCodec<
   private codes: Record<number, Code> = {}
   private codeBook: Record<number, number[]> = {}
   private sortedCodes: Code[] = []
-  private sortedValuesByBitCode: number[] = []
-  private sortedBitCodes: number[] = []
-  private sortedBitLengthsByBitCode: number[] = []
-  private bitCodeToValue: number[] = []
+  // parallel flat arrays indexed by position in sortedCodes; flat arrays let
+  // V8 use monomorphic inline caches in the decode hot path
+  private valuesByIndex: number[] = []
+  private bitLengthsByIndex: number[] = []
+  // sparse lookup: bitCode -> index in sortedCodes, or -1 if absent
+  private bitCodeToIndex: number[] = []
 
   constructor(
     parameters: HuffmanEncoding['parameters'],
@@ -150,19 +152,18 @@ export default class HuffmanIntCodec extends CramCodec<
       (a, b) => a.bitLength - b.bitLength || a.bitCode - b.bitCode,
     )
 
-    this.sortedValuesByBitCode = this.sortedCodes.map(c => c.value)
-    this.sortedBitCodes = this.sortedCodes.map(c => c.bitCode)
-    this.sortedBitLengthsByBitCode = this.sortedCodes.map(c => c.bitLength)
-    if (this.sortedBitCodes.length > 0) {
+    this.valuesByIndex = this.sortedCodes.map(c => c.value)
+    this.bitLengthsByIndex = this.sortedCodes.map(c => c.bitLength)
+    if (this.sortedCodes.length > 0) {
       let maxBitCode = 0
-      for (const code of this.sortedBitCodes) {
-        if (code > maxBitCode) {
-          maxBitCode = code
+      for (const code of this.sortedCodes) {
+        if (code.bitCode > maxBitCode) {
+          maxBitCode = code.bitCode
         }
       }
-      this.bitCodeToValue = new Array(maxBitCode + 1).fill(-1)
-      for (let i = 0; i < this.sortedBitCodes.length; i += 1) {
-        this.bitCodeToValue[this.sortedCodes[i]!.bitCode] = i
+      this.bitCodeToIndex = new Array(maxBitCode + 1).fill(-1)
+      for (let i = 0; i < this.sortedCodes.length; i++) {
+        this.bitCodeToIndex[this.sortedCodes[i]!.bitCode] = i
       }
     }
   }
@@ -194,9 +195,9 @@ export default class HuffmanIntCodec extends CramCodec<
         bits |= getBitsInline(input, coreCursor, bitsToRead)
       }
       prevLen = length
-      const index = this.bitCodeToValue[bits] ?? -1
-      if (index > -1 && this.sortedBitLengthsByBitCode[index] === length) {
-        return this.sortedValuesByBitCode[index]!
+      const index = this.bitCodeToIndex[bits] ?? -1
+      if (index > -1 && this.bitLengthsByIndex[index] === length) {
+        return this.valuesByIndex[index]!
       }
       while (
         i + 1 < this.sortedCodes.length &&
