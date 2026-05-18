@@ -193,7 +193,10 @@ export default class IndexedCramFile {
           const mateRecs = []
           for (const feature of feats) {
             const name = requireReadName(feature)
-            if (unmatedReadNames.has(name) && !seenUniqueIds.has(feature.uniqueId)) {
+            if (
+              unmatedReadNames.has(name) &&
+              !seenUniqueIds.has(feature.uniqueId)
+            ) {
               mateRecs.push(feature)
             }
           }
