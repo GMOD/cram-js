@@ -37,11 +37,7 @@ function copyFromWasm(module: HtsCodecsModule, ptr: number, size: number) {
 async function decompress(
   input: Uint8Array,
   fnName: string,
-  call: (
-    module: HtsCodecsModule,
-    inPtr: number,
-    outSizePtr: number,
-  ) => number,
+  call: (module: HtsCodecsModule, inPtr: number, outSizePtr: number) => number,
   emptyOk = false,
 ): Promise<Uint8Array> {
   if (emptyOk && input.length === 0) {
