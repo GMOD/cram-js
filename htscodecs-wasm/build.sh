@@ -88,10 +88,10 @@ COMMON_FLAGS=(
     -DNDEBUG
 )
 
-# Build ESM module. Emitted as .mjs so Node parses it as ESM regardless of
-# the parent package.json's "type" field — CJS consumers go through
-# require(ESM) on Node 22.12+.
-echo "Building ESM (.mjs) version..."
+# Build ESM module. Lands as plain .js in src/wasm — tsc with allowJs
+# re-emits it as ESM (esm/) and CJS (dist/) so downstream consumers and
+# bundlers see standard extensions.
+echo "Building ESM (.js) version..."
 # ENVIRONMENT excludes 'node' on purpose: with SINGLE_FILE=1 the wasm is
 # inlined as base64, so emscripten's node init (dynamic import of
 # node:module/node:fs/node:path/node:url to locate the .wasm on disk) is
@@ -100,7 +100,14 @@ echo "Building ESM (.mjs) version..."
 # bundle still runs under Node.
 emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,worker' "${SOURCES[@]}" -o htscodecs.esm.js
 
-mkdir -p ../src/wasm
-cp htscodecs.esm.js ../src/wasm/htscodecs.mjs
+# Strip `import.meta.url` — emscripten emits it for module-relative URL
+# resolution, but SINGLE_FILE=1 inlines the wasm as base64, so the URL
+# is dead code (its only consumer is `new URL(".", l)` inside an empty
+# try/catch). Replacing with "" keeps the source valid in CJS-emitted
+# output too, so tsc with allowJs can re-emit both esm/ and dist/ cleanly.
+sed -i 's/import\.meta\.url/""/g' htscodecs.esm.js
 
-echo "Build complete; copied to src/wasm/htscodecs.mjs"
+mkdir -p ../src/wasm
+cp htscodecs.esm.js ../src/wasm/htscodecs.js
+
+echo "Build complete; copied to src/wasm/htscodecs.js"
