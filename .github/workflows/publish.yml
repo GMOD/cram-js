@@ -23,7 +23,10 @@ jobs:
           node-version: 24.x
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
+      - run: sudo apt-get update && sudo apt-get install -y samtools
       - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
       - run: pnpm build
+      - run: pnpm test --run
       - run: pnpm test:pack
       - run: npm publish --access public
