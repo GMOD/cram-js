@@ -1,7 +1,7 @@
 # CRAM Codec Support
 
-All block compression methods and data-series codecs used by modern CRAM v3
-producers are supported.
+All block compression methods and data-series codecs used by CRAM v3 producers
+are supported, including the v3.1 additions (rans4x16, arith, fqzcomp, tok3).
 
 ## Block-level compression
 
