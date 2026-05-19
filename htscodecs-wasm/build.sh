@@ -88,18 +88,13 @@ COMMON_FLAGS=(
     -DNDEBUG
 )
 
-# Build ESM version (for esm/ directory) - web/worker only, no Node.js require()
-echo "Building ESM version..."
-emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,worker' "${SOURCES[@]}" -o htscodecs.esm.js
+# Build ESM module. Emitted as .mjs so Node parses it as ESM regardless of
+# the parent package.json's "type" field — CJS consumers go through
+# require(ESM) on Node 22.12+.
+echo "Building ESM (.mjs) version..."
+emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,node,worker' "${SOURCES[@]}" -o htscodecs.esm.js
 
-# Build CommonJS version (for dist/ directory) - includes Node.js support
-echo "Building CommonJS version..."
-emcc "${COMMON_FLAGS[@]}" -s ENVIRONMENT='web,node,worker' "${SOURCES[@]}" -o htscodecs.cjs.js
-
-echo "Build complete!"
-
-# Copy ESM version to src/wasm (used during development and for ESM build)
 mkdir -p ../src/wasm
-cp htscodecs.esm.js ../src/wasm/htscodecs.js
+cp htscodecs.esm.js ../src/wasm/htscodecs.mjs
 
-echo "Copied ESM version to src/wasm/htscodecs.js"
+echo "Build complete; copied to src/wasm/htscodecs.mjs"

@@ -1,4 +1,4 @@
-import createHtsCodecsModule from './wasm/htscodecs.js'
+import createHtsCodecsModule from './wasm/htscodecs.ts'
 
 type HtsCodecsModule = Awaited<ReturnType<typeof createHtsCodecsModule>>
 

@@ -1,4 +1,12 @@
-interface HtsCodecsModule {
+// Typed wrapper around the emscripten-emitted htscodecs.mjs bundle. The
+// .mjs is plain JS, but tsc's inference from it is `Promise<{}>`, so we
+// re-export through this file with hand-written types. Re-exporting from
+// a .ts file also keeps the .mjs source-only — tsc emits both files to
+// esm/wasm/ and dist/wasm/ via allowJs.
+
+import createHtsCodecsModule from './htscodecs.mjs'
+
+export interface HtsCodecsModule {
   _malloc: (size: number) => number
   _free: (ptr: number) => void
   _rans_uncompress: (
@@ -60,4 +68,4 @@ interface HtsCodecsModule {
   HEAP32: Int32Array
 }
 
-export default function createHtsCodecsModule(): Promise<HtsCodecsModule>
+export default createHtsCodecsModule as () => Promise<HtsCodecsModule>
