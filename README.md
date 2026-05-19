@@ -182,4 +182,4 @@ pnpm version patch  # or minor/major
 
 ## Codec support
 
-See [CODEC_SUPPORT.md](CODEC_SUPPORT.md)
+See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md)

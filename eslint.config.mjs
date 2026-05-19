@@ -21,7 +21,6 @@ export default defineConfig(
       'src/htscodecs',
       'src/seek-bzip',
       'coverage',
-      'vite.config.ts',
       'vitest.config.ts',
     ],
   },
