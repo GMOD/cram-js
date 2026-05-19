@@ -17,9 +17,15 @@ supported.
 | 7  | fqzcomp  | htscodecs WASM (`fqz_decompress`)           |
 | 8  | tok3     | htscodecs WASM (`tok3_decode_names`)        |
 
-rANS 32x16 and striped variants are dispatched internally by
-`rans_uncompress_4x16` based on format bytes — `rANS_static32x16pr.c` is
-compiled into the WASM.
+`rans_uncompress_4x16` handles all sub-variants via a format byte in the
+stream — no separate entry points are needed. Covered: order-0/1, Pack (P),
+RLE (R), 32-symbol (r32x16, via `rANS_static32x16pr.c`), striped, and CAT
+(`rNx16-cat`, a raw-passthrough path inside the same function). `gzip-min`
+is just gzip at level 1; the decompressor is identical.
+
+tok3 (`tok3_decode_names`) reads a `use_arith` byte from the stream and
+dispatches to rANS or arithmetic sub-codec internally, so both `tok3-rans`
+and `tok3-arith` are handled.
 
 ### htscodecs WASM
 
