@@ -4,7 +4,8 @@
 ![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
 Read CRAM files with pure JS, works in node or the browser. Supports CRAM 2.x
-and 3.x, `.crai` indexes, and bzip2/lzma codecs.
+and 3.x, `.crai` indexes, and all CRAM v3 block codecs (gzip, bzip2, lzma,
+rANS, arithmetic, fqzcomp, tok3). See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md).
 
 ## Install
 
@@ -179,7 +180,3 @@ Actions.
 ```bash
 pnpm version patch  # or minor/major
 ```
-
-## Codec support
-
-See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md)
