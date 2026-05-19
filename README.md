@@ -1,7 +1,7 @@
 # @gmod/cram
 
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)](https://github.com/GMOD/cram-js/actions?query=branch%3Amain+workflow%3APush+)
+![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
 Read CRAM files with pure JS, works in node or the browser. Supports CRAM 2.x
 and 3.x, `.crai` indexes, and bzip2/lzma codecs.
