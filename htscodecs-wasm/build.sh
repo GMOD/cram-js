@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Reproducible builds: suppress timestamps in emscripten/closure output
+export SOURCE_DATE_EPOCH=0
+
 echo "Building htscodecs WASM module..."
 
 # Source emscripten environment if available (local development)
