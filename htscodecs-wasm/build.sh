@@ -92,7 +92,13 @@ COMMON_FLAGS=(
 # the parent package.json's "type" field — CJS consumers go through
 # require(ESM) on Node 22.12+.
 echo "Building ESM (.mjs) version..."
-emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,node,worker' "${SOURCES[@]}" -o htscodecs.esm.js
+# ENVIRONMENT excludes 'node' on purpose: with SINGLE_FILE=1 the wasm is
+# inlined as base64, so emscripten's node init (dynamic import of
+# node:module/node:fs/node:path/node:url to locate the .wasm on disk) is
+# dead weight — and webpack 5 chokes on the node: URI scheme. Modern Node
+# satisfies the 'web' init path (globalThis.atob + WebAssembly), so the
+# bundle still runs under Node.
+emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,worker' "${SOURCES[@]}" -o htscodecs.esm.js
 
 mkdir -p ../src/wasm
 cp htscodecs.esm.js ../src/wasm/htscodecs.mjs
