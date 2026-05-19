@@ -1,54 +1,49 @@
 # CRAM Codec Support
 
+All block compression methods and data-series codecs used by modern CRAM v3
+producers are supported.
+
 ## Block-level compression
 
-Compresses raw bytes within each CRAM block. All 9 CRAM v3 methods are
-supported.
-
-| ID | Method   | Source                                      |
+| ID | Method   | Implementation                              |
 |----|----------|---------------------------------------------|
 | 0  | raw      | passthrough                                 |
-| 1  | gzip     | htscodecs WASM (`zlib_uncompress`)          |
-| 2  | bzip2    | htscodecs WASM (`bz2_uncompress`)           |
-| 3  | lzma     | [xz-decompress](https://github.com/httptoolkit/xz-decompress) WASM (xz-embedded) |
-| 4  | rans     | htscodecs WASM (`rans_uncompress`, rANS 4x8) |
-| 5  | rans4x16 | htscodecs WASM (`rans_uncompress_4x16`, rANS 4x16 + 32x16 + striped) |
-| 6  | arith    | htscodecs WASM (`arith_uncompress`)         |
-| 7  | fqzcomp  | htscodecs WASM (`fqz_decompress`)           |
-| 8  | tok3     | htscodecs WASM (`tok3_decode_names`)        |
+| 1  | gzip     | htscodecs WASM                              |
+| 2  | bzip2    | htscodecs WASM                              |
+| 3  | lzma     | [xz-decompress](https://github.com/httptoolkit/xz-decompress) WASM |
+| 4  | rans     | htscodecs WASM (rANS 4x8)                  |
+| 5  | rans4x16 | htscodecs WASM (rANS 4x16, see below)      |
+| 6  | arith    | htscodecs WASM                              |
+| 7  | fqzcomp  | htscodecs WASM                              |
+| 8  | tok3     | htscodecs WASM                              |
 
-`rans_uncompress_4x16` handles all sub-variants via a format byte in the
-stream — no separate entry points are needed. Covered: order-0/1, Pack (P),
-RLE (R), 32-symbol (r32x16, via `rANS_static32x16pr.c`), striped, and CAT
-(`rNx16-cat`, a raw-passthrough path inside the same function). `gzip-min`
-is just gzip at level 1; the decompressor is identical.
+**rans4x16 sub-variants** — all handled via a format byte in the stream:
+order-0/1, Pack (P), RLE (R), 32-symbol r32x16 (`rANS_static32x16pr.c` compiled
+into WASM), striped, CAT (`rNx16-cat`). `gzip-min` decodes identically to gzip.
 
-tok3 (`tok3_decode_names`) reads a `use_arith` byte from the stream and
-dispatches to rANS or arithmetic sub-codec internally, so both `tok3-rans`
-and `tok3-arith` are handled.
+**tok3 sub-variants** — `tok3_decode_names` reads a `use_arith` flag from the
+stream, so `tok3-rans` and `tok3-arith` are both handled.
 
 ### htscodecs WASM
 
-Built from [samtools/htscodecs](https://github.com/samtools/htscodecs)
-v1.6.6 via Emscripten (`htscodecs-wasm/build.sh`). The compiled bundle is
-checked in at `src/wasm/htscodecs.js` (inlined base64 WASM) so consumers
-don't need a C toolchain. Update with `htscodecs-wasm/update-htscodecs.sh`,
-then rebuild.
+Built from [samtools/htscodecs](https://github.com/samtools/htscodecs) v1.6.6
+via Emscripten (`htscodecs-wasm/build.sh`), checked in as inlined base64 at
+`src/wasm/htscodecs.js`. To update: `htscodecs-wasm/update-htscodecs.sh` then
+`./build.sh`.
 
 ## Data-series codecs
 
-Encode individual data fields within a block (integers, byte arrays, etc.).
-All codecs used by modern CRAM producers are implemented in TypeScript.
+| ID | Codec           | File                        | Typically used for               |
+|----|-----------------|-----------------------------|----------------------------------|
+| 1  | External        | `codecs/external.ts`        | most integer and byte series     |
+| 3  | Huffman         | `codecs/huffman.ts`         | low-cardinality data             |
+| 4  | ByteArrayLength | `codecs/byteArrayLength.ts` | base blocks (BB)                 |
+| 5  | ByteArrayStop   | `codecs/byteArrayStop.ts`   | read names, insertions, soft-clip|
+| 6  | Beta            | `codecs/beta.ts`            | alignment position (unsorted)    |
+| 7  | SubExp          | `codecs/subexp.ts`          | variable-length integers         |
+| 9  | Gamma           | `codecs/gamma.ts`           | variable-length integers         |
 
-| ID | Codec           | File                       | Used for (typical)              |
-|----|-----------------|----------------------------|---------------------------------|
-| 1  | External        | `codecs/external.ts`       | most integer and byte series    |
-| 3  | Huffman         | `codecs/huffman.ts`        | low-cardinality data            |
-| 4  | ByteArrayLength | `codecs/byteArrayLength.ts`| base blocks (BB)                |
-| 5  | ByteArrayStop   | `codecs/byteArrayStop.ts`  | read names, insertions, soft-clip |
-| 6  | Beta            | `codecs/beta.ts`           | alignment position (unsorted)   |
-| 7  | SubExp          | `codecs/subexp.ts`         | variable-length integers        |
-| 9  | Gamma           | `codecs/gamma.ts`          | variable-length integers        |
+Golomb (2) and Golomb-Rice (8) are CRAM v2-era, not generated by modern tools.
 
-Golomb (2) and Golomb-Rice (8) are CRAM v2-era codecs not generated by any
-modern tool and are intentionally omitted.
+CRAM v4 adds codecs 41–44 (VARINT_UNSIGNED/SIGNED, CONST_BYTE/INT) which are
+not implemented — CRAM v4 is a draft not generated by samtools by default.
