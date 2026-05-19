@@ -33,7 +33,7 @@
     "build:esm": "tsc --outDir esm",
     "build:es5": "tsc --module commonjs --moduleResolution bundler --outDir dist",
     "postbuild:es5": "echo '{\"type\": \"commonjs\"}' > dist/package.json",
-    "preversion": "pnpm lint && pnpm test --run && pnpm build",
+    "preversion": "pnpm lint && pnpm test --run && pnpm clean && pnpm build:esm && pnpm build:es5",
     "postversion": "git push --follow-tags",
     "build": "pnpm build:wasm && pnpm build:esm && pnpm build:es5",
     "benchonly": "vitest bench",
