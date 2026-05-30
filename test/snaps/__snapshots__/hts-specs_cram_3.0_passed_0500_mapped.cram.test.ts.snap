@@ -316,7 +316,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0500_mapped.cram without e
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

@@ -186,8 +186,8 @@ export interface CramPreservationMap {
   MI: boolean
   UI: boolean
   PI: boolean
-  RN: boolean
-  AP: boolean
+  RN: boolean | undefined
+  AP: boolean | undefined
   RR: boolean | undefined
   SM: [number, number, number, number, number]
   TD: CramTagDictionary

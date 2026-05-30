@@ -457,7 +457,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1405_index_multisliceref.c
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -18682,7 +18682,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1405_index_multisliceref.c
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -36922,7 +36922,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1405_index_multisliceref.c
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -55156,7 +55156,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1405_index_multisliceref.c
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -61712,7 +61712,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1405_index_multisliceref.c
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

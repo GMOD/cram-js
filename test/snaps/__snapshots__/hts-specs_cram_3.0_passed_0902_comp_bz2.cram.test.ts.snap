@@ -348,7 +348,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0902_comp_bz2.cram without
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

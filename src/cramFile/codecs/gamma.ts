@@ -1,5 +1,5 @@
 import CramCodec from './_base.ts'
-import { CramUnimplementedError } from '../../errors.ts'
+import { CramBufferOverrunError, CramUnimplementedError } from '../../errors.ts'
 
 import type { Cursor, Cursors } from './_base.ts'
 import type { GammaEncoding } from '../encoding.ts'
@@ -45,10 +45,15 @@ function decodeGammaInline(
   let { bytePosition, bitPosition } = cursor
   let length = 1
 
-  // Count leading zeros (each 0 bit increases length)
-  // Inline single-bit reads for the while loop
+  // Count leading zeros (each 0 bit increases length). A truncated core block
+  // reads as zeros forever, so guard against running off the end.
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
+    if (bytePosition >= data.length) {
+      throw new CramBufferOverrunError(
+        'read beyond end of core block; file seems truncated',
+      )
+    }
     const bit = (data[bytePosition]! >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {

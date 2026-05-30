@@ -365,7 +365,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

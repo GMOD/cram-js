@@ -679,7 +679,7 @@ exports[`can dump the whole c2#pad.3.0.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

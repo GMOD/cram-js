@@ -668,7 +668,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

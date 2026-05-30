@@ -431,7 +431,7 @@ exports[`can dump the whole amb#amb.3.0.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

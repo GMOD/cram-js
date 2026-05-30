@@ -541,7 +541,7 @@ exports[`can dump the whole ce#unmap2.2.1.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -2480,7 +2480,7 @@ exports[`can dump the whole ce#unmap2.2.1.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

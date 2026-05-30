@@ -452,7 +452,7 @@ exports[`can dump the whole ce#5.2.1.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

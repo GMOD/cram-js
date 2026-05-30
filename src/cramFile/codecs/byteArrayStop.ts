@@ -1,6 +1,5 @@
 import CramCodec from './_base.ts'
-import { CramBufferOverrunError } from './getBits.ts'
-import { CramMalformedError } from '../../errors.ts'
+import { CramBufferOverrunError, CramMalformedError } from '../../errors.ts'
 
 import type { Cursor, Cursors } from './_base.ts'
 import type { ByteArrayStopCramEncoding } from '../encoding.ts'

@@ -397,7 +397,7 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

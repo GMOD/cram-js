@@ -344,7 +344,7 @@ exports[`can dump the whole c1#bounds.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
