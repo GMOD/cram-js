@@ -16,12 +16,13 @@ All CRAM v3 and v3.1 codecs are supported.
 | 7   | fqzcomp  | ✅                                                                         |
 | 8   | tok3     | ✅ all sub-variants (tok3-rans, tok3-arith)                                |
 
-### htscodecs WASM
+### htscodecs and other libraries usage
 
-Built from [samtools/htscodecs](https://github.com/samtools/htscodecs) v1.6.6
-via Emscripten (`htscodecs-wasm/build.sh`), checked in as inlined base64 at
+We use [samtools/htscodecs](https://github.com/samtools/htscodecs) via
+Emscripten (`htscodecs-wasm/build.sh`), checked in as inlined base64 at
 `src/wasm/htscodecs.js`. To update: `htscodecs-wasm/update-htscodecs.sh` then
-`./build.sh`.
+`./build.sh`. All the above codecs come from htscodecs except xz-decompress
+which is vendored from https://github.com/httptoolkit/xz-decompress
 
 ## Data-series codecs
 
