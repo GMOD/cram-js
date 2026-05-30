@@ -20,36 +20,36 @@ import type CramContainerCompressionScheme from '../container/compressionScheme.
 // the underlying cursor. Built once per slice in slice/index.ts as a fixed-
 // shape object literal so call sites get monomorphic property access.
 export interface BoundDecoders {
-  BF(): number | undefined
-  CF(): number | undefined
-  RI(): number | undefined
-  RL(): number | undefined
-  AP(): number | undefined
-  RG(): number | undefined
-  RN(): Uint8Array | undefined
-  MF(): number | undefined
-  NS(): number | undefined
-  NP(): number | undefined
-  TS(): number | undefined
-  NF(): number | undefined
-  TL(): number | undefined
-  FN(): number | undefined
-  FC(): number | undefined
-  FP(): number | undefined
-  DL(): number | undefined
-  BB(): Uint8Array | undefined
-  QQ(): Uint8Array | undefined
-  BS(): number | undefined
-  IN(): Uint8Array | undefined
-  RS(): number | undefined
-  PD(): number | undefined
-  HC(): number | undefined
-  SC(): Uint8Array | undefined
-  MQ(): number | undefined
-  BA(): number | undefined
-  QS(): number | undefined
-  TC(): number | undefined
-  TN(): number | undefined
+  BF(): number
+  CF(): number
+  RI(): number
+  RL(): number
+  AP(): number
+  RG(): number
+  RN(): Uint8Array
+  MF(): number
+  NS(): number
+  NP(): number
+  TS(): number
+  NF(): number
+  TL(): number
+  FN(): number
+  FC(): number
+  FP(): number
+  DL(): number
+  BB(): Uint8Array
+  QQ(): Uint8Array
+  BS(): number
+  IN(): Uint8Array
+  RS(): number
+  PD(): number
+  HC(): number
+  SC(): Uint8Array
+  MQ(): number
+  BA(): number
+  QS(): number
+  TC(): number
+  TN(): number
 }
 
 // Uses DataView rather than typed arrays because the buffer is a subarray of a
@@ -157,19 +157,19 @@ export function buildRFSchema(
   const arr: (RFEntry | undefined)[] = new Array(128)
   arr['B'.charCodeAt(0)] = [
     'B',
-    () => [String.fromCharCode(bd.BA()!), bd.QS()!] as [string, number],
+    () => [String.fromCharCode(bd.BA()), bd.QS()] as [string, number],
   ]
-  arr['X'.charCodeAt(0)] = ['X', () => bd.BS()!]
-  arr['D'.charCodeAt(0)] = ['D', () => bd.DL()!]
-  arr['I'.charCodeAt(0)] = ['I', () => decodeUtf8(bd.IN()!)]
-  arr['i'.charCodeAt(0)] = ['i', () => String.fromCharCode(bd.BA()!)]
-  arr['b'.charCodeAt(0)] = ['b', () => decodeUtf8(bd.BB()!)]
-  arr['q'.charCodeAt(0)] = ['q', () => Array.from(bd.QQ()!)]
-  arr['Q'.charCodeAt(0)] = ['Q', () => bd.QS()!]
-  arr['H'.charCodeAt(0)] = ['H', () => bd.HC()!]
-  arr['P'.charCodeAt(0)] = ['P', () => bd.PD()!]
-  arr['N'.charCodeAt(0)] = ['N', () => bd.RS()!]
-  arr['S'.charCodeAt(0)] = ['S', () => decodeUtf8(SC()!)]
+  arr['X'.charCodeAt(0)] = ['X', () => bd.BS()]
+  arr['D'.charCodeAt(0)] = ['D', () => bd.DL()]
+  arr['I'.charCodeAt(0)] = ['I', () => decodeUtf8(bd.IN())]
+  arr['i'.charCodeAt(0)] = ['i', () => String.fromCharCode(bd.BA())]
+  arr['b'.charCodeAt(0)] = ['b', () => decodeUtf8(bd.BB())]
+  arr['q'.charCodeAt(0)] = ['q', () => Array.from(bd.QQ())]
+  arr['Q'.charCodeAt(0)] = ['Q', () => bd.QS()]
+  arr['H'.charCodeAt(0)] = ['H', () => bd.HC()]
+  arr['P'.charCodeAt(0)] = ['P', () => bd.PD()]
+  arr['N'.charCodeAt(0)] = ['N', () => bd.RS()]
+  arr['S'.charCodeAt(0)] = ['S', () => decodeUtf8(SC())]
   return arr
 }
 
@@ -187,8 +187,8 @@ function decodeReadFeatures(
   const decodeFP = bd.FP
 
   for (let i = 0; i < readFeatureCount; i++) {
-    const codeNum = decodeFC()!
-    readPos += decodeFP()!
+    const codeNum = decodeFC()
+    readPos += decodeFP()
     const entry = schema[codeNum]
 
     if (!entry) {
@@ -226,7 +226,7 @@ export type BulkByteRawDecoder = (
 function decodeQualityScores(
   readLength: number,
   decodeBulkBytesRaw: BulkByteRawDecoder | undefined,
-  decodeQS: () => number | undefined,
+  decodeQS: () => number,
 ) {
   const raw = decodeBulkBytesRaw?.('QS', readLength)
   if (raw) {
@@ -234,7 +234,7 @@ function decodeQualityScores(
   }
   const out = new Uint8Array(readLength)
   for (let i = 0; i < readLength; i++) {
-    out[i] = decodeQS()!
+    out[i] = decodeQS()
   }
   return out
 }
@@ -242,7 +242,7 @@ function decodeQualityScores(
 function decodeReadBases(
   readLength: number,
   decodeBulkBytesRaw: BulkByteRawDecoder | undefined,
-  decodeBA: () => number | undefined,
+  decodeBA: () => number,
 ) {
   const raw = decodeBulkBytesRaw?.('BA', readLength)
   if (raw) {
@@ -250,7 +250,7 @@ function decodeReadBases(
   }
   const buf = new Uint8Array(readLength)
   for (let i = 0; i < readLength; i++) {
-    buf[i] = decodeBA()!
+    buf[i] = decodeBA()
   }
   return decodeUtf8(buf)
 }
@@ -276,11 +276,11 @@ export default function decodeRecord(
   decodeOptions?: Required<DecodeOptions>,
   decodeBulkBytesRaw?: BulkByteRawDecoder,
 ) {
-  let flags = bd.BF()!
+  let flags = bd.BF()
 
   // note: the C data type of compressionFlags is byte in cram v1 and int32 in
   // cram v2+, but that does not matter for us here in javascript land.
-  const cramFlags = bd.CF()!
+  const cramFlags = bd.CF()
 
   if (!isMappedSliceHeader(sliceHeader.parsedContent)) {
     throw new Error('slice header not mapped')
@@ -291,18 +291,18 @@ export default function decodeRecord(
       ? bd.RI()
       : sliceHeader.parsedContent.refSeqId
 
-  const readLength = bd.RL()!
+  const readLength = bd.RL()
   // if APDelta, AP is a delta from the previous record's alignmentStart
-  let alignmentStart = bd.AP()!
+  let alignmentStart = bd.AP()
   if (compressionScheme.APdelta) {
     alignmentStart = alignmentStart + cursors.lastAlignmentStart
   }
   cursors.lastAlignmentStart = alignmentStart
-  const readGroupId = bd.RG()!
+  const readGroupId = bd.RG()
 
   let readNameRaw: Uint8Array | undefined
   if (compressionScheme.readNamesIncluded) {
-    readNameRaw = bd.RN()!
+    readNameRaw = bd.RN()
   }
 
   let mate: MateRecord | undefined
@@ -312,14 +312,14 @@ export default function decodeRecord(
   if (CramFlagsDecoder.isDetached(cramFlags)) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
     // matter for javascript
-    const mateFlags = bd.MF()!
+    const mateFlags = bd.MF()
     let mateReadName: string | undefined
     if (!compressionScheme.readNamesIncluded) {
-      readNameRaw = bd.RN()!
+      readNameRaw = bd.RN()
       mateReadName = readNullTerminatedStringFromBuffer(readNameRaw)
     }
-    const mateSequenceId = bd.NS()!
-    const mateAlignmentStart = bd.NP()!
+    const mateSequenceId = bd.NS()
+    const mateAlignmentStart = bd.NP()
     if (mateFlags || mateSequenceId > -1) {
       mate = {
         flags: mateFlags,
@@ -329,7 +329,7 @@ export default function decodeRecord(
       }
     }
 
-    templateSize = bd.TS()!
+    templateSize = bd.TS()
 
     // set mate unmapped if needed
     if (MateFlagsDecoder.isUnmapped(mateFlags)) {
@@ -340,12 +340,12 @@ export default function decodeRecord(
       flags = BamFlagsDecoder.setMateReverseComplemented(flags)
     }
   } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
-    mateRecordNumber = bd.NF()! + recordNumber + 1
+    mateRecordNumber = bd.NF() + recordNumber + 1
   }
 
   // TODO: the aux tag parsing will have to be refactored if we want to support
   // cram v1
-  const TLindex = bd.TL()!
+  const TLindex = bd.TL()
   if (TLindex < 0) {
     /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */
     throw new CramMalformedError('invalid TL index')
@@ -380,7 +380,7 @@ export default function decodeRecord(
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
-    const readFeatureCount = bd.FN()!
+    const readFeatureCount = bd.FN()
     lengthOnRef = readLength
     if (readFeatureCount) {
       const [features, refDelta] = decodeReadFeatures(
@@ -400,7 +400,7 @@ export default function decodeRecord(
     }
 
     // mapping quality
-    mappingQuality = bd.MQ()!
+    mappingQuality = bd.MQ()
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
       qualityScores = decodeQualityScores(readLength, decodeBulkBytesRaw, bd.QS)

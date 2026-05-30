@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 
 import ExternalCodec from '../src/cramFile/codecs/external.ts'
-import { CramBufferOverrunError } from '../src/cramFile/codecs/getBits.ts'
+import { CramBufferOverrunError } from '../src/errors.ts'
 
 import type { Cursors } from '../src/cramFile/codecs/_base.ts'
 import type { CramFileBlock } from '../src/cramFile/file.ts'

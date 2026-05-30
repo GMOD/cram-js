@@ -620,7 +620,7 @@ exports[`can dump the whole xx#tlen.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -1315,7 +1315,7 @@ exports[`can dump the whole xx#tlen.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

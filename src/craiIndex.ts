@@ -120,10 +120,9 @@ export default class CraiIndex {
     }
 
     // sort each of them by start
-    Object.entries(index).forEach(([seqId, ent]) => {
-      const e2 = ent!
-      index[seqId] = e2.sort((a, b) => a.start - b.start || a.span - b.span)
-    })
+    for (const ent of Object.values(index)) {
+      ent?.sort((a, b) => a.start - b.start || a.span - b.span)
+    }
     return index
   }
 

@@ -46,7 +46,7 @@ export default abstract class CramCodec<
     coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
-  ): DataTypeMapping[TResult] | undefined
+  ): DataTypeMapping[TResult]
 
   getBytesSubarray(
     _blocksByContentId: Record<number, CramFileBlock>,

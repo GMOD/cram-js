@@ -15,3 +15,8 @@ export class CramSizeLimitError extends CramError {}
  * An invalid argument was supplied to a cram-js method or object.
  */
 export class CramArgumentError extends CramError {}
+
+/** Read past the end of a block, indicating a truncated file. */
+export class CramBufferOverrunError extends CramError {
+  readonly code = 'CRAM_BUFFER_OVERRUN' as const
+}

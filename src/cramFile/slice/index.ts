@@ -1,10 +1,13 @@
-import { CramArgumentError, CramMalformedError } from '../../errors.ts'
+import {
+  CramArgumentError,
+  CramBufferOverrunError,
+  CramMalformedError,
+} from '../../errors.ts'
 import ByteArrayStopCodec from '../codecs/byteArrayStop.ts'
 import ExternalCodec, {
   batchDecodeItf8,
   parseItf8,
 } from '../codecs/external.ts'
-import { CramBufferOverrunError } from '../codecs/getBits.ts'
 import Constants from '../constants.ts'
 import decodeRecord, { buildRFSchema } from './decodeRecord.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
@@ -570,7 +573,11 @@ export default class CramSlice {
         }
         const contentBlock = blocksByContentId[bid]
         if (!contentBlock) {
-          return () => undefined
+          return () => {
+            throw new CramMalformedError(
+              `no block found with content ID ${bid}`,
+            )
+          }
         }
         const cursor = cursors.externalBlocks.getCursor(bid)
         const content = contentBlock.content
@@ -579,8 +586,8 @@ export default class CramSlice {
         }
         // Mirror the bounds check in ExternalCodec.decode — without it,
         // a truncated/corrupt block silently yields `undefined` for byte
-        // reads, which downstream `bd.XX()!` lies about and propagates as
-        // NaN/0 (silent data corruption) rather than a clear error.
+        // reads, which downstream propagates as NaN/0 (silent data
+        // corruption) rather than a clear error.
         return () => {
           if (cursor.bytePosition >= content.length) {
             throw new CramBufferOverrunError(
@@ -594,7 +601,11 @@ export default class CramSlice {
         const { blockContentId, stopByte } = codec.parameters
         const contentBlock = blocksByContentId[blockContentId]
         if (!contentBlock) {
-          return () => undefined
+          return () => {
+            throw new CramMalformedError(
+              `no block found with content ID ${blockContentId}`,
+            )
+          }
         }
         const content = contentBlock.content
         const cursor = cursors.externalBlocks.getCursor(blockContentId)

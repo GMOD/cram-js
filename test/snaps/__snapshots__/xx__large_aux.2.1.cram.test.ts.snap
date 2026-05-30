@@ -292,7 +292,7 @@ exports[`can dump the whole xx#large_aux.2.1.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

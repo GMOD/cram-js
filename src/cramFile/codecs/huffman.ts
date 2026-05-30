@@ -97,7 +97,7 @@ export default class HuffmanIntCodec extends CramCodec<
 
   buildCodeBook() {
     // parse the parameters together into a `codes` data structure
-    let codes = new Array<{ symbol: number; bitLength: number }>(
+    const codes = new Array<{ symbol: number; bitLength: number }>(
       this.parameters.numCodes,
     )
     for (let i = 0; i < this.parameters.numCodes; i++) {
@@ -107,9 +107,7 @@ export default class HuffmanIntCodec extends CramCodec<
       }
     }
     // sort the codes by bit length and symbol value
-    codes = codes.sort(
-      (a, b) => a.bitLength - b.bitLength || a.symbol - b.symbol,
-    )
+    codes.sort((a, b) => a.bitLength - b.bitLength || a.symbol - b.symbol)
 
     this.codeBook = {}
     codes.forEach(code => {

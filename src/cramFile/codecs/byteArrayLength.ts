@@ -35,8 +35,12 @@ export default class ByteArrayLengthCodec extends CramCodec<
     cursors: Cursors,
   ) {
     const lengthCodec = this._getLengthCodec()
-    const arrayLength =
-      lengthCodec.decode(slice, coreDataBlock, blocksByContentId, cursors) || 0
+    const arrayLength = lengthCodec.decode(
+      slice,
+      coreDataBlock,
+      blocksByContentId,
+      cursors,
+    )
 
     if (arrayLength > 0) {
       const dataCodec = this._getDataCodec()
@@ -50,13 +54,12 @@ export default class ByteArrayLengthCodec extends CramCodec<
       } else {
         const data = new Uint8Array(arrayLength)
         for (let i = 0; i < arrayLength; i += 1) {
-          data[i] =
-            dataCodec.decode(
-              slice,
-              coreDataBlock,
-              blocksByContentId,
-              cursors,
-            ) || 0
+          data[i] = dataCodec.decode(
+            slice,
+            coreDataBlock,
+            blocksByContentId,
+            cursors,
+          )
         }
         return data
       }

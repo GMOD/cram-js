@@ -415,7 +415,7 @@ exports[`can dump the whole ce#supp.3.0.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

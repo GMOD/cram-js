@@ -348,7 +348,7 @@ exports[`can dump the whole hts-specs/0903_comp_lzma.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

@@ -204,9 +204,7 @@ export default class IndexedCramFile {
         }),
       )
       const newMateFeats = await Promise.all(mateFeatPromises)
-      if (newMateFeats.length) {
-        ret = ret.concat(newMateFeats.flat())
-      }
+      ret = ret.concat(newMateFeats.flat())
     }
     return ret
   }

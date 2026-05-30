@@ -1,6 +1,9 @@
 import CramCodec, { type Cursors } from './_base.ts'
-import { CramBufferOverrunError } from './getBits.ts'
-import { CramUnimplementedError } from '../../errors.ts'
+import {
+  CramBufferOverrunError,
+  CramMalformedError,
+  CramUnimplementedError,
+} from '../../errors.ts'
 import { parseItf8 } from '../util.ts'
 
 import type { ExternalCramEncoding } from '../encoding.ts'
@@ -80,18 +83,22 @@ export default class ExternalCodec extends CramCodec<
     if (this.dataType === 'int') {
       const preDecoded = cursors.preDecodedIntBlocks?.get(this.blockContentId)
       if (preDecoded) {
-        return preDecoded.values[preDecoded.index++]
+        return preDecoded.values[preDecoded.index++]!
       }
       const contentBlock = blocksByContentId[this.blockContentId]
       if (!contentBlock) {
-        return undefined
+        throw new CramMalformedError(
+          `no block found with content ID ${this.blockContentId}`,
+        )
       }
       const cursor = cursors.externalBlocks.getCursor(this.blockContentId)
       return parseItf8(contentBlock.content, cursor)
     } else {
       const contentBlock = blocksByContentId[this.blockContentId]
       if (!contentBlock) {
-        return undefined
+        throw new CramMalformedError(
+          `no block found with content ID ${this.blockContentId}`,
+        )
       }
       const cursor = cursors.externalBlocks.getCursor(this.blockContentId)
       if (cursor.bytePosition >= contentBlock.content.length) {
@@ -99,7 +106,7 @@ export default class ExternalCodec extends CramCodec<
           'attempted to read beyond end of block. this file seems truncated.',
         )
       }
-      return contentBlock.content[cursor.bytePosition++]
+      return contentBlock.content[cursor.bytePosition++]!
     }
   }
 

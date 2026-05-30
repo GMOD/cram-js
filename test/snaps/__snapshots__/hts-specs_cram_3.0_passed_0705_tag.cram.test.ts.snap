@@ -267,7 +267,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0705_tag.cram without erro
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

@@ -302,9 +302,9 @@ export default class CramFile {
       )
     }
     if (buf.length !== uncompressedSize) {
-      const ret = new Uint8Array(uncompressedSize)
-      ret.set(buf, 0)
-      return ret
+      throw new CramMalformedError(
+        `${compressionMethod} decompression produced ${buf.length} bytes, expected ${uncompressedSize}`,
+      )
     }
     return buf
   }

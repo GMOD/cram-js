@@ -89,10 +89,11 @@ export default class CramContainerCompressionScheme {
 
   constructor(content: CramCompressionHeader) {
     // interpret some of the preservation map tags for convenient use
-    this.readNamesIncluded = content.preservation.RN
-    this.APdelta = content.preservation.AP
-
-    this.referenceRequired = !!content.preservation.RR
+    // preservation-map defaults when a key is absent, per the CRAM spec
+    // (matches htslib cram_decode.c): RN=false, AP=true, RR=true.
+    this.readNamesIncluded = content.preservation.RN ?? false
+    this.APdelta = content.preservation.AP ?? true
+    this.referenceRequired = content.preservation.RR ?? true
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
     this.dataSeriesEncoding = content.dataSeriesEncoding

@@ -520,7 +520,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -6542,7 +6542,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -12726,7 +12726,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -18345,7 +18345,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -24410,7 +24410,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -30227,7 +30227,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -36256,7 +36256,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -42460,7 +42460,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -48455,7 +48455,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -54351,7 +54351,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -60428,7 +60428,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -66047,7 +66047,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -71798,7 +71798,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -78183,7 +78183,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -84008,7 +84008,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -89725,7 +89725,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -96252,7 +96252,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -102030,7 +102030,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -108026,7 +108026,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -113685,7 +113685,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -119460,7 +119460,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -125491,7 +125491,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -131163,7 +131163,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -137305,7 +137305,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -143132,7 +143132,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -148771,7 +148771,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -155095,7 +155095,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -161251,7 +161251,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -167580,7 +167580,7 @@ exports[`can dump the whole ce#1000.tmp.cram without error 1`] = `
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",

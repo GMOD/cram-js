@@ -456,7 +456,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -6762,7 +6762,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -13068,7 +13068,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -19376,7 +19376,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -25684,7 +25684,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -29322,7 +29322,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -30645,7 +30645,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -36952,7 +36952,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -43259,7 +43259,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -49567,7 +49567,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -55875,7 +55875,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -59478,7 +59478,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -61528,7 +61528,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -63578,7 +63578,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -65628,7 +65628,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
@@ -67678,7 +67678,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1402_index_3ref.cram witho
         },
       },
       "readNamesIncluded": true,
-      "referenceRequired": false,
+      "referenceRequired": true,
       "substitutionMatrix": [
         [
           "C",
