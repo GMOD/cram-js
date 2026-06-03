@@ -122,7 +122,7 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 - `readName` — read name
 - `sequenceId` — numeric reference ID
 - `alignmentStart` — 1-based start position
-- `qualityScores` — `Int8Array` of per-base quality scores
+- `qualityScores` — `Uint8Array` of per-base quality scores
 - `readFeatures` — array of read features (see below)
 - `tags` — auxiliary tags object
 
@@ -143,9 +143,9 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 **Methods:**
 
-- `getReadBases()` → `string` — returns the read sequence string. Requires
-  `seqFetch` to be configured and is populated automatically by
-  `getRecordsForRange`.
+- `getReadBases()` → `string | null | undefined` — returns the read sequence
+  string. Requires `seqFetch` to be configured and is populated automatically
+  by `getRecordsForRange`.
 
 ### ReadFeatures
 
