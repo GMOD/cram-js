@@ -183,21 +183,12 @@ export function cramTagDictionary() {
 }
 
 export interface CramPreservationMap {
-<<<<<<< Updated upstream
-  MI: boolean
-  UI: boolean
-  PI: boolean
-  RN: boolean | undefined
-  AP: boolean | undefined
-  RR: boolean | undefined
-=======
   MI?: boolean
   UI?: boolean
   PI?: boolean
   RN?: boolean
   AP?: boolean
   RR?: boolean
->>>>>>> Stashed changes
   SM: [number, number, number, number, number]
   TD: CramTagDictionary
 }
