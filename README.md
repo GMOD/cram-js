@@ -4,8 +4,8 @@
 ![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
 Read CRAM files with pure JS, works in node or the browser. Supports CRAM 2.x
-and 3.x, `.crai` indexes, and all CRAM v3 block codecs (gzip, bzip2, lzma,
-rANS, arithmetic, fqzcomp, tok3). See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md).
+and 3.x, `.crai` indexes, and all CRAM v3 block codecs (gzip, bzip2, lzma, rANS,
+arithmetic, fqzcomp, tok3). See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md).
 
 ## Install
 
@@ -144,8 +144,8 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 **Methods:**
 
 - `getReadBases()` → `string | null | undefined` — returns the read sequence
-  string. Requires `seqFetch` to be configured and is populated automatically
-  by `getRecordsForRange`.
+  string. Requires `seqFetch` to be configured and is populated automatically by
+  `getRecordsForRange`.
 
 ### ReadFeatures
 
