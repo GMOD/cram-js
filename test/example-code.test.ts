@@ -48,3 +48,28 @@ test('runs without error', async () => {
     'VI shows a base substitution of A->C at 100101',
   ])
 })
+
+test('reports download progress for getRecordsForRange', async () => {
+  const indexedFile = new IndexedCramFile({
+    cramPath: require.resolve('./data/ce#5.tmp.cram'),
+    index: new CraiIndex({
+      path: require.resolve('./data/ce#5.tmp.cram.crai'),
+    }),
+    seqFetch: async (seqId, start, end) => 'A'.repeat(end - start + 1),
+    checkSequenceMD5: false,
+  })
+
+  const ticks: [number, number][] = []
+  await indexedFile.getRecordsForRange(0, 10000, 20000, {
+    onProgress: (downloaded, total) => {
+      ticks.push([downloaded, total])
+    },
+  })
+
+  expect(ticks[0]![0]).toEqual(0)
+  expect(ticks[0]![1]).toBeGreaterThan(0)
+  expect(ticks.at(-1)![0]).toEqual(ticks[0]![1])
+  for (let i = 1; i < ticks.length; i++) {
+    expect(ticks[i]![0]).toBeGreaterThanOrEqual(ticks[i - 1]![0])
+  }
+})

@@ -100,17 +100,33 @@ export default class IndexedCramFile {
       viewAsPairs?: boolean
       pairAcrossChr?: boolean
       maxInsertSize?: number
+      /**
+       * Called as the slices covering the query are fetched and decoded, with
+       * cumulative processed bytes and the total to fetch. Reported at slice
+       * granularity (one tick per slice, including instant ticks for cached
+       * slices) since slice byte sizes are known up front from the index. Lets
+       * callers render a determinate progress bar.
+       */
+      onProgress?: (bytesDownloaded: number, totalBytes: number) => void
     } & DecodeOptions = {},
   ) {
     const viewAsPairs = opts.viewAsPairs ?? false
     const pairAcrossChr = opts.pairAcrossChr ?? false
     const maxInsertSize = opts.maxInsertSize ?? 200000
+    const onProgress = opts.onProgress
     const decodeOptions: DecodeOptions = {
       decodeTags: opts.decodeTags,
     }
 
     const seqId = seq
     const slices = await this.index.getEntriesForRange(seqId, start, end)
+
+    let totalBytes = 0
+    for (const slice of slices) {
+      totalBytes += slice.sliceBytes
+    }
+    let downloadedBytes = 0
+    onProgress?.(0, totalBytes)
 
     // fetch all the slices and parse the feature data
     const sliceResults = await Promise.all(
@@ -139,7 +155,11 @@ export default class IndexedCramFile {
             )
           },
           decodeOptions,
-        ),
+        ).then(records => {
+          downloadedBytes += slice.sliceBytes
+          onProgress?.(downloadedBytes, totalBytes)
+          return records
+        }),
       ),
     )
 
