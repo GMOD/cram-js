@@ -1,7 +1,7 @@
 import CramFile from './cramFile/index.ts'
 import { type DecodeOptions } from './cramFile/record.ts'
 
-import type { Slice } from './craiIndex.ts'
+import type { IndexOpts, Slice } from './craiIndex.ts'
 import type { SeqFetch } from './cramFile/file.ts'
 import type CramRecord from './cramFile/record.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
@@ -25,6 +25,7 @@ export interface CramIndexLike {
     seqId: number,
     start: number,
     end: number,
+    opts?: IndexOpts,
   ) => Promise<Slice[]>
   hasDataForReferenceSequence: (seqId: number) => Promise<boolean>
 }
@@ -107,7 +108,7 @@ export default class IndexedCramFile {
        * slices) since slice byte sizes are known up front from the index. Lets
        * callers render a determinate progress bar.
        */
-      onProgress?: (bytesDownloaded: number, totalBytes: number) => void
+      onProgress?: (bytesDownloaded: number, totalBytes?: number) => void
     } & DecodeOptions = {},
   ) {
     const viewAsPairs = opts.viewAsPairs ?? false
@@ -119,7 +120,11 @@ export default class IndexedCramFile {
     }
 
     const seqId = seq
-    const slices = await this.index.getEntriesForRange(seqId, start, end)
+    // the .crai index downloads lazily here on first query; thread onProgress so
+    // its download streams under the same bar, ahead of the slice data below
+    const slices = await this.index.getEntriesForRange(seqId, start, end, {
+      onProgress,
+    })
 
     let totalBytes = 0
     for (const slice of slices) {

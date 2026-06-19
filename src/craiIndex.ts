@@ -7,6 +7,16 @@ import type { GenericFilehandle } from 'generic-filehandle2'
 
 const BAI_MAGIC = 21_578_050 // BAI\1
 
+export interface IndexOpts {
+  signal?: AbortSignal
+  /**
+   * Called as the index (.crai) is downloaded, with cumulative downloaded bytes
+   * and the total. The index is a whole-file read, so this streams real byte
+   * progress. Lets callers show a determinate "downloading index" bar.
+   */
+  onProgress?: (bytesDownloaded: number, totalBytes?: number) => void
+}
+
 export interface Slice {
   start: number
   span: number
@@ -66,10 +76,13 @@ export default class CraiIndex {
     this.filehandle = open(args.url, args.path, args.filehandle)
   }
 
-  async parseIndex() {
+  async parseIndex(opts: IndexOpts = {}) {
     const index: ParsedIndex = {}
     const uncompressedBuffer = await maybeUnzip(
-      await this.filehandle.readFile(),
+      await this.filehandle.readFile({
+        signal: opts.signal,
+        onProgress: opts.onProgress,
+      }),
     )
     const dataView = new DataView(
       uncompressedBuffer.buffer,
@@ -126,9 +139,9 @@ export default class CraiIndex {
     return index
   }
 
-  getIndex() {
+  getIndex(opts: IndexOpts = {}) {
     if (!this.parseIndexP) {
-      this.parseIndexP = this.parseIndex().catch((e: unknown) => {
+      this.parseIndexP = this.parseIndex(opts).catch((e: unknown) => {
         this.parseIndexP = undefined
         throw e
       })
@@ -160,8 +173,9 @@ export default class CraiIndex {
     seqId: number,
     queryStart: number,
     queryEnd: number,
+    opts: IndexOpts = {},
   ): Promise<Slice[]> {
-    const seqEntries = (await this.getIndex())[seqId]
+    const seqEntries = (await this.getIndex(opts))[seqId]
     return seqEntries
       ? seqEntries.filter(
           entry =>

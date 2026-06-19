@@ -15,8 +15,8 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2(buffer@6.0.3)
       generic-filehandle2:
-        specifier: ^2.1.10
-        version: 2.1.10
+        specifier: ^2.2.0
+        version: 2.2.0
       md5:
         specifier: ^2.3.0
         version: 2.3.0
@@ -1158,6 +1158,9 @@ packages:
 
   generic-filehandle2@2.1.10:
     resolution: {integrity: sha512-Ao611pePOWnFJtjPuBLpmUFtoD5VnvcBfiP5GeiZF7ahdVaFUQJrANFDIgoOMX0eXF9fzph40xCLXQTs5U95cw==}
+
+  generic-filehandle2@2.2.0:
+    resolution: {integrity: sha512-gIE15MYVakEEzWvuNkUnTfjVWzodBi3T6stgRIXpWackW6FhiK5eOBBxif1Kq2wkiiegRGGqaxpv+qUmIzh3Lg==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -3563,6 +3566,8 @@ snapshots:
   function-bind@1.1.2: {}
 
   generic-filehandle2@2.1.10: {}
+
+  generic-filehandle2@2.2.0: {}
 
   gensync@1.0.0-beta.2: {}
 
