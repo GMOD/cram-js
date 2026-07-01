@@ -423,6 +423,101 @@ export default class CramRecord {
     return this.readBases
   }
 
+  /**
+   * Get the CIGAR string describing this read's alignment against the
+   * reference, reconstructed from the read features. Substitutions and
+   * verbatim bases are reported as alignment matches (M), following the plain
+   * CIGAR convention where M covers both matches and mismatches. Unmapped
+   * reads return '*'.
+   *
+   * See CRAMv3 §10.2 (Read features):
+   * https://samtools.github.io/hts-specs/CRAMv3.pdf
+   *
+   * @returns {string} the CIGAR string, e.g. "50M2I48M"
+   */
+  getCigarString(): string {
+    if (this.isSegmentUnmapped()) {
+      return '*'
+    }
+
+    // build up (length, op) pairs, merging adjacent runs of the same op so
+    // e.g. consecutive single-base insertions collapse into one I operation
+    const ops: [number, string][] = []
+    const push = (len: number, op: string) => {
+      if (len > 0) {
+        const last = ops.at(-1)
+        if (last?.[1] === op) {
+          last[0] += len
+        } else {
+          ops.push([len, op])
+        }
+      }
+    }
+
+    let readConsumed = 0
+    let refPos = this.alignmentStart
+
+    if (this.readFeatures !== undefined) {
+      for (const feature of this.readFeatures) {
+        // 'q'/'Q' carry only quality information; their refPos does not track
+        // the alignment geometry, so they must not perturb position tracking
+        if (feature.code !== 'q' && feature.code !== 'Q') {
+          // reference bases between the last position and this feature are matches
+          const gap = feature.refPos - refPos
+          push(gap, 'M')
+          readConsumed += gap
+          refPos = feature.refPos
+
+          switch (feature.code) {
+            case 'b': {
+              // verbatim stretch of bases, aligned as matches
+              push(feature.data.length, 'M')
+              readConsumed += feature.data.length
+              refPos += feature.data.length
+              break
+            }
+            case 'B':
+            case 'X': {
+              // single-base (substitution or base+quality), aligned as a match
+              push(1, 'M')
+              readConsumed += 1
+              refPos += 1
+              break
+            }
+            case 'D':
+            case 'N': {
+              push(feature.data, feature.code)
+              refPos += feature.data
+              break
+            }
+            case 'I':
+            case 'S': {
+              push(feature.data.length, feature.code)
+              readConsumed += feature.data.length
+              break
+            }
+            case 'i': {
+              // single-base insertion
+              push(1, 'I')
+              readConsumed += 1
+              break
+            }
+            case 'P':
+            case 'H': {
+              push(feature.data, feature.code)
+              break
+            }
+          }
+        }
+      }
+    }
+
+    // any read bases past the last feature are trailing matches
+    push(this.readLength - readConsumed, 'M')
+
+    return ops.map(([len, op]) => `${len}${op}`).join('')
+  }
+
   // adapted from igv.js
   // uses precomputed lookup table indexed by flag bits + isize sign.
   // the BAM spec defines tlen as positive for the leftmost segment and

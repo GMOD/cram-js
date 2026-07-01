@@ -146,6 +146,10 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 - `getReadBases()` → `string | null | undefined` — returns the read sequence
   string. Requires `seqFetch` to be configured and is populated automatically by
   `getRecordsForRange`.
+- `getCigarString()` → `string` — returns the CIGAR string describing the read's
+  alignment (e.g. `"50M2I48M"`), reconstructed from the read features.
+  Substitutions and mismatches are reported as `M` per the plain CIGAR
+  convention; unmapped reads return `"*"`. Does not require `seqFetch`.
 
 ### ReadFeatures
 
