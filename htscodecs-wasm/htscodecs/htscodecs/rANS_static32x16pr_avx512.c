@@ -651,6 +651,8 @@ unsigned char *rans_compress_O1_32x16_avx512(unsigned char *in,
                 iN[0] += BATCH;
                 for (j = 0; j < 32; j++) {
                     iN[j] -= BATCH;
+                    if (iN[j] < BATCH || iN[j] > in_size)
+                        return NULL;
                     memcpy(c[j], &in[iN[j]-BATCH], BATCH);
                 }
                 // transpose matrix from 32xBATCH to BATCHx32
