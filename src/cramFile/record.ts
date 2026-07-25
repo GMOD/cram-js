@@ -4,14 +4,16 @@ import { readNullTerminatedStringFromBuffer } from './util.ts'
 import type CramContainerCompressionScheme from './container/compressionScheme.ts'
 import type decodeRecord from './slice/decodeRecord.ts'
 
-// precomputed pair orientation strings indexed by ((flags >> 4) & 0xF) | (isize > 0 ? 16 : 0)
-// bits 0-3 encode flag bits 0x10(reverse),0x20(mate reverse),0x40(read1),0x80(read2)
-// bit 4 encodes whether isize > 0
+// Precomputed pair orientation strings, indexed by
+//   ((flags >> 4) & 0x7) | (selfIsLeft ? 8 : 0)
+// bits 0-2 are flag bits 0x10 (self reverse), 0x20 (mate reverse), 0x40 (read1);
+// bit 3 is whether this record is the leftmost of the pair. The read2 flag (0x80)
+// is deliberately not consulted — "not read1" is what decides the numbering, so
+// a record with neither flag set reads the same as read2.
+// SYNC: ~/src/gmod/bam-js src/record.ts PAIR_ORIENTATION_TABLE
 // prettier-ignore
 const PAIR_ORIENTATION_TABLE = [
-  'F F ','F R ','R F ','R R ','F2F1','F2R1','R2F1','R2R1',
   'F1F2','F1R2','R1F2','R1R2','F2F1','F2R1','R2F1','R2R1',
-  'F F ','R F ','F R ','R R ','F1F2','R1F2','F1R2','R1R2',
   'F2F1','R2F1','F2R1','R2R1','F1F2','R1F2','F1R2','R1R2',
 ]
 
@@ -518,20 +520,33 @@ export default class CramRecord {
     return ops.map(([len, op]) => `${len}${op}`).join('')
   }
 
-  // adapted from igv.js
-  // uses precomputed lookup table indexed by flag bits + isize sign.
-  // the BAM spec defines tlen as positive for the leftmost segment and
-  // negative for the rightmost, so isize > 0 reliably indicates which
-  // read comes first without needing position-based correction
-  // (see also: gmod/bam-js src/record.ts pair_orientation getter)
+  // Must come out identical from either mate, or the two halves of one normal
+  // pair render as different orientations. The leftmost mate is therefore picked
+  // by a total order on (sequenceId, alignmentStart) that both mates evaluate the
+  // same way, with a read1-first tie-break for equal loci; when the mate is
+  // unknown the read1-first rule alone still keeps the two consistent.
+  //
+  // Deriving "leftmost" from template length looks tempting — the spec makes it
+  // positive for the leftmost segment and negative for the rightmost — but it is
+  // left at 0 whenever the insert size is unavailable, which includes every
+  // cross-reference pair. Both mates then read as "not leftmost" and disagree.
+  // SYNC: ~/src/gmod/bam-js src/record.ts pair_orientation getter
   getPairOrientation() {
     const f = this.flags
-    // paired (0x1) set, unmapped (0x4) clear, mate unmapped (0x8) clear
-    if ((f & 0xd) !== 0x1 || this.sequenceId !== this.mate?.sequenceId) {
+    if (!(f & Constants.BAM_FPAIRED)) {
       return undefined
     }
-    const isize = this.templateLength || this.templateSize || 0
-    return PAIR_ORIENTATION_TABLE[((f >> 4) & 0xf) | (isize > 0 ? 16 : 0)]
+    const isRead1 = !!(f & Constants.BAM_FREAD1)
+    const mate = this.mate
+    const selfIsLeft =
+      mate === undefined
+        ? isRead1
+        : this.sequenceId !== mate.sequenceId
+          ? this.sequenceId < mate.sequenceId
+          : this.alignmentStart !== mate.alignmentStart
+            ? this.alignmentStart < mate.alignmentStart
+            : isRead1
+    return PAIR_ORIENTATION_TABLE[((f >> 4) & 0x7) | (selfIsLeft ? 8 : 0)]
   }
 
   /**
