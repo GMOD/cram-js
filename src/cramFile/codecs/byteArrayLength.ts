@@ -7,7 +7,7 @@ import type { DataType } from './dataSeriesTypes.ts'
 
 type CramCodecFactory = <TData extends DataType = DataType>(
   encodingData: CramEncoding,
-  dataType: TData | 'ignore',
+  dataType: TData,
 ) => CramCodec<TData>
 
 export default class ByteArrayLengthCodec extends CramCodec<

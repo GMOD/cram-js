@@ -25,7 +25,7 @@ const codecClasses = {
 
 type CramCodecFactory = <TData extends DataType = DataType>(
   encodingData: CramEncoding,
-  dataType: TData | 'ignore',
+  dataType: TData,
 ) => CramCodec<TData>
 
 type CramCodecConstructor = new (
@@ -40,11 +40,9 @@ function getCodecClassWithId(id: number): CramCodecConstructor | undefined {
 
 export function instantiateCodec<TResult extends DataType = DataType>(
   encodingData: CramEncoding,
-  dataType: DataType | 'ignore',
+  dataType: DataType,
 ): CramCodec<TResult> {
-  const CodecClass = getCodecClassWithId(
-    dataType === 'ignore' ? 0 : encodingData.codecId,
-  )
+  const CodecClass = getCodecClassWithId(encodingData.codecId)
   if (!CodecClass) {
     throw new CramUnimplementedError(
       `no codec implemented for codec ID ${encodingData.codecId}`,
@@ -53,7 +51,7 @@ export function instantiateCodec<TResult extends DataType = DataType>(
 
   return new CodecClass(
     encodingData.parameters,
-    dataType as DataType,
+    dataType,
     instantiateCodec,
   ) as CramCodec<TResult>
 }

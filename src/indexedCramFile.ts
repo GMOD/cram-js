@@ -115,14 +115,10 @@ export default class IndexedCramFile {
     const pairAcrossChr = opts.pairAcrossChr ?? false
     const maxInsertSize = opts.maxInsertSize ?? 200000
     const onProgress = opts.onProgress
-    const decodeOptions: DecodeOptions = {
-      decodeTags: opts.decodeTags,
-    }
 
-    const seqId = seq
     // the .crai index downloads lazily here on first query; thread onProgress so
     // its download streams under the same bar, ahead of the slice data below
-    const slices = await this.index.getEntriesForRange(seqId, start, end, {
+    const slices = await this.index.getEntriesForRange(seq, start, end, {
       onProgress,
     })
 
@@ -159,7 +155,9 @@ export default class IndexedCramFile {
               feature.alignmentStart + feature.lengthOnRef - 1 > start
             )
           },
-          decodeOptions,
+          // opts is a superset of DecodeOptions; getRecords resolves the
+          // defaults per key so passing it straight through is safe
+          opts,
         ).then(records => {
           downloadedBytes += slice.sliceBytes
           onProgress?.(downloadedBytes, totalBytes)
@@ -186,7 +184,7 @@ export default class IndexedCramFile {
         if (
           unmatedReadNames.has(name) &&
           cramRecord.mate &&
-          (cramRecord.mate.sequenceId === seqId || pairAcrossChr) &&
+          (cramRecord.mate.sequenceId === seq || pairAcrossChr) &&
           Math.abs(cramRecord.alignmentStart - cramRecord.mate.alignmentStart) <
             maxInsertSize
         ) {

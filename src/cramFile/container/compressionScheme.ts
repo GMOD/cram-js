@@ -120,15 +120,6 @@ export default class CramContainerCompressionScheme {
     return this.tagCodecCache[tagName]
   }
 
-  /**
-   *
-   * @param {number} tagListId ID of the tag list to fetch from the tag dictionary
-   * @private
-   */
-  getTagNames(tagListId: number) {
-    return this.tagIdsDictionary[tagListId]
-  }
-
   getCodecForDataSeries<TDataSeries extends DataSeriesEncodingKey>(
     dataSeriesName: TDataSeries,
   ): CramCodec<DataSeriesTypes[TDataSeries]> | undefined {

@@ -54,7 +54,6 @@ interface RefRegion {
  */
 function calculateMultiSegmentMatedTemplateLength(
   allRecords: CramRecord[],
-  _currentRecordNumber: number,
   thisRecord: CramRecord,
 ) {
   const matedRecords: CramRecord[] = [thisRecord]
@@ -182,10 +181,8 @@ function associateIntraSliceMate(
   // set mate unmapped if needed
   if (mateRecord.flags & Constants.BAM_FUNMAP) {
     thisRecord.flags |= Constants.BAM_FMUNMAP
-    // thisRecord.templateLength = 0
   }
   if (thisRecord.flags & Constants.BAM_FUNMAP) {
-    // thisRecord.templateLength = 0
     mateRecord.flags |= Constants.BAM_FMUNMAP
   }
 
@@ -199,11 +196,7 @@ function associateIntraSliceMate(
 
   if (thisRecord.templateLength === undefined) {
     if (complicatedMultiSegment) {
-      calculateMultiSegmentMatedTemplateLength(
-        allRecords,
-        currentRecordNumber,
-        thisRecord,
-      )
+      calculateMultiSegmentMatedTemplateLength(allRecords, thisRecord)
     } else {
       calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord)
     }
