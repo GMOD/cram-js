@@ -24,12 +24,6 @@ export function decodeUtf8(buffer: Uint8Array) {
   return getTextDecoder().decode(buffer)
 }
 
-export const TWO_PWR_16_DBL = 1 << 16
-export const TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL
-export const TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL
-export const TWO_PWR_24_DBL = 1 << 24
-export const TWO_PWR_56_DBL = TWO_PWR_24_DBL * TWO_PWR_32_DBL
-
 export function itf8Size(v: number) {
   if (!(v & ~0x7f)) {
     return 1
@@ -107,102 +101,22 @@ export function parseItf8Sized(
   return [value, cursor.bytePosition - offset] as const
 }
 
+// LTF8 encodes the byte count in the leading 1 bits of the first byte: n
+// leading ones mean n further bytes follow, and the first byte's remaining low
+// bits are the value's most significant bits (0xFF, all ones, has none — eight
+// bytes follow). Accumulating by multiplication rather than shifting is what
+// keeps this correct past 32 bits: `a << 24 | b << 16 | c << 8 | d` is a signed
+// int32, so any word whose top byte is >= 0x80 came out negative and the value
+// was ~2^32 too small.
+// See CRAMv3 §2.3 (Integer types): https://samtools.github.io/hts-specs/CRAMv3.pdf
 export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
-  let offset = initialOffset
-  const countFlags = buffer[offset]!
-  let value: number
-
-  // Single byte value < 0x80
-  if (countFlags < 0x80) {
-    value = countFlags
-    offset += 1
+  const firstByte = buffer[initialOffset]!
+  const extraBytes = Math.clz32(~firstByte & 0xff) - 24
+  let value = firstByte & (0xff >> extraBytes)
+  for (let i = 1; i <= extraBytes; i++) {
+    value = value * 256 + buffer[initialOffset + i]!
   }
-  // Two byte value < 0xC0
-  else if (countFlags < 0xc0) {
-    value = ((countFlags << 8) | buffer[offset + 1]!) & 0x3fff
-    offset += 2
-  }
-  // Three byte value < 0xE0
-  else if (countFlags < 0xe0) {
-    value =
-      ((countFlags & 0x3f) << 16) |
-      (buffer[offset + 1]! << 8) |
-      buffer[offset + 2]!
-    offset += 3
-  }
-  // Four byte value < 0xF0
-  else if (countFlags < 0xf0) {
-    value =
-      ((countFlags & 0x1f) << 24) |
-      (buffer[offset + 1]! << 16) |
-      (buffer[offset + 2]! << 8) |
-      buffer[offset + 3]!
-    offset += 4
-  }
-  // Five byte value < 0xF8
-  else if (countFlags < 0xf8) {
-    value =
-      (buffer[offset]! & 0x0f) * TWO_PWR_32_DBL +
-      ((buffer[offset + 1]! << 24) |
-        (buffer[offset + 2]! << 16) |
-        (buffer[offset + 3]! << 8) |
-        buffer[offset + 4]!)
-    offset += 5
-  }
-  // Six byte value < 0xFC
-  else if (countFlags < 0xfc) {
-    value =
-      (((buffer[offset]! & 0x07) << 8) | buffer[offset + 1]!) * TWO_PWR_32_DBL +
-      ((buffer[offset + 2]! << 24) |
-        (buffer[offset + 3]! << 16) |
-        (buffer[offset + 4]! << 8) |
-        buffer[offset + 5]!)
-    offset += 6
-  }
-  // Seven byte value < 0xFE
-  else if (countFlags < 0xfe) {
-    value =
-      (((buffer[offset]! & 0x03) << 16) |
-        (buffer[offset + 1]! << 8) |
-        buffer[offset + 2]!) *
-        TWO_PWR_32_DBL +
-      ((buffer[offset + 3]! << 24) |
-        (buffer[offset + 4]! << 16) |
-        (buffer[offset + 5]! << 8) |
-        buffer[offset + 6]!)
-    offset += 7
-  }
-  // Eight byte value < 0xFF
-  else if (countFlags < 0xff) {
-    value =
-      ((buffer[offset + 1]! << 24) |
-        (buffer[offset + 2]! << 16) |
-        (buffer[offset + 3]! << 8) |
-        buffer[offset + 4]!) *
-        TWO_PWR_32_DBL +
-      ((buffer[offset + 5]! << 24) |
-        (buffer[offset + 6]! << 16) |
-        (buffer[offset + 7]! << 8) |
-        buffer[offset + 8]!)
-    offset += 8
-  }
-  // Nine byte value
-  else {
-    value =
-      buffer[offset + 1]! * TWO_PWR_56_DBL +
-      ((buffer[offset + 2]! << 24) |
-        (buffer[offset + 3]! << 16) |
-        (buffer[offset + 4]! << 8) |
-        buffer[offset + 5]!) *
-        TWO_PWR_32_DBL +
-      ((buffer[offset + 6]! << 24) |
-        (buffer[offset + 7]! << 16) |
-        (buffer[offset + 8]! << 8) |
-        buffer[offset + 9]!)
-    offset += 9
-  }
-
-  return [value, offset - initialOffset] as const
+  return [value, extraBytes + 1] as const
 }
 
 export function parseItem<T>(
