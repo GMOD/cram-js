@@ -18,5 +18,5 @@ export function testFile(filename: string) {
         }),
       ),
     ).toMatchSnapshot()
-  }, 30000)
+  })
 }

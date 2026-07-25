@@ -77,4 +77,4 @@ test('debug dumpFile logic for noseq', async () => {
       `  Slice ${i}: at block ${s.blockNum}, ${s.records} records, ${s.blocks} data blocks`,
     )
   })
-}, 30000)
+})
