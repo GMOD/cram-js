@@ -775,7 +775,24 @@ export interface CramCompressionHeader {
   _endPosition: number
 }
 
+// The parsers are pure functions of (buffer, offset), so a set can be shared
+// by every container and slice in a file. Without this each slice header read
+// rebuilt all eleven parsers and their closures.
+const sectionParserCache = new Map<
+  number,
+  ReturnType<typeof buildSectionParsers>
+>()
+
 export function getSectionParsers(majorVersion: number) {
+  let parsers = sectionParserCache.get(majorVersion)
+  if (parsers === undefined) {
+    parsers = buildSectionParsers(majorVersion)
+    sectionParserCache.set(majorVersion, parsers)
+  }
+  return parsers
+}
+
+function buildSectionParsers(majorVersion: number) {
   return {
     cramFileDefinition: cramFileDefinition(),
     cramBlockHeader: cramBlockHeader(),

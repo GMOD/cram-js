@@ -4,7 +4,6 @@ import type { Cursors } from './_base.ts'
 import type { ByteArrayLengthEncoding, CramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
 import type { DataType } from './dataSeriesTypes.ts'
-import type CramSlice from '../slice/index.ts'
 
 type CramCodecFactory = <TData extends DataType = DataType>(
   encodingData: CramEncoding,
@@ -29,14 +28,12 @@ export default class ByteArrayLengthCodec extends CramCodec<
   }
 
   decode(
-    slice: CramSlice,
     coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
     const lengthCodec = this._getLengthCodec()
     const arrayLength = lengthCodec.decode(
-      slice,
       coreDataBlock,
       blocksByContentId,
       cursors,
@@ -54,12 +51,7 @@ export default class ByteArrayLengthCodec extends CramCodec<
       } else {
         const data = new Uint8Array(arrayLength)
         for (let i = 0; i < arrayLength; i += 1) {
-          data[i] = dataCodec.decode(
-            slice,
-            coreDataBlock,
-            blocksByContentId,
-            cursors,
-          )
+          data[i] = dataCodec.decode(coreDataBlock, blocksByContentId, cursors)
         }
         return data
       }

@@ -4,7 +4,6 @@ import { CramBufferOverrunError, CramUnimplementedError } from '../../errors.ts'
 import type { Cursor, Cursors } from './_base.ts'
 import type { GammaEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import type CramSlice from '../slice/index.ts'
 
 export default class GammaCodec extends CramCodec<
   'int',
@@ -20,7 +19,6 @@ export default class GammaCodec extends CramCodec<
   }
 
   decode(
-    _slice: CramSlice,
     coreDataBlock: CramFileBlock,
     _blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,

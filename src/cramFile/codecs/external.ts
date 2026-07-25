@@ -8,7 +8,6 @@ import { parseItf8 } from '../util.ts'
 
 import type { ExternalCramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import type CramSlice from '../slice/index.ts'
 
 export { parseItf8 } from '../util.ts'
 
@@ -52,7 +51,14 @@ export function batchDecodeItf8(buffer: Uint8Array) {
     }
   }
 
-  return result.subarray(0, count)
+  // Every ITF8 value occupies at least one byte, so buffer.length is a safe
+  // upper bound on the count — but a block of mostly multi-byte values leaves
+  // the scratch array several times larger than needed, and a subarray would
+  // pin all of it for as long as the slice stays cached. Copy out when the
+  // overhang is large enough to be worth the copy.
+  return count * 2 < result.length
+    ? result.slice(0, count)
+    : result.subarray(0, count)
 }
 
 export default class ExternalCodec extends CramCodec<
@@ -75,7 +81,6 @@ export default class ExternalCodec extends CramCodec<
   }
 
   decode(
-    _slice: CramSlice,
     _coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
@@ -83,7 +88,13 @@ export default class ExternalCodec extends CramCodec<
     if (this.dataType === 'int') {
       const preDecoded = cursors.preDecodedIntBlocks?.get(this.blockContentId)
       if (preDecoded) {
-        return preDecoded.values[preDecoded.index++]!
+        const value = preDecoded.values[preDecoded.index++]
+        if (value === undefined) {
+          throw new CramBufferOverrunError(
+            'attempted to read beyond end of block. this file seems truncated.',
+          )
+        }
+        return value
       }
       const contentBlock = blocksByContentId[this.blockContentId]
       if (!contentBlock) {

@@ -1,6 +1,5 @@
 import type { CramFileBlock } from '../file.ts'
 import type { DataType } from './dataSeriesTypes.ts'
-import type CramSlice from '../slice/index.ts'
 
 export interface DataTypeMapping {
   byte: number
@@ -42,7 +41,6 @@ export default abstract class CramCodec<
   }
 
   abstract decode(
-    slice: CramSlice,
     coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,

@@ -4,14 +4,12 @@ import { CramBufferOverrunError, CramMalformedError } from '../../errors.ts'
 import type { Cursor, Cursors } from './_base.ts'
 import type { ByteArrayStopCramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import type CramSlice from '../slice/index.ts'
 
 export default class ByteArrayStopCodec extends CramCodec<
   'byteArray',
   ByteArrayStopCramEncoding['parameters']
 > {
   decode(
-    _slice: CramSlice,
     _coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,

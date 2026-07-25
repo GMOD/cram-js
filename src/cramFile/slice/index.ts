@@ -21,7 +21,13 @@ import type {
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers.ts'
-import type { BoundDecoders, BulkByteRawDecoder } from './decodeRecord.ts'
+import type {
+  BoundDecoders,
+  BulkByteRawDecoder,
+  ByteArraySeries,
+  NumericSeries,
+  SliceDecodeContext,
+} from './decodeRecord.ts'
 import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type CramContainer from '../container/index.ts'
@@ -352,6 +358,16 @@ export default class CramSlice {
     return blocksByContentId
   }
 
+  // the container only lacks a compression scheme when it holds no records,
+  // which is never the case for a container we are decoding a slice out of
+  private async getCompressionScheme() {
+    const compressionScheme = await this.container.getCompressionScheme()
+    if (compressionScheme === undefined) {
+      throw new CramMalformedError('compression scheme undefined')
+    }
+    return compressionScheme
+  }
+
   async getBlockByContentId(id: number) {
     const blocksByContentId = await this._getBlocksContentIdIndex()
     return blocksByContentId[id]
@@ -368,10 +384,7 @@ export default class CramSlice {
       return undefined
     }
 
-    const compressionScheme = await this.container.getCompressionScheme()
-    if (compressionScheme === undefined) {
-      throw new Error('compression scheme undefined')
-    }
+    const compressionScheme = await this.getCompressionScheme()
 
     if (sliceHeader.refBaseBlockId >= 0) {
       const refBlock = await this.getBlockByContentId(
@@ -436,10 +449,7 @@ export default class CramSlice {
   async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
     const { majorVersion } = await this.file.getDefinition()
 
-    const compressionScheme = await this.container.getCompressionScheme()
-    if (compressionScheme === undefined) {
-      throw new Error('compression scheme undefined')
-    }
+    const compressionScheme = await this.getCompressionScheme()
 
     const sliceHeader = await this.getHeader()
     const blocksByContentId = await this._getBlocksContentIdIndex()
@@ -449,20 +459,23 @@ export default class CramSlice {
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
       isMappedSliceHeader(sliceHeader.parsedContent) &&
-      sliceHeader.parsedContent.refSeqId >= 0 &&
-      sliceHeader.parsedContent.md5?.join('') !== '0000000000000000'
+      sliceHeader.parsedContent.refSeqId >= 0
     ) {
-      const refRegion = await this.getReferenceRegion()
-      if (refRegion) {
-        const { seq, start, end } = refRegion
-        const seqMd5 = sequenceMD5(seq)
-        const storedMd5 = sliceHeader.parsedContent.md5
-          ?.map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
-          .join('')
-        if (seqMd5 !== storedMd5) {
-          throw new CramMalformedError(
-            `MD5 checksum reference mismatch for ref ${sliceHeader.parsedContent.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
-          )
+      const md5Bytes = sliceHeader.parsedContent.md5
+      // an absent or all-zero md5 means "not recorded", nothing to check
+      if (md5Bytes?.some(byte => byte !== 0)) {
+        const refRegion = await this.getReferenceRegion()
+        if (refRegion) {
+          const { seq, start, end } = refRegion
+          const seqMd5 = sequenceMD5(seq)
+          const storedMd5 = md5Bytes
+            .map(byte => (byte < 16 ? '0' : '') + byte.toString(16))
+            .join('')
+          if (seqMd5 !== storedMd5) {
+            throw new CramMalformedError(
+              `MD5 checksum reference mismatch for ref ${sliceHeader.parsedContent.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
+            )
+          }
         }
       }
     }
@@ -553,10 +566,14 @@ export default class CramSlice {
     // single object literal with all data series present so V8 sees a stable
     // hidden class — call sites in decodeRecord then become direct property
     // accesses with monomorphic inline caches.
-    const bind = (dataSeriesName: string) => {
-      const codec = compressionScheme.getCodecForDataSeries(
-        dataSeriesName as DataSeriesEncodingKey,
-      )
+    // `bind` is a function declaration rather than an arrow so it can carry
+    // overloads: the return type depends on the data series, per dataSeriesTypes
+    function bind(dataSeriesName: NumericSeries): () => number
+    function bind(dataSeriesName: ByteArraySeries): () => Uint8Array
+    function bind(
+      dataSeriesName: DataSeriesEncodingKey,
+    ): () => number | Uint8Array {
+      const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
       if (!codec) {
         return () => {
           throw new CramMalformedError(
@@ -569,7 +586,18 @@ export default class CramSlice {
         const preDecoded = preDecodedIntBlocks.get(bid)
         if (preDecoded) {
           const { values } = preDecoded
-          return () => values[preDecoded.index++]
+          // bounds check mirrors the byte branch below — without it a
+          // truncated block silently yields undefined, which propagates as
+          // NaN through alignmentStart/readLength rather than erroring
+          return () => {
+            const value = values[preDecoded.index++]
+            if (value === undefined) {
+              throw new CramBufferOverrunError(
+                'attempted to read beyond end of block. this file seems truncated.',
+              )
+            }
+            return value
+          }
         }
         const contentBlock = blocksByContentId[bid]
         if (!contentBlock) {
@@ -589,12 +617,13 @@ export default class CramSlice {
         // reads, which downstream propagates as NaN/0 (silent data
         // corruption) rather than a clear error.
         return () => {
-          if (cursor.bytePosition >= content.length) {
+          const value = content[cursor.bytePosition++]
+          if (value === undefined) {
             throw new CramBufferOverrunError(
               'attempted to read beyond end of block. this file seems truncated.',
             )
           }
-          return content[cursor.bytePosition++]
+          return value
         }
       }
       if (codec instanceof ByteArrayStopCodec) {
@@ -625,8 +654,7 @@ export default class CramSlice {
           return content.subarray(start, pos)
         }
       }
-      return () =>
-        codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
+      return () => codec.decode(coreDataBlock!, blocksByContentId, cursors)
     }
 
     const bd: BoundDecoders = {
@@ -660,7 +688,7 @@ export default class CramSlice {
       QS: bind('QS'),
       TC: bind('TC'),
       TN: bind('TN'),
-    } as BoundDecoders
+    }
 
     // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray
     // view when the codec supports it (e.g. ExternalCodec), or undefined otherwise
@@ -685,8 +713,7 @@ export default class CramSlice {
     > = {}
     const bindTagFallback = (tagId: string) => {
       const codec = compressionScheme.getCodecForTag(tagId)
-      return () =>
-        codec.decode(this, coreDataBlock!, blocksByContentId, cursors)
+      return () => codec.decode(coreDataBlock!, blocksByContentId, cursors)
     }
     for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
       const enc = compressionScheme.tagEncoding[tagId]!
@@ -709,7 +736,15 @@ export default class CramSlice {
         const lenContent = lenContentBlock.content
         const lenCursor = cursors.externalBlocks.getCursor(lenBid)
         const readTagLen = lenPreDecoded
-          ? () => lenPreDecoded.values[lenPreDecoded.index++]!
+          ? () => {
+              const length = lenPreDecoded.values[lenPreDecoded.index++]
+              if (length === undefined) {
+                throw new CramBufferOverrunError(
+                  'attempted to read beyond end of block. this file seems truncated.',
+                )
+              }
+              return length
+            }
           : () => parseItf8(lenContent, lenCursor)
         boundTagDecoders[tagId] = () => {
           const length = readTagLen()
@@ -731,33 +766,46 @@ export default class CramSlice {
       }
     }
 
+    // Split each three-character tag id into its name and type once per slice
+    // rather than once per tag per record.
+    const tagDescriptorsByTL = compressionScheme.tagIdsDictionary.map(tagIds =>
+      tagIds.map(tagId => ({
+        name: tagId.slice(0, 2),
+        type: tagId[2]!,
+        decode:
+          boundTagDecoders[tagId] ??
+          (() => {
+            throw new CramMalformedError(
+              `tag ${tagId} is in the tag dictionary but has no encoding`,
+            )
+          }),
+      })),
+    )
+
+    if (!isMappedSliceHeader(sliceHeader.parsedContent)) {
+      throw new CramMalformedError('slice header not mapped')
+    }
+    const ctx: SliceDecodeContext = {
+      bd,
+      rfSchema: buildRFSchema(bd, majorVersion),
+      tagDescriptorsByTL,
+      cursors,
+      decodeBulkBytesRaw,
+      decodeTags: decodeOptions.decodeTags,
+      APdelta: compressionScheme.APdelta,
+      readNamesIncluded: compressionScheme.readNamesIncluded,
+      isMultiRef: majorVersion > 1 && sliceHeader.parsedContent.refSeqId === -2,
+      refSeqId: sliceHeader.parsedContent.refSeqId,
+    }
+
     const records: CramRecord[] = new Array(
       sliceHeader.parsedContent.numRecords,
     )
-    const rfSchema = buildRFSchema(bd, majorVersion)
+    const uniqueIdBase =
+      sliceHeader.contentPosition + sliceHeader.parsedContent.recordCounter + 1
     for (let i = 0; i < records.length; i += 1) {
       try {
-        records[i] = new CramRecord(
-          decodeRecord(
-            this,
-            bd,
-            rfSchema,
-            boundTagDecoders,
-            compressionScheme,
-            sliceHeader,
-            coreDataBlock!,
-            blocksByContentId,
-            cursors,
-            majorVersion,
-            i,
-            sliceHeader.contentPosition +
-              sliceHeader.parsedContent.recordCounter +
-              i +
-              1,
-            decodeOptions,
-            decodeBulkBytesRaw,
-          ),
-        )
+        records[i] = new CramRecord(decodeRecord(ctx, i, uniqueIdBase + i))
       } catch (e) {
         const err = e as { code?: string; message?: string }
         if (err.code === 'CRAM_BUFFER_OVERRUN') {
@@ -798,8 +846,13 @@ export default class CramSlice {
     filterFunction: (r: CramRecord) => boolean,
     decodeOptions?: DecodeOptions,
   ) {
-    // Merge with defaults
-    const opts = { ...defaultDecodeOptions, ...decodeOptions }
+    // Resolve defaults per-key rather than by spreading: callers routinely
+    // build a DecodeOptions with explicitly-undefined values (see
+    // IndexedCramFile.getRecordsForRange), and a spread would let those
+    // undefined values overwrite the defaults.
+    const opts: Required<DecodeOptions> = {
+      decodeTags: decodeOptions?.decodeTags ?? defaultDecodeOptions.decodeTags,
+    }
 
     // fetch the features if necessary, using the file-level feature cache
     // Include decode options in cache key so different decode configs are cached separately
@@ -826,10 +879,7 @@ export default class CramSlice {
           sliceHeader.parsedContent.refSeqId >= 0
             ? sliceHeader.parsedContent.refSeqId
             : undefined
-        const compressionScheme = await this.container.getCompressionScheme()
-        if (compressionScheme === undefined) {
-          throw new Error('compression scheme undefined')
-        }
+        const compressionScheme = await this.getCompressionScheme()
         const refRegions: Record<string, RefRegion> = {}
 
         // iterate over the records to find the spans of the reference

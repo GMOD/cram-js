@@ -6,7 +6,10 @@ import type {
   DataSeriesEncodingMap,
 } from '../codecs/dataSeriesTypes.ts'
 import type { CramEncoding } from '../encoding.ts'
-import type { CramCompressionHeader } from '../sectionParsers.ts'
+import type {
+  CramCompressionHeader,
+  CramTagDictionary,
+} from '../sectionParsers.ts'
 
 // the hardcoded data type to be decoded for each core
 // data field
@@ -80,7 +83,8 @@ export default class CramContainerCompressionScheme {
   public readNamesIncluded: boolean
   public APdelta: boolean
   public referenceRequired: boolean
-  public tagIdsDictionary: Record<number, string[]>
+  // the TD preservation map entry: tag-list index -> three-character tag ids
+  public tagIdsDictionary: CramTagDictionary
   public substitutionMatrix: string[][]
   public dataSeriesCodecCache: DataSeriesCache = {}
   public tagCodecCache: Record<string, CramCodec> = {}

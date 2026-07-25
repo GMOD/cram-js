@@ -335,7 +335,7 @@ export default class CramRecord {
     if (mate) {
       this.mate = mate
     }
-    if (mateRecordNumber) {
+    if (mateRecordNumber !== undefined) {
       this.mateRecordNumber = mateRecordNumber
     }
   }
