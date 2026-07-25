@@ -202,7 +202,6 @@ export default class HuffmanIntCodec extends CramCodec<
     // indexed rather than for-of: this is the innermost bit-decoding loop, and
     // groupBitLength.entries() would allocate an iterator plus an [index, value]
     // tuple on every iteration
-    // eslint-disable-next-line unicorn/no-for-loop
     for (let g = 0; g < groupBitLength.length; g += 1) {
       const length = groupBitLength[g]!
       const bitsToRead = length - prevLen
