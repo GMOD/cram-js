@@ -27,20 +27,20 @@ export interface Slice {
 
 type ParsedIndex = Record<string, Slice[] | undefined>
 
-function addRecordToIndex(index: ParsedIndex, record: number[]) {
-  const [seqId, start, span, containerStart, sliceStart, sliceBytes] = record
+const FIELDS_PER_RECORD = 6
 
-  const s = seqId!
-  if (!index[s]) {
-    index[s] = []
+function addRecordToIndex(index: ParsedIndex, fields: number[]) {
+  const seqId = fields[0]!
+  if (!index[seqId]) {
+    index[seqId] = []
   }
 
-  index[s].push({
-    start: start!,
-    span: span!,
-    containerStart: containerStart!,
-    sliceStart: sliceStart!,
-    sliceBytes: sliceBytes!,
+  index[seqId].push({
+    start: fields[1]!,
+    span: fields[2]!,
+    containerStart: fields[3]!,
+    sliceStart: fields[4]!,
+    sliceBytes: fields[5]!,
   })
 }
 
@@ -97,26 +97,52 @@ export default class CraiIndex {
         'invalid .crai index file. note: file appears to be a .bai index. this is technically legal but please open a github issue if you need support',
       )
     }
-    // interpret the text as regular ascii, since it is supposed to be only
-    // digits and whitespace characters this is written in a deliberately
-    // low-level fashion for performance, because some .crai files can be
-    // pretty large.
-    let currentRecord: number[] = []
-    let currentString = ''
-    for (const charCode of uncompressedBuffer) {
-      if (
-        (charCode >= 48 && charCode <= 57) /* 0-9 */ ||
-        (!currentString && charCode === 45) /* leading - */
-      ) {
-        currentString += String.fromCharCode(charCode)
-      } else if (charCode === 9 /* \t */) {
-        currentRecord.push(Number.parseInt(currentString, 10))
-        currentString = ''
-      } else if (charCode === 10 /* \n */) {
-        currentRecord.push(Number.parseInt(currentString, 10))
-        currentString = ''
-        addRecordToIndex(index, currentRecord)
-        currentRecord = []
+    // Interpret the text as regular ascii, since it is supposed to be only
+    // digits and whitespace characters. Digits are accumulated numerically
+    // rather than into a string that is then parseInt'd: whole-genome .crai
+    // files run to tens of megabytes, and the per-digit string building
+    // dominated index load time.
+    const fields: number[] = new Array(FIELDS_PER_RECORD)
+    let fieldCount = 0
+    let value = 0
+    let negative = false
+    let hasDigits = false
+    const len = uncompressedBuffer.length
+    for (let i = 0; i < len; i++) {
+      const charCode = uncompressedBuffer[i]!
+      if (charCode >= 48 && charCode <= 57 /* 0-9 */) {
+        value = value * 10 + (charCode - 48)
+        hasDigits = true
+      } else if (charCode === 45 /* - */ && !hasDigits && !negative) {
+        negative = true
+      } else if (charCode === 9 /* \t */ || charCode === 10 /* \n */) {
+        // a \n with nothing pending at the start of a record is a blank line
+        if (charCode === 10 && fieldCount === 0 && !hasDigits && !negative) {
+          continue
+        }
+        if (!hasDigits) {
+          throw new CramMalformedError(
+            'invalid .crai index file, empty numeric field',
+          )
+        }
+        if (fieldCount === FIELDS_PER_RECORD) {
+          throw new CramMalformedError(
+            `invalid .crai index file, more than ${FIELDS_PER_RECORD} fields in a record`,
+          )
+        }
+        fields[fieldCount++] = negative ? -value : value
+        value = 0
+        negative = false
+        hasDigits = false
+        if (charCode === 10) {
+          if (fieldCount !== FIELDS_PER_RECORD) {
+            throw new CramMalformedError(
+              `invalid .crai index file, expected ${FIELDS_PER_RECORD} fields per record but got ${fieldCount}`,
+            )
+          }
+          addRecordToIndex(index, fields)
+          fieldCount = 0
+        }
       } else if (charCode !== 13 /* \r */ && charCode !== 32 /* space */) {
         // if there are other characters in the file besides
         // space and \r, something is wrong.
@@ -125,11 +151,11 @@ export default class CraiIndex {
     }
 
     // if the file ends without a \n, we need to flush our buffers
-    if (currentString) {
-      currentRecord.push(Number.parseInt(currentString, 10))
+    if (hasDigits && fieldCount < FIELDS_PER_RECORD) {
+      fields[fieldCount++] = negative ? -value : value
     }
-    if (currentRecord.length === 6) {
-      addRecordToIndex(index, currentRecord)
+    if (fieldCount === FIELDS_PER_RECORD) {
+      addRecordToIndex(index, fields)
     }
 
     // sort each of them by start

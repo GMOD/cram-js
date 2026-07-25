@@ -1,7 +1,83 @@
+import { BlobFile } from 'generic-filehandle2'
 import { expect, test } from 'vitest'
 
 import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
+
+// .crai text is parsed digit-by-digit in a hand-rolled loop for speed, so the
+// cases below pin down the parser's handling of separators, signs and
+// malformed input rather than going through a fixture file
+function indexFromText(text: string) {
+  return new CraiIndex({
+    filehandle: new BlobFile(new Blob([new TextEncoder().encode(text)])),
+  })
+}
+
+const entry = {
+  start: 1,
+  span: 20,
+  containerStart: 562,
+  sliceStart: 143,
+  sliceBytes: 200,
+}
+
+test('parses a record with no trailing newline', async () => {
+  expect(await indexFromText('0\t1\t20\t562\t143\t200').getIndex()).toEqual({
+    0: [entry],
+  })
+})
+
+test('parses negative sequence ids', async () => {
+  expect(await indexFromText('-1\t1\t20\t562\t143\t200\n').getIndex()).toEqual({
+    '-1': [entry],
+  })
+})
+
+test('parses multi-digit values exactly', async () => {
+  const data = await indexFromText(
+    '0\t100009\t102\t1953\t592\t1024\n',
+  ).getIndex()
+  expect(data[0]).toEqual([
+    {
+      start: 100009,
+      span: 102,
+      containerStart: 1953,
+      sliceStart: 592,
+      sliceBytes: 1024,
+    },
+  ])
+})
+
+test('tolerates blank lines and trailing whitespace', async () => {
+  const data = await indexFromText(
+    '0\t1\t20\t562\t143\t200\n\n0\t1\t20\t562\t143\t200\r\n',
+  ).getIndex()
+  expect(data[0]).toEqual([entry, entry])
+})
+
+test('throws on a record with too few fields', async () => {
+  await expect(
+    indexFromText('0\t1\t20\t562\t143\n').getIndex(),
+  ).rejects.toThrow(/expected 6 fields/)
+})
+
+test('throws on a record with too many fields', async () => {
+  await expect(
+    indexFromText('0\t1\t20\t562\t143\t200\t7\n').getIndex(),
+  ).rejects.toThrow(/more than 6 fields/)
+})
+
+test('throws on an empty field rather than yielding NaN', async () => {
+  await expect(
+    indexFromText('0\t\t20\t562\t143\t200\n').getIndex(),
+  ).rejects.toThrow(/empty numeric field/)
+})
+
+test('throws on non-numeric content', async () => {
+  await expect(
+    indexFromText('0\tx\t20\t562\t143\t200\n').getIndex(),
+  ).rejects.toThrow(/invalid \.crai index file/)
+})
 
 test('can read xx#unsorted.tmp.cram.crai', async () => {
   const filehandle = testDataFile('xx#unsorted.tmp.cram.crai')
