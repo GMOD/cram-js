@@ -1,0 +1,59 @@
+import { expect, test } from 'vitest'
+
+import CramRecord from '../src/cramFile/record.ts'
+
+import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
+
+// A 10bp mapped read at ref 101, fully covered by a 10bp reference region.
+// readFeatures/lengthOnRef are what each case varies.
+function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
+  const record = new CramRecord({
+    flags: 0,
+    cramFlags: 0,
+    readLength: 10,
+    mappingQuality: 30,
+    lengthOnRef,
+    qualityScores: undefined,
+    mateRecordNumber: undefined,
+    readBases: undefined,
+    readFeatures,
+    mate: undefined,
+    readGroupId: 0,
+    readNameRaw: undefined,
+    sequenceId: 0,
+    uniqueId: 1,
+    templateSize: undefined,
+    alignmentStart: 101,
+    tags: {},
+  })
+  const refRegion: RefRegion = { start: 101, end: 110, seq: 'ACGTACGTAC' }
+  record._refRegion = refRegion
+  return record
+}
+
+test('reconstructs read bases from substitution features', () => {
+  const record = makeRecord([
+    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'T' },
+  ])
+  expect(record.getReadBases()).toBe('ACGTTCGTAC')
+})
+
+// Regression guard: the walk over read features used to spin forever whenever
+// an iteration could neither emit a base nor consume a feature. Both dead ends
+// are reachable from malformed data and hang hard — the loop is synchronous, so
+// the tab/process cannot even be interrupted.
+test('throws rather than hanging on two features at one read position', () => {
+  // what an FP delta of 0 between two base-consuming features decodes to
+  const record = makeRecord([
+    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'T' },
+    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'G' },
+  ])
+  expect(() => record.getReadBases()).toThrow(/seems malformed/)
+})
+
+test('throws rather than hanging when the reference region falls short', () => {
+  // a deletion claims 5 reference bases the 10bp region cannot supply on top of
+  // the read's own 10, so the trailing reference chunk comes back empty
+  const record = makeRecord([{ code: 'D', data: 5, pos: 3, refPos: 103 }], 15)
+  expect(() => record.getReadBases()).toThrow(/seems malformed/)
+})

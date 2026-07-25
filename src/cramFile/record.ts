@@ -1,4 +1,5 @@
 import Constants from './constants.ts'
+import { CramMalformedError } from '../errors.ts'
 import { readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type CramContainerCompressionScheme from './container/compressionScheme.ts'
@@ -84,6 +85,15 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   let regionPos = regionSeqOffset
   let currentReadFeature = 0
   while (bases.length < cramRecord.readLength) {
+    // Every iteration must either emit read bases or consume a feature, or the
+    // walk cannot terminate. Malformed data reaches both dead ends: an FP delta
+    // of 0 puts two base-consuming features at one read position, so the chunk
+    // up to "the next feature" is empty and the feature is never consumed; and
+    // read features inconsistent with lengthOnRef leave the reference region
+    // too short to fill the read, so the trailing chunk is empty too. Either
+    // way the loop below would spin forever on a file we cannot decode.
+    const basesBefore = bases.length
+    const featureBefore = currentReadFeature
     if (currentReadFeature < cramRecord.readFeatures.length) {
       const feature = cramRecord.readFeatures[currentReadFeature]!
       if (feature.code === 'Q' || feature.code === 'q') {
@@ -137,6 +147,11 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
       bases += chunk
       regionPos += chunk.length
     }
+    if (bases.length === basesBefore && currentReadFeature === featureBefore) {
+      throw new CramMalformedError(
+        `could not decode read bases for ${cramRecord.sequenceId}:${cramRecord.alignmentStart}: stuck at ${bases.length} of ${cramRecord.readLength} bases, read feature ${currentReadFeature} of ${cramRecord.readFeatures.length}. this file seems malformed`,
+      )
+    }
   }
 
   return bases.toUpperCase()
@@ -172,10 +187,8 @@ function decodeBaseSubstitution(
   if (refBase) {
     readFeature.ref = refBase
   }
-  let baseNumber = baseNumbers[refBase]
-  if (baseNumber === undefined) {
-    baseNumber = 4
-  }
+  // anything that is not a called base substitutes through the N row
+  const baseNumber = baseNumbers[refBase] ?? 4
   const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]!
   const base = substitutionScheme[readFeature.data]
   if (base) {
