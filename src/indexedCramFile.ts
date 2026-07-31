@@ -51,7 +51,9 @@ export default class IndexedCramFile {
    * returning reference sequence for a region; seqId is numeric, coords 1-based
    *
    * @param {number} [args.cacheSize] optional maximum number of CRAM records
-   * to cache.  default 20,000
+   * to keep in the decoded-slice cache. default 20,000. Slices are cached whole,
+   * so the limit is applied by evicting least-recently-used slices until the
+   * total record count is back under it.
    *
    * @param {boolean} [args.checkSequenceMD5] - default true. if false,
    * disables verifying the MD5 checksum of the reference sequence underlying a

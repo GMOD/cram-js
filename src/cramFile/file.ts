@@ -1,10 +1,10 @@
-import QuickLRU from '@jbrowse/quick-lru'
 import crc32 from 'crc/calculators/crc32'
 
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import { parseHeaderText } from '../sam.ts'
+import SliceRecordCache from './sliceRecordCache.ts'
 import { decodeUtf8, parseItem } from './util.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
@@ -16,7 +16,6 @@ import {
 } from './sectionParsers.ts'
 import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
-import type CramRecord from './record.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
@@ -64,7 +63,7 @@ export default class CramFile {
     checkSequenceMD5?: boolean
     cacheSize: number
   }
-  public featureCache: QuickLRU<string, Promise<CramRecord[]>>
+  public featureCache: SliceRecordCache
   private header: string | undefined
   private _sectionParsers?: ReturnType<typeof getSectionParsers>
   private _definitionResult?: ReturnType<CramFile['_fetchDefinition']>
@@ -82,9 +81,7 @@ export default class CramFile {
     // cache of features in a slice, keyed by the slice offset. caches all of
     // the features in a slice, or none. the cache is actually used by the
     // slice object, it's just kept here at the level of the file
-    this.featureCache = new QuickLRU({
-      maxSize: this.options.cacheSize,
-    })
+    this.featureCache = new SliceRecordCache(this.options.cacheSize)
     if (!checkLittleEndian()) {
       throw new Error('Detected big-endian machine, may be unable to run')
     }
