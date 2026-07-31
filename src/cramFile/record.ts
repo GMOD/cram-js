@@ -355,15 +355,6 @@ export default class CramRecord {
     }
   }
 
-  /**
-   * Get a single quality score at the given index.
-   * @param index 0-based index into the quality scores
-   * @returns the quality score at that index, or undefined if not available
-   */
-  qualityScoreAt(index: number): number | undefined {
-    return this.qualityScores?.[index]
-  }
-
   // BAM flags — see SAM/BAM spec §1.4 (Flag field):
   // https://samtools.github.io/hts-specs/SAMv1.pdf
   /** @returns {boolean} true if the read is paired, regardless of whether both segments are mapped */
