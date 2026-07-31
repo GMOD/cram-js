@@ -120,6 +120,26 @@ Recorded so they are not rediscovered:
 - **A short-buffer fast path in `decodeUtf8`.** Node 24's `TextDecoder` matches
   or beats `String.fromCharCode.apply` at every length tested (73–114 ns/call vs
   62–147), and is 2x faster at length 12.
+- **A positional `CramRecord` constructor.** `decodeRecord` builds a 19-key
+  object literal that `new CramRecord(...)` immediately destructures and drops,
+  one per record — so on the per-record-and-GC-bound short-read path it looks
+  like free throughput. Having `decodeRecord` return the `CramRecord` directly,
+  through a 19-argument positional constructor, does remove the allocation, and
+  the output is byte-identical (sha256 over `toJSON()` + `getCigarString()` +
+  `getPairOrientation()` for all 92,582 records in `test/data`). It buys nothing
+  worth having: five alternating processes per tree, median-of-medians, gave
+  129.6 → 128.5 ms on SRR396637 and 56.2 → 56.0 ms on SRR396636, both inside the
+  ±1% cold-decode noise floor. GC time does drop consistently (107 → 94 ms on
+  SRR396637, ~12%), confirming the allocation really is gone, but GC is only ~8%
+  of that decode so it never reaches 1% end-to-end. Against that: nineteen
+  unlabelled positional parameters, sixteen of them `number` or
+  `number | undefined`, where any transposition still typechecks — and it is a
+  breaking change to a public constructor. If the constructor is revisited, do
+  it for the _type_ wart instead: its parameter is
+  `ReturnType<typeof decodeRecord>`, so every key is required and building a
+  record by hand means spelling out seven explicit `undefined`s (see
+  `test/pairOrientation.test.ts`). A named `CramRecordArgs` interface with the
+  optional fields marked optional fixes that at no runtime cost.
 - **`CramRecord` hidden-class stability.** The conditional constructor
   assignments look like they would split the hidden class; measured **1 shape**
   across all records, because `target: es2022` implies
