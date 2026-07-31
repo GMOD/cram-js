@@ -48,6 +48,13 @@ interface RefRegion {
   seq: string | null
 }
 
+/** a RefRegion whose sequence has been fetched, as addReferenceSequence takes it */
+interface RefRegionWithSeq {
+  start: number
+  end: number
+  seq: string
+}
+
 /**
  * Try to estimate the template length from a bunch of interrelated
  * multi-segment reads.
@@ -920,17 +927,32 @@ export default class CramSlice {
           }),
         )
 
+        // Narrow each fetched region to the { start, end, seq } shape
+        // addReferenceSequence takes, once per region rather than once per
+        // record. The object is only read, never mutated, so every record
+        // covered by a region shares one — spreading inside the loop below
+        // instead cost ~72 bytes of retained heap per record.
+        const resolvedRegions: Record<string, RefRegionWithSeq> = {}
+        for (const [seqId, refRegion] of Object.entries(refRegions)) {
+          // truthy, not `!== null`: a seqFetch callback that cannot resolve the
+          // reference may hand back an empty string, and decoding a read
+          // against an empty reference throws rather than yielding no bases
+          if (refRegion.seq) {
+            resolvedRegions[seqId] = {
+              start: refRegion.start,
+              end: refRegion.end,
+              seq: refRegion.seq,
+            }
+          }
+        }
+
         // now decorate all the records with them
         for (const record of records) {
           const seqId =
             singleRefId !== undefined ? singleRefId : record.sequenceId
-          const refRegion = refRegions[seqId]
-          if (refRegion?.seq) {
-            const seq = refRegion.seq
-            record.addReferenceSequence(
-              { ...refRegion, seq },
-              compressionScheme,
-            )
+          const refRegion = resolvedRegions[seqId]
+          if (refRegion) {
+            record.addReferenceSequence(refRegion, compressionScheme)
           }
         }
       }
