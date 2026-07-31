@@ -145,7 +145,7 @@ export function forEachMismatch(
               // an unresolved substitution reads as N, matching getReadBases()
               // and the substitution matrix's own fallback row
               subCodes[i] ? String.fromCharCode(subCodes[i]!) : 'N',
-              hasQual ? qual[pos[i]! - 1]! : -1,
+              hasQual ? qual[pos[i]!]! : -1,
               // 0 stays 0 through the upper-casing, so an unknown reference
               // base keeps reporting as unknown
               refCodes[i]! & ~0x20,

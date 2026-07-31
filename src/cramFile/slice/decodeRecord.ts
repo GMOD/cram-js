@@ -229,7 +229,7 @@ export function buildRFSchema(
  * they occupy and their total effect on the record's length on the reference.
  */
 function decodeReadFeatures(
-  alignmentStart: number,
+  recordStart: number,
   readFeatureCount: number,
   bd: BoundDecoders,
   schema: (RFEntry | undefined)[],
@@ -237,7 +237,9 @@ function decodeReadFeatures(
 ): [number, number] {
   let readPos = 0
   let refDelta = 0
-  const base = alignmentStart - 1
+  // FP decodes to a 1-based read position, so `readPos - 1` is the 0-based one
+  // and `recordStart - 1` absorbs that subtraction for the reference column
+  const base = recordStart - 1
   const decodeFC = bd.FC
   const decodeFP = bd.FP
 
@@ -258,7 +260,7 @@ function decodeReadFeatures(
     }
 
     codes[i] = codeNum
-    pos[i] = readPos
+    pos[i] = readPos - 1
     refPos[i] = readPos + base + refDelta
     refDelta += entry.decodeInto(arena, i)
   }
@@ -364,11 +366,12 @@ export default function decodeRecord(
   const sequenceId = isMultiRef ? bd.RI() : refSeqId
 
   const readLength = bd.RL()
-  // if APDelta, AP is a delta from the previous record's alignmentStart
-  let alignmentStart = bd.AP()
-  if (APdelta) {
-    alignmentStart = alignmentStart + cursors.lastAlignmentStart
-  }
+  // if APDelta, AP is a delta from the previous record's start and carries no
+  // origin of its own — the 0-based seed comes from the slice header's
+  // refSeqStart. Otherwise AP is an absolute 1-based position and converts here.
+  const alignmentStart = APdelta
+    ? bd.AP() + cursors.lastAlignmentStart
+    : bd.AP() - 1
   cursors.lastAlignmentStart = alignmentStart
   const readGroupId = bd.RG()
 
@@ -391,12 +394,13 @@ export default function decodeRecord(
       mateReadName = readNullTerminatedStringFromBuffer(readNameRaw)
     }
     const mateSequenceId = bd.NS()
-    const mateAlignmentStart = bd.NP()
+    // NP is an absolute 1-based position, never a delta
+    const mateAlignmentStart = bd.NP() - 1
     if (mateFlags || mateSequenceId > -1) {
       mate = {
         flags: mateFlags,
         sequenceId: mateSequenceId,
-        alignmentStart: mateAlignmentStart,
+        start: mateAlignmentStart,
         readName: mateReadName,
       }
     }
@@ -496,7 +500,7 @@ export default function decodeRecord(
     sequenceId,
     cramFlags,
     flags,
-    alignmentStart,
+    start: alignmentStart,
     readGroupId,
     readNameRaw,
     mate,

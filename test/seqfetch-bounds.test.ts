@@ -25,7 +25,7 @@ test('seqFetch is bounded to the reads covered extent (#79)', async () => {
         'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
       ),
     }),
-    seqFetch: async (id, start, end) => {
+    fetchReferenceSequence: async (id, start, end) => {
       calls.push({ start, end })
       return fasta.fetch(id, start, end)
     },
@@ -36,9 +36,9 @@ test('seqFetch is bounded to the reads covered extent (#79)', async () => {
 
   // the reads covered extent, using lengthOnRef when present and falling back to
   // readLength (matches how the reference fetch computes its span)
-  const readStart = Math.min(...records.map(r => r.alignmentStart))
+  const readStart = Math.min(...records.map(r => r.start))
   const readEnd = Math.max(
-    ...records.map(r => r.alignmentStart + (r.lengthOnRef ?? r.readLength) - 1),
+    ...records.map(r => r.start + (r.lengthOnRef ?? r.readLength)),
   )
 
   const fetchStart = Math.min(...calls.map(c => c.start))

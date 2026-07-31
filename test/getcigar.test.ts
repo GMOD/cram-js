@@ -16,7 +16,7 @@ function referenceCigar(record: CramRecord) {
   let cigar = ''
   const op = 'M'
   let oplen = 0
-  let last_pos = record.alignmentStart
+  let last_pos = record.start
   let seqlen = 0
   if (record.readFeatures !== undefined) {
     for (const feature of record.readFeatures) {
@@ -140,7 +140,7 @@ test('getCigarString matches htslib (samtools) output', async () => {
   const cram = new IndexedCramFile({
     cramFilehandle: testDataFile('volvox-long-reads-sv.cram'),
     // CIGAR reconstruction never reads the reference, so a stub suffices
-    seqFetch: async () => 'N'.repeat(100_000),
+    fetchReferenceSequence: async () => 'N'.repeat(100_000),
     index: new CraiIndex({
       filehandle: testDataFile('volvox-long-reads-sv.cram.crai'),
     }),
@@ -151,7 +151,7 @@ test('getCigarString matches htslib (samtools) output', async () => {
     const records = await cram.getRecordsForRange(seqId, 0, 60000)
     for (const record of records) {
       actual.push(
-        `${record.flags}\t${record.alignmentStart}\t${record.getCigarString()}`,
+        `${record.flags}\t${record.start + 1}\t${record.getCigarString()}`,
       )
     }
   }
@@ -167,7 +167,7 @@ function makeRecord({
 }: {
   flags: number
   readLength: number
-  alignmentStart: number
+  start: number
   readFeatures?: ReadFeature[]
 }) {
   const arena = readFeatures ? arenaFromReadFeatures(readFeatures) : undefined
@@ -183,7 +183,7 @@ test('read with no features is all matches', () => {
     makeRecord({
       flags: 0,
       readLength: 100,
-      alignmentStart: 5,
+      start: 4,
     }).getCigarString(),
   ).toBe('100M')
 })
@@ -193,8 +193,8 @@ test('substitutions stay within the match run', () => {
     makeRecord({
       flags: 0,
       readLength: 10,
-      alignmentStart: 1,
-      readFeatures: [{ code: 'X', data: 2, pos: 5, refPos: 5 }],
+      start: 0,
+      readFeatures: [{ code: 'X', data: 2, pos: 4, refPos: 4 }],
     }).getCigarString(),
   ).toBe('10M')
 })
@@ -204,10 +204,10 @@ test('deletion and refskip', () => {
     makeRecord({
       flags: 0,
       readLength: 10,
-      alignmentStart: 1,
+      start: 0,
       readFeatures: [
-        { code: 'D', data: 3, pos: 5, refPos: 5 },
-        { code: 'N', data: 100, pos: 5, refPos: 8 },
+        { code: 'D', data: 3, pos: 4, refPos: 4 },
+        { code: 'N', data: 100, pos: 4, refPos: 7 },
       ],
     }).getCigarString(),
   ).toBe('4M3D100N6M')
@@ -218,11 +218,11 @@ test('soft clip, insertion, hard clip', () => {
     makeRecord({
       flags: 0,
       readLength: 20,
-      alignmentStart: 1,
+      start: 0,
       readFeatures: [
-        { code: 'H', data: 5, pos: 1, refPos: 1 },
-        { code: 'S', data: 'ACGT', pos: 1, refPos: 1 },
-        { code: 'I', data: 'GG', pos: 5, refPos: 5 },
+        { code: 'H', data: 5, pos: 0, refPos: 0 },
+        { code: 'S', data: 'ACGT', pos: 0, refPos: 0 },
+        { code: 'I', data: 'GG', pos: 4, refPos: 4 },
       ],
     }).getCigarString(),
   ).toBe('5H4S4M2I10M')
@@ -233,10 +233,10 @@ test('coalesces consecutive single-base insertions', () => {
     makeRecord({
       flags: 0,
       readLength: 5,
-      alignmentStart: 1,
+      start: 0,
       readFeatures: [
-        { code: 'i', data: 'A', pos: 3, refPos: 3 },
-        { code: 'i', data: 'C', pos: 4, refPos: 3 },
+        { code: 'i', data: 'A', pos: 2, refPos: 2 },
+        { code: 'i', data: 'C', pos: 3, refPos: 2 },
       ],
     }).getCigarString(),
   ).toBe('2M2I1M')
@@ -251,11 +251,11 @@ test('a Q between two single-base insertions does not split them', () => {
     makeRecord({
       flags: 0,
       readLength: 5,
-      alignmentStart: 1,
+      start: 0,
       readFeatures: [
-        { code: 'i', data: 'A', pos: 3, refPos: 3 },
-        { code: 'Q', data: 36, pos: 3, refPos: 2 },
-        { code: 'i', data: 'C', pos: 4, refPos: 3 },
+        { code: 'i', data: 'A', pos: 2, refPos: 2 },
+        { code: 'Q', data: 36, pos: 2, refPos: 1 },
+        { code: 'i', data: 'C', pos: 3, refPos: 2 },
       ],
     }).getCigarString(),
   ).toBe('2M2I1M')
@@ -268,11 +268,11 @@ test('Q features inside an insertion do not perturb the match runs', () => {
     makeRecord({
       flags: 0,
       readLength: 10,
-      alignmentStart: 1,
+      start: 0,
       readFeatures: [
-        { code: 'I', data: 'GG', pos: 5, refPos: 5 },
+        { code: 'I', data: 'GG', pos: 4, refPos: 4 },
+        { code: 'Q', data: 36, pos: 4, refPos: 2 },
         { code: 'Q', data: 36, pos: 5, refPos: 3 },
-        { code: 'Q', data: 36, pos: 6, refPos: 4 },
       ],
     }).getCigarString(),
   ).toBe('4M2I4M')
@@ -285,8 +285,8 @@ test('mapped read with no operations returns *', () => {
     makeRecord({
       flags: 0x10,
       readLength: 0,
-      alignmentStart: 4,
-      readFeatures: [{ code: 'H', data: 0, pos: 1, refPos: 4 }],
+      start: 3,
+      readFeatures: [{ code: 'H', data: 0, pos: 0, refPos: 3 }],
     }).getCigarString(),
   ).toBe('*')
 })
@@ -296,7 +296,7 @@ test('unmapped read returns *', () => {
     makeRecord({
       flags: 0x4,
       readLength: 100,
-      alignmentStart: 1,
+      start: 0,
     }).getCigarString(),
   ).toBe('*')
 })

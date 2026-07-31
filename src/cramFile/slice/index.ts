@@ -77,19 +77,19 @@ function calculateMultiSegmentMatedTemplateLength(
     cur = mateRecord
   }
 
-  let minStart = matedRecords[0]!.alignmentStart
-  let maxEnd = minStart + matedRecords[0]!.readLength - 1
+  let minStart = matedRecords[0]!.start
+  let maxEnd = minStart + matedRecords[0]!.readLength
   for (let i = 1; i < matedRecords.length; i++) {
     const r = matedRecords[i]!
-    if (r.alignmentStart < minStart) {
-      minStart = r.alignmentStart
+    if (r.start < minStart) {
+      minStart = r.start
     }
-    const end = r.alignmentStart + r.readLength - 1
+    const end = r.start + r.readLength
     if (end > maxEnd) {
       maxEnd = end
     }
   }
-  const estimatedTemplateLength = maxEnd - minStart + 1
+  const estimatedTemplateLength = maxEnd - minStart
   if (estimatedTemplateLength >= 0) {
     matedRecords.forEach(r => {
       if (r.templateLength !== undefined) {
@@ -99,7 +99,7 @@ function calculateMultiSegmentMatedTemplateLength(
       }
       // sign per SAM spec: positive for leftmost, negative for rightmost
       r.templateLength =
-        r.alignmentStart === minStart
+        r.start === minStart
           ? estimatedTemplateLength
           : -estimatedTemplateLength
     })
@@ -117,19 +117,19 @@ function calculateIntraSliceMatePairTemplateLength(
   // this just estimates the template length by using the simple (non-gapped)
   // end coordinate of each read, because gapping in the alignment doesn't mean
   // the template is longer or shorter
-  const start = Math.min(thisRecord.alignmentStart, mateRecord.alignmentStart)
+  const start = Math.min(thisRecord.start, mateRecord.start)
   const end = Math.max(
-    thisRecord.alignmentStart + thisRecord.readLength - 1,
-    mateRecord.alignmentStart + mateRecord.readLength - 1,
+    thisRecord.start + thisRecord.readLength,
+    mateRecord.start + mateRecord.readLength,
   )
-  const lengthEstimate = end - start + 1
+  const lengthEstimate = end - start
   // sign per SAM spec: positive for leftmost, negative for rightmost
   thisRecord.templateLength =
-    thisRecord.alignmentStart <= mateRecord.alignmentStart
+    thisRecord.start <= mateRecord.start
       ? lengthEstimate
       : -lengthEstimate
   mateRecord.templateLength =
-    mateRecord.alignmentStart <= thisRecord.alignmentStart
+    mateRecord.start <= thisRecord.start
       ? lengthEstimate
       : -lengthEstimate
 }
@@ -161,7 +161,7 @@ function associateIntraSliceMate(
 
   thisRecord.mate = {
     sequenceId: mateRecord.sequenceId,
-    alignmentStart: mateRecord.alignmentStart,
+    start: mateRecord.start,
     uniqueId: mateRecord.uniqueId,
   }
   if (mateRecord.readName) {
@@ -174,7 +174,7 @@ function associateIntraSliceMate(
   if (!mateRecord.mate && mateRecord.mateRecordNumber === undefined) {
     mateRecord.mate = {
       sequenceId: thisRecord.sequenceId,
-      alignmentStart: thisRecord.alignmentStart,
+      start: thisRecord.start,
       uniqueId: thisRecord.uniqueId,
     }
     if (thisRecord.readName) {
@@ -406,7 +406,7 @@ export default class CramSlice {
       return {
         seq: decodeUtf8(refBlock.content),
         start: sliceHeader.refSeqStart,
-        end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+        end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan,
         span: sliceHeader.refSeqSpan,
       }
     }
@@ -423,7 +423,7 @@ export default class CramSlice {
       const seq = await this.file.fetchReferenceSequenceCallback(
         sliceHeader.refSeqId,
         sliceHeader.refSeqStart,
-        sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+        sliceHeader.refSeqStart + sliceHeader.refSeqSpan,
       )
 
       if (seq.length !== sliceHeader.refSeqSpan) {
@@ -435,7 +435,7 @@ export default class CramSlice {
       return {
         seq,
         start: sliceHeader.refSeqStart,
-        end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan - 1,
+        end: sliceHeader.refSeqStart + sliceHeader.refSeqSpan,
         span: sliceHeader.refSeqSpan,
       }
     }
@@ -898,7 +898,7 @@ export default class CramSlice {
           if (!refRegion) {
             refRegion = {
               id: seqId,
-              start: record.alignmentStart,
+              start: record.start,
               end: Number.NEGATIVE_INFINITY,
               seq: null,
             }
@@ -906,14 +906,12 @@ export default class CramSlice {
           }
 
           const end =
-            record.alignmentStart +
-            (record.lengthOnRef || record.readLength) -
-            1
+            record.start + (record.lengthOnRef || record.readLength)
           if (end > refRegion.end) {
             refRegion.end = end
           }
-          if (record.alignmentStart < refRegion.start) {
-            refRegion.start = record.alignmentStart
+          if (record.start < refRegion.start) {
+            refRegion.start = record.start
           }
         }
 
@@ -922,9 +920,14 @@ export default class CramSlice {
           Object.values(refRegions).map(async refRegion => {
             if (
               refRegion.id !== -1 &&
-              refRegion.start <= refRegion.end &&
+              refRegion.start < refRegion.end &&
               this.file.fetchReferenceSequenceCallback
             ) {
+              // deliberately NOT length-checked the way getReferenceRegion() is:
+              // this span is built from `lengthOnRef || readLength`, so unmapped
+              // reads inflate it past the end of the contig and a correct
+              // callback legitimately returns fewer bases. Add the check once
+              // that span is computed from mapped reads only.
               refRegion.seq = await this.file.fetchReferenceSequenceCallback(
                 refRegion.id,
                 refRegion.start,

@@ -284,7 +284,7 @@ GGTCACACGATTAACCCAAGTCAATAGAAGCCGGCGTAAAGAGTGTTTTAGATCACCCCC
 TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
       const cram = new IndexedCramFile({
         cramFilehandle: testDataFile('raw_sorted_duplicates_removed.cram'),
-        async seqFetch(ref, start, end) {
+        async fetchReferenceSequence(ref, start, end) {
           return seq.slice(start, end)
         },
         index: new CraiIndex({

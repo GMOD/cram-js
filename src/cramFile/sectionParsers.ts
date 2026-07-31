@@ -270,6 +270,7 @@ function formatMap(data: { ents: { key: string; value: unknown }[] }) {
 
 export interface MappedSliceHeader {
   refSeqId: number
+  /** 0-based; the file stores it 1-based and the parser shifts it */
   refSeqStart: number
   refSeqSpan: number
   numRecords: number
@@ -418,7 +419,14 @@ function cramMappedSliceHeader(majorVersion: number) {
           numContentIds,
           refSeqSpan,
           refSeqId,
-          refSeqStart,
+          // the file stores this 1-based; nothing downstream of this parse is.
+          // Seeds cursors.lastAlignmentStart, so shifting it here is what makes
+          // every record's AP-delta chain come out 0-based. On an unmapped or
+          // multi-ref slice the stored value is a 0 placeholder rather than a
+          // coordinate, and the -1 it becomes is still the right seed: the
+          // chain is a pure sum, so a uniform shift of the seed shifts every
+          // record start by exactly one.
+          refSeqStart: refSeqStart - 1,
           recordCounter,
           refBaseBlockId,
           contentIds,
@@ -696,7 +704,8 @@ function cramContainerHeader1(majorVersion: number) {
         value: {
           length,
           refSeqId,
-          refSeqStart,
+          // 1-based in the file, 0-based from here on — see the slice header
+          refSeqStart: refSeqStart - 1,
           alignmentSpan,
           numBlocks,
           numLandmarks,

@@ -9,7 +9,7 @@ test('debug dumpFile logic for noseq', async () => {
   const seqFetch = fasta.fetch.bind(fasta)
   const file = new CramFile({
     filehandle: testDataFile('c1#noseq.tmp.cram'),
-    seqFetch,
+    fetchReferenceSequence: seqFetch,
   })
 
   const containerId = 1

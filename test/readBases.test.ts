@@ -27,7 +27,7 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
     sequenceId: 0,
     uniqueId: 1,
     templateSize: undefined,
-    alignmentStart: 101,
+    start: 101,
     tags: {},
   })
   const refRegion: RefRegion = { start: 101, end: 110, seq: 'ACGTACGTAC' }
@@ -37,7 +37,7 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
 
 test('reconstructs read bases from substitution features', () => {
   const record = makeRecord([
-    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'T' },
+    { code: 'X', data: 0, pos: 4, refPos: 104, sub: 'T' },
   ])
   expect(record.getReadBases()).toBe('ACGTTCGTAC')
 })
@@ -49,8 +49,8 @@ test('reconstructs read bases from substitution features', () => {
 test('throws rather than hanging on two features at one read position', () => {
   // what an FP delta of 0 between two base-consuming features decodes to
   const record = makeRecord([
-    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'T' },
-    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'G' },
+    { code: 'X', data: 0, pos: 4, refPos: 104, sub: 'T' },
+    { code: 'X', data: 0, pos: 4, refPos: 104, sub: 'G' },
   ])
   expect(() => record.getReadBases()).toThrow(/seems malformed/)
 })
@@ -58,6 +58,6 @@ test('throws rather than hanging on two features at one read position', () => {
 test('throws rather than hanging when the reference region falls short', () => {
   // a deletion claims 5 reference bases the 10bp region cannot supply on top of
   // the read's own 10, so the trailing reference chunk comes back empty
-  const record = makeRecord([{ code: 'D', data: 5, pos: 3, refPos: 103 }], 15)
+  const record = makeRecord([{ code: 'D', data: 5, pos: 2, refPos: 102 }], 15)
   expect(() => record.getReadBases()).toThrow(/seems malformed/)
 })

@@ -15,19 +15,19 @@ import type { ReadFeature } from '../src/cramFile/record.ts'
 // one of every code, so the round trip covers all four payload shapes: numeric
 // (D/N/H/P/Q), byte-string (I/S/b/i), quality array (q) and base+quality (B)
 const allCodes: ReadFeature[] = [
-  { code: 'X', data: 2, pos: 1, refPos: 101 },
-  { code: 'X', data: 0, pos: 2, refPos: 102, ref: 'A', sub: 'G' },
-  { code: 'I', data: 'ACGT', pos: 3, refPos: 103 },
-  { code: 'S', data: 'TTT', pos: 4, refPos: 104 },
-  { code: 'b', data: 'GG', pos: 5, refPos: 105 },
-  { code: 'i', data: 'C', pos: 6, refPos: 106 },
-  { code: 'B', data: ['T', 37], pos: 7, refPos: 107 },
-  { code: 'q', data: [10, 20, 30], pos: 8, refPos: 108 },
-  { code: 'Q', data: 40, pos: 9, refPos: 109 },
-  { code: 'D', data: 5, pos: 10, refPos: 110 },
-  { code: 'N', data: 60, pos: 11, refPos: 111 },
-  { code: 'H', data: 3, pos: 12, refPos: 112 },
-  { code: 'P', data: 1, pos: 13, refPos: 113 },
+  { code: 'X', data: 2, pos: 0, refPos: 100 },
+  { code: 'X', data: 0, pos: 1, refPos: 101, ref: 'A', sub: 'G' },
+  { code: 'I', data: 'ACGT', pos: 2, refPos: 102 },
+  { code: 'S', data: 'TTT', pos: 3, refPos: 103 },
+  { code: 'b', data: 'GG', pos: 4, refPos: 104 },
+  { code: 'i', data: 'C', pos: 5, refPos: 105 },
+  { code: 'B', data: ['T', 37], pos: 6, refPos: 106 },
+  { code: 'q', data: [10, 20, 30], pos: 7, refPos: 107 },
+  { code: 'Q', data: 40, pos: 8, refPos: 108 },
+  { code: 'D', data: 5, pos: 9, refPos: 109 },
+  { code: 'N', data: 60, pos: 10, refPos: 110 },
+  { code: 'H', data: 3, pos: 11, refPos: 111 },
+  { code: 'P', data: 1, pos: 12, refPos: 112 },
 ]
 
 test('materialize round-trips every read feature code', () => {
@@ -86,7 +86,7 @@ test('one arena is shared by every record of a slice', async () => {
     index: new CraiIndex({
       filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
     }),
-    seqFetch: async (_id, start, end) => 'A'.repeat(end - start + 1),
+    fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start + 1),
     checkSequenceMD5: false,
   })
   const records = await cram.getRecordsForRange(0, 0, 100_000_000)
@@ -114,12 +114,12 @@ test('one arena is shared by every record of a slice', async () => {
 // pins the actionable message, since V8's default only says "has only a getter".
 test('assigning readFeatures throws a message pointing at the arena', () => {
   const arena = arenaFromReadFeatures([
-    { code: 'X', data: 0, pos: 5, refPos: 105 },
+    { code: 'X', data: 0, pos: 4, refPos: 104 },
   ])
   const record = Object.assign(Object.create(CramRecord.prototype), {
     flags: 0,
     readLength: 10,
-    alignmentStart: 101,
+    start: 101,
     readFeatureArena: arena,
     readFeatureStart: 0,
     readFeatureCount: arena.length,

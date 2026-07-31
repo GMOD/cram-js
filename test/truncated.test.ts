@@ -48,7 +48,7 @@ test('ExternalCodec byte path throws CramBufferOverrunError past EOF', () => {
 // batch-ITF8-decoded up front into an Int32Array, and both ExternalCodec.decode
 // and the inlined-bind fast path read from it by advancing a shared index. An
 // exhausted array yields `undefined`, which used to be asserted away with `!`
-// and then propagated as NaN through alignmentStart/readLength — silent data
+// and then propagated as NaN through start/readLength — silent data
 // corruption instead of a truncation error.
 test('ExternalCodec pre-decoded int path throws CramBufferOverrunError past EOF', () => {
   const block = {

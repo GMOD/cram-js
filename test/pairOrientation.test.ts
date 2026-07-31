@@ -15,13 +15,13 @@ type RecordArgs = ConstructorParameters<typeof CramRecord>[0]
 function makeRecord({
   flags,
   sequenceId,
-  alignmentStart,
+  start,
   mate,
   templateLength,
 }: {
   flags: number
   sequenceId: number
-  alignmentStart: number
+  start: number
   mate?: MateRecord
   templateLength?: number
 }) {
@@ -35,7 +35,7 @@ function makeRecord({
     readGroupId: 0,
     sequenceId,
     uniqueId: 1,
-    alignmentStart,
+    start,
     tags: {},
     mate,
     readNameRaw: undefined,
@@ -75,8 +75,8 @@ test('both mates of a pair agree on the orientation', () => {
           const read1 = makeRecord({
             flags: PAIRED | READ1 | selfRev | mateRev,
             sequenceId: loci.seqId,
-            alignmentStart: loci.pos,
-            mate: { sequenceId: loci.mateSeqId, alignmentStart: loci.matePos },
+            start: loci.pos,
+            mate: { sequenceId: loci.mateSeqId, start: loci.matePos },
             templateLength: tlen1,
           })
           // the mate sees the strands the other way round
@@ -87,8 +87,8 @@ test('both mates of a pair agree on the orientation', () => {
               (mateRev ? REVERSE : 0) |
               (selfRev ? MATE_REVERSE : 0),
             sequenceId: loci.mateSeqId,
-            alignmentStart: loci.matePos,
-            mate: { sequenceId: loci.seqId, alignmentStart: loci.pos },
+            start: loci.matePos,
+            mate: { sequenceId: loci.seqId, start: loci.pos },
             templateLength: tlen2,
           })
           expect(read1.getPairOrientation()).toBe(read2.getPairOrientation())
@@ -99,12 +99,12 @@ test('both mates of a pair agree on the orientation', () => {
 })
 
 test('orientation of a canonical FR pair', () => {
-  const mate = { sequenceId: 1, alignmentStart: 300 }
+  const mate = { sequenceId: 1, start: 300 }
   expect(
     makeRecord({
       flags: PAIRED | READ1 | MATE_REVERSE,
       sequenceId: 1,
-      alignmentStart: 100,
+      start: 100,
       mate,
       templateLength: 300,
     }).getPairOrientation(),
@@ -113,7 +113,7 @@ test('orientation of a canonical FR pair', () => {
     makeRecord({
       flags: PAIRED | READ1 | REVERSE,
       sequenceId: 1,
-      alignmentStart: 100,
+      start: 100,
       mate,
       templateLength: 300,
     }).getPairOrientation(),
@@ -121,12 +121,12 @@ test('orientation of a canonical FR pair', () => {
 })
 
 test('orientation is undefined only for unpaired reads', () => {
-  const mate = { sequenceId: 1, alignmentStart: 300 }
+  const mate = { sequenceId: 1, start: 300 }
   expect(
     makeRecord({
       flags: READ1 | MATE_REVERSE,
       sequenceId: 1,
-      alignmentStart: 100,
+      start: 100,
       mate,
     }).getPairOrientation(),
   ).toBeUndefined()
@@ -137,7 +137,7 @@ test('orientation is undefined only for unpaired reads', () => {
     makeRecord({
       flags: PAIRED | READ1 | MATE_REVERSE | 0x4,
       sequenceId: 1,
-      alignmentStart: 100,
+      start: 100,
       mate,
     }).getPairOrientation(),
   ).toBe('F1R2')
@@ -147,8 +147,8 @@ test('orientation is undefined only for unpaired reads', () => {
     makeRecord({
       flags: PAIRED | READ1 | MATE_REVERSE,
       sequenceId: 1,
-      alignmentStart: 100,
-      mate: { sequenceId: 9, alignmentStart: 300 },
+      start: 100,
+      mate: { sequenceId: 9, start: 300 },
       templateLength: 0,
     }).getPairOrientation(),
   ).toBe('F1R2')
@@ -158,12 +158,12 @@ test('an unknown mate falls back to read1-first, keeping mates consistent', () =
   const read1 = makeRecord({
     flags: PAIRED | READ1 | MATE_REVERSE,
     sequenceId: 1,
-    alignmentStart: 100,
+    start: 100,
   })
   const read2 = makeRecord({
     flags: PAIRED | READ2 | REVERSE,
     sequenceId: 1,
-    alignmentStart: 300,
+    start: 300,
   })
   expect(read1.getPairOrientation()).toBe('F1R2')
   expect(read2.getPairOrientation()).toBe('F1R2')

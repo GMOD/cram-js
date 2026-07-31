@@ -11,7 +11,7 @@ function openTlen(file: string) {
   return new IndexedCramFile({
     cramFilehandle: testDataFile(file),
     index: new CraiIndex({ filehandle: testDataFile(`${file}.crai`) }),
-    seqFetch,
+    fetchReferenceSequence: seqFetch,
   })
 }
 
@@ -20,22 +20,22 @@ function openTlen(file: string) {
 // xx reads: SAM spec leftmost-positive encoding
 // yy reads: bwa/picard 5'->3' encoding (stored as templateSize, not estimated)
 const expectedTlen: Record<string, number> = {
-  'x1@1': 20,
-  'x1@16': -20,
-  'x2@7': 8,
-  'x2@10': -8,
-  'x3@7': 8,
-  'x3@10': -8,
-  'x4@1': 20,
-  'x4@16': -20,
-  'y1@1': 20,
-  'y1@16': -20,
-  'y2@7': 8,
-  'y2@10': -8,
-  'y3@7': -2,
-  'y3@10': 2,
-  'y4@1': 10,
-  'y4@16': -10,
+  'x1@0': 20,
+  'x1@15': -20,
+  'x2@6': 8,
+  'x2@9': -8,
+  'x3@6': 8,
+  'x3@9': -8,
+  'x4@0': 20,
+  'x4@15': -20,
+  'y1@0': 20,
+  'y1@15': -20,
+  'y2@6': 8,
+  'y2@9': -8,
+  'y3@6': -2,
+  'y3@9': 2,
+  'y4@0': 10,
+  'y4@15': -10,
 }
 
 async function collectTlens(cram: IndexedCramFile) {
@@ -45,7 +45,7 @@ async function collectTlens(cram: IndexedCramFile) {
   for (const r of [...xx, ...yy]) {
     const tlen = r.templateLength ?? r.templateSize
     if (tlen !== undefined) {
-      result[`${r.readName}@${r.alignmentStart}`] = tlen
+      result[`${r.readName}@${r.start}`] = tlen
     }
   }
   return result

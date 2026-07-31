@@ -90,8 +90,8 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
     return null
   }
 
-  // remember: all coordinates are 1-based closed
-  const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
+  // remember: all coordinates are 0-based half-open
+  const regionSeqOffset = cramRecord.start - refRegion.start
 
   const arena = cramRecord.readFeatureArena
   if (!arena) {
@@ -125,7 +125,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
         // q/Q describe quality, not geometry: consume the feature and neither
         // emit bases nor move along the reference
         currentReadFeature += 1
-      } else if (pos[i] === bases.length + 1) {
+      } else if (pos[i] === bases.length) {
         currentReadFeature += 1
         if (code === RF_SUBST) {
           // an unresolved substitution reads as N, the same fallback the
@@ -153,7 +153,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
         // put down a chunk of reference up to the next read feature
         const chunk = refRegion.seq.slice(
           regionPos,
-          regionPos + pos[i]! - bases.length - 1,
+          regionPos + pos[i]! - bases.length,
         )
         bases += chunk
         regionPos += chunk.length
@@ -169,7 +169,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
     }
     if (bases.length === basesBefore && currentReadFeature === featureBefore) {
       throw new CramMalformedError(
-        `could not decode read bases for ${cramRecord.sequenceId}:${cramRecord.alignmentStart}: stuck at ${bases.length} of ${cramRecord.readLength} bases, read feature ${currentReadFeature} of ${featureCount}. this file seems malformed`,
+        `could not decode read bases for ${cramRecord.sequenceId}:${cramRecord.start}: stuck at ${bases.length} of ${cramRecord.readLength} bases, read feature ${currentReadFeature} of ${featureCount}. this file seems malformed`,
       )
     }
   }
@@ -214,7 +214,8 @@ function decodeBaseSubstitution(
 export interface MateRecord {
   readName?: string
   sequenceId: number
-  alignmentStart: number
+  /** 0-based */
+  start: number
   flags?: number
 
   uniqueId?: number
@@ -301,7 +302,8 @@ export default class CramRecord {
   /** index of this record's first read feature in {@link readFeatureArena} */
   public readFeatureStart: number
   public readFeatureCount: number
-  public alignmentStart: number
+  /** 0-based start of the alignment on the reference */
+  public start: number
   public lengthOnRef: number | undefined
   public readLength: number
   // templateLength is computed post-hoc for intra-slice mate pairs,
@@ -387,7 +389,7 @@ export default class CramRecord {
     sequenceId,
     uniqueId,
     templateSize,
-    alignmentStart,
+    start,
     tags,
   }: ReturnType<typeof decodeRecord>) {
     this.flags = flags
@@ -399,7 +401,7 @@ export default class CramRecord {
     this.readGroupId = readGroupId
     this.sequenceId = sequenceId!
     this.uniqueId = uniqueId
-    this.alignmentStart = alignmentStart
+    this.start = start
     this.tags = tags
     if (readNameRaw) {
       this._readNameRaw = readNameRaw
@@ -525,7 +527,7 @@ export default class CramRecord {
     }
 
     let readConsumed = 0
-    let refPos = this.alignmentStart
+    let refPos = this.start
 
     const arena = this.readFeatureArena
     if (arena !== undefined) {
@@ -634,7 +636,7 @@ export default class CramRecord {
 
   // Must come out identical from either mate, or the two halves of one normal
   // pair render as different orientations. The leftmost mate is therefore picked
-  // by a total order on (sequenceId, alignmentStart) that both mates evaluate the
+  // by a total order on (sequenceId, start) that both mates evaluate the
   // same way, with a read1-first tie-break for equal loci; when the mate is
   // unknown the read1-first rule alone still keeps the two consistent.
   //
@@ -655,8 +657,8 @@ export default class CramRecord {
         ? isRead1
         : this.sequenceId !== mate.sequenceId
           ? this.sequenceId < mate.sequenceId
-          : this.alignmentStart !== mate.alignmentStart
-            ? this.alignmentStart < mate.alignmentStart
+          : this.start !== mate.start
+            ? this.start < mate.start
             : isRead1
     return PAIR_ORIENTATION_TABLE[((f >> 4) & 0x7) | (selfIsLeft ? 8 : 0)]
   }
@@ -695,9 +697,8 @@ export default class CramRecord {
     // keep a reference to it
     if (
       !this.readBases &&
-      refRegion.start <= this.alignmentStart &&
-      refRegion.end >=
-        this.alignmentStart + (this.lengthOnRef || this.readLength) - 1
+      refRegion.start <= this.start &&
+      refRegion.end >= this.start + (this.lengthOnRef || this.readLength)
     ) {
       this._refRegion = refRegion
     }
@@ -709,7 +710,7 @@ export default class CramRecord {
   // historical shape of the output.
   toJSON() {
     const data: Record<string, unknown> = {
-      alignmentStart: this.alignmentStart,
+      start: this.start,
       cramFlags: this.cramFlags,
       flags: this.flags,
       readGroupId: this.readGroupId,

@@ -18,6 +18,7 @@ export interface IndexOpts {
 }
 
 export interface Slice {
+  /** 0-based start of the slice on the reference (the .crai stores 1-based) */
   start: number
   span: number
   containerStart: number
@@ -36,7 +37,8 @@ function addRecordToIndex(index: ParsedIndex, fields: number[]) {
   }
 
   index[seqId].push({
-    start: fields[1]!,
+    // the .crai column is 1-based; everything past this parse is 0-based
+    start: fields[1]! - 1,
     span: fields[2]!,
     containerStart: fields[3]!,
     sliceStart: fields[4]!,
@@ -188,8 +190,8 @@ export default class CraiIndex {
    * fetch index entries for the given range
    *
    * @param {number} seqId
-   * @param {number} queryStart
-   * @param {number} queryEnd
+   * @param {number} queryStart 0-based half-open
+   * @param {number} queryEnd 0-based half-open
    *
    * @returns {Promise} promise for
    * an array of objects of the form
@@ -205,7 +207,7 @@ export default class CraiIndex {
     return seqEntries
       ? seqEntries.filter(
           entry =>
-            entry.start <= queryEnd && entry.start + entry.span > queryStart,
+            entry.start < queryEnd && entry.start + entry.span > queryStart,
         )
       : []
   }

@@ -11,14 +11,14 @@ import type { ReadFeature } from '../src/cramFile/record.ts'
 // bare record carrying just what forEachMismatch reads
 function makeRecord(
   readFeatures: ReadFeature[],
-  alignmentStart = 101,
+  start = 100,
   qualityScores?: Uint8Array,
 ) {
   const arena = arenaFromReadFeatures(readFeatures)
   return Object.assign(Object.create(CramRecord.prototype), {
     flags: 0,
     readLength: 10,
-    alignmentStart,
+    start,
     qualityScores,
     readFeatureArena: arena,
     readFeatureStart: 0,
@@ -37,25 +37,25 @@ const show = (m: Mismatch) =>
 
 const mismatchesOf = (
   readFeatures: ReadFeature[],
-  alignmentStart?: number,
+  start?: number,
   qualityScores?: Uint8Array,
 ) =>
-  makeRecord(readFeatures, alignmentStart, qualityScores)
+  makeRecord(readFeatures, start, qualityScores)
     .getMismatches()
     .map(show)
 
 test('a substitution reports the substituted and reference bases', () => {
   expect(
     mismatchesOf([
-      { code: 'X', data: 0, pos: 5, refPos: 105, ref: 'a', sub: 'T' },
+      { code: 'X', data: 0, pos: 4, refPos: 104, ref: 'a', sub: 'T' },
     ]),
-  ).toEqual(['X@105/1ref/"T"/refA'])
+  ).toEqual(['X@104/1ref/"T"/refA'])
 })
 
 test('an unresolved substitution reports N with no reference base', () => {
   // what a file read without a seqFetch gives: no ref, no sub
-  expect(mismatchesOf([{ code: 'X', data: 0, pos: 5, refPos: 105 }])).toEqual([
-    'X@105/1ref/"N"',
+  expect(mismatchesOf([{ code: 'X', data: 0, pos: 4, refPos: 104 }])).toEqual([
+    'X@104/1ref/"N"',
   ])
 })
 
@@ -63,28 +63,28 @@ test('a substitution carries the quality score of its read base', () => {
   const qual = new Uint8Array([10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
   expect(
     mismatchesOf(
-      [{ code: 'X', data: 0, pos: 5, refPos: 105, sub: 'T' }],
+      [{ code: 'X', data: 0, pos: 4, refPos: 104, sub: 'T' }],
       101,
       qual,
     ),
-  ).toEqual([`X@105/1ref/"T"/q14`])
+  ).toEqual([`X@104/1ref/"T"/q14`])
 })
 
 test('insertions, deletions, skips and clips', () => {
   expect(
     mismatchesOf([
-      { code: 'S', data: 'ACGT', pos: 1, refPos: 101 },
-      { code: 'I', data: 'GG', pos: 5, refPos: 105 },
-      { code: 'D', data: 3, pos: 6, refPos: 106 },
-      { code: 'N', data: 20, pos: 6, refPos: 109 },
-      { code: 'H', data: 5, pos: 10, refPos: 130 },
+      { code: 'S', data: 'ACGT', pos: 0, refPos: 100 },
+      { code: 'I', data: 'GG', pos: 4, refPos: 104 },
+      { code: 'D', data: 3, pos: 5, refPos: 105 },
+      { code: 'N', data: 20, pos: 5, refPos: 108 },
+      { code: 'H', data: 5, pos: 9, refPos: 129 },
     ]),
   ).toEqual([
-    'S@101/4read',
-    'I@105/"GG"/2read',
-    'D@106/3ref',
-    'N@109/20ref',
-    'H@130/5read',
+    'S@100/4read',
+    'I@104/"GG"/2read',
+    'D@105/3ref',
+    'N@108/20ref',
+    'H@129/5read',
   ])
 })
 
@@ -93,8 +93,8 @@ test('insertions, deletions, skips and clips', () => {
 test('verbatim bases and padding are not differences', () => {
   expect(
     mismatchesOf([
-      { code: 'b', data: 'ACGT', pos: 1, refPos: 101 },
-      { code: 'P', data: 2, pos: 5, refPos: 105 },
+      { code: 'b', data: 'ACGT', pos: 0, refPos: 100 },
+      { code: 'P', data: 2, pos: 4, refPos: 104 },
     ]),
   ).toEqual([])
 })
@@ -102,10 +102,10 @@ test('verbatim bases and padding are not differences', () => {
 test('a run of single-base i insertions becomes one insertion', () => {
   expect(
     mismatchesOf([
-      { code: 'i', data: 'A', pos: 3, refPos: 103 },
-      { code: 'i', data: 'C', pos: 4, refPos: 103 },
+      { code: 'i', data: 'A', pos: 2, refPos: 102 },
+      { code: 'i', data: 'C', pos: 3, refPos: 102 },
     ]),
-  ).toEqual(['I@103/"AC"/2read'])
+  ).toEqual(['I@102/"AC"/2read'])
 })
 
 // q/Q report where a quality score sits in the read, so the Q following an
@@ -114,41 +114,41 @@ test('a run of single-base i insertions becomes one insertion', () => {
 test('a Q between two i insertions does not split them', () => {
   expect(
     mismatchesOf([
-      { code: 'i', data: 'A', pos: 3, refPos: 103 },
-      { code: 'Q', data: 36, pos: 3, refPos: 102 },
-      { code: 'i', data: 'C', pos: 4, refPos: 103 },
+      { code: 'i', data: 'A', pos: 2, refPos: 102 },
+      { code: 'Q', data: 36, pos: 2, refPos: 101 },
+      { code: 'i', data: 'C', pos: 3, refPos: 102 },
     ]),
-  ).toEqual(['I@103/"AC"/2read'])
+  ).toEqual(['I@102/"AC"/2read'])
 })
 
 test('an insertion is reported before a substitution at the same position', () => {
   expect(
     mismatchesOf([
-      { code: 'i', data: 'A', pos: 3, refPos: 103 },
-      { code: 'X', data: 0, pos: 4, refPos: 103, sub: 'T' },
+      { code: 'i', data: 'A', pos: 2, refPos: 102 },
+      { code: 'X', data: 0, pos: 3, refPos: 102, sub: 'T' },
     ]),
-  ).toEqual(['I@103/"A"/1read', 'X@103/1ref/"T"'])
+  ).toEqual(['I@102/"A"/1read', 'X@102/1ref/"T"'])
 })
 
 test('the window restricts to differences touching the range', () => {
   const record = makeRecord([
-    { code: 'X', data: 0, pos: 1, refPos: 101, sub: 'T' },
-    { code: 'D', data: 10, pos: 2, refPos: 105 },
-    { code: 'X', data: 0, pos: 3, refPos: 130, sub: 'G' },
+    { code: 'X', data: 0, pos: 0, refPos: 100, sub: 'T' },
+    { code: 'D', data: 10, pos: 1, refPos: 104 },
+    { code: 'X', data: 0, pos: 2, refPos: 129, sub: 'G' },
   ])
   expect(record.getMismatches({ start: 120, end: 140 }).map(show)).toEqual([
-    'X@130/1ref/"G"',
+    'X@129/1ref/"G"',
   ])
   // the deletion spans 105-114, so a window inside it still sees it
   expect(record.getMismatches({ start: 110, end: 112 }).map(show)).toEqual([
-    'D@105/10ref',
+    'D@104/10ref',
   ])
 })
 
 test('forEachMismatch allocates nothing per difference', () => {
   const record = makeRecord([
-    { code: 'X', data: 0, pos: 5, refPos: 105, sub: 'T' },
-    { code: 'I', data: 'GG', pos: 6, refPos: 106 },
+    { code: 'X', data: 0, pos: 4, refPos: 104, sub: 'T' },
+    { code: 'I', data: 'GG', pos: 5, refPos: 105 },
   ])
   const seen: number[] = []
   record.forEachMismatch(code => {
@@ -161,7 +161,7 @@ test('a record with no read features has no differences', () => {
   const record = Object.assign(Object.create(CramRecord.prototype), {
     flags: 0,
     readLength: 10,
-    alignmentStart: 101,
+    start: 101,
     readFeatureArena: undefined,
     readFeatureStart: 0,
     readFeatureCount: 0,
@@ -176,7 +176,7 @@ test('reports differences from a real file', async () => {
     index: new CraiIndex({
       filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
     }),
-    seqFetch: async (_id, start, end) => 'A'.repeat(end - start + 1),
+    fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start + 1),
     checkSequenceMD5: false,
   })
   const records = await cram.getRecordsForRange(0, 0, 2000)
@@ -187,7 +187,7 @@ test('reports differences from a real file', async () => {
   // and every substitution must name a base
   for (const record of withDifferences) {
     for (const m of record.getMismatches()) {
-      expect(m.refPos).toBeGreaterThanOrEqual(record.alignmentStart)
+      expect(m.refPos).toBeGreaterThanOrEqual(record.start)
       if (String.fromCharCode(m.code) === 'X') {
         expect(m.bases).toMatch(/^[ACGTN]$/)
       }

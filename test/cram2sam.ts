@@ -30,13 +30,14 @@ const indexedFile = new IndexedCramFile({
   index: new CraiIndex({
     path: `${process.argv[3]}.crai`,
   }),
-  seqFetch: async (seqId, start, end) => {
+  fetchReferenceSequence: async (seqId, start, end) => {
     // note:
-    // * seqFetch should return a promise for a string, in this instance retrieved from IndexedFasta
-    // * we use start-1 because cram-js uses 1-based but IndexedFasta uses 0-based coordinates
+    // * the callback returns a promise for a string, here from IndexedFasta
+    // * coordinates pass straight through: since v10 cram-js is 0-based
+    //   half-open, which is what IndexedFasta already takes
     // * the seqId is a numeric identifier
     const seqList = await t.getSequenceNames()
-    const r = await t.getSequence(seqList[seqId], start - 1, end)
+    const r = await t.getSequence(seqList[seqId], start, end)
     if (r === undefined) {
       throw new Error('getSequence returned undefined')
     }
@@ -55,7 +56,7 @@ function decodeSeqCigar(record: CramRecord) {
   // not sure I should access these, but...
   const ref = record._refRegion!.seq
   const refStart = record._refRegion!.start
-  let last_pos = record.alignmentStart
+  let last_pos = record.start
   if (record.readFeatures !== undefined) {
     record.readFeatures.forEach(({ code, refPos, sub, data }) => {
       const sublen = refPos - last_pos
@@ -209,7 +210,7 @@ async function run() {
   let refStart: number | undefined = undefined
   records.forEach(record => {
     if (!refStart) {
-      refStart = record.alignmentStart
+      refStart = record.start
     }
     const [seq, cigar] = decodeSeqCigar(record)
 
@@ -235,8 +236,10 @@ async function run() {
     const tags = tags2str(record, RG)
 
     console.log(
+      // SAM POS is 1-based; record.start is 0-based, so this is the one place
+      // that converts back out to the text convention
       `${record.readName}\t${record.flags}\t${seqList[record.sequenceId]}\t${
-        record.alignmentStart
+        record.start + 1
       }\t${record.mappingQuality}\t${cigar}\t*\t0\t0\t${seq}\t${qual}${tags}`,
     )
   })

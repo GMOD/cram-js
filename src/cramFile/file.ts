@@ -34,6 +34,12 @@ export interface CramFileSource {
   path?: string
 }
 
+/**
+ * Fetch reference bases for `[start, end)` — 0-based half-open, so the returned
+ * string must be exactly `end - start` characters. Both call sites check that
+ * length, which is what turns a callback still written against the pre-v10
+ * 1-based closed contract into an error rather than bases shifted by one.
+ */
 export type SeqFetch = (
   seqId: number,
   start: number,
@@ -43,7 +49,7 @@ export type SeqFetch = (
 export type CramFileArgs = CramFileSource & {
   checkSequenceMD5?: boolean
   cacheSize?: number
-  seqFetch?: SeqFetch
+  fetchReferenceSequence?: SeqFetch
   validateChecksums?: boolean
 }
 
@@ -72,7 +78,7 @@ export default class CramFile {
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
     this.validateChecksums = args.validateChecksums ?? false
-    this.fetchReferenceSequenceCallback = args.seqFetch
+    this.fetchReferenceSequenceCallback = args.fetchReferenceSequence
     this.options = {
       checkSequenceMD5: args.checkSequenceMD5,
       cacheSize: args.cacheSize ?? 20000,

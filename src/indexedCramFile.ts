@@ -47,8 +47,11 @@ export default class IndexedCramFile {
    * @param {string} [args.cramUrl] remote URL of the CRAM file
    * @param {FileHandle} [args.cramFilehandle] generic-filehandle2 or similar
    *
-   * @param {Function} [args.seqFetch] async (seqId, start, end) => string
-   * returning reference sequence for a region; seqId is numeric, coords 1-based
+   * @param {Function} [args.fetchReferenceSequence] async (seqId, start, end) => string
+   * returning reference sequence for a region; seqId is numeric, coords 0-based
+   * half-open (so the string must be exactly `end - start` long). Renamed from
+   * `seqFetch` in v10 so a callback still written against the old 1-based
+   * closed contract fails loudly instead of returning bases shifted by one.
    *
    * @param {number} [args.cacheSize] optional maximum number of CRAM records
    * to keep in the decoded-slice cache. default 20,000. Slices are cached whole,
@@ -67,7 +70,7 @@ export default class IndexedCramFile {
       | { cram: CramFile }
       | ({
           cram?: undefined
-          seqFetch?: SeqFetch
+          fetchReferenceSequence?: SeqFetch
           checkSequenceMD5?: boolean
           validateChecksums?: boolean
           cacheSize?: number
@@ -80,7 +83,7 @@ export default class IndexedCramFile {
         url: args.cramUrl,
         path: args.cramPath,
         filehandle: args.cramFilehandle,
-        seqFetch: args.seqFetch,
+        fetchReferenceSequence: args.fetchReferenceSequence,
         checkSequenceMD5: args.checkSequenceMD5,
         validateChecksums: args.validateChecksums,
         cacheSize: args.cacheSize,
@@ -92,8 +95,8 @@ export default class IndexedCramFile {
   /**
    *
    * @param seq numeric ID of the reference sequence
-   * @param start start of the range of interest. 1-based closed coordinates.
-   * @param end end of the range of interest. 1-based closed coordinates.
+   * @param start start of the range of interest. 0-based half-open coordinates.
+   * @param end end of the range of interest. 0-based half-open coordinates.
    */
   async getRecordsForRange(
     seq: number,
@@ -145,16 +148,17 @@ export default class IndexedCramFile {
             // For unmapped reads (lengthOnRef is undefined), they are placed at their
             // mate's position. Include them if that position is within the range.
             if (feature.lengthOnRef === undefined) {
-              return (
-                feature.alignmentStart >= start && feature.alignmentStart <= end
-              )
+              return feature.start >= start && feature.start < end
             }
 
-            // For mapped reads, check if they overlap the requested range
-            // Use > instead of >= for start boundary to match samtools behavior
+            // For mapped reads, check if they overlap the requested range.
+            // NOT the plain half-open overlap (`start + lengthOnRef > start`):
+            // the `- 1` excludes a read whose last base sits exactly on the
+            // query start, which is the samtools behaviour this has always
+            // matched. Dropping it pulls in extra reads at the left edge.
             return (
-              feature.alignmentStart <= end &&
-              feature.alignmentStart + feature.lengthOnRef - 1 > start
+              feature.start < end &&
+              feature.start + feature.lengthOnRef - 1 > start
             )
           },
           // opts is a superset of DecodeOptions; getRecords resolves the
@@ -187,14 +191,14 @@ export default class IndexedCramFile {
           unmatedReadNames.has(name) &&
           cramRecord.mate &&
           (cramRecord.mate.sequenceId === seq || pairAcrossChr) &&
-          Math.abs(cramRecord.alignmentStart - cramRecord.mate.alignmentStart) <
+          Math.abs(cramRecord.start - cramRecord.mate.start) <
             maxInsertSize
         ) {
           matePromises.push(
             this.index.getEntriesForRange(
               cramRecord.mate.sequenceId,
-              cramRecord.mate.alignmentStart,
-              cramRecord.mate.alignmentStart + 1,
+              cramRecord.mate.start,
+              cramRecord.mate.start + 1,
             ),
           )
         }

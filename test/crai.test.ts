@@ -14,7 +14,7 @@ function indexFromText(text: string) {
 }
 
 const entry = {
-  start: 1,
+  start: 0,
   span: 20,
   containerStart: 562,
   sliceStart: 143,
@@ -39,7 +39,7 @@ test('parses multi-digit values exactly', async () => {
   ).getIndex()
   expect(data[0]).toEqual([
     {
-      start: 100009,
+      start: 100008,
       span: 102,
       containerStart: 1953,
       sliceStart: 592,
@@ -86,14 +86,14 @@ test('can read xx#unsorted.tmp.cram.crai', async () => {
   expect(data).toEqual({
     0: [
       {
-        start: 1,
+        start: 0,
         span: 20,
         containerStart: 562,
         sliceStart: 143,
         sliceBytes: 200,
       },
       {
-        start: 1,
+        start: 0,
         span: 20,
         containerStart: 923,
         sliceStart: 173,
@@ -102,14 +102,14 @@ test('can read xx#unsorted.tmp.cram.crai', async () => {
     ],
     1: [
       {
-        start: 1,
+        start: 0,
         span: 10,
         containerStart: 923,
         sliceStart: 173,
         sliceBytes: 243,
       },
       {
-        start: 11,
+        start: 10,
         span: 10,
         containerStart: 252,
         sliceStart: 181,
@@ -153,7 +153,7 @@ test('can read cramQueryWithCRAI.cram.crai', async () => {
   expect(data).toEqual({
     0: [
       {
-        start: 100009,
+        start: 100008,
         span: 102,
         containerStart: 1953,
         sliceStart: 592,
@@ -162,7 +162,7 @@ test('can read cramQueryWithCRAI.cram.crai', async () => {
     ],
     '-1': [
       {
-        start: 0,
+        start: -1,
         span: 1,
         containerStart: 3590,
         sliceStart: 209,
@@ -179,21 +179,21 @@ test('can read small crai file', async () => {
   expect(data).toEqual({
     0: [
       {
-        start: 1,
+        start: 0,
         span: 12495,
         containerStart: 418,
         sliceStart: 278,
         sliceBytes: 537131,
       },
       {
-        start: 12405,
+        start: 12404,
         span: 13371,
         containerStart: 537849,
         sliceStart: 278,
         sliceBytes: 538434,
       },
       {
-        start: 25679,
+        start: 25678,
         span: 4414,
         containerStart: 1076585,
         sliceStart: 281,
@@ -207,7 +207,7 @@ test('can read small crai file', async () => {
       sliceBytes: 167795,
       sliceStart: 281,
       span: 4414,
-      start: 25679,
+      start: 25678,
     },
   ])
 })

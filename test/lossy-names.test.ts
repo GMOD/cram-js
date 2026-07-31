@@ -9,7 +9,7 @@ describe('1kg mate test', () => {
       index: new CraiIndex({
         path: require.resolve('./data/na12889_lossy.cram.crai'),
       }),
-      seqFetch: async (seqId, start, end) => {
+      fetchReferenceSequence: async (seqId, start, end) => {
         let fakeSeq = ''
         for (let i = start; i <= end; i += 1) {
           fakeSeq += 'A'

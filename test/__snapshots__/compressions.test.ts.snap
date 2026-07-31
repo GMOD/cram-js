@@ -4,9 +4,9 @@ exports[`bzip2 1`] = `
 {
   "code": "X",
   "data": 1,
-  "pos": 51,
+  "pos": 50,
   "ref": "A",
-  "refPos": 1050,
+  "refPos": 1049,
   "sub": "G",
 }
 `;
@@ -15,9 +15,9 @@ exports[`lzma 1`] = `
 {
   "code": "X",
   "data": 1,
-  "pos": 51,
+  "pos": 50,
   "ref": "A",
-  "refPos": 1050,
+  "refPos": 1049,
   "sub": "G",
 }
 `;

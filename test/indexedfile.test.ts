@@ -14,10 +14,10 @@ test('can read ce#tag_padded.tmp.cram', async () => {
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 2, 200)
+  const features = await cram.getRecordsForRange(0, 1, 200)
   expect(features).toMatchSnapshot()
 
-  expect(await cram.getRecordsForRange(1, 2, 200)).toEqual([])
+  expect(await cram.getRecordsForRange(1, 1, 200)).toEqual([])
   expect(await cram.hasDataForReferenceSequence(1)).toEqual(false)
   expect(await cram.hasDataForReferenceSequence(0)).toEqual(true)
 })
@@ -30,7 +30,7 @@ test('can read ce#unmap2.tmp.cram', async () => {
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 2, 200)
+  const features = await cram.getRecordsForRange(0, 1, 200)
   expect(features).toMatchSnapshot()
 })
 
@@ -42,7 +42,7 @@ test('can read ce#1000.tmp.cram', async () => {
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 2, 200)
+  const features = await cram.getRecordsForRange(0, 1, 200)
   features.sort((a, b) => (a.readName || '').localeCompare(b.readName || ''))
   expect(features).toMatchSnapshot()
 })
@@ -59,10 +59,10 @@ test('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async ()
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 0, Number.POSITIVE_INFINITY)
+  const features = await cram.getRecordsForRange(0, -1, Number.POSITIVE_INFINITY)
   const features2 = await cram.getRecordsForRange(
     -1,
-    0,
+    -1,
     Number.POSITIVE_INFINITY,
   )
   expect(features).toMatchSnapshot()
@@ -113,7 +113,7 @@ test('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async ()
 
     const features = await cram.getRecordsForRange(
       0,
-      0,
+      -1,
       Number.POSITIVE_INFINITY,
     )
     features.sort((a, b) => (a.readName || '').localeCompare(b.readName || ''))
@@ -129,7 +129,7 @@ test('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async ()
 
     const features = await cram.getRecordsForRange(
       1,
-      0,
+      -1,
       Number.POSITIVE_INFINITY,
     )
     expect(features.length).toBeGreaterThan(-1)
@@ -150,10 +150,10 @@ test('can read paired.cram', async () => {
       filehandle: testDataFile('paired-region.cram.crai'),
     }),
   })
-  const features = await cram.getRecordsForRange(19, 62501, 64500, {
+  const features = await cram.getRecordsForRange(19, 62500, 64500, {
     viewAsPairs: true,
   })
-  const features2 = await cramResult.getRecordsForRange(0, 1, 70000)
+  const features2 = await cramResult.getRecordsForRange(0, 0, 70000)
   expect(features.map(f => f.readName).sort()).toEqual(
     features2.map(f => f.readName).sort(),
   )
@@ -167,7 +167,7 @@ test('can read long_pair.cram', async () => {
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 15767, 28287, {
+  const features = await cram.getRecordsForRange(0, 15766, 28287, {
     viewAsPairs: true,
   })
 
@@ -194,7 +194,7 @@ test('duplicate IDs test', async () => {
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 163504, 175473)
+  const features = await cram.getRecordsForRange(0, 163503, 175473)
   const totalMap = {} as Record<string, string | undefined>
   let noCollisions = true
   for (const feature of features) {
@@ -220,7 +220,7 @@ test('match names from samtools', async () => {
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 25999, 26499)
+  const features = await cram.getRecordsForRange(0, 25998, 26499)
   expect(features.map(f => f.readName)).toMatchSnapshot()
   expect(features.length).toEqual(407)
 })
@@ -247,8 +247,8 @@ test('region not downloading enough records', async () => {
   })
   const entries = await index.getEntriesForRange(0, 75100635, 75125544)
   expect(entries.length).toEqual(2)
-  expect(entries[0].start).toEqual(74378949)
-  expect(entries[1].start).toEqual(74945118)
+  expect(entries[0].start).toEqual(74378948)
+  expect(entries[1].start).toEqual(74945117)
 })
 
 test('troublesome file returns the correct sequence', async () => {
@@ -271,7 +271,7 @@ GGTCACACGATTAACCCAAGTCAATAGAAGCCGGCGTAAAGAGTGTTTTAGATCACCCCC
 TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
   const cram = new IndexedCramFile({
     cramFilehandle: testDataFile('raw_sorted_duplicates_removed.cram'),
-    async seqFetch(ref, start, end) {
+    async fetchReferenceSequence(ref, start, end) {
       return seq.slice(start, end)
     },
     index: new CraiIndex({
@@ -279,7 +279,7 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, 0, 500)
+  const features = await cram.getRecordsForRange(0, -1, 500)
   const feat = features.findLast(
     f => f.readName === 'NB500904:194:H3HNVBGXB:1:21110:9045:16767',
   )
@@ -297,7 +297,7 @@ test('cram31 returns the correct sequence', async () => {
     }),
   })
 
-  const [feature] = await cram.getRecordsForRange(0, 0, 4)
+  const [feature] = await cram.getRecordsForRange(0, -1, 4)
 
   expect(feature).toMatchSnapshot()
 })
@@ -310,6 +310,6 @@ test('start of chr', async () => {
     }),
   })
 
-  const feats = await cram.getRecordsForRange(0, 0, 1)
+  const feats = await cram.getRecordsForRange(0, -1, 1)
   expect(feats.length).toBe(13)
 })
