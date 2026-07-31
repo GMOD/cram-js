@@ -1,7 +1,8 @@
 # TODO
 
 Investigated, measured, not yet done. Numbers below were measured on this repo
-at v8.7.0 — see the method note at the bottom before trusting or re-running them.
+at v8.7.0 — see the method note at the bottom before trusting or re-running
+them.
 
 ## Columnar (struct-of-arrays) read features
 
@@ -18,20 +19,20 @@ objects** (5,773 per read).
 
 Measured retained heap, prototype vs current:
 
-| workload | features/record | current | per-record SoA | **per-slice arena** |
-| --- | --- | --- | --- | --- |
-| `HG002_ONTrel2_16x_...` (ONT) | 5773 | 18.86 MB | 3.30 MB (−82%) | **3.64 MB (−81%)** |
-| `SRR396636.sorted.clip` | 1.7 | 20.04 MB | 39.69 MB (**+98%**) | **16.55 MB (−18%)** |
-| `SRR396637.sorted.clip` | 2.0 | 46.21 MB | 90.92 MB (**+97%**) | **36.40 MB (−21%)** |
+| workload                      | features/record | current  | per-record SoA      | **per-slice arena** |
+| ----------------------------- | --------------- | -------- | ------------------- | ------------------- |
+| `HG002_ONTrel2_16x_...` (ONT) | 5773            | 18.86 MB | 3.30 MB (−82%)      | **3.64 MB (−81%)**  |
+| `SRR396636.sorted.clip`       | 1.7             | 20.04 MB | 39.69 MB (**+98%**) | **16.55 MB (−18%)** |
+| `SRR396637.sorted.clip`       | 2.0             | 46.21 MB | 90.92 MB (**+97%**) | **36.40 MB (−21%)** |
 
 ### The trap — read this before starting
 
 **Do not give each record its own set of typed arrays.** That is the obvious
-columnar layout and it makes short-read files ~2x *worse*: each
-`Uint8Array`/`Int32Array` carries ~100 bytes of fixed object overhead, so at
-~2 features per record five per-record objects replace two 64-byte feature
-objects. Short-read CRAM is the common case, so this would be a net regression
-for most users.
+columnar layout and it makes short-read files ~2x _worse_: each
+`Uint8Array`/`Int32Array` carries ~100 bytes of fixed object overhead, so at ~2
+features per record five per-record objects replace two 64-byte feature objects.
+Short-read CRAM is the common case, so this would be a net regression for most
+users.
 
 Put the columns on the **slice** and give each record only a `(start, length)`
 pair into them. Fixed overhead is then amortised across the whole slice and the
@@ -46,8 +47,8 @@ layout wins in both regimes — that is the "per-slice arena" column above.
 - `pos`, `refPos`, `num: Int32Array` — `num` holds the numeric payload for
   D/N/H/P/Q and the X substitution-matrix index
 - `objs: (string | number[] | [string, number] | undefined)[] | undefined` —
-  allocated lazily, only for the features that carry a string/array payload
-  (I, S, b, i, q, B)
+  allocated lazily, only for the features that carry a string/array payload (I,
+  S, b, i, q, B)
 - `refCodes`, `subCodes: Uint8Array` — filled by `addReferenceSequence`, so the
   ~43%-of-features `ref`/`sub` strings disappear entirely
 - geometric `reserve(n)` growth; total feature count is not known up front
@@ -74,7 +75,7 @@ already indexed `for` loops over `rf.code` string comparisons, so they become a
   `undefined` and churns all 103 snapshots — the arena pays that cost once. See
   the NOTE in `src/cramFile/slice/decodeRecord.ts`.
 - **Coalesce consecutive single-base `i` insertions.** 34,387 of the ONT
-  fixture's 213,602 features (16%) are single-base insertions that *both*
+  fixture's 213,602 features (16%) are single-base insertions that _both_
   jbrowse consumers immediately re-coalesce into runs. Coalescing at decode time
   drops 16% of feature slots and deletes the accumulate-and-flush logic from
   both walks. It changes the emitted feature list, so it belongs with the arena
@@ -104,9 +105,66 @@ when the new query is covered.
 `readBlock` reads `cramBlockHeader.maxLength` at a position, then reads the full
 block at the same position — the second read is a superset of the first. Per
 cold decode: 2 of 8 filehandle reads on ONT, 6 of 22 on Illumina are redundant
-(~25%), but only ~34–102 redundant *bytes*. Irrelevant locally; over HTTP it is
+(~25%), but only ~34–102 redundant _bytes_. Irrelevant locally; over HTTP it is
 25% more range requests on the setup path. Measured at the CramFile→filehandle
 boundary — check whether generic-filehandle2 already coalesces before changing.
+
+## No AbortSignal on the record read path
+
+`getRecordsForRange` accepts no `signal` — only `IndexOpts` (the `.crai`
+download) does. So a cancelled query keeps downloading its slice data to
+completion and then discards it. jbrowse-components wants this: its adapters
+thread a stop-token-derived signal into `@gmod/bam`, `@gmod/tabix` and
+`@gmod/bbi` already, and CRAM is the one indexed format left out.
+
+### Why it is worth more than "index reads are short" suggests
+
+The caller's byte-range layer coalesces contiguous 256 KiB chunks into one range
+request, so a _small viewport over deep data_ becomes a _large_ single read.
+Measured in jbrowse on the analogous BAM path (not CRAM — nobody has measured
+CRAM): one 4 kb viewport over a 2000x BAM issues a single **6.5 MiB** range
+read, and over a 4-hop pan burst throttled to 50 KiB/s, three cancelled
+navigations abandoned ~6.5 MiB each — ~19.5 MiB that would otherwise transfer in
+full and be thrown away. The same `RemoteFileWithRangeCache` sits under CRAM, so
+expect the same order of magnitude.
+
+### The trap — read this before starting
+
+The read path is a stack of **self-clearing memoized promises**:
+`getDefinition`, `getCompressionScheme`, `getHeader`,
+`_getBlocksContentIdIndex`, then `SliceRecordCache`. Every one of them already
+evicts on rejection, so a cancellation cannot _poison_ a cache —
+`SliceRecordCache` documents exactly that hazard. That is not the problem.
+
+The problem is that none of them has a **foreign-abort retry**. Thread a signal
+in naively and a query that happens to share a memoized read with a cancelled
+query inherits that cancellation as its own failure. It will succeed on a retry
+(the entry was dropped), but the in-flight sharer fails for a reason that has
+nothing to do with it.
+
+### Shape
+
+- **Thread the signal only into the bulk slice-data reads** reached from
+  `_fetchRecords`. Do **not** thread it into `getDefinition` /
+  `getCompressionScheme` / `getHeader` / `_getBlocksContentIdIndex`: those are
+  small, one-time, and shared file-wide, so cancelling them on one query's
+  behalf is wrong regardless of retries.
+- **Handle the sharing at `CramSlice.getRecords`**, the one level that shares
+  bulk reads between queries. Two proven patterns to pick from:
+  - the retry `@gmod/bam` (>= 7.6.0) uses in `_cachedChunkFeatures`: remember
+    the owning signal, and if the read you joined aborted while yours did not,
+    start over.
+  - the ref-counted abort `@gmod/abortable-promise-cache` gives `@gmod/tabix`
+    and `@gmod/bbi` for free, where `AggregateAbortController` fires only once
+    _every_ joined consumer has aborted. Cleaner, but CRAM's memoization is
+    bespoke, so adopting it means reworking the cache rather than adding ten
+    lines.
+
+### Consumer
+
+jbrowse's `CramAdapter.getFeatures` would wrap the read in
+`withStopTokenSignal(stopToken, signal => ...)`, exactly as `BamAdapter` now
+does. Nothing else changes on that side.
 
 ## Simplifications (no perf angle)
 
@@ -116,9 +174,9 @@ boundary — check whether generic-filehandle2 already coalesces before changing
   to `tagDescriptorsByTL` is a pure function of (compression scheme, blocks,
   cursors) and could build the `SliceDecodeContext` in its own module.
 - The `bind()` closures in that function are a fourth copy of the
-  External/ByteArrayStop/ByteArrayLength decode logic, bounds checks included.
-  A `CramCodec.bindDecoder(coreDataBlock, blocksByContentId, cursors)` returning
-  a specialised closure (defaulting to `() => this.decode(...)`) would let each
+  External/ByteArrayStop/ByteArrayLength decode logic, bounds checks included. A
+  `CramCodec.bindDecoder(coreDataBlock, blocksByContentId, cursors)` returning a
+  specialised closure (defaulting to `() => this.decode(...)`) would let each
   codec own its fast path and drop the `instanceof` chain.
 - The self-clearing async memoize block is copy-pasted seven times across
   `file.ts`, `container/index.ts` and `slice/index.ts`.
@@ -128,7 +186,7 @@ boundary — check whether generic-filehandle2 already coalesces before changing
   to. A small reader over `(buffer, offset)` with `.itf8()`/`.ltf8()`/`.u8()`/
   `.u32()` would roughly halve the file.
 
-## Measured and *not* worth doing
+## Measured and _not_ worth doing
 
 Recorded so they are not rediscovered:
 
@@ -146,18 +204,19 @@ Recorded so they are not rediscovered:
   compile target would silently undo it.
 - **Read-feature polymorphism as a consumer cost.** Forcing true monomorphism
   made jbrowse's two walks no faster — noise in both directions. The `ref`/`sub`
-  change above is worth doing for its *memory*, not for call-site shape.
+  change above is worth doing for its _memory_, not for call-site shape.
 
 ## Method note
 
 Retained-heap figures come from decoding into a held variable in a **fresh
 process per variant**, with a forced GC either side and no warm-up decode (a
 discarded `await` at module top level stays reachable and lands in the baseline,
-which silently collapses the measured delta to ~0). Noise floor on a base-vs-base
-control was ±0.2% for heap, ±1% for cold decode, ±8% for warm re-query.
+which silently collapses the measured delta to ~0). Noise floor on a
+base-vs-base control was ±0.2% for heap, ±1% for cold decode, ±8% for warm
+re-query.
 
 **No wall-clock claim here is trustworthy** — the machine was loaded when these
 were taken, and the timing noise floor is wider than most of the effects. In
-particular it is *not* known whether the arena makes decoding faster as well as
+particular it is _not_ known whether the arena makes decoding faster as well as
 smaller (it removes 213k allocations on ONT, so it probably does). Re-measure
 timings on a quiet machine before quoting any.
