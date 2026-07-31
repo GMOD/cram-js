@@ -416,7 +416,7 @@ export default class CramSlice {
     ) {
       if (!this.file.fetchReferenceSequenceCallback) {
         throw new Error(
-          'reference sequence not embedded, and seqFetch callback not provided, cannot fetch reference sequence',
+          'reference sequence not embedded, and fetchReferenceSequence callback not provided, cannot fetch reference sequence',
         )
       }
 

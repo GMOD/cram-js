@@ -43,15 +43,15 @@ export interface Mismatch {
    * The substituted base for X, or the inserted bases for an insertion; empty
    * for D/N/S/H, which have no bases of their own to report. 'N' for a
    * substitution whose base could not be resolved, which is what happens when
-   * the file was read without a `seqFetch`.
+   * the file was read without a `fetchReferenceSequence`.
    */
   bases: string
   /** quality score of a substituted base, or -1 when not stored in the file */
   qual: number
   /**
    * Char code of the reference base a substitution replaces, 0 when unknown
-   * (again, no `seqFetch`). Upper-cased, since a soft-masked reference would
-   * otherwise report lowercase.
+   * (again, no `fetchReferenceSequence`). Upper-cased, since a soft-masked
+   * reference would otherwise report lowercase.
    */
   refBaseCode: number
   /** read bases consumed: the inserted or clipped length; 0 otherwise */

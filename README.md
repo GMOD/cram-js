@@ -17,21 +17,22 @@ npm install @gmod/cram
 
 Every coordinate this library hands out or takes in is **0-based half-open**.
 Before v10 they were 1-based closed, which propagated a serialization detail of
-the CRAM spec into the in-memory API. htslib does the opposite — `bam1_core_t.pos`
-is 0-based in memory even though SAM text is 1-based — and `@gmod/bam` was
-already 0-based, so the two libraries disagreed. They no longer do.
+the CRAM spec into the in-memory API. htslib does the opposite —
+`bam1_core_t.pos` is 0-based in memory even though SAM text is 1-based — and
+`@gmod/bam` was already 0-based, so the two libraries disagreed. They no longer
+do.
 
 What changed:
 
-| before (≤ 9)                             | now (10)                                             |
-| ---------------------------------------- | ---------------------------------------------------- |
-| `record.alignmentStart` (1-based)        | `record.start` (0-based)                             |
-| `record.mate.alignmentStart`             | `record.mate.start`                                  |
-| `seqFetch(id, start, end)` 1-based closed | `fetchReferenceSequence(id, start, end)` half-open   |
-| `getRecordsForRange(id, start, end)` 1-based closed | 0-based half-open                          |
-| `readFeature.pos` / `.refPos` (1-based)  | 0-based                                              |
-| `Mismatch.refPos`, `forEachMismatch` opts | 0-based half-open                                    |
-| `CraiIndex` entry `.start` (1-based)     | 0-based                                              |
+| before (≤ 9)                                        | now (10)                                           |
+| --------------------------------------------------- | -------------------------------------------------- |
+| `record.alignmentStart` (1-based)                   | `record.start` (0-based)                           |
+| `record.mate.alignmentStart`                        | `record.mate.start`                                |
+| `seqFetch(id, start, end)` 1-based closed           | `fetchReferenceSequence(id, start, end)` half-open |
+| `getRecordsForRange(id, start, end)` 1-based closed | 0-based half-open                                  |
+| `readFeature.pos` / `.refPos` (1-based)             | 0-based                                            |
+| `Mismatch.refPos`, `forEachMismatch` opts           | 0-based half-open                                  |
+| `CraiIndex` entry `.start` (1-based)                | 0-based                                            |
 
 Migrating:
 
@@ -44,8 +45,10 @@ Migrating:
   and the library throws "callback not provided".
 - Half-open means the returned string must be exactly `end - start` characters —
   one fewer than before for the same region.
-- Unplaced records now report `start` of `-1` rather than `0`, matching what
-  BAM has always stored.
+- Unplaced records now report `start` of `-1` rather than `0`, matching what BAM
+  has always stored. If you fetch them, the query moves with them:
+  `getRecordsForRange(-1, -1, end)`, not `(-1, 0, end)`, which now returns
+  nothing. See [Unplaced reads](#indexedcramfile) below.
 
 Converting back out to a 1-based text format (SAM `POS`, a locus string for a
 user) means adding 1 — that is now the only place the conversion appears.
@@ -71,9 +74,9 @@ const indexedFile = new IndexedCramFile({
     path: '/path/to/file.cram.crai',
     // alternatives: url, filehandle
   }),
-  seqFetch: async (seqId, start, end) => {
-    // seqId is numeric; coordinates are 1-based but IndexedFasta is 0-based
-    return fasta.getSequence(idToName[seqId], start - 1, end)
+  fetchReferenceSequence: async (seqId, start, end) => {
+    // seqId is numeric; coordinates are 0-based half-open, as IndexedFasta's are
+    return fasta.getSequence(idToName[seqId], start, end)
   },
   checkSequenceMD5: false,
 })
@@ -91,7 +94,7 @@ samHeader
     })
   })
 
-// Fetch records for a range (1-based, closed coordinates)
+// Fetch records for a range (0-based, half-open coordinates)
 const records = await indexedFile.getRecordsForRange(
   nameToId['chr1'],
   10000,
@@ -99,14 +102,14 @@ const records = await indexedFile.getRecordsForRange(
 )
 
 for (const record of records) {
-  console.log(record.readName, record.alignmentStart, record.mappingQuality)
+  console.log(record.readName, record.start, record.mappingQuality)
   console.log(record.getCigarString()) // e.g. "50M2I48M"
 
   // Where this read differs from the reference
   for (const m of record.getMismatches()) {
     console.log(
       String.fromCharCode(m.code), // 'X', 'I', 'D', 'N', 'S' or 'H'
-      m.refPos, // 1-based reference position
+      m.refPos, // 0-based reference position
       m.bases, // substituted or inserted bases
       m.length, // reference bases covered (deletions, skips)
       m.clipLength, // read bases consumed (insertions, clips)
@@ -135,9 +138,9 @@ record.forEachMismatch(
 record.forEachMismatch(cb, { start: 10000, end: 10100 })
 ```
 
-Both need `seqFetch` configured to resolve the actual bases of a substitution.
-Without it, a substitution still reports at the right position but with `bases`
-of `'N'` and a `refBaseCode` of `0`.
+Both need `fetchReferenceSequence` configured to resolve the actual bases of a
+substitution. Without it, a substitution still reports at the right position but
+with `bases` of `'N'` and a `refBaseCode` of `0`.
 
 Read features — the raw CRAM encoding these are derived from — are also
 available as `record.readFeatures`, but interpreting them correctly takes a fair
@@ -160,15 +163,25 @@ new IndexedCramFile({
   cramUrl, // remote URL
   cramFilehandle, // generic-filehandle2 compatible handle
   index, // CraiIndex instance (or any object with getEntriesForRange)
-  seqFetch, // async (seqId, start, end) => string
+  fetchReferenceSequence, // async (seqId, start, end) => string, 0-based half-open
   checkSequenceMD5, // default true; set false to avoid large reference fetches
   cacheSize, // max cached records, default 20000
 })
 ```
 
 - `getRecordsForRange(seqId, start, end, opts?)` → `Promise<CramRecord[]>` —
-  1-based closed coords. `opts`: `{ viewAsPairs, pairAcrossChr, maxInsertSize }`
+  0-based half-open coords. `opts`:
+  `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress }`
 - `hasDataForReferenceSequence(seqId)` → `Promise<boolean>`
+
+Unplaced reads — the ones with no position at all, which sort to the end of the
+file — have `sequenceId` and `start` of `-1`, so the query that reaches them is
+`getRecordsForRange(-1, -1, end)`. Passing a `start` of `0` returns nothing:
+both the index-entry filter and the record filter are half-open against a read
+that begins at `-1`. Before v10 those reads sat at `0` and `(-1, 0, end)` was
+the query, so this is a migration point if you fetch them. Reads that are
+unmapped but _placed_ at their mate's position are unaffected — they carry the
+mate's `sequenceId` and `start` and come back from an ordinary range query.
 
 ### `CraiIndex`
 
@@ -180,7 +193,9 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 - `readName` — read name
 - `sequenceId` — numeric reference ID
-- `alignmentStart` — 1-based start position
+- `start` — 0-based start position; `-1` for an unplaced read
+- `lengthOnRef` — reference bases the alignment covers, `undefined` for an
+  unmapped read
 - `qualityScores` — `Uint8Array` of per-base quality scores
 - `tags` — auxiliary tags object
 - `readFeatures` — the raw read features as an array (see below); rebuilt from
@@ -209,15 +224,15 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 **Methods:**
 
 - `getReadBases()` → `string | null | undefined` — returns the read sequence
-  string. Requires `seqFetch` to be configured and is populated automatically by
-  `getRecordsForRange`.
+  string. Requires `fetchReferenceSequence` to be configured and is populated
+  automatically by `getRecordsForRange`.
 - `getCigarString()` → `string` — returns the CIGAR string describing the read's
   alignment (e.g. `"50M2I48M"`), reconstructed from the read features.
   Substitutions and mismatches are reported as `M` per the plain CIGAR
   convention; unmapped reads, and mapped reads with no operations, return `"*"`.
-  Does not require `seqFetch`.
+  Does not require `fetchReferenceSequence`.
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
-  `opts` is an optional `{ start, end }` 1-based closed reference range.
+  `opts` is an optional `{ start, end }` 0-based half-open reference range.
 - `forEachMismatch(callback, opts?)` — the same differences, reported to
   `callback(code, refPos, length, bases, qual, refBaseCode, clipLength)` without
   allocating per difference.
@@ -230,7 +245,7 @@ What `getMismatches()` returns, and the argument order `forEachMismatch` passes:
   (reference skip), `S` (soft clip) or `H` (hard clip). Compare against the
   exported `RF_SUBST`, `RF_INSERTION`, … constants. Insertions arrive as `I`
   whether the file encoded them as `I` or as a run of `i`.
-- `refPos` — 1-based reference position
+- `refPos` — 0-based reference position
 - `length` — reference bases covered: 1 for a substitution, the deleted or
   skipped length for `D`/`N`, and 0 for insertions and clips
 - `bases` — the substituted base, or the inserted bases; empty for
@@ -246,8 +261,8 @@ Each entry in `record.readFeatures`, the raw CRAM encoding (see CRAM spec
 §10.2):
 
 - `code` — feature type, one of `bqBXIDiQNSPH`
-- `pos` — read position (1-based)
-- `refPos` — reference position (1-based) — **except for `q` and `Q`**, whose
+- `pos` — read position (0-based)
+- `refPos` — reference position (0-based) — **except for `q` and `Q`**, whose
   `refPos` is derived from a read position the reference never reaches, so it
   can point backwards into an insertion. `RF_POSITIONAL[code]` is 0 for exactly
   those two.
@@ -258,7 +273,8 @@ Each entry in `record.readFeatures`, the raw CRAM encoding (see CRAM spec
   and an array of them for `q`; `[base, quality]` for `B`; and for `X`, an index
   into the container's substitution matrix — not a base
 - `ref` / `sub` — reference and substituted base (code `X` only), present only
-  once a reference has been applied, i.e. when `seqFetch` is configured
+  once a reference has been applied, i.e. when `fetchReferenceSequence` is
+  configured
 
 ### Error classes
 
