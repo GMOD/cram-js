@@ -29,6 +29,7 @@
   ],
   "scripts": {
     "test": "vitest",
+    "test:profile": "vitest --run test/profile-longreads.test.ts",
     "test:pack": "./scripts/test-pack.sh",
     "clean": "rimraf dist esm",
     "format": "prettier --write .",

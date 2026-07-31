@@ -25,7 +25,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -418,7 +418,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
       "numRecords": 1,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 4951,
+      "refSeqStart": 4950,
     },
     "data": [
       {
@@ -436,12 +436,11 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
         "numRecords": 1,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 4951,
+        "refSeqStart": 4950,
       },
       {
         "features": [
           {
-            "alignmentStart": 4951,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 60,
@@ -516,6 +515,15 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
                   "N",
                   33,
                 ],
+                "pos": 50,
+                "refPos": 5000,
+              },
+              {
+                "code": "B",
+                "data": [
+                  "N",
+                  33,
+                ],
                 "pos": 51,
                 "refPos": 5001,
               },
@@ -540,7 +548,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
               {
                 "code": "B",
                 "data": [
-                  "N",
+                  "A",
                   33,
                 ],
                 "pos": 54,
@@ -549,7 +557,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
               {
                 "code": "B",
                 "data": [
-                  "A",
+                  "C",
                   33,
                 ],
                 "pos": 55,
@@ -558,7 +566,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
               {
                 "code": "B",
                 "data": [
-                  "C",
+                  "G",
                   33,
                 ],
                 "pos": 56,
@@ -567,7 +575,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
               {
                 "code": "B",
                 "data": [
-                  "G",
+                  "T",
                   33,
                 ],
                 "pos": 57,
@@ -576,7 +584,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
               {
                 "code": "B",
                 "data": [
-                  "T",
+                  "R",
                   33,
                 ],
                 "pos": 58,
@@ -585,26 +593,18 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
               {
                 "code": "B",
                 "data": [
-                  "R",
+                  "Y",
                   33,
                 ],
                 "pos": 59,
                 "refPos": 5009,
-              },
-              {
-                "code": "B",
-                "data": [
-                  "Y",
-                  33,
-                ],
-                "pos": 60,
-                "refPos": 5010,
               },
             ],
             "readGroupId": -1,
             "readLength": 60,
             "readName": "overflow",
             "sequenceId": 0,
+            "start": 4950,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 518,
@@ -688,7 +688,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1200_overflow.cram without
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 50,
-            "refSeqStart": 4951,
+            "refSeqStart": 4950,
           },
           "uncompressedSize": 33,
         },

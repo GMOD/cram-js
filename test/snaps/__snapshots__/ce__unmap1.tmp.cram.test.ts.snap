@@ -25,7 +25,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -733,7 +733,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
       "numRecords": 10,
       "recordCounter": 0,
       "refSeqId": -1,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -752,12 +752,11 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
         "numRecords": 10,
         "recordCounter": 0,
         "refSeqId": -1,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "features": [
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -867,6 +866,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808391",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -874,7 +874,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 831,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -984,6 +983,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808433",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -991,7 +991,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 832,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1101,6 +1100,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808462",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1108,7 +1108,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 833,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1218,6 +1217,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808468",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1225,7 +1225,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 834,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1335,6 +1334,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808471",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1342,7 +1342,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 835,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1452,6 +1451,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808489",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1459,7 +1459,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 836,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1569,6 +1568,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808504",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1660,7 +1660,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": -1,
             "refSeqSpan": 1,
-            "refSeqStart": 0,
+            "refSeqStart": -1,
           },
           "uncompressedSize": 39,
         },
@@ -1668,7 +1668,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
       {
         "features": [
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1778,6 +1777,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808511",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1785,7 +1785,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 1344,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1895,6 +1894,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808521",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -1902,7 +1902,6 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "uniqueId": 1345,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -2012,6 +2011,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "readLength": 100,
             "readName": "SRR065390.33808523",
             "sequenceId": -1,
+            "start": -1,
             "tags": {
               "YT": "UU",
             },
@@ -2103,7 +2103,7 @@ exports[`can dump the whole ce#unmap1.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": -1,
             "refSeqSpan": 1,
-            "refSeqStart": 0,
+            "refSeqStart": -1,
           },
           "uncompressedSize": 39,
         },

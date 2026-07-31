@@ -25,7 +25,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -390,7 +390,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
       "numRecords": 3,
       "recordCounter": 0,
       "refSeqId": -1,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -408,12 +408,11 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
         "numRecords": 3,
         "recordCounter": 0,
         "refSeqId": -1,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "features": [
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -523,19 +522,19 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
             "readLength": 100,
             "readName": "x",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 399,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 77,
             "mate": {
-              "alignmentStart": 0,
               "flags": 2,
               "readName": undefined,
               "sequenceId": -1,
+              "start": -1,
             },
             "qualityScores": [
               2,
@@ -642,19 +641,19 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
             "readLength": 98,
             "readName": "y",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 400,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 141,
             "mate": {
-              "alignmentStart": 0,
               "flags": 2,
               "readName": undefined,
               "sequenceId": -1,
+              "start": -1,
             },
             "qualityScores": [
               2,
@@ -759,6 +758,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
             "readLength": 96,
             "readName": "y",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 401,
@@ -849,7 +849,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
             "refBaseBlockId": -1,
             "refSeqId": -1,
             "refSeqSpan": 1,
-            "refSeqStart": 0,
+            "refSeqStart": -1,
           },
           "uncompressedSize": 38,
         },

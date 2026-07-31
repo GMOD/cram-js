@@ -25,7 +25,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -472,7 +472,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
       "numRecords": 3,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 4,
+      "refSeqStart": 3,
     },
     "data": [
       {
@@ -490,12 +490,11 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
         "numRecords": 3,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 4,
+        "refSeqStart": 3,
       },
       {
         "features": [
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -506,14 +505,15 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
               {
                 "code": "H",
                 "data": 10,
-                "pos": 1,
-                "refPos": 4,
+                "pos": 0,
+                "refPos": 3,
               },
             ],
             "readGroupId": -1,
             "readLength": 0,
             "readName": "a0",
             "sequenceId": 0,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -522,7 +522,6 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "uniqueId": 498,
           },
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -533,14 +532,15 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
               {
                 "code": "H",
                 "data": 10,
-                "pos": 1,
-                "refPos": 4,
+                "pos": 0,
+                "refPos": 3,
               },
             ],
             "readGroupId": -1,
             "readLength": 0,
             "readName": "a1",
             "sequenceId": 0,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -549,7 +549,6 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "uniqueId": 499,
           },
           {
-            "alignmentStart": 4,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 10,
@@ -571,20 +570,21 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
               {
                 "code": "H",
                 "data": 5,
-                "pos": 1,
-                "refPos": 4,
+                "pos": 0,
+                "refPos": 3,
               },
               {
                 "code": "H",
                 "data": 5,
-                "pos": 11,
-                "refPos": 14,
+                "pos": 10,
+                "refPos": 13,
               },
             ],
             "readGroupId": -1,
             "readLength": 10,
             "readName": "a2",
             "sequenceId": 0,
+            "start": 3,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 500,
@@ -685,7 +685,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 10,
-            "refSeqStart": 4,
+            "refSeqStart": 3,
           },
           "uncompressedSize": 44,
         },
@@ -1023,7 +1023,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
       "numRecords": 5,
       "recordCounter": 3,
       "refSeqId": 1,
-      "refSeqStart": 4,
+      "refSeqStart": 3,
     },
     "data": [
       {
@@ -1041,12 +1041,11 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
         "numRecords": 5,
         "recordCounter": 3,
         "refSeqId": 1,
-        "refSeqStart": 4,
+        "refSeqStart": 3,
       },
       {
         "features": [
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -1057,6 +1056,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "readLength": 0,
             "readName": "A0",
             "sequenceId": 1,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -1065,7 +1065,6 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "uniqueId": 1131,
           },
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -1076,6 +1075,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "readLength": 0,
             "readName": "A1",
             "sequenceId": 1,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -1084,7 +1084,6 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "uniqueId": 1132,
           },
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -1095,6 +1094,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "readLength": 0,
             "readName": "A2",
             "sequenceId": 1,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -1103,7 +1103,6 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "uniqueId": 1133,
           },
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -1114,6 +1113,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "readLength": 0,
             "readName": "A3",
             "sequenceId": 1,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -1122,7 +1122,6 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "uniqueId": 1134,
           },
           {
-            "alignmentStart": 4,
             "cramFlags": 11,
             "flags": 16,
             "lengthOnRef": 0,
@@ -1133,6 +1132,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "readLength": 0,
             "readName": "A4",
             "sequenceId": 1,
+            "start": 3,
             "tags": {
               "MD": "0",
               "NM": 0,
@@ -1222,7 +1222,7 @@ exports[`can dump the whole xx#minimal.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 1,
             "refSeqSpan": 0,
-            "refSeqStart": 4,
+            "refSeqStart": 3,
           },
           "uncompressedSize": 37,
         },

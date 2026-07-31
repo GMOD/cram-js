@@ -25,7 +25,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -355,7 +355,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
       "numRecords": 2,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1000,
+      "refSeqStart": 999,
     },
     "data": [
       {
@@ -373,20 +373,19 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
         "numRecords": 2,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1000,
+        "refSeqStart": 999,
       },
       {
         "features": [
           {
-            "alignmentStart": 1000,
             "cramFlags": 5,
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 40,
             "mate": {
-              "alignmentStart": 1200,
               "readName": "match",
               "sequenceId": 0,
+              "start": 1199,
               "uniqueId": 485,
             },
             "qualityScores": [
@@ -496,46 +495,46 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
               {
                 "code": "D",
                 "data": 5,
-                "pos": 21,
-                "refPos": 1020,
+                "pos": 20,
+                "refPos": 1019,
               },
               {
                 "code": "D",
                 "data": 1,
-                "pos": 23,
-                "refPos": 1027,
+                "pos": 22,
+                "refPos": 1026,
               },
               {
                 "code": "I",
                 "data": "GAAAG",
-                "pos": 65,
-                "refPos": 1070,
+                "pos": 64,
+                "refPos": 1069,
               },
               {
                 "code": "i",
                 "data": "A",
-                "pos": 71,
-                "refPos": 1071,
+                "pos": 70,
+                "refPos": 1070,
               },
             ],
             "readGroupId": -1,
             "readLength": 100,
             "readName": "match",
             "sequenceId": 0,
+            "start": 999,
             "tags": {},
             "templateLength": 300,
             "uniqueId": 484,
           },
           {
-            "alignmentStart": 1200,
             "cramFlags": 1,
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 40,
             "mate": {
-              "alignmentStart": 1000,
               "readName": "match",
               "sequenceId": 0,
+              "start": 999,
               "uniqueId": 484,
             },
             "qualityScores": [
@@ -645,6 +644,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
             "readLength": 100,
             "readName": "match",
             "sequenceId": 0,
+            "start": 1199,
             "tags": {},
             "templateLength": -300,
             "uniqueId": 485,
@@ -741,7 +741,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0505_mapped.cram without e
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 300,
-            "refSeqStart": 1000,
+            "refSeqStart": 999,
           },
           "uncompressedSize": 40,
         },

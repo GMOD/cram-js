@@ -35,7 +35,7 @@ describe('CRAM reader', () => {
       _size: 19,
       _endPosition: 45,
       refSeqId: 0,
-      refSeqStart: 0,
+      refSeqStart: -1,
     })
   })
 
@@ -58,7 +58,7 @@ describe('CRAM reader', () => {
       numRecords: 2,
       recordCounter: 0,
       refSeqId: 0,
-      refSeqStart: 1,
+      refSeqStart: 0,
     })
   })
 
@@ -124,7 +124,7 @@ describe('CRAM reader', () => {
       numRecords: 35,
       recordCounter: 770,
       refSeqId: -2,
-      refSeqStart: 0,
+      refSeqStart: -1,
     })
     const {
       content,

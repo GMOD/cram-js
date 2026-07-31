@@ -21,7 +21,7 @@ exports[`can dump the whole hg19mini#cramQueryTestEmpty.cram without error 1`] =
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": -1,
+      "refSeqStart": -2,
     },
     "data": [
       {
@@ -36,7 +36,7 @@ exports[`can dump the whole hg19mini#cramQueryTestEmpty.cram without error 1`] =
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": -1,
+        "refSeqStart": -2,
       },
       {
         "samHeader": [

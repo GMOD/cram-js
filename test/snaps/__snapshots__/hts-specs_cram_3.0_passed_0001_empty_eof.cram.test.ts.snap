@@ -24,7 +24,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0001_empty_eof.cram withou
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -42,7 +42,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0001_empty_eof.cram withou
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [],

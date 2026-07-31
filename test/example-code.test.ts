@@ -42,10 +42,10 @@ test('runs without error', async () => {
 
   expect(messages).toEqual([
     'got a record named VI',
-    'VI shows a base substitution of A->C at 2',
-    'VI shows a base substitution of A->C at 28',
-    'VI shows a base substitution of A->C at 100029',
-    'VI shows a base substitution of A->C at 100101',
+    'VI shows a base substitution of A->C at 1',
+    'VI shows a base substitution of A->C at 27',
+    'VI shows a base substitution of A->C at 100028',
+    'VI shows a base substitution of A->C at 100100',
   ])
 })
 

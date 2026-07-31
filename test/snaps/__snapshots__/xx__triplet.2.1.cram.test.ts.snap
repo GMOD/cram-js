@@ -23,7 +23,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -40,7 +40,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -375,7 +375,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
       "numRecords": 3,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -392,21 +392,20 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
         "numRecords": 3,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 6,
               "flags": 0,
               "readName": undefined,
               "sequenceId": 0,
+              "start": 5,
             },
             "qualityScores": [
               9,
@@ -425,21 +424,21 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "a1",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 20,
             "uniqueId": 10429,
           },
           {
-            "alignmentStart": 6,
             "cramFlags": 3,
             "flags": 35,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 11,
               "flags": 1,
               "readName": undefined,
               "sequenceId": 0,
+              "start": 10,
             },
             "qualityScores": [
               9,
@@ -458,21 +457,21 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "a1",
             "sequenceId": 0,
+            "start": 5,
             "tags": {},
             "templateSize": -20,
             "uniqueId": 10430,
           },
           {
-            "alignmentStart": 11,
             "cramFlags": 3,
             "flags": 147,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 1,
               "flags": 0,
               "readName": undefined,
               "sequenceId": 0,
+              "start": 0,
             },
             "qualityScores": [
               9,
@@ -491,6 +490,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "a1",
             "sequenceId": 0,
+            "start": 10,
             "tags": {},
             "templateSize": -20,
             "uniqueId": 10431,
@@ -568,7 +568,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 20,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 30,
         },
@@ -810,7 +810,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
       "numRecords": 2,
       "recordCounter": 3,
       "refSeqId": 1,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -827,20 +827,19 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
         "numRecords": 2,
         "recordCounter": 3,
         "refSeqId": 1,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 5,
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 6,
               "readName": "a1",
               "sequenceId": 1,
+              "start": 5,
               "uniqueId": 10714,
             },
             "qualityScores": [
@@ -860,20 +859,20 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "a1",
             "sequenceId": 1,
+            "start": 0,
             "tags": {},
             "templateLength": 15,
             "uniqueId": 10713,
           },
           {
-            "alignmentStart": 6,
             "cramFlags": 1,
             "flags": 3,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 1,
               "readName": "a1",
               "sequenceId": 1,
+              "start": 0,
               "uniqueId": 10713,
             },
             "qualityScores": [
@@ -893,6 +892,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "a1",
             "sequenceId": 1,
+            "start": 5,
             "tags": {},
             "templateLength": -15,
             "uniqueId": 10714,
@@ -970,7 +970,7 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 1,
             "refSeqSpan": 15,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 30,
         },

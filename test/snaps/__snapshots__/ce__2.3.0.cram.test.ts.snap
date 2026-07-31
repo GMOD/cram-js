@@ -25,7 +25,7 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -656,7 +656,7 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
       "numRecords": 2,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 2,
+      "refSeqStart": 1,
     },
     "data": [
       {
@@ -674,12 +674,11 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
         "numRecords": 2,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 2,
+        "refSeqStart": 1,
       },
       {
         "features": [
           {
-            "alignmentStart": 2,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 101,
@@ -791,44 +790,45 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
               {
                 "code": "X",
                 "data": 1,
+                "pos": 4,
+                "refPos": 5,
+              },
+              {
+                "code": "X",
+                "data": 1,
                 "pos": 5,
                 "refPos": 6,
               },
               {
                 "code": "X",
                 "data": 1,
-                "pos": 6,
-                "refPos": 7,
+                "pos": 11,
+                "refPos": 12,
               },
               {
                 "code": "X",
                 "data": 1,
-                "pos": 12,
-                "refPos": 13,
+                "pos": 17,
+                "refPos": 18,
               },
               {
                 "code": "X",
                 "data": 1,
-                "pos": 18,
-                "refPos": 19,
-              },
-              {
-                "code": "X",
-                "data": 1,
-                "pos": 24,
-                "refPos": 25,
+                "pos": 23,
+                "refPos": 24,
               },
               {
                 "code": "D",
                 "data": 1,
-                "pos": 28,
-                "refPos": 29,
+                "pos": 27,
+                "refPos": 28,
               },
             ],
             "readGroupId": -1,
             "readLength": 100,
             "readName": "SRR065390.14978392",
             "sequenceId": 0,
+            "start": 1,
             "tags": {
               "AS": -18,
               "XG": 1,
@@ -842,7 +842,6 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
             "uniqueId": 653,
           },
           {
-            "alignmentStart": 3,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 100,
@@ -954,26 +953,27 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
               {
                 "code": "X",
                 "data": 0,
+                "pos": 10,
+                "refPos": 12,
+              },
+              {
+                "code": "X",
+                "data": 2,
                 "pos": 11,
                 "refPos": 13,
               },
               {
                 "code": "X",
-                "data": 2,
-                "pos": 12,
-                "refPos": 14,
-              },
-              {
-                "code": "X",
                 "data": 1,
-                "pos": 23,
-                "refPos": 25,
+                "pos": 22,
+                "refPos": 24,
               },
             ],
             "readGroupId": -1,
             "readLength": 100,
             "readName": "SRR065390.921023",
             "sequenceId": 0,
+            "start": 2,
             "tags": {
               "AS": -6,
               "XG": 0,
@@ -1064,7 +1064,7 @@ exports[`can dump the whole ce#2.3.0.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 101,
-            "refSeqStart": 2,
+            "refSeqStart": 1,
           },
           "uncompressedSize": 32,
         },

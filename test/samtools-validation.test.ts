@@ -93,7 +93,7 @@ describe('CRAM record count validation against samtools', () => {
         for (let refId = 0; refId < sqLines.length; refId++) {
           const features = await cram.getRecordsForRange(
             refId,
-            0,
+            -1,
             Number.POSITIVE_INFINITY,
           )
           allFeatures = allFeatures.concat(features)
@@ -101,7 +101,7 @@ describe('CRAM record count validation against samtools', () => {
 
         const unmappedFeatures = await cram.getRecordsForRange(
           -1,
-          0,
+          -1,
           Number.POSITIVE_INFINITY,
         )
         allFeatures = allFeatures.concat(unmappedFeatures)
@@ -126,7 +126,7 @@ describe('CRAM record count validation against samtools', () => {
 
         const features = await cram.getRecordsForRange(
           0,
-          0,
+          -1,
           Number.POSITIVE_INFINITY,
         )
         const samtoolsCount = getSamtoolsCount(filename, refNames[0])
@@ -149,7 +149,7 @@ describe('CRAM record count validation against samtools', () => {
 
         const features = await cram.getRecordsForRange(
           1,
-          0,
+          -1,
           Number.POSITIVE_INFINITY,
         )
         const samtoolsCount = getSamtoolsCount(filename, refNames[1])
@@ -208,7 +208,7 @@ describe('CRAM record count validation against samtools', () => {
 
       const features = await cram.getRecordsForRange(
         0,
-        0,
+        -1,
         Number.POSITIVE_INFINITY,
       )
 

@@ -25,7 +25,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -369,7 +369,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
       "numRecords": 2,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1010,
+      "refSeqStart": 1009,
     },
     "data": [
       {
@@ -387,21 +387,20 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
         "numRecords": 2,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1010,
+        "refSeqStart": 1009,
       },
       {
         "features": [
           {
-            "alignmentStart": 1010,
             "cramFlags": 2,
             "flags": 99,
             "lengthOnRef": 80,
             "mappingQuality": 40,
             "mate": {
-              "alignmentStart": 1200,
               "flags": 1,
               "readName": undefined,
               "sequenceId": 0,
+              "start": 1199,
             },
             "qualityScores": undefined,
             "readBases": undefined,
@@ -409,8 +408,14 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
               {
                 "code": "S",
                 "data": "RTTTTTCGGG",
-                "pos": 1,
-                "refPos": 1010,
+                "pos": 0,
+                "refPos": 1009,
+              },
+              {
+                "code": "Q",
+                "data": 2,
+                "pos": 0,
+                "refPos": 999,
               },
               {
                 "code": "Q",
@@ -467,16 +472,16 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
                 "refPos": 1008,
               },
               {
-                "code": "Q",
-                "data": 2,
-                "pos": 10,
-                "refPos": 1009,
-              },
-              {
                 "code": "S",
                 "data": "GTGCAGAATR",
-                "pos": 91,
-                "refPos": 1090,
+                "pos": 90,
+                "refPos": 1089,
+              },
+              {
+                "code": "Q",
+                "data": 34,
+                "pos": 90,
+                "refPos": 1079,
               },
               {
                 "code": "Q",
@@ -532,32 +537,26 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
                 "pos": 99,
                 "refPos": 1088,
               },
-              {
-                "code": "Q",
-                "data": 34,
-                "pos": 100,
-                "refPos": 1089,
-              },
             ],
             "readGroupId": -1,
             "readLength": 100,
             "readName": "match",
             "sequenceId": 0,
+            "start": 1009,
             "tags": {},
             "templateSize": 300,
             "uniqueId": 496,
           },
           {
-            "alignmentStart": 1210,
             "cramFlags": 2,
             "flags": 147,
             "lengthOnRef": 80,
             "mappingQuality": 40,
             "mate": {
-              "alignmentStart": 1000,
               "flags": 0,
               "readName": undefined,
               "sequenceId": 0,
+              "start": 999,
             },
             "qualityScores": undefined,
             "readBases": undefined,
@@ -565,8 +564,14 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
               {
                 "code": "S",
                 "data": "YYGTTTTAGA",
-                "pos": 1,
-                "refPos": 1210,
+                "pos": 0,
+                "refPos": 1209,
+              },
+              {
+                "code": "Q",
+                "data": 2,
+                "pos": 0,
+                "refPos": 1199,
               },
               {
                 "code": "Q",
@@ -623,16 +628,16 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
                 "refPos": 1208,
               },
               {
-                "code": "Q",
-                "data": 2,
-                "pos": 10,
-                "refPos": 1209,
-              },
-              {
                 "code": "S",
                 "data": "TGCCAAAGYY",
-                "pos": 91,
-                "refPos": 1290,
+                "pos": 90,
+                "refPos": 1289,
+              },
+              {
+                "code": "Q",
+                "data": 34,
+                "pos": 90,
+                "refPos": 1279,
               },
               {
                 "code": "Q",
@@ -688,17 +693,12 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
                 "pos": 99,
                 "refPos": 1288,
               },
-              {
-                "code": "Q",
-                "data": 34,
-                "pos": 100,
-                "refPos": 1289,
-              },
             ],
             "readGroupId": -1,
             "readLength": 100,
             "readName": "match",
             "sequenceId": 0,
+            "start": 1209,
             "tags": {},
             "templateSize": -300,
             "uniqueId": 497,
@@ -795,7 +795,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 280,
-            "refSeqStart": 1010,
+            "refSeqStart": 1009,
           },
           "uncompressedSize": 40,
         },

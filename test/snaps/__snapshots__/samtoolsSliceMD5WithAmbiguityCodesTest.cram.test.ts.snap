@@ -25,7 +25,7 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -1527,7 +1527,7 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
       "numRecords": 2,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -1545,12 +1545,11 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
         "numRecords": 2,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 10,
@@ -1572,26 +1571,27 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
               {
                 "code": "X",
                 "data": 3,
+                "pos": 6,
+                "refPos": 6,
+              },
+              {
+                "code": "X",
+                "data": 1,
                 "pos": 7,
                 "refPos": 7,
               },
               {
                 "code": "X",
-                "data": 1,
+                "data": 0,
                 "pos": 8,
                 "refPos": 8,
-              },
-              {
-                "code": "X",
-                "data": 0,
-                "pos": 9,
-                "refPos": 9,
               },
             ],
             "readGroupId": 0,
             "readLength": 10,
             "readName": "Fred",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "A!": "!",
               "AC": "C",
@@ -1641,7 +1641,6 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
             "uniqueId": 1276,
           },
           {
-            "alignmentStart": 11,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 10,
@@ -1663,20 +1662,21 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
               {
                 "code": "X",
                 "data": 0,
-                "pos": 2,
-                "refPos": 12,
+                "pos": 1,
+                "refPos": 11,
               },
               {
                 "code": "X",
                 "data": 0,
-                "pos": 3,
-                "refPos": 13,
+                "pos": 2,
+                "refPos": 12,
               },
             ],
             "readGroupId": 0,
             "readLength": 10,
             "readName": "Jim",
             "sequenceId": 0,
+            "start": 10,
             "tags": {
               "BC": [
                 0,
@@ -1808,7 +1808,7 @@ exports[`can dump the whole samtoolsSliceMD5WithAmbiguityCodesTest.cram without 
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 20,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 38,
         },

@@ -25,7 +25,7 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -328,7 +328,7 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
       "numRecords": 6,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -346,20 +346,19 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
         "numRecords": 6,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 5,
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 11,
               "readName": "S",
               "sequenceId": 0,
+              "start": 10,
               "uniqueId": 399,
             },
             "qualityScores": [
@@ -379,20 +378,20 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "readLength": 10,
             "readName": "S",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateLength": 20,
             "uniqueId": 398,
           },
           {
-            "alignmentStart": 11,
             "cramFlags": 5,
             "flags": 131,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 1,
               "readName": "S",
               "sequenceId": 0,
+              "start": 0,
               "uniqueId": 400,
             },
             "qualityScores": [
@@ -412,20 +411,20 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "readLength": 10,
             "readName": "S",
             "sequenceId": 0,
+            "start": 10,
             "tags": {},
             "templateLength": -20,
             "uniqueId": 399,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 5,
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 11,
               "readName": "S",
               "sequenceId": 0,
+              "start": 10,
               "uniqueId": 401,
             },
             "qualityScores": [
@@ -445,20 +444,20 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "readLength": 10,
             "readName": "S",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateLength": 20,
             "uniqueId": 400,
           },
           {
-            "alignmentStart": 11,
             "cramFlags": 5,
             "flags": 131,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 1,
               "readName": "S",
               "sequenceId": 0,
+              "start": 0,
               "uniqueId": 402,
             },
             "qualityScores": [
@@ -478,20 +477,20 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "readLength": 10,
             "readName": "S",
             "sequenceId": 0,
+            "start": 10,
             "tags": {},
             "templateLength": -20,
             "uniqueId": 401,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 5,
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 11,
               "readName": "S",
               "sequenceId": 0,
+              "start": 10,
               "uniqueId": 403,
             },
             "qualityScores": [
@@ -511,20 +510,20 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "readLength": 10,
             "readName": "S",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateLength": 20,
             "uniqueId": 402,
           },
           {
-            "alignmentStart": 11,
             "cramFlags": 1,
             "flags": 131,
             "lengthOnRef": 10,
             "mappingQuality": 1,
             "mate": {
-              "alignmentStart": 1,
               "readName": "S",
               "sequenceId": 0,
+              "start": 0,
               "uniqueId": 402,
             },
             "qualityScores": [
@@ -544,6 +543,7 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "readLength": 10,
             "readName": "S",
             "sequenceId": 0,
+            "start": 10,
             "tags": {},
             "templateLength": -20,
             "uniqueId": 403,
@@ -626,7 +626,7 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 20,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 32,
         },

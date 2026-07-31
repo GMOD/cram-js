@@ -23,7 +23,7 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -40,7 +40,7 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [],
@@ -311,7 +311,7 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
       "numRecords": 6,
       "recordCounter": 0,
       "refSeqId": -1,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -328,12 +328,11 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
         "numRecords": 6,
         "recordCounter": 0,
         "refSeqId": -1,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "features": [
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -443,12 +442,12 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "readLength": 100,
             "readName": "I",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10242,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -558,12 +557,12 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "readLength": 100,
             "readName": "II",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10243,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -673,12 +672,12 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "readLength": 100,
             "readName": "III",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10244,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -788,12 +787,12 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "readLength": 100,
             "readName": "IV",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10245,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -903,12 +902,12 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "readLength": 100,
             "readName": "V",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10246,
           },
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -1018,6 +1017,7 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "readLength": 100,
             "readName": "VI",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10247,
@@ -1101,7 +1101,7 @@ exports[`can dump the whole ce#unmap.2.1.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": -1,
             "refSeqSpan": 1,
-            "refSeqStart": 0,
+            "refSeqStart": -1,
           },
           "uncompressedSize": 35,
         },

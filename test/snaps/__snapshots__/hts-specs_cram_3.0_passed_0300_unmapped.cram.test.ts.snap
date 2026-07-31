@@ -25,7 +25,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0300_unmapped.cram without
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0300_unmapped.cram without
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -411,7 +411,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0300_unmapped.cram without
       "numRecords": 1,
       "recordCounter": 0,
       "refSeqId": -1,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -429,12 +429,11 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0300_unmapped.cram without
         "numRecords": 1,
         "recordCounter": 0,
         "refSeqId": -1,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "features": [
           {
-            "alignmentStart": 0,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -544,6 +543,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0300_unmapped.cram without
             "readLength": 100,
             "readName": "x",
             "sequenceId": -1,
+            "start": -1,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 407,
@@ -628,7 +628,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0300_unmapped.cram without
             "refBaseBlockId": -1,
             "refSeqId": -1,
             "refSeqSpan": 1,
-            "refSeqStart": 0,
+            "refSeqStart": -1,
           },
           "uncompressedSize": 35,
         },

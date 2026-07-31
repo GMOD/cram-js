@@ -23,7 +23,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -40,7 +40,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -452,7 +452,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
       "numRecords": 9,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -469,12 +469,11 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
         "numRecords": 9,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 10,
@@ -496,12 +495,12 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "sq1",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10403,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 10,
@@ -523,12 +522,12 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "sQ1",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10404,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 10,
@@ -550,6 +549,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "readLength": 10,
             "readName": "SQ1",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "MD": "10",
               "NM": 0,
@@ -558,7 +558,6 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "uniqueId": 10405,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 10,
@@ -579,20 +578,20 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
               {
                 "code": "D",
                 "data": 1,
-                "pos": 5,
-                "refPos": 5,
+                "pos": 4,
+                "refPos": 4,
               },
             ],
             "readGroupId": -1,
             "readLength": 9,
             "readName": "sq2",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10406,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 10,
@@ -613,20 +612,20 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
               {
                 "code": "D",
                 "data": 1,
-                "pos": 5,
-                "refPos": 5,
+                "pos": 4,
+                "refPos": 4,
               },
             ],
             "readGroupId": -1,
             "readLength": 9,
             "readName": "sQ2",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10407,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 10,
@@ -647,14 +646,15 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
               {
                 "code": "D",
                 "data": 1,
-                "pos": 5,
-                "refPos": 5,
+                "pos": 4,
+                "refPos": 4,
               },
             ],
             "readGroupId": -1,
             "readLength": 9,
             "readName": "SQ2",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "MD": "4^G5",
               "NM": 1,
@@ -663,7 +663,6 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "uniqueId": 10408,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -682,12 +681,12 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "readLength": 9,
             "readName": "sq3",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10409,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [
@@ -706,12 +705,12 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "readLength": 9,
             "readName": "sQ3",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10410,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 4,
             "qualityScores": [],
@@ -720,6 +719,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "readLength": 0,
             "readName": "SQ3",
             "sequenceId": 0,
+            "start": 0,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 10411,
@@ -801,7 +801,7 @@ exports[`can dump the whole c1#noseq.2.1.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 10,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 32,
         },

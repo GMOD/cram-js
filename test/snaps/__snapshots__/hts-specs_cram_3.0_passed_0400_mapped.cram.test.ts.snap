@@ -25,7 +25,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0400_mapped.cram without e
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0400_mapped.cram without e
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -410,7 +410,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0400_mapped.cram without e
       "numRecords": 1,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1000,
+      "refSeqStart": 999,
     },
     "data": [
       {
@@ -428,12 +428,11 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0400_mapped.cram without e
         "numRecords": 1,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1000,
+        "refSeqStart": 999,
       },
       {
         "features": [
           {
-            "alignmentStart": 1000,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 100,
@@ -545,14 +544,15 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0400_mapped.cram without e
               {
                 "code": "b",
                 "data": "ATTTTTCGGGTTTTTTGAAATGAATATCGTAGCTACAGAAACGGTTGTGCACTCATCTGAAAGTTTGTTTTTCTTGTTTTCTTGCACTTTGTGCAGAATT",
-                "pos": 1,
-                "refPos": 1000,
+                "pos": 0,
+                "refPos": 999,
               },
             ],
             "readGroupId": -1,
             "readLength": 100,
             "readName": "fwdmatch",
             "sequenceId": 0,
+            "start": 999,
             "tags": {},
             "templateSize": 0,
             "uniqueId": 397,
@@ -636,7 +636,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0400_mapped.cram without e
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 100,
-            "refSeqStart": 1000,
+            "refSeqStart": 999,
           },
           "uncompressedSize": 33,
         },

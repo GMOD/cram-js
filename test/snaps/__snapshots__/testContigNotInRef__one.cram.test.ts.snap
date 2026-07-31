@@ -21,7 +21,7 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -36,7 +36,7 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -1430,7 +1430,7 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
       "numRecords": 2,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -1447,12 +1447,11 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
         "numRecords": 2,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 10,
@@ -1474,6 +1473,7 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
             "readLength": 10,
             "readName": "Fred",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "A!": "!",
               "AC": "C",
@@ -1523,7 +1523,6 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
             "uniqueId": 2207,
           },
           {
-            "alignmentStart": 11,
             "cramFlags": 3,
             "flags": 16,
             "lengthOnRef": 10,
@@ -1545,6 +1544,7 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
             "readLength": 10,
             "readName": "Jim",
             "sequenceId": 0,
+            "start": 10,
             "tags": {
               "BC": [
                 0,
@@ -1710,7 +1710,7 @@ exports[`can dump the whole testContigNotInRef#one.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 20,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 69,
         },

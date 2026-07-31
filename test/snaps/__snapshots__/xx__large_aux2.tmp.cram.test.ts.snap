@@ -25,7 +25,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
       "numRecords": 0,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 0,
+      "refSeqStart": -1,
     },
     "data": [
       {
@@ -44,7 +44,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
         "numRecords": 0,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 0,
+        "refSeqStart": -1,
       },
       {
         "samHeader": [
@@ -729,7 +729,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
       "numRecords": 10,
       "recordCounter": 0,
       "refSeqId": 0,
-      "refSeqStart": 1,
+      "refSeqStart": 0,
     },
     "data": [
       {
@@ -748,12 +748,11 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
         "numRecords": 10,
         "recordCounter": 0,
         "refSeqId": 0,
-        "refSeqStart": 1,
+        "refSeqStart": 0,
       },
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -766,6 +765,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a1",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
             },
@@ -773,7 +773,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 791,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -786,6 +785,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a2",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -794,7 +794,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 792,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -807,6 +806,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a3",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -816,7 +816,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 793,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -829,6 +828,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a4",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -839,7 +839,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 794,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -852,6 +851,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a5",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -863,7 +863,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 795,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -876,6 +875,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a6",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -888,7 +888,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 796,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -901,6 +900,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a7",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -1024,7 +1024,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 1,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 59,
         },
@@ -1032,7 +1032,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
       {
         "features": [
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -1045,6 +1044,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a8",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -1059,7 +1059,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 1234,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -1072,6 +1071,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "a9",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -1087,7 +1087,6 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "uniqueId": 1235,
           },
           {
-            "alignmentStart": 1,
             "cramFlags": 3,
             "flags": 0,
             "lengthOnRef": 1,
@@ -1100,6 +1099,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "readLength": 1,
             "readName": "aA",
             "sequenceId": 0,
+            "start": 0,
             "tags": {
               "aa": 1,
               "ab": 1,
@@ -1241,7 +1241,7 @@ exports[`can dump the whole xx#large_aux2.tmp.cram without error 1`] = `
             "refBaseBlockId": -1,
             "refSeqId": 0,
             "refSeqSpan": 1,
-            "refSeqStart": 1,
+            "refSeqStart": 0,
           },
           "uncompressedSize": 71,
         },
