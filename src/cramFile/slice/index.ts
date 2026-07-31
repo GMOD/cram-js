@@ -12,6 +12,7 @@ import Constants from '../constants.ts'
 import decodeRecord, { buildRFSchema } from './decodeRecord.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import { type CramFileBlock } from '../file.ts'
+import ReadFeatureArena from '../readFeatureArena.ts'
 import CramRecord, { defaultDecodeOptions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
@@ -788,6 +789,7 @@ export default class CramSlice {
     const ctx: SliceDecodeContext = {
       bd,
       rfSchema: buildRFSchema(bd, majorVersion),
+      arena: new ReadFeatureArena(),
       tagDescriptorsByTL,
       cursors,
       decodeBulkBytesRaw,
@@ -821,6 +823,11 @@ export default class CramSlice {
         }
       }
     }
+
+    // decoding grows the arena geometrically, so it can be holding up to twice
+    // the memory the features actually need; it outlives the decode in the
+    // feature cache, so give the slack back
+    ctx.arena.trim()
 
     // interpret `recordsToNextFragment` attributes to make standard `mate`
     // objects. The records loop above fills every slot or throws — by the

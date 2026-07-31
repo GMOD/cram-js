@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 
+import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord from '../src/cramFile/record.ts'
 
 import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
@@ -7,6 +8,7 @@ import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
 // A 10bp mapped read at ref 101, fully covered by a 10bp reference region.
 // readFeatures/lengthOnRef are what each case varies.
 function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
+  const arena = arenaFromReadFeatures(readFeatures)
   const record = new CramRecord({
     flags: 0,
     cramFlags: 0,
@@ -16,7 +18,9 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
     qualityScores: undefined,
     mateRecordNumber: undefined,
     readBases: undefined,
-    readFeatures,
+    readFeatureArena: arena,
+    readFeatureStart: 0,
+    readFeatureCount: arena.length,
     mate: undefined,
     readGroupId: 0,
     readNameRaw: undefined,

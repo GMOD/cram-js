@@ -11,6 +11,7 @@ import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 import type { Cursors } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
+import type ReadFeatureArena from '../readFeatureArena.ts'
 
 /** Data series whose codecs yield a Uint8Array rather than a number. */
 export type ByteArraySeries = {
@@ -143,31 +144,15 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-// Read-feature schema: a charCode-indexed array of entries whose decode()
-// reads and transforms the feature's data (character → fromCharCode,
-// string → decodeUtf8, numArray → Array.from, number → identity,
-// B → [base, qualityScore]). Built once per slice, so the inner loop becomes
-// a charCode lookup plus a monomorphic call.
-type RFData = string | number | number[] | [string, number]
-
-/**
- * How a feature advances the reference position relative to the read, folded
- * into the schema so the decode loop can branch on a small integer instead of
- * comparing the feature code against five strings per feature.
- */
-const DELTA_NONE = 0
-const DELTA_ADD_DATA = 1 // D, N: data is the number of reference bases skipped
-const DELTA_SUB_DATA_LENGTH = 2 // I, S: data is inserted/clipped read sequence
-const DELTA_SUB_ONE = 3 // i: single inserted base
-
+// Read-feature schema: a charCode-indexed array of entries whose decodeInto()
+// reads the feature's payload straight into an arena slot and returns how far
+// that feature advances the reference position relative to the read. Built once
+// per slice, so the inner loop becomes a charCode lookup plus a monomorphic
+// call — and folding the reference delta into the return value replaces what
+// used to be a per-feature branch on the feature's kind.
 export interface RFEntry {
   code: ReadFeature['code']
-  decode: () => RFData
-  deltaKind:
-    | typeof DELTA_NONE
-    | typeof DELTA_ADD_DATA
-    | typeof DELTA_SUB_DATA_LENGTH
-    | typeof DELTA_SUB_ONE
+  decodeInto: (arena: ReadFeatureArena, index: number) => number
 }
 
 export function buildRFSchema(
@@ -180,40 +165,88 @@ export function buildRFSchema(
   const arr: (RFEntry | undefined)[] = new Array(128).fill(undefined)
   const set = (
     code: ReadFeature['code'],
-    deltaKind: RFEntry['deltaKind'],
-    decode: () => RFData,
+    decodeInto: RFEntry['decodeInto'],
   ) => {
-    arr[code.charCodeAt(0)] = { code, decode, deltaKind }
+    arr[code.charCodeAt(0)] = { code, decodeInto }
   }
-  set('B', DELTA_NONE, () => [String.fromCharCode(bd.BA()), bd.QS()])
-  set('X', DELTA_NONE, () => bd.BS())
-  set('D', DELTA_ADD_DATA, () => bd.DL())
-  set('I', DELTA_SUB_DATA_LENGTH, () => decodeUtf8(bd.IN()))
-  set('i', DELTA_SUB_ONE, () => String.fromCharCode(bd.BA()))
-  set('b', DELTA_NONE, () => decodeUtf8(bd.BB()))
-  set('q', DELTA_NONE, () => Array.from(bd.QQ()))
-  set('Q', DELTA_NONE, () => bd.QS())
-  set('H', DELTA_NONE, () => bd.HC())
-  set('P', DELTA_NONE, () => bd.PD())
-  set('N', DELTA_ADD_DATA, () => bd.RS())
-  set('S', DELTA_SUB_DATA_LENGTH, () => decodeUtf8(SC()))
+  // I, S, b, q: a byte-array payload whose length is what `num` records
+  const setBytes = (a: ReadFeatureArena, i: number, bytes: Uint8Array) => {
+    a.setPayload(i, bytes)
+    a.num[i] = bytes.length
+    return bytes.length
+  }
+  set('B', (a, i) => {
+    a.setPayloadByte(i, bd.BA())
+    a.num[i] = bd.QS()
+    return 0
+  })
+  set('X', (a, i) => {
+    a.num[i] = bd.BS()
+    return 0
+  })
+  set('D', (a, i) => {
+    const deleted = bd.DL()
+    a.num[i] = deleted
+    return deleted
+  })
+  set('N', (a, i) => {
+    const skipped = bd.RS()
+    a.num[i] = skipped
+    return skipped
+  })
+  set('I', (a, i) => -setBytes(a, i, bd.IN()))
+  set('S', (a, i) => -setBytes(a, i, SC()))
+  set('b', (a, i) => {
+    setBytes(a, i, bd.BB())
+    return 0
+  })
+  set('q', (a, i) => {
+    setBytes(a, i, bd.QQ())
+    return 0
+  })
+  set('i', (a, i) => {
+    a.setPayloadByte(i, bd.BA())
+    a.num[i] = 1
+    return -1
+  })
+  set('Q', (a, i) => {
+    a.num[i] = bd.QS()
+    return 0
+  })
+  set('H', (a, i) => {
+    a.num[i] = bd.HC()
+    return 0
+  })
+  set('P', (a, i) => {
+    a.num[i] = bd.PD()
+    return 0
+  })
   return arr
 }
 
+/**
+ * Decode this record's read features into `arena`, returning the slot range
+ * they occupy and their total effect on the record's length on the reference.
+ */
 function decodeReadFeatures(
   alignmentStart: number,
   readFeatureCount: number,
   bd: BoundDecoders,
   schema: (RFEntry | undefined)[],
-): [ReadFeature[], number] {
+  arena: ReadFeatureArena,
+): [number, number] {
   let readPos = 0
   let refDelta = 0
   const base = alignmentStart - 1
-  const readFeatures: ReadFeature[] = new Array(readFeatureCount)
   const decodeFC = bd.FC
   const decodeFP = bd.FP
 
-  for (let i = 0; i < readFeatureCount; i++) {
+  const start = arena.length
+  arena.reserve(readFeatureCount)
+  // read after reserve(): growing the arena replaces the column arrays
+  const { codes, pos, refPos } = arena
+
+  for (let i = start; i < start + readFeatureCount; i++) {
     const codeNum = decodeFC()
     readPos += decodeFP()
     const entry = schema[codeNum]
@@ -224,32 +257,13 @@ function decodeReadFeatures(
       )
     }
 
-    const data = entry.decode()
-
-    // NOTE: X features get `ref`/`sub` assigned later by addReferenceSequence,
-    // which makes V8 move their properties to an out-of-object backing store.
-    // Constructing X with those two slots already present measures -11.7%
-    // retained heap on long-read data, but it makes the keys visible (as
-    // undefined) to anything that enumerates a feature, which churns every
-    // snapshot. Worth doing together with a columnar read-feature layout,
-    // which pays that cost once — not on its own.
-    readFeatures[i] = {
-      code: entry.code,
-      pos: readPos,
-      refPos: readPos + base + refDelta,
-      data,
-    } as ReadFeature
-
-    const { deltaKind } = entry
-    if (deltaKind === DELTA_ADD_DATA) {
-      refDelta += data as number
-    } else if (deltaKind === DELTA_SUB_DATA_LENGTH) {
-      refDelta -= (data as string).length
-    } else if (deltaKind === DELTA_SUB_ONE) {
-      refDelta -= 1
-    }
+    codes[i] = codeNum
+    pos[i] = readPos
+    refPos[i] = readPos + base + refDelta
+    refDelta += entry.decodeInto(arena, i)
   }
-  return [readFeatures, refDelta]
+  arena.length = start + readFeatureCount
+  return [start, refDelta]
 }
 
 export type BulkByteRawDecoder = (
@@ -308,6 +322,8 @@ export interface TagDescriptor {
 export interface SliceDecodeContext {
   bd: BoundDecoders
   rfSchema: (RFEntry | undefined)[]
+  /** columnar read-feature storage shared by every record in the slice */
+  arena: ReadFeatureArena
   /** indexed by TL data series value */
   tagDescriptorsByTL: TagDescriptor[][]
   cursors: Cursors
@@ -329,6 +345,7 @@ export default function decodeRecord(
   const {
     bd,
     rfSchema,
+    arena,
     tagDescriptorsByTL,
     cursors,
     decodeBulkBytesRaw,
@@ -427,23 +444,28 @@ export default function decodeRecord(
     }
   }
 
-  let readFeatures: ReadFeature[] | undefined
+  let readFeatureArena: ReadFeatureArena | undefined
+  let readFeatureStart = 0
+  let readFeatureCount = 0
   let lengthOnRef: number | undefined
   let mappingQuality: number | undefined
   let qualityScores: Uint8Array | undefined | null
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
-    const readFeatureCount = bd.FN()
+    const encodedFeatureCount = bd.FN()
     lengthOnRef = readLength
-    if (readFeatureCount) {
-      const [features, refDelta] = decodeReadFeatures(
+    if (encodedFeatureCount) {
+      const [start, refDelta] = decodeReadFeatures(
         alignmentStart,
-        readFeatureCount,
+        encodedFeatureCount,
         bd,
         rfSchema,
+        arena,
       )
-      readFeatures = features
+      readFeatureArena = arena
+      readFeatureStart = start
+      readFeatureCount = encodedFeatureCount
       lengthOnRef += refDelta
     }
     if (Number.isNaN(lengthOnRef)) {
@@ -480,7 +502,9 @@ export default function decodeRecord(
     mate,
     templateSize,
     mateRecordNumber,
-    readFeatures,
+    readFeatureArena,
+    readFeatureStart,
+    readFeatureCount,
     lengthOnRef,
     mappingQuality,
     qualityScores,

@@ -4,83 +4,6 @@ Investigated, measured, not yet done. Numbers below were measured on this repo
 at v8.7.0 — see the method note at the bottom before trusting or re-running
 them.
 
-## Columnar (struct-of-arrays) read features
-
-**Status:** prototyped and benchmarked, then discarded. Worth doing; needs a
-coordinated change in jbrowse-components.
-
-### Why
-
-Read features are the dominant term in decoded-record memory on long-read data.
-`decodeReadFeatures` allocates one `{code, pos, refPos, data}` object per
-feature — 64 bytes each, 81 once `addReferenceSequence` adds `ref`/`sub` to the
-X features. The ONT test fixture decodes 37 records into **213,602 feature
-objects** (5,773 per read).
-
-Measured retained heap, prototype vs current:
-
-| workload                      | features/record | current  | per-record SoA      | **per-slice arena** |
-| ----------------------------- | --------------- | -------- | ------------------- | ------------------- |
-| `HG002_ONTrel2_16x_...` (ONT) | 5773            | 18.86 MB | 3.30 MB (−82%)      | **3.64 MB (−81%)**  |
-| `SRR396636.sorted.clip`       | 1.7             | 20.04 MB | 39.69 MB (**+98%**) | **16.55 MB (−18%)** |
-| `SRR396637.sorted.clip`       | 2.0             | 46.21 MB | 90.92 MB (**+97%**) | **36.40 MB (−21%)** |
-
-### The trap — read this before starting
-
-**Do not give each record its own set of typed arrays.** That is the obvious
-columnar layout and it makes short-read files ~2x _worse_: each
-`Uint8Array`/`Int32Array` carries ~100 bytes of fixed object overhead, so at ~2
-features per record five per-record objects replace two 64-byte feature objects.
-Short-read CRAM is the common case, so this would be a net regression for most
-users.
-
-Put the columns on the **slice** and give each record only a `(start, length)`
-pair into them. Fixed overhead is then amortised across the whole slice and the
-layout wins in both regimes — that is the "per-slice arena" column above.
-
-### Shape that worked
-
-`ReadFeatureArena`, one per slice, built in `_fetchRecords` and passed through
-`SliceDecodeContext`:
-
-- `codes: Uint8Array` — feature code as a char code
-- `pos`, `refPos`, `num: Int32Array` — `num` holds the numeric payload for
-  D/N/H/P/Q and the X substitution-matrix index
-- `objs: (string | number[] | [string, number] | undefined)[] | undefined` —
-  allocated lazily, only for the features that carry a string/array payload (I,
-  S, b, i, q, B)
-- `refCodes`, `subCodes: Uint8Array` — filled by `addReferenceSequence`, so the
-  ~43%-of-features `ref`/`sub` strings disappear entirely
-- geometric `reserve(n)` growth; total feature count is not known up front
-
-`record.readFeatures` becomes a getter that materialises the old
-array-of-structs view on demand, so unported consumers keep working. Measured
-cost of that fallback: back to roughly baseline (18.81 / 20.44 / 46.73 MB) —
-never worse than today, but it gives the win back, so jbrowse's two walks need
-porting to keep it.
-
-Consumers to port: `decodeReadSequence`, `getCigarString`,
-`addReferenceSequence` (all in `src/cramFile/record.ts`), and in
-jbrowse-components `plugins/alignments/src/CramAdapter/` —
-`readFeaturesToMismatches.ts` and `readFeaturesToNumericCIGAR.ts`. Both are
-already indexed `for` loops over `rf.code` string comparisons, so they become a
-`switch` on a `Uint8Array` char code.
-
-### Fold in while you are there
-
-- **Preallocate `ref`/`sub` on X features.** Assigning a property the object was
-  not constructed with makes V8 move its properties to an out-of-object backing
-  store; constructing X with the slots present measures **−11.7% retained heap**
-  on its own. Not landed separately because it makes the keys enumerable as
-  `undefined` and churns all 103 snapshots — the arena pays that cost once. See
-  the NOTE in `src/cramFile/slice/decodeRecord.ts`.
-- **Coalesce consecutive single-base `i` insertions.** 34,387 of the ONT
-  fixture's 213,602 features (16%) are single-base insertions that _both_
-  jbrowse consumers immediately re-coalesce into runs. Coalescing at decode time
-  drops 16% of feature slots and deletes the accumulate-and-flush logic from
-  both walks. It changes the emitted feature list, so it belongs with the arena
-  change rather than on its own.
-
 ## Cached slices redo their reference decoration on every query
 
 `CramSlice.getRecords` serves records from `featureCache`, then unconditionally
@@ -202,9 +125,45 @@ Recorded so they are not rediscovered:
   across all records, because `target: es2022` implies
   `useDefineForClassFields`. Do not "fix" this, and note that lowering the
   compile target would silently undo it.
+- **Coalescing consecutive single-base `i` insertions.** The note that used to
+  live here claimed 34,387 of the ONT fixture's 213,602 features (16%) were
+  single-base insertions "that both jbrowse consumers immediately re-coalesce
+  into runs". They are single-base insertions, but they are _isolated_: counting
+  adjacent `(i, i)` slot pairs — which is exactly the pair a consumer merges,
+  since two adjacent `i` features share a reference position if and only if
+  their read positions are adjacent — gives **0 runs on ONT, 0 on SRR396636, 0
+  on SRR396637**. Coalescing at decode time bought nothing on all three, in
+  exchange for a per-feature branch in the decode loop and a change to a public
+  output shape (it altered exactly one of the 189 snapshots, the grc37-1
+  Illumina one). htslib does not merge the features either — its `case 'i'`
+  accumulates into the _CIGAR_ via `cig_len++` while keeping one decode step per
+  feature (`cram/cram_decode.c`). Leave the merging in the consumer walks.
 - **Read-feature polymorphism as a consumer cost.** Forcing true monomorphism
-  made jbrowse's two walks no faster — noise in both directions. The `ref`/`sub`
-  change above is worth doing for its _memory_, not for call-site shape.
+  made jbrowse's two walks no faster — noise in both directions. Moving `ref`/
+  `sub` into the arena's byte columns was worth doing for its _memory_, not for
+  call-site shape.
+- **A `Uint32Array` NUMERIC_CIGAR for every read.** In jbrowse's
+  `readFeaturesToNumericCIGAR` it is 8.7% faster and half the retained bytes on
+  ONT (median 4391 ops/read), but **147% slower and 2.4x the memory** on short
+  reads (median 1 op/read), where ~96 bytes of fixed typed-array overhead lands
+  on a one-element payload. Same shape of trap as the per-record arena. That
+  walk now switches per read at 64 ops, matching the ~50–100 crossover bam-js
+  measured in its own `src/record.ts`.
+
+## Packing the arena's columns — measured, and now a breaking change
+
+On the ONT slice `payloadOffsets` is 854 KB (11.5% of the 7.42 MB the records
+retain) and `refCodes`/`subCodes` together are 427 KB (5.7%). Offsets are
+monotonic, so a per-record base offset would collapse them; and an X feature's
+`num` only holds a 0–3 substitution-matrix index, so `ref`/`sub` would fit in
+its spare bits.
+
+Neither is worth doing now. The columns are public API — jbrowse's
+`readFeaturesToMismatches` reads `refCodes`/`subCodes`/`num` directly, because
+that walk is on its render path and emits jbrowse's own mismatch vocabulary, so
+it cannot move in here. Packing them is therefore a breaking change for a few
+percent. Privatising the layout would mean cram-js owning that walk too, which
+would drag `@jbrowse/cigar-utils`' render types into a file parser.
 
 ## Method note
 
@@ -216,7 +175,21 @@ base-vs-base control was ±0.2% for heap, ±1% for cold decode, ±8% for warm
 re-query.
 
 **No wall-clock claim here is trustworthy** — the machine was loaded when these
-were taken, and the timing noise floor is wider than most of the effects. In
-particular it is _not_ known whether the arena makes decoding faster as well as
-smaller (it removes 213k allocations on ONT, so it probably does). Re-measure
-timings on a quiet machine before quoting any.
+were taken, and the timing noise floor is wider than most of the effects.
+Re-measure timings on a quiet machine before quoting any.
+
+Two traps worth knowing, both found the hard way while landing the columnar read
+features:
+
+- **`heapUsed` does not see typed arrays.** V8 allocates ArrayBuffer backing
+  stores outside the JS heap, so a struct-of-arrays layout looks nearly free if
+  you only read `process.memoryUsage().heapUsed` — the first ONT measurement
+  came out at 0.93 MB against an 18.07 MB baseline. Add `arrayBuffers`.
+  `scripts/measure-heap.ts` reports both columns and their sum.
+- **Do not A/B two source trees in one process.** Importing a baseline and a
+  candidate side by side and interleaving them round by round made the columnar
+  decode look 7–11% _slower_ on ONT, consistently across five runs — consistent
+  enough to look real rather than noisy. It was an artifact of the two variants
+  sharing a heap and a GC history: one-tree-per-process runs and a separate CPU
+  profile of each tree both showed it _faster_ (GC self-time 143 ms → 24 ms).
+  Alternate processes, not imports.

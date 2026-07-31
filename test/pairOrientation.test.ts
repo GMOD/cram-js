@@ -41,7 +41,9 @@ function makeRecord({
     readNameRaw: undefined,
     templateSize: undefined,
     mateRecordNumber: undefined,
-    readFeatures: undefined,
+    readFeatureArena: undefined,
+    readFeatureStart: 0,
+    readFeatureCount: 0,
     readBases: undefined,
   }
   const record = new CramRecord(args)

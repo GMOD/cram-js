@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 
 import { expect, test } from 'vitest'
 
+import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord from '../src/cramFile/record.ts'
 import { CraiIndex, IndexedCramFile } from '../src/index.ts'
 import { testDataFile } from './lib/util.ts'
@@ -93,6 +94,9 @@ function coalesce(cigar: string) {
 }
 
 const files = [
+  // the only fixture here carrying Q features — 44 of them, across 29 records —
+  // so the only one that exercises the RF_POSITIONAL skip against real data
+  'raw_sorted_duplicates_removed.cram',
   'SRR396636.sorted.clip.cram',
   'SRR396637.sorted.clip.cram',
   'ce#1000.tmp.cram',
@@ -157,18 +161,30 @@ test('getCigarString matches htslib (samtools) output', async () => {
 
 // build a bare record with just the fields getCigarString() reads, bypassing
 // the decode constructor
-function makeRecord(fields: {
+function makeRecord({
+  readFeatures,
+  ...fields
+}: {
   flags: number
   readLength: number
   alignmentStart: number
   readFeatures?: ReadFeature[]
 }) {
-  return Object.assign(Object.create(CramRecord.prototype), fields) as CramRecord
+  const arena = readFeatures ? arenaFromReadFeatures(readFeatures) : undefined
+  return Object.assign(Object.create(CramRecord.prototype), fields, {
+    readFeatureArena: arena,
+    readFeatureStart: 0,
+    readFeatureCount: arena ? arena.length : 0,
+  }) as CramRecord
 }
 
 test('read with no features is all matches', () => {
   expect(
-    makeRecord({ flags: 0, readLength: 100, alignmentStart: 5 }).getCigarString(),
+    makeRecord({
+      flags: 0,
+      readLength: 100,
+      alignmentStart: 5,
+    }).getCigarString(),
   ).toBe('100M')
 })
 
@@ -226,8 +242,61 @@ test('coalesces consecutive single-base insertions', () => {
   ).toBe('2M2I1M')
 })
 
+// A Q between the two halves of an insertion is what a real decoder produces
+// when quality is preserved for one inserted base: 'i' moves refDelta back by
+// one, so the Q that follows it reports a refPos behind the insertion. A walk
+// that lets Q through flushes the pending insertion here and emits 1I1I.
+test('a Q between two single-base insertions does not split them', () => {
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 5,
+      alignmentStart: 1,
+      readFeatures: [
+        { code: 'i', data: 'A', pos: 3, refPos: 3 },
+        { code: 'Q', data: 36, pos: 3, refPos: 2 },
+        { code: 'i', data: 'C', pos: 4, refPos: 3 },
+      ],
+    }).getCigarString(),
+  ).toBe('2M2I1M')
+})
+
+// the same shape around a multi-base insertion, where Q's refPos lands two
+// bases behind and would otherwise contribute a negative match run
+test('Q features inside an insertion do not perturb the match runs', () => {
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 10,
+      alignmentStart: 1,
+      readFeatures: [
+        { code: 'I', data: 'GG', pos: 5, refPos: 5 },
+        { code: 'Q', data: 36, pos: 5, refPos: 3 },
+        { code: 'Q', data: 36, pos: 6, refPos: 4 },
+      ],
+    }).getCigarString(),
+  ).toBe('4M2I4M')
+})
+
+// htslib's xx#minimal carries five of these: mapped, zero read length, and a
+// single zero-length feature, so no operation survives. samtools prints '*'
+test('mapped read with no operations returns *', () => {
+  expect(
+    makeRecord({
+      flags: 0x10,
+      readLength: 0,
+      alignmentStart: 4,
+      readFeatures: [{ code: 'H', data: 0, pos: 1, refPos: 4 }],
+    }).getCigarString(),
+  ).toBe('*')
+})
+
 test('unmapped read returns *', () => {
   expect(
-    makeRecord({ flags: 0x4, readLength: 100, alignmentStart: 1 }).getCigarString(),
+    makeRecord({
+      flags: 0x4,
+      readLength: 100,
+      alignmentStart: 1,
+    }).getCigarString(),
   ).toBe('*')
 })

@@ -1,8 +1,28 @@
 import Constants from './constants.ts'
 import { CramMalformedError } from '../errors.ts'
+import { forEachMismatch } from './mismatches.ts'
+import {
+  RF_BASES,
+  RF_BASE_QUAL,
+  RF_DELETION,
+  RF_HARD_CLIP,
+  RF_INSERTION,
+  RF_INSERT_BASE,
+  RF_PADDING,
+  RF_POSITIONAL,
+  RF_REF_SKIP,
+  RF_SOFT_CLIP,
+  RF_SUBST,
+} from './readFeatureArena.ts'
 import { readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type CramContainerCompressionScheme from './container/compressionScheme.ts'
+import type {
+  Mismatch,
+  MismatchCallback,
+  MismatchOptions,
+} from './mismatches.ts'
+import type ReadFeatureArena from './readFeatureArena.ts'
 import type decodeRecord from './slice/decodeRecord.ts'
 
 // Precomputed pair orientation strings, indexed by
@@ -73,7 +93,8 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
   // remember: all coordinates are 1-based closed
   const regionSeqOffset = cramRecord.alignmentStart - refRegion.start
 
-  if (!cramRecord.readFeatures) {
+  const arena = cramRecord.readFeatureArena
+  if (!arena) {
     return refRegion.seq
       .slice(regionSeqOffset, regionSeqOffset + (cramRecord.lengthOnRef || 0))
       .toUpperCase()
@@ -81,6 +102,9 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
 
   // Walk read features against the reference to reconstruct the read sequence.
   // See CRAMv3 §10.2 (Read features): https://samtools.github.io/hts-specs/CRAMv3.pdf
+  const { codes, pos, num, subCodes } = arena
+  const featureStart = cramRecord.readFeatureStart
+  const featureCount = cramRecord.readFeatureCount
   let bases = ''
   let regionPos = regionSeqOffset
   let currentReadFeature = 0
@@ -94,46 +118,42 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
     // way the loop below would spin forever on a file we cannot decode.
     const basesBefore = bases.length
     const featureBefore = currentReadFeature
-    if (currentReadFeature < cramRecord.readFeatures.length) {
-      const feature = cramRecord.readFeatures[currentReadFeature]!
-      if (feature.code === 'Q' || feature.code === 'q') {
+    if (currentReadFeature < featureCount) {
+      const i = featureStart + currentReadFeature
+      const code = codes[i]!
+      if (!RF_POSITIONAL[code]) {
+        // q/Q describe quality, not geometry: consume the feature and neither
+        // emit bases nor move along the reference
         currentReadFeature += 1
-      } else if (feature.pos === bases.length + 1) {
+      } else if (pos[i] === bases.length + 1) {
         currentReadFeature += 1
-        switch (feature.code) {
-          case 'b': {
-            bases += feature.data
-            regionPos += feature.data.length
-            break
-          }
-          case 'B': {
-            bases += feature.data[0]
-            regionPos += 1
-            break
-          }
-          case 'X': {
-            bases += feature.sub
-            regionPos += 1
-            break
-          }
-          case 'I':
-          case 'i':
-          case 'S': {
-            bases += feature.data
-            break
-          }
-          case 'D':
-          case 'N': {
-            regionPos += feature.data
-            break
-          }
-          // H (hard clip), P (padding): do nothing
+        if (code === RF_SUBST) {
+          // an unresolved substitution reads as N, the same fallback the
+          // substitution matrix uses for a reference base it does not know
+          const subCode = subCodes[i]!
+          bases += subCode ? String.fromCharCode(subCode) : 'N'
+          regionPos += 1
+        } else if (code === RF_BASE_QUAL) {
+          bases += String.fromCharCode(arena.payloadBytesAt(i)[0]!)
+          regionPos += 1
+        } else if (code === RF_BASES) {
+          bases += arena.payloadStringAt(i)
+          regionPos += num[i]!
+        } else if (
+          code === RF_INSERTION ||
+          code === RF_INSERT_BASE ||
+          code === RF_SOFT_CLIP
+        ) {
+          bases += arena.payloadStringAt(i)
+        } else if (code === RF_DELETION || code === RF_REF_SKIP) {
+          regionPos += num[i]!
         }
+        // H (hard clip), P (padding): do nothing
       } else {
         // put down a chunk of reference up to the next read feature
         const chunk = refRegion.seq.slice(
           regionPos,
-          regionPos + feature.pos - bases.length - 1,
+          regionPos + pos[i]! - bases.length - 1,
         )
         bases += chunk
         regionPos += chunk.length
@@ -149,7 +169,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
     }
     if (bases.length === basesBefore && currentReadFeature === featureBefore) {
       throw new CramMalformedError(
-        `could not decode read bases for ${cramRecord.sequenceId}:${cramRecord.alignmentStart}: stuck at ${bases.length} of ${cramRecord.readLength} bases, read feature ${currentReadFeature} of ${cramRecord.readFeatures.length}. this file seems malformed`,
+        `could not decode read bases for ${cramRecord.sequenceId}:${cramRecord.alignmentStart}: stuck at ${bases.length} of ${cramRecord.readLength} bases, read feature ${currentReadFeature} of ${featureCount}. this file seems malformed`,
       )
     }
   }
@@ -171,28 +191,23 @@ const baseNumbers: Record<string, number | undefined> = {
 }
 
 function decodeBaseSubstitution(
-  cramRecord: CramRecord,
+  arena: ReadFeatureArena,
+  index: number,
   refRegion: RefRegion,
   compressionScheme: CramContainerCompressionScheme,
-  readFeature: ReadFeatureBase & {
-    code: 'X'
-    data: number
-    ref?: string
-    sub?: string
-  },
 ) {
   // decode base substitution code using the substitution matrix
-  const refCoord = readFeature.refPos - refRegion.start
+  const refCoord = arena.refPos[index]! - refRegion.start
   const refBase = refRegion.seq.charAt(refCoord)
   if (refBase) {
-    readFeature.ref = refBase
+    arena.refCodes[index] = refBase.charCodeAt(0)
   }
   // anything that is not a called base substitutes through the N row
   const baseNumber = baseNumbers[refBase] ?? 4
   const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]!
-  const base = substitutionScheme[readFeature.data]
+  const base = substitutionScheme[arena.num[index]!]
   if (base) {
-    readFeature.sub = base
+    arena.subCodes[index] = base.charCodeAt(0)
   }
 }
 
@@ -276,7 +291,16 @@ export default class CramRecord {
   public cramFlags: number
   public readBases?: string | null
   public _refRegion?: RefRegion
-  public readFeatures?: ReadFeature[]
+  /**
+   * Columnar storage for this record's read features, shared with every other
+   * record in the same slice; undefined when the record has none. Read them
+   * through the columns rather than through {@link readFeatures}, which
+   * rebuilds an array of objects on every access.
+   */
+  public readFeatureArena: ReadFeatureArena | undefined
+  /** index of this record's first read feature in {@link readFeatureArena} */
+  public readFeatureStart: number
+  public readFeatureCount: number
   public alignmentStart: number
   public lengthOnRef: number | undefined
   public readLength: number
@@ -294,6 +318,44 @@ export default class CramRecord {
   public readGroupId: number
   public mappingQuality: number | undefined
   public qualityScores: Uint8Array | null | undefined
+
+  /**
+   * This record's read features as the array of `{code, pos, refPos, data}`
+   * objects this library has always handed out.
+   *
+   * Rebuilt from the arena columns on every access, so a consumer that walks
+   * these more than once, or that walks many records, should read
+   * {@link readFeatureArena} directly — materialising them is what the columnar
+   * layout exists to avoid.
+   */
+  get readFeatures(): ReadFeature[] | undefined {
+    return this.readFeatureArena?.materialize(
+      this.readFeatureStart,
+      this.readFeatureCount,
+    )
+  }
+
+  /**
+   * Assigning read features is no longer supported — this exists only so the
+   * failure says what to do instead of V8's "has only a getter".
+   *
+   * There is deliberately no working setter. It would fix the one break that
+   * already fails loudly while leaving the two that fail silently: the array is
+   * rebuilt per access, so it has no stable identity, and mutating a feature
+   * from it writes into a throwaway object. Both would need the materialised
+   * array memoised, which retains the objects *and* the columns — more memory
+   * than before the columns existed — and lets the two representations
+   * disagree, while consumers on the fast path read the columns.
+   */
+  set readFeatures(_value: ReadFeature[] | undefined) {
+    throw new TypeError(
+      'CramRecord.readFeatures is read-only: it is rebuilt from the columnar ' +
+        'arena on every access. To build a record from plain read features, ' +
+        'pass arenaFromReadFeatures(features) as readFeatureArena with ' +
+        'readFeatureStart 0 and readFeatureCount features.length. To read them, ' +
+        'use the readFeatureArena columns.',
+    )
+  }
 
   get readName() {
     if (this._readName === undefined) {
@@ -316,7 +378,9 @@ export default class CramRecord {
     qualityScores,
     mateRecordNumber,
     readBases,
-    readFeatures,
+    readFeatureArena,
+    readFeatureStart,
+    readFeatureCount,
     mate,
     readGroupId,
     readNameRaw,
@@ -344,9 +408,9 @@ export default class CramRecord {
       this.readBases = readBases
     }
     this.templateSize = templateSize
-    if (readFeatures) {
-      this.readFeatures = readFeatures
-    }
+    this.readFeatureArena = readFeatureArena
+    this.readFeatureStart = readFeatureStart
+    this.readFeatureCount = readFeatureCount
     if (mate) {
       this.mate = mate
     }
@@ -463,56 +527,44 @@ export default class CramRecord {
     let readConsumed = 0
     let refPos = this.alignmentStart
 
-    if (this.readFeatures !== undefined) {
-      for (const feature of this.readFeatures) {
-        // 'q'/'Q' carry only quality information; their refPos does not track
-        // the alignment geometry, so they must not perturb position tracking
-        if (feature.code !== 'q' && feature.code !== 'Q') {
+    const arena = this.readFeatureArena
+    if (arena !== undefined) {
+      const { codes, num } = arena
+      const end = this.readFeatureStart + this.readFeatureCount
+      for (let i = this.readFeatureStart; i < end; i++) {
+        const code = codes[i]!
+        // skips q/Q, whose refPos would perturb the position tracking below
+        if (RF_POSITIONAL[code]) {
           // reference bases between the last position and this feature are matches
-          const gap = feature.refPos - refPos
+          const gap = arena.refPos[i]! - refPos
           push(gap, 'M')
           readConsumed += gap
-          refPos = feature.refPos
+          refPos = arena.refPos[i]!
 
-          switch (feature.code) {
-            case 'b': {
-              // verbatim stretch of bases, aligned as matches
-              push(feature.data.length, 'M')
-              readConsumed += feature.data.length
-              refPos += feature.data.length
-              break
-            }
-            case 'B':
-            case 'X': {
-              // single-base (substitution or base+quality), aligned as a match
-              push(1, 'M')
-              readConsumed += 1
-              refPos += 1
-              break
-            }
-            case 'D':
-            case 'N': {
-              push(feature.data, feature.code)
-              refPos += feature.data
-              break
-            }
-            case 'I':
-            case 'S': {
-              push(feature.data.length, feature.code)
-              readConsumed += feature.data.length
-              break
-            }
-            case 'i': {
-              // single-base insertion
-              push(1, 'I')
-              readConsumed += 1
-              break
-            }
-            case 'P':
-            case 'H': {
-              push(feature.data, feature.code)
-              break
-            }
+          // `num` is the data value for D/N/P/H and the payload length for
+          // b/I/S/i, so both kinds read the same way here
+          const n = num[i]!
+          if (code === RF_SUBST || code === RF_BASE_QUAL) {
+            // single-base (substitution or base+quality), aligned as a match
+            push(1, 'M')
+            readConsumed += 1
+            refPos += 1
+          } else if (code === RF_BASES) {
+            // verbatim stretch of bases, aligned as matches
+            push(n, 'M')
+            readConsumed += n
+            refPos += n
+          } else if (code === RF_DELETION || code === RF_REF_SKIP) {
+            push(n, code === RF_DELETION ? 'D' : 'N')
+            refPos += n
+          } else if (code === RF_INSERTION || code === RF_INSERT_BASE) {
+            push(n, 'I')
+            readConsumed += n
+          } else if (code === RF_SOFT_CLIP) {
+            push(n, 'S')
+            readConsumed += n
+          } else if (code === RF_PADDING || code === RF_HARD_CLIP) {
+            push(n, code === RF_PADDING ? 'P' : 'H')
           }
         }
       }
@@ -521,7 +573,63 @@ export default class CramRecord {
     // any read bases past the last feature are trailing matches
     push(this.readLength - readConsumed, 'M')
 
-    return ops.map(([len, op]) => `${len}${op}`).join('')
+    // a mapped record can still have no operations at all — htslib's xx#minimal
+    // carries five with a zero read length whose one feature is a zero-length
+    // op — and '*' is how SAM spells an absent CIGAR, which is what samtools
+    // prints for them. Returning '' there would be invalid SAM
+    return ops.length ? ops.map(([len, op]) => `${len}${op}`).join('') : '*'
+  }
+
+  /**
+   * Report each difference between this read and the reference — substitutions,
+   * insertions, deletions, reference skips and clips — without allocating an
+   * object per difference. This is the intended way to read a record's
+   * differences; {@link readFeatures} hands out the raw CRAM features, which
+   * takes rather more of the format to interpret correctly (see
+   * {@link Mismatch}).
+   *
+   * `ref`/`sub` bases and quality scores are only as populated as the file and
+   * the `seqFetch` allowed: without a reference, a substitution reports as 'N'
+   * with a `refBaseCode` of 0.
+   *
+   * @param callback called as
+   *   `(code, refPos, length, bases, qual, refBaseCode, clipLength)`
+   * @param opts optional 1-based closed reference range to restrict to
+   */
+  forEachMismatch(callback: MismatchCallback, opts?: MismatchOptions) {
+    forEachMismatch(
+      this.readFeatureArena,
+      this.readFeatureStart,
+      this.readFeatureCount,
+      this.qualityScores,
+      opts?.start ?? Number.NEGATIVE_INFINITY,
+      opts?.end ?? Number.POSITIVE_INFINITY,
+      callback,
+    )
+  }
+
+  /**
+   * The same differences {@link forEachMismatch} reports, as an array of
+   * {@link Mismatch} objects. Convenient; allocates one object per difference,
+   * so the callback form is the one to reach for on a hot path.
+   */
+  getMismatches(opts?: MismatchOptions) {
+    const out: Mismatch[] = []
+    this.forEachMismatch(
+      (code, refPos, length, bases, qual, refBaseCode, clipLength) => {
+        out.push({
+          code,
+          refPos,
+          length,
+          bases,
+          qual,
+          refBaseCode,
+          clipLength,
+        })
+      },
+      opts,
+    )
+    return out
   }
 
   // Must come out identical from either mate, or the two halves of one normal
@@ -570,17 +678,15 @@ export default class CramRecord {
     refRegion: RefRegion,
     compressionScheme: CramContainerCompressionScheme,
   ) {
-    if (this.readFeatures) {
+    const arena = this.readFeatureArena
+    if (arena) {
       // use the reference bases to decode the bases substituted in each base
       // substitution
-      for (const readFeature of this.readFeatures) {
-        if (readFeature.code === 'X') {
-          decodeBaseSubstitution(
-            this,
-            refRegion,
-            compressionScheme,
-            readFeature,
-          )
+      const { codes } = arena
+      const end = this.readFeatureStart + this.readFeatureCount
+      for (let i = this.readFeatureStart; i < end; i++) {
+        if (codes[i] === RF_SUBST) {
+          decodeBaseSubstitution(arena, i, refRegion, compressionScheme)
         }
       }
     }
@@ -629,8 +735,10 @@ export default class CramRecord {
     if (this.templateLength !== undefined) {
       data.templateLength = this.templateLength
     }
-    if (this.readFeatures !== undefined) {
-      data.readFeatures = this.readFeatures
+    // read once: the getter rebuilds the array-of-structs view on every access
+    const readFeatures = this.readFeatures
+    if (readFeatures !== undefined) {
+      data.readFeatures = readFeatures
     }
     if (this.mate !== undefined) {
       data.mate = this.mate
