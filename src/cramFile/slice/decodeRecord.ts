@@ -226,6 +226,13 @@ function decodeReadFeatures(
 
     const data = entry.decode()
 
+    // NOTE: X features get `ref`/`sub` assigned later by addReferenceSequence,
+    // which makes V8 move their properties to an out-of-object backing store.
+    // Constructing X with those two slots already present measures -11.7%
+    // retained heap on long-read data, but it makes the keys visible (as
+    // undefined) to anything that enumerates a feature, which churns every
+    // snapshot. Worth doing together with a columnar read-feature layout,
+    // which pays that cost once — not on its own.
     readFeatures[i] = {
       code: entry.code,
       pos: readPos,
