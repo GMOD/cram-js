@@ -79,18 +79,18 @@ export function cramFileDefinition() {
   }
 }
 export function cramBlockHeader() {
+  // runs once per block, so it reads the two leading bytes straight off the
+  // Uint8Array rather than allocating a DataView to do it
   const parser = (buffer: Uint8Array, _startOffset = 0) => {
-    const b = buffer
-    const dataView = new DataView(b.buffer, b.byteOffset, b.length)
     let offset = 0
-    const d = dataView.getUint8(offset)
+    const d = buffer[offset]!
     const compressionMethod = COMPRESSION_METHODS[d]
     if (!compressionMethod) {
       throw new Error(`compression method number ${d} not implemented`)
     }
     offset += 1
 
-    const c = dataView.getUint8(offset)
+    const c = buffer[offset]!
     const contentType = CONTENT_TYPES[c]
     if (!contentType) {
       throw new Error(`invalid block content type id ${c}`)
