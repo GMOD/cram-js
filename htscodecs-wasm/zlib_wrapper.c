@@ -60,6 +60,7 @@ unsigned char *zlib_uncompress(unsigned char *in, unsigned int in_size,
     strm.avail_out = alloc_size;
 
     /* Use Z_SYNC_FLUSH for slightly faster decompression */
+    uLong last_total_in = 0, last_total_out = 0;
     while (1) {
         ret = inflate(&strm, Z_SYNC_FLUSH);
 
@@ -86,7 +87,25 @@ unsigned char *zlib_uncompress(unsigned char *in, unsigned int in_size,
             strm.next_out = out + alloc_size;
             strm.avail_out = new_size - alloc_size;
             alloc_size = new_size;
+            continue;
         }
+
+        /*
+         * Output space remains but the stream has not ended, so inflate
+         * stopped for want of input. avail_in is set once and never refilled,
+         * so once a call consumes nothing and emits nothing there is no way
+         * forward: a truncated or corrupt deflate stream lands here, and
+         * without this check the loop spins forever at 100% CPU with no way
+         * to interrupt it (the call is synchronous wasm).
+         */
+        if (strm.total_in == last_total_in &&
+            strm.total_out == last_total_out) {
+            inflateEnd(&strm);
+            free(out);
+            return NULL;
+        }
+        last_total_in = strm.total_in;
+        last_total_out = strm.total_out;
     }
 
     inflateEnd(&strm);
