@@ -1,3 +1,28 @@
+## [10.2.0](https://github.com/GMOD/cram-js/compare/v10.1.0...v10.2.0) (2026-08-01)
+
+### Chores
+
+- Add git-cliff for changelog generation
+
+### Documentation
+
+- Move the raw read-feature reference into its own page, warm up the README
+- Move the raw read-feature reference into its own page, warm up the README
+- Add a page on the wasm decoding path, its speed and its memory use
+- Backfill CHANGELOG.md for v3.0.1 through v10.1.0
+- Mark breaking changes in the generated changelog
+- Write up the memory techniques on their own page
+
+### Performance Improvements
+
+- Stop evicting the slices of the query still in flight
+- Decode quality scores into a per-slice column
+- Decode read names during the slice decode
+
+### Refactoring
+
+- Build the slice decode context in its own module
+
 # v10.1.0
 
 - Decompress gzip blocks with libdeflate instead of zlib. libdeflate has a
