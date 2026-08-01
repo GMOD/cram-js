@@ -59,8 +59,8 @@ for (const record of records) {
     console.log(
       String.fromCharCode(m.code), // 'X', 'I', 'D', 'N', 'S' or 'H'
       m.refPos, // 0-based reference position
-      m.bases, // substituted or inserted bases
       m.length, // reference bases covered (deletions, skips)
+      m.bases, // substituted or inserted bases
       m.clipLength, // read bases consumed (insertions, clips)
     )
   }
@@ -210,14 +210,13 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 **Methods:**
 
-- `getReadBases()` → `string | null | undefined` — returns the read sequence
-  string. Requires `fetchReferenceSequence` to be configured and is populated
-  automatically by `getRecordsForRange`.
-- `getCigarString()` → `string` — returns the CIGAR string describing the read's
-  alignment (e.g. `"50M2I48M"`), reconstructed from the read features.
-  Substitutions and mismatches are reported as `M` per the plain CIGAR
-  convention; unmapped reads, and mapped reads with no operations, return `"*"`.
-  Does not require `fetchReferenceSequence`.
+- `getReadBases()` → `string | null | undefined` — the read sequence. Needs
+  `fetchReferenceSequence`; `getRecordsForRange` applies the reference for you.
+- `getCigarString()` → `string` — the read's alignment (e.g. `"50M2I48M"`),
+  reconstructed from the read features. Substitutions and mismatches are
+  reported as `M`, per the plain CIGAR convention. Unmapped reads, and mapped
+  reads with no operations, return `"*"`. Does not require
+  `fetchReferenceSequence`.
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
   `opts` is an optional `{ start, end }` 0-based half-open reference range.
 - `forEachMismatch(callback, opts?)` — the same differences, reported to
@@ -228,19 +227,19 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 What `getMismatches()` returns, and the argument order `forEachMismatch` passes:
 
-- `code` — char code of `X` (substitution), `I` (insertion), `D` (deletion), `N`
-  (reference skip), `S` (soft clip) or `H` (hard clip). Compare against the
-  exported `RF_SUBST`, `RF_INSERTION`, … constants. Insertions arrive as `I`
-  whether the file encoded them as `I` or as a run of `i`.
-- `refPos` — 0-based reference position
-- `length` — reference bases covered: 1 for a substitution, the deleted or
-  skipped length for `D`/`N`, and 0 for insertions and clips
-- `bases` — the substituted base, or the inserted bases; empty for
-  `D`/`N`/`S`/`H`
-- `qual` — quality of a substituted base, `-1` when the file does not store it
-- `refBaseCode` — char code of the reference base a substitution replaces, `0`
-  when unknown
-- `clipLength` — read bases consumed: the inserted or clipped length, else 0
+| Field         | Meaning                                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `code`        | char code of `X` = substitution, `I` = insertion, `D` = deletion, `N` = reference skip, `S` = soft clip, `H` = hard clip |
+| `refPos`      | 0-based reference position                                                                                               |
+| `length`      | reference bases covered: 1 for a substitution, the deleted or skipped length for `D`/`N`, 0 for insertions and clips     |
+| `bases`       | the substituted base, or the inserted bases; empty for `D`/`N`/`S`/`H`                                                   |
+| `qual`        | quality of a substituted base, `-1` when the file does not store it                                                      |
+| `refBaseCode` | char code of the reference base a substitution replaces, `0` when unknown                                                |
+| `clipLength`  | read bases consumed: the inserted or clipped length, else 0                                                              |
+
+Compare `code` against the exported `RF_SUBST`, `RF_INSERTION`, … constants.
+Insertions arrive as `I` whether the file encoded them as `I` or as a run of
+`i`.
 
 ### ReadFeatures
 
@@ -249,19 +248,25 @@ Each entry in `record.readFeatures`, the raw CRAM encoding (see CRAM spec
 
 - `code` — feature type, one of `bqBXIDiQNSPH`
 - `pos` — read position (0-based)
-- `refPos` — reference position (0-based) — **except for `q` and `Q`**, whose
-  `refPos` is derived from a read position the reference never reaches, so it
-  can point backwards into an insertion. `RF_POSITIONAL[code]` is 0 for exactly
+- `refPos` — reference position (0-based), **except for `q` and `Q`**. Those two
+  derive `refPos` from a read position the reference never reaches, so it can
+  point backwards into an insertion. `RF_POSITIONAL[code]` is 0 for exactly
   those two.
-- `data` — the payload, which differs per code: the inserted, clipped or
-  verbatim bases as a string for `I`/`S`/`b`/`i` (including `i`, which is a
-  single-base insertion and does store its base); the deleted, skipped, clipped
-  or padded length as a number for `D`/`N`/`H`/`P`; the quality score for `Q`
-  and an array of them for `q`; `[base, quality]` for `B`; and for `X`, an index
-  into the container's substitution matrix — not a base
+- `data` — the payload, which differs per code (see table below)
 - `ref` / `sub` — reference and substituted base (code `X` only), present only
   once a reference has been applied, i.e. when `fetchReferenceSequence` is
   configured
+
+`data` by feature code:
+
+| Code(s)            | `data`                                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `I`, `S`, `b`, `i` | the inserted, clipped or verbatim bases, as a string — including `i`, which is a single-base insertion and does store its base |
+| `D`, `N`, `H`, `P` | the deleted, skipped, clipped or padded length, as a number                                                                    |
+| `Q`                | the quality score                                                                                                              |
+| `q`                | an array of quality scores                                                                                                     |
+| `B`                | `[base, quality]`                                                                                                              |
+| `X`                | an index into the container's substitution matrix — **not** a base                                                             |
 
 ### Error classes
 
