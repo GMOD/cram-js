@@ -5,9 +5,9 @@ _read features_: the handful of places where the read departs from the
 reference, plus a few housekeeping entries. `getReadBases()`, `getCigarString()`
 and `getMismatches()` are all reconstructed from that list.
 
-You can get at the list directly, as `record.readFeatures`. Most code has no
-reason to, and this page is mostly here to talk you out of it. If you do need
-it, everything you have to know is below.
+You can get at the list directly, as `record.readFeatures`. Most users can
+generally use getMismatches. If you do need readFeatures, everything you have to
+know is below.
 
 ## You probably don't need this
 
