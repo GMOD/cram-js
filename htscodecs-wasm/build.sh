@@ -26,6 +26,12 @@ if [ ! -d "htscodecs/htscodecs" ]; then
     exit 1
 fi
 
+# Verify libdeflate source exists
+if [ ! -d "libdeflate/lib" ]; then
+    echo "Error: libdeflate source not found. Run ./update-libdeflate.sh first."
+    exit 1
+fi
+
 echo "Compiling with Emscripten..."
 
 # Copy our config.h and version.h to the htscodecs directory
@@ -47,6 +53,14 @@ SOURCES=(
     "bz2_wrapper.c"
     "zlib_wrapper.c"
     "itf8_batch.c"
+    # libdeflate, decompression side only — the compressor and its
+    # matchfinders are dead weight here.
+    "libdeflate/lib/deflate_decompress.c"
+    "libdeflate/lib/gzip_decompress.c"
+    "libdeflate/lib/zlib_decompress.c"
+    "libdeflate/lib/adler32.c"
+    "libdeflate/lib/crc32.c"
+    "libdeflate/lib/utils.c"
 )
 
 # Functions to export
@@ -80,13 +94,13 @@ COMMON_FLAGS=(
     -s MAXIMUM_MEMORY=2GB
     -s SINGLE_FILE=1
     -s USE_BZIP2=1
-    -s USE_ZLIB=1
     -s FILESYSTEM=0
     -s TEXTDECODER=2
     -s SUPPORT_LONGJMP=0
     --closure 1
     -I htscodecs
     -I htscodecs/htscodecs
+    -I libdeflate
     -DHAVE_BUILTIN_PREFETCH
     -DNDEBUG
 )

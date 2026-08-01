@@ -36,6 +36,7 @@ interface HtsCodecsModule {
   _zlib_uncompress: (
     inPtr: number,
     inSize: number,
+    expectedSize: number,
     outSizePtr: number,
   ) => number
   _batch_itf8_decode: (

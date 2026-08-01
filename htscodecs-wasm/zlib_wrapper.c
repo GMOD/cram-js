@@ -1,114 +1,165 @@
-/* Fast wrapper for zlib inflate (gzip/zlib decompression) */
-#include <zlib.h>
+/* Wrapper for libdeflate (gzip/zlib/raw-deflate decompression) */
+#include "libdeflate.h"
 #include <stdlib.h>
 #include <string.h>
 
 /*
- * Fast inflate that skips CRC checking for speed.
- * Uses raw deflate (windowBits = -15) when possible to avoid header overhead.
- * Auto-detects gzip vs zlib vs raw deflate format.
+ * libdeflate has no streaming API: every call decompresses in one bounded
+ * pass and returns a result code. That rules out the class of bug the old
+ * zlib-based wrapper had, where a truncated stream left inflate() making no
+ * forward progress and the retry loop spun forever inside a synchronous
+ * wasm call.
+ */
+
+/* Refuse to grow past this when the uncompressed size is unknown. */
+#define MAX_ALLOC (1u << 31)
+
+/* Highest expansion ratio a valid deflate stream can achieve. */
+#define DEFLATE_MAX_RATIO 1032
+
+/* One decompressor is reused across calls; it is a ~100KB heap struct and
+ * the module is single-threaded. */
+static struct libdeflate_decompressor *decompressor = NULL;
+
+static struct libdeflate_decompressor *get_decompressor(void) {
+    if (!decompressor) {
+        decompressor = libdeflate_alloc_decompressor();
+    }
+    return decompressor;
+}
+
+enum format { FORMAT_GZIP, FORMAT_ZLIB, FORMAT_RAW };
+
+static enum format sniff_format(const unsigned char *in, unsigned int in_size) {
+    if (in_size >= 2 && in[0] == 0x1f && in[1] == 0x8b) {
+        return FORMAT_GZIP;
+    }
+    /* zlib CMF byte: CM=8 for deflate */
+    if (in_size >= 1 && (in[0] & 0x0F) == 0x08) {
+        return FORMAT_ZLIB;
+    }
+    return FORMAT_RAW;
+}
+
+static enum libdeflate_result decompress_one(
+    struct libdeflate_decompressor *d, enum format fmt,
+    const unsigned char *in, size_t in_avail,
+    unsigned char *out, size_t out_avail,
+    size_t *in_used, size_t *out_used) {
+    if (fmt == FORMAT_GZIP) {
+        return libdeflate_gzip_decompress_ex(d, in, in_avail, out, out_avail,
+                                             in_used, out_used);
+    }
+    if (fmt == FORMAT_ZLIB) {
+        return libdeflate_zlib_decompress_ex(d, in, in_avail, out, out_avail,
+                                             in_used, out_used);
+    }
+    return libdeflate_deflate_decompress_ex(d, in, in_avail, out, out_avail,
+                                            in_used, out_used);
+}
+
+/*
+ * Decompress `in` into a freshly malloc'd buffer, returning it and writing
+ * its length to *out_size. Returns NULL on any malformed input.
+ *
+ * `expected_size` is the exact uncompressed size when the caller knows it
+ * (CRAM block headers carry it), which lets us allocate once and skip the
+ * grow loop entirely. Pass 0 when it is unknown.
  */
 unsigned char *zlib_uncompress(unsigned char *in, unsigned int in_size,
+                               unsigned int expected_size,
                                unsigned int *out_size) {
     if (in_size == 0) {
         *out_size = 0;
         return malloc(1);
     }
 
-    z_stream strm;
-    memset(&strm, 0, sizeof(strm));
-
-    /*
-     * Detect format and choose windowBits:
-     * - gzip (0x1f 0x8b): windowBits = 15 + 16 = 31
-     * - zlib (0x78): windowBits = 15
-     * - raw deflate: windowBits = -15
-     *
-     * Using 15+32 enables auto-detection but we can be more explicit
-     * for slightly faster init.
-     */
-    int windowBits;
-    if (in_size >= 2 && in[0] == 0x1f && in[1] == 0x8b) {
-        /* gzip format */
-        windowBits = 15 + 16;
-    } else if (in_size >= 1 && (in[0] & 0x0F) == 0x08) {
-        /* zlib format (CMF byte: CM=8 for deflate) */
-        windowBits = 15;
-    } else {
-        /* Assume raw deflate */
-        windowBits = -15;
-    }
-
-    int ret = inflateInit2(&strm, windowBits);
-    if (ret != Z_OK) {
+    struct libdeflate_decompressor *d = get_decompressor();
+    if (!d) {
         return NULL;
     }
 
-    /* Start with 4x input size, grow if needed */
-    unsigned int alloc_size = in_size * 4;
-    if (alloc_size < 4096) alloc_size = 4096;
+    const enum format fmt = sniff_format(in, in_size);
+
+    /*
+     * expected_size comes off the wire (a CRAM block header's ITF8), so it
+     * cannot be trusted as an allocation size. deflate cannot expand by more
+     * than 1032:1, so anything above that is a corrupt header; ignore it and
+     * grow from the input size instead of mallocing on its word. Division
+     * rather than multiplication so the bound itself cannot overflow.
+     */
+    if (expected_size / DEFLATE_MAX_RATIO > in_size) {
+        expected_size = 0;
+    }
+
+    size_t alloc_size = expected_size;
+    if (alloc_size == 0) {
+        alloc_size = in_size * 4;
+        if (alloc_size < 4096) {
+            alloc_size = 4096;
+        }
+    }
 
     unsigned char *out = malloc(alloc_size);
     if (!out) {
-        inflateEnd(&strm);
         return NULL;
     }
 
-    strm.next_in = in;
-    strm.avail_in = in_size;
-    strm.next_out = out;
-    strm.avail_out = alloc_size;
-
-    /* Use Z_SYNC_FLUSH for slightly faster decompression */
-    uLong last_total_in = 0, last_total_out = 0;
+    size_t in_pos = 0, out_pos = 0;
     while (1) {
-        ret = inflate(&strm, Z_SYNC_FLUSH);
+        size_t in_used = 0, out_used = 0;
+        const enum libdeflate_result res =
+            decompress_one(d, fmt, in + in_pos, in_size - in_pos,
+                           out + out_pos, alloc_size - out_pos,
+                           &in_used, &out_used);
 
-        if (ret == Z_STREAM_END) {
-            break;
-        }
-
-        if (ret != Z_OK && ret != Z_BUF_ERROR) {
-            inflateEnd(&strm);
-            free(out);
-            return NULL;
-        }
-
-        /* Need more output space */
-        if (strm.avail_out == 0) {
-            unsigned int new_size = alloc_size * 2;
+        if (res == LIBDEFLATE_INSUFFICIENT_SPACE) {
+            /* Only reachable when expected_size was unknown or wrong. */
+            if (alloc_size >= MAX_ALLOC) {
+                free(out);
+                return NULL;
+            }
+            size_t new_size = alloc_size * 2;
+            if (new_size > MAX_ALLOC) {
+                new_size = MAX_ALLOC;
+            }
             unsigned char *new_out = realloc(out, new_size);
             if (!new_out) {
-                inflateEnd(&strm);
                 free(out);
                 return NULL;
             }
             out = new_out;
-            strm.next_out = out + alloc_size;
-            strm.avail_out = new_size - alloc_size;
             alloc_size = new_size;
             continue;
         }
 
-        /*
-         * Output space remains but the stream has not ended, so inflate
-         * stopped for want of input. avail_in is set once and never refilled,
-         * so once a call consumes nothing and emits nothing there is no way
-         * forward: a truncated or corrupt deflate stream lands here, and
-         * without this check the loop spins forever at 100% CPU with no way
-         * to interrupt it (the call is synchronous wasm).
-         */
-        if (strm.total_in == last_total_in &&
-            strm.total_out == last_total_out) {
-            inflateEnd(&strm);
+        /* A truncated or corrupt stream lands here and returns, rather than
+         * looping. */
+        if (res != LIBDEFLATE_SUCCESS) {
             free(out);
             return NULL;
         }
-        last_total_in = strm.total_in;
-        last_total_out = strm.total_out;
+
+        in_pos += in_used;
+        out_pos += out_used;
+
+        /*
+         * gzip members concatenate — BGZF (used for .crai indexes) is
+         * exactly that, one member per ~64KB block. Keep going while the
+         * next bytes still look like a member; anything else (the trailing
+         * zero padding some writers emit) ends the stream.
+         *
+         * in_used is nonzero for any successful member, so in_pos always
+         * advances and the loop terminates.
+         */
+        const int more = fmt == FORMAT_GZIP && in_used > 0 &&
+                         in_size - in_pos >= 2 && in[in_pos] == 0x1f &&
+                         in[in_pos + 1] == 0x8b;
+        if (!more) {
+            break;
+        }
     }
 
-    inflateEnd(&strm);
-    *out_size = strm.total_out;
+    *out_size = out_pos;
     return out;
 }

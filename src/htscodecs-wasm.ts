@@ -95,11 +95,13 @@ export async function fqzcomp_uncompress(input: Uint8Array) {
   }
 }
 
-export function zlib_uncompress(input: Uint8Array) {
+// expectedSize lets libdeflate allocate the output buffer exactly once; pass 0
+// when the size is not known ahead of time and it grows on demand instead.
+export function zlib_uncompress(input: Uint8Array, expectedSize = 0) {
   return decompress(
     input,
     'zlib_uncompress',
-    (m, i, o) => m._zlib_uncompress(i, input.length, o),
+    (m, i, o) => m._zlib_uncompress(i, input.length, expectedSize, o),
     true,
   )
 }
