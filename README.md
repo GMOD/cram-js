@@ -3,9 +3,15 @@
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
-Read CRAM files with pure JS, works in node or the browser. Supports CRAM 2.x
-and 3.x, `.crai` indexes, and all CRAM v3 block codecs (gzip, bzip2, lzma, rANS,
-arithmetic, fqzcomp, tok3). See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md).
+Read CRAM files in node or the browser. Supports CRAM 2.x and 3.x, `.crai`
+indexes, and all CRAM v3 block codecs (gzip, bzip2, lzma, rANS, arithmetic,
+fqzcomp, tok3). See [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md).
+
+Block decoding runs in WebAssembly, built from the same htscodecs C that
+samtools uses and inlined in the bundle, so you get native decode speed and
+every v3.1 codec without another file to serve or anything to configure. It
+weighs 55 KB gzipped, takes about 5 ms to start up once, and keeps a 16 MB wasm
+heap. More in [docs/WASM.md](docs/WASM.md).
 
 ## Install
 

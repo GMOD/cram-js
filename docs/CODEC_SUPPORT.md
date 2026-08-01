@@ -24,6 +24,9 @@ Emscripten (`htscodecs-wasm/build.sh`), checked in as inlined base64 at
 `./build.sh`. All the above codecs come from htscodecs except xz-decompress
 which is vendored from https://github.com/httptoolkit/xz-decompress
 
+For what the wasm module costs in bundle size, startup and memory, see
+[WASM.md](WASM.md).
+
 ## Data-series codecs
 
 | ID  | Codec           | Supported                                   |
