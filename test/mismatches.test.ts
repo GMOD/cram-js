@@ -39,10 +39,7 @@ const mismatchesOf = (
   readFeatures: ReadFeature[],
   start?: number,
   qualityScores?: Uint8Array,
-) =>
-  makeRecord(readFeatures, start, qualityScores)
-    .getMismatches()
-    .map(show)
+) => makeRecord(readFeatures, start, qualityScores).getMismatches().map(show)
 
 test('a substitution reports the substituted and reference bases', () => {
   expect(
@@ -176,7 +173,8 @@ test('reports differences from a real file', async () => {
     index: new CraiIndex({
       filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
     }),
-    fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start + 1),
+    fetchReferenceSequence: async (_id, start, end) =>
+      'A'.repeat(end - start + 1),
     checkSequenceMD5: false,
   })
   const records = await cram.getRecordsForRange(0, 0, 2000)

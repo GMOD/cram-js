@@ -191,8 +191,7 @@ export default class IndexedCramFile {
           unmatedReadNames.has(name) &&
           cramRecord.mate &&
           (cramRecord.mate.sequenceId === seq || pairAcrossChr) &&
-          Math.abs(cramRecord.start - cramRecord.mate.start) <
-            maxInsertSize
+          Math.abs(cramRecord.start - cramRecord.mate.start) < maxInsertSize
         ) {
           matePromises.push(
             this.index.getEntriesForRange(

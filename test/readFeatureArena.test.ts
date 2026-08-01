@@ -86,7 +86,8 @@ test('one arena is shared by every record of a slice', async () => {
     index: new CraiIndex({
       filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
     }),
-    fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start + 1),
+    fetchReferenceSequence: async (_id, start, end) =>
+      'A'.repeat(end - start + 1),
     checkSequenceMD5: false,
   })
   const records = await cram.getRecordsForRange(0, 0, 100_000_000)

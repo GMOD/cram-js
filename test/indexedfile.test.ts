@@ -59,7 +59,11 @@ test('can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram', async ()
     }),
   })
 
-  const features = await cram.getRecordsForRange(0, -1, Number.POSITIVE_INFINITY)
+  const features = await cram.getRecordsForRange(
+    0,
+    -1,
+    Number.POSITIVE_INFINITY,
+  )
   const features2 = await cram.getRecordsForRange(
     -1,
     -1,

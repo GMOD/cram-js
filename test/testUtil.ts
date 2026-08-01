@@ -14,7 +14,9 @@ export function testFile(filename: string) {
       await dumpWholeFile(
         new CramFile({
           filehandle: testDataFile(filename),
-          fetchReferenceSequence: fasta ? (...args) => fasta.fetch(...args) : undefined,
+          fetchReferenceSequence: fasta
+            ? (...args) => fasta.fetch(...args)
+            : undefined,
         }),
       ),
     ).toMatchSnapshot()

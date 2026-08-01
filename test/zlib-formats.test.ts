@@ -29,7 +29,9 @@ test('decodes gzip, zlib and raw deflate', async () => {
 // a single gzip stream), but a hand-bgzipped index is, and silently returning
 // a prefix of an index is the worst possible failure mode.
 test('concatenated gzip members all decode', async () => {
-  const members = ['first', 'second', 'third'].map(s => gzipSync(Buffer.from(s)))
+  const members = ['first', 'second', 'third'].map(s =>
+    gzipSync(Buffer.from(s)),
+  )
   const out = await unzip(new Uint8Array(Buffer.concat(members)))
   expect(Buffer.from(out).toString()).toBe('firstsecondthird')
 })

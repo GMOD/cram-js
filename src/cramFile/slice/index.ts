@@ -125,13 +125,9 @@ function calculateIntraSliceMatePairTemplateLength(
   const lengthEstimate = end - start
   // sign per SAM spec: positive for leftmost, negative for rightmost
   thisRecord.templateLength =
-    thisRecord.start <= mateRecord.start
-      ? lengthEstimate
-      : -lengthEstimate
+    thisRecord.start <= mateRecord.start ? lengthEstimate : -lengthEstimate
   mateRecord.templateLength =
-    mateRecord.start <= thisRecord.start
-      ? lengthEstimate
-      : -lengthEstimate
+    mateRecord.start <= thisRecord.start ? lengthEstimate : -lengthEstimate
 }
 
 /**
@@ -906,8 +902,7 @@ export default class CramSlice {
             refRegions[seqId] = refRegion
           }
 
-          const end =
-            record.start + (record.lengthOnRef || record.readLength)
+          const end = record.start + (record.lengthOnRef || record.readLength)
           if (end > refRegion.end) {
             refRegion.end = end
           }

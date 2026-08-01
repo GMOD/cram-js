@@ -56,7 +56,8 @@ test('reports download progress for getRecordsForRange', async () => {
     index: new CraiIndex({
       path: require.resolve('./data/ce#5.tmp.cram.crai'),
     }),
-    fetchReferenceSequence: async (seqId, start, end) => 'A'.repeat(end - start + 1),
+    fetchReferenceSequence: async (seqId, start, end) =>
+      'A'.repeat(end - start + 1),
     checkSequenceMD5: false,
   })
 
