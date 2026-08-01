@@ -15,12 +15,13 @@ npm install @gmod/cram
 
 ## Coordinates
 
-Every coordinate this library hands out or takes in is **0-based half-open**,
-matching `@gmod/bam`. Converting back out to a 1-based text format (SAM `POS`, a
-locus string for a user) means adding 1.
+Every coordinate this library gives you or takes from you is **0-based
+half-open**, the same as `@gmod/bam`. When you convert back to a 1-based text
+format, like SAM's `POS` or a locus you're showing a user, add 1.
 
-This changed in v10 — coordinates were 1-based closed through v9, and `seqFetch`
-was renamed to `fetchReferenceSequence`. See [MIGRATION.md](MIGRATION.md).
+This changed in v10. Coordinates were 1-based closed through v9, and `seqFetch`
+is now `fetchReferenceSequence`. If you're upgrading, see
+[MIGRATION.md](MIGRATION.md).
 
 ## Usage
 
@@ -94,18 +95,19 @@ await cram.getReferenceName(0) // 'chr1', undefined if there is no such @SQ
 await cram.getReferenceInfo() // [{ name, length, md5 }, ...] in @SQ order
 ```
 
-`fetchReferenceSequence` receives both the number and the name, so a name-keyed
-sequence source like `IndexedFasta` needs no lookup of its own.
+`fetchReferenceSequence` is handed both the number and the name, so if your
+sequence source is keyed by name, like `IndexedFasta` is, you can use the name
+directly and skip the lookup.
 
-`-1` is the one id that is not an `@SQ` position — it means
+The only id that isn't an `@SQ` position is `-1`, which means the read is
 [unplaced](#indexedcramfile).
 
 ### Reading differences from the reference
 
 `getMismatches()` is the intended way to see how a read differs from the
-reference. Use `forEachMismatch(callback)` instead when you care about
-allocation — it reports the same differences without building an object for each
-one:
+reference. If you're processing enough records that the per-difference objects
+start to matter, `forEachMismatch(callback)` reports exactly the same
+differences without allocating any:
 
 ```js
 record.forEachMismatch(
@@ -118,29 +120,20 @@ record.forEachMismatch(
 record.forEachMismatch(cb, { start: 10000, end: 10100 })
 ```
 
-Both need `fetchReferenceSequence` configured to resolve the actual bases of a
-substitution. Without it, a substitution still reports at the right position but
-with `bases` of `'N'` and a `refBaseCode` of `0`.
+Both need `fetchReferenceSequence` configured before they can tell you the
+actual bases involved in a substitution. Without it you still get the
+substitution, at the right position, but its `bases` come back as `'N'` and its
+`refBaseCode` as `0`.
 
-If mismatches are all you want, you are done — `record.readFeatures` is not
-involved. `getMismatches()` reports every read feature that is a difference from
-the reference: substitutions, insertions under either encoding, deletions,
-skips, and soft and hard clips.
+If differences are all you're after, that's the whole API. Between them,
+`getMismatches()`, `getCigarString()` and `getReadBases()` answer the three
+questions people usually have about a read, and none of them ask you to know
+anything about how CRAM encodes it.
 
-`readFeatures` exposes the raw CRAM encoding underneath, and is only worth
-reaching for to get at the features that are _not_ differences: quality scores
-(`q`, `Q`), explicit base-plus-quality (`B`), padding (`P`) and verbatim base
-stretches (`b`, which align as matches). For everything else prefer
-`getMismatches()`, `getCigarString()` and `getReadBases()` — every trap below
-has caused a bug in a consumer that walked the features itself.
-
-- `i` and `I` are both insertions and store their payload differently
-- a run of `i` features is _one_ insertion
-- `b` is a stretch of verbatim bases that align as matches
-- `q` and `Q` carry only quality, and their `refPos` is **not** an alignment
-  position, so a positional walk must skip them (`RF_POSITIONAL` marks which)
-- an `X` feature's `data` indexes the container's substitution matrix, not a
-  base
+Underneath, a record stores its alignment as a list of _read features_, which
+you can get at as `record.readFeatures`. It's a sharper tool than it looks, and
+it isn't needed for mismatches, so it lives on its own page:
+[docs/READ_FEATURES.md](docs/READ_FEATURES.md).
 
 ## API
 
@@ -164,20 +157,22 @@ new IndexedCramFile({
 - `hasDataForReferenceSequence(seqId)` → `Promise<boolean>`
 - `cram` — the underlying `CramFile`
 
-Unplaced reads — no position at all, sorted to the end of the file — have
-`sequenceId` and `start` of `-1`:
+Unplaced reads have no position at all and sort to the end of the file. Both
+their `sequenceId` and their `start` are `-1`, so you ask for them like this:
 
 ```js
 await indexedFile.getRecordsForRange(-1, -1, end) // a start of 0 finds nothing
 ```
 
-Reads that are unmapped but _placed_ at their mate's position carry the mate's
-`sequenceId` and `start`, and come back from an ordinary range query.
+Reads that are unmapped but _placed_ at their mate's position are a different
+case. They carry the mate's `sequenceId` and `start`, so an ordinary range query
+finds them.
 
 ### `CramFile`
 
-Also usable standalone via `new CramFile({ path, url, filehandle })`, without an
-index, for reading the header or walking containers.
+Usually reached as `indexedFile.cram`, but you can also build one directly with
+`new CramFile({ path, url, filehandle })`. No index needed, which is handy if
+all you want is the header, or if you're walking containers yourself.
 
 - `getReferenceInfo()` → `Promise<{ name, length, md5? }[]>` — the `@SQ` lines,
   in header order
@@ -202,19 +197,28 @@ Takes `{ path, url, filehandle }` — one of the three is required.
   unmapped read
 - `qualityScores` — `Uint8Array` of per-base quality scores
 - `tags` — auxiliary tags object
-- `readFeatures` — the raw read features as an array (see
-  [ReadFeatures](#readfeatures)). Prefer `getMismatches()` for interpreting
-  them. The array is rebuilt from the columnar storage on every access, so
-  assign it to a local instead of reading it in a loop condition.
+- `readFeatures` — the raw read features, as an array. Prefer `getMismatches()`;
+  see [docs/READ_FEATURES.md](docs/READ_FEATURES.md) if you really do need this
+  level. The array is rebuilt on every access, so pull it into a local rather
+  than reading it in a loop condition.
 - `readFeatureArena`, `readFeatureStart`, `readFeatureCount` — the columnar
-  storage the features are decoded into, shared across every record in a slice.
+  storage the features decode into, shared across every record in a slice.
   Reading these columns instead of `readFeatures` is what makes a bulk consumer
-  fast: 3.7x on a long-read slice, and a fraction of the memory.
+  fast: 3.7x on a long-read slice, at a fraction of the memory.
 
-**Flag methods**, all returning `boolean`: `isPaired()`, `isProperlyPaired()`,
-`isSegmentUnmapped()`, `isMateUnmapped()`, `isReverseComplemented()`,
-`isMateReverseComplemented()`, `isRead1()`, `isRead2()`, `isSecondary()`,
-`isFailedQc()`, `isDuplicate()`, `isSupplementary()`.
+**Flag methods:** the usual SAM flags (spec §1.4), all returning `boolean`.
+
+- `isPaired()` — the read is paired, whether or not both segments mapped
+- `isProperlyPaired()` — paired, and both segments mapped
+- `isSegmentUnmapped()` — this read did not map
+- `isMateUnmapped()` — the mate did not map
+- `isReverseComplemented()` — mapped to the reverse strand
+- `isMateReverseComplemented()` — the mate mapped to the reverse strand
+- `isRead1()` / `isRead2()` — which segment of the pair this is
+- `isSecondary()` — a secondary alignment
+- `isSupplementary()` — a supplementary (chimeric) alignment
+- `isFailedQc()` — flagged as failing quality control
+- `isDuplicate()` — flagged as a PCR or optical duplicate
 
 **Methods:**
 
@@ -251,32 +255,9 @@ Insertions arrive as `I` whether the file encoded them as `I` or as a run of
 
 ### ReadFeatures
 
-Each entry in `record.readFeatures`, the raw CRAM encoding (see CRAM spec
-§10.2). Not needed for mismatches —
-[`getMismatches()`](#reading-differences-from-the-reference) already reports
-every feature that is a difference from the reference.
-
-- `code` — feature type, one of `bqBXIDiQNSPH`
-- `pos` — read position (0-based)
-- `refPos` — reference position (0-based), **except for `q` and `Q`**. Those two
-  derive `refPos` from a read position the reference never reaches, so it can
-  point backwards into an insertion. `RF_POSITIONAL[code]` is 0 for exactly
-  those two.
-- `data` — the payload, which differs per code (see table below)
-- `ref` / `sub` — reference and substituted base (code `X` only), present only
-  once a reference has been applied, i.e. when `fetchReferenceSequence` is
-  configured
-
-`data` by feature code:
-
-| Code(s)            | `data`                                                                                                                         |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| `I`, `S`, `b`, `i` | the inserted, clipped or verbatim bases, as a string — including `i`, which is a single-base insertion and does store its base |
-| `D`, `N`, `H`, `P` | the deleted, skipped, clipped or padded length, as a number                                                                    |
-| `Q`                | the quality score                                                                                                              |
-| `q`                | an array of quality scores                                                                                                     |
-| `B`                | `[base, quality]`                                                                                                              |
-| `X`                | an index into the container's substitution matrix — **not** a base                                                             |
+The raw CRAM encoding behind `record.readFeatures`, documented in
+[docs/READ_FEATURES.md](docs/READ_FEATURES.md). You don't need it for
+mismatches.
 
 ### Error classes
 
