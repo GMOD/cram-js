@@ -58,6 +58,43 @@ test('keeps a slice larger than the whole budget', async () => {
   expect(cache.get('big')).toBe(p)
 })
 
+test('keeps every slice of one over-budget batch', async () => {
+  const cache = new SliceRecordCache(100)
+  // what getRecordsForRange does: start every slice of the range at once. The
+  // caller holds all of them until it returns, so evicting one frees nothing
+  // and only guarantees the next identical query re-decodes it
+  const keys = ['a', 'b', 'c', 'd', 'e', 'f']
+  const promises = keys.map(key => {
+    const p = records(40)
+    cache.set(key, p)
+    return p
+  })
+  await Promise.all(promises)
+
+  for (const key of keys) {
+    expect(cache.get(key)).toBeDefined()
+  }
+})
+
+test('evicts the previous batch once a new one lands', async () => {
+  const cache = new SliceRecordCache(100)
+  const first = ['a', 'b'].map(key => {
+    const p = records(40)
+    cache.set(key, p)
+    return p
+  })
+  await Promise.all(first)
+
+  const p = records(40)
+  cache.set('c', p)
+  await p
+
+  // 'a' and 'b' are no longer protected, so the budget applies to them again
+  expect(cache.get('a')).toBeUndefined()
+  expect(cache.get('b')).toBeDefined()
+  expect(cache.get('c')).toBeDefined()
+})
+
 test('does not cache a failed decode', async () => {
   const cache = new SliceRecordCache(100)
   const p = Promise.reject(new Error('read failed'))
