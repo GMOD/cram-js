@@ -1,47 +1,19 @@
-import {
-  CramArgumentError,
-  CramBufferOverrunError,
-  CramMalformedError,
-} from '../../errors.ts'
-import ByteArrayStopCodec from '../codecs/byteArrayStop.ts'
-import ExternalCodec, {
-  batchDecodeItf8,
-  parseItf8,
-} from '../codecs/external.ts'
+import { CramArgumentError, CramMalformedError } from '../../errors.ts'
 import Constants from '../constants.ts'
-import decodeRecord, { buildRFSchema } from './decodeRecord.ts'
-import { dataSeriesTypes } from '../container/compressionScheme.ts'
+import { buildSliceDecodeContext, trimSliceColumns } from './decodeContext.ts'
+import decodeRecord from './decodeRecord.ts'
 import { type CramFileBlock } from '../file.ts'
-import {
-  externalQualityColumn,
-  growableQualityColumn,
-  trimQualityColumn,
-} from '../qualityColumn.ts'
-import ReadFeatureArena from '../readFeatureArena.ts'
 import CramRecord, { defaultDecodeOptions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
 
+import type CramContainer from '../container/index.ts'
+import type CramFile from '../file.ts'
 import type { DecodeOptions } from '../record.ts'
 import type {
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers.ts'
-import type {
-  BoundDecoders,
-  BulkBasesDecoder,
-  ByteArraySeries,
-  NumericSeries,
-  SliceDecodeContext,
-} from './decodeRecord.ts'
-import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
-import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
-import type CramContainer from '../container/index.ts'
-import type { CramEncoding } from '../encoding.ts'
-import type CramFile from '../file.ts'
-
-// shared zero-length sentinel returned by bound tag decoders when length=0
-const EMPTY_BYTES = new Uint8Array(0)
 
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
@@ -214,6 +186,28 @@ function associateIntraSliceMate(
   // delete this last because it's used by the
   // complicated template length estimation
   thisRecord.mateRecordNumber = undefined
+}
+
+/**
+ * Interpret the `recordsToNextFragment` attributes the decode left behind, to
+ * make standard `mate` objects.
+ *
+ * The decode loop fills every slot or throws, so `records[i]` is always
+ * defined here; the `records[mateRecordNumber]` guard is against a malformed
+ * pointer past the end of the slice.
+ */
+function associateIntraSliceMates(records: CramRecord[]) {
+  for (let i = 0; i < records.length; i += 1) {
+    const r = records[i]!
+    const { mateRecordNumber } = r
+    if (
+      mateRecordNumber !== undefined &&
+      mateRecordNumber >= 0 &&
+      records[mateRecordNumber]
+    ) {
+      associateIntraSliceMate(records, i, r, records[mateRecordNumber])
+    }
+  }
 }
 
 export default class CramSlice {
@@ -449,15 +443,15 @@ export default class CramSlice {
     return this.getRecords(() => true)
   }
 
-  async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
-    const { majorVersion } = await this.file.getDefinition()
-
-    const compressionScheme = await this.getCompressionScheme()
-
-    const sliceHeader = await this.getHeader()
-    const blocksByContentId = await this._getBlocksContentIdIndex()
-
-    // check MD5 of reference if available
+  /**
+   * Verify the reference the slice was written against matches the one we are
+   * decoding with, when the slice records an md5 and the caller asked for the
+   * check.
+   */
+  private async checkReferenceMd5(
+    sliceHeader: SliceHeader,
+    majorVersion: number,
+  ) {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
@@ -482,395 +476,52 @@ export default class CramSlice {
         }
       }
     }
+  }
 
-    // tracks the read position within the block. codec.decode() methods
-    // advance the byte and bit positions in the cursor as they decode
-    // data note that we are only decoding a single block here, the core
-    // data block
-    const coreDataBlock = await this.getCoreDataBlock()
-    const externalCursorMap = new Map<number, Cursor>()
-    const cursors: Cursors = {
-      lastAlignmentStart: isMappedSliceHeader(sliceHeader.parsedContent)
-        ? sliceHeader.parsedContent.refSeqStart
-        : 0,
-      coreBlock: { bitPosition: 7, bytePosition: 0 },
-      externalBlocks: {
-        getCursor(contentId: number) {
-          let r = externalCursorMap.get(contentId)
-          if (r === undefined) {
-            r = { bitPosition: 7, bytePosition: 0 }
-            externalCursorMap.set(contentId, r)
-          }
-          return r
-        },
-      },
-    }
+  async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
+    const { majorVersion } = await this.file.getDefinition()
+    const compressionScheme = await this.getCompressionScheme()
+    const sliceHeader = await this.getHeader()
+    const blocksByContentId = await this._getBlocksContentIdIndex()
 
-    // Pre-decode external int blocks: batch ITF8 decode via WASM so that
-    // ExternalCodec.decode() becomes a simple array index read.
-    // A block can only be pre-decoded if ALL accessors use int type.
-    // If any byte-type accessor shares the same block, skip it.
-    const externalIntBlockIds = new Set<number>()
-    const externalByteBlockIds = new Set<number>()
+    await this.checkReferenceMd5(sliceHeader, majorVersion)
 
-    // Recurse through codec encodings to find which external block IDs are
-    // used as int vs byte. codecId 1 = EXTERNAL, 4 = BYTE_ARRAY_LENGTH
-    // (whose lengths sub-codec is int, values sub-codec is byte),
-    // 5 = BYTE_ARRAY_STOP (always byte).
-    function collectExternalBlockIds(
-      enc: CramEncoding | undefined,
-      isInt: boolean,
-    ) {
-      if (!enc) {
-        return
-      }
-      if (enc.codecId === 1) {
-        if (isInt) {
-          externalIntBlockIds.add(enc.parameters.blockContentId)
-        } else {
-          externalByteBlockIds.add(enc.parameters.blockContentId)
-        }
-      } else if (enc.codecId === 4) {
-        collectExternalBlockIds(enc.parameters.lengthsEncoding, true)
-        collectExternalBlockIds(enc.parameters.valuesEncoding, false)
-      } else if (enc.codecId === 5) {
-        externalByteBlockIds.add(enc.parameters.blockContentId)
-      }
-    }
-
-    for (const [ds, enc] of Object.entries(
-      compressionScheme.dataSeriesEncoding,
-    )) {
-      const dsType = dataSeriesTypes[ds as keyof typeof dataSeriesTypes]
-      collectExternalBlockIds(enc, dsType === 'int')
-    }
-    for (const tagEnc of Object.values(compressionScheme.tagEncoding)) {
-      collectExternalBlockIds(tagEnc, false)
-    }
-
-    // Remove any int block that is also used as byte
-    for (const id of externalByteBlockIds) {
-      externalIntBlockIds.delete(id)
-    }
-
-    const preDecodedIntBlocks = new Map<number, PreDecodedIntBlock>()
-    for (const contentId of externalIntBlockIds) {
-      const block = blocksByContentId[contentId]
-      if (block?.content.length) {
-        const values = batchDecodeItf8(block.content)
-        preDecodedIntBlocks.set(contentId, { values, index: 0 })
-      }
-    }
-    cursors.preDecodedIntBlocks = preDecodedIntBlocks
-
-    // Build bound decode functions per data series. For ExternalCodec this
-    // captures the content buffer and cursor directly, eliminating per-call
-    // Record/Map lookup overhead. The bound decoders are assembled into a
-    // single object literal with all data series present so V8 sees a stable
-    // hidden class — call sites in decodeRecord then become direct property
-    // accesses with monomorphic inline caches.
-    // `bind` is a function declaration rather than an arrow so it can carry
-    // overloads: the return type depends on the data series, per dataSeriesTypes
-    function bind(dataSeriesName: NumericSeries): () => number
-    function bind(dataSeriesName: ByteArraySeries): () => Uint8Array
-    function bind(
-      dataSeriesName: DataSeriesEncodingKey,
-    ): () => number | Uint8Array {
-      const codec = compressionScheme.getCodecForDataSeries(dataSeriesName)
-      if (!codec) {
-        return () => {
-          throw new CramMalformedError(
-            `no codec defined for ${dataSeriesName} data series`,
-          )
-        }
-      }
-      if (codec instanceof ExternalCodec) {
-        const bid = codec.parameters.blockContentId
-        const preDecoded = preDecodedIntBlocks.get(bid)
-        if (preDecoded) {
-          const { values } = preDecoded
-          // bounds check mirrors the byte branch below — without it a
-          // truncated block silently yields undefined, which propagates as
-          // NaN through alignmentStart/readLength rather than erroring
-          return () => {
-            const value = values[preDecoded.index++]
-            if (value === undefined) {
-              throw new CramBufferOverrunError(
-                'attempted to read beyond end of block. this file seems truncated.',
-              )
-            }
-            return value
-          }
-        }
-        const contentBlock = blocksByContentId[bid]
-        if (!contentBlock) {
-          return () => {
-            throw new CramMalformedError(
-              `no block found with content ID ${bid}`,
-            )
-          }
-        }
-        const cursor = cursors.externalBlocks.getCursor(bid)
-        const content = contentBlock.content
-        if (codec.dataType === 'int') {
-          return () => parseItf8(content, cursor)
-        }
-        // Mirror the bounds check in ExternalCodec.decode — without it,
-        // a truncated/corrupt block silently yields `undefined` for byte
-        // reads, which downstream propagates as NaN/0 (silent data
-        // corruption) rather than a clear error.
-        return () => {
-          const value = content[cursor.bytePosition++]
-          if (value === undefined) {
-            throw new CramBufferOverrunError(
-              'attempted to read beyond end of block. this file seems truncated.',
-            )
-          }
-          return value
-        }
-      }
-      if (codec instanceof ByteArrayStopCodec) {
-        const { blockContentId, stopByte } = codec.parameters
-        const contentBlock = blocksByContentId[blockContentId]
-        if (!contentBlock) {
-          return () => {
-            throw new CramMalformedError(
-              `no block found with content ID ${blockContentId}`,
-            )
-          }
-        }
-        const content = contentBlock.content
-        const cursor = cursors.externalBlocks.getCursor(blockContentId)
-        return () => {
-          const start = cursor.bytePosition
-          const len = content.length
-          let pos = start
-          while (pos < len && content[pos] !== stopByte) {
-            pos++
-          }
-          if (pos >= len) {
-            throw new CramBufferOverrunError(
-              'byteArrayStop reading beyond length of data buffer?',
-            )
-          }
-          cursor.bytePosition = pos + 1
-          return content.subarray(start, pos)
-        }
-      }
-      return () => codec.decode(coreDataBlock!, blocksByContentId, cursors)
-    }
-
-    const bd: BoundDecoders = {
-      BF: bind('BF'),
-      CF: bind('CF'),
-      RI: bind('RI'),
-      RL: bind('RL'),
-      AP: bind('AP'),
-      RG: bind('RG'),
-      RN: bind('RN'),
-      MF: bind('MF'),
-      NS: bind('NS'),
-      NP: bind('NP'),
-      TS: bind('TS'),
-      NF: bind('NF'),
-      TL: bind('TL'),
-      FN: bind('FN'),
-      FC: bind('FC'),
-      FP: bind('FP'),
-      DL: bind('DL'),
-      BB: bind('BB'),
-      QQ: bind('QQ'),
-      BS: bind('BS'),
-      IN: bind('IN'),
-      RS: bind('RS'),
-      PD: bind('PD'),
-      HC: bind('HC'),
-      SC: bind('SC'),
-      MQ: bind('MQ'),
-      BA: bind('BA'),
-      QS: bind('QS'),
-      TC: bind('TC'),
-      TN: bind('TN'),
-    }
-
-    // Bulk read-base decoder — getBytesSubarray returns a subarray view when the
-    // codec supports it (e.g. ExternalCodec), or undefined otherwise
-    const baCodec = compressionScheme.getCodecForDataSeries('BA')
-    const decodeBulkBases: BulkBasesDecoder | undefined = baCodec
-      ? length => baCodec.getBytesSubarray(blocksByContentId, cursors, length)
-      : undefined
-
-    // Quality scores go into one column shared by the whole slice rather than a
-    // Uint8Array per record. When QS is a plain external block that column is
-    // the block itself — the scores are already laid out end to end in record
-    // order, so nothing is copied and a record just remembers its offset.
-    const qsCodec = compressionScheme.getCodecForDataSeries('QS')
-    const qsBlock =
-      qsCodec instanceof ExternalCodec
-        ? blocksByContentId[qsCodec.parameters.blockContentId]
-        : undefined
-    const qualityColumn = qsBlock
-      ? externalQualityColumn(
-          qsBlock.content,
-          cursors.externalBlocks.getCursor(qsBlock.contentId),
-        )
-      : growableQualityColumn()
-
-    // Bound tag decoders — tags are typically encoded as byteArrayLength
-    // (codecId=4) wrapping External-int lengths + External-byte values. We
-    // build a fast closure per tagId that inlines the length read and value
-    // subarray, eliminating per-call dispatch through ByteArrayLengthCodec
-    // and the inner codecs. Other encodings fall back to the generic dispatch.
-    const boundTagDecoders: Record<
-      string,
-      () => Uint8Array | number | undefined
-    > = {}
-    const bindTagFallback = (tagId: string) => {
-      const codec = compressionScheme.getCodecForTag(tagId)
-      return () => codec.decode(coreDataBlock!, blocksByContentId, cursors)
-    }
-    for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
-      const enc = compressionScheme.tagEncoding[tagId]!
-      if (
-        enc.codecId === 4 &&
-        enc.parameters.lengthsEncoding.codecId === 1 &&
-        enc.parameters.valuesEncoding.codecId === 1
-      ) {
-        const lenBid = enc.parameters.lengthsEncoding.parameters.blockContentId
-        const valBid = enc.parameters.valuesEncoding.parameters.blockContentId
-        const lenContentBlock = blocksByContentId[lenBid]
-        const valContentBlock = blocksByContentId[valBid]
-        if (!lenContentBlock || !valContentBlock) {
-          boundTagDecoders[tagId] = bindTagFallback(tagId)
-          continue
-        }
-        const valContent = valContentBlock.content
-        const valCursor = cursors.externalBlocks.getCursor(valBid)
-        const lenPreDecoded = preDecodedIntBlocks.get(lenBid)
-        const lenContent = lenContentBlock.content
-        const lenCursor = cursors.externalBlocks.getCursor(lenBid)
-        const readTagLen = lenPreDecoded
-          ? () => {
-              const length = lenPreDecoded.values[lenPreDecoded.index++]
-              if (length === undefined) {
-                throw new CramBufferOverrunError(
-                  'attempted to read beyond end of block. this file seems truncated.',
-                )
-              }
-              return length
-            }
-          : () => parseItf8(lenContent, lenCursor)
-        boundTagDecoders[tagId] = () => {
-          const length = readTagLen()
-          if (length === 0) {
-            return EMPTY_BYTES
-          }
-          const start = valCursor.bytePosition
-          const end = start + length
-          if (end > valContent.length) {
-            throw new CramBufferOverrunError(
-              'attempted to read beyond end of block. this file seems truncated.',
-            )
-          }
-          valCursor.bytePosition = end
-          return valContent.subarray(start, end)
-        }
-      } else {
-        boundTagDecoders[tagId] = bindTagFallback(tagId)
-      }
-    }
-
-    // Split each three-character tag id into its name and type once per slice
-    // rather than once per tag per record.
-    const tagDescriptorsByTL = compressionScheme.tagIdsDictionary.map(tagIds =>
-      tagIds.map(tagId => ({
-        name: tagId.slice(0, 2),
-        type: tagId[2]!,
-        decode:
-          boundTagDecoders[tagId] ??
-          (() => {
-            throw new CramMalformedError(
-              `tag ${tagId} is in the tag dictionary but has no encoding`,
-            )
-          }),
-      })),
-    )
-
-    if (!isMappedSliceHeader(sliceHeader.parsedContent)) {
+    const header = sliceHeader.parsedContent
+    if (!isMappedSliceHeader(header)) {
       throw new CramMalformedError('slice header not mapped')
     }
-    const ctx: SliceDecodeContext = {
-      bd,
-      rfSchema: buildRFSchema(bd, majorVersion),
-      arena: new ReadFeatureArena(),
-      qualityColumn,
-      tagDescriptorsByTL,
-      cursors,
-      decodeBulkBases,
-      decodeTags: decodeOptions.decodeTags,
-      APdelta: compressionScheme.APdelta,
-      readNamesIncluded: compressionScheme.readNamesIncluded,
-      isMultiRef: majorVersion > 1 && sliceHeader.parsedContent.refSeqId === -2,
-      refSeqId: sliceHeader.parsedContent.refSeqId,
-    }
 
-    const records: CramRecord[] = new Array(
-      sliceHeader.parsedContent.numRecords,
-    )
-    const uniqueIdBase =
-      sliceHeader.contentPosition + sliceHeader.parsedContent.recordCounter + 1
+    const ctx = buildSliceDecodeContext({
+      compressionScheme,
+      blocksByContentId,
+      coreDataBlock: await this.getCoreDataBlock(),
+      majorVersion,
+      refSeqId: header.refSeqId,
+      refSeqStart: header.refSeqStart,
+      decodeTags: decodeOptions.decodeTags,
+    })
+
+    const records: CramRecord[] = new Array(header.numRecords)
+    const uniqueIdBase = sliceHeader.contentPosition + header.recordCounter + 1
     for (let i = 0; i < records.length; i += 1) {
       try {
         records[i] = new CramRecord(decodeRecord(ctx, i, uniqueIdBase + i))
       } catch (e) {
         const err = e as { code?: string; message?: string }
-        if (err.code === 'CRAM_BUFFER_OVERRUN') {
-          const recordsDecoded = i
-          const recordsExpected = sliceHeader.parsedContent.numRecords
-          throw new CramMalformedError(
-            `Failed to decode all records in slice. Decoded ${recordsDecoded} of ${recordsExpected} expected records. ` +
-              `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
-              `or (3) there's a bug in the decoder. Original error: ${err.message}`,
-          )
-        } else {
-          throw e
-        }
+        const error =
+          err.code === 'CRAM_BUFFER_OVERRUN'
+            ? new CramMalformedError(
+                `Failed to decode all records in slice. Decoded ${i} of ${header.numRecords} expected records. ` +
+                  `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
+                  `or (3) there's a bug in the decoder. Original error: ${err.message}`,
+              )
+            : e
+        throw error
       }
     }
 
-    // decoding grows the arena geometrically, so it can be holding up to twice
-    // the memory the features actually need; it outlives the decode in the
-    // feature cache, so give the slack back
-    ctx.arena.trim()
-
-    // same for a quality column we decoded into — and trimming replaces the
-    // array, so the records that were handed the untrimmed one need re-pointing
-    if (qualityColumn.cursor === undefined) {
-      trimQualityColumn(qualityColumn)
-      for (const record of records) {
-        if (record.qualityColumn !== undefined) {
-          record.qualityColumn = qualityColumn.bytes
-        }
-      }
-    }
-
-    // interpret `recordsToNextFragment` attributes to make standard `mate`
-    // objects. The records loop above fills every slot or throws — by the
-    // time we get here, records[i] is always defined. The records[mate]
-    // guard protects against malformed mateRecordNumber pointing past the
-    // slice.
-    for (let i = 0; i < records.length; i += 1) {
-      const r = records[i]!
-      const { mateRecordNumber } = r
-      if (
-        mateRecordNumber !== undefined &&
-        mateRecordNumber >= 0 &&
-        records[mateRecordNumber]
-      ) {
-        associateIntraSliceMate(records, i, r, records[mateRecordNumber])
-      }
-    }
-
+    trimSliceColumns(ctx, records)
+    associateIntraSliceMates(records)
     return records
   }
 

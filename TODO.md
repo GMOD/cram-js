@@ -115,12 +115,7 @@ does. Nothing else changes on that side.
 
 ## Simplifications (no perf angle)
 
-- `CramSlice._fetchRecords` is ~390 lines doing six unrelated jobs: MD5 check,
-  external-block int/byte classification, ITF8 pre-decoding, per-data-series
-  decoder binding, per-tag decoder binding, and the record loop. Everything up
-  to `tagDescriptorsByTL` is a pure function of (compression scheme, blocks,
-  cursors) and could build the `SliceDecodeContext` in its own module.
-- The `bind()` closures in that function are a fourth copy of the
+- The `bind()` closures in `slice/decodeContext.ts` are a fourth copy of the
   External/ByteArrayStop/ByteArrayLength decode logic, bounds checks included. A
   `CramCodec.bindDecoder(coreDataBlock, blocksByContentId, cursors)` returning a
   specialised closure (defaulting to `() => this.decode(...)`) would let each
