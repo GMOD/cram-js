@@ -122,7 +122,15 @@ Both need `fetchReferenceSequence` configured to resolve the actual bases of a
 substitution. Without it, a substitution still reports at the right position but
 with `bases` of `'N'` and a `refBaseCode` of `0`.
 
-`record.readFeatures` exposes the raw CRAM encoding underneath. Prefer
+If mismatches are all you want, you are done — `record.readFeatures` is not
+involved. `getMismatches()` reports every read feature that is a difference from
+the reference: substitutions, insertions under either encoding, deletions,
+skips, and soft and hard clips.
+
+`readFeatures` exposes the raw CRAM encoding underneath, and is only worth
+reaching for to get at the features that are _not_ differences: quality scores
+(`q`, `Q`), explicit base-plus-quality (`B`), padding (`P`) and verbatim base
+stretches (`b`, which align as matches). For everything else prefer
 `getMismatches()`, `getCigarString()` and `getReadBases()` — every trap below
 has caused a bug in a consumer that walked the features itself.
 
@@ -244,7 +252,9 @@ Insertions arrive as `I` whether the file encoded them as `I` or as a run of
 ### ReadFeatures
 
 Each entry in `record.readFeatures`, the raw CRAM encoding (see CRAM spec
-§10.2):
+§10.2). Not needed for mismatches —
+[`getMismatches()`](#reading-differences-from-the-reference) already reports
+every feature that is a difference from the reference.
 
 - `code` — feature type, one of `bqBXIDiQNSPH`
 - `pos` — read position (0-based)
