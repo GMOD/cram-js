@@ -1,6 +1,10 @@
 import crc32 from 'crc/calculators/crc32'
 
-import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
+import {
+  CramArgumentError,
+  CramMalformedError,
+  CramUnimplementedError,
+} from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import { parseHeaderText } from '../sam.ts'
@@ -39,12 +43,48 @@ export interface CramFileSource {
  * string must be exactly `end - start` characters. Both call sites check that
  * length, which is what turns a callback still written against the pre-v10
  * 1-based closed contract into an error rather than bases shifted by one.
+ *
+ * `refName` is the `@SQ` `SN` for `seqId`, so a callback can hand coordinates
+ * straight to a name-keyed sequence source instead of the caller maintaining
+ * its own id->name table. Only `undefined` for a CRAM with no `@SQ` lines.
  */
 export type SeqFetch = (
   seqId: number,
   start: number,
   end: number,
+  refName: string | undefined,
 ) => Promise<string>
+
+/** One `@SQ` line of the SAM header. */
+export interface ReferenceInfo {
+  /** `SN` */
+  name: string
+  /** `LN` */
+  length: number
+  /** `M5`, when the header records one */
+  md5?: string
+}
+
+function parseReferenceInfo(
+  header: ReturnType<typeof parseHeaderText>,
+): ReferenceInfo[] {
+  return header
+    .filter(line => line.tag === 'SQ')
+    .map((line, refId) => {
+      const name = line.data.find(item => item.tag === 'SN')?.value
+      const length = line.data.find(item => item.tag === 'LN')?.value
+      if (name === undefined || length === undefined) {
+        throw new CramMalformedError(
+          `@SQ line ${refId} is missing its ${name === undefined ? 'SN' : 'LN'} tag`,
+        )
+      }
+      return {
+        name,
+        length: Number(length),
+        md5: line.data.find(item => item.tag === 'M5')?.value,
+      }
+    })
+}
 
 export type CramFileArgs = CramFileSource & {
   checkSequenceMD5?: boolean
@@ -74,6 +114,7 @@ export default class CramFile {
   private _sectionParsers?: ReturnType<typeof getSectionParsers>
   private _definitionResult?: ReturnType<CramFile['_fetchDefinition']>
   private _samHeaderResult?: ReturnType<CramFile['_fetchSamHeader']>
+  private _referenceInfo?: ReferenceInfo[]
 
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
@@ -166,6 +207,43 @@ export default class CramFile {
   async getHeaderText() {
     await this.getSamHeader()
     return this.header
+  }
+
+  /**
+   * The `@SQ` lines in header order. A reference's numeric ID — what
+   * `getRecordsForRange` takes and `CramRecord.sequenceId` reports — is its
+   * index here. Empty for a CRAM with no `@SQ` lines.
+   */
+  async getReferenceInfo() {
+    this._referenceInfo ??= parseReferenceInfo(await this.getSamHeader())
+    return this._referenceInfo
+  }
+
+  /**
+   * Numeric ID for a reference name. Throws if the header has no such `SN` —
+   * a name that is not in the file is a caller mistake, and returning `-1`
+   * would collide with the ID unplaced reads use. Use `getReferenceInfo()` to
+   * test for a name without throwing.
+   */
+  async getReferenceId(name: string) {
+    const refId = (await this.getReferenceInfo()).findIndex(
+      ref => ref.name === name,
+    )
+    if (refId === -1) {
+      throw new CramArgumentError(
+        `no @SQ line in the CRAM header named ${name}`,
+      )
+    }
+    return refId
+  }
+
+  /**
+   * Reference name for a numeric ID. Undefined for an ID with no `@SQ` line,
+   * which is routine rather than a mistake: `-1` means unplaced, and a CRAM
+   * with no `@SQ` lines at all has no names to give.
+   */
+  async getReferenceName(refId: number) {
+    return (await this.getReferenceInfo())[refId]?.name
   }
 
   // Walk containers from the start of the file. Yields each container along
@@ -284,7 +362,7 @@ export default class CramFile {
   ): Promise<Uint8Array> {
     let buf: Uint8Array
     if (compressionMethod === 'gzip') {
-      buf = await unzip(inputBuffer)
+      buf = await unzip(inputBuffer, uncompressedSize)
     } else if (compressionMethod === 'bzip2') {
       buf = await htscodecs.bz2_uncompress(inputBuffer, uncompressedSize)
     } else if (compressionMethod === 'lzma') {

@@ -424,6 +424,7 @@ export default class CramSlice {
         sliceHeader.refSeqId,
         sliceHeader.refSeqStart,
         sliceHeader.refSeqStart + sliceHeader.refSeqSpan,
+        await this.file.getReferenceName(sliceHeader.refSeqId),
       )
 
       if (seq.length !== sliceHeader.refSeqSpan) {
@@ -932,6 +933,7 @@ export default class CramSlice {
                 refRegion.id,
                 refRegion.start,
                 refRegion.end,
+                await this.file.getReferenceName(refRegion.id),
               )
             }
           }),

@@ -16,9 +16,8 @@
         checkSequenceMD5: false,
       })
 
-      // example of fetching records from an indexed CRAM file.
-      // NOTE: only numeric IDs for the reference sequence are accepted.
-      // For indexedfasta the numeric ID is the order in which the sequence names appear in the header
+      // getRecordsForRange takes a numeric reference ID: the index of the @SQ
+      // line in the header. Resolve one with cram.getReferenceId(name).
 
       // Wrap in an async and then run
       run = async () => {

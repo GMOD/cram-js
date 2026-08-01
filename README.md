@@ -33,9 +33,6 @@ const fasta = new IndexedFasta({
   faiPath: '/path/to/reference.fa.fai',
 })
 
-const idToName = []
-const nameToId = {}
-
 const indexedFile = new IndexedCramFile({
   cramPath: '/path/to/file.cram',
   // alternatives: cramUrl, cramFilehandle (see generic-filehandle2)
@@ -43,32 +40,15 @@ const indexedFile = new IndexedCramFile({
     path: '/path/to/file.cram.crai',
     // alternatives: url, filehandle
   }),
-  fetchReferenceSequence: async (seqId, start, end) => {
-    // seqId is numeric; coordinates are 0-based half-open, as IndexedFasta's are
-    return fasta.getSequence(idToName[seqId], start, end)
-  },
+  // refName is the @SQ SN for seqId; coordinates are 0-based half-open, as
+  // IndexedFasta's are
+  fetchReferenceSequence: (seqId, start, end, refName) =>
+    fasta.getSequence(refName, start, end),
   checkSequenceMD5: false,
 })
 
-// Build numeric refId <-> name mappings from the SAM header
-const samHeader = await indexedFile.cram.getSamHeader()
-samHeader
-  .filter(l => l.tag === 'SQ')
-  .forEach((sqLine, refId) => {
-    sqLine.data.forEach(item => {
-      if (item.tag === 'SN') {
-        nameToId[item.value] = refId
-        idToName[refId] = item.value
-      }
-    })
-  })
-
-// Fetch records for a range (0-based, half-open coordinates)
-const records = await indexedFile.getRecordsForRange(
-  nameToId['chr1'],
-  10000,
-  20000,
-)
+const refId = await indexedFile.cram.getReferenceId('chr1')
+const records = await indexedFile.getRecordsForRange(refId, 10000, 20000)
 
 for (const record of records) {
   console.log(record.readName, record.start, record.mappingQuality)
@@ -90,11 +70,42 @@ for (const record of records) {
 See the [example directory](./example) for browser usage with `<script>` tag and
 the bundled `cram-bundle.js`.
 
+### Reference sequences
+
+CRAM identifies a reference by **number**, not by name. That number — `seqId`,
+or `refId` — is just the position of the reference's `@SQ` line in the SAM
+header:
+
+```
+@SQ  SN:chr1  LN:248956422    ->  0
+@SQ  SN:chr2  LN:242193529    ->  1
+@SQ  SN:chrX  LN:156040895    ->  2
+```
+
+`getRecordsForRange`, `record.sequenceId` and the `.crai` index all speak in
+those numbers. The order is whatever a given file says, so don't hardcode one —
+ask the file:
+
+```js
+const { cram } = indexedFile
+
+await cram.getReferenceId('chr1') // 0, throws if the header has no such SN
+await cram.getReferenceName(0) // 'chr1', undefined if there is no such @SQ
+await cram.getReferenceInfo() // [{ name, length, md5 }, ...] in @SQ order
+```
+
+`fetchReferenceSequence` receives both the number and the name, so a name-keyed
+sequence source like `IndexedFasta` needs no lookup of its own.
+
+`-1` is the one id that is not an `@SQ` position — it means
+[unplaced](#indexedcramfile).
+
 ### Reading differences from the reference
 
-`getMismatches()` is the intended way to ask what a read says. Use
-`forEachMismatch(callback)` instead when you care about allocation — it reports
-the same differences without building an object for each one:
+`getMismatches()` is the intended way to see how a read differs from the
+reference. Use `forEachMismatch(callback)` instead when you care about
+allocation — it reports the same differences without building an object for each
+one:
 
 ```js
 record.forEachMismatch(
@@ -111,16 +122,17 @@ Both need `fetchReferenceSequence` configured to resolve the actual bases of a
 substitution. Without it, a substitution still reports at the right position but
 with `bases` of `'N'` and a `refBaseCode` of `0`.
 
-Read features — the raw CRAM encoding these are derived from — are also
-available as `record.readFeatures`, but interpreting them correctly takes a fair
-amount of the format. `i` and `I` are both insertions and store their payload
-differently; a run of `i` features is _one_ insertion; `b` is a stretch of
-verbatim bases that align as matches; `q` and `Q` carry only quality, and their
-`refPos` is **not** an alignment position, so a walk that tracks position across
-features must skip them (`RF_POSITIONAL` marks which codes to skip); and an `X`
-feature's `data` is an index into the container's substitution matrix, not a
-base. Each of those has caused a bug in a downstream consumer. Prefer
-`getMismatches()`, `getCigarString()` and `getReadBases()`, which handle it.
+`record.readFeatures` exposes the raw CRAM encoding underneath. Prefer
+`getMismatches()`, `getCigarString()` and `getReadBases()` — every trap below
+has caused a bug in a consumer that walked the features itself.
+
+- `i` and `I` are both insertions and store their payload differently
+- a run of `i` features is _one_ insertion
+- `b` is a stretch of verbatim bases that align as matches
+- `q` and `Q` carry only quality, and their `refPos` is **not** an alignment
+  position, so a positional walk must skip them (`RF_POSITIONAL` marks which)
+- an `X` feature's `data` indexes the container's substitution matrix, not a
+  base
 
 ## API
 
@@ -132,7 +144,7 @@ new IndexedCramFile({
   cramUrl, // remote URL
   cramFilehandle, // generic-filehandle2 compatible handle
   index, // CraiIndex instance (or any object with getEntriesForRange)
-  fetchReferenceSequence, // async (seqId, start, end) => string, 0-based half-open
+  fetchReferenceSequence, // async (seqId, start, end, refName) => string
   checkSequenceMD5, // default true; set false to avoid large reference fetches
   cacheSize, // max cached records, default 20000
 })
@@ -142,15 +154,30 @@ new IndexedCramFile({
   0-based half-open coords. `opts`:
   `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress }`
 - `hasDataForReferenceSequence(seqId)` → `Promise<boolean>`
+- `cram` — the underlying `CramFile`
 
-Unplaced reads — the ones with no position at all, which sort to the end of the
-file — have `sequenceId` and `start` of `-1`, so the query that reaches them is
-`getRecordsForRange(-1, -1, end)`. Passing a `start` of `0` returns nothing:
-both the index-entry filter and the record filter are half-open against a read
-that begins at `-1`. Before v10 those reads sat at `0` and `(-1, 0, end)` was
-the query, so this is a migration point if you fetch them. Reads that are
-unmapped but _placed_ at their mate's position are unaffected — they carry the
-mate's `sequenceId` and `start` and come back from an ordinary range query.
+Unplaced reads — no position at all, sorted to the end of the file — have
+`sequenceId` and `start` of `-1`:
+
+```js
+await indexedFile.getRecordsForRange(-1, -1, end) // a start of 0 finds nothing
+```
+
+Reads that are unmapped but _placed_ at their mate's position carry the mate's
+`sequenceId` and `start`, and come back from an ordinary range query.
+
+### `CramFile`
+
+Also usable standalone via `new CramFile({ path, url, filehandle })`, without an
+index, for reading the header or walking containers.
+
+- `getReferenceInfo()` → `Promise<{ name, length, md5? }[]>` — the `@SQ` lines,
+  in header order
+- `getReferenceId(name)` → `Promise<number>` — throws if the header has no such
+  `SN`
+- `getReferenceName(refId)` → `Promise<string | undefined>`
+- `getSamHeader()` → the parsed header as `{ tag, data: { tag, value }[] }[]`
+- `getHeaderText()` → the raw header text
 
 ### `CraiIndex`
 
@@ -167,28 +194,19 @@ Takes `{ path, url, filehandle }` — one of the three is required.
   unmapped read
 - `qualityScores` — `Uint8Array` of per-base quality scores
 - `tags` — auxiliary tags object
-- `readFeatures` — the raw read features as an array (see below); rebuilt from
-  the columns on each access, so read it into a local rather than in a loop
-  condition, and prefer `getMismatches()` for interpreting them
+- `readFeatures` — the raw read features as an array (see
+  [ReadFeatures](#readfeatures)). Prefer `getMismatches()` for interpreting
+  them. The array is rebuilt from the columnar storage on every access, so
+  assign it to a local instead of reading it in a loop condition.
 - `readFeatureArena`, `readFeatureStart`, `readFeatureCount` — the columnar
   storage the features are decoded into, shared across every record in a slice.
   Reading these columns instead of `readFeatures` is what makes a bulk consumer
-  fast: 3.7x on a long-read slice, and a fraction of the memory
+  fast: 3.7x on a long-read slice, and a fraction of the memory.
 
-**Flag methods** (all return `boolean`):
-
-- `isPaired()`
-- `isProperlyPaired()`
-- `isSegmentUnmapped()`
-- `isMateUnmapped()`
-- `isReverseComplemented()`
-- `isMateReverseComplemented()`
-- `isRead1()`
-- `isRead2()`
-- `isSecondary()`
-- `isFailedQc()`
-- `isDuplicate()`
-- `isSupplementary()`
+**Flag methods**, all returning `boolean`: `isPaired()`, `isProperlyPaired()`,
+`isSegmentUnmapped()`, `isMateUnmapped()`, `isReverseComplemented()`,
+`isMateReverseComplemented()`, `isRead1()`, `isRead2()`, `isSecondary()`,
+`isFailedQc()`, `isDuplicate()`, `isSupplementary()`.
 
 **Methods:**
 

@@ -23,5 +23,6 @@ export {
   default as ReadFeatureArena,
 } from './cramFile/readFeatureArena.ts'
 export { default as CramFile } from './cramFile/index.ts'
+export type { ReferenceInfo, SeqFetch } from './cramFile/file.ts'
 export { default as CraiIndex } from './craiIndex.ts'
 export { default as IndexedCramFile } from './indexedCramFile.ts'

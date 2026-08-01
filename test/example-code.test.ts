@@ -26,9 +26,10 @@ test('runs without error', async () => {
     checkSequenceMD5: false,
   })
 
-  // example of fetching records from an indexed CRAM file.
-  // NOTE: only numeric IDs for the reference sequence are accepted
-  const records = await indexedFile2.getRecordsForRange(0, 10000, 20000)
+  // getRecordsForRange takes a numeric reference ID: the index of the @SQ line
+  // in the header, which cram.getReferenceId(name) resolves
+  const refId = await indexedFile2.cram.getReferenceId('CHROMOSOME_I')
+  const records = await indexedFile2.getRecordsForRange(refId, 10000, 20000)
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
     record.readFeatures?.forEach(({ code, refPos, ref, sub }) => {
