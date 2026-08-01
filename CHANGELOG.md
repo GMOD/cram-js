@@ -23,6 +23,25 @@
 
 - Build the slice decode context in its own module
 
+### Upgrade notes
+
+Reading a `CramRecord` is unchanged — every documented property returns what it
+did in 10.1.0, and `toJSON()` output is byte-identical. Three things moved
+underneath that are observable if you were doing something unusual with a
+record:
+
+- `record.qualityScores` is now a getter over the slice-wide `qualityColumn`,
+  not an own field. Assigning it throws instead of silently working, and it
+  returns a fresh view per access, so
+  `record.qualityScores !== record.qualityScores`. Writing through a view still
+  persists — it writes into the column. Use `qualityScoreAt(pos)`, or hoist
+  `qualityColumn`/`qualityStart` for a per-base loop.
+- Own-property enumerability flipped for two fields: `readName` is now an own
+  field and `qualityScores` is not, so `{...record}` and `Object.keys(record)`
+  gained the first and lost the second. `toJSON()` is unaffected.
+- `record._syntheticReadName` is gone; lossy-name records get their synthetic
+  name written straight to `readName`.
+
 # v10.1.0
 
 - Decompress gzip blocks with libdeflate instead of zlib. libdeflate has a
@@ -40,8 +59,8 @@
 
 # v10.0.0
 
-- **Breaking:** coordinates are now 0-based half-open throughout, replacing
-  the previous 1-based closed convention (matching htslib and @gmod/bam). See
+- **Breaking:** coordinates are now 0-based half-open throughout, replacing the
+  previous 1-based closed convention (matching htslib and @gmod/bam). See
   MIGRATION.md for the full list of renamed/changed APIs
   (`alignmentStart`->`start`, `seqFetch`->`fetchReferenceSequence`,
   `getRecordsForRange`, `readFeature.pos`/`.refPos`, `Mismatch.refPos`,
@@ -49,11 +68,11 @@
 
 # v9.0.0
 
-- **Breaking:** `CramRecord.readFeatures` is now a getter that rebuilds an
-  array of objects from a per-slice `ReadFeatureArena` of typed-array columns
-  on each access; assigning to it now throws. Reading it is unchanged in
-  shape and values. Cuts retained heap for a decoded slice substantially
-  (measured -64% on ONT long reads, -17% to -20% on short reads)
+- **Breaking:** `CramRecord.readFeatures` is now a getter that rebuilds an array
+  of objects from a per-slice `ReadFeatureArena` of typed-array columns on each
+  access; assigning to it now throws. Reading it is unchanged in shape and
+  values. Cuts retained heap for a decoded slice substantially (measured -64% on
+  ONT long reads, -17% to -20% on short reads)
 - Add `record.getMismatches(opts?)` and `record.forEachMismatch(cb, opts?)` to
   read the differences from the reference (X/I/D/N/S/H) without hand-parsing
   read features
@@ -62,10 +81,10 @@
 
 # v8.7.0
 
-- Fix the decoded-slice cache being unbounded instead of bounded by record
-  count as documented
-- Share one reference-region object across a slice's records, and read a
-  block header's two leading bytes without a DataView, for less GC pressure
+- Fix the decoded-slice cache being unbounded instead of bounded by record count
+  as documented
+- Share one reference-region object across a slice's records, and read a block
+  header's two leading bytes without a DataView, for less GC pressure
 - Remove unused `CramRecord.qualityScoreAt`
 
 # v8.6.1
@@ -78,8 +97,8 @@
 
 # v8.6.0
 
-- Fix `getPairOrientation` to derive orientation from mate position instead
-  of template length
+- Fix `getPairOrientation` to derive orientation from mate position instead of
+  template length
 
 # v8.5.0
 
@@ -117,8 +136,8 @@
 
 # v8.2.4
 
-- Keep the bundled htscodecs wasm as a plain `.js` file instead of `.mjs`,
-  strip `import.meta.url` usage
+- Keep the bundled htscodecs wasm as a plain `.js` file instead of `.mjs`, strip
+  `import.meta.url` usage
 - Fix stale CI badge references
 
 # v8.2.3
@@ -128,11 +147,11 @@
 
 # v8.2.2
 
-- Drop `node` from the emscripten `ENVIRONMENT` for the inlined wasm bundle;
-  the node init path pulled in `node:`-scheme imports that webpack 5 can't
-  resolve for the browser build
-- CI: merge publish into the push workflow gated on the full test suite; add
-  a `test:pack` smoke test against the packed artifact
+- Drop `node` from the emscripten `ENVIRONMENT` for the inlined wasm bundle; the
+  node init path pulled in `node:`-scheme imports that webpack 5 can't resolve
+  for the browser build
+- CI: merge publish into the push workflow gated on the full test suite; add a
+  `test:pack` smoke test against the packed artifact
 
 # v8.2.1
 
@@ -145,21 +164,19 @@
 # v8.2.0
 
 - Eliminate intermediate object allocations in record decoding: build
-  `CramRecord` directly instead of destructuring a temporary object, and
-  build mate records in their final shape
+  `CramRecord` directly instead of destructuring a temporary object, and build
+  mate records in their final shape
 - Replace the string-keyed data-series decoder lookup with fixed-shape
-  `BoundDecoders` for monomorphic dispatch (~22% faster on long-read
-  decoding)
+  `BoundDecoders` for monomorphic dispatch (~22% faster on long-read decoding)
 - Rewrite the README by hand, replacing documentation.js autogeneration
 - Simplify package exports
 
 # v8.1.0
 
-- Batch ITF8 pre-decode ahead of the record loop and bind per-data-series
-  decode closures at slice setup time, ~40% faster decoding
+- Batch ITF8 pre-decode ahead of the record loop and bind per-data-series decode
+  closures at slice setup time, ~40% faster decoding
 - Bump bundled htscodecs to v1.6.6
-- Switch to pnpm, update TypeScript, remove `any` types, fix container
-  caching
+- Switch to pnpm, update TypeScript, remove `any` types, fix container caching
 - Fix DataView construction, deduplicate `readBlock`
 - Add CONTRIBUTING.md and a publish workflow
 
@@ -227,8 +244,8 @@
 
 # v5.0.6
 
-- Throw a clear error instead of hanging when given a non-CRAM file (e.g. a
-  BAM file)
+- Throw a clear error instead of hanging when given a non-CRAM file (e.g. a BAM
+  file)
 - Bump deps, ESM compatibility fixes
 
 # v5.0.5
@@ -295,8 +312,8 @@
 
 # v4.0.0
 
-- **Breaking:** adapt to generic-filehandle2 (#147), replacing the
-  unmaintained generic-filehandle dependency
+- **Breaking:** adapt to generic-filehandle2 (#147), replacing the unmaintained
+  generic-filehandle dependency
 
 # v3.0.7
 
