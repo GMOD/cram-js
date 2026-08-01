@@ -157,6 +157,10 @@ new IndexedCramFile({
 })
 ```
 
+Slices are cached whole, so `cacheSize` bounds the cache by record count rather
+than by slices — see [docs/MEMORY.md](docs/MEMORY.md) for why, and for what a
+query in flight is allowed to exceed it by.
+
 - `getRecordsForRange(seqId, start, end, opts?)` → `Promise<CramRecord[]>` —
   0-based half-open coords. `opts`:
   `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress }`
@@ -208,9 +212,7 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 - `qualityScoreAt(pos)` — the score at a 0-based read position, or `-1` when the
   file has none. Reads straight out of the column, allocating nothing.
 - `qualityColumn`, `qualityStart` — every quality score in the record's slice
-  laid end to end, and this record's offset into it. A per-record `Uint8Array`
-  costs ~104 bytes in V8, more than the scores of a short read, so they live in
-  one column per slice exactly like read features do. Hoist these out of a
+  laid end to end, and this record's offset into it. Hoist these out of a
   per-base loop and index `qualityColumn[qualityStart + i]`.
 - `tags` — auxiliary tags object
 - `readFeatures` — the raw read features, as an array. Prefer `getMismatches()`;
@@ -221,6 +223,12 @@ Takes `{ path, url, filehandle }` — one of the three is required.
   storage the features decode into, shared across every record in a slice.
   Reading these columns instead of `readFeatures` is what makes a bulk consumer
   fast: 3.7x on a long-read slice, at a fraction of the memory.
+
+Read features and quality scores are both stored as one shared typed array per
+slice rather than per record, because a per-record `Uint8Array` costs ~104 bytes
+in V8 — more than the quality scores of a short read.
+[docs/MEMORY.md](docs/MEMORY.md) covers what a decoded slice retains, how to
+read these columns without allocating, and how the slice cache is bounded.
 
 **Flag methods:** the usual SAM flags (spec §1.4), all returning `boolean`.
 

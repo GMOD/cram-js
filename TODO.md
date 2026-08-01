@@ -276,20 +276,18 @@ re-query.
 
 **No wall-clock claim here is trustworthy** — the machine was loaded when these
 were taken, and the timing noise floor is wider than most of the effects.
-Re-measure timings on a quiet machine before quoting any.
+Re-measure timings on a quiet machine before quoting any. Retained heap is the
+opposite: it reproduces to ±0.2% even on a loaded machine, so heap deltas in
+this file can be taken at face value.
 
-Two traps worth knowing, both found the hard way while landing the columnar read
-features:
+The two traps that produce confidently wrong numbers here — `heapUsed` not
+seeing typed arrays, and A/B-ing two source trees in one process — are written
+up in [docs/MEMORY.md](docs/MEMORY.md#measuring-it), along with the per-object
+costs (a retained `Uint8Array` view is 104 B, a declared class field is 8 B)
+that most of the items above are reasoning from.
 
-- **`heapUsed` does not see typed arrays.** V8 allocates ArrayBuffer backing
-  stores outside the JS heap, so a struct-of-arrays layout looks nearly free if
-  you only read `process.memoryUsage().heapUsed` — the first ONT measurement
-  came out at 0.93 MB against an 18.07 MB baseline. Add `arrayBuffers`.
-  `scripts/measure-heap.ts` reports both columns and their sum.
-- **Do not A/B two source trees in one process.** Importing a baseline and a
-  candidate side by side and interleaving them round by round made the columnar
-  decode look 7–11% _slower_ on ONT, consistently across five runs — consistent
-  enough to look real rather than noisy. It was an artifact of the two variants
-  sharing a heap and a GC history: one-tree-per-process runs and a separate CPU
-  profile of each tree both showed it _faster_ (GC self-time 143 ms → 24 ms).
-  Alternate processes, not imports.
+A usable A/B is one tree per process, alternating, comparing **fastest runs**
+rather than medians: contention shows up as occasional 2-3x outliers that drag a
+median around by 20% in either direction, while the minimum stays put. Extract
+the baseline with `git archive <ref> | tar -x -C <dir>` and symlink
+`node_modules` into it, so neither tree is a git worktree of the other.
