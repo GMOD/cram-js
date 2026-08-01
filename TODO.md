@@ -240,6 +240,11 @@ the quality column landed, freeing one field at a time and re-measuring:
 | `readFeatureArena` | 2,327 KB  | 44       |
 | `_refRegion`       | 333 KB    | 6        |
 
+The `readName` row has since shrunk by ~2 MB — names are decoded during the
+slice decode now, which dropped the per-record `Uint8Array` view, two of the
+three name fields, and a duplicate string per detached record. The shape of the
+rest of the table still holds.
+
 Per-object costs measured on this V8 (Node 24, 200k instances each): a retained
 `Uint8Array` view is **104 B**, an empty `{}` is **56 B**, a 25-char string is
 **56 B**, and a declared class field is **8 B** — so every field removed from
@@ -253,12 +258,6 @@ Per-object costs measured on this V8 (Node 24, 200k instances each): a retained
 - **Share one frozen empty `tags`.** A fresh `{}` per record is 56 B whether or
   not it holds anything, so `decodeTags: false` still pays ~3.0 MB of the 4.28
   MB that tags cost. Worth it for that mode and for tagless files.
-- **`_readNameRaw` costs more than the string it defers.** Patching the getter
-  never to materialise took SRR396637 from 37.69 MB to **40.94 MB**: a retained
-  subarray view (104 B) is nearly 2x a retained 25-char name (56 B). The lazy
-  path only ever buys CPU, and SRR396636 currently holds 19,045 of those views
-  (~2 MB). Decoding eagerly also collapses `_readName`/`_readNameRaw`/
-  `_syntheticReadName` from three fields to one.
 - **Flatten `mate`.** 88 B/record with every record in these files carrying one.
   Four inlined fields (32 B) plus a `mate` getter that rebuilds the object would
   save ~50 B/record, but jbrowse reads `record.mate.*` three or four times per

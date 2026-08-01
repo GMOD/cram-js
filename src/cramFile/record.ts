@@ -14,7 +14,6 @@ import {
   RF_SOFT_CLIP,
   RF_SUBST,
 } from './readFeatureArena.ts'
-import { readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type CramContainerCompressionScheme from './container/compressionScheme.ts'
 import type {
@@ -314,9 +313,15 @@ export default class CramRecord {
   // templateSize is the raw CRAM-encoded TS data series value
   public templateLength?: number
   public templateSize?: number
-  private _readName?: string
-  private _readNameRaw?: Uint8Array
-  public _syntheticReadName?: string
+  /**
+   * The read's name, or undefined for a file that does not store them and a
+   * record that mate association could not give a synthetic one to.
+   *
+   * Decoded during the slice decode rather than deferred behind the raw bytes:
+   * a retained `Uint8Array` view is ~104 bytes against ~56 for the name it
+   * holds, so holding one to avoid a decode cost almost twice what it saved.
+   */
+  public readName: string | undefined
   public mateRecordNumber?: number
   public mate?: MateRecord
   public uniqueId: number
@@ -409,16 +414,15 @@ export default class CramRecord {
     return column === undefined ? -1 : column[this.qualityStart + pos]!
   }
 
-  get readName() {
-    if (this._readName === undefined) {
-      if (this._readNameRaw) {
-        this._readName = readNullTerminatedStringFromBuffer(this._readNameRaw)
-        this._readNameRaw = undefined
-      } else {
-        return this._syntheticReadName
-      }
+  /**
+   * Give a record whose file stored no read name the synthetic one its pair
+   * shares, without disturbing a name that was stored. Called by mate
+   * association; there is nothing here for a caller to do.
+   */
+  setSyntheticReadName(name: string) {
+    if (!this.readName) {
+      this.readName = name
     }
-    return this._readName
   }
 
   constructor({
@@ -436,7 +440,7 @@ export default class CramRecord {
     readFeatureCount,
     mate,
     readGroupId,
-    readNameRaw,
+    readName,
     sequenceId,
     uniqueId,
     templateSize,
@@ -455,9 +459,7 @@ export default class CramRecord {
     this.uniqueId = uniqueId
     this.start = start
     this.tags = tags
-    if (readNameRaw) {
-      this._readNameRaw = readNameRaw
-    }
+    this.readName = readName
     if (readBases) {
       this.readBases = readBases
     }

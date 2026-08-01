@@ -24,7 +24,7 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
     readFeatureCount: arena.length,
     mate: undefined,
     readGroupId: 0,
-    readNameRaw: undefined,
+    readName: undefined,
     sequenceId: 0,
     uniqueId: 1,
     templateSize: undefined,

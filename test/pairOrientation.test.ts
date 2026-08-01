@@ -39,7 +39,7 @@ function makeRecord({
     start,
     tags: {},
     mate,
-    readNameRaw: undefined,
+    readName: undefined,
     templateSize: undefined,
     mateRecordNumber: undefined,
     readFeatureArena: undefined,

@@ -156,8 +156,8 @@ function associateIntraSliceMate(
   // so that paired records share the same name
   if (!thisRecord.readName) {
     const syntheticName = String(thisRecord.uniqueId)
-    thisRecord._syntheticReadName = syntheticName
-    mateRecord._syntheticReadName = syntheticName
+    thisRecord.setSyntheticReadName(syntheticName)
+    mateRecord.setSyntheticReadName(syntheticName)
   }
 
   thisRecord.mate = {

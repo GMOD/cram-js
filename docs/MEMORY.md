@@ -13,7 +13,7 @@ forced GC, `heapUsed + arrayBuffers`:
 | file                    | records | retained | JS heap | typed arrays |
 | ----------------------- | ------- | -------- | ------- | ------------ |
 | HG002 ONT (long reads)  | 37      | 7.10 MB  | 0.62    | 6.49         |
-| SRR396637 (short reads) | 54,695  | 32.6 MB  | 24.0    | 8.7          |
+| SRR396637 (short reads) | 54,695  | 30.7 MB  | 22.0    | 8.7          |
 
 Long reads put nearly everything in **read features** — that 37-record ONT slice
 decodes 213,602 of them, 118 KB of features per record. Short reads have about
@@ -89,6 +89,29 @@ for (let i = 0; i < record.readLength; i++) {
   const q = qualityColumn[qualityStart + i]
 }
 ```
+
+## Laziness that holds a view is a pessimisation
+
+Read names used to be deferred: the record kept the raw `Uint8Array` off the RN
+block and decoded on first access. Patching the getter never to materialise, so
+that every record kept its view, took SRR396637 from 37.7 MB to **40.9** — the
+104-byte view is nearly twice the ~56 bytes of the name it was avoiding
+decoding. Deferring only pays if you hold something _smaller_ than the result,
+and a typed-array view over a short run of bytes is not that.
+
+So names are decoded during the slice decode, which also collapsed
+`_readName`/`_readNameRaw`/`_syntheticReadName` into one field and removed a
+duplicate string per detached record (the mate's name was decoded eagerly, then
+the record's own name decoded the same bytes again later). Worth ~2 MB on both
+short-read fixtures. The general form of the same lesson:
+
+- **Defer a computation, not a view.** A lazily-decoded `record.qualityScores`
+  is fine because the offsets it defers behind are two numbers on an object that
+  already exists; a lazily-decoded read name was not, because the thing it
+  deferred behind was a whole object.
+- **Check who forces it anyway.** Mate association already read `readName` for
+  53,472 of SRR396637's 54,695 records, so the deferral was mostly notional
+  before it was removed.
 
 ## The slice cache
 

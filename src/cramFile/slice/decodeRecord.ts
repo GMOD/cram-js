@@ -362,9 +362,12 @@ export default function decodeRecord(
   cursors.lastAlignmentStart = alignmentStart
   const readGroupId = bd.RG()
 
-  let readNameRaw: Uint8Array | undefined
+  // decoded here rather than deferred behind the raw bytes: a retained
+  // Uint8Array view is ~104 bytes against ~56 for the name it holds, so keeping
+  // one per record to avoid a decode costs almost twice what the decode saves
+  let readName: string | undefined
   if (readNamesIncluded) {
-    readNameRaw = bd.RN()
+    readName = readNullTerminatedStringFromBuffer(bd.RN())
   }
 
   let mate: MateRecord | undefined
@@ -377,8 +380,10 @@ export default function decodeRecord(
     const mateFlags = bd.MF()
     let mateReadName: string | undefined
     if (!readNamesIncluded) {
-      readNameRaw = bd.RN()
-      mateReadName = readNullTerminatedStringFromBuffer(readNameRaw)
+      // the two mates of a pair share a name, so this is the record's own name
+      // as well — one string rather than the two the deferred path decoded
+      readName = readNullTerminatedStringFromBuffer(bd.RN())
+      mateReadName = readName
     }
     const mateSequenceId = bd.NS()
     // NP is an absolute 1-based position, never a delta
@@ -492,7 +497,7 @@ export default function decodeRecord(
     flags,
     start: alignmentStart,
     readGroupId,
-    readNameRaw,
+    readName,
     mate,
     templateSize,
     mateRecordNumber,
