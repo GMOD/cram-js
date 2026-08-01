@@ -72,7 +72,11 @@ export type ReadFeature =
   | (ReadFeatureBase & { code: 'q'; data: number[] })
 
 export interface DecodeOptions {
-  /** Whether to parse tags. If false, raw tag data is stored for lazy parsing. Default true. */
+  /**
+   * Whether to parse tags. Default true. If false, `record.tags` is empty and
+   * the tag data is *dropped*, not kept for later — there is no lazy path back
+   * to it, so re-decode the slice if you find you need the tags after all.
+   */
   decodeTags?: boolean
 }
 
@@ -319,7 +323,16 @@ export default class CramRecord {
   public sequenceId: number
   public readGroupId: number
   public mappingQuality: number | undefined
-  public qualityScores: Uint8Array | null | undefined
+  /**
+   * Every quality score in this record's slice, laid end to end and shared with
+   * every other record in it; undefined when this record carries none. Read
+   * this record's own scores as `qualityColumn[qualityStart + i]` for
+   * `i < readLength` — {@link qualityScores} wraps that in a view, which costs
+   * more than the scores themselves.
+   */
+  public qualityColumn: Uint8Array | undefined
+  /** offset of this record's scores in {@link qualityColumn} */
+  public qualityStart: number
 
   /**
    * This record's read features as the array of `{code, pos, refPos, data}`
@@ -359,6 +372,43 @@ export default class CramRecord {
     )
   }
 
+  /**
+   * This record's per-base quality scores, or null for a '*' record that has
+   * neither bases nor scores, or undefined when the file did not preserve them.
+   *
+   * Built on every access as a view over {@link qualityColumn}, which is where
+   * the scores actually live — a retained view costs ~104 bytes in V8, more
+   * than the scores of a short read. A hot path should index the column.
+   */
+  get qualityScores(): Uint8Array | null | undefined {
+    const column = this.qualityColumn
+    if (column === undefined) {
+      // the '*' case reported null rather than undefined before the scores
+      // moved into a column, and the flags say which case this is
+      return this.isSegmentUnmapped() && this.isUnknownBases()
+        ? null
+        : undefined
+    }
+    return column.subarray(
+      this.qualityStart,
+      this.qualityStart + this.readLength,
+    )
+  }
+
+  /**
+   * The quality score of the read base at 0-based read position `pos`, or -1
+   * when the file did not preserve quality scores.
+   *
+   * The allocation-free way to read a handful of scores — reaching for
+   * {@link qualityScores} to index it once builds a view over the whole read.
+   * A walk over *every* base should instead hoist {@link qualityColumn} and
+   * {@link qualityStart} out of its loop.
+   */
+  qualityScoreAt(pos: number) {
+    const column = this.qualityColumn
+    return column === undefined ? -1 : column[this.qualityStart + pos]!
+  }
+
   get readName() {
     if (this._readName === undefined) {
       if (this._readNameRaw) {
@@ -377,7 +427,8 @@ export default class CramRecord {
     readLength,
     mappingQuality,
     lengthOnRef,
-    qualityScores,
+    qualityColumn,
+    qualityStart,
     mateRecordNumber,
     readBases,
     readFeatureArena,
@@ -397,7 +448,8 @@ export default class CramRecord {
     this.readLength = readLength
     this.mappingQuality = mappingQuality
     this.lengthOnRef = lengthOnRef
-    this.qualityScores = qualityScores
+    this.qualityColumn = qualityColumn
+    this.qualityStart = qualityStart
     this.readGroupId = readGroupId
     this.sequenceId = sequenceId!
     this.uniqueId = uniqueId
@@ -603,7 +655,8 @@ export default class CramRecord {
       this.readFeatureArena,
       this.readFeatureStart,
       this.readFeatureCount,
-      this.qualityScores,
+      this.qualityColumn,
+      this.qualityStart,
       opts?.start ?? Number.NEGATIVE_INFINITY,
       opts?.end ?? Number.POSITIVE_INFINITY,
       callback,
@@ -709,6 +762,8 @@ export default class CramRecord {
   // stay diffable. Optional fields are added only when defined to match the
   // historical shape of the output.
   toJSON() {
+    // read once: the getter builds a fresh view over the quality column
+    const qualityScores = this.qualityScores
     const data: Record<string, unknown> = {
       start: this.start,
       cramFlags: this.cramFlags,
@@ -720,9 +775,7 @@ export default class CramRecord {
       uniqueId: this.uniqueId,
       readName: this.readName,
       readBases: this.getReadBases(),
-      qualityScores: this.qualityScores
-        ? Array.from(this.qualityScores)
-        : this.qualityScores,
+      qualityScores: qualityScores ? Array.from(qualityScores) : qualityScores,
     }
     if (this.lengthOnRef !== undefined) {
       data.lengthOnRef = this.lengthOnRef

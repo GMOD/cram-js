@@ -12,6 +12,11 @@ import Constants from '../constants.ts'
 import decodeRecord, { buildRFSchema } from './decodeRecord.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import { type CramFileBlock } from '../file.ts'
+import {
+  externalQualityColumn,
+  growableQualityColumn,
+  trimQualityColumn,
+} from '../qualityColumn.ts'
 import ReadFeatureArena from '../readFeatureArena.ts'
 import CramRecord, { defaultDecodeOptions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
@@ -24,7 +29,7 @@ import type {
 } from '../sectionParsers.ts'
 import type {
   BoundDecoders,
-  BulkByteRawDecoder,
+  BulkBasesDecoder,
   ByteArraySeries,
   NumericSeries,
   SliceDecodeContext,
@@ -688,17 +693,28 @@ export default class CramSlice {
       TN: bind('TN'),
     }
 
-    // Bulk byte decoder for QS and BA — getBytesSubarray returns a subarray
-    // view when the codec supports it (e.g. ExternalCodec), or undefined otherwise
-    const qsCodec = compressionScheme.getCodecForDataSeries('QS')
+    // Bulk read-base decoder — getBytesSubarray returns a subarray view when the
+    // codec supports it (e.g. ExternalCodec), or undefined otherwise
     const baCodec = compressionScheme.getCodecForDataSeries('BA')
-    const decodeBulkBytesRaw: BulkByteRawDecoder | undefined =
-      qsCodec || baCodec
-        ? (dataSeriesName, length) => {
-            const codec = dataSeriesName === 'QS' ? qsCodec : baCodec
-            return codec?.getBytesSubarray(blocksByContentId, cursors, length)
-          }
+    const decodeBulkBases: BulkBasesDecoder | undefined = baCodec
+      ? length => baCodec.getBytesSubarray(blocksByContentId, cursors, length)
+      : undefined
+
+    // Quality scores go into one column shared by the whole slice rather than a
+    // Uint8Array per record. When QS is a plain external block that column is
+    // the block itself — the scores are already laid out end to end in record
+    // order, so nothing is copied and a record just remembers its offset.
+    const qsCodec = compressionScheme.getCodecForDataSeries('QS')
+    const qsBlock =
+      qsCodec instanceof ExternalCodec
+        ? blocksByContentId[qsCodec.parameters.blockContentId]
         : undefined
+    const qualityColumn = qsBlock
+      ? externalQualityColumn(
+          qsBlock.content,
+          cursors.externalBlocks.getCursor(qsBlock.contentId),
+        )
+      : growableQualityColumn()
 
     // Bound tag decoders — tags are typically encoded as byteArrayLength
     // (codecId=4) wrapping External-int lengths + External-byte values. We
@@ -787,9 +803,10 @@ export default class CramSlice {
       bd,
       rfSchema: buildRFSchema(bd, majorVersion),
       arena: new ReadFeatureArena(),
+      qualityColumn,
       tagDescriptorsByTL,
       cursors,
-      decodeBulkBytesRaw,
+      decodeBulkBases,
       decodeTags: decodeOptions.decodeTags,
       APdelta: compressionScheme.APdelta,
       readNamesIncluded: compressionScheme.readNamesIncluded,
@@ -825,6 +842,17 @@ export default class CramSlice {
     // the memory the features actually need; it outlives the decode in the
     // feature cache, so give the slack back
     ctx.arena.trim()
+
+    // same for a quality column we decoded into — and trimming replaces the
+    // array, so the records that were handed the untrimmed one need re-pointing
+    if (qualityColumn.cursor === undefined) {
+      trimQualityColumn(qualityColumn)
+      for (const record of records) {
+        if (record.qualityColumn !== undefined) {
+          record.qualityColumn = qualityColumn.bytes
+        }
+      }
+    }
 
     // interpret `recordsToNextFragment` attributes to make standard `mate`
     // objects. The records loop above fills every slot or throws — by the

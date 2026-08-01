@@ -1,4 +1,5 @@
 import { CramMalformedError } from '../../errors.ts'
+import { readQualityScores } from '../qualityColumn.ts'
 import {
   BamFlagsDecoder,
   CramFlagsDecoder,
@@ -11,6 +12,7 @@ import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 import type { Cursors } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
+import type { QualityColumn } from '../qualityColumn.ts'
 import type ReadFeatureArena from '../readFeatureArena.ts'
 
 /** Data series whose codecs yield a Uint8Array rather than a number. */
@@ -268,33 +270,15 @@ function decodeReadFeatures(
   return [start, refDelta]
 }
 
-export type BulkByteRawDecoder = (
-  dataSeriesName: 'QS' | 'BA',
-  length: number,
-) => Uint8Array | undefined
-
-function decodeQualityScores(
-  readLength: number,
-  decodeBulkBytesRaw: BulkByteRawDecoder | undefined,
-  decodeQS: () => number,
-) {
-  const raw = decodeBulkBytesRaw?.('QS', readLength)
-  if (raw) {
-    return raw
-  }
-  const out = new Uint8Array(readLength)
-  for (let i = 0; i < readLength; i++) {
-    out[i] = decodeQS()
-  }
-  return out
-}
+/** Reads `length` read bases at once, when the BA codec can hand out a view. */
+export type BulkBasesDecoder = (length: number) => Uint8Array | undefined
 
 function decodeReadBases(
   readLength: number,
-  decodeBulkBytesRaw: BulkByteRawDecoder | undefined,
+  decodeBulkBases: BulkBasesDecoder | undefined,
   decodeBA: () => number,
 ) {
-  const raw = decodeBulkBytesRaw?.('BA', readLength)
+  const raw = decodeBulkBases?.(readLength)
   if (raw) {
     return decodeUtf8(raw)
   }
@@ -326,10 +310,12 @@ export interface SliceDecodeContext {
   rfSchema: (RFEntry | undefined)[]
   /** columnar read-feature storage shared by every record in the slice */
   arena: ReadFeatureArena
+  /** columnar quality-score storage shared by every record in the slice */
+  qualityColumn: QualityColumn
   /** indexed by TL data series value */
   tagDescriptorsByTL: TagDescriptor[][]
   cursors: Cursors
-  decodeBulkBytesRaw: BulkByteRawDecoder | undefined
+  decodeBulkBases: BulkBasesDecoder | undefined
   decodeTags: boolean
   APdelta: boolean
   readNamesIncluded: boolean
@@ -348,9 +334,10 @@ export default function decodeRecord(
     bd,
     rfSchema,
     arena,
+    qualityColumn,
     tagDescriptorsByTL,
     cursors,
-    decodeBulkBytesRaw,
+    decodeBulkBases,
     decodeTags,
     APdelta,
     readNamesIncluded,
@@ -453,7 +440,9 @@ export default function decodeRecord(
   let readFeatureCount = 0
   let lengthOnRef: number | undefined
   let mappingQuality: number | undefined
-  let qualityScores: Uint8Array | undefined | null
+  // offset of this record's scores in the slice's quality column, -1 for a
+  // record that carries none
+  let qualityStart = -1
   let readBases = undefined
   if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
     // reading read features
@@ -483,15 +472,16 @@ export default function decodeRecord(
     mappingQuality = bd.MQ()
 
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      qualityScores = decodeQualityScores(readLength, decodeBulkBytesRaw, bd.QS)
+      qualityStart = readQualityScores(qualityColumn, readLength, bd.QS)
     }
   } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
+    // a '*' record carries neither bases nor scores; CramRecord.qualityScores
+    // reads that back off the flags rather than storing a null
     readBases = null
-    qualityScores = null
   } else {
-    readBases = decodeReadBases(readLength, decodeBulkBytesRaw, bd.BA)
+    readBases = decodeReadBases(readLength, decodeBulkBases, bd.BA)
     if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
-      qualityScores = decodeQualityScores(readLength, decodeBulkBytesRaw, bd.QS)
+      qualityStart = readQualityScores(qualityColumn, readLength, bd.QS)
     }
   }
 
@@ -511,7 +501,11 @@ export default function decodeRecord(
     readFeatureCount,
     lengthOnRef,
     mappingQuality,
-    qualityScores,
+    // the column array itself rather than the QualityColumn, so that reading a
+    // record's scores is one property hop; a growable column is re-pointed
+    // after the slice finishes decoding
+    qualityColumn: qualityStart < 0 ? undefined : qualityColumn.bytes,
+    qualityStart,
     readBases,
     tags,
     uniqueId,

@@ -23,6 +23,30 @@ every pan back over cached data re-reads reference sequence it already has. Fix
 is to track the span the cached records are already decorated against and skip
 when the new query is covered.
 
+This is now the dominant cost of a warm query, since `SliceRecordCache` stopped
+evicting the slices of the query still in flight. On SRR396637 a repeat of the
+same 54,695-record query went from 117 ms (re-reading 1.9 MB and re-inflating
+6.0 MB, because the range was bigger than the 20,000-record budget and the LRU
+evicted each slice just before the next identical query wanted it) to ~13 ms
+with nothing re-inflated. What is left in those 13 ms is the re-decoration
+above, plus the re-parse below.
+
+## Every warm query rebuilds the container and re-parses its compression scheme
+
+`getContainerAtPosition` and `getSlice` construct fresh objects on every call —
+see the `// TODO: perhaps we should cache slices?` in `container/index.ts`. So
+even a query served entirely from `featureCache` re-reads the container header
+and the slice header and re-parses the compression header block: 36 filehandle
+reads, 6 containers and 6 compression schemes for a 6-slice warm query on
+SRR396637. Locally that is a couple of KB; over HTTP it is 6 range requests per
+slice per query, and the parse happens regardless of what the byte-range cache
+does.
+
+Files with more than one slice per container duplicate it _within_ a query too —
+every slice builds its own `CramContainer` and re-inflates the same compression
+header. The fixtures here are all 1 slice per container, so that case is
+un-measured; htsjdk output is where to look.
+
 ## `readBlock` reads the same offset twice
 
 `readBlock` reads `cramBlockHeader.maxLength` at a position, then reads the full
@@ -108,6 +132,13 @@ does. Nothing else changes on that side.
   with `newOffset1..8` numbered inconsistently against the fields they belong
   to. A small reader over `(buffer, offset)` with `.itf8()`/`.ltf8()`/`.u8()`/
   `.u32()` would roughly halve the file.
+- The read-features-to-mismatches walk exists twice:
+  `src/cramFile/mismatches.ts` here and
+  `plugins/alignments/src/CramAdapter/readFeaturesToMismatches.ts` in jbrowse,
+  which does not use ours. They are the same walk and disagree in details —
+  soft-clip `length` 0 against 1, deletion `bases` `''` against `'*'`, a closed
+  window against a half-open one. Either jbrowse adopts `forEachMismatch` or
+  this repo is carrying a second, unexercised copy of its own trickiest walk.
 
 ## Measured and _not_ worth doing
 
@@ -170,7 +201,7 @@ Recorded so they are not rediscovered:
   walk now switches per read at 64 ops, matching the ~50–100 crossover bam-js
   measured in its own `src/record.ts`.
 
-## Packing the arena's columns — measured, and now a breaking change
+## Packing the arena's columns
 
 On the ONT slice `payloadOffsets` is 854 KB (11.5% of the 7.42 MB the records
 retain) and `refCodes`/`subCodes` together are 427 KB (5.7%). Offsets are
@@ -178,12 +209,61 @@ monotonic, so a per-record base offset would collapse them; and an X feature's
 `num` only holds a 0–3 substitution-matrix index, so `ref`/`sub` would fit in
 its spare bits.
 
-Neither is worth doing now. The columns are public API — jbrowse's
-`readFeaturesToMismatches` reads `refCodes`/`subCodes`/`num` directly, because
-that walk is on its render path and emits jbrowse's own mismatch vocabulary, so
-it cannot move in here. Packing them is therefore a breaking change for a few
-percent. Privatising the layout would mean cram-js owning that walk too, which
-would drag `@jbrowse/cigar-utils`' render types into a file parser.
+The two halves are **not** equally locked, contrary to what this section used to
+say. Auditing what jbrowse actually reads: `readFeaturesToMismatches` and
+`readFeaturesToNumericCIGAR` destructure `codes`, `pos`, `refPos`, `num`,
+`refCodes`, `subCodes` and call `payloadStringAt(i)`. Neither ever touches
+`payloadOffsets` or `payloadBytes`.
+
+- **`payloadOffsets` is free to pack or privatise.** It is 11.5% of an ONT slice
+  and no consumer reads it. The only cost is that `payloadBytesAt` /
+  `payloadStringAt` have to unpack, which is where the reads already go.
+- **`refCodes`/`subCodes` are genuinely public.** That walk is on jbrowse's
+  render path and emits jbrowse's own mismatch vocabulary, so it cannot move in
+  here; packing them is a breaking change for 5.7%. Privatising the layout would
+  mean cram-js owning that walk too, which would drag `@jbrowse/cigar-utils`'
+  render types into a file parser.
+
+## Short-read record memory — what is left after the quality column
+
+The read-feature arena and the quality column between them cover the two ends of
+the read-length range. What remains is the per-record JS object graph, which is
+what dominates short-read files. Ablation on SRR396637 (54,695 records) after
+the quality column landed, freeing one field at a time and re-measuring:
+
+| component          | freed     | B/record |
+| ------------------ | --------- | -------- |
+| CramRecord shells  | 12,697 KB | 238      |
+| `mate`             | 4,682 KB  | 88       |
+| `tags`             | 4,284 KB  | 80       |
+| `readName`         | 3,349 KB  | 63       |
+| `readFeatureArena` | 2,327 KB  | 44       |
+| `_refRegion`       | 333 KB    | 6        |
+
+Per-object costs measured on this V8 (Node 24, 200k instances each): a retained
+`Uint8Array` view is **104 B**, an empty `{}` is **56 B**, a 25-char string is
+**56 B**, and a declared class field is **8 B** — so every field removed from
+`CramRecord` is 437 KB on a 54k-record view. Ranked by what looks reachable:
+
+- **Intern tag string values.** SRR396637 has 164,526 tag values and only
+  **1,084 distinct** ones (`MC` is a CIGAR string, repeated across nearly every
+  record). A per-slice `Map<string, string>` in `parseTagData`'s `Z` branch
+  recovers most of the ~1.3 MB the strings hold, for a few lines. The temporary
+  string is still allocated and collected; only the retained copy is shared.
+- **Share one frozen empty `tags`.** A fresh `{}` per record is 56 B whether or
+  not it holds anything, so `decodeTags: false` still pays ~3.0 MB of the 4.28
+  MB that tags cost. Worth it for that mode and for tagless files.
+- **`_readNameRaw` costs more than the string it defers.** Patching the getter
+  never to materialise took SRR396637 from 37.69 MB to **40.94 MB**: a retained
+  subarray view (104 B) is nearly 2x a retained 25-char name (56 B). The lazy
+  path only ever buys CPU, and SRR396636 currently holds 19,045 of those views
+  (~2 MB). Decoding eagerly also collapses `_readName`/`_readNameRaw`/
+  `_syntheticReadName` from three fields to one.
+- **Flatten `mate`.** 88 B/record with every record in these files carrying one.
+  Four inlined fields (32 B) plus a `mate` getter that rebuilds the object would
+  save ~50 B/record, but jbrowse reads `record.mate.*` three or four times per
+  feature in its getters, so it needs `mateStart`/`mateSequenceId` handed to it
+  directly rather than an allocating getter. Breaking; needs an API decision.
 
 ## Method note
 

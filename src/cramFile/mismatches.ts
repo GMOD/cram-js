@@ -88,13 +88,14 @@ export function forEachMismatch(
   arena: ReadFeatureArena | undefined,
   featureStart: number,
   featureCount: number,
-  qual: ArrayLike<number> | null | undefined,
+  /** the record's slice-wide quality column, and its offset into it */
+  qualColumn: Uint8Array | undefined,
+  qualStart: number,
   windowStart: number,
   windowEnd: number,
   callback: MismatchCallback,
 ) {
   if (arena !== undefined) {
-    const hasQual = !!qual
     const { codes, pos, refPos, num, refCodes, subCodes } = arena
     const end = featureStart + featureCount
     let insertedBases = ''
@@ -145,7 +146,7 @@ export function forEachMismatch(
               // an unresolved substitution reads as N, matching getReadBases()
               // and the substitution matrix's own fallback row
               subCodes[i] ? String.fromCharCode(subCodes[i]!) : 'N',
-              hasQual ? qual[pos[i]!]! : -1,
+              qualColumn === undefined ? -1 : qualColumn[qualStart + pos[i]!]!,
               // 0 stays 0 through the upper-casing, so an unknown reference
               // base keeps reporting as unknown
               refCodes[i]! & ~0x20,

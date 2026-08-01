@@ -19,7 +19,10 @@ function makeRecord(
     flags: 0,
     readLength: 10,
     start,
-    qualityScores,
+    // a one-record slice, so this record's scores start at the front of the
+    // slice-wide column
+    qualityColumn: qualityScores,
+    qualityStart: 0,
     readFeatureArena: arena,
     readFeatureStart: 0,
     readFeatureCount: arena.length,

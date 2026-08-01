@@ -201,7 +201,17 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 - `start` — 0-based start position; `-1` for an unplaced read
 - `lengthOnRef` — reference bases the alignment covers, `undefined` for an
   unmapped read
-- `qualityScores` — `Uint8Array` of per-base quality scores
+- `qualityScores` — `Uint8Array` of per-base quality scores, `null` for a `*`
+  record, `undefined` when the file did not preserve them. Built on every access
+  as a view over `qualityColumn` below, so pull it into a local rather than
+  indexing it in a loop.
+- `qualityScoreAt(pos)` — the score at a 0-based read position, or `-1` when the
+  file has none. Reads straight out of the column, allocating nothing.
+- `qualityColumn`, `qualityStart` — every quality score in the record's slice
+  laid end to end, and this record's offset into it. A per-record `Uint8Array`
+  costs ~104 bytes in V8, more than the scores of a short read, so they live in
+  one column per slice exactly like read features do. Hoist these out of a
+  per-base loop and index `qualityColumn[qualityStart + i]`.
 - `tags` — auxiliary tags object
 - `readFeatures` — the raw read features, as an array. Prefer `getMismatches()`;
   see [docs/READ_FEATURES.md](docs/READ_FEATURES.md) if you really do need this
