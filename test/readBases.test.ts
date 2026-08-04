@@ -97,3 +97,77 @@ test('both reconstructions upper-case every source of bases', () => {
   expect(shortBases).toBe(shortBases!.toUpperCase())
   expect(longBases).toHaveLength(1000)
 })
+
+// The two reconstructions in decodeReadSequence — a string for short reads, a
+// byte array for long ones — are picked by read length, so only ever one of them
+// runs for a given record and a drift between them would hide until a file of
+// the other size hit the changed branch. Run the same features through both.
+//
+// Each case is built twice against the same repeating reference: once short
+// enough for the string path, once padded past BYTEWISE_READ_BASES_MIN for the
+// byte path. Only the feature-covered prefix is comparable — past it the two
+// records take different amounts of reference — but that prefix is where every
+// branch lives.
+const REF_UNIT = 'acgtACGTns'
+
+function bothPaths(features: ReadFeature[], prefixLength: number) {
+  const build = (readLength: number) => {
+    const arena = arenaFromReadFeatures(features)
+    const record = Object.assign(Object.create(CramRecord.prototype), {
+      flags: 0,
+      cramFlags: 0,
+      start: 101,
+      readLength,
+      lengthOnRef: readLength,
+      readFeatureArena: arena,
+      readFeatureStart: 0,
+      readFeatureCount: arena.length,
+    }) as CramRecord
+    record._refRegion = {
+      start: 101,
+      end: 101 + REF_UNIT.length * 400,
+      seq: REF_UNIT.repeat(400),
+    }
+    return record.getReadBases()!
+  }
+  return [
+    build(prefixLength + 20).slice(0, prefixLength),
+    build(2000).slice(0, prefixLength),
+  ]
+}
+
+test.each([
+  ['substitution', [{ code: 'X', data: 0, pos: 3, refPos: 104, sub: 'g' }], 8],
+  ['deletion', [{ code: 'D', data: 4, pos: 3, refPos: 104 }], 8],
+  ['reference skip', [{ code: 'N', data: 6, pos: 3, refPos: 104 }], 8],
+  ['insertion', [{ code: 'I', data: 'tt', pos: 3, refPos: 104 }], 8],
+  ['single-base insertion', [{ code: 'i', data: 'a', pos: 3, refPos: 104 }], 8],
+  ['soft clip', [{ code: 'S', data: 'cc', pos: 0, refPos: 101 }], 8],
+  ['hard clip', [{ code: 'H', data: 5, pos: 0, refPos: 101 }], 8],
+  ['padding', [{ code: 'P', data: 2, pos: 3, refPos: 104 }], 8],
+  ['verbatim bases', [{ code: 'b', data: 'gg', pos: 3, refPos: 104 }], 8],
+  [
+    'base plus quality',
+    [{ code: 'B', data: ['t', 40], pos: 3, refPos: 104 }],
+    8,
+  ],
+  ['quality only', [{ code: 'Q', data: 40, pos: 3, refPos: 104 }], 8],
+  [
+    'several at once',
+    [
+      { code: 'S', data: 'cc', pos: 0, refPos: 101 },
+      { code: 'X', data: 0, pos: 4, refPos: 104, sub: 'g' },
+      { code: 'D', data: 3, pos: 5, refPos: 105 },
+      { code: 'I', data: 'tt', pos: 5, refPos: 108 },
+    ],
+    12,
+  ],
+] as [string, ReadFeature[], number][])(
+  'the string and byte reconstructions agree: %s',
+  (_name, features, prefixLength) => {
+    const [viaString, viaBytes] = bothPaths(features, prefixLength)
+    expect(viaBytes).toBe(viaString)
+    // and neither leaves the soft-masked reference lowercase
+    expect(viaString).toBe(viaString!.toUpperCase())
+  },
+)
