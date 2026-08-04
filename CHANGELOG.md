@@ -1,3 +1,17 @@
+## [10.4.0](https://github.com/GMOD/cram-js/compare/v10.3.0...v10.4.0) (2026-08-04)
+
+### Documentation
+
+- Note what moving the reference into the decode costs on the error path
+
+### Features
+
+- Answer the trailing clip in O(1) too, and pin both against the walk
+
+### Tests
+
+- Pin the two read-base reconstructions against each other
+
 ## [10.3.0](https://github.com/GMOD/cram-js/compare/v10.2.0...v10.3.0) (2026-08-04)
 
 ### Documentation
