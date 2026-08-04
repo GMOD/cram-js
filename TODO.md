@@ -34,6 +34,17 @@ mapped read in the slice by definition, so `checkReferenceMd5` now hands its
 region back and decoration reuses it. `ce#5` with the check on went from 2
 fetches to 1.
 
+**The trade it makes**, which is the right one but worth knowing: resolving the
+reference is now part of decoding a slice rather than something layered on
+after. That is arguably the truer model — a CRAM record is reference-compressed,
+so its bases do not exist without the reference — and it is what makes the
+result cacheable. But it means a **failed `fetchReferenceSequence` now discards
+the decode too**. `SliceRecordCache` drops rejected promises, so a flaky
+sequence adapter costs a re-inflate of the slice on retry where before it only
+cost the decoration. Worth revisiting only if that shows up in practice: the fix
+would be to cache the decoded records and the reference resolution as separate
+memos, which reintroduces most of the bookkeeping this removed.
+
 ## ~~`getReadBases()` costs ~1.5 ms per long read~~ — halved
 
 `decodeReadSequence` concatenated a string, which on a long read meant a
