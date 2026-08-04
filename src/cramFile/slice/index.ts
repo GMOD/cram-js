@@ -19,14 +19,7 @@ export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
 }
 
-interface RefRegion {
-  id: number
-  start: number
-  end: number
-  seq: string | null
-}
-
-/** a RefRegion whose sequence has been fetched, as addReferenceSequence takes it */
+/** a reference region whose sequence has been fetched, as addReferenceSequence takes it */
 interface RefRegionWithSeq {
   start: number
   end: number
@@ -447,11 +440,16 @@ export default class CramSlice {
    * Verify the reference the slice was written against matches the one we are
    * decoding with, when the slice records an md5 and the caller asked for the
    * check.
+   *
+   * Returns the region it fetched, so that decorating the records can reuse it
+   * rather than fetching the same bases a second time. It spans the slice's
+   * whole declared reference, which by definition covers every mapped read in
+   * the slice.
    */
   private async checkReferenceMd5(
     sliceHeader: SliceHeader,
     majorVersion: number,
-  ) {
+  ): Promise<RefRegionWithSeq | undefined> {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
@@ -473,7 +471,113 @@ export default class CramSlice {
               `MD5 checksum reference mismatch for ref ${sliceHeader.parsedContent.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
             )
           }
+          return { start, end, seq }
         }
+      }
+    }
+    return undefined
+  }
+
+  /**
+   * Decode each record's base substitutions against the reference, and give the
+   * records the region their bases can later be reconstructed from.
+   *
+   * Runs **once per slice**, from `_fetchRecords`, rather than once per query.
+   * It used to run in `getRecords` over the filtered records, which meant a
+   * cached slice re-issued every `fetchReferenceSequence` call and re-decoded
+   * every substitution on each repeat query — for jbrowse, a trip to the
+   * sequence adapter for bases it already had on every pan back over data it
+   * had already decoded.
+   *
+   * The span asked for is the extent of the slice's reads, never the slice's
+   * declared `refSeqSpan` — see `test/seqfetch-bounds.test.ts` and issue #79.
+   * Computing it from every record rather than from one query's matches is what
+   * makes it a property of the slice, and so cacheable; it is also the widest
+   * any sequence of queries against the slice could have asked for in total.
+   */
+  private async applyReferenceSequence(
+    records: CramRecord[],
+    header: MappedSliceHeader,
+    md5Region: RefRegionWithSeq | undefined,
+  ) {
+    const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
+    if (
+      !records.length ||
+      // -2 is a multi-reference slice, whose records each name their own
+      (header.refSeqId < 0 && header.refSeqId !== -2)
+    ) {
+      return
+    }
+    if (!fetchReferenceSequence && !md5Region) {
+      return
+    }
+    const singleRefId = header.refSeqId >= 0 ? header.refSeqId : undefined
+
+    // the reference span each sequence's reads cover
+    const spans = new Map<number, { start: number; end: number }>()
+    for (const record of records) {
+      const seqId = singleRefId ?? record.sequenceId
+      const end = record.start + (record.lengthOnRef || record.readLength)
+      const span = spans.get(seqId)
+      if (span === undefined) {
+        spans.set(seqId, { start: record.start, end })
+      } else {
+        if (record.start < span.start) {
+          span.start = record.start
+        }
+        if (end > span.end) {
+          span.end = end
+        }
+      }
+    }
+
+    const compressionScheme = await this.getCompressionScheme()
+    const resolved = new Map<number, RefRegionWithSeq>()
+    await Promise.all(
+      [...spans].map(async ([seqId, span]) => {
+        if (seqId === -1 || span.start >= span.end) {
+          return
+        }
+        // the md5 check already fetched the slice's declared reference, which
+        // covers every mapped read in it, so reuse rather than fetch again
+        if (
+          md5Region &&
+          md5Region.start <= span.start &&
+          md5Region.end >= span.end
+        ) {
+          resolved.set(seqId, md5Region)
+          return
+        }
+        if (!fetchReferenceSequence) {
+          return
+        }
+        // deliberately NOT length-checked the way getReferenceRegion() is:
+        // this span is built from `lengthOnRef || readLength`, so unmapped
+        // reads inflate it past the end of the contig and a correct callback
+        // legitimately returns fewer bases. Add the check once that span is
+        // computed from mapped reads only.
+        const seq = await fetchReferenceSequence(
+          seqId,
+          span.start,
+          span.end,
+          await this.file.getReferenceName(seqId),
+        )
+        // truthy, not `!== ''`: a callback that cannot resolve the reference
+        // may hand back an empty string, and decoding a read against an empty
+        // reference throws rather than yielding no bases
+        if (seq) {
+          resolved.set(seqId, { start: span.start, end: span.end, seq })
+        }
+      }),
+    )
+
+    // The region object is only read, never mutated, so every record covered by
+    // one shares it — spreading a copy per record instead cost ~72 bytes of
+    // retained heap each.
+    for (const record of records) {
+      const region = resolved.get(singleRefId ?? record.sequenceId)
+      if (region) {
+        record.addReferenceSequence(region, compressionScheme)
       }
     }
   }
@@ -484,7 +588,7 @@ export default class CramSlice {
     const sliceHeader = await this.getHeader()
     const blocksByContentId = await this._getBlocksContentIdIndex()
 
-    await this.checkReferenceMd5(sliceHeader, majorVersion)
+    const md5Region = await this.checkReferenceMd5(sliceHeader, majorVersion)
 
     const header = sliceHeader.parsedContent
     if (!isMappedSliceHeader(header)) {
@@ -522,6 +626,7 @@ export default class CramSlice {
 
     trimSliceColumns(ctx, records)
     associateIntraSliceMates(records)
+    await this.applyReferenceSequence(records, header, md5Region)
     return records
   }
 
@@ -547,103 +652,10 @@ export default class CramSlice {
       this.file.featureCache.set(cacheKey, recordsPromise)
     }
 
+    // the records come back already decorated with their reference — see
+    // applyReferenceSequence, which runs once per slice inside the cached
+    // decode rather than once per query over the filtered subset
     const unfiltered = await recordsPromise
-    const records = unfiltered.filter(filterFunction)
-
-    // if we can fetch reference sequence, add the reference sequence to the records
-    if (records.length && this.file.fetchReferenceSequenceCallback) {
-      const sliceHeader = await this.getHeader()
-      if (
-        isMappedSliceHeader(sliceHeader.parsedContent) &&
-        (sliceHeader.parsedContent.refSeqId >= 0 || // single-ref slice
-          sliceHeader.parsedContent.refSeqId === -2) // multi-ref slice
-      ) {
-        const singleRefId =
-          sliceHeader.parsedContent.refSeqId >= 0
-            ? sliceHeader.parsedContent.refSeqId
-            : undefined
-        const compressionScheme = await this.getCompressionScheme()
-        const refRegions: Record<string, RefRegion> = {}
-
-        // iterate over the records to find the spans of the reference
-        // sequences we need to fetch
-        for (const record of records) {
-          const seqId =
-            singleRefId !== undefined ? singleRefId : record.sequenceId
-          let refRegion = refRegions[seqId]
-          if (!refRegion) {
-            refRegion = {
-              id: seqId,
-              start: record.start,
-              end: Number.NEGATIVE_INFINITY,
-              seq: null,
-            }
-            refRegions[seqId] = refRegion
-          }
-
-          const end = record.start + (record.lengthOnRef || record.readLength)
-          if (end > refRegion.end) {
-            refRegion.end = end
-          }
-          if (record.start < refRegion.start) {
-            refRegion.start = record.start
-          }
-        }
-
-        // fetch the `seq` for all of the ref regions
-        await Promise.all(
-          Object.values(refRegions).map(async refRegion => {
-            if (
-              refRegion.id !== -1 &&
-              refRegion.start < refRegion.end &&
-              this.file.fetchReferenceSequenceCallback
-            ) {
-              // deliberately NOT length-checked the way getReferenceRegion() is:
-              // this span is built from `lengthOnRef || readLength`, so unmapped
-              // reads inflate it past the end of the contig and a correct
-              // callback legitimately returns fewer bases. Add the check once
-              // that span is computed from mapped reads only.
-              refRegion.seq = await this.file.fetchReferenceSequenceCallback(
-                refRegion.id,
-                refRegion.start,
-                refRegion.end,
-                await this.file.getReferenceName(refRegion.id),
-              )
-            }
-          }),
-        )
-
-        // Narrow each fetched region to the { start, end, seq } shape
-        // addReferenceSequence takes, once per region rather than once per
-        // record. The object is only read, never mutated, so every record
-        // covered by a region shares one — spreading inside the loop below
-        // instead cost ~72 bytes of retained heap per record.
-        const resolvedRegions: Record<string, RefRegionWithSeq> = {}
-        for (const [seqId, refRegion] of Object.entries(refRegions)) {
-          // truthy, not `!== null`: a seqFetch callback that cannot resolve the
-          // reference may hand back an empty string, and decoding a read
-          // against an empty reference throws rather than yielding no bases
-          if (refRegion.seq) {
-            resolvedRegions[seqId] = {
-              start: refRegion.start,
-              end: refRegion.end,
-              seq: refRegion.seq,
-            }
-          }
-        }
-
-        // now decorate all the records with them
-        for (const record of records) {
-          const seqId =
-            singleRefId !== undefined ? singleRefId : record.sequenceId
-          const refRegion = resolvedRegions[seqId]
-          if (refRegion) {
-            record.addReferenceSequence(refRegion, compressionScheme)
-          }
-        }
-      }
-    }
-
-    return records
+    return unfiltered.filter(filterFunction)
   }
 }
