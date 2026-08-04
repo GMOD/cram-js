@@ -508,42 +508,43 @@ test('packs into BAM-style (length << 4) | op', () => {
 // exactly with reading the first/last operation off the full walk.
 // ---------------------------------------------------------------------------
 
-/** the leading clip as reading the first operation off the full walk gives it */
-function leadingClipFromWalk(record: CramRecord) {
-  const first = collectOps(record)[0]
-  return first && (first[0] === CIGAR_SOFT_CLIP || first[0] === CIGAR_HARD_CLIP)
-    ? first[1]
-    : 0
+/** the clips as reading the first and last operation off the full walk gives them */
+function clipsFromWalk(record: CramRecord) {
+  const ops = collectOps(record)
+  const isClip = (op: number) =>
+    op === CIGAR_SOFT_CLIP || op === CIGAR_HARD_CLIP
+  const first = ops[0]
+  const last = ops.at(-1)
+  return {
+    leading: first && isClip(first[0]) ? first[1] : 0,
+    trailing: last && isClip(last[0]) ? last[1] : 0,
+  }
 }
 
 let clippedTotal = 0
-test.each(files)(
-  'leading clip getter agrees with the CIGAR walk %s',
-  async file => {
-    const cram = new IndexedCramFile({
-      cramFilehandle: testDataFile(file),
-      index: new CraiIndex({ filehandle: testDataFile(`${file}.crai`) }),
-    })
-    const records = await cram.getRecordsForRange(
-      0,
-      0,
-      Number.POSITIVE_INFINITY,
-    )
-    let seen = 0
-    let clipped = 0
-    for (const record of records) {
-      const leading = leadingClipFromWalk(record)
-      seen++
-      if (leading) {
-        clipped++
-      }
-      expect(record.getLeadingClipLength()).toBe(leading)
+test.each(files)('clip getters agree with the CIGAR walk %s', async file => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile(file),
+    index: new CraiIndex({ filehandle: testDataFile(`${file}.crai`) }),
+  })
+  const records = await cram.getRecordsForRange(0, 0, Number.POSITIVE_INFINITY)
+  let seen = 0
+  let clipped = 0
+  for (const record of records) {
+    const { leading, trailing } = clipsFromWalk(record)
+    seen++
+    if (leading || trailing) {
+      clipped++
     }
-    expect(seen).toBeGreaterThan(0)
-    // not every fixture is clipped, but across the set some must be
-    clippedTotal += clipped
-  },
-)
+    expect({
+      leading: record.getLeadingClipLength(),
+      trailing: record.getTrailingClipLength(),
+    }).toEqual({ leading, trailing })
+  }
+  expect(seen).toBeGreaterThan(0)
+  // not every fixture is clipped, but across the set some must be
+  clippedTotal += clipped
+})
 
 test('the leading clip getter reports only the first operation', () => {
   // 5H4S… — the leading run is the 5H alone, not 9
@@ -601,4 +602,46 @@ test('a mid-read soft clip is not the first operation', () => {
   })
   expect(record.getCigarString()).toBe('4M4S12M')
   expect(record.getLeadingClipLength()).toBe(0)
+})
+
+test('the trailing clip getter reports only the last operation', () => {
+  // 5H4S10M4S5H — the trailing run is the 5H alone, not 9
+  const record = makeRecord({
+    flags: 0,
+    readLength: 18,
+    start: 0,
+    readFeatures: [
+      { code: 'H', data: 5, pos: 0, refPos: 0 },
+      { code: 'S', data: 'AAAA', pos: 0, refPos: 0 },
+      { code: 'S', data: 'TTTT', pos: 14, refPos: 10 },
+      { code: 'H', data: 5, pos: 18, refPos: 10 },
+    ],
+  })
+  expect(record.getCigarString()).toBe('5H4S10M4S5H')
+  expect(record.getTrailingClipLength()).toBe(5)
+})
+
+test('a mid-read soft clip is not the last operation either', () => {
+  const record = makeRecord({
+    flags: 0,
+    readLength: 20,
+    start: 0,
+    readFeatures: [{ code: 'S', data: 'AAAA', pos: 4, refPos: 4 }],
+  })
+  expect(record.getCigarString()).toBe('4M4S12M')
+  expect(record.getTrailingClipLength()).toBe(0)
+})
+
+test('adjacent trailing clips merge, as the CIGAR does', () => {
+  const record = makeRecord({
+    flags: 0,
+    readLength: 0,
+    start: 3,
+    readFeatures: [
+      { code: 'H', data: 5, pos: 0, refPos: 3 },
+      { code: 'H', data: 5, pos: 0, refPos: 3 },
+    ],
+  })
+  expect(record.getCigarString()).toBe('10H')
+  expect(record.getTrailingClipLength()).toBe(10)
 })

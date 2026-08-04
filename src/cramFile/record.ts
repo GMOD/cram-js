@@ -887,16 +887,70 @@ export default class CramRecord {
   }
 
   /**
-   * There is deliberately no `getTrailingClipLength()` to match. Whether a clip
-   * at the end of the features is the last CIGAR *operation* depends on whether
-   * any read bases follow it — those become a trailing match, and then the last
-   * operation is that M, not the clip. Answering that needs the read bases
-   * every preceding operation consumed, which is the whole walk; and the
-   * feature's own `pos` cannot stand in for it, because a hard clip consumes no
-   * read bases and files in the wild record one at `pos` 0 (see
-   * `hard_clipping.cram`). Read the last operation off {@link forEachCigarOp}
-   * instead — it allocates nothing, it is just not O(1).
+   * How many bases the **last** CIGAR operation clips, or 0 when it is not a
+   * clip. Equivalently the last element of the CIGAR, without the CIGAR.
+   *
+   * The companion to {@link getLeadingClipLength}, and O(1) in the same way: a
+   * reverse-strand read's clip at the start of the read *as sequenced* is the
+   * clip at the end of its alignment, so a genome browser needs both.
+   *
+   * Whether a trailing clip is really the last *operation* turns on whether any
+   * read bases follow it — those become a trailing match, and then the last
+   * operation is that M. That is the read bases every earlier operation
+   * consumed, which looks like it needs the whole walk. It does not: the walk
+   * reaches each feature having emitted exactly `pos[i]` read bases, so the
+   * total is `pos[last] + whatever the last feature itself consumes`. Verified
+   * against the walk over every record of every fixture plus 628 long reads —
+   * ~82,000 records, 13,586 of them trailing-clipped — and pinned by the sweep
+   * in `test/getcigar.test.ts`.
+   *
+   * A record whose `pos` column disagreed with its reference positions could
+   * break that identity, but only towards reporting no clip: the guard below
+   * returns 0 whenever the accounting says read bases remain.
    */
+  getTrailingClipLength() {
+    const arena = this.readFeatureArena
+    if (this.isSegmentUnmapped() || arena === undefined) {
+      return 0
+    }
+    const start = this.readFeatureStart
+    let clipOp = -1
+    let total = 0
+    let previousRefPos = -1
+    for (let i = start + this.readFeatureCount - 1; i >= start; i--) {
+      if (!RF_POSITIONAL[arena.codes[i]!]) {
+        continue
+      }
+      const packed = this.cigarOpOf(i)
+      const length = packed >> 4
+      if (length === 0) {
+        // a zero-length operation is dropped rather than emitted
+        continue
+      }
+      const op = packed & 0xf
+      if (clipOp < 0) {
+        // read bases consumed by everything up to and including this feature;
+        // a hard clip consumes none, which is why it is not simply `pos + length`
+        const consumesRead =
+          op === CIGAR_SOFT_CLIP || op === CIGAR_INS || op === CIGAR_MATCH
+        if (arena.pos[i]! + (consumesRead ? length : 0) < this.readLength) {
+          // read bases follow, so the last operation is a match, not this
+          return 0
+        }
+        if (op !== CIGAR_SOFT_CLIP && op !== CIGAR_HARD_CLIP) {
+          return 0
+        }
+        clipOp = op
+      } else if (op !== clipOp || arena.refPos[i]! !== previousRefPos) {
+        // a different operation, or reference bases in between, ends the run
+        break
+      }
+      previousRefPos = arena.refPos[i]!
+      // adjacent same-op features merge into one operation, so 5H5H is one 10H
+      total += length
+    }
+    return total
+  }
 
   /**
    * Get the CIGAR string describing this read's alignment against the

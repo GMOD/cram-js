@@ -275,16 +275,17 @@ read these columns without allocating, and how the slice cache is bounded.
   features. So this library hands out the walk rather than an array type it
   would have picked for you.
 
-- `getLeadingClipLength()` → `number` — how many bases the **first** CIGAR
-  operation clips, or 0 when it is not a clip. Reads only the features at the
-  start of the record, so it is O(1) where walking the CIGAR to look at its
-  first operation is O(operations) — and a long read has thousands. Reports that
-  one operation and no more, so a `5H4S…` read clips 5, not 9.
+- `getLeadingClipLength()` → `number` and `getTrailingClipLength()` → `number` —
+  how many bases the **first** and **last** CIGAR operations clip, or 0 when
+  they are not clips. Both read only the features at that end of the record, so
+  they are O(1) where walking the CIGAR to look at one of its operations is
+  O(operations), and a long read has thousands. Each reports that one operation
+  and no more, so a `5H4S…10M…4S5H` read clips 5 at each end, not 9.
 
-  There is deliberately no `getTrailingClipLength()`: whether a clip at the end
-  is the last _operation_ depends on whether any read bases follow it (they
-  would become a trailing `M`), which needs the whole walk. Read the last
-  operation off `forEachCigarOp` for that.
+  Between them these answer "how much of this read is clipped, as sequenced":
+  the leading clip for a forward-strand read and the trailing one for a
+  reverse-strand read, since a reverse-strand read is stored
+  reverse-complemented.
 
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
   `opts` is an optional `{ start, end }` 0-based half-open reference range.

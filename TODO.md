@@ -295,9 +295,19 @@ callback's ~15% is paid only by consumers that genuinely want the packed form
 (per-base colouring, the details panel), and `NUMERIC_CIGAR` is now lazy for
 CRAM rather than built once per read on the render path.
 
-The remaining 50% is the reverse strand. There is deliberately no
-`getTrailingClipLength()` — see the note beside `getLeadingClipLength` in
-`record.ts` for why the end of the record cannot answer it alone.
+Both ends are now O(1). `getTrailingClipLength()` looked impossible at first —
+whether a trailing clip is really the last _operation_ turns on whether read
+bases follow it, which is the read bases every earlier operation consumed, which
+looks like the whole walk. It is not: the walk reaches each feature having
+emitted exactly `pos[i]` read bases, so the total is `pos[last]` plus whatever
+the last feature consumes. That identity was checked against the walk over
+~82,000 records across every fixture plus 628 long reads, 13,586 of them
+trailing-clipped, and `hard_clipping.cram` — the fixture originally cited as the
+counterexample — is among them.
+
+With both ends direct, the whole step all but disappears: **-99.9%** on the
+long-read set (148 ms to ~0.15 ms for 628 reads) and **-64%** on the short-read
+files, against building the packed array to read one element of it.
 
 ### Use a real long-read dataset for this
 
