@@ -3,11 +3,11 @@ const Constants = {
   CRAM_FLAG_DETACHED: 1 << 1,
   CRAM_FLAG_MATE_DOWNSTREAM: 1 << 2,
   CRAM_FLAG_NO_SEQ: 1 << 3,
-  CRAM_FLAG_MASK: (1 << 4) - 1,
 
-  // mate read is reversed
+  // MF, the mate flags of a detached record — see CRAMv3 §8.5 (Mate flags)
+  //  the mate is mapped to the reverse strand
   CRAM_M_REVERSE: 1,
-  // mated read is unmapped
+  //  the mate is unmapped
   CRAM_M_UNMAP: 2,
 
   //  the read is paired in sequencing, no matter whether it is mapped in a pair
@@ -34,22 +34,6 @@ const Constants = {
   BAM_FDUP: 1024,
   //  supplementary alignment
   BAM_FSUPPLEMENTARY: 2048,
-
-  BAM_CMATCH: 0,
-  BAM_CINS: 1,
-  BAM_CDEL: 2,
-  BAM_CREF_SKIP: 3,
-  BAM_CSOFT_CLIP: 4,
-  BAM_CHARD_CLIP: 5,
-  BAM_CPAD: 6,
-  BAM_CEQUAL: 7,
-  BAM_CDIFF: 8,
-  BAM_CBACK: 9,
-
-  BAM_CIGAR_STR: 'MIDNSHP:XB',
-  BAM_CIGAR_SHIFT: 4,
-  BAM_CIGAR_MASK: 0xf,
-  BAM_CIGAR_TYPE: 0x3c1a7,
 }
 
 export default Constants

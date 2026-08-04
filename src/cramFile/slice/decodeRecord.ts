@@ -1,12 +1,7 @@
 import { CramMalformedError } from '../../errors.ts'
+import Constants from '../constants.ts'
 import { readQualityScores } from '../qualityColumn.ts'
-import {
-  BamFlagsDecoder,
-  CramFlagsDecoder,
-  MateFlagsDecoder,
-  type MateRecord,
-  type ReadFeature,
-} from '../record.ts'
+import { type MateRecord, type ReadFeature } from '../record.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursors } from '../codecs/_base.ts'
@@ -146,30 +141,24 @@ function parseTagData(tagType: string, buffer: Uint8Array) {
   throw new CramMalformedError(`Unrecognized tag type ${tagType}`)
 }
 
-// Read-feature schema: a charCode-indexed array of entries whose decodeInto()
-// reads the feature's payload straight into an arena slot and returns how far
-// that feature advances the reference position relative to the read. Built once
-// per slice, so the inner loop becomes a charCode lookup plus a monomorphic
-// call — and folding the reference delta into the return value replaces what
-// used to be a per-feature branch on the feature's kind.
-export interface RFEntry {
-  code: ReadFeature['code']
-  decodeInto: (arena: ReadFeatureArena, index: number) => number
-}
+// Read-feature schema: a charCode-indexed array of decoders that read the
+// feature's payload straight into an arena slot and return how far that feature
+// advances the reference position relative to the read. Built once per slice,
+// so the inner loop becomes a charCode lookup plus a monomorphic call — and
+// folding the reference delta into the return value replaces what used to be a
+// per-feature branch on the feature's kind.
+export type RFDecoder = (arena: ReadFeatureArena, index: number) => number
 
 export function buildRFSchema(
   bd: BoundDecoders,
   majorVersion: number,
-): (RFEntry | undefined)[] {
+): (RFDecoder | undefined)[] {
   const SC = majorVersion > 1 ? bd.SC : bd.IN
   // filled rather than left sparse: a holey array degrades every lookup in the
   // decode loop below
-  const arr: (RFEntry | undefined)[] = new Array(128).fill(undefined)
-  const set = (
-    code: ReadFeature['code'],
-    decodeInto: RFEntry['decodeInto'],
-  ) => {
-    arr[code.charCodeAt(0)] = { code, decodeInto }
+  const arr: (RFDecoder | undefined)[] = new Array(128).fill(undefined)
+  const set = (code: ReadFeature['code'], decodeInto: RFDecoder) => {
+    arr[code.charCodeAt(0)] = decodeInto
   }
   // I, S, b, q: a byte-array payload whose length is what `num` records
   const setBytes = (a: ReadFeatureArena, i: number, bytes: Uint8Array) => {
@@ -234,7 +223,7 @@ function decodeReadFeatures(
   recordStart: number,
   readFeatureCount: number,
   bd: BoundDecoders,
-  schema: (RFEntry | undefined)[],
+  schema: (RFDecoder | undefined)[],
   arena: ReadFeatureArena,
 ): [number, number] {
   let readPos = 0
@@ -253,9 +242,9 @@ function decodeReadFeatures(
   for (let i = start; i < start + readFeatureCount; i++) {
     const codeNum = decodeFC()
     readPos += decodeFP()
-    const entry = schema[codeNum]
+    const decodeInto = schema[codeNum]
 
-    if (!entry) {
+    if (!decodeInto) {
       throw new CramMalformedError(
         `invalid read feature code "${String.fromCharCode(codeNum)}"`,
       )
@@ -264,7 +253,7 @@ function decodeReadFeatures(
     codes[i] = codeNum
     pos[i] = readPos - 1
     refPos[i] = readPos + base + refDelta
-    refDelta += entry.decodeInto(arena, i)
+    refDelta += decodeInto(arena, i)
   }
   arena.length = start + readFeatureCount
   return [start, refDelta]
@@ -307,7 +296,7 @@ export interface TagDescriptor {
  */
 export interface SliceDecodeContext {
   bd: BoundDecoders
-  rfSchema: (RFEntry | undefined)[]
+  rfSchema: (RFDecoder | undefined)[]
   /** columnar read-feature storage shared by every record in the slice */
   arena: ReadFeatureArena
   /** columnar quality-score storage shared by every record in the slice */
@@ -374,7 +363,7 @@ export default function decodeRecord(
   let templateSize: number | undefined
   let mateRecordNumber: number | undefined
   // mate record
-  if (CramFlagsDecoder.isDetached(cramFlags)) {
+  if (cramFlags & Constants.CRAM_FLAG_DETACHED) {
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
     // matter for javascript
     const mateFlags = bd.MF()
@@ -400,14 +389,14 @@ export default function decodeRecord(
     templateSize = bd.TS()
 
     // set mate unmapped if needed
-    if (MateFlagsDecoder.isUnmapped(mateFlags)) {
-      flags = BamFlagsDecoder.setMateUnmapped(flags)
+    if (mateFlags & Constants.CRAM_M_UNMAP) {
+      flags |= Constants.BAM_FMUNMAP
     }
     // set mate reversed if needed
-    if (MateFlagsDecoder.isOnNegativeStrand(mateFlags)) {
-      flags = BamFlagsDecoder.setMateReverseComplemented(flags)
+    if (mateFlags & Constants.CRAM_M_REVERSE) {
+      flags |= Constants.BAM_FMREVERSE
     }
-  } else if (CramFlagsDecoder.isWithMateDownstream(cramFlags)) {
+  } else if (cramFlags & Constants.CRAM_FLAG_MATE_DOWNSTREAM) {
     mateRecordNumber = bd.NF() + recordNumber + 1
   }
 
@@ -449,7 +438,7 @@ export default function decodeRecord(
   // record that carries none
   let qualityStart = -1
   let readBases = undefined
-  if (!BamFlagsDecoder.isSegmentUnmapped(flags)) {
+  if (!(flags & Constants.BAM_FUNMAP)) {
     // reading read features
     const encodedFeatureCount = bd.FN()
     lengthOnRef = readLength
@@ -476,16 +465,16 @@ export default function decodeRecord(
     // mapping quality
     mappingQuality = bd.MQ()
 
-    if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
+    if (cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES) {
       qualityStart = readQualityScores(qualityColumn, readLength, bd.QS)
     }
-  } else if (CramFlagsDecoder.isDecodeSequenceAsStar(cramFlags)) {
+  } else if (cramFlags & Constants.CRAM_FLAG_NO_SEQ) {
     // a '*' record carries neither bases nor scores; CramRecord.qualityScores
     // reads that back off the flags rather than storing a null
     readBases = null
   } else {
     readBases = decodeReadBases(readLength, decodeBulkBases, bd.BA)
-    if (CramFlagsDecoder.isPreservingQualityScores(cramFlags)) {
+    if (cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES) {
       qualityStart = readQualityScores(qualityColumn, readLength, bd.QS)
     }
   }

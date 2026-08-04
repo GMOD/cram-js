@@ -87,6 +87,11 @@ function parseReferenceInfo(
 }
 
 export type CramFileArgs = CramFileSource & {
+  /**
+   * Verify each slice's recorded reference MD5 against the sequence it is being
+   * decoded with. Default false — the check needs the slice's whole reference
+   * span, which can be many megabases the query would not otherwise fetch.
+   */
   checkSequenceMD5?: boolean
   cacheSize?: number
   fetchReferenceSequence?: SeqFetch
@@ -106,12 +111,11 @@ export default class CramFile {
   public validateChecksums: boolean
   public fetchReferenceSequenceCallback?: SeqFetch
   public options: {
-    checkSequenceMD5?: boolean
+    checkSequenceMD5: boolean
     cacheSize: number
   }
   public featureCache: SliceRecordCache
   private header: string | undefined
-  private _sectionParsers?: ReturnType<typeof getSectionParsers>
   private _definitionResult?: ReturnType<CramFile['_fetchDefinition']>
   private _samHeaderResult?: ReturnType<CramFile['_fetchSamHeader']>
   private _referenceInfo?: ReferenceInfo[]
@@ -121,7 +125,10 @@ export default class CramFile {
     this.validateChecksums = args.validateChecksums ?? false
     this.fetchReferenceSequenceCallback = args.fetchReferenceSequence
     this.options = {
-      checkSequenceMD5: args.checkSequenceMD5,
+      // off unless asked for: the check needs the whole span a slice was
+      // written against, which for a big slice is many megabases the query
+      // itself would never have fetched
+      checkSequenceMD5: args.checkSequenceMD5 ?? false,
       cacheSize: args.cacheSize ?? 20000,
     }
 
@@ -138,12 +145,12 @@ export default class CramFile {
     return this.file.read(length, position)
   }
 
+  // getSectionParsers is itself cached per major version — the parsers are pure
+  // functions of (buffer, offset), so one set is shared by every file — which
+  // is why there is no memo of its result here
   private async _getSectionParsers() {
-    if (!this._sectionParsers) {
-      const { majorVersion } = await this.getDefinition()
-      this._sectionParsers = getSectionParsers(majorVersion)
-    }
-    return this._sectionParsers
+    const { majorVersion } = await this.getDefinition()
+    return getSectionParsers(majorVersion)
   }
 
   async getDefinition() {
@@ -322,37 +329,6 @@ export default class CramFile {
 
   getContainerAtPosition(position: number) {
     return new CramContainer(this, position)
-  }
-
-  async readBlockHeader(
-    position: number,
-  ): Promise<BlockHeader & { _endPosition: number; _size: number }> {
-    const { cramBlockHeader } = await this._getSectionParsers()
-
-    const buffer = await this.file.read(cramBlockHeader.maxLength, position)
-    return parseItem(buffer, cramBlockHeader.parser, 0, position)
-  }
-
-  async _parseSection<T>(
-    section: {
-      maxLength: number
-      parser: (
-        buffer: Uint8Array,
-        offset: number,
-      ) => { offset: number; value: T }
-    },
-    position: number,
-    size = section.maxLength,
-    preReadBuffer?: Uint8Array,
-  ): Promise<T & { _endPosition: number; _size: number }> {
-    const buffer = preReadBuffer ?? (await this.file.read(size, position))
-    const data = parseItem(buffer, section.parser, 0, position)
-    if (data._size !== size) {
-      throw new CramMalformedError(
-        `section read error: requested size ${size} does not equal parsed size ${data._size}`,
-      )
-    }
-    return data
   }
 
   async _uncompress(

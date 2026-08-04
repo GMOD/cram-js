@@ -58,10 +58,11 @@ export default class IndexedCramFile {
    * so the limit is applied by evicting least-recently-used slices until the
    * total record count is back under it.
    *
-   * @param {boolean} [args.checkSequenceMD5] - default true. if false,
-   * disables verifying the MD5 checksum of the reference sequence underlying a
-   * slice. In some applications, this check can cause an inconvenient amount
-   * (many megabases) of sequences to be fetched.
+   * @param {boolean} [args.checkSequenceMD5] - default false. if true, verifies
+   * the MD5 checksum of the reference sequence underlying a slice against the
+   * one the slice recorded. Off by default because the check needs the slice's
+   * whole reference span, which in some applications is an inconvenient amount
+   * (many megabases) of sequence to fetch.
    */
   constructor(
     args: {

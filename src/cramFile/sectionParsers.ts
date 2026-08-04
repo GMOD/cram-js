@@ -438,13 +438,6 @@ function cramMappedSliceHeader(majorVersion: number) {
   }
 }
 
-function cramEncoding() {
-  return {
-    parser: (buffer: Uint8Array, offset: number) =>
-      cramEncodingSub(buffer, offset),
-  }
-}
-
 function cramEncodingSub(
   buffer: Uint8Array,
   offset: number,
@@ -809,7 +802,6 @@ function buildSectionParsers(majorVersion: number) {
     cramDataSeriesEncodingMap: cramDataSeriesEncodingMap(),
     cramTagEncodingMap: cramTagEncodingMap(),
     cramCompressionHeader: cramCompressionHeader(),
-    cramEncoding: cramEncoding(),
     cramUnmappedSliceHeader: cramUnmappedSliceHeader(majorVersion),
     cramMappedSliceHeader: cramMappedSliceHeader(majorVersion),
     cramContainerHeader1: cramContainerHeader1(majorVersion),
