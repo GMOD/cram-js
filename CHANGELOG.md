@@ -1,3 +1,26 @@
+## [10.3.0](https://github.com/GMOD/cram-js/compare/v10.2.0...v10.3.0) (2026-08-04)
+
+### Documentation
+
+- Note what moved under CramRecord in 10.2.0
+- Write up what was measured, including the two traps that misled it
+
+### Features
+
+- Add forEachCigarOp and getLeadingClipLength, and halve long-read bases
+
+### Performance Improvements
+
+- Apply the reference to a slice's records once, not once per query
+
+### Refactoring
+
+- Drop dead code, and say what checkSequenceMD5 actually defaults to
+
+### Tests
+
+- Cover the new cigar module in the packed-artifact smoke test
+
 ## [10.2.0](https://github.com/GMOD/cram-js/compare/v10.1.0...v10.2.0) (2026-08-01)
 
 ### Chores
