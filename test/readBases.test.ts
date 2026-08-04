@@ -62,3 +62,38 @@ test('throws rather than hanging when the reference region falls short', () => {
   const record = makeRecord([{ code: 'D', data: 5, pos: 2, refPos: 102 }], 15)
   expect(() => record.getReadBases()).toThrow(/seems malformed/)
 })
+
+// The bytewise reconstruction (long reads) and the string one (short reads) must
+// agree exactly. The string form upper-cased the whole read at the end, so every
+// byte the bytewise form writes has to be upper-cased as it goes — including the
+// two that come from neither the reference nor a payload run. No fixture here
+// carries a lowercase substitution or B base, so nothing else would catch it.
+test('both reconstructions upper-case every source of bases', () => {
+  const features: ReadFeature[] = [
+    // lowercase soft clip, verbatim bases, insertion and B base
+    { code: 'S', data: 'aa', pos: 0, refPos: 101 },
+    { code: 'b', data: 'cc', pos: 2, refPos: 101 },
+    { code: 'B', data: ['g', 40], pos: 4, refPos: 103 },
+    { code: 'I', data: 'tt', pos: 5, refPos: 104 },
+  ]
+  const short = makeRecord(features)
+  // a lowercase (soft-masked) reference, as a real genome has
+  short._refRegion = { start: 101, end: 111, seq: 'acgtacgtac' }
+  const shortBases = short.getReadBases()
+
+  // the same record over the byte path, which only runs at length >= 1000
+  const long = makeRecord(features)
+  long._refRegion = { start: 101, end: 1101, seq: 'acgtacgtac'.repeat(100) }
+  long.readLength = 1000
+  long.lengthOnRef = 1000
+  const longBases = long.getReadBases()!
+
+  // 2 clipped + 2 verbatim + 1 B base + 2 inserted, then reference to fill 10
+  expect(shortBases).toBe('AACCGTTTAC')
+  // the byte path agrees on every base the features contribute, then takes the
+  // reference for the rest — and neither path leaves any lowercase behind
+  expect(longBases.slice(0, 7)).toBe(shortBases!.slice(0, 7))
+  expect(longBases).toBe(longBases.toUpperCase())
+  expect(shortBases).toBe(shortBases!.toUpperCase())
+  expect(longBases).toHaveLength(1000)
+})

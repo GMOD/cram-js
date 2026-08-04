@@ -1,4 +1,17 @@
 export { CramRecord } from './cramFile/record.ts'
+export {
+  CIGAR_DEL,
+  CIGAR_DIFF,
+  CIGAR_EQUAL,
+  CIGAR_HARD_CLIP,
+  CIGAR_INS,
+  CIGAR_MATCH,
+  CIGAR_OP_CHARS,
+  CIGAR_PAD,
+  CIGAR_REF_SKIP,
+  CIGAR_SOFT_CLIP,
+} from './cramFile/cigar.ts'
+export type { CigarCallback } from './cramFile/cigar.ts'
 export type {
   Mismatch,
   MismatchCallback,

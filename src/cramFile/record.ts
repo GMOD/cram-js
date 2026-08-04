@@ -1,3 +1,13 @@
+import {
+  CIGAR_DEL,
+  CIGAR_HARD_CLIP,
+  CIGAR_INS,
+  CIGAR_MATCH,
+  CIGAR_OP_CHARS,
+  CIGAR_PAD,
+  CIGAR_REF_SKIP,
+  CIGAR_SOFT_CLIP,
+} from './cigar.ts'
 import Constants from './constants.ts'
 import { CramMalformedError } from '../errors.ts'
 import { forEachMismatch } from './mismatches.ts'
@@ -14,7 +24,9 @@ import {
   RF_SOFT_CLIP,
   RF_SUBST,
 } from './readFeatureArena.ts'
+import { decodeUtf8 } from './util.ts'
 
+import type { CigarCallback } from './cigar.ts'
 import type CramContainerCompressionScheme from './container/compressionScheme.ts'
 import type {
   Mismatch,
@@ -103,8 +115,165 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
       .toUpperCase()
   }
 
-  // Walk read features against the reference to reconstruct the read sequence.
-  // See CRAMv3 §10.2 (Read features): https://samtools.github.io/hts-specs/CRAMv3.pdf
+  // long reads go bytewise; the short-read walk stays inline below so that the
+  // common case pays one comparison and no extra call
+  if (cramRecord.readLength >= BYTEWISE_READ_BASES_MIN) {
+    return decodeReadSequenceBytes(
+      cramRecord,
+      arena,
+      refRegion,
+      regionSeqOffset,
+    )
+  }
+  return decodeReadSequenceString(cramRecord, arena, refRegion, regionSeqOffset)
+}
+
+/**
+ * Above this read length, reconstruct the read into a byte array; below it,
+ * concatenate a string.
+ *
+ * The byte form avoids a `TextDecoder` call per insertion and soft clip, a
+ * `String.fromCharCode` per substitution, a substring per reference chunk, and
+ * the flatten of the whole rope that `toUpperCase` used to force — worth **-56%**
+ * on 628 49kb reads (1098 ms -> 480 ms). But it puts a typed-array allocation
+ * and one `TextDecoder` call on every record, and on a 100bp short read that
+ * fixed cost swamps the work: **+141%** on SRR396637 and **+253%** on
+ * SRR396636, where a substring plus a native `toUpperCase` is simply cheaper.
+ * Same trade as the read-feature arena and the typed CIGAR — see TODO.md.
+ *
+ * Both forms produce byte-identical output on every record of all three
+ * datasets. The exact crossover is unmeasured: what is measured is 100bp
+ * (string wins hard) and 49kb (bytes win hard), and 1000 separates every real
+ * short-read platform from every real long-read one.
+ */
+const BYTEWISE_READ_BASES_MIN = 1000
+
+/** the byte-array reconstruction — see {@link BYTEWISE_READ_BASES_MIN} */
+function decodeReadSequenceBytes(
+  cramRecord: CramRecord,
+  arena: ReadFeatureArena,
+  refRegion: RefRegion,
+  regionSeqOffset: number,
+) {
+  const { codes, pos, num, subCodes } = arena
+  const { payloadBytes, payloadOffsets } = arena
+  const refSeq = refRegion.seq
+  const readLength = cramRecord.readLength
+  const featureStart = cramRecord.readFeatureStart
+  const featureCount = cramRecord.readFeatureCount
+
+  // readLength is the answer's length for any well-formed record; `grow` covers
+  // the malformed ones, which the string form let run past it rather than
+  // truncating
+  let out = new Uint8Array(readLength)
+  let outPos = 0
+  let regionPos = regionSeqOffset
+  const grow = (needed: number) => {
+    if (needed > out.length) {
+      const bigger = new Uint8Array(Math.max(needed, out.length * 2))
+      bigger.set(out.subarray(0, outPos))
+      out = bigger
+    }
+  }
+  const malformed = () => {
+    throw new CramMalformedError(
+      `could not decode read bases for ${cramRecord.sequenceId}:${cramRecord.start}: stuck at ${outPos} of ${readLength} bases. this file seems malformed`,
+    )
+  }
+  /** reference bases are the bulk of a read, and may be soft-masked lowercase */
+  const copyReference = (count: number) => {
+    if (regionPos < 0 || regionPos + count > refSeq.length) {
+      // read features inconsistent with lengthOnRef leave the region too short
+      // to fill the read; the string form emitted an empty chunk and spun
+      malformed()
+    }
+    grow(outPos + count)
+    for (let j = 0; j < count; j++) {
+      const c = refSeq.charCodeAt(regionPos + j)
+      out[outPos + j] = c >= 97 && c <= 122 ? c - 32 : c
+    }
+    outPos += count
+    regionPos += count
+  }
+
+  for (let f = 0; f < featureCount && outPos < readLength; f++) {
+    const i = featureStart + f
+    const code = codes[i]!
+    // q/Q describe quality, not geometry: neither emits bases nor moves along
+    // the reference
+    if (!RF_POSITIONAL[code]) {
+      continue
+    }
+    const featurePos = pos[i]!
+    if (featurePos > outPos) {
+      // put down a chunk of reference up to this read feature
+      copyReference(featurePos - outPos)
+    } else if (featurePos < outPos) {
+      // an FP delta of 0 puts two base-consuming features at one read position;
+      // the string form emitted an empty chunk here and never consumed either
+      malformed()
+    }
+
+    if (code === RF_SUBST) {
+      // an unresolved substitution reads as N, the same fallback the
+      // substitution matrix uses for a reference base it does not know
+      grow(outPos + 1)
+      // upper-cased like every other byte written here: the substitution matrix
+      // only ever emits upper case, but the string form this replaced
+      // upper-cased the whole read at the end, so anything else would be a
+      // difference between the two paths waiting on the right file
+      const sub = subCodes[i] || 0x4e /* N */
+      out[outPos++] = sub >= 97 && sub <= 122 ? sub - 32 : sub
+      regionPos += 1
+    } else if (code === RF_BASE_QUAL) {
+      grow(outPos + 1)
+      const base = payloadBytes[payloadOffsets[i]!]!
+      out[outPos++] = base >= 97 && base <= 122 ? base - 32 : base
+      regionPos += 1
+    } else if (
+      code === RF_BASES ||
+      code === RF_INSERTION ||
+      code === RF_INSERT_BASE ||
+      code === RF_SOFT_CLIP
+    ) {
+      // the payload is already bytes in the arena, so no decode is needed here
+      const n = num[i]!
+      const off = payloadOffsets[i]!
+      grow(outPos + n)
+      for (let j = 0; j < n; j++) {
+        const c = payloadBytes[off + j]!
+        out[outPos + j] = c >= 97 && c <= 122 ? c - 32 : c
+      }
+      outPos += n
+      // verbatim bases consume reference; inserted and clipped bases do not
+      if (code === RF_BASES) {
+        regionPos += n
+      }
+    } else if (code === RF_DELETION || code === RF_REF_SKIP) {
+      regionPos += num[i]!
+    }
+    // H (hard clip), P (padding): do nothing
+  }
+
+  // any read bases past the last feature come from the reference
+  if (outPos < readLength) {
+    copyReference(readLength - outPos)
+  }
+
+  return decodeUtf8(outPos === out.length ? out : out.subarray(0, outPos))
+}
+
+/**
+ * The string reconstruction, for short reads — see
+ * {@link BYTEWISE_READ_BASES_MIN}. Walks read features against the reference,
+ * per CRAMv3 §10.2: https://samtools.github.io/hts-specs/CRAMv3.pdf
+ */
+function decodeReadSequenceString(
+  cramRecord: CramRecord,
+  arena: ReadFeatureArena,
+  refRegion: RefRegion,
+  regionSeqOffset: number,
+) {
   const { codes, pos, num, subCodes } = arena
   const featureStart = cramRecord.readFeatureStart
   const featureCount = cramRecord.readFeatureCount
@@ -223,68 +392,6 @@ export interface MateRecord {
 
   uniqueId?: number
 }
-
-export const BamFlags = [
-  [0x1, 'Paired'],
-  [0x2, 'ProperlyPaired'],
-  [0x4, 'SegmentUnmapped'],
-  [0x8, 'MateUnmapped'],
-  [0x10, 'ReverseComplemented'],
-  //  the mate is mapped to the reverse strand
-  [0x20, 'MateReverseComplemented'],
-  //  this is read1
-  [0x40, 'Read1'],
-  //  this is read2
-  [0x80, 'Read2'],
-  //  not primary alignment
-  [0x100, 'Secondary'],
-  //  QC failure
-  [0x200, 'FailedQc'],
-  //  optical or PCR duplicate
-  [0x400, 'Duplicate'],
-  //  supplementary alignment
-  [0x800, 'Supplementary'],
-] as const
-
-export const CramFlags = [
-  [0x1, 'PreservingQualityScores'],
-  [0x2, 'Detached'],
-  [0x4, 'WithMateDownstream'],
-  [0x8, 'DecodeSequenceAsStar'],
-] as const
-
-export const MateFlags = [
-  [0x1, 'OnNegativeStrand'],
-  [0x2, 'Unmapped'],
-] as const
-
-type FlagsDecoder<Type> = {
-  [Property in Type as `is${Capitalize<string & Property>}`]: (
-    flags: number,
-  ) => boolean
-}
-
-type FlagsEncoder<Type> = {
-  [Property in Type as `set${Capitalize<string & Property>}`]: (
-    flags: number,
-  ) => number
-}
-
-function makeFlagsHelper<T>(
-  x: readonly (readonly [number, T])[],
-): FlagsDecoder<T> & FlagsEncoder<T> {
-  const r: Record<string, (flags: number) => boolean | number> = {}
-  for (const [code, name] of x) {
-    r[`is${name}`] = (flags: number) => !!(flags & code)
-    r[`set${name}`] = (flags: number) => flags | code
-  }
-
-  return r as unknown as FlagsDecoder<T> & FlagsEncoder<T>
-}
-
-export const BamFlagsDecoder = makeFlagsHelper(BamFlags)
-export const CramFlagsDecoder = makeFlagsHelper(CramFlags)
-export const MateFlagsDecoder = makeFlagsHelper(MateFlags)
 
 /**
  * Class of each CRAM record returned by this API.
@@ -550,35 +657,49 @@ export default class CramRecord {
   }
 
   /**
-   * Get the CIGAR string describing this read's alignment against the
-   * reference, reconstructed from the read features. Substitutions and
-   * verbatim bases are reported as alignment matches (M), following the plain
-   * CIGAR convention where M covers both matches and mismatches. Unmapped
-   * reads return '*'.
+   * Walk this read's alignment against the reference one CIGAR operation at a
+   * time, without building a CIGAR of any kind. `callback` is called in order
+   * with the op as one of the `CIGAR_*` codes and how many bases it covers.
+   *
+   * This is the primitive the CIGAR is reconstructed by, and the level to reach
+   * for whenever the answer is a measurement rather than a string — a clip
+   * length, a reference span, an op histogram. {@link getCigarString} is this
+   * walk plus a string; a consumer that wants the ops packed as BAM stores them
+   * can build `(length << 4) | op` from it and choose its own array type.
+   *
+   * Unlike `@gmod/bam`, which hands out a zero-copy view of the packed CIGAR
+   * the file already contains, CRAM stores no CIGAR at all — it is always
+   * reconstructed from the read features, so any array form would be an
+   * allocation this library invented and imposed. Hence the callback, matching
+   * {@link forEachMismatch}.
+   *
+   * Substitutions and verbatim bases are reported as alignment matches (M),
+   * following the plain CIGAR convention where M covers both matches and
+   * mismatches. Adjacent runs of the same op are merged and zero-length ops are
+   * dropped, so a record with two hard clips and nothing between them emits one
+   * 10H rather than 5H5H. An unmapped read emits nothing.
    *
    * See CRAMv3 §10.2 (Read features):
    * https://samtools.github.io/hts-specs/CRAMv3.pdf
-   *
-   * @returns {string} the CIGAR string, e.g. "50M2I48M"
    */
-  getCigarString(): string {
+  forEachCigarOp(callback: CigarCallback) {
     if (this.isSegmentUnmapped()) {
-      return '*'
+      return
     }
 
-    // build up (length, op) pairs, merging adjacent runs of the same op so
-    // e.g. consecutive single-base insertions collapse into one I operation
-    const ops: [number, string][] = []
-    const push = (len: number, op: string) => {
-      if (len > 0) {
-        const last = ops.at(-1)
-        if (last?.[1] === op) {
-          last[0] += len
-        } else {
-          ops.push([len, op])
-        }
-      }
-    }
+    // One pending (op, length) run, held in locals. Every emit point below
+    // either extends it or flushes it and starts a new one, which is what
+    // merges adjacent same-op features and drops the zero-length ops htslib's
+    // xx#minimal fixtures carry — and it is why the callback fires once per
+    // *run* rather than once per read feature.
+    //
+    // The coalescing is written out at each of the three emit points rather
+    // than factored into a `push(len, op)` closure. That closure has to capture
+    // and mutate `op`/`oplen`, so V8 allocates a context for it on every call —
+    // measured at +40% on short-read files, where a record averages 1.3
+    // operations and so is dominated by per-call cost, and +10% on ONT.
+    let op = CIGAR_MATCH
+    let oplen = 0
 
     let readConsumed = 0
     let refPos = this.start
@@ -593,47 +714,206 @@ export default class CramRecord {
         if (RF_POSITIONAL[code]) {
           // reference bases between the last position and this feature are matches
           const gap = arena.refPos[i]! - refPos
-          push(gap, 'M')
-          readConsumed += gap
+          if (gap > 0) {
+            if (op === CIGAR_MATCH) {
+              oplen += gap
+            } else {
+              if (oplen > 0) {
+                callback(op, oplen)
+              }
+              op = CIGAR_MATCH
+              oplen = gap
+            }
+            readConsumed += gap
+          }
           refPos = arena.refPos[i]!
 
-          // `num` is the data value for D/N/P/H and the payload length for
-          // b/I/S/i, so both kinds read the same way here
+          // Reduce the feature to the one operation it contributes, then emit
+          // it through the single coalescing block below. `num` is the data
+          // value for D/N/P/H and the payload length for b/I/S/i, so both kinds
+          // read their length from the same column.
           const n = num[i]!
+          let emitOp = CIGAR_MATCH
+          let emitLen = 0
           if (code === RF_SUBST || code === RF_BASE_QUAL) {
             // single-base (substitution or base+quality), aligned as a match
-            push(1, 'M')
+            emitLen = 1
             readConsumed += 1
             refPos += 1
           } else if (code === RF_BASES) {
             // verbatim stretch of bases, aligned as matches
-            push(n, 'M')
+            emitLen = n
             readConsumed += n
             refPos += n
           } else if (code === RF_DELETION || code === RF_REF_SKIP) {
-            push(n, code === RF_DELETION ? 'D' : 'N')
+            emitOp = code === RF_DELETION ? CIGAR_DEL : CIGAR_REF_SKIP
+            emitLen = n
             refPos += n
           } else if (code === RF_INSERTION || code === RF_INSERT_BASE) {
-            push(n, 'I')
+            emitOp = CIGAR_INS
+            emitLen = n
             readConsumed += n
           } else if (code === RF_SOFT_CLIP) {
-            push(n, 'S')
+            emitOp = CIGAR_SOFT_CLIP
+            emitLen = n
             readConsumed += n
           } else if (code === RF_PADDING || code === RF_HARD_CLIP) {
-            push(n, code === RF_PADDING ? 'P' : 'H')
+            emitOp = code === RF_PADDING ? CIGAR_PAD : CIGAR_HARD_CLIP
+            emitLen = n
+          }
+
+          if (emitLen > 0) {
+            if (emitOp === op) {
+              oplen += emitLen
+            } else {
+              if (oplen > 0) {
+                callback(op, oplen)
+              }
+              op = emitOp
+              oplen = emitLen
+            }
           }
         }
       }
     }
 
     // any read bases past the last feature are trailing matches
-    push(this.readLength - readConsumed, 'M')
+    const trailing = this.readLength - readConsumed
+    if (trailing > 0) {
+      if (op === CIGAR_MATCH) {
+        oplen += trailing
+      } else {
+        if (oplen > 0) {
+          callback(op, oplen)
+        }
+        op = CIGAR_MATCH
+        oplen = trailing
+      }
+    }
 
-    // a mapped record can still have no operations at all — htslib's xx#minimal
-    // carries five with a zero read length whose one feature is a zero-length
-    // op — and '*' is how SAM spells an absent CIGAR, which is what samtools
-    // prints for them. Returning '' there would be invalid SAM
-    return ops.length ? ops.map(([len, op]) => `${len}${op}`).join('') : '*'
+    // flush the final run
+    if (oplen > 0) {
+      callback(op, oplen)
+    }
+  }
+
+  /**
+   * The op and length a read feature contributes, packed as
+   * `(length << 4) | op`, or 0 for one that contributes nothing. The single
+   * place the feature-code-to-CIGAR-op mapping is written down for the O(1)
+   * clip getters; {@link forEachCigarOp} inlines the same mapping because it
+   * also has to track reference and read position as it goes.
+   */
+  private cigarOpOf(index: number) {
+    const arena = this.readFeatureArena!
+    const code = arena.codes[index]!
+    const n = arena.num[index]!
+    if (code === RF_SUBST || code === RF_BASE_QUAL) {
+      return (1 << 4) | CIGAR_MATCH
+    } else if (code === RF_BASES) {
+      return (n << 4) | CIGAR_MATCH
+    } else if (code === RF_DELETION) {
+      return (n << 4) | CIGAR_DEL
+    } else if (code === RF_REF_SKIP) {
+      return (n << 4) | CIGAR_REF_SKIP
+    } else if (code === RF_INSERTION || code === RF_INSERT_BASE) {
+      return (n << 4) | CIGAR_INS
+    } else if (code === RF_SOFT_CLIP) {
+      return (n << 4) | CIGAR_SOFT_CLIP
+    } else if (code === RF_PADDING) {
+      return (n << 4) | CIGAR_PAD
+    } else if (code === RF_HARD_CLIP) {
+      return (n << 4) | CIGAR_HARD_CLIP
+    }
+    return 0
+  }
+
+  /**
+   * How many bases the **first** CIGAR operation clips, or 0 when it is not a
+   * clip. Equivalently `getNumericCigar()[0]`, without the CIGAR.
+   *
+   * Reads only the features at the start of the record — a clipped read has its
+   * clip in the first feature or two — so this is O(1) where walking the CIGAR
+   * to look at its first operation is O(operations), and a long read has
+   * thousands. Note it reports that one operation and no more: a read whose
+   * CIGAR is `5H4S…` clips 5 here, not 9, exactly as reading `[0]` would.
+   *
+   * See {@link clipLengthAtStartOfRead} in a genome browser for what this is
+   * for: placing a read's clipped bases needs this one number and nothing else
+   * the CIGAR carries.
+   */
+  getLeadingClipLength() {
+    const arena = this.readFeatureArena
+    if (this.isSegmentUnmapped() || arena === undefined) {
+      return 0
+    }
+    const end = this.readFeatureStart + this.readFeatureCount
+    let refPos = this.start
+    let clipOp = -1
+    let total = 0
+    for (let i = this.readFeatureStart; i < end; i++) {
+      if (!RF_POSITIONAL[arena.codes[i]!]) {
+        continue
+      }
+      // reference bases before this feature are a leading match, so whatever
+      // follows can no longer be the first operation
+      if (arena.refPos[i]! > refPos) {
+        break
+      }
+      const packed = this.cigarOpOf(i)
+      const length = packed >> 4
+      if (length === 0) {
+        // a zero-length operation is dropped rather than emitted, so it neither
+        // starts nor ends the leading run
+        continue
+      }
+      const op = packed & 0xf
+      if (clipOp < 0) {
+        if (op !== CIGAR_SOFT_CLIP && op !== CIGAR_HARD_CLIP) {
+          return 0
+        }
+        clipOp = op
+      } else if (op !== clipOp) {
+        // a different operation ends the first run
+        break
+      }
+      // adjacent same-op features merge into one operation, so 5H5H is one 10H
+      total += length
+      if (op === CIGAR_DEL || op === CIGAR_REF_SKIP) {
+        refPos += length
+      }
+    }
+    return total
+  }
+
+  /**
+   * There is deliberately no `getTrailingClipLength()` to match. Whether a clip
+   * at the end of the features is the last CIGAR *operation* depends on whether
+   * any read bases follow it — those become a trailing match, and then the last
+   * operation is that M, not the clip. Answering that needs the read bases
+   * every preceding operation consumed, which is the whole walk; and the
+   * feature's own `pos` cannot stand in for it, because a hard clip consumes no
+   * read bases and files in the wild record one at `pos` 0 (see
+   * `hard_clipping.cram`). Read the last operation off {@link forEachCigarOp}
+   * instead — it allocates nothing, it is just not O(1).
+   */
+
+  /**
+   * Get the CIGAR string describing this read's alignment against the
+   * reference, e.g. `"50M2I48M"`. This is {@link forEachCigarOp} plus a string,
+   * so use that instead on any path that does not literally need the text.
+   *
+   * A mapped record can still have no operations at all — htslib's xx#minimal
+   * carries five with a zero read length whose one feature is a zero-length op
+   * — and both those and unmapped reads render as `'*'`, which is how SAM
+   * spells an absent CIGAR and what samtools prints for them.
+   */
+  getCigarString(): string {
+    let cigar = ''
+    this.forEachCigarOp((op, length) => {
+      cigar += length + CIGAR_OP_CHARS[op]!
+    })
+    return cigar || '*'
   }
 
   /**

@@ -4,7 +4,17 @@ import { expect, test } from 'vitest'
 
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord from '../src/cramFile/record.ts'
-import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import {
+  CIGAR_DEL,
+  CIGAR_HARD_CLIP,
+  CIGAR_INS,
+  CIGAR_MATCH,
+  CIGAR_OP_CHARS,
+  CIGAR_REF_SKIP,
+  CIGAR_SOFT_CLIP,
+  CraiIndex,
+  IndexedCramFile,
+} from '../src/index.ts'
 import { testDataFile } from './lib/util.ts'
 
 import type { ReadFeature } from '../src/cramFile/record.ts'
@@ -299,4 +309,296 @@ test('unmapped read returns *', () => {
       start: 0,
     }).getCigarString(),
   ).toBe('*')
+})
+
+// 'b' is a stretch of verbatim bases that aligns as matches, one M column per
+// base — not an insertion, and not something whose `data` length can be ignored
+test("'b' verbatim bases align as matches", () => {
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 10,
+      start: 0,
+      readFeatures: [
+        { code: 'b', data: 'ACGT', pos: 0, refPos: 0 },
+        { code: 'D', data: 2, pos: 4, refPos: 4 },
+      ],
+    }).getCigarString(),
+  ).toBe('4M2D6M')
+})
+
+// insertions consuming every remaining read base leave no trailing match, and
+// the run still has to be emitted — a walk that flushes its pending insertion
+// only when there are trailing bases left drops them entirely
+test('trailing single-base insertions survive with no trailing matches', () => {
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 5,
+      start: -1,
+      readFeatures: [
+        { code: 'i', data: 'A', pos: 2, refPos: 2 },
+        { code: 'i', data: 'C', pos: 3, refPos: 2 },
+      ],
+    }).getCigarString(),
+  ).toBe('3M2I')
+})
+
+// htslib's c2#pad s4, whose CIGAR samtools gives as 4M1I1D1I4M. A walk that
+// accumulates single-base insertions and flushes them only on a match region
+// merges these two across the deletion and emits them after it, as 4M1D2I4M
+test('single-base insertions either side of a deletion stay separate', () => {
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 10,
+      start: 0,
+      readFeatures: [
+        { code: 'i', data: 'A', pos: 4, refPos: 4 },
+        { code: 'D', data: 1, pos: 5, refPos: 4 },
+        { code: 'i', data: 'C', pos: 5, refPos: 5 },
+      ],
+    }).getCigarString(),
+  ).toBe('4M1I1D1I4M')
+})
+
+// htslib's xx#minimal a1 (two hard clips, samtools gives 10H) and a2 (hard
+// clips around a zero-length insertion and deletion, samtools gives 5H10M5H)
+test('zero-length ops are dropped and same-op runs merge', () => {
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 0,
+      start: 3,
+      readFeatures: [
+        { code: 'H', data: 5, pos: 0, refPos: 3 },
+        { code: 'H', data: 5, pos: 0, refPos: 3 },
+      ],
+    }).getCigarString(),
+  ).toBe('10H')
+  expect(
+    makeRecord({
+      flags: 0,
+      readLength: 10,
+      start: 3,
+      readFeatures: [
+        { code: 'H', data: 5, pos: 0, refPos: 3 },
+        { code: 'I', data: '', pos: 0, refPos: 3 },
+        { code: 'D', data: 0, pos: 10, refPos: 13 },
+        { code: 'H', data: 5, pos: 10, refPos: 13 },
+      ],
+    }).getCigarString(),
+  ).toBe('5H10M5H')
+})
+
+// ---------------------------------------------------------------------------
+// forEachCigarOp — the walk getCigarString renders. That the walk is *right* is
+// what everything above tests; these check the callback contract consumers
+// build their own representations on.
+// ---------------------------------------------------------------------------
+
+function collectOps(record: CramRecord) {
+  const out: [number, number][] = []
+  record.forEachCigarOp((op, length) => {
+    out.push([op, length])
+  })
+  return out
+}
+
+/** parse a CIGAR string into the same pairs, independently of the walk */
+function parseCigar(cigar: string) {
+  const out: [number, number][] = []
+  for (const [, len, op] of cigar.matchAll(/(\d+)([A-Z=])/g)) {
+    out.push([CIGAR_OP_CHARS.indexOf(op!), Number(len)])
+  }
+  return out
+}
+
+test.each(files)(
+  'forEachCigarOp emits what getCigarString spells %s',
+  async file => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile(file),
+      index: new CraiIndex({ filehandle: testDataFile(`${file}.crai`) }),
+    })
+    const records = await cram.getRecordsForRange(
+      0,
+      0,
+      Number.POSITIVE_INFINITY,
+    )
+    let checked = 0
+    for (const record of records) {
+      const ops = collectOps(record)
+      const cigar = record.getCigarString()
+      if (cigar === '*') {
+        expect(ops).toEqual([])
+        continue
+      }
+      checked++
+      expect(ops).toEqual(parseCigar(cigar))
+      // every op is a real SAM op, no zero-length op survives, and no two
+      // consecutive emissions share an op — the run merging is the callback's
+      // contract, not something a consumer should have to redo
+      for (const [i, [op, length]] of ops.entries()) {
+        expect(op).toBeGreaterThanOrEqual(0)
+        expect(op).toBeLessThan(CIGAR_OP_CHARS.length)
+        expect(length).toBeGreaterThan(0)
+        if (i > 0) {
+          expect(op).not.toBe(ops[i - 1]![0])
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(0)
+  },
+)
+
+test('unmapped read emits no operations', () => {
+  expect(
+    collectOps(makeRecord({ flags: 0x4, readLength: 100, start: 0 })),
+  ).toEqual([])
+})
+
+test('operations are reported with the SAM op numbering', () => {
+  const ops = collectOps(
+    makeRecord({
+      flags: 0,
+      readLength: 10,
+      start: 0,
+      readFeatures: [
+        { code: 'S', data: 'AA', pos: 0, refPos: 0 },
+        { code: 'I', data: 'GG', pos: 4, refPos: 4 },
+        { code: 'D', data: 3, pos: 6, refPos: 6 },
+        { code: 'N', data: 2, pos: 6, refPos: 9 },
+      ],
+    }),
+  )
+  expect(ops).toEqual([
+    [CIGAR_SOFT_CLIP, 2],
+    [CIGAR_MATCH, 4],
+    [CIGAR_INS, 2],
+    [CIGAR_MATCH, 2],
+    [CIGAR_DEL, 3],
+    [CIGAR_REF_SKIP, 2],
+  ])
+})
+
+// what a consumer that wants BAM's packed layout does with the walk — the
+// point of the callback being the primitive rather than an array this library
+// picks the type of
+test('packs into BAM-style (length << 4) | op', () => {
+  const record = makeRecord({
+    flags: 0,
+    readLength: 10,
+    start: 0,
+    readFeatures: [{ code: 'I', data: 'GG', pos: 4, refPos: 4 }],
+  })
+  const packed: number[] = []
+  record.forEachCigarOp((op, length) => {
+    packed.push((length << 4) | op)
+  })
+  expect(packed).toEqual([
+    (4 << 4) | CIGAR_MATCH,
+    (2 << 4) | CIGAR_INS,
+    (4 << 4) | CIGAR_MATCH,
+  ])
+})
+
+// ---------------------------------------------------------------------------
+// getLeadingClipLength / getTrailingClipLength — O(1) answers that must agree
+// exactly with reading the first/last operation off the full walk.
+// ---------------------------------------------------------------------------
+
+/** the leading clip as reading the first operation off the full walk gives it */
+function leadingClipFromWalk(record: CramRecord) {
+  const first = collectOps(record)[0]
+  return first && (first[0] === CIGAR_SOFT_CLIP || first[0] === CIGAR_HARD_CLIP)
+    ? first[1]
+    : 0
+}
+
+let clippedTotal = 0
+test.each(files)(
+  'leading clip getter agrees with the CIGAR walk %s',
+  async file => {
+    const cram = new IndexedCramFile({
+      cramFilehandle: testDataFile(file),
+      index: new CraiIndex({ filehandle: testDataFile(`${file}.crai`) }),
+    })
+    const records = await cram.getRecordsForRange(
+      0,
+      0,
+      Number.POSITIVE_INFINITY,
+    )
+    let seen = 0
+    let clipped = 0
+    for (const record of records) {
+      const leading = leadingClipFromWalk(record)
+      seen++
+      if (leading) {
+        clipped++
+      }
+      expect(record.getLeadingClipLength()).toBe(leading)
+    }
+    expect(seen).toBeGreaterThan(0)
+    // not every fixture is clipped, but across the set some must be
+    clippedTotal += clipped
+  },
+)
+
+test('the leading clip getter reports only the first operation', () => {
+  // 5H4S… — the leading run is the 5H alone, not 9
+  const record = makeRecord({
+    flags: 0,
+    readLength: 18,
+    start: 0,
+    readFeatures: [
+      { code: 'H', data: 5, pos: 0, refPos: 0 },
+      { code: 'S', data: 'AAAA', pos: 0, refPos: 0 },
+      { code: 'S', data: 'TTTT', pos: 14, refPos: 10 },
+      { code: 'H', data: 5, pos: 18, refPos: 10 },
+    ],
+  })
+  expect(record.getCigarString()).toBe('5H4S10M4S5H')
+  expect(record.getLeadingClipLength()).toBe(5)
+})
+
+test('every fixture record above was checked, and some were clipped', () => {
+  expect(clippedTotal).toBeGreaterThan(0)
+})
+
+test('adjacent same-op clips merge, as the CIGAR does', () => {
+  const record = makeRecord({
+    flags: 0,
+    readLength: 0,
+    start: 3,
+    readFeatures: [
+      { code: 'H', data: 5, pos: 0, refPos: 3 },
+      { code: 'H', data: 5, pos: 0, refPos: 3 },
+    ],
+  })
+  expect(record.getCigarString()).toBe('10H')
+  expect(record.getLeadingClipLength()).toBe(10)
+})
+
+test('an unclipped read reports no clip at either end', () => {
+  const record = makeRecord({ flags: 0, readLength: 100, start: 4 })
+  expect(record.getCigarString()).toBe('100M')
+  expect(record.getLeadingClipLength()).toBe(0)
+})
+
+test('an unmapped read reports no clip', () => {
+  const record = makeRecord({ flags: 0x4, readLength: 100, start: 0 })
+  expect(record.getLeadingClipLength()).toBe(0)
+})
+
+test('a mid-read soft clip is not the first operation', () => {
+  // soft clip mid-read, then more read bases: the CIGAR ends M, not S
+  const record = makeRecord({
+    flags: 0,
+    readLength: 20,
+    start: 0,
+    readFeatures: [{ code: 'S', data: 'AAAA', pos: 4, refPos: 4 }],
+  })
+  expect(record.getCigarString()).toBe('4M4S12M')
+  expect(record.getLeadingClipLength()).toBe(0)
 })
