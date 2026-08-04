@@ -4,32 +4,82 @@ Investigated, measured, not yet done. Numbers below were measured on this repo
 at v8.7.0 — see the method note at the bottom before trusting or re-running
 them.
 
-## Cached slices redo their reference decoration on every query
+## ~~Cached slices redo their reference decoration on every query~~ — done
 
-`CramSlice.getRecords` serves records from `featureCache`, then unconditionally
-re-runs the filter, recomputes the reference regions, **re-issues every
-`fetchReferenceSequenceCallback` call**, and re-runs `addReferenceSequence` over
-records that are already decorated. Five identical queries against a fully
-cached file:
+`CramSlice.getRecords` used to serve records from `featureCache` and then
+unconditionally recompute the reference regions, **re-issue every
+`fetchReferenceSequenceCallback` call**, and re-run `addReferenceSequence` over
+records that were already decorated. Five identical queries against a fully
+cached file each re-fetched the same bases (ONT 310,089 ×5; Illumina 30,280 ×5),
+and in jbrowse every one of those went through `CramAdapter.seqFetch` to the
+sequence sub-adapter — so every pan back over cached data re-read reference it
+already had.
+
+Fixed by moving the decoration into `_fetchRecords`, the cached layer, so it
+runs once per slice rather than once per query. `applyReferenceSequence` now
+computes the span from **every** record in the slice rather than from one
+query's matches, which is what makes it a property of the slice and so cacheable
+— and is still the reads' extent, never the declared `refSeqSpan` (issue #79,
+`test/seqfetch-bounds.test.ts`). Measured on SRR396637, 54,695 records:
 
 ```
-ONT       seqFetch calls per query: 1, 1, 1, 1, 1 | bases: 310089 ×5
-Illumina  seqFetch calls per query: 3, 3, 3, 3, 3 | bases: 30280 ×5
+cold   517 ms, 6 seqFetch calls, 100,684 bases
+warm   5.5 ms, 0 seqFetch calls,       0 bases   (was: all 6 again, every query)
 ```
 
-`addReferenceSequence` is 9.0% of ONT decode self-time, and in jbrowse each of
-those calls goes through `CramAdapter.seqFetch` to the sequence sub-adapter — so
-every pan back over cached data re-reads reference sequence it already has. Fix
-is to track the span the cached records are already decorated against and skip
-when the new query is covered.
+The md5 check no longer double-fetches either. It needs the slice's _declared_
+reference span while decoration needs the reads' extent, so the two used to
+issue separate calls for overlapping bases; the declared span covers every
+mapped read in the slice by definition, so `checkReferenceMd5` now hands its
+region back and decoration reuses it. `ce#5` with the check on went from 2
+fetches to 1.
 
-This is now the dominant cost of a warm query, since `SliceRecordCache` stopped
-evicting the slices of the query still in flight. On SRR396637 a repeat of the
-same 54,695-record query went from 117 ms (re-reading 1.9 MB and re-inflating
-6.0 MB, because the range was bigger than the 20,000-record budget and the LRU
-evicted each slice just before the next identical query wanted it) to ~13 ms
-with nothing re-inflated. What is left in those 13 ms is the re-decoration
-above, plus the re-parse below.
+## ~~`getReadBases()` costs ~1.5 ms per long read~~ — halved
+
+`decodeReadSequence` concatenated a string, which on a long read meant a
+`TextDecoder` call per insertion and soft clip (`payloadStringAt`), a
+`String.fromCharCode` per substitution, a substring per reference chunk, and
+finally a flatten of the whole rope when `toUpperCase` ran. 628 reads of
+`200x.longread.cram` (median 49 kb, 3.1M read features, 31.1 Mbp) took ~960 ms.
+
+Now assembled into a byte array and decoded once, with the upper-casing folded
+into the copy and feature payloads copied straight out of the arena, which is
+already bytes. Two trees, separate processes, fastest of seven:
+
+| dataset       | records | HEAD    | now     |              |
+| ------------- | ------- | ------- | ------- | ------------ |
+| longread 200x | 628     | 862 ms  | 404 ms  | **-53%**     |
+| SRR396637     | 54,695  | 29.0 ms | 25.6 ms | within noise |
+| SRR396636     | 23,051  | 14.7 ms | 12.8 ms | within noise |
+
+Byte-identical output on every record of all three.
+
+**It only wins above a read length**, and loses badly below one — a typed-array
+allocation plus a `TextDecoder` call per record is simply more than a substring
+and a native `toUpperCase` for 100 bp: **+141%** on SRR396637 and **+253%** on
+SRR396636 when the byte path ran unconditionally. Same trade as the read-feature
+arena and the typed CIGAR. Hence `BYTEWISE_READ_BASES_MIN`, with the short-read
+walk kept inline so the common case pays one comparison.
+
+Two things this cost, recorded so they are not repeated:
+
+- **`.toUpperCase()` was the wrong suspect.** It is 11 ms of the 960 — 1%. The
+  reference is genuinely soft-masked (42,099 of the region's 85,377 bases are
+  lowercase), so the upper-casing is needed; it was just never the cost.
+- **Do not A/B a standalone copy of the old function against the new method.**
+  Doing that reported +9-13% on short reads, which two-tree runs showed was
+  entirely the harness: a free function in the benchmark inlines where the real
+  `getReadBases` → `decodeReadSequence` path does not.
+
+Reached from jbrowse via `feature.get('seq')` in the per-base-letter extractor,
+so it is on the render path whenever per-base colouring is on, and via
+`toJSON()` for the details panel.
+
+The related `NUMERIC_QUAL` path is **not** a comparable problem, despite looking
+like one: `CramRecord.qualityScores` returns a `subarray` view over the slice's
+quality column, so it is ~104 bytes and no copy, not an O(readLength)
+materialization. Handing out `qualityColumn`/`qualityStart` instead would save
+that one view per read and nothing more.
 
 ## Every warm query rebuilds the container and re-parses its compression scheme
 
@@ -122,6 +172,12 @@ does. Nothing else changes on that side.
   codec own its fast path and drop the `instanceof` chain.
 - The self-clearing async memoize block is copy-pasted seven times across
   `file.ts`, `container/index.ts` and `slice/index.ts`.
+- `slice/index.ts` builds its reference regions in a `Record<string, …>` keyed
+  by numeric seq ids, then re-keys them into a second `Record` and looks each up
+  again per record. A `Map<number, …>` collapses it, and the single-reference
+  case — the common one — has exactly one region and needs no map at all.
+- `readFeatureArena.ts`'s `growUint8`/`nextCapacity` and `qualityColumn.ts`'s
+  inline grow loop are the same geometric-growth-then-trim, written twice.
 - `sectionParsers.ts` has ~40 sites of
   `const [v, newOffsetN] = parseItf8(buffer, offset); offset += newOffsetN`,
   with `newOffset1..8` numbered inconsistently against the fields they belong
@@ -134,6 +190,128 @@ does. Nothing else changes on that side.
   soft-clip `length` 0 against 1, deletion `bases` `''` against `'*'`, a closed
   window against a half-open one. Either jbrowse adopts `forEachMismatch` or
   this repo is carrying a second, unexercised copy of its own trickiest walk.
+
+  The read-features-to-CIGAR walk had the same split and no longer does:
+  `CramRecord.forEachCigarOp` is now the primitive `getCigarString` renders, and
+  jbrowse's `readFeaturesToNumericCIGAR` packs its array from it rather than
+  re-walking the arena. Note what made that one tractable: the CIGAR has a
+  single spec-defined vocabulary (the SAM op codes), so the walk could be moved
+  in here without dragging any consumer's render types along. The mismatch walk
+  emits jbrowse's own vocabulary, which is exactly why it has not moved — see
+  the note under "Packing the arena's columns".
+
+## What `forEachCigarOp` costs, and why it was taken anyway
+
+The CIGAR walk moved here from jbrowse's `readFeaturesToNumericCIGAR` as a
+callback rather than as an array, because CRAM stores no CIGAR — unlike BAM,
+where the packed array is on disk and `@gmod/bam` can hand out a zero-copy view
+of it, any array form here is an allocation this library would have invented and
+imposed on every consumer.
+
+**It is measurably slower than the inlined walk it replaced.** A/B over decoded
+records, alternating, fastest-of-N, with an A-vs-A control to establish the
+noise floor, three processes each:
+
+| dataset           | records | ops       | control      | via `forEachCigarOp` |
+| ----------------- | ------- | --------- | ------------ | -------------------- |
+| longread 200x     | 628     | 4,452,662 | -1.4%..+1.4% | **+13.5%..+17.5%**   |
+| SRR396637         | 54,695  | 69,837    | -0.8%..+2.8% | **+8.9%..+15.5%**    |
+| SRR396636         | 23,051  | 33,793    | -0.6%..+5.1% | **+12.6%..+20.3%**   |
+| ONT HG002 fixture | 37      | 244,795   | -1.2%..+2.1% | +10.9%..+13.8%       |
+
+Call it **~15%** of the CIGAR-building step, and note it is ~15% at both ends of
+the read-length range rather than concentrated at one — long reads pay it per
+operation, short reads per call, and the two land in the same place. In absolute
+terms it is ~10 ms on a ~70 ms pass over 628 long reads (~16 µs per read, which
+jbrowse then memoizes per feature in its ultra-long LRU), and ~0.5 ms on a 3.5
+ms pass over 54,695 short ones.
+
+### Do not measure this with two consumers in one process
+
+The first version of this benchmark ran `packCigar` **and** a hoisted-callback
+variant in the same process, and reported **+40%..+60%**. That was an artefact:
+two consumers make `forEachCigarOp`'s internal `callback(op, oplen)` sites
+polymorphic and block inlining. With a single consumer — what jbrowse actually
+has — the cost is the ~15% above.
+
+Which is also a real constraint on the API, not just on the benchmark: **the
+cost of this callback is not local**. A second call site in the same process
+with a differently-shaped callback roughly triples the penalty for the first. If
+a consumer ever wants both a packer and, say, a clip-length walker, they should
+share one callback rather than pass two.
+
+Two things were tried and did **not** recover it:
+
+- **Inlining the run coalescing** instead of factoring it into a `push(len, op)`
+  closure. This one is worth keeping and is what the code does now: the closure
+  has to capture and mutate `op`/`oplen`, so V8 allocates a context per call,
+  which cost a further +40% on the short-read files (1.3 ops per record, so
+  per-call cost dominates) and +10% on the long-read ones.
+- **Hoisting the consumer's callback** to a module-level singleton writing into
+  a swapped-in target array, so nothing is allocated per record. Measured
+  indistinguishable from the per-call arrow. The remaining cost is the indirect
+  call per operation, not allocation — so there is no consumer-side trick that
+  gets it back, and a packed-array API would be the only way.
+
+Taken anyway: it deletes a 240-line second implementation of the format's
+trickiest walk, one that had no samtools cross-check on the side that shipped
+it. Revisit only with an end-to-end jbrowse render measurement showing it
+matters there — this micro-benchmark deliberately isolates the walk from
+everything else a render does per read.
+
+### …and then the render path stopped building a CIGAR at all
+
+The ~15% above is what it costs to _build the packed array_. It turned out the
+render path never needed the array: `clipLengthAtStartOfRead` is the only CIGAR
+value it reads per read, and that is a single operation — the first, or the last
+on the reverse strand. jbrowse was manufacturing ~7,000 operations for a long
+ONT read, and retaining them, to look at one.
+
+{@link CramRecord.getLeadingClipLength} answers the forward-strand case in O(1)
+by reading the features at the start of the record, so with jbrowse computing
+the clip from that (and from an allocation-free walk on the reverse strand, ~50%
+of reads) the whole step is now **faster than the array version it replaced**:
+
+| dataset       | records | vs. building the array |
+| ------------- | ------- | ---------------------- |
+| longread 200x | 628     | **-62%**               |
+| ONT HG002     | 37      | **-62%**               |
+| SRR396637     | 54,695  | **-45%**               |
+| SRR396636     | 23,051  | **-46%**               |
+
+Identical answers on every record of every dataset, control within ±3%. So the
+callback's ~15% is paid only by consumers that genuinely want the packed form
+(per-base colouring, the details panel), and `NUMERIC_CIGAR` is now lazy for
+CRAM rather than built once per read on the render path.
+
+The remaining 50% is the reverse strand. There is deliberately no
+`getTrailingClipLength()` — see the note beside `getLeadingClipLength` in
+`record.ts` for why the end of the record cannot answer it alone.
+
+### Use a real long-read dataset for this
+
+The checked-in ONT fixture is **37 records**, which is too few to time stably —
+its control swung 23 points before the polymorphism was fixed. `~/src/jb2bench`
+has `200x.longread.cram` (36 MB, hg19mod.fa alongside it); the region
+`0..120000` gives 628 records, 3.1M read features, 4.45M CIGAR ops and a median
+read length of 49 kb, and its control holds to ±1.4%. Too big to check in here,
+but that is the shape of data any claim about long-read CIGAR cost needs.
+
+It is worth as much for correctness as for timing: the benchmark compares the
+two walks op-for-op before it times anything, and over those 4.45M operations
+they agree **exactly**, with no unmapped reads in the region to hit the one
+intended difference below. That is a far wider cross-check of the walk than the
+checked-in fixtures reach.
+
+### It also changed the CIGAR of unmapped reads
+
+`forEachCigarOp` emits nothing for an unmapped read, so jbrowse's
+`NUMERIC_CIGAR` is now empty for one where the walk it replaced synthesized a
+full-length match run (190 of the ONT fixture's records, 114 of SRR396637's).
+Empty is right: `getCigarString()` gives `'*'`, which is what samtools prints,
+and `@gmod/bam`'s `_computeNumericCigar` likewise returns an empty `Uint32Array`
+for `BAM_FUNMAP` — so this makes jbrowse's CRAM path agree with its BAM path
+rather than diverge from it.
 
 ## Measured and _not_ worth doing
 

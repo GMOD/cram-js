@@ -152,7 +152,7 @@ new IndexedCramFile({
   cramFilehandle, // generic-filehandle2 compatible handle
   index, // CraiIndex instance (or any object with getEntriesForRange)
   fetchReferenceSequence, // async (seqId, start, end, refName) => string
-  checkSequenceMD5, // default true; set false to avoid large reference fetches
+  checkSequenceMD5, // default false; set true to verify each slice's reference MD5
   cacheSize, // max cached records, default 20000
 })
 ```
@@ -253,6 +253,39 @@ read these columns without allocating, and how the slice cache is bounded.
   reported as `M`, per the plain CIGAR convention. Unmapped reads, and mapped
   reads with no operations, return `"*"`. Does not require
   `fetchReferenceSequence`.
+- `forEachCigarOp(callback)` — the same alignment reported to
+  `callback(op, length)` one operation at a time, without building a CIGAR of
+  any kind. `op` is one of the exported `CIGAR_MATCH`, `CIGAR_INS`, `CIGAR_DEL`,
+  `CIGAR_REF_SKIP`, `CIGAR_SOFT_CLIP`, `CIGAR_HARD_CLIP`, `CIGAR_PAD` — the
+  numbering the SAM spec gives them, so `(length << 4) | op` is BAM's packed
+  form. Adjacent runs of the same op are merged and zero-length ops dropped.
+  Reach for this whenever the answer is a measurement rather than text — a
+  reference span, an op histogram, or the packed `(length << 4) | op` array BAM
+  stores natively:
+
+  ```js
+  const packed = []
+  record.forEachCigarOp((op, length) => {
+    packed.push((length << 4) | op)
+  })
+  ```
+
+  CRAM stores no CIGAR — unlike BAM, where the packed array is on disk and can
+  be read as a zero-copy view, here it is always reconstructed from the read
+  features. So this library hands out the walk rather than an array type it
+  would have picked for you.
+
+- `getLeadingClipLength()` → `number` — how many bases the **first** CIGAR
+  operation clips, or 0 when it is not a clip. Reads only the features at the
+  start of the record, so it is O(1) where walking the CIGAR to look at its
+  first operation is O(operations) — and a long read has thousands. Reports that
+  one operation and no more, so a `5H4S…` read clips 5, not 9.
+
+  There is deliberately no `getTrailingClipLength()`: whether a clip at the end
+  is the last _operation_ depends on whether any read bases follow it (they
+  would become a trailing `M`), which needs the whole walk. Read the last
+  operation off `forEachCigarOp` for that.
+
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
   `opts` is an optional `{ start, end }` 0-based half-open reference range.
 - `forEachMismatch(callback, opts?)` — the same differences, reported to
