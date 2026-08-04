@@ -36,6 +36,8 @@ npm install --silent --no-audit --no-fund "./$TARBALL" generic-filehandle2 >/dev
 
 cat >smoke.mjs <<'JS'
 import {
+  CIGAR_INS,
+  CIGAR_MATCH,
   CraiIndex,
   IndexedCramFile,
   RF_INSERTION,
@@ -69,11 +71,28 @@ const cram = new IndexedCramFile({
 })
 const records = await cram.getRecordsForRange(0, 1, 1000)
 if (!records.length) throw new Error('esm: expected at least one record')
-console.log(`esm decode ok (${records.length} records, arena module ok)`)
+
+// The CIGAR walk and the clip getter live in their own module too, so a build
+// that failed to emit it would import fine here but blow up on use.
+const ops = []
+records[0].forEachCigarOp((op, length) => ops.push([op, length]))
+if (
+  !ops.length ||
+  ops.some(([op]) => op !== CIGAR_MATCH && op !== CIGAR_INS) ||
+  records[0].getCigarString() === '' ||
+  typeof records[0].getLeadingClipLength() !== 'number'
+) {
+  throw new Error('esm: cigar module is broken')
+}
+console.log(
+  `esm decode ok (${records.length} records, arena + cigar modules ok)`,
+)
 JS
 
 cat >smoke.cjs <<'JS'
 const {
+  CIGAR_INS,
+  CIGAR_MATCH,
   CraiIndex,
   IndexedCramFile,
   RF_INSERTION,
@@ -105,7 +124,20 @@ if (
   })
   const records = await cram.getRecordsForRange(0, 1, 1000)
   if (!records.length) throw new Error('cjs: expected at least one record')
-  console.log(`cjs decode ok (${records.length} records, arena module ok)`)
+
+  const ops = []
+  records[0].forEachCigarOp((op, length) => ops.push([op, length]))
+  if (
+    !ops.length ||
+    ops.some(([op]) => op !== CIGAR_MATCH && op !== CIGAR_INS) ||
+    records[0].getCigarString() === '' ||
+    typeof records[0].getLeadingClipLength() !== 'number'
+  ) {
+    throw new Error('cjs: cigar module is broken')
+  }
+  console.log(
+    `cjs decode ok (${records.length} records, arena + cigar modules ok)`,
+  )
 })().catch(e => { console.error(e); process.exit(1) })
 JS
 
