@@ -132,37 +132,92 @@ test('a query that aborts itself while joined to another still rejects', async (
   await expect(second).rejects.toThrow(/abort/i)
 })
 
-test('a cancelled query does not make a bystander re-read the slice', async () => {
-  // baseline: what one query that nobody cancels costs
+/** how many times each byte offset was read */
+function readsByPosition(reads: [number, number][]) {
+  const counts = new Map<number, number>()
+  for (const [, position] of reads) {
+    counts.set(position, (counts.get(position) ?? 0) + 1)
+  }
+  return counts
+}
+
+test('a pan does not make the new view re-decode the slices it shares', async () => {
+  // The motivating case, in its real shape: the user pans, the query in flight
+  // is cancelled, and the new view wants an overlapping — not identical — set
+  // of slices. The ones still decoding are exactly the ones both queries want.
+  const LEAVING = [0, 0, 60] as const
+  const ARRIVING = [0, 40, 200] as const
+
+  // Baseline: the same two regions, in the same order, nobody cancelled. The
+  // second query finds the shared slices in the record cache, so every slice is
+  // decoded once and each byte offset is read the fewest times it can be.
   const solo = new GatedFile(testDataFile(CRAM))
   const soloCram = openCram(solo)
   await warmUp(soloCram, solo)
-  await soloCram.getRecordsForRange(...REGION)
-  const soloReads = solo.reads.length
+  await soloCram.getRecordsForRange(...LEAVING)
+  const expected = await soloCram.getRecordsForRange(...ARRIVING)
+  const baseline = readsByPosition(solo.reads)
+  const baselineReads = solo.reads.length
 
   const file = new GatedFile(testDataFile(CRAM))
   const cram = openCram(file)
   await warmUp(cram, file)
 
   const cancelled = new AbortController()
-  const bystander = new AbortController()
+  const arriving = new AbortController()
   file.hold()
-  const first = cram.getRecordsForRange(...REGION, { signal: cancelled.signal })
-  const second = cram.getRecordsForRange(...REGION, { signal: bystander.signal })
-  const firstRejected = expect(first).rejects.toThrow(/abort/i)
+  const leaving = cram.getRecordsForRange(...LEAVING, {
+    signal: cancelled.signal,
+  })
+  const records = cram.getRecordsForRange(...ARRIVING, {
+    signal: arriving.signal,
+  })
+  const leavingRejected = expect(leaving).rejects.toThrow(/abort/i)
   await drainMicrotasks()
 
   cancelled.abort()
   file.open()
-  await firstRejected
-  await second
+  await leavingRejected
+  const arrived = await records
 
-  // The decode is ref-counted, so one of two consumers cancelling is not a
-  // cancellation at all — it keeps running for the other. No read is abandoned,
-  // and the bystander, which used to inherit the failure and start every slice
-  // over, costs exactly what it would have on its own.
-  expect(file.abortedReads).toBe(0)
-  expect(file.reads.length).toBe(soloReads)
+  // The property. A slice both queries want is decoded once: the cancellation
+  // does not reach it, because the arriving query still wants it. Under the
+  // retry this replaced, every shared slice still in flight was read a second
+  // time — so its offset would be read once more here than in the baseline,
+  // where it was read once and then served from the cache.
+  //
+  // Stated as "no more than", not "equal to", because the leaving query's
+  // *exclusive* slices are genuinely cancelled and stop part-read — those
+  // offsets are legitimately read fewer times than the baseline.
+  for (const [position, count] of readsByPosition(file.reads)) {
+    expect(count).toBeLessThanOrEqual(baseline.get(position) ?? 0)
+  }
+  expect(arrived.map(r => r.uniqueId)).toEqual(expected.map(r => r.uniqueId))
+
+  // On this fixture the bound is in fact tight. Slices here span ~100 bp on a
+  // ~180 bp reference, so every slice the leaving view wanted is one the
+  // arriving view wants too — nothing is cancelled early, and a cancelled pan
+  // costs exactly what the same two views cost with no cancellation at all.
+  // The per-offset form above is what generalizes to a file whose slices are
+  // short enough for the leaving view to have some of its own.
+  expect(file.reads.length).toBe(baselineReads)
+
+  // Not vacuous: the two views really do want different slices, and really do
+  // share most of them — run independently they would cost far more than the
+  // baseline, which is the sharing this test is about.
+  const readsAlone = async (region: readonly [number, number, number]) => {
+    const alone = new GatedFile(testDataFile(CRAM))
+    const aloneCram = openCram(alone)
+    await warmUp(aloneCram, alone)
+    await aloneCram.getRecordsForRange(region[0], region[1], region[2])
+    return alone.reads.length
+  }
+  const [leavingAlone, arrivingAlone] = await Promise.all([
+    readsAlone(LEAVING),
+    readsAlone(ARRIVING),
+  ])
+  expect(arrived.length).toBeGreaterThan(0)
+  expect(baselineReads).toBeLessThan(leavingAlone + arrivingAlone)
 })
 
 test('a cancelled query does not fail a concurrent one sharing the index parse', async () => {
