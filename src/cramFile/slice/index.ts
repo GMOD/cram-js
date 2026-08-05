@@ -44,6 +44,17 @@ function calculateMultiSegmentMatedTemplateLength(
         'intra-slice mate record not found, this file seems malformed',
       )
     }
+    // A well-formed NF is a forward offset (`NF + recordNumber + 1`), so the
+    // chain strictly increases and cannot revisit a record. A malformed one
+    // points backwards and the walk never terminates: it re-pushes the same
+    // records until the process dies — 14 million entries in two seconds, and
+    // synchronously, so the tab cannot even be interrupted. Every record is
+    // visited at most once, so overrunning the slice means a cycle.
+    if (matedRecords.length > allRecords.length) {
+      throw new CramMalformedError(
+        'cyclic intra-slice mate chain, this file seems malformed',
+      )
+    }
     matedRecords.push(mateRecord)
     cur = mateRecord
   }
@@ -189,8 +200,11 @@ function associateIntraSliceMate(
  * The decode loop fills every slot or throws, so `records[i]` is always
  * defined here; the `records[mateRecordNumber]` guard is against a malformed
  * pointer past the end of the slice.
+ *
+ * Exported for the tests that pin its behaviour on malformed mate pointers;
+ * nothing outside the decode calls it.
  */
-function associateIntraSliceMates(records: CramRecord[]) {
+export function associateIntraSliceMates(records: CramRecord[]) {
   for (let i = 0; i < records.length; i += 1) {
     const r = records[i]!
     const { mateRecordNumber } = r
