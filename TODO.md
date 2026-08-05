@@ -350,6 +350,40 @@ Recorded so they are not rediscovered:
   wants to be _batched_ before deciding it wants to be deferred) are in
   [ADR 0002](docs/adr/0002-batch-decoding-over-lazy-fields.md).
 
+- **Interning the decoded strings.** Tried, measured, reverted. The duplication
+  is real and large — SRR396637 has 164,526 tag values with only **1,084
+  distinct** ones (`MC` is a CIGAR string repeated across nearly every record),
+  and 27,462 distinct read names for 54,695 records, because the two mates of a
+  pair share one. A per-slice `Map<string, string>` in `bindStringReader`
+  delivers on the memory exactly as expected:
+
+  | dataset   | retained, sharing | retained, interned   |
+  | --------- | ----------------- | -------------------- |
+  | SRR396637 | 31.55 MB          | **29.49 MB** (-6.5%) |
+  | SRR396636 | 13.27 MB          | **12.48 MB** (-6.0%) |
+  | ONT       | 7.47 MB           | 7.47 MB (37 records) |
+
+  That is not only better than the un-interned reader, it is 1.19 MB _below_
+  where the file sat before any of the batching work.
+
+  **It costs 10-20% of the decode**, which is far more than the memory is worth
+  on a path whose whole point was speed. Against 7023d88, 12 paired rounds with
+  an A-vs-A control: SRR396637 -15.5% mean, faster in **0/12** (control -2.9%,
+  5/12); jb2bench 200x -10.9%, 2/12 (control +2.1%); jb2bench 1000x -20.6%, 1/12
+  (control -4.6%). ONT reads +15.8% but its control reads +13.3%, so it is
+  drift, not an effect.
+
+  The reason is that a `Map` keyed by string has to **hash the string**, which
+  means reading every character of it — ~220,000 times per decode of SRR396637,
+  on values that had just been made nearly free to produce. Deduplication that
+  needs to look at the bytes cannot be cheaper than producing the bytes.
+
+  Two things it also does _not_ do, contrary to the note that used to be here:
+  it does not let the decoded block be collected, because interning keeps one
+  reference per distinct value and one reference pins the block just as well as
+  fifty thousand; and it does not remove the temporary, which is allocated to be
+  hashed whether or not it is kept.
+
 - **`batchDecodeItf8` scratch sizing.** The `new Int32Array(buffer.length)`
   looks like a 4x over-allocation; measured utilisation is **97.5–100%** (ITF8
   values in these blocks are overwhelmingly single-byte) and the `.slice()` copy
@@ -462,22 +496,6 @@ Per-object costs measured on this V8 (Node 24, 200k instances each): a retained
 `Uint8Array` view is **104 B**, an empty `{}` is **56 B**, a 25-char string is
 **56 B**, and a declared class field is **8 B** — so every field removed from
 `CramRecord` is 437 KB on a 54k-record view. Ranked by what looks reachable:
-
-- **Intern the strings.** SRR396637 has 164,526 tag values and only **1,084
-  distinct** ones (`MC` is a CIGAR string, repeated across nearly every record),
-  and 27,462 distinct read names for 54,695 records, because the two mates of a
-  pair share one. A per-slice `Map<string, string>` in the string reader shares
-  the retained copy; the temporary is still allocated and collected.
-
-  This is now worth more than it was, and for a second reason. Both values are
-  `slice`s of a decoded block, so interning a read name does not just drop a
-  duplicate — it drops a reference into the block, and enough of them would let
-  the block be collected instead of pinned by whichever record outlives the
-  query. Against that, it puts a hash lookup per value back on a path the
-  batching just made allocation-light, which is exactly the trade that needs
-  measuring rather than assuming. Note V8 copies a slice shorter than 13
-  characters instead of pointing into the parent, so short tag values are
-  already free of the pinning and only the long ones (`MC`, `SA`) benefit.
 
 - **Share one frozen empty `tags`.** A fresh `{}` per record is 56 B whether or
   not it holds anything, so `decodeTags: false` still pays ~3.0 MB of the 4.28

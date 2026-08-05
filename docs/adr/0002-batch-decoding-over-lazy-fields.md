@@ -59,8 +59,10 @@ never has a NUL before its delimiter and takes the same expression unchanged.
   plus the 1.14 MB block they point into, against ~1.75 MB of standalone
   strings. Measured 30.68 MB → 31.37 MB on SRR396637, +2.3%. **A slice keeps its
   whole block alive as long as any record from it lives** — invisible until
-  someone holds one record out of a query. Interning would recover most of it
-  and is recorded in `TODO.md`.
+  someone holds one record out of a query. Interning recovers it and more (29.49
+  MB, below where the file sat before any of this) but costs 10–20% of the
+  decode, so it was tried and reverted; see `TODO.md` for the numbers and for
+  why hashing a string cannot be cheaper than slicing one.
   - Tag values mostly escape this: V8 copies a slice shorter than 13 characters
     instead of pointing into the parent, so short values do not pin the block
     and it is collected after the decode. Adding Z tags cost only a further
