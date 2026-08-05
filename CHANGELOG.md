@@ -1,3 +1,16 @@
+## [10.4.1](https://github.com/GMOD/cram-js/compare/v10.4.0...v10.4.1) (2026-08-05)
+
+### Bug Fixes
+
+- Return reads overlapping the query start by one base
+
+### Tests
+
+- Check every indexed CRAM against samtools, and keep zero-span reads
+- Walk only references that hold records, and reuse one reader
+- Keep the samtools comparison off the network
+- Fail in CI when samtools is missing
+
 ## [10.4.0](https://github.com/GMOD/cram-js/compare/v10.3.0...v10.4.0) (2026-08-04)
 
 ### Documentation
