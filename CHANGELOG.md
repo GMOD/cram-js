@@ -1,3 +1,17 @@
+## [10.6.0](https://github.com/GMOD/cram-js/compare/v10.5.0...v10.6.0) (2026-08-05)
+
+### Bug Fixes
+
+- Stop the slice cache retaining a signal per cache hit
+
+### Features
+
+- Cancel a query with an AbortSignal
+
+### Tests
+
+- Exercise the pan case with overlapping regions, not identical ones
+
 ## [10.5.0](https://github.com/GMOD/cram-js/compare/v10.4.1...v10.5.0) (2026-08-05)
 
 ### Bug Fixes
