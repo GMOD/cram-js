@@ -162,9 +162,14 @@ export default class IndexedCramFile {
             // 123852-124001, and `samtools view f.cram chr:124001-124300`
             // returns it. The extra `- 1` silently dropped every read
             // overlapping the query by exactly one base.
-            return (
-              feature.start < end && feature.start + feature.lengthOnRef > start
-            )
+            //
+            // A mapped read can still consume no reference at all — a
+            // hard-clip-only CIGAR such as `10H`, or an empty one. htslib's
+            // bam_endpos() reports one base rather than zero for those, so they
+            // stay findable at the base they sit on instead of being
+            // unreachable from every query.
+            const span = feature.lengthOnRef > 0 ? feature.lengthOnRef : 1
+            return feature.start < end && feature.start + span > start
           },
           // opts is a superset of DecodeOptions; getRecords resolves the
           // defaults per key so passing it straight through is safe
