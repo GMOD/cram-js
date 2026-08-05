@@ -21,6 +21,7 @@ import {
 } from './sectionParsers.ts'
 import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
+import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
@@ -48,12 +49,18 @@ export interface CramFileSource {
  * `refName` is the `@SQ` `SN` for `seqId`, so a callback can hand coordinates
  * straight to a name-keyed sequence source instead of the caller maintaining
  * its own id->name table. Only `undefined` for a CRAM with no `@SQ` lines.
+ *
+ * `opts.signal` is the signal of the query that needs these bases, for a
+ * callback whose sequence source is itself remote. Ignoring it is fine — the
+ * query still rejects on abort, at the next point the decode checks — so a
+ * four-argument callback written before v10.6 keeps working unchanged.
  */
 export type SeqFetch = (
   seqId: number,
   start: number,
   end: number,
   refName: string | undefined,
+  opts?: BaseOpts,
 ) => Promise<string>
 
 /** One `@SQ` line of the SAM header. */
@@ -117,6 +124,13 @@ export default class CramFile {
   }
   public featureCache: SliceRecordCache
   private header: string | undefined
+  // Deliberately signal-free, unlike every other memo in the read path. These
+  // two are shared file-wide and fetched once for the life of the object — 26
+  // bytes of definition, and the first container for the SAM header — so every
+  // query after the first joins them already resolved. Threading a signal in
+  // would mean the first query to arrive owns a read the whole file depends on,
+  // and cancelling it on that one query's behalf is wrong however carefully the
+  // sharing is handled.
   private _definitionMemo = memoizeAsync(() => this._fetchDefinition())
   private _samHeaderMemo = memoizeAsync(() => this._fetchSamHeader())
   private _referenceInfo?: ReferenceInfo[]
@@ -142,8 +156,18 @@ export default class CramFile {
     }
   }
 
-  read(length: number, position: number) {
-    return this.file.read(length, position)
+  /**
+   * Every byte the decode reads comes through here.
+   *
+   * The signal is checked before the read is issued as well as handed to the
+   * filehandle, because honouring it is optional down there: `RemoteFile`
+   * aborts the `fetch`, but `LocalFile` ignores the signal entirely and runs to
+   * completion. The up-front check is what makes a cancelled query stop making
+   * progress on a local file rather than reading the whole range anyway.
+   */
+  read(length: number, position: number, opts?: ReadOpts) {
+    opts?.signal?.throwIfAborted()
+    return this.file.read(length, position, opts)
   }
 
   // getSectionParsers is itself cached per major version — the parsers are pure
@@ -284,8 +308,9 @@ export default class CramFile {
     length: number,
     recordedCrc32: number,
     description: string,
+    opts?: ReadOpts,
   ) {
-    const b = await this.file.read(length, position)
+    const b = await this.read(length, position, opts)
     // this shift >>> 0 is equivalent to crc32(b).unsigned but uses the
     // internal calculator of crc32 to avoid accidentally importing buffer
     // https://github.com/alexgorbatchev/crc/blob/31fc3853e417b5fb5ec83335428805842575f699/src/define_crc.ts#L5
@@ -365,11 +390,11 @@ export default class CramFile {
     return buf
   }
 
-  async readBlock(position: number) {
+  async readBlock(position: number, opts?: ReadOpts) {
     const { majorVersion } = await this.getDefinition()
     const { cramBlockHeader, cramBlockCrc32 } = await this._getSectionParsers()
 
-    const headerBuf = await this.file.read(cramBlockHeader.maxLength, position)
+    const headerBuf = await this.read(cramBlockHeader.maxLength, position, opts)
     const blockHeader = parseItem(
       headerBuf,
       cramBlockHeader.parser,
@@ -381,7 +406,7 @@ export default class CramFile {
       blockHeader._size +
       blockHeader.compressedSize +
       (majorVersion >= 3 ? cramBlockCrc32.maxLength : 0)
-    const fullBuffer = await this.file.read(totalSize, position)
+    const fullBuffer = await this.read(totalSize, position, opts)
 
     return this.readBlockFromBuffer(fullBuffer, 0, position)
   }

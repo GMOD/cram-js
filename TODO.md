@@ -103,80 +103,74 @@ see the `// TODO: perhaps we should cache slices?` in `container/index.ts`. So
 even a query served entirely from `featureCache` re-reads the container header
 and the slice header and re-parses the compression header block: 36 filehandle
 reads, 6 containers and 6 compression schemes for a 6-slice warm query on
-SRR396637. Locally that is a couple of KB; over HTTP it is 6 range requests per
-slice per query, and the parse happens regardless of what the byte-range cache
-does.
+SRR396637. Locally that is a couple of KB; over HTTP the parse happens
+regardless of what the byte-range cache does.
 
-Files with more than one slice per container duplicate it _within_ a query too —
-every slice builds its own `CramContainer` and re-inflates the same compression
-header. The fixtures here are all 1 slice per container, so that case is
-un-measured; htsjdk output is where to look.
+**The within-a-query half of this is done.** An earlier version of this note
+said "the fixtures here are all 1 slice per container, so that case is
+un-measured" — that was wrong. `ce#1000.tmp.cram` packs 5 slices into each of
+its ~30 containers, and a whole-reference query over it issued **1001 filehandle
+reads of which only 545 were distinct**: every container header and compression
+header block re-read once per slice it held. `getRecordsForRange` now shares
+containers across the slices of one query, which takes it to 545 reads with zero
+duplicates, and 145,161 bytes for a 141,134-byte file (was 200,851).
+`test/redundantReads.test.ts` pins it.
+
+**The across-queries half is now constrained, not just unimplemented.** Caching
+containers file-wide would make a warm query free, but a container's memos are
+threaded with the caller's `AbortSignal` on a first-caller-wins basis, which is
+sound only while every caller of one memo belongs to the same query. A
+file-level cache breaks that and needs the foreign-abort handling
+`SliceRecordCache` and `CraiIndex` have — read
+[ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md) before starting.
 
 ## `readBlock` reads the same offset twice
 
 `readBlock` reads `cramBlockHeader.maxLength` at a position, then reads the full
 block at the same position — the second read is a superset of the first. Per
 cold decode: 2 of 8 filehandle reads on ONT, 6 of 22 on Illumina are redundant
-(~25%), but only ~34–102 redundant _bytes_. Irrelevant locally; over HTTP it is
-25% more range requests on the setup path. Measured at the CramFile→filehandle
-boundary — check whether generic-filehandle2 already coalesces before changing.
+(~25%), but only ~34–102 redundant _bytes_. On ce#1000 it is now the _only_
+remaining redundancy: a whole-reference query issues 545 reads at 373 distinct
+positions, so 172 of them are this.
 
-## No AbortSignal on the record read path
+It is **not** 25% more range requests over HTTP, which an earlier version of
+this note guessed. jbrowse's `RemoteFileWithRangeCache` caches per 256 KiB
+chunk, and the probe and the full read are in the same chunk by construction, so
+the second one is a cache hit. What it costs there is a `Uint8Array` allocation,
+a copy and a synthesized `Response` per read. Locally it is a real
+`open`/`read`/`close`, since that is what `LocalFile.read` does per call.
 
-`getRecordsForRange` accepts no `signal` — only `IndexOpts` (the `.crai`
-download) does. So a cancelled query keeps downloading its slice data to
-completion and then discards it. jbrowse-components wants this: its adapters
-thread a stop-token-derived signal into `@gmod/bam`, `@gmod/tabix` and
-`@gmod/bbi` already, and CRAM is the one indexed format left out.
+So: worth doing, but as an allocation/syscall win, not a network one. Measured
+at the CramFile→filehandle boundary.
 
-### Why it is worth more than "index reads are short" suggests
+## ~~No AbortSignal on the record read path~~ — done
 
-The caller's byte-range layer coalesces contiguous 256 KiB chunks into one range
-request, so a _small viewport over deep data_ becomes a _large_ single read.
-Measured in jbrowse on the analogous BAM path (not CRAM — nobody has measured
-CRAM): one 4 kb viewport over a 2000x BAM issues a single **6.5 MiB** range
-read, and over a 4-hop pan burst throttled to 50 KiB/s, three cancelled
-navigations abandoned ~6.5 MiB each — ~19.5 MiB that would otherwise transfer in
-full and be thrown away. The same `RemoteFileWithRangeCache` sits under CRAM, so
-expect the same order of magnitude.
+`getRecordsForRange` now takes a `signal`. The decision, including why the
+signal reaches some memos and not others and how the two genuinely shared reads
+avoid failing a bystander, is
+[ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md).
 
-### The trap — read this before starting
+Still open on the consumer side, and it is a three-line diff.
+`CramAdapter.getFeatures` already has the `stopToken` and already calls
+`checkStopToken` either side of the fetch; only the fetch itself is missing the
+signal. It needs to become what `BamAdapter.ts` already does:
 
-The read path is a stack of **self-clearing memoized promises**:
-`getDefinition`, `getCompressionScheme`, `getHeader`,
-`_getBlocksContentIdIndex`, then `SliceRecordCache`. Every one of them already
-evicts on rejection, so a cancellation cannot _poison_ a cache —
-`SliceRecordCache` documents exactly that hazard. That is not the problem.
+```js
+onProgress =>
+  withStopTokenSignal(stopToken, signal =>
+    cram.getRecordsForRange(refId, start, end, { onProgress, signal }),
+  ),
+```
 
-The problem is that none of them has a **foreign-abort retry**. Thread a signal
-in naively and a query that happens to share a memoized read with a cancelled
-query inherits that cancellation as its own failure. It will succeed on a retry
-(the entry was dropped), but the in-flight sharer fails for a reason that has
-nothing to do with it.
+Two things to do there while it is open:
 
-### Shape
-
-- **Thread the signal only into the bulk slice-data reads** reached from
-  `_fetchRecords`. Do **not** thread it into `getDefinition` /
-  `getCompressionScheme` / `getHeader` / `_getBlocksContentIdIndex`: those are
-  small, one-time, and shared file-wide, so cancelling them on one query's
-  behalf is wrong regardless of retries.
-- **Handle the sharing at `CramSlice.getRecords`**, the one level that shares
-  bulk reads between queries. Two proven patterns to pick from:
-  - the retry `@gmod/bam` (>= 7.6.0) uses in `_cachedChunkFeatures`: remember
-    the owning signal, and if the read you joined aborted while yours did not,
-    start over.
-  - the ref-counted abort `@gmod/abortable-promise-cache` gives `@gmod/tabix`
-    and `@gmod/bbi` for free, where `AggregateAbortController` fires only once
-    _every_ joined consumer has aborted. Cleaner, but CRAM's memoization is
-    bespoke, so adopting it means reworking the cache rather than adding ten
-    lines.
-
-### Consumer
-
-jbrowse's `CramAdapter.getFeatures` would wrap the read in
-`withStopTokenSignal(stopToken, signal => ...)`, exactly as `BamAdapter` now
-does. Nothing else changes on that side.
+- `products/jbrowse-web/browser-tests/suites/fetch-cancellation.ts` covers this
+  end to end for BAM and has a long comment on why jest cannot: the mechanisms
+  are a worker `postMessage`, a synchronous XHR that only exists in a worker
+  global, and an `AbortSignal` whose whole purpose is what it does to a socket.
+  A CRAM case belongs alongside it.
+- Nobody has measured what a cancelled CRAM navigation actually abandons. The
+  figure quoted in the ADR is from the BAM path.
 
 ## Simplifications (no perf angle)
 
