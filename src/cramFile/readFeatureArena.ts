@@ -200,10 +200,28 @@ export default class ReadFeatureArena {
     }
   }
 
-  /** The raw bytes of slot `index`'s payload, as a view into `payloadBytes`. */
+  /**
+   * The raw bytes of slot `index`'s payload, as a view into `payloadBytes`.
+   *
+   * Only for the codes whose `num` is a payload length — I/S/b/i/q. `num` means
+   * something else for every other code, so this would size the view by the
+   * quality score of a B or the data value of a D. Use {@link payloadByteAt}
+   * for B, the only other code that carries bytes.
+   */
   payloadBytesAt(index: number) {
     const offset = this.payloadOffsets[index]!
     return this.payloadBytes.subarray(offset, offset + this.num[index]!)
+  }
+
+  /**
+   * The single payload byte of slot `index` — the read base of a B feature.
+   *
+   * Deliberately not `payloadBytesAt(index)[0]`: `num` is B's *quality score*,
+   * so that sized the view by the quality and handed back an empty one whenever
+   * the quality was 0, which then read as a NUL instead of the base.
+   */
+  payloadByteAt(index: number) {
+    return this.payloadBytes[this.payloadOffsets[index]!]!
   }
 
   /** Slot `index`'s payload decoded as a string — the I/S/b/i `data` value. */
@@ -244,10 +262,7 @@ export default class ReadFeatureArena {
         code: 'B',
         pos,
         refPos,
-        data: [
-          String.fromCharCode(this.payloadBytes[this.payloadOffsets[index]!]!),
-          this.num[index]!,
-        ],
+        data: [String.fromCharCode(this.payloadByteAt(index)), this.num[index]!],
       }
     }
     if (code === RF_QUALS) {

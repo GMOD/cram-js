@@ -151,6 +151,15 @@ test.each([
     [{ code: 'B', data: ['t', 40], pos: 3, refPos: 104 }],
     8,
   ],
+  // A B feature's `num` column holds its *quality score*, not a payload length,
+  // so reading its base through the length-sized view handed back an empty one
+  // whenever the quality happened to be 0 — and the base decoded as a NUL. Only
+  // the string path read it that way, so the two disagreed on nothing else.
+  [
+    'base plus quality, quality zero',
+    [{ code: 'B', data: ['t', 0], pos: 3, refPos: 104 }],
+    8,
+  ],
   ['quality only', [{ code: 'Q', data: 40, pos: 3, refPos: 104 }], 8],
   [
     'several at once',

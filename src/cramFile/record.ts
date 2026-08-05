@@ -306,7 +306,7 @@ function decodeReadSequenceString(
           bases += subCode ? String.fromCharCode(subCode) : 'N'
           regionPos += 1
         } else if (code === RF_BASE_QUAL) {
-          bases += String.fromCharCode(arena.payloadBytesAt(i)[0]!)
+          bases += String.fromCharCode(arena.payloadByteAt(i))
           regionPos += 1
         } else if (code === RF_BASES) {
           bases += arena.payloadStringAt(i)
