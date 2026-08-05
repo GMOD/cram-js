@@ -1,3 +1,50 @@
+## [10.5.0](https://github.com/GMOD/cram-js/compare/v10.4.1...v10.5.0) (2026-08-05)
+
+### Bug Fixes
+
+- Decode a B read feature whose quality score is 0 as its base
+- Throw rather than hang on a cyclic intra-slice mate chain
+- Report a B read feature as a substitution when its base differs
+- Pass the reference under the name v10 gave it
+
+### Chores
+
+- Type-check the tests too, and fix what that turned up
+
+### Documentation
+
+- Record what the string batching did to the memory table, and why the read name is not deferred
+- Start an architecture decision record, and move the decisions into it
+- Interning the decoded strings was tried and is not worth it
+
+### Other Changes
+
+- Bump deps
+
+### Performance Improvements
+
+- Binary-search the .crai for a range instead of filtering every slice
+- Resolve base substitutions through numeric tables, not strings
+- Settle the read name's NUL terminator by its last byte
+- Bind the tag fast path on the values codec alone
+- Decode a slice's read names in one pass, not one call per record
+- Read a Z tag's value from its block the way a read name is read
+- Read a fixed-width tag as a number, not as a one-element array
+
+### Refactoring
+
+- Give the self-clearing async memoize one home, and drop a dead module
+- Drop an unused error class, and say what containerCount counts
+- Read the section parsers through a cursor instead of offset arithmetic
+- Let each codec bind its own fast path
+
+### Tests
+
+- Pass the reference under the name v10 gave it, and compare every field
+- Hold the four tolerated samtools discrepancies to exact equality
+- Arbitrate the unsorted fixtures too, and assert what parse.test claimed
+- Drop the unmapped-CIGAR blanking, following @gmod/bam
+
 ## [10.4.1](https://github.com/GMOD/cram-js/compare/v10.4.0...v10.4.1) (2026-08-05)
 
 ### Bug Fixes
