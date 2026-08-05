@@ -168,3 +168,11 @@ describe.skipIf(!available)(
     })
   },
 )
+
+// The coverage guard above lives inside the skipIf'd describe, so it skips
+// along with the suite and cannot report its own absence: with samtools
+// missing, every case here silently passes by not running. CI installs it, and
+// this fails loudly if that ever stops being true.
+test.skipIf(!process.env.CI)('samtools is installed in CI', () => {
+  expect(available).toBe(true)
+})
