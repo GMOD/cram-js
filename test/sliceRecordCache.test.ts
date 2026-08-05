@@ -224,6 +224,35 @@ test('a hit on a settled slice does not retain the caller', async () => {
   expect(cache.consumerCount('a')).toBe(0)
 })
 
+test('a consumer that already aborted does not keep a decode alive', async () => {
+  const cache = new SliceRecordCache(100)
+  const { promise, reject } = deferred()
+  const live = new AbortController()
+  const dead = new AbortController()
+  dead.abort()
+  let fillSignal: AbortSignal | undefined
+
+  const first = cache.getOrFill('a', live.signal, signal => {
+    fillSignal = signal
+    return promise
+  })
+  await expect(
+    cache.getOrFill('a', dead.signal, () => promise),
+  ).rejects.toThrow(/abort/i)
+
+  // The failure mode being guarded: an `abort` listener never fires on a signal
+  // that aborted before it was added, so counting `dead` as a waiter would
+  // leave it in the set forever and this decode could never be cancelled by
+  // anyone. `@gmod/bam` shipped exactly that at a layer with no equivalent of
+  // getOrFill's up-front check, and it was the ordinary pan rather than an edge
+  // case — the abort lands while the index is still being read.
+  live.abort()
+  expect(fillSignal!.aborted).toBe(true)
+
+  reject(new DOMException('aborted', 'AbortError'))
+  await expect(first).rejects.toThrow(/abort/i)
+})
+
 test('an already-aborted consumer never joins', async () => {
   const cache = new SliceRecordCache(100)
   const controller = new AbortController()

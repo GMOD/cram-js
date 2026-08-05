@@ -158,6 +158,21 @@ export default class SliceRecordCache {
   private join(entry: Entry, signal: AbortSignal | undefined) {
     if (signal === undefined) {
       entry.pinned = true
+    } else if (signal.aborted) {
+      // A consumer that has already given up is not a waiter, and must not be
+      // counted as one: an `abort` listener never fires on a signal that
+      // aborted before it was added, so nothing would ever take this signal
+      // back out of the set. The count would never reach zero and the decode
+      // would be uncancellable for everyone joined to it, silently.
+      //
+      // `getOrFill` rejects such a consumer before it reaches here, with no
+      // `await` in between, so this is unreachable today. It is here because
+      // the invariant is far too quiet to fail to be left resting on a check
+      // ten lines away — `@gmod/bam` shipped exactly this bug at a layer whose
+      // equivalent check did not exist.
+      if (!entry.pinned && entry.signals.size === 0) {
+        entry.controller.abort(signal.reason)
+      }
     } else if (!entry.signals.has(signal)) {
       // guarded so one signal joining twice — a viewAsPairs query reaching the
       // same slice for a read and for its mate — does not add two listeners
