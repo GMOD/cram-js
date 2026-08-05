@@ -50,12 +50,18 @@ describe('util.parseLtf8', () => {
     const encoded = encodeLtf8(value)
     // pad so an over-read past the field would be visibly nonzero
     const buffer = Uint8Array.from([...encoded, 0xff, 0xff, 0xff, 0xff])
-    expect(parseLtf8(buffer, 0)).toEqual([Number(value), encoded.length])
+    // cursor-mutating, so the advance is checked through the cursor rather
+    // than returned — which is the point: no tuple allocated per field
+    const cursor = { bytePosition: 0 }
+    expect(parseLtf8(buffer, cursor)).toEqual(Number(value))
+    expect(cursor.bytePosition).toEqual(encoded.length)
   })
 
   it('reads from a nonzero offset', () => {
     const buffer = Uint8Array.from([0x11, 0x22, ...encodeLtf8(3_000_000_000n)])
-    expect(parseLtf8(buffer, 2)).toEqual([3_000_000_000, 5])
+    const cursor = { bytePosition: 2 }
+    expect(parseLtf8(buffer, cursor)).toEqual(3_000_000_000)
+    expect(cursor.bytePosition).toEqual(7)
   })
 })
 

@@ -40,16 +40,15 @@ export function itf8Size(v: number) {
   return 5
 }
 
-// Cursor object used by the no-allocation hot-path parseItf8/parseLtf8 callers
-// (codecs/external.ts). The cursor is just `{ bytePosition: number }` —
-// matches the shape used elsewhere in the decode pipeline.
+// Cursor object used by the no-allocation parseItf8/parseLtf8 callers
+// (codecs/external.ts, and BufferReader, which is itself one). The cursor is
+// just `{ bytePosition: number }` — matches the shape used elsewhere in the
+// decode pipeline.
 export interface ByteCursor {
   bytePosition: number
 }
 
-// Canonical ITF8 parser — cursor-mutating, no per-call allocation. Used by
-// the hot path. The tuple-returning parseItf8Sized below is a thin wrapper
-// for section parsers that work in terms of `let offset` arithmetic.
+// Canonical ITF8 parser — cursor-mutating, no per-call allocation.
 // See CRAMv3 §2.3 (Integer types): https://samtools.github.io/hts-specs/CRAMv3.pdf
 export function parseItf8(buffer: Uint8Array, cursor: ByteCursor): number {
   const offset = cursor.bytePosition
@@ -89,18 +88,6 @@ export function parseItf8(buffer: Uint8Array, cursor: ByteCursor): number {
   )
 }
 
-// Tuple-returning wrapper for callers that prefer offset arithmetic
-// (sectionParsers.ts). Allocates one cursor + one tuple per call — fine for
-// section parsing (called O(slices) times) but not for the byte-decode loop.
-export function parseItf8Sized(
-  buffer: Uint8Array,
-  offset: number,
-): readonly [number, number] {
-  const cursor = { bytePosition: offset }
-  const value = parseItf8(buffer, cursor)
-  return [value, cursor.bytePosition - offset] as const
-}
-
 // LTF8 encodes the byte count in the leading 1 bits of the first byte: n
 // leading ones mean n further bytes follow, and the first byte's remaining low
 // bits are the value's most significant bits (0xFF, all ones, has none — eight
@@ -108,15 +95,18 @@ export function parseItf8Sized(
 // keeps this correct past 32 bits: `a << 24 | b << 16 | c << 8 | d` is a signed
 // int32, so any word whose top byte is >= 0x80 came out negative and the value
 // was ~2^32 too small.
+// Cursor-mutating like parseItf8, so neither allocates per field.
 // See CRAMv3 §2.3 (Integer types): https://samtools.github.io/hts-specs/CRAMv3.pdf
-export function parseLtf8(buffer: Uint8Array, initialOffset: number) {
-  const firstByte = buffer[initialOffset]!
+export function parseLtf8(buffer: Uint8Array, cursor: ByteCursor) {
+  const offset = cursor.bytePosition
+  const firstByte = buffer[offset]!
   const extraBytes = Math.clz32(~firstByte & 0xff) - 24
   let value = firstByte & (0xff >> extraBytes)
   for (let i = 1; i <= extraBytes; i++) {
-    value = value * 256 + buffer[initialOffset + i]!
+    value = value * 256 + buffer[offset + i]!
   }
-  return [value, extraBytes + 1] as const
+  cursor.bytePosition = offset + extraBytes + 1
+  return value
 }
 
 export function parseItem<T>(
