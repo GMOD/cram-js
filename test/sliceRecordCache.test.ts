@@ -208,6 +208,22 @@ test('a consumer with no signal pins the decode', async () => {
   expect(await second).toHaveLength(2)
 })
 
+test('a hit on a settled slice does not retain the caller', async () => {
+  const cache = new SliceRecordCache(100)
+  await cache.getOrFill('a', undefined, () => records(5))
+
+  // A settled entry has taken its abort listeners back off its consumers'
+  // signals, so a consumer registered after that point could never be
+  // unregistered: it sat in the set for as long as the LRU held the slice,
+  // holding that query's AbortController with it. jbrowse pans back over cached
+  // slices constantly, so this grew without bound on exactly the hot path the
+  // cache exists to make cheap.
+  for (let i = 0; i < 50; i++) {
+    await cache.getOrFill('a', new AbortController().signal, () => records(5))
+  }
+  expect(cache.consumerCount('a')).toBe(0)
+})
+
 test('an already-aborted consumer never joins', async () => {
   const cache = new SliceRecordCache(100)
   const controller = new AbortController()

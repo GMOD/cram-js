@@ -197,6 +197,24 @@ What remains is 545 reads at 373 distinct positions: 172 are `readBlock` probing
 a block header and then re-reading it as part of the full block, which is the
 open TODO item, not this one.
 
+**The ref-count came with a retention bug of its own, which is worth recording
+because it is the one this ADR criticises `@gmod/abortable-promise-cache` for.**
+`getOrFill` joined every consumer to the entry, including consumers arriving
+after it had settled. A settled entry has already taken its abort listeners back
+off its consumers' signals, so a signal registered after that point could never
+be unregistered: it sat in the entry's set for as long as the LRU held the
+slice, holding that query's `AbortController` with it. Every cache _hit_ leaked
+one, on exactly the path the cache exists to make cheap. The fix is that only a
+decode still running has anything to cancel, so a settled entry is not joined at
+all. `a hit on a settled slice does not retain the caller` counts 50 hits and
+expects zero retained; before the fix it counted 50.
+
+That count is invisible from behaviour — a settled entry with a thousand stale
+signals answers every query exactly like one with none — which is why
+`SliceRecordCache.consumerCount` exists purely as a test seam. Reading the code
+was the only thing standing between this and shipping, and reading the code is
+how it got written.
+
 **Where that win actually lands.** Over HTTP it is mostly not bytes. jbrowse's
 `RemoteFileWithRangeCache` caches per 256 KiB chunk, and a container header sits
 in the same chunk as the slices that follow it, so the duplicate reads were
