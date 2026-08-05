@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 const iterations = Number(process.argv[2] || '5')
 
 const seqFetch = async (_seqId: number, start: number, end: number) =>
-  'A'.repeat(end - start + 1)
+  'A'.repeat(end - start)
 
 interface BenchCase {
   name: string
@@ -65,7 +65,7 @@ async function benchBranch(branchDir: string, c: BenchCase) {
   const cram0 = new IndexedCramFile({
     cramPath: c.cramPath,
     index: new CraiIndex({ path: `${c.cramPath}.crai` }),
-    seqFetch,
+    fetchReferenceSequence: seqFetch,
     checkSequenceMD5: false,
   })
   const warmupRecords = await cram0.getRecordsForRange(c.seqId, c.start, c.end)
@@ -84,7 +84,7 @@ async function benchBranch(branchDir: string, c: BenchCase) {
     const cram = new IndexedCramFile({
       cramPath: c.cramPath,
       index: new CraiIndex({ path: `${c.cramPath}.crai` }),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     await cram.getRecordsForRange(c.seqId, c.start, c.end)

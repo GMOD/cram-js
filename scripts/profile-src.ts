@@ -6,7 +6,7 @@ import { IndexedCramFile } from '../src/index.ts'
 const iterations = Number(process.argv[2] || '10')
 
 const seqFetch = async (_seqId: number, start: number, end: number) =>
-  'A'.repeat(end - start + 1)
+  'A'.repeat(end - start)
 
 interface BenchCase {
   name: string
@@ -59,7 +59,7 @@ async function benchCase(c: BenchCase) {
     const cram = new IndexedCramFile({
       cramFilehandle: new LocalFile(c.cramPath),
       index: new CraiIndex({ filehandle: new LocalFile(`${c.cramPath}.crai`) }),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     await cram.getRecordsForRange(c.seqId, c.start, c.end)
@@ -79,7 +79,7 @@ async function benchCase(c: BenchCase) {
     const cram = new IndexedCramFile({
       cramFilehandle: new LocalFile(c.cramPath),
       index: new CraiIndex({ filehandle: new LocalFile(`${c.cramPath}.crai`) }),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     const records = await cram.getRecordsForRange(c.seqId, c.start, c.end)

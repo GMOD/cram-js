@@ -29,7 +29,7 @@ if (!c) {
 }
 
 const seqFetch = async (_seqId: number, start: number, end: number) =>
-  'A'.repeat(end - start + 1)
+  'A'.repeat(end - start)
 
 // heapUsed alone undercounts a columnar layout badly: V8 allocates ArrayBuffer
 // backing stores outside the JS heap, so every typed-array column shows up in
@@ -46,7 +46,7 @@ const before = usage()
 const cram = new IndexedCramFile({
   cramFilehandle: new LocalFile(c.cramPath),
   index: new CraiIndex({ filehandle: new LocalFile(`${c.cramPath}.crai`) }),
-  seqFetch,
+  fetchReferenceSequence: seqFetch,
   checkSequenceMD5: false,
 })
 const t0 = performance.now()

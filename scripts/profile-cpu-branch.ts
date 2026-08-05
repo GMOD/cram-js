@@ -8,7 +8,7 @@ const branchDir = branch === '1' ? 'esm_branch1' : 'esm_branch2'
 const branchName = readFileSync(`${branchDir}/branchname.txt`, 'utf8').trim()
 
 const seqFetch = async (_seqId: number, start: number, end: number) =>
-  'A'.repeat(end - start + 1)
+  'A'.repeat(end - start)
 
 interface ProfileCase {
   name: string
@@ -44,7 +44,7 @@ async function profileCase(session: Session, c: ProfileCase) {
     const cram = new IndexedCramFile({
       cramPath: c.cramPath,
       index: new CraiIndex({ path: `${c.cramPath}.crai` }),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     await cram.getRecordsForRange(c.seqId, c.start, c.end)
@@ -62,7 +62,7 @@ async function profileCase(session: Session, c: ProfileCase) {
     const cram = new IndexedCramFile({
       cramPath: c.cramPath,
       index: new CraiIndex({ path: `${c.cramPath}.crai` }),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     const records = await cram.getRecordsForRange(c.seqId, c.start, c.end)

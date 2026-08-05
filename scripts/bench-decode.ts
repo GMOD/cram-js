@@ -80,7 +80,7 @@ async function benchIndexed(name: string, cram: string, crai: string) {
     const file = new IndexedCramFile({
       cramFilehandle: new LocalFile(`${DATA}/${cram}`),
       index: new CraiIndex({ filehandle: new LocalFile(`${DATA}/${crai}`) }),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     const records = await file.getRecordsForRange(
@@ -96,7 +96,7 @@ async function benchWholeFile(name: string, cram: string) {
   return time(name, async () => {
     const file = new CramFile({
       filehandle: new LocalFile(`${DATA}/${cram}`),
-      seqFetch,
+      fetchReferenceSequence: seqFetch,
       checkSequenceMD5: false,
     })
     let total = 0
