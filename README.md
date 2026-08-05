@@ -323,6 +323,13 @@ mismatches.
 - `CramMalformedError` — malformed file data
 - `CramBufferOverrunError` — read past end of data
 
+## Design notes
+
+[docs/adr/](docs/adr/) records the decisions that shape how the decoder is put
+together — what was decided, the measurement that settled it, and what it costs.
+[TODO.md](TODO.md) is the other half: work investigated and measured but not
+done, including what was deliberately rejected.
+
 ## Academic Use
 
 Written with [NHGRI](http://genome.gov) funding as part of

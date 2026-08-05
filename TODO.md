@@ -4,6 +4,10 @@ Investigated, measured, not yet done. Numbers below were measured on this repo
 at v8.7.0 — see the method note at the bottom before trusting or re-running
 them.
 
+Decisions that were _taken_ live in [docs/adr/](docs/adr/) rather than here;
+this file is for what has been measured but not acted on, including what was
+deliberately rejected.
+
 ## ~~Cached slices redo their reference decoration on every query~~ — done
 
 `CramSlice.getRecords` used to serve records from `featureCache` and then
@@ -338,27 +342,13 @@ rather than diverge from it.
 
 Recorded so they are not rediscovered:
 
-- **Deferring the read name behind a getter.** The reasoning that makes it look
-  attractive is sound as far as it goes: jbrowse reaches `record.readName` only
-  through `CramSlightlyLazyFeature`'s `name` getter, and the only callers of
-  `get('name')` on the CRAM path are chained/paired mode (`chainGroupingKey`),
-  the details panel (`buildBaseFeatureData`), the context menu, the read-vs-ref
-  dialog and SAM export. **A plain pileup render never asks for a read name at
-  all**, so a lazy name would be free for the common render.
-
-  What kills it is that decoding the block at once already collected most of the
-  prize. Names were ~10.4 ms of a ~110 ms decode of SRR396637 when each was a
-  `TextDecoder` call; they are ~1.5 ms now. So laziness is competing for the
-  remaining ~1.4%, and to get it it would have to turn a public field into a
-  getter, give every record an offset field beside it, handle `mate.readName`
-  and the assignment in `addReferenceSequence`, and keep the name block alive as
-  bytes rather than as a string. Not worth it at that size. Revisit only if the
-  eager path somehow gets expensive again.
-
-  The general lesson is worth keeping separately from the specific answer: when
-  a per-record cost looks like it wants to be deferred, check first whether it
-  wants to be _batched_. Deferring moves work; batching deletes it, and does not
-  touch the API.
+- **Deferring the read name behind a getter.** Attractive for a real reason — a
+  plain jbrowse pileup render never asks for a read name — but the batching took
+  names from ~10.4 ms to ~1.5 ms first, so deferral is left competing for ~1.4%
+  of the decode and would buy it with a public field's field-ness. The call
+  sites, the numbers and the general point (check whether a per-record cost
+  wants to be _batched_ before deciding it wants to be deferred) are in
+  [ADR 0002](docs/adr/0002-batch-decoding-over-lazy-fields.md).
 
 - **`batchDecodeItf8` scratch sizing.** The `new Int32Array(buffer.length)`
   looks like a 4x over-allocation; measured utilisation is **97.5–100%** (ITF8
