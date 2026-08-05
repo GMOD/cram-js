@@ -7,11 +7,6 @@ export class CramUnimplementedError extends Error {}
 export class CramMalformedError extends CramError {}
 
 /**
- * An error caused by data being too big, exceeding a size limit.
- */
-export class CramSizeLimitError extends CramError {}
-
-/**
  * An invalid argument was supplied to a cram-js method or object.
  */
 export class CramArgumentError extends CramError {}

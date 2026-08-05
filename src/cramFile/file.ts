@@ -298,22 +298,32 @@ export default class CramFile {
   }
 
   /**
-   * @returns {Promise[number]} the number of containers in the file
+   * How many containers the file holds, not counting the EOF marker container.
    *
-   * note: this is currently used only in unit tests, and after removing file
-   * length check, relies on a try catch to read return an error to break
+   * Nothing in a CRAM records this, so it is a walk from the start, and there
+   * is no length to bound the walk either — it ends when a container fails to
+   * parse, which is what reading past the end of the file looks like. The EOF
+   * marker parses like any other container, so it is walked and then
+   * subtracted: the number left is how many containers hold data, which is what
+   * `getContainerById` indexes.
+   *
+   * A file whose very first container does not parse counts 0 rather than
+   * reporting -1.
+   *
+   * Only used by the tests.
    */
-  async containerCount(): Promise<number | undefined> {
-    let containerCount = 0
+  async containerCount(): Promise<number> {
+    let parsed = 0
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for await (const _container of this.iterContainers()) {
-        containerCount += 1
+        parsed += 1
       }
-    } catch (e) {
-      containerCount--
+    } catch {
+      // the failed read past the last container is how the walk terminates;
+      // every container counted before it parsed cleanly
     }
-    return containerCount
+    return Math.max(parsed - 1, 0)
   }
 
   getContainerAtPosition(position: number) {
