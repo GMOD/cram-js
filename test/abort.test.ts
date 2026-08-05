@@ -31,6 +31,24 @@ async function warmUp(cram: IndexedCramFile, file?: GatedFile) {
   file?.reset()
 }
 
+test('containers and slices are never shared between queries', () => {
+  const { cram } = openCram()
+
+  // Not a style preference — this is the invariant the whole signal-threading
+  // arrangement rests on. Container and slice memos take the caller's signal on
+  // a first-caller-wins basis (see `memoizeAsync`), which is sound only while
+  // every caller of one memo belongs to the same query. Cache either of these
+  // objects file-wide and the first query to arrive silently owns a header that
+  // every later query depends on, which is the leak `SliceRecordCache` and
+  // `CraiIndex` handle explicitly, reappearing somewhere that does not.
+  //
+  // Nothing else in the suite would notice: the tests below all pass against a
+  // file-level container cache. Hence this one.
+  const container = cram.getContainerAtPosition(0)
+  expect(cram.getContainerAtPosition(0)).not.toBe(container)
+  expect(container.getSlice(0, 100)).not.toBe(container.getSlice(0, 100))
+})
+
 test('a query with an already-aborted signal rejects and reads nothing', async () => {
   const file = new GatedFile(testDataFile(CRAM))
   const cram = openCram(file)

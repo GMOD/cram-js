@@ -72,6 +72,19 @@ export default class SliceRecordCache {
     return this.touch(key)?.promise
   }
 
+  /**
+   * How many consumer signals the entry under `key` is still holding.
+   *
+   * A seam for the tests. The count is invisible from behaviour — a settled
+   * entry with a thousand stale signals answers every query exactly like one
+   * with none — so without it the only thing pinning "does not retain its
+   * callers" would be reading the code, which is how the retention it guards
+   * against got written in the first place.
+   */
+  consumerCount(key: string) {
+    return this.entries.get(key)?.signals.size ?? 0
+  }
+
   private touch(key: string) {
     const entry = this.entries.get(key)
     if (entry === undefined) {
@@ -107,7 +120,14 @@ export default class SliceRecordCache {
       entry = undefined
     }
     entry ??= this.start(key, fill)
-    this.join(entry, signal)
+    // Only a decode still running has anything to cancel. Joining a settled one
+    // would add this caller to a set nothing will ever take it out of — the
+    // entry dropped its abort listeners when it settled — so the cache would
+    // retain an AbortSignal, and the controller behind it, for every query that
+    // ever hit this slice.
+    if (!entry.settled) {
+      this.join(entry, signal)
+    }
 
     try {
       const records = await entry.promise
