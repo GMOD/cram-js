@@ -8,6 +8,7 @@ import CramRecord, { defaultDecodeOptions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
 
+import type { BaseOpts, ReadOpts } from '../../opts.ts'
 import type CramContainer from '../container/index.ts'
 import type CramFile from '../file.ts'
 import type { DecodeOptions } from '../record.ts'
@@ -223,10 +224,18 @@ export default class CramSlice {
   container: CramContainer
   containerPosition: number
   sliceSize: number
-  private _headerMemo = memoizeAsync(() => this._fetchHeader())
-  private _blocksMemo = memoizeAsync(() => this._fetchBlocks())
-  private _blocksContentIdIndexMemo = memoizeAsync(() =>
-    this._fetchBlocksContentIdIndex(),
+  // Like `CramContainer`, a slice is constructed per query rather than looked
+  // up, so these memos are private to one query and take its signal directly.
+  // Records decoded out of the slice *are* shared between queries, through
+  // `CramFile.featureCache` — `getRecords` below is where that is handled.
+  private _headerMemo = memoizeAsync((opts?: ReadOpts) =>
+    this._fetchHeader(opts),
+  )
+  private _blocksMemo = memoizeAsync((opts?: ReadOpts) =>
+    this._fetchBlocks(opts),
+  )
+  private _blocksContentIdIndexMemo = memoizeAsync((opts?: ReadOpts) =>
+    this._fetchBlocksContentIdIndex(opts),
   )
 
   constructor(
@@ -240,18 +249,19 @@ export default class CramSlice {
     this.sliceSize = sliceSize
   }
 
-  getHeader() {
-    return this._headerMemo()
+  getHeader(opts?: ReadOpts) {
+    return this._headerMemo(opts)
   }
 
-  private async _fetchHeader() {
+  private async _fetchHeader(opts?: ReadOpts) {
     // fetch and parse the slice header
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
-    const containerHeader = await this.container.getHeader()
+    const containerHeader = await this.container.getHeader(opts)
 
     const header = await this.file.readBlock(
       containerHeader._endPosition + this.containerPosition,
+      opts,
     )
     const parser =
       header.contentType === 'MAPPED_SLICE_HEADER'
@@ -274,26 +284,31 @@ export default class CramSlice {
     }
   }
 
-  getBlocks() {
-    return this._blocksMemo()
+  getBlocks(opts?: ReadOpts) {
+    return this._blocksMemo(opts)
   }
 
-  private async _fetchBlocks() {
-    const header = await this.getHeader()
+  private async _fetchBlocks(opts?: ReadOpts) {
+    const header = await this.getHeader(opts)
 
     if (this.sliceSize) {
       // if we know the slice size (from the index), do one big read for all
       // blocks and parse from the in-memory buffer
-      const containerHeader = await this.container.getHeader()
+      const containerHeader = await this.container.getHeader(opts)
       const sliceFilePosition =
         containerHeader._endPosition + this.containerPosition
       const blocksFilePosition = header._endPosition
       const headerSize = blocksFilePosition - sliceFilePosition
       const remainingBytes = this.sliceSize - headerSize
 
+      // The read a cancellation is really aimed at. Everything else on this
+      // path is header-sized; this is the slice's whole payload, and under a
+      // range-coalescing filehandle a small viewport over deep data turns into
+      // a single multi-megabyte request.
       const allBlocksBuffer = await this.file.read(
         remainingBytes,
         blocksFilePosition,
+        opts,
       )
 
       const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
@@ -314,7 +329,7 @@ export default class CramSlice {
     let blockPosition = header._endPosition
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
     for (let i = 0; i < blocks.length; i++) {
-      const block = await this.file.readBlock(blockPosition)
+      const block = await this.file.readBlock(blockPosition, opts)
       blocks[i] = block
       blockPosition = block._endPosition
     }
@@ -322,19 +337,19 @@ export default class CramSlice {
   }
 
   // no memoize
-  async getCoreDataBlock() {
-    const blocks = await this.getBlocks()
+  async getCoreDataBlock(opts?: ReadOpts) {
+    const blocks = await this.getBlocks(opts)
     return blocks[0]
   }
 
-  _getBlocksContentIdIndex() {
-    return this._blocksContentIdIndexMemo()
+  _getBlocksContentIdIndex(opts?: ReadOpts) {
+    return this._blocksContentIdIndexMemo(opts)
   }
 
-  private async _fetchBlocksContentIdIndex(): Promise<
-    Record<number, CramFileBlock>
-  > {
-    const blocks = await this.getBlocks()
+  private async _fetchBlocksContentIdIndex(
+    opts?: ReadOpts,
+  ): Promise<Record<number, CramFileBlock>> {
+    const blocks = await this.getBlocks(opts)
     const blocksByContentId: Record<number, CramFileBlock> = {}
     blocks.forEach(block => {
       if (block.contentType === 'EXTERNAL_DATA') {
@@ -346,22 +361,22 @@ export default class CramSlice {
 
   // the container only lacks a compression scheme when it holds no records,
   // which is never the case for a container we are decoding a slice out of
-  private async getCompressionScheme() {
-    const compressionScheme = await this.container.getCompressionScheme()
+  private async getCompressionScheme(opts?: ReadOpts) {
+    const compressionScheme = await this.container.getCompressionScheme(opts)
     if (compressionScheme === undefined) {
       throw new CramMalformedError('compression scheme undefined')
     }
     return compressionScheme
   }
 
-  async getBlockByContentId(id: number) {
-    const blocksByContentId = await this._getBlocksContentIdIndex()
+  async getBlockByContentId(id: number, opts?: ReadOpts) {
+    const blocksByContentId = await this._getBlocksContentIdIndex(opts)
     return blocksByContentId[id]
   }
 
-  async getReferenceRegion() {
+  async getReferenceRegion(opts?: ReadOpts) {
     // read the slice header
-    const sliceHeader = (await this.getHeader()).parsedContent
+    const sliceHeader = (await this.getHeader(opts)).parsedContent
     if (!isMappedSliceHeader(sliceHeader)) {
       throw new Error('slice header not mapped')
     }
@@ -370,11 +385,12 @@ export default class CramSlice {
       return undefined
     }
 
-    const compressionScheme = await this.getCompressionScheme()
+    const compressionScheme = await this.getCompressionScheme(opts)
 
     if (sliceHeader.refBaseBlockId >= 0) {
       const refBlock = await this.getBlockByContentId(
         sliceHeader.refBaseBlockId,
+        opts,
       )
       if (!refBlock) {
         throw new CramMalformedError(
@@ -410,6 +426,7 @@ export default class CramSlice {
         sliceHeader.refSeqStart,
         sliceHeader.refSeqStart + sliceHeader.refSeqSpan,
         await this.file.getReferenceName(sliceHeader.refSeqId),
+        opts,
       )
 
       if (seq.length !== sliceHeader.refSeqSpan) {
@@ -429,8 +446,8 @@ export default class CramSlice {
     return undefined
   }
 
-  getAllRecords() {
-    return this.getRecords(() => true)
+  getAllRecords(opts?: BaseOpts & DecodeOptions) {
+    return this.getRecords(() => true, opts)
   }
 
   /**
@@ -446,6 +463,7 @@ export default class CramSlice {
   private async checkReferenceMd5(
     sliceHeader: SliceHeader,
     majorVersion: number,
+    opts?: ReadOpts,
   ): Promise<RefRegionWithSeq | undefined> {
     if (
       majorVersion > 1 &&
@@ -456,7 +474,7 @@ export default class CramSlice {
       const md5Bytes = sliceHeader.parsedContent.md5
       // an absent or all-zero md5 means "not recorded", nothing to check
       if (md5Bytes?.some(byte => byte !== 0)) {
-        const refRegion = await this.getReferenceRegion()
+        const refRegion = await this.getReferenceRegion(opts)
         if (refRegion) {
           const { seq, start, end } = refRegion
           const seqMd5 = sequenceMD5(seq)
@@ -496,6 +514,7 @@ export default class CramSlice {
     records: CramRecord[],
     header: MappedSliceHeader,
     md5Region: RefRegionWithSeq | undefined,
+    opts?: ReadOpts,
   ) {
     const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
     if (
@@ -528,7 +547,7 @@ export default class CramSlice {
       }
     }
 
-    const compressionScheme = await this.getCompressionScheme()
+    const compressionScheme = await this.getCompressionScheme(opts)
     const resolved = new Map<number, RefRegionWithSeq>()
     await Promise.all(
       [...spans].map(async ([seqId, span]) => {
@@ -558,6 +577,7 @@ export default class CramSlice {
           span.start,
           span.end,
           await this.file.getReferenceName(seqId),
+          opts,
         )
         // truthy, not `!== ''`: a callback that cannot resolve the reference
         // may hand back an empty string, and decoding a read against an empty
@@ -579,13 +599,20 @@ export default class CramSlice {
     }
   }
 
-  async _fetchRecords(decodeOptions: Required<DecodeOptions>) {
+  async _fetchRecords(
+    decodeOptions: Required<DecodeOptions>,
+    opts?: ReadOpts,
+  ) {
     const { majorVersion } = await this.file.getDefinition()
-    const compressionScheme = await this.getCompressionScheme()
-    const sliceHeader = await this.getHeader()
-    const blocksByContentId = await this._getBlocksContentIdIndex()
+    const compressionScheme = await this.getCompressionScheme(opts)
+    const sliceHeader = await this.getHeader(opts)
+    const blocksByContentId = await this._getBlocksContentIdIndex(opts)
 
-    const md5Region = await this.checkReferenceMd5(sliceHeader, majorVersion)
+    const md5Region = await this.checkReferenceMd5(
+      sliceHeader,
+      majorVersion,
+      opts,
+    )
 
     const header = sliceHeader.parsedContent
     if (!isMappedSliceHeader(header)) {
@@ -595,12 +622,20 @@ export default class CramSlice {
     const ctx = buildSliceDecodeContext({
       compressionScheme,
       blocksByContentId,
-      coreDataBlock: await this.getCoreDataBlock(),
+      coreDataBlock: await this.getCoreDataBlock(opts),
       majorVersion,
       refSeqId: header.refSeqId,
       refSeqStart: header.refSeqStart,
       decodeTags: decodeOptions.decodeTags,
     })
+
+    // The last chance to bail before the expensive part. The loop below is
+    // synchronous across the whole slice — tens of thousands of records on
+    // short-read data — so there is no point inside it at which an abort could
+    // be noticed, and no `await` for one to interleave with. Checking here also
+    // covers the filehandles that ignore the signal outright (`LocalFile`):
+    // their reads run to completion regardless, but the decode does not.
+    opts?.signal?.throwIfAborted()
 
     const records: CramRecord[] = new Array(header.numRecords)
     const uniqueIdBase = sliceHeader.contentPosition + header.recordCounter + 1
@@ -623,13 +658,13 @@ export default class CramSlice {
 
     trimSliceColumns(ctx, records)
     associateIntraSliceMates(records)
-    await this.applyReferenceSequence(records, header, md5Region)
+    await this.applyReferenceSequence(records, header, md5Region, opts)
     return records
   }
 
   async getRecords(
     filterFunction: (r: CramRecord) => boolean,
-    decodeOptions?: DecodeOptions,
+    decodeOptions?: DecodeOptions & BaseOpts,
   ) {
     // Resolve defaults per-key rather than by spreading: callers routinely
     // build a DecodeOptions with explicitly-undefined values (see
@@ -638,21 +673,29 @@ export default class CramSlice {
     const opts: Required<DecodeOptions> = {
       decodeTags: decodeOptions?.decodeTags ?? defaultDecodeOptions.decodeTags,
     }
-
-    // fetch the features if necessary, using the file-level feature cache
-    // Include decode options in cache key so different decode configs are cached separately
+    // The signal is deliberately *not* part of `opts` above, and so not part of
+    // the cache key below: two queries wanting the same records under different
+    // signals still want the same records.
+    //
+    // Include decode options in the cache key so different decode configs are
+    // cached separately
     const optionsKey = `${opts.decodeTags ? 1 : 0}`
     const cacheKey = `${this.container.filePosition}:${this.containerPosition}:${optionsKey}`
-    let recordsPromise = this.file.featureCache.get(cacheKey)
-    if (!recordsPromise) {
-      recordsPromise = this._fetchRecords(opts)
-      this.file.featureCache.set(cacheKey, recordsPromise)
-    }
 
-    // the records come back already decorated with their reference — see
+    // The decode runs under the signal the *cache* hands back, not under this
+    // caller's: a slice is shared between concurrent queries, and it must
+    // survive until every one of them has given up. `SliceRecordCache` does
+    // that ref-counting and reports this caller's own cancellation to this
+    // caller alone.
+    //
+    // The records come back already decorated with their reference — see
     // applyReferenceSequence, which runs once per slice inside the cached
-    // decode rather than once per query over the filtered subset
-    const unfiltered = await recordsPromise
-    return unfiltered.filter(filterFunction)
+    // decode rather than once per query over the filtered subset.
+    const records = await this.file.featureCache.getOrFill(
+      cacheKey,
+      decodeOptions?.signal,
+      signal => this._fetchRecords(opts, { signal }),
+    )
+    return records.filter(filterFunction)
   }
 }

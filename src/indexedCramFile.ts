@@ -2,8 +2,10 @@ import CramFile from './cramFile/index.ts'
 import { type DecodeOptions } from './cramFile/record.ts'
 
 import type { IndexOpts, Slice } from './craiIndex.ts'
+import type CramContainer from './cramFile/container/index.ts'
 import type { SeqFetch } from './cramFile/file.ts'
 import type CramRecord from './cramFile/record.ts'
+import type { BaseOpts } from './opts.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 export interface CramFileSource {
@@ -27,7 +29,10 @@ export interface CramIndexLike {
     end: number,
     opts?: IndexOpts,
   ) => Promise<Slice[]>
-  hasDataForReferenceSequence: (seqId: number) => Promise<boolean>
+  hasDataForReferenceSequence: (
+    seqId: number,
+    opts?: IndexOpts,
+  ) => Promise<boolean>
 }
 
 export default class IndexedCramFile {
@@ -115,17 +120,21 @@ export default class IndexedCramFile {
        * callers render a determinate progress bar.
        */
       onProgress?: (bytesDownloaded: number, totalBytes?: number) => void
-    } & DecodeOptions = {},
+    } & DecodeOptions &
+      BaseOpts = {},
   ) {
     const viewAsPairs = opts.viewAsPairs ?? false
     const pairAcrossChr = opts.pairAcrossChr ?? false
     const maxInsertSize = opts.maxInsertSize ?? 200000
     const onProgress = opts.onProgress
+    const signal = opts.signal
+    signal?.throwIfAborted()
 
     // the .crai index downloads lazily here on first query; thread onProgress so
     // its download streams under the same bar, ahead of the slice data below
     const slices = await this.index.getEntriesForRange(seq, start, end, {
       onProgress,
+      signal,
     })
 
     let totalBytes = 0
@@ -134,6 +143,20 @@ export default class IndexedCramFile {
     }
     let downloadedBytes = 0
     onProgress?.(0, totalBytes)
+
+    // A CRAM packs several slices per container, so without this every slice of
+    // a query re-read its container's header and compression header block: on
+    // ce#1000, 149 slices across ~30 containers meant 456 of 1001 filehandle
+    // reads were exact duplicates of another read in the same query.
+    //
+    // Scoped to this one query on purpose, and it must stay that way. A
+    // container's memos are threaded with the caller's `signal` on a
+    // first-caller-wins basis (see `memoizeAsync`), which is sound only while
+    // every caller of one memo is the same query. A file-level container cache
+    // would put the first query's signal in charge of a header every later query
+    // depends on — the leak `SliceRecordCache` and `CraiIndex` handle explicitly,
+    // reappearing at a third site with nothing to handle it.
+    const containers = new Map<number, CramContainer>()
 
     // fetch all the slices and parse the feature data
     const sliceResults = await Promise.all(
@@ -174,6 +197,7 @@ export default class IndexedCramFile {
           // opts is a superset of DecodeOptions; getRecords resolves the
           // defaults per key so passing it straight through is safe
           opts,
+          containers,
         ).then(records => {
           downloadedBytes += slice.sliceBytes
           onProgress?.(downloadedBytes, totalBytes)
@@ -208,6 +232,7 @@ export default class IndexedCramFile {
               cramRecord.mate.sequenceId,
               cramRecord.mate.start,
               cramRecord.mate.start + 1,
+              { signal },
             ),
           )
         }
@@ -227,19 +252,21 @@ export default class IndexedCramFile {
       }
 
       const mateFeatPromises = [...uniqueMateSlices.values()].map(c =>
-        this.getRecordsInSlice(c, () => true).then(feats => {
-          const mateRecs = []
-          for (const feature of feats) {
-            const name = requireReadName(feature)
-            if (
-              unmatedReadNames.has(name) &&
-              !seenUniqueIds.has(feature.uniqueId)
-            ) {
-              mateRecs.push(feature)
+        this.getRecordsInSlice(c, () => true, { signal }, containers).then(
+          feats => {
+            const mateRecs = []
+            for (const feature of feats) {
+              const name = requireReadName(feature)
+              if (
+                unmatedReadNames.has(name) &&
+                !seenUniqueIds.has(feature.uniqueId)
+              ) {
+                mateRecs.push(feature)
+              }
             }
-          }
-          return mateRecs
-        }),
+            return mateRecs
+          },
+        ),
       )
       const newMateFeats = await Promise.all(mateFeatPromises)
       ret = ret.concat(newMateFeats.flat())
@@ -254,9 +281,20 @@ export default class IndexedCramFile {
       sliceBytes,
     }: { containerStart: number; sliceStart: number; sliceBytes: number },
     filterFunction: (r: CramRecord) => boolean,
-    decodeOptions?: DecodeOptions,
+    decodeOptions?: DecodeOptions & BaseOpts,
+    /**
+     * Containers already built for the query this call belongs to, so that
+     * slices sharing a container share its header reads. Must be scoped to one
+     * query — see where `getRecordsForRange` creates it. Omitting it is
+     * correct, just one container's worth of re-reading per slice.
+     */
+    containers?: Map<number, CramContainer>,
   ) {
-    const container = this.cram.getContainerAtPosition(containerStart)
+    let container = containers?.get(containerStart)
+    if (!container) {
+      container = this.cram.getContainerAtPosition(containerStart)
+      containers?.set(containerStart, container)
+    }
     const slice = container.getSlice(sliceStart, sliceBytes)
     return slice.getRecords(filterFunction, decodeOptions)
   }
@@ -267,7 +305,7 @@ export default class IndexedCramFile {
    * @returns {Promise} true if the CRAM file contains data for the given
    * reference sequence numerical ID
    */
-  hasDataForReferenceSequence(seqId: number) {
-    return this.index.hasDataForReferenceSequence(seqId)
+  hasDataForReferenceSequence(seqId: number, opts?: IndexOpts) {
+    return this.index.hasDataForReferenceSequence(seqId, opts)
   }
 }

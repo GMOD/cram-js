@@ -20,6 +20,7 @@ The distinction from the other documents here:
 | ----------------------------------------------- | ---------------------------------------------------------- | -------- |
 | [0001](0001-codec-binding-seam.md)              | Codecs bind their own per-slice fast paths                 | accepted |
 | [0002](0002-batch-decoding-over-lazy-fields.md) | Batch per-record work rather than defer it behind a getter | accepted |
+| [0003](0003-abortsignal-on-the-read-path.md)    | Cancel per-query reads, reference-count the shared ones    | accepted |
 
 ## Writing one
 

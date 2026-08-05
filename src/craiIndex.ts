@@ -3,19 +3,19 @@ import { open } from './io.ts'
 import { unzip } from './unzip.ts'
 
 import type { CramFileSource } from './cramFile/file.ts'
+import type { BaseOpts } from './opts.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 const BAI_MAGIC = 21_578_050 // BAI\1
 
-export interface IndexOpts {
-  signal?: AbortSignal
-  /**
-   * Called as the index (.crai) is downloaded, with cumulative downloaded bytes
-   * and the total. The index is a whole-file read, so this streams real byte
-   * progress. Lets callers show a determinate "downloading index" bar.
-   */
-  onProgress?: (bytesDownloaded: number, totalBytes?: number) => void
-}
+/**
+ * {@link BaseOpts} under the name the index methods have always taken.
+ *
+ * `onProgress` here is the download of the `.crai` itself, which is a
+ * whole-file read, so it streams real byte progress rather than the
+ * slice-granularity ticks `getRecordsForRange` reports for the CRAM data.
+ */
+export type IndexOpts = BaseOpts
 
 export interface Slice {
   /** 0-based start of the slice on the reference (the .crai stores 1-based) */
@@ -88,6 +88,13 @@ export default class CraiIndex {
   // Each line represents a slice in the CRAM file. Please note that all slices
   // must be listed in index file.
   private indexDataP?: Promise<IndexData>
+  /**
+   * The signal `indexDataP` was started under, while it is still in flight. The
+   * whole index is parsed once and shared by every query against the file, so
+   * without this the first query to arrive would own a read all the others
+   * depend on — see `getIndexData`.
+   */
+  private indexDataSignal?: AbortSignal
 
   private filehandle: GenericFilehandle
 
@@ -191,16 +198,64 @@ export default class CraiIndex {
     return index
   }
 
-  private getIndexData(opts: IndexOpts = {}) {
-    if (!this.indexDataP) {
-      this.indexDataP = this.parseIndex(opts)
-        .then(bySeqId => ({ bySeqId, maxSpan: maxSpanBySeqId(bySeqId) }))
-        .catch((e: unknown) => {
-          this.indexDataP = undefined
-          throw e
-        })
+  /**
+   * Parse the index, or join the parse already running.
+   *
+   * The index is downloaded and parsed once for the life of the object, so this
+   * is the one read in the class that is shared between queries — and the one
+   * place a cancellation could leak from the query that asked for it to a query
+   * that did not. A caller that joined someone else's parse and saw it fail
+   * because *they* aborted starts over rather than inheriting the failure —
+   * once, then propagates, for the reason `CramSlice.cachedRecords` gives for
+   * bounding the equivalent retry on decoded slices.
+   */
+  private async getIndexData(
+    opts: IndexOpts = {},
+    retried = false,
+  ): Promise<IndexData> {
+    opts.signal?.throwIfAborted()
+    const pending = this.indexDataP
+    if (!pending) {
+      return this.startIndexParse(opts)
     }
-    return this.indexDataP
+
+    // read before awaiting: the owner is forgotten as soon as the parse settles
+    const ownerSignal = this.indexDataSignal
+    try {
+      return await pending
+    } catch (e) {
+      if (retried || !ownerSignal?.aborted || opts.signal?.aborted) {
+        throw e
+      }
+      return this.getIndexData(opts, true)
+    }
+  }
+
+  private startIndexParse(opts: IndexOpts) {
+    const pending = this.parseIndex(opts).then(bySeqId => ({
+      bySeqId,
+      maxSpan: maxSpanBySeqId(bySeqId),
+    }))
+    this.indexDataP = pending
+    this.indexDataSignal = opts.signal
+    // Drop a rejection rather than keeping it, so one transient failure does not
+    // poison the index for the lifetime of the file. Both branches are
+    // identity-checked so a retry started after this settles is not cleared by
+    // the attempt it already replaced.
+    pending.then(
+      () => {
+        if (this.indexDataP === pending) {
+          this.indexDataSignal = undefined
+        }
+      },
+      () => {
+        if (this.indexDataP === pending) {
+          this.indexDataP = undefined
+          this.indexDataSignal = undefined
+        }
+      },
+    )
+    return pending
   }
 
   async getIndex(opts: IndexOpts = {}) {
@@ -212,8 +267,8 @@ export default class CraiIndex {
    * @returns {Promise} true if the index contains entries for
    * the given reference sequence ID, false otherwise
    */
-  async hasDataForReferenceSequence(seqId: number) {
-    return !!(await this.getIndex())[seqId]
+  async hasDataForReferenceSequence(seqId: number, opts: IndexOpts = {}) {
+    return !!(await this.getIndex(opts))[seqId]
   }
 
   /**

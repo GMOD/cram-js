@@ -5,17 +5,25 @@ import { itf8Size, parseItem } from '../util.ts'
 import CramContainerCompressionScheme from './compressionScheme.ts'
 import { getSectionParsers } from '../sectionParsers.ts'
 
+import type { ReadOpts } from '../../opts.ts'
 import type CramFile from '../file.ts'
 
+// A container is built fresh for every query — `CramFile.getContainerAtPosition`
+// constructs one rather than looking one up — so the memos below are private to
+// one query and a signal can be threaded straight through them. See
+// `memoizeAsync` for why that matters, and `SliceRecordCache` for the one read
+// that *is* shared between queries.
 export default class CramContainer {
   file: CramFile
   filePosition: number
-  private _headerMemo = memoizeAsync(() => this._fetchHeader())
-  private _compressionHeaderBlockMemo = memoizeAsync(() =>
-    this._fetchCompressionHeaderBlock(),
+  private _headerMemo = memoizeAsync((opts?: ReadOpts) =>
+    this._fetchHeader(opts),
   )
-  private _compressionSchemeMemo = memoizeAsync(() =>
-    this._fetchCompressionScheme(),
+  private _compressionHeaderBlockMemo = memoizeAsync((opts?: ReadOpts) =>
+    this._fetchCompressionHeaderBlock(opts),
+  )
+  private _compressionSchemeMemo = memoizeAsync((opts?: ReadOpts) =>
+    this._fetchCompressionScheme(opts),
   )
 
   constructor(file: CramFile, filePosition: number) {
@@ -23,20 +31,20 @@ export default class CramContainer {
     this.filePosition = filePosition
   }
 
-  getHeader() {
-    return this._headerMemo()
+  getHeader(opts?: ReadOpts) {
+    return this._headerMemo(opts)
   }
 
-  private _fetchHeader() {
-    return this._readContainerHeader(this.filePosition)
+  private _fetchHeader(opts?: ReadOpts) {
+    return this._readContainerHeader(this.filePosition, opts)
   }
 
-  getCompressionHeaderBlock() {
-    return this._compressionHeaderBlockMemo()
+  getCompressionHeaderBlock(opts?: ReadOpts) {
+    return this._compressionHeaderBlockMemo(opts)
   }
 
-  private async _fetchCompressionHeaderBlock() {
-    const containerHeader = await this.getHeader()
+  private async _fetchCompressionHeaderBlock(opts?: ReadOpts) {
+    const containerHeader = await this.getHeader(opts)
 
     // if there are no records in the container, there will be no compression
     // header
@@ -46,7 +54,7 @@ export default class CramContainer {
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
 
-    const block = await this.getFirstBlock()
+    const block = await this.getFirstBlock(opts)
     if (block.contentType !== 'COMPRESSION_HEADER') {
       throw new CramMalformedError(
         `invalid content type ${block.contentType} in compression header block`,
@@ -65,19 +73,19 @@ export default class CramContainer {
     }
   }
 
-  async getFirstBlock() {
-    const containerHeader = await this.getHeader()
-    return this.file.readBlock(containerHeader._endPosition)
+  async getFirstBlock(opts?: ReadOpts) {
+    const containerHeader = await this.getHeader(opts)
+    return this.file.readBlock(containerHeader._endPosition, opts)
   }
 
   // parses the compression header data into a CramContainerCompressionScheme
   // object
-  getCompressionScheme() {
-    return this._compressionSchemeMemo()
+  getCompressionScheme(opts?: ReadOpts) {
+    return this._compressionSchemeMemo(opts)
   }
 
-  private async _fetchCompressionScheme() {
-    const header = await this.getCompressionHeaderBlock()
+  private async _fetchCompressionScheme(opts?: ReadOpts) {
+    const header = await this.getCompressionHeaderBlock(opts)
     if (!header) {
       return undefined
     }
@@ -91,7 +99,7 @@ export default class CramContainer {
     return new CramSlice(this, slicePosition, sliceSize)
   }
 
-  async _readContainerHeader(position: number) {
+  async _readContainerHeader(position: number, opts?: ReadOpts) {
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
@@ -101,6 +109,7 @@ export default class CramContainer {
     const bytes1 = await this.file.read(
       cramContainerHeader1.maxLength,
       position,
+      opts,
     )
     const header1 = parseItem(bytes1, cramContainerHeader1.parser)
     const numLandmarksSize = itf8Size(header1.numLandmarks)
@@ -108,6 +117,7 @@ export default class CramContainer {
     const bytes2 = await this.file.read(
       cramContainerHeader2.maxLength(header1.numLandmarks),
       position + header1._size - numLandmarksSize,
+      opts,
     )
     const header2 = parseItem(bytes2, cramContainerHeader2.parser)
 
@@ -117,6 +127,7 @@ export default class CramContainer {
         header1._size + header2._size - numLandmarksSize - 4,
         header2.crc32,
         `container header beginning at position ${position}`,
+        opts,
       )
     }
 

@@ -151,7 +151,7 @@ new IndexedCramFile({
   cramUrl, // remote URL
   cramFilehandle, // generic-filehandle2 compatible handle
   index, // CraiIndex instance (or any object with getEntriesForRange)
-  fetchReferenceSequence, // async (seqId, start, end, refName) => string
+  fetchReferenceSequence, // async (seqId, start, end, refName, opts) => string
   checkSequenceMD5, // default false; set true to verify each slice's reference MD5
   cacheSize, // max cached records, default 20000
 })
@@ -163,9 +163,45 @@ query in flight is allowed to exceed it by.
 
 - `getRecordsForRange(seqId, start, end, opts?)` → `Promise<CramRecord[]>` —
   0-based half-open coords. `opts`:
-  `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress }`
-- `hasDataForReferenceSequence(seqId)` → `Promise<boolean>`
+  `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress, signal }`
+- `hasDataForReferenceSequence(seqId, opts?)` → `Promise<boolean>`
 - `cram` — the underlying `CramFile`
+
+### Cancelling a query
+
+Pass an `AbortSignal` as `opts.signal` and the query rejects, stops decoding,
+and — on a filehandle that honours the signal, which `RemoteFile` does and
+`LocalFile` does not — abandons the range request it has in flight:
+
+```js
+const controller = new AbortController()
+const records = indexedFile.getRecordsForRange(0, 1000, 2000, {
+  signal: controller.signal,
+})
+controller.abort() // `records` rejects with an AbortError
+```
+
+This is worth more than "index reads are short" suggests. A byte-range-caching
+filehandle coalesces adjacent reads into one request, so a small viewport over
+deep data becomes a single multi-megabyte fetch — exactly the thing you want to
+drop when the user pans away.
+
+**Aborting your query never fails anyone else's.** Two things in a `CramFile`
+are shared between concurrent queries: the parsed `.crai`, and each decoded
+slice in the record cache. A slice's decode is reference-counted — it is
+cancelled only once _every_ query waiting on it has aborted, so cancelling yours
+costs a concurrent query nothing, not even a re-read. The file definition and
+SAM header are read once for the life of the object and are deliberately not
+cancellable at all.
+
+The corollary: a query with **no** signal can never give up, so it pins any
+slice it is waiting on. If one caller omits the signal, that slice's decode
+stops being cancellable for everyone sharing it — so thread the signal through
+consistently rather than on the queries you happen to care about.
+
+If `fetchReferenceSequence` is backed by something remote, it is handed the
+signal as a fifth argument (`opts.signal`) so it can cancel too. Ignoring it is
+fine; a four-argument callback keeps working unchanged.
 
 Unplaced reads have no position at all and sort to the end of the file. Both
 their `sequenceId` and their `start` are `-1`, so you ask for them like this:

@@ -38,4 +38,6 @@ export {
 export { default as CramFile } from './cramFile/index.ts'
 export type { ReferenceInfo, SeqFetch } from './cramFile/file.ts'
 export { default as CraiIndex } from './craiIndex.ts'
+export type { IndexOpts, Slice } from './craiIndex.ts'
 export { default as IndexedCramFile } from './indexedCramFile.ts'
+export type { BaseOpts, ReadOpts } from './opts.ts'
