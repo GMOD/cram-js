@@ -96,11 +96,16 @@ describe.skipIf(!available)(
           })
 
         const refs = references(path, extra)
-        const present = refsWithRecords(path)
-        if (!refs || !present) {
+        if (!refs) {
+          // samtools will not read this fixture, so it cannot arbitrate it
           skipped.push(name)
           return
         }
+        // Only an optimisation — it keeps a 3316-reference header from
+        // querying 3316 empty references — and `idxstats` refuses outright on
+        // a file that is not position sorted, which several of these
+        // deliberately are not. Walk the header when it will not answer.
+        const present = refsWithRecords(path)
         // One pass for the whole file rather than one per reference, and only
         // where samtools can decode it: without a reference it cannot emit
         // records at all, so the scan would be a guaranteed-failing full
@@ -110,7 +115,7 @@ describe.skipIf(!available)(
         // its caches and turn this into a decompression benchmark
         const cram = open()
 
-        for (const ref of refs.filter(r => present.has(r.name))) {
+        for (const ref of refs.filter(r => !present || present.has(r.name))) {
           let all
           try {
             all = await cram.getRecordsForRange(ref.id, 0, ref.length)
@@ -126,9 +131,15 @@ describe.skipIf(!available)(
 
           // Judged from the file's own record order rather than from @HD,
           // which these fixtures do not carry. See sortedness().
-          if (sorted?.get(ref.name) === false) {
+          //
+          // Only the window comparisons go: htslib's region iterator is what
+          // assumes coordinate order, so it cannot arbitrate a query on one of
+          // these. The decode comparison below still can, reading the file
+          // linearly instead — and these are the fixtures that exist to
+          // exercise template length, so it is the one worth keeping.
+          const unsorted = sorted?.get(ref.name) === false
+          if (unsorted) {
             skipped.push(`${name}:${ref.name} (not coordinate sorted)`)
-            continue
           }
 
           const spans = all.map(r => ({
@@ -136,7 +147,9 @@ describe.skipIf(!available)(
             end: r.start + (r.lengthOnRef || 1),
           }))
 
-          for (const [min, max] of boundaryWindows(spans, ref.length)) {
+          for (const [min, max] of unsorted
+            ? []
+            : boundaryWindows(spans, ref.length)) {
             const mine = await cram.getRecordsForRange(ref.id, min, max)
             const where = `${name} ${ref.name}:${min}-${max} (0-based, half-open)`
 
@@ -171,25 +184,41 @@ describe.skipIf(!available)(
           // The same records again, this time on what each one decoded to.
           // MAPQ is spelled back as the 0 htslib prints for a record that
           // stores none, which CRAM does for every unmapped read.
+          //
+          // xx#repeated gives its three pairs one read name between them, and
+          // stores no TS for any of them, so both implementations have to
+          // work the template length out from the mate chain. Neither is
+          // reading the file wrong; they resolve an ambiguous chain
+          // differently, and htslib's own answer is not consistent across the
+          // three — it reports +20 for the first S/67 at position 1 and -20
+          // for the other two, which are the same record. Compare everything
+          // else about them.
+          const dropTlen = name.startsWith('xx#repeated')
           const where = `${name}:${ref.name}`
           const decoded = all
             .map(r =>
-              samFields([
-                r.readName,
-                r.flags,
-                r.start + 1,
-                r.getCigarString(),
-                r.mappingQuality ?? 0,
-                r.templateLength ?? r.templateSize ?? 0,
-                r.getReadBases(),
-                qualString(r.qualityScores),
-              ]),
+              samFields(
+                [
+                  r.readName,
+                  r.flags,
+                  r.start + 1,
+                  r.getCigarString(),
+                  r.mappingQuality ?? 0,
+                  r.templateLength ?? r.templateSize ?? 0,
+                  r.getReadBases(),
+                  qualString(r.qualityScores),
+                ],
+                dropTlen,
+              ),
             )
             .sort()
           decodeComparisons += decoded.length
           expect({ where, alignments: decoded }).toStrictEqual({
             where,
-            alignments: alignments(path, ref.name, extra),
+            alignments: alignments(path, ref.name, extra, {
+              scan: unsorted,
+              dropTlen,
+            }),
           })
         }
       },
@@ -200,7 +229,7 @@ describe.skipIf(!available)(
     // stopped producing windows, would otherwise pass while checking nothing.
     test('covers enough of the corpus to be meaningful', () => {
       if (skipped.length) {
-        console.warn(`not arbitrated by samtools: ${skipped.join(', ')}`)
+        console.warn(`no window comparison: ${skipped.join(', ')}`)
       }
       expect(indexedCrams.length).toBeGreaterThanOrEqual(40)
       expect(identityComparisons).toBeGreaterThanOrEqual(100)

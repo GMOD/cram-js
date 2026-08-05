@@ -142,11 +142,13 @@ describe('CRAM reader', () => {
       uncompressedSize: 372,
       crc32: 1246026486,
     })
-    expect(Object.keys(compressionBlockData).includes('tagEncoding'))
-    expect(Object.keys(compressionBlockData).includes('preservation'))
-    expect(Object.keys(compressionBlockData).includes('dataSeriesEncoding'))
-    expect(Object.keys(compressionBlockData).includes('_size'))
-    expect(Object.keys(compressionBlockData).includes('_endPosition'))
+    expect(Object.keys(compressionBlockData).sort()).toEqual([
+      '_endPosition',
+      '_size',
+      'dataSeriesEncoding',
+      'preservation',
+      'tagEncoding',
+    ])
     expect(compressionBlockData.preservation).toEqual({
       TD: [
         ['ASC', 'XSC', 'XNC', 'XMC', 'XOC', 'XGC', 'YTZ'],
