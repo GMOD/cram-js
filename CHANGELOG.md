@@ -1,3 +1,17 @@
+## [10.6.1](https://github.com/GMOD/cram-js/compare/v10.6.0...v10.6.1) (2026-08-05)
+
+### Chores
+
+- Drop eslint-plugin-unicorn
+
+### Refactoring
+
+- Drop the unreachable doomed-entry check in SliceRecordCache
+
+### Tests
+
+- Pin that an already-aborted consumer cannot poison a shared decode
+
 ## [10.6.0](https://github.com/GMOD/cram-js/compare/v10.5.0...v10.6.0) (2026-08-05)
 
 ### Bug Fixes
