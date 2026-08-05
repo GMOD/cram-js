@@ -88,8 +88,11 @@ describe.skipIf(!available)(
           skipped.push(name)
           return
         }
-        // one pass for the whole file rather than one per reference
-        const sorted = sortedness(path, extra)
+        // One pass for the whole file rather than one per reference, and only
+        // where samtools can decode it: without a reference it cannot emit
+        // records at all, so the scan would be a guaranteed-failing full
+        // decode of every container.
+        const sorted = fa ? sortedness(path, extra) : undefined
         // one reader for the whole file: re-opening per window would discard
         // its caches and turn this into a decompression benchmark
         const cram = open()
