@@ -32,10 +32,12 @@ test('runs without error', async () => {
   const records = await indexedFile2.getRecordsForRange(refId, 10000, 20000)
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
-    record.readFeatures?.forEach(({ code, refPos, ref, sub }) => {
-      if (code === 'X') {
+    record.readFeatures?.forEach(feature => {
+      // ReadFeature is a discriminated union on `code`, so `ref` and `sub`
+      // only exist once it is narrowed to the substitution case
+      if (feature.code === 'X') {
         console.log(
-          `${record.readName} shows a base substitution of ${ref}->${sub} at ${refPos}`,
+          `${record.readName} shows a base substitution of ${feature.ref}->${feature.sub} at ${feature.refPos}`,
         )
       }
     })
@@ -56,12 +58,15 @@ test('reports download progress for getRecordsForRange', async () => {
     index: new CraiIndex({
       path: require.resolve('./data/ce#5.tmp.cram.crai'),
     }),
+    // 0-based half-open since v10, so the string is `end - start` long
     fetchReferenceSequence: async (seqId, start, end) =>
-      'A'.repeat(end - start + 1),
+      'A'.repeat(end - start),
     checkSequenceMD5: false,
   })
 
-  const ticks: [number, number][] = []
+  // totalBytes is optional on onProgress: a source that cannot report a
+  // content length calls back with only the first argument
+  const ticks: [number, number | undefined][] = []
   await indexedFile.getRecordsForRange(0, 10000, 20000, {
     onProgress: (downloaded, total) => {
       ticks.push([downloaded, total])

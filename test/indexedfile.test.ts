@@ -251,8 +251,8 @@ test('region not downloading enough records', async () => {
   })
   const entries = await index.getEntriesForRange(0, 75100635, 75125544)
   expect(entries.length).toEqual(2)
-  expect(entries[0].start).toEqual(74378948)
-  expect(entries[1].start).toEqual(74945117)
+  expect(entries[0]!.start).toEqual(74378948)
+  expect(entries[1]!.start).toEqual(74945117)
 })
 
 test('troublesome file returns the correct sequence', async () => {

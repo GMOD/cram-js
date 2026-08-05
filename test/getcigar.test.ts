@@ -94,7 +94,7 @@ function coalesce(cigar: string) {
   const merged: [number, string][] = []
   for (const [, len, op] of cigar.matchAll(/(\d+)([A-Z])/g)) {
     const last = merged.at(-1)
-    if (last?.[1] === op) {
+    if (last && last[1] === op) {
       last[0] += Number(len)
     } else {
       merged.push([Number(len), op!])

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { dumpWholeFile } from './lib/dumpFile.ts'
+import { dumpWholeFile, sliceRecords } from './lib/dumpFile.ts'
 import { testDataFile } from './lib/util.ts'
 import { CramFile } from '../src/index.ts'
 import { FetchableSmallFasta } from './lib/fasta/index.ts'
@@ -13,8 +13,8 @@ test('lzma', async () => {
     fetchReferenceSequence: seqFetch,
   })
   const fileData = await dumpWholeFile(file)
-  const feat = fileData[2].data[1].features[0]
-  const hardClip = feat.readFeatures[0]
+  const feat = sliceRecords(fileData, 2, 1)[0]!
+  const hardClip = feat.readFeatures![0]
   expect(hardClip).toMatchSnapshot()
 })
 
@@ -26,8 +26,8 @@ test('bzip2', async () => {
     fetchReferenceSequence: seqFetch,
   })
   const fileData = await dumpWholeFile(file)
-  const feat = fileData[2].data[1].features[0]
-  const hardClip = feat.readFeatures[0]
+  const feat = sliceRecords(fileData, 2, 1)[0]!
+  const hardClip = feat.readFeatures![0]
   expect(hardClip).toMatchSnapshot()
 })
 

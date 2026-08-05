@@ -14,9 +14,9 @@ export function testFile(filename: string) {
       await dumpWholeFile(
         new CramFile({
           filehandle: testDataFile(filename),
-          fetchReferenceSequence: fasta
-            ? (...args) => fasta.fetch(...args)
-            : undefined,
+          // bound rather than spread: SeqFetch passes a fourth argument,
+          // refName, that fetch() does not take
+          fetchReferenceSequence: fasta ? fasta.fetch.bind(fasta) : undefined,
         }),
       ),
     ).toMatchSnapshot()

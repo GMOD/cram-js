@@ -101,7 +101,8 @@ test('an absurd expected size is not trusted as an allocation size', async () =>
 
 test('rejects corrupt input rather than returning a prefix', async () => {
   const compressed = gzipSync(text(100))
-  compressed[compressed.length - 5] ^= 0xff // corrupt the CRC
+  const crcByte = compressed.length - 5
+  compressed[crcByte] = compressed[crcByte]! ^ 0xff // corrupt the CRC
   await expect(unzip(new Uint8Array(compressed))).rejects.toThrow(
     'zlib_uncompress failed',
   )

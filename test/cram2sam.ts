@@ -11,9 +11,10 @@ if (process.argv.length !== 7) {
   process.exit(1)
 }
 
-const chr = process.argv[4]
-const startStr = process.argv[5]
-const endStr = process.argv[6]
+// present: the length check above exits otherwise
+const chr = process.argv[4]!
+const startStr = process.argv[5]!
+const endStr = process.argv[6]!
 
 const start = Number.parseInt(startStr)
 const end = Number.parseInt(endStr)
@@ -37,7 +38,7 @@ const indexedFile = new IndexedCramFile({
     //   half-open, which is what IndexedFasta already takes
     // * the seqId is a numeric identifier
     const seqList = await t.getSequenceNames()
-    const r = await t.getSequence(seqList[seqId], start, end)
+    const r = await t.getSequence(seqList[seqId]!, start, end)
     if (r === undefined) {
       throw new Error('getSequence returned undefined')
     }
@@ -58,7 +59,12 @@ function decodeSeqCigar(record: CramRecord) {
   const refStart = record._refRegion!.start
   let last_pos = record.start
   if (record.readFeatures !== undefined) {
-    record.readFeatures.forEach(({ code, refPos, sub, data }) => {
+    // ReadFeature is a discriminated union on `code`: `data` is a different
+    // type in each arm and `sub` only exists on the substitution one, so the
+    // payload has to be read after the narrowing rather than destructured
+    // before it.
+    record.readFeatures.forEach(feature => {
+      const { code, refPos } = feature
       const sublen = refPos - last_pos
       seq += ref.slice(last_pos - refStart, refPos - refStart)
       last_pos = refPos
@@ -73,41 +79,40 @@ function decodeSeqCigar(record: CramRecord) {
       }
 
       if (code === 'b') {
-        // An array of bases stored verbatim
-        const ret = data.split(',')
-        const added = String.fromCharCode(...ret)
+        // Bases stored verbatim, already a string of them
+        const added = feature.data
         seq += added
         last_pos += added.length
         oplen += added.length
       } else if (code === 'B') {
-        // Single base (+ qual score)
-        seq += sub
+        // Single base (+ qual score), stored as [base, qual]
+        seq += feature.data[0]
         last_pos++
         oplen++
       } else if (code === 'X') {
         // Substitution
-        seq += sub
+        seq += feature.sub
         last_pos++
         oplen++
       } else if (code === 'D' || code === 'N') {
         // Deletion or Ref Skip
-        last_pos += data
+        last_pos += feature.data
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += data + code
+        cigar += feature.data + code
         oplen = 0
       } else if (code === 'I' || code === 'S') {
         // Insertion or soft-clip
-        seq += data
+        seq += feature.data
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += data.length + code
+        cigar += feature.data.length + code
         oplen = 0
       } else if (code === 'i') {
         // Single base insertion
-        seq += data
+        seq += feature.data
         if (oplen) {
           cigar += oplen + op
         }
@@ -118,13 +123,13 @@ function decodeSeqCigar(record: CramRecord) {
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += `${data}P`
+        cigar += `${feature.data}P`
       } else if (code === 'H') {
         // Hard clip
         if (oplen) {
           cigar += oplen + op
         }
-        cigar += `${data}H`
+        cigar += `${feature.data}H`
         oplen = 0
       } // else q or Q
     })

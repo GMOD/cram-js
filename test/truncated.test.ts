@@ -30,7 +30,6 @@ test('ExternalCodec byte path throws CramBufferOverrunError past EOF', () => {
     lastAlignmentStart: 0,
     coreBlock: { bitPosition: 7, bytePosition: 0 },
     externalBlocks: {
-      map: new Map([[1, cursor]]),
       getCursor: () => cursor,
     },
   }

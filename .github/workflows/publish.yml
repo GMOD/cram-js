@@ -21,6 +21,11 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: sudo apt-get update && sudo apt-get install -y samtools
       - run: pnpm lint
+      # `pnpm build` only compiles src/. This is the same check over test/ too,
+      # which is otherwise never type-checked: a test can call a renamed option
+      # or a changed signature and go on passing by testing nothing. That is
+      # exactly what test/samtoolsAgreement.test.ts did with `seqFetch`.
+      - run: pnpm typecheck
       - run: pnpm build
       - run: pnpm test
       - run: pnpm test:pack

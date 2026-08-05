@@ -14,14 +14,14 @@ test('debug dumpFile logic for noseq', async () => {
 
   const containerId = 1
   const container = await file.getContainerById(containerId)
-  const containerHeader = await container.getHeader()
+  const containerHeader = await container!.getHeader()
 
   console.log(
     `Container header: ${containerHeader.numRecords} records, ${containerHeader.numBlocks} blocks`,
   )
 
-  const compressionHeader = await container.getCompressionHeaderBlock()
-  let blockPosition = compressionHeader._endPosition
+  const compressionHeader = await container!.getCompressionHeaderBlock()
+  let blockPosition = compressionHeader!._endPosition
   const numBlocks = containerHeader.numBlocks - 1 // subtract compression header
 
   console.log(
@@ -43,8 +43,8 @@ test('debug dumpFile logic for noseq', async () => {
       block.contentType === 'UNMAPPED_SLICE_HEADER'
     ) {
       const sliceOffset =
-        blockPosition - container.filePosition - containerHeader._size
-      const slice = container.getSlice(sliceOffset)
+        blockPosition - container!.filePosition - containerHeader._size
+      const slice = container!.getSlice(sliceOffset, 0)
       const sliceHeader = await slice.getHeader()
 
       console.log(

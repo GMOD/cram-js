@@ -26,8 +26,8 @@ describe('1kg mate test', () => {
       155160000,
     )
 
-    const firstMate = chr1Records[0]
-    const secondMate = chr1Records[1]
+    const firstMate = chr1Records[0]!
+    const secondMate = chr1Records[1]!
     expect(firstMate.readName).not.toBeUndefined()
     expect(firstMate.readName).toEqual(secondMate.readName)
 
@@ -38,8 +38,8 @@ describe('1kg mate test', () => {
       12100300,
     )
 
-    const chr1mate = chr1Records[2]
-    const chr16mate = chr16Records[0]
+    const chr1mate = chr1Records[2]!
+    const chr16mate = chr16Records[0]!
     expect(chr1mate.readName !== undefined).toEqual(true)
     expect(chr1mate.readName).toEqual(chr16mate.readName)
   })

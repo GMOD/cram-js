@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import { dumpWholeFile } from './lib/dumpFile.ts'
+import { dumpWholeFile, sliceRecords } from './lib/dumpFile.ts'
 import { CramFile } from '../src/index.ts'
 import { FetchableSmallFasta } from './lib/fasta/index.ts'
 import { testDataFile } from './lib/util.ts'
@@ -13,9 +13,10 @@ test('works with hard clipping', async () => {
     fetchReferenceSequence: seqFetch,
   })
   const fileData = await dumpWholeFile(file)
-  const feat = fileData[2].data[1].features[0]
-  const hardClip = feat.readFeatures[0]
-  const nextReadFeature = feat.readFeatures[0]
+  const feat = sliceRecords(fileData, 2, 1)[0]!
+  const readFeatures = feat.readFeatures!
+  const hardClip = readFeatures[0]!
+  const nextReadFeature = readFeatures[0]!
   expect(hardClip.refPos).toEqual(736)
   expect(nextReadFeature.refPos).toEqual(736)
   expect(hardClip.refPos).toEqual(feat.start)

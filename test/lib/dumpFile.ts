@@ -1,5 +1,6 @@
 import type CramContainer from '../../src/cramFile/container/index.ts'
 import type CramFile from '../../src/cramFile/file.ts'
+import type CramRecord from '../../src/cramFile/record.ts'
 
 async function dumpSlice(container: CramContainer, sliceOffset: number) {
   const slice = container.getSlice(sliceOffset, 0)
@@ -10,15 +11,15 @@ async function dumpSlice(container: CramContainer, sliceOffset: number) {
 
 async function dumpContainerById(file: CramFile, containerId: number) {
   const container = await file.getContainerById(containerId)
-  const containerHeader = await container.getHeader()
+  const containerHeader = await container!.getHeader()
   const returnData: Record<string, unknown> = { containerHeader }
   let blockPosition: number
   let { numBlocks } = containerHeader
   // if this is not the first container, and the container has records in it,
   // there should be a compression header as the next block.
   if (containerId > 0 && containerHeader.numRecords) {
-    const compressionHeader = await container.getCompressionHeaderBlock()
-    const compressionScheme = await container.getCompressionScheme()
+    const compressionHeader = await container!.getCompressionHeaderBlock()
+    const compressionScheme = await container!.getCompressionScheme()
     blockPosition = compressionHeader!._endPosition
     returnData.compressionScheme = compressionScheme
     numBlocks -= 1
@@ -33,8 +34,8 @@ async function dumpContainerById(file: CramFile, containerId: number) {
       block.contentType === 'UNMAPPED_SLICE_HEADER'
     ) {
       const slice = await dumpSlice(
-        container,
-        blockPosition - container.filePosition - containerHeader._size,
+        container!,
+        blockPosition - container!.filePosition - containerHeader._size,
       )
       data.push(slice)
       // Skip the data blocks that belong to this slice
@@ -70,4 +71,17 @@ async function dumpWholeFile(file: CramFile) {
   return items
 }
 
-export { dumpWholeFile }
+/**
+ * The records of one slice of one container in a dump.
+ *
+ * dumpWholeFile's return is `unknown`, deliberately: it is a debug dump whose
+ * shape is whatever the parser produced, and snapshots are what read it. A few
+ * tests reach into one known spot instead, so the reach is named once here
+ * rather than cast at each of them.
+ */
+function sliceRecords(dump: unknown[], container: number, slice: number) {
+  const { data } = dump[container] as { data: { features: CramRecord[] }[] }
+  return data[slice]!.features
+}
+
+export { dumpWholeFile, sliceRecords }

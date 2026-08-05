@@ -21,7 +21,7 @@ describe('CRAM reader', () => {
     const file = new CramFile({
       filehandle: testDataFile('auxf#values.tmp.cram'),
     })
-    const header = await (await file.getContainerById(0)).getHeader()
+    const header = await (await file.getContainerById(0))!.getHeader()
     expect(header).toEqual({
       alignmentSpan: 0,
       crc32: 2996618296,
@@ -44,7 +44,7 @@ describe('CRAM reader', () => {
       filehandle: testDataFile('auxf#values.tmp.cram'),
     })
     const container = await file.getContainerById(1)
-    const header = await container.getHeader()
+    const header = await container!.getHeader()
     expect(header).toEqual({
       alignmentSpan: 20,
       crc32: 3362745060,
@@ -110,7 +110,7 @@ describe('CRAM reader', () => {
   it('can read the compression header block and first slice header block from the 23rd container of ce#1000.tmp.cram', async () => {
     const file = new CramFile({ filehandle: testDataFile('ce#1000.tmp.cram') })
     const container = await file.getContainerById(23)
-    const containerHeader = await container.getHeader()
+    const containerHeader = await container!.getHeader()
     expect(containerHeader).toEqual({
       _endPosition: 108275,
       _size: 32,
@@ -130,7 +130,7 @@ describe('CRAM reader', () => {
       content,
       parsedContent: compressionBlockData,
       ...compressionBlock
-    } = await container.getCompressionHeaderBlock()
+    } = (await container!.getCompressionHeaderBlock())!
     expect(compressionBlock).toEqual({
       _size: 376,
       _endPosition: 108658,

@@ -50,11 +50,12 @@ test('padded records match samtools spans', async () => {
 test('a read is returned exactly while the query still covers its last base', async () => {
   const cram = openCram('SRR396637.sorted.clip.cram')
   const all = await cram.getRecordsForRange(0, 0, 1_000_000)
-  const read = all.find(f => f.lengthOnRef > 1)!
+  const read = all.find(f => (f.lengthOnRef ?? 0) > 1)!
   expect(read).toBeDefined()
 
-  const lastBase = read.start + read.lengthOnRef - 1
-  const has = (feats: { readName: string; start: number }[]) =>
+  const lastBase = read.start + read.lengthOnRef! - 1
+  // readName is optional on CramRecord: a lossy-names file leaves it undefined
+  const has = (feats: { readName: string | undefined; start: number }[]) =>
     feats.some(f => f.readName === read.readName && f.start === read.start)
 
   expect(has(await cram.getRecordsForRange(0, lastBase, lastBase + 1000))).toBe(

@@ -86,8 +86,8 @@ test('one arena is shared by every record of a slice', async () => {
     index: new CraiIndex({
       filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
     }),
-    fetchReferenceSequence: async (_id, start, end) =>
-      'A'.repeat(end - start + 1),
+    // 0-based half-open since v10, so the string is `end - start` long
+    fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start),
     checkSequenceMD5: false,
   })
   const records = await cram.getRecordsForRange(0, 0, 100_000_000)
@@ -127,7 +127,8 @@ test('assigning readFeatures throws a message pointing at the arena', () => {
   }) as CramRecord
   expect(record.readFeatures).toHaveLength(1)
   expect(() => {
-    // @ts-expect-error deliberately assigning to a read-only accessor
+    // types allow this: the accessor has a setter, which is how it gets to
+    // throw a message of its own rather than V8's
     record.readFeatures = []
   }).toThrow(/read-only.*arenaFromReadFeatures/s)
 })

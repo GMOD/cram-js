@@ -176,8 +176,8 @@ test('reports differences from a real file', async () => {
     index: new CraiIndex({
       filehandle: testDataFile('SRR396636.sorted.clip.cram.crai'),
     }),
-    fetchReferenceSequence: async (_id, start, end) =>
-      'A'.repeat(end - start + 1),
+    // 0-based half-open since v10, so the string is `end - start` long
+    fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start),
     checkSequenceMD5: false,
   })
   const records = await cram.getRecordsForRange(0, 0, 2000)
