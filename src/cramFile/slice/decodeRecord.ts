@@ -305,6 +305,8 @@ export interface SliceDecodeContext {
   tagDescriptorsByTL: TagDescriptor[][]
   cursors: Cursors
   decodeBulkBases: BulkBasesDecoder | undefined
+  /** reads the next read name, batched over the whole block where it can be */
+  decodeReadName: () => string
   decodeTags: boolean
   APdelta: boolean
   readNamesIncluded: boolean
@@ -327,6 +329,7 @@ export default function decodeRecord(
     tagDescriptorsByTL,
     cursors,
     decodeBulkBases,
+    decodeReadName,
     decodeTags,
     APdelta,
     readNamesIncluded,
@@ -356,7 +359,7 @@ export default function decodeRecord(
   // one per record to avoid a decode costs almost twice what the decode saves
   let readName: string | undefined
   if (readNamesIncluded) {
-    readName = readNullTerminatedStringFromBuffer(bd.RN())
+    readName = decodeReadName()
   }
 
   let mate: MateRecord | undefined
@@ -371,7 +374,7 @@ export default function decodeRecord(
     if (!readNamesIncluded) {
       // the two mates of a pair share a name, so this is the record's own name
       // as well — one string rather than the two the deferred path decoded
-      readName = readNullTerminatedStringFromBuffer(bd.RN())
+      readName = decodeReadName()
       mateReadName = readName
     }
     const mateSequenceId = bd.NS()

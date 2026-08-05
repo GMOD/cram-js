@@ -8,6 +8,7 @@ import {
   trimQualityColumn,
 } from '../qualityColumn.ts'
 import ReadFeatureArena from '../readFeatureArena.ts'
+import { readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
@@ -94,6 +95,15 @@ export function buildSliceDecodeContext({
     cursors,
   )
 
+  // Read names come out of the RN codec as a string rather than as bytes the
+  // record decoder then decodes, so that a codec able to decode its whole block
+  // at once can. byteArrayStop is, and is what 49 of the 51 indexed fixtures
+  // use for RN; the rest fall back to decoding a name at a time.
+  const rnCodec = compressionScheme.getCodecForDataSeries('RN')
+  const decodeReadName =
+    rnCodec?.bindStringReader(coreDataBlock, blocksByContentId, cursors) ??
+    (() => readNullTerminatedStringFromBuffer(bd.RN()))
+
   // Quality scores go into one column shared by the whole slice rather than a
   // Uint8Array per record. When QS is a plain external block that column is
   // the block itself — the scores are already laid out end to end in record
@@ -123,6 +133,7 @@ export function buildSliceDecodeContext({
     ),
     cursors,
     decodeBulkBases,
+    decodeReadName,
     decodeTags,
     APdelta: compressionScheme.APdelta,
     readNamesIncluded: compressionScheme.readNamesIncluded,

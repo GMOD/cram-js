@@ -1,5 +1,6 @@
 import CramCodec from './_base.ts'
 import { CramBufferOverrunError, CramMalformedError } from '../../errors.ts'
+import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursor, Cursors } from './_base.ts'
 import type { ByteArrayStopCramEncoding } from '../encoding.ts'
@@ -63,5 +64,54 @@ export default class ByteArrayStopCodec extends CramCodec<
     const content = contentBlock.content
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
     return () => readToStop(content, cursor, stopByte)
+  }
+
+  bindStringReader(
+    _coreDataBlock: CramFileBlock | undefined,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ) {
+    const { blockContentId, stopByte } = this.parameters
+    const contentBlock = blocksByContentId[blockContentId]
+    // a stop byte other than NUL does not delimit strings, so leave those to
+    // the caller's per-value path
+    if (!contentBlock || stopByte !== 0) {
+      return undefined
+    }
+    const content = contentBlock.content
+    const cursor = cursors.externalBlocks.getCursor(blockContentId)
+
+    // decoded on the first read rather than at bind time: a slice whose records
+    // never reach this series — read names on a file that stores none — should
+    // not decode the block to find out
+    let block: string | undefined
+    // whether a byte offset into the block is also a character offset into the
+    // decoded string, which holds exactly when every byte decoded to one
+    // character. CRAM read names and Z tag values are ASCII by spec, so this is
+    // the case in practice; anything else falls through to decoding per value
+    let flat = false
+
+    return () => {
+      if (block === undefined) {
+        block = decodeUtf8(content)
+        flat = block.length === content.length
+      }
+      if (flat) {
+        const start = cursor.bytePosition
+        // native, and reading the string the cursor points at rather than an
+        // index into a precomputed table — so a block shared with another codec
+        // stays correct with no bookkeeping to keep in step
+        const end = block.indexOf('\0', start)
+        if (end !== -1) {
+          cursor.bytePosition = end + 1
+          return block.slice(start, end)
+        }
+      }
+      // no terminator ahead, or the block is not flat. Fall back, and let
+      // readToStop raise the overrun if the block really is exhausted.
+      return readNullTerminatedStringFromBuffer(
+        readToStop(content, cursor, stopByte),
+      )
+    }
   }
 }
