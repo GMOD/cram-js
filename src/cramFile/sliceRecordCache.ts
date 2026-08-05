@@ -111,15 +111,12 @@ export default class SliceRecordCache {
   ): Promise<CramRecord[]> {
     signal?.throwIfAborted()
 
-    let entry = this.touch(key)
-    // An entry every consumer has abandoned is on its way out but may not have
-    // noticed yet — its fill only learns of the abort a microtask later. Start
-    // a fresh decode rather than joining one that is already doomed.
-    if (entry?.controller.signal.aborted && !entry.settled) {
-      this.drop(key)
-      entry = undefined
-    }
-    entry ??= this.start(key, fill)
+    // A decode every consumer has abandoned is never found here, so there is no
+    // check for one: `start` evicts the entry synchronously the moment its
+    // controller aborts, and that listener is attached before any consumer can
+    // trigger it. A consumer arriving after that point therefore misses and
+    // gets a decode of its own rather than joining one already doomed.
+    const entry = this.touch(key) ?? this.start(key, fill)
     // Only a decode still running has anything to cancel. Joining a settled one
     // would add this caller to a set nothing will ever take it out of — the
     // entry dropped its abort listeners when it settled — so the cache would

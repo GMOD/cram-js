@@ -269,6 +269,32 @@ test('an already-aborted consumer never joins', async () => {
   expect(cache.get('a')).toBeUndefined()
 })
 
+test('a decode every consumer has abandoned is not joined', async () => {
+  const cache = new SliceRecordCache(100)
+  // never settles, modelling a fill that ignores the signal it was handed —
+  // `LocalFile` does exactly that, so a cancelled decode really can keep running
+  const { promise } = deferred()
+  const leaving = new AbortController()
+
+  const first = cache.getOrFill('a', leaving.signal, () => promise)
+  void first.catch(() => undefined)
+  leaving.abort()
+
+  // Nothing is left that wants this decode, so a consumer arriving now must get
+  // its own rather than join one already cancelled — joining it means inheriting
+  // a cancellation that has nothing to do with this caller, which is the leak
+  // this whole class exists to prevent. `getOrFill` has no check for it: the
+  // eviction listener in `start` is what makes the doomed entry unfindable, so
+  // this is the test that pins that listener.
+  let refilled = false
+  const second = await cache.getOrFill('a', undefined, () => {
+    refilled = true
+    return records(3)
+  })
+  expect(refilled).toBe(true)
+  expect(second).toHaveLength(3)
+})
+
 test('the same signal joining twice counts once', async () => {
   const cache = new SliceRecordCache(100)
   const { promise, reject } = deferred()
