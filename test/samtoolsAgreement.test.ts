@@ -26,9 +26,10 @@ import {
   count as samtoolsCount,
   records as samtoolsRecords,
   references,
+  refsWithRecords,
   samtoolsAvailable,
   samtoolsVersion,
-  scanRef,
+  sortedness,
 } from './lib/samtools.ts'
 import { testDataFile } from './lib/util.ts'
 
@@ -82,15 +83,21 @@ describe.skipIf(!available)(
           })
 
         const refs = references(path, extra)
-        if (!refs) {
+        const present = refsWithRecords(path)
+        if (!refs || !present) {
           skipped.push(name)
           return
         }
+        // one pass for the whole file rather than one per reference
+        const sorted = sortedness(path, extra)
+        // one reader for the whole file: re-opening per window would discard
+        // its caches and turn this into a decompression benchmark
+        const cram = open()
 
-        for (const ref of refs) {
+        for (const ref of refs.filter(r => present.has(r.name))) {
           let all
           try {
-            all = await open().getRecordsForRange(ref.id, 0, ref.length)
+            all = await cram.getRecordsForRange(ref.id, 0, ref.length)
           } catch {
             // a fixture this reader rejects on purpose; its own unit test owns
             // that behaviour, and samtools cannot arbitrate what never parsed
@@ -101,9 +108,9 @@ describe.skipIf(!available)(
             continue
           }
 
-          // Judged from the file's own record order rather than from @HD, which
-          // these fixtures do not carry. See scanRef.
-          if (scanRef(path, ref.name, extra).sorted === false) {
+          // Judged from the file's own record order rather than from @HD,
+          // which these fixtures do not carry. See sortedness().
+          if (sorted?.get(ref.name) === false) {
             skipped.push(`${name}:${ref.name} (not coordinate sorted)`)
             continue
           }
@@ -114,7 +121,7 @@ describe.skipIf(!available)(
           }))
 
           for (const [min, max] of boundaryWindows(spans, ref.length)) {
-            const mine = await open().getRecordsForRange(ref.id, min, max)
+            const mine = await cram.getRecordsForRange(ref.id, min, max)
             const where = `${name} ${ref.name}:${min}-${max} (0-based, half-open)`
 
             if (fa) {
