@@ -100,7 +100,7 @@ function parseTagValueArray(buffer: Uint8Array) {
   return array
 }
 
-function parseTagData(tagType: string, buffer: Uint8Array) {
+export function parseTagData(tagType: string, buffer: Uint8Array) {
   if (tagType === 'Z') {
     return readNullTerminatedStringFromBuffer(buffer)
   }
@@ -283,10 +283,16 @@ function decodeReadBases(
  * name and its one-character type, split out of the three-character tag id
  * ahead of time so the per-record loop does no string work.
  */
+export type TagValue = string | number | number[] | undefined
+
 export interface TagDescriptor {
   name: string
-  type: string
-  decode: () => Uint8Array | number | undefined
+  /**
+   * The tag's value for the next record, with its type already resolved — see
+   * `bindTagDecoders`. The type is fixed for the slice, so dispatching on it
+   * belongs there rather than in the record loop.
+   */
+  read: () => TagValue
 }
 
 /**
@@ -411,7 +417,6 @@ export default function decodeRecord(
     throw new CramMalformedError('invalid TL index')
   }
 
-  type TagValue = string | number | number[] | undefined
   const tags: Record<string, TagValue> = {}
   if (decodeTags) {
     const descriptors = tagDescriptorsByTL[TLindex]
@@ -421,14 +426,7 @@ export default function decodeRecord(
       )
     }
     for (const descriptor of descriptors) {
-      const { name, type, decode } = descriptor
-      const tagData = decode()
-      tags[name] =
-        tagData === undefined
-          ? undefined
-          : typeof tagData === 'number'
-            ? tagData
-            : parseTagData(type, tagData)
+      tags[descriptor.name] = descriptor.read()
     }
   }
 

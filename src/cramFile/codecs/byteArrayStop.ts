@@ -73,13 +73,12 @@ export default class ByteArrayStopCodec extends CramCodec<
   ) {
     const { blockContentId, stopByte } = this.parameters
     const contentBlock = blocksByContentId[blockContentId]
-    // a stop byte other than NUL does not delimit strings, so leave those to
-    // the caller's per-value path
-    if (!contentBlock || stopByte !== 0) {
+    if (!contentBlock) {
       return undefined
     }
     const content = contentBlock.content
     const cursor = cursors.externalBlocks.getCursor(blockContentId)
+    const stopChar = String.fromCharCode(stopByte)
 
     // decoded on the first read rather than at bind time: a slice whose records
     // never reach this series — read names on a file that stores none — should
@@ -101,10 +100,20 @@ export default class ByteArrayStopCodec extends CramCodec<
         // native, and reading the string the cursor points at rather than an
         // index into a precomputed table — so a block shared with another codec
         // stays correct with no bookkeeping to keep in step
-        const end = block.indexOf('\0', start)
+        const end = block.indexOf(stopChar, start)
         if (end !== -1) {
           cursor.bytePosition = end + 1
-          return block.slice(start, end)
+          // The stop byte ends the *value*; a string inside it may still carry
+          // its own terminator, as a Z tag does — CRAM delimits those with a
+          // tab and leaves BAM's trailing NUL in place. Strip it the way
+          // readNullTerminatedStringFromBuffer would, cutting at the first NUL
+          // rather than the last byte so an embedded one still truncates.
+          return block.slice(
+            start,
+            end > start && block.charCodeAt(end - 1) === 0
+              ? block.indexOf('\0', start)
+              : end,
+          )
         }
       }
       // no terminator ahead, or the block is not flat. Fall back, and let

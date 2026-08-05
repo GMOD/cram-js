@@ -1,4 +1,4 @@
-import { buildRFSchema } from './decodeRecord.ts'
+import { buildRFSchema, parseTagData } from './decodeRecord.ts'
 import { CramMalformedError } from '../../errors.ts'
 import ExternalCodec, { batchDecodeItf8 } from '../codecs/external.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
@@ -22,6 +22,7 @@ import type {
   ByteArraySeries,
   NumericSeries,
   SliceDecodeContext,
+  TagValue,
 } from './decodeRecord.ts'
 
 export interface SliceDecodeContextArgs {
@@ -125,7 +126,7 @@ export function buildSliceDecodeContext({
     rfSchema: buildRFSchema(bd, majorVersion),
     arena: new ReadFeatureArena(),
     qualityColumn,
-    tagDescriptorsByTL: bindTagDecoders(
+    tagDescriptorsByTL: bindTagReaders(
       compressionScheme,
       blocksByContentId,
       coreDataBlock,
@@ -281,36 +282,56 @@ function bindDataSeriesDecoders(
 }
 
 /**
- * Bound tag decoders, indexed by TL data series value.
+ * Bound tag readers, indexed by TL data series value.
  *
  * Every tag binds through its own codec, the same as a data series does, so a
  * byteArrayLength tag reads its length through whatever codec the file named
  * and takes its value as a view off the block. The three-character tag ids are
  * split into name and type here too, once per slice rather than once per tag
- * per record.
+ * per record — and because the type is then known, the reader dispatches on it
+ * here as well, rather than running `parseTagData`'s comparison chain on every
+ * tag of every record.
+ *
+ * A Z tag whose codec can decode its whole block at once takes that path, the
+ * same as a read name. CRAM delimits Z values with a tab and keeps BAM's
+ * trailing NUL inside them, so the terminator is stripped from the string
+ * rather than consumed as the delimiter.
  */
-function bindTagDecoders(
+function bindTagReaders(
   compressionScheme: CramContainerCompressionScheme,
   blocksByContentId: Record<number, CramFileBlock>,
   coreDataBlock: CramFileBlock | undefined,
   cursors: Cursors,
 ) {
-  const boundTagDecoders: Record<
-    string,
-    () => Uint8Array | number | undefined
-  > = {}
+  const boundTagReaders: Record<string, () => TagValue> = {}
   for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
-    boundTagDecoders[tagId] = compressionScheme
-      .getCodecForTag(tagId)
-      .bindDecoder(coreDataBlock, blocksByContentId, cursors)
+    const type = tagId[2]!
+    const codec = compressionScheme.getCodecForTag(tagId)
+    if (type === 'Z') {
+      const readString = codec.bindStringReader(
+        coreDataBlock,
+        blocksByContentId,
+        cursors,
+      )
+      if (readString) {
+        boundTagReaders[tagId] = readString
+        continue
+      }
+    }
+    const decode = codec.bindDecoder(coreDataBlock, blocksByContentId, cursors)
+    // a tag codec is instantiated as byteArray, so this is a Uint8Array in
+    // practice; the number arm covers a codec that decodes to one directly
+    boundTagReaders[tagId] = () => {
+      const data = decode()
+      return typeof data === 'number' ? data : parseTagData(type, data)
+    }
   }
 
   return compressionScheme.tagIdsDictionary.map(tagIds =>
     tagIds.map(tagId => ({
       name: tagId.slice(0, 2),
-      type: tagId[2]!,
-      decode:
-        boundTagDecoders[tagId] ??
+      read:
+        boundTagReaders[tagId] ??
         (() => {
           throw new CramMalformedError(
             `tag ${tagId} is in the tag dictionary but has no encoding`,
