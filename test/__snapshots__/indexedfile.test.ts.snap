@@ -135652,6 +135652,26 @@ exports[`can read ce#tag_padded.tmp.cram 1`] = `
   {
     "cramFlags": 3,
     "flags": 768,
+    "lengthOnRef": 1,
+    "mappingQuality": 255,
+    "qualityScores": [
+      255,
+    ],
+    "readBases": undefined,
+    "readGroupId": -1,
+    "readLength": 1,
+    "readName": "*",
+    "sequenceId": 0,
+    "start": 1,
+    "tags": {
+      "CT": "+;STOP",
+    },
+    "templateSize": 0,
+    "uniqueId": 575,
+  },
+  {
+    "cramFlags": 3,
+    "flags": 768,
     "lengthOnRef": 3,
     "mappingQuality": 255,
     "qualityScores": [
@@ -1678591,6 +1678611,7 @@ exports[`cram31 returns the correct sequence 1`] = `
 
 exports[`match names from samtools 1`] = `
 [
+  "SRR396636.sra.82183",
   "SRR396636.sra.897624",
   "SRR396636.sra.626822",
   "SRR396636.sra.38901",
@@ -1678611,6 +1678632,8 @@ exports[`match names from samtools 1`] = `
   "SRR396636.sra.322327",
   "SRR396636.sra.1205063",
   "SRR396636.sra.1117231",
+  "SRR396636.sra.894750",
+  "SRR396636.sra.1038930",
   "SRR396636.sra.797353",
   "SRR396636.sra.1904614",
   "SRR396636.sra.1457591",
