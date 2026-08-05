@@ -152,14 +152,18 @@ export default class IndexedCramFile {
               return feature.start >= start && feature.start < end
             }
 
-            // For mapped reads, check if they overlap the requested range.
-            // NOT the plain half-open overlap (`start + lengthOnRef > start`):
-            // the `- 1` excludes a read whose last base sits exactly on the
-            // query start, which is the samtools behaviour this has always
-            // matched. Dropping it pulls in extra reads at the left edge.
+            // For mapped reads, the plain half-open overlap. A read covers its
+            // last base, so it overlaps [start, end) as soon as
+            // start + lengthOnRef reaches the query start.
+            //
+            // This used to subtract one more, on the belief that samtools
+            // excludes a read whose last base sits exactly on the query start.
+            // It does not: a 150M read at 1-based POS 123852 spans
+            // 123852-124001, and `samtools view f.cram chr:124001-124300`
+            // returns it. The extra `- 1` silently dropped every read
+            // overlapping the query by exactly one base.
             return (
-              feature.start < end &&
-              feature.start + feature.lengthOnRef - 1 > start
+              feature.start < end && feature.start + feature.lengthOnRef > start
             )
           },
           // opts is a superset of DecodeOptions; getRecords resolves the

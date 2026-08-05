@@ -226,7 +226,7 @@ test('match names from samtools', async () => {
 
   const features = await cram.getRecordsForRange(0, 25998, 26499)
   expect(features.map(f => f.readName)).toMatchSnapshot()
-  expect(features.length).toEqual(407)
+  expect(features.length).toEqual(410)
 })
 
 test('getHeaderText matches names given from samtools', async () => {
