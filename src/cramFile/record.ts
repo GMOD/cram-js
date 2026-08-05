@@ -1076,8 +1076,19 @@ export default class CramRecord {
       const { codes } = arena
       const end = this.readFeatureStart + this.readFeatureCount
       for (let i = this.readFeatureStart; i < end; i++) {
-        if (codes[i] === RF_SUBST) {
+        const code = codes[i]
+        if (code === RF_SUBST) {
           decodeBaseSubstitution(arena, i, refRegion, compressionScheme)
+        } else if (code === RF_BASE_QUAL) {
+          // B carries its read base verbatim, so it needs no substitution
+          // matrix — but forEachMismatch still needs the reference base to tell
+          // whether that base differs from it
+          const refBase = refRegion.seq.charAt(
+            arena.refPos[i]! - refRegion.start,
+          )
+          if (refBase) {
+            arena.refCodes[i] = refBase.charCodeAt(0)
+          }
         }
       }
     }

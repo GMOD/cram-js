@@ -1,4 +1,5 @@
 import {
+  RF_BASE_QUAL,
   RF_DELETION,
   RF_HARD_CLIP,
   RF_INSERTION,
@@ -28,7 +29,9 @@ export interface Mismatch {
    * Which kind of difference, as the CIGAR-style char code it corresponds to:
    * `RF_SUBST` (X), `RF_INSERTION` (I), `RF_DELETION` (D), `RF_REF_SKIP` (N),
    * `RF_SOFT_CLIP` (S) or `RF_HARD_CLIP` (H). Insertions arrive as `RF_INSERTION`
-   * whether the file encoded them as `I` or as a run of `i`.
+   * whether the file encoded them as `I` or as a run of `i`, and a `B` feature
+   * — a read base stored verbatim with its own quality — arrives as
+   * `RF_SUBST` when the base it carries differs from the reference.
    */
   code: number
   /** 1-based reference position the difference starts at */
@@ -56,6 +59,15 @@ export interface Mismatch {
   refBaseCode: number
   /** read bases consumed: the inserted or clipped length; 0 otherwise */
   clipLength: number
+}
+
+/**
+ * ASCII upper-case, leaving anything that is not a lowercase letter alone — so
+ * a soft-masked reference base reports upper-cased, and the 0 that means "no
+ * reference applied" stays 0.
+ */
+function upperCase(code: number) {
+  return code >= 97 && code <= 122 ? code - 32 : code
 }
 
 export type MismatchCallback = (
@@ -149,7 +161,7 @@ export function forEachMismatch(
               qualColumn === undefined ? -1 : qualColumn[qualStart + pos[i]!]!,
               // 0 stays 0 through the upper-casing, so an unknown reference
               // base keeps reporting as unknown
-              refCodes[i]! & ~0x20,
+              upperCase(refCodes[i]!),
               0,
             )
           }
@@ -170,6 +182,28 @@ export function forEachMismatch(
           insertionPos = rPos
           insertedBases += arena.payloadStringAt(i)
           insertedLength += n
+        } else if (code === RF_BASE_QUAL) {
+          // B stores one read base verbatim with its own quality score, rather
+          // than through the substitution matrix X uses. It aligns as a match,
+          // so it is a difference only when the base it carries is not the
+          // reference base — and with no reference applied there is nothing to
+          // compare against, so `refCodes` of 0 reports nothing rather than
+          // guessing. Reported as a substitution because that is what it is to
+          // a consumer; `num` is B's quality, which is the one the file
+          // preserved for this base.
+          const base = upperCase(arena.payloadByteAt(i))
+          const refCode = refCodes[i]!
+          if (touchesWindow && refCode !== 0 && base !== upperCase(refCode)) {
+            callback(
+              RF_SUBST,
+              rPos,
+              1,
+              String.fromCharCode(base),
+              n,
+              upperCase(refCode),
+              0,
+            )
+          }
         }
         // b (verbatim bases) aligns as matches and P (padding) consumes
         // nothing, so neither is a difference to report

@@ -195,3 +195,32 @@ test('reports differences from a real file', async () => {
     }
   }
 })
+
+// A 'B' feature is a read base stored verbatim with its own quality score,
+// rather than through the substitution matrix an 'X' goes through. It aligns as
+// a CIGAR match, so it is a difference only when the base it carries is not the
+// reference base — which is why it needs the reference resolved before it can
+// be reported at all. It is what a writer reaches for when the matrix cannot
+// encode the base: md#1.tmp.cram stores a 'Y' this way.
+test('a B feature reports nothing with no reference to compare against', () => {
+  expect(
+    mismatchesOf([{ code: 'B', data: ['Y', 37], pos: 4, refPos: 104 }]),
+  ).toEqual([])
+})
+
+test('a B feature reports once the reference is applied', () => {
+  const record = makeRecord([
+    { code: 'B', data: ['Y', 37], pos: 4, refPos: 104 },
+  ])
+  // refPos 104 is the 5th base of a region starting at 100
+  record.readFeatureArena!.refCodes[0] = 'a'.charCodeAt(0)
+  expect(record.getMismatches().map(show)).toEqual(['X@104/1ref/"Y"/refA/q37'])
+})
+
+test('a B feature matching the reference is not a difference', () => {
+  const record = makeRecord([
+    { code: 'B', data: ['a', 37], pos: 4, refPos: 104 },
+  ])
+  record.readFeatureArena!.refCodes[0] = 'A'.charCodeAt(0)
+  expect(record.getMismatches()).toEqual([])
+})
