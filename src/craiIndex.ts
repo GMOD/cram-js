@@ -28,6 +28,30 @@ export interface Slice {
 
 type ParsedIndex = Record<string, Slice[] | undefined>
 
+/**
+ * The parsed index, plus what {@link CraiIndex.getEntriesForRange} needs to
+ * binary-search it: the longest span of any slice on each reference, which
+ * bounds how far back from a query's start an overlapping slice can begin.
+ */
+interface IndexData {
+  bySeqId: ParsedIndex
+  maxSpan: Record<string, number | undefined>
+}
+
+function maxSpanBySeqId(index: ParsedIndex) {
+  const maxSpans: Record<string, number> = {}
+  for (const [seqId, entries] of Object.entries(index)) {
+    let max = 0
+    for (const entry of entries ?? []) {
+      if (entry.span > max) {
+        max = entry.span
+      }
+    }
+    maxSpans[seqId] = max
+  }
+  return maxSpans
+}
+
 const FIELDS_PER_RECORD = 6
 
 function addRecordToIndex(index: ParsedIndex, fields: number[]) {
@@ -63,7 +87,7 @@ export default class CraiIndex {
   //
   // Each line represents a slice in the CRAM file. Please note that all slices
   // must be listed in index file.
-  private parseIndexP?: Promise<ParsedIndex>
+  private indexDataP?: Promise<IndexData>
 
   private filehandle: GenericFilehandle
 
@@ -167,14 +191,20 @@ export default class CraiIndex {
     return index
   }
 
-  getIndex(opts: IndexOpts = {}) {
-    if (!this.parseIndexP) {
-      this.parseIndexP = this.parseIndex(opts).catch((e: unknown) => {
-        this.parseIndexP = undefined
-        throw e
-      })
+  private getIndexData(opts: IndexOpts = {}) {
+    if (!this.indexDataP) {
+      this.indexDataP = this.parseIndex(opts)
+        .then(bySeqId => ({ bySeqId, maxSpan: maxSpanBySeqId(bySeqId) }))
+        .catch((e: unknown) => {
+          this.indexDataP = undefined
+          throw e
+        })
     }
-    return this.parseIndexP
+    return this.indexDataP
+  }
+
+  async getIndex(opts: IndexOpts = {}) {
+    return (await this.getIndexData(opts)).bySeqId
   }
 
   /**
@@ -203,12 +233,48 @@ export default class CraiIndex {
     queryEnd: number,
     opts: IndexOpts = {},
   ): Promise<Slice[]> {
-    const seqEntries = (await this.getIndex(opts))[seqId]
-    return seqEntries
-      ? seqEntries.filter(
-          entry =>
-            entry.start < queryEnd && entry.start + entry.span > queryStart,
-        )
-      : []
+    const { bySeqId, maxSpan } = await this.getIndexData(opts)
+    const entries = bySeqId[seqId]
+    if (!entries) {
+      return []
+    }
+
+    // The entries are sorted by start, so both ends of the overlapping run can
+    // be found rather than scanned for. A slice starting at or before
+    // `queryStart - maxSpan` cannot reach the query however long it is, so that
+    // bounds the search from below; past `queryEnd` nothing can overlap either,
+    // so the forward scan stops rather than running to the end of the
+    // reference.
+    //
+    // This used to filter the whole reference's entry list on every call. A
+    // whole-genome .crai runs to hundreds of thousands of slices, and
+    // `getRecordsForRange` with `viewAsPairs` calls this once per unmated read
+    // — so a query returning n reads did O(n x slices) work before deduplicating
+    // the slices it found down to a handful.
+    const earliestStart = queryStart - (maxSpan[seqId] ?? 0)
+    let lo = 0
+    let hi = entries.length
+    while (lo < hi) {
+      const mid = (lo + hi) >>> 1
+      if (entries[mid]!.start < earliestStart) {
+        lo = mid + 1
+      } else {
+        hi = mid
+      }
+    }
+
+    const overlapping: Slice[] = []
+    for (let i = lo; i < entries.length; i++) {
+      const entry = entries[i]!
+      if (entry.start >= queryEnd) {
+        break
+      }
+      // the lower bound is only as tight as the longest span on the reference,
+      // so each candidate still gets the real overlap test
+      if (entry.start + entry.span > queryStart) {
+        overlapping.push(entry)
+      }
+    }
+    return overlapping
   }
 }

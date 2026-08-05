@@ -212,6 +212,38 @@ test('can read small crai file', async () => {
   ])
 })
 
+// getEntriesForRange binary-searches the sorted entries rather than filtering
+// all of them, bounding the search below by the longest span on the reference.
+// A short slice sitting between a long one and the query is what breaks a
+// lower bound derived from anything narrower than that maximum.
+test('finds a long slice that starts well before the query', async () => {
+  const index = indexFromText(
+    [
+      // start (1-based), span: a very long slice, then short ones after it
+      '0\t1\t10000\t100\t0\t50', // 0..10000  — overlaps
+      '0\t101\t10\t200\t0\t50', // 100..110  — does not
+      '0\t5001\t10\t300\t0\t50', // 5000..5010 — does not
+      '0\t9001\t2000\t400\t0\t50', // 9000..11000 — overlaps
+      '0\t20001\t10\t500\t0\t50', // 20000..20010 — does not
+      '',
+    ].join('\n'),
+  )
+  const hits = await index.getEntriesForRange(0, 9500, 9600)
+  expect(hits.map(h => h.containerStart)).toEqual([100, 400])
+})
+
+test('returns entries in index order, with no lower bound to find', async () => {
+  const index = indexFromText(
+    ['0\t1\t50\t100\t0\t50', '0\t11\t50\t200\t0\t50', ''].join('\n'),
+  )
+  expect(
+    (await index.getEntriesForRange(0, 0, 100)).map(h => h.containerStart),
+  ).toEqual([100, 200])
+  // a query entirely before every entry, and one entirely after
+  expect(await index.getEntriesForRange(0, -50, 0)).toEqual([])
+  expect(await index.getEntriesForRange(0, 1000, 2000)).toEqual([])
+})
+
 test('test a BAI', async () => {
   const filehandle = testDataFile('volvox-sorted.bam.bai')
   const index = new CraiIndex({ filehandle })
