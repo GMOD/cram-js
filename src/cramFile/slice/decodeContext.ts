@@ -1,11 +1,6 @@
 import { buildRFSchema } from './decodeRecord.ts'
-import { CramBufferOverrunError, CramMalformedError } from '../../errors.ts'
-import ByteArrayStopCodec from '../codecs/byteArrayStop.ts'
-import ExternalCodec, {
-  batchDecodeItf8,
-  parseItf8,
-} from '../codecs/external.ts'
-import { instantiateCodec } from '../codecs/index.ts'
+import { CramMalformedError } from '../../errors.ts'
+import ExternalCodec, { batchDecodeItf8 } from '../codecs/external.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
 import {
   externalQualityColumn,
@@ -27,9 +22,6 @@ import type {
   NumericSeries,
   SliceDecodeContext,
 } from './decodeRecord.ts'
-
-// shared zero-length sentinel returned by bound tag decoders when length=0
-const EMPTY_BYTES = new Uint8Array(0)
 
 export interface SliceDecodeContextArgs {
   compressionScheme: CramContainerCompressionScheme
@@ -93,12 +85,14 @@ export function buildSliceDecodeContext({
     cursors,
   )
 
-  // Bulk read-base decoder — getBytesSubarray returns a subarray view when the
-  // codec supports it (e.g. ExternalCodec), or undefined otherwise
+  // Bulk read-base decoder — a view straight off the BA block when its codec
+  // can hand one out (ExternalCodec can), undefined otherwise, in which case
+  // decodeReadBases falls back to reading a base at a time
   const baCodec = compressionScheme.getCodecForDataSeries('BA')
-  const decodeBulkBases: BulkBasesDecoder | undefined = baCodec
-    ? length => baCodec.getBytesSubarray(blocksByContentId, cursors, length)
-    : undefined
+  const decodeBulkBases: BulkBasesDecoder | undefined = baCodec?.bindBytesReader(
+    blocksByContentId,
+    cursors,
+  )
 
   // Quality scores go into one column shared by the whole slice rather than a
   // Uint8Array per record. When QS is a plain external block that column is
@@ -205,12 +199,17 @@ function preDecodeIntBlocks(
 }
 
 /**
- * Build bound decode functions per data series. For ExternalCodec this captures
- * the content buffer and cursor directly, eliminating per-call Record/Map
- * lookup overhead. The bound decoders are assembled into a single object
- * literal with all data series present so V8 sees a stable hidden class — call
- * sites in decodeRecord then become direct property accesses with monomorphic
- * inline caches.
+ * Build bound decode functions per data series.
+ *
+ * Each codec binds itself — see `CramCodec.bindDecoder` — so the per-slice
+ * lookups (find the content block, find its cursor, join the pre-decoded int
+ * block) happen once here rather than on every record. This used to be an
+ * `instanceof` chain that reimplemented each codec's read inline, which meant
+ * a codec combination the chain did not name paid full dispatch per record.
+ *
+ * The bound decoders are assembled into a single object literal with all data
+ * series present so V8 sees a stable hidden class — call sites in decodeRecord
+ * then become direct property accesses with monomorphic inline caches.
  */
 function bindDataSeriesDecoders(
   compressionScheme: CramContainerCompressionScheme,
@@ -218,8 +217,6 @@ function bindDataSeriesDecoders(
   coreDataBlock: CramFileBlock | undefined,
   cursors: Cursors,
 ): BoundDecoders {
-  const preDecodedIntBlocks = cursors.preDecodedIntBlocks
-
   // `bind` is a function declaration rather than an arrow so it can carry
   // overloads: the return type depends on the data series, per dataSeriesTypes
   function bind(dataSeriesName: NumericSeries): () => number
@@ -235,78 +232,7 @@ function bindDataSeriesDecoders(
         )
       }
     }
-    if (codec instanceof ExternalCodec) {
-      const bid = codec.parameters.blockContentId
-      const preDecoded = preDecodedIntBlocks?.get(bid)
-      if (preDecoded) {
-        const { values } = preDecoded
-        // bounds check mirrors the byte branch below — without it a
-        // truncated block silently yields undefined, which propagates as
-        // NaN through alignmentStart/readLength rather than erroring
-        return () => {
-          const value = values[preDecoded.index++]
-          if (value === undefined) {
-            throw new CramBufferOverrunError(
-              'attempted to read beyond end of block. this file seems truncated.',
-            )
-          }
-          return value
-        }
-      }
-      const contentBlock = blocksByContentId[bid]
-      if (!contentBlock) {
-        return () => {
-          throw new CramMalformedError(`no block found with content ID ${bid}`)
-        }
-      }
-      const cursor = cursors.externalBlocks.getCursor(bid)
-      const content = contentBlock.content
-      if (codec.dataType === 'int') {
-        return () => parseItf8(content, cursor)
-      }
-      // Mirror the bounds check in ExternalCodec.decode — without it,
-      // a truncated/corrupt block silently yields `undefined` for byte
-      // reads, which downstream propagates as NaN/0 (silent data
-      // corruption) rather than a clear error.
-      return () => {
-        const value = content[cursor.bytePosition++]
-        if (value === undefined) {
-          throw new CramBufferOverrunError(
-            'attempted to read beyond end of block. this file seems truncated.',
-          )
-        }
-        return value
-      }
-    }
-    if (codec instanceof ByteArrayStopCodec) {
-      const { blockContentId, stopByte } = codec.parameters
-      const contentBlock = blocksByContentId[blockContentId]
-      if (!contentBlock) {
-        return () => {
-          throw new CramMalformedError(
-            `no block found with content ID ${blockContentId}`,
-          )
-        }
-      }
-      const content = contentBlock.content
-      const cursor = cursors.externalBlocks.getCursor(blockContentId)
-      return () => {
-        const start = cursor.bytePosition
-        const len = content.length
-        let pos = start
-        while (pos < len && content[pos] !== stopByte) {
-          pos++
-        }
-        if (pos >= len) {
-          throw new CramBufferOverrunError(
-            'byteArrayStop reading beyond length of data buffer?',
-          )
-        }
-        cursor.bytePosition = pos + 1
-        return content.subarray(start, pos)
-      }
-    }
-    return () => codec.decode(coreDataBlock!, blocksByContentId, cursors)
+    return codec.bindDecoder(coreDataBlock, blocksByContentId, cursors)
   }
 
   return {
@@ -346,14 +272,11 @@ function bindDataSeriesDecoders(
 /**
  * Bound tag decoders, indexed by TL data series value.
  *
- * Tags are typically encoded as byteArrayLength (codecId=4) wrapping
- * External-int lengths + External-byte values. We build a fast closure per
- * tagId that inlines the length read and value subarray, eliminating per-call
- * dispatch through ByteArrayLengthCodec and the inner codecs. Other encodings
- * fall back to the generic dispatch.
- *
- * The three-character tag ids are also split into name and type here, once per
- * slice rather than once per tag per record.
+ * Every tag binds through its own codec, the same as a data series does, so a
+ * byteArrayLength tag reads its length through whatever codec the file named
+ * and takes its value as a view off the block. The three-character tag ids are
+ * split into name and type here too, once per slice rather than once per tag
+ * per record.
  */
 function bindTagDecoders(
   compressionScheme: CramContainerCompressionScheme,
@@ -361,84 +284,14 @@ function bindTagDecoders(
   coreDataBlock: CramFileBlock | undefined,
   cursors: Cursors,
 ) {
-  const preDecodedIntBlocks = cursors.preDecodedIntBlocks
   const boundTagDecoders: Record<
     string,
     () => Uint8Array | number | undefined
   > = {}
-  const bindTagFallback = (tagId: string) => {
-    const codec = compressionScheme.getCodecForTag(tagId)
-    return () => codec.decode(coreDataBlock!, blocksByContentId, cursors)
-  }
   for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
-    const enc = compressionScheme.tagEncoding[tagId]!
-    // Only the *values* side has to be external for the value read to be a
-    // subarray off a captured buffer. Requiring the lengths side to be external
-    // too used to send the fixed-width tags down the generic path — a tag like
-    // `AS:C` is always one byte, so its length is a constant, which CRAM writes
-    // as a zero-bit huffman code. Those are the tags whose length is free, and
-    // they were the ones paying a ByteArrayLengthCodec dispatch plus a Record
-    // and a Map lookup per record to read one byte: on SRR396637, two such
-    // lookups on every one of 54,695 records.
-    if (enc.codecId === 4 && enc.parameters.valuesEncoding.codecId === 1) {
-      const valBid = enc.parameters.valuesEncoding.parameters.blockContentId
-      const valContentBlock = blocksByContentId[valBid]
-      if (!valContentBlock) {
-        boundTagDecoders[tagId] = bindTagFallback(tagId)
-        continue
-      }
-      const valContent = valContentBlock.content
-      const valCursor = cursors.externalBlocks.getCursor(valBid)
-
-      const lengthsEncoding = enc.parameters.lengthsEncoding
-      let readTagLen: () => number
-      if (lengthsEncoding.codecId === 1) {
-        const lenBid = lengthsEncoding.parameters.blockContentId
-        const lenContentBlock = blocksByContentId[lenBid]
-        if (!lenContentBlock) {
-          boundTagDecoders[tagId] = bindTagFallback(tagId)
-          continue
-        }
-        const lenPreDecoded = preDecodedIntBlocks?.get(lenBid)
-        const lenContent = lenContentBlock.content
-        const lenCursor = cursors.externalBlocks.getCursor(lenBid)
-        readTagLen = lenPreDecoded
-          ? () => {
-              const length = lenPreDecoded.values[lenPreDecoded.index++]
-              if (length === undefined) {
-                throw new CramBufferOverrunError(
-                  'attempted to read beyond end of block. this file seems truncated.',
-                )
-              }
-              return length
-            }
-          : () => parseItf8(lenContent, lenCursor)
-      } else {
-        // huffman, beta, whatever else the file used for the length —
-        // instantiated once per slice rather than reached through the
-        // ByteArrayLength codec on every record
-        const lenCodec = instantiateCodec<'int'>(lengthsEncoding, 'int')
-        readTagLen = () =>
-          lenCodec.decode(coreDataBlock!, blocksByContentId, cursors)
-      }
-      boundTagDecoders[tagId] = () => {
-        const length = readTagLen()
-        if (length === 0) {
-          return EMPTY_BYTES
-        }
-        const start = valCursor.bytePosition
-        const end = start + length
-        if (end > valContent.length) {
-          throw new CramBufferOverrunError(
-            'attempted to read beyond end of block. this file seems truncated.',
-          )
-        }
-        valCursor.bytePosition = end
-        return valContent.subarray(start, end)
-      }
-    } else {
-      boundTagDecoders[tagId] = bindTagFallback(tagId)
-    }
+    boundTagDecoders[tagId] = compressionScheme
+      .getCodecForTag(tagId)
+      .bindDecoder(coreDataBlock, blocksByContentId, cursors)
   }
 
   return compressionScheme.tagIdsDictionary.map(tagIds =>
