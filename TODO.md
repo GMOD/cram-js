@@ -338,6 +338,28 @@ rather than diverge from it.
 
 Recorded so they are not rediscovered:
 
+- **Deferring the read name behind a getter.** The reasoning that makes it look
+  attractive is sound as far as it goes: jbrowse reaches `record.readName` only
+  through `CramSlightlyLazyFeature`'s `name` getter, and the only callers of
+  `get('name')` on the CRAM path are chained/paired mode (`chainGroupingKey`),
+  the details panel (`buildBaseFeatureData`), the context menu, the read-vs-ref
+  dialog and SAM export. **A plain pileup render never asks for a read name at
+  all**, so a lazy name would be free for the common render.
+
+  What kills it is that decoding the block at once already collected most of the
+  prize. Names were ~10.4 ms of a ~110 ms decode of SRR396637 when each was a
+  `TextDecoder` call; they are ~1.5 ms now. So laziness is competing for the
+  remaining ~1.4%, and to get it it would have to turn a public field into a
+  getter, give every record an offset field beside it, handle `mate.readName`
+  and the assignment in `addReferenceSequence`, and keep the name block alive as
+  bytes rather than as a string. Not worth it at that size. Revisit only if the
+  eager path somehow gets expensive again.
+
+  The general lesson is worth keeping separately from the specific answer: when
+  a per-record cost looks like it wants to be deferred, check first whether it
+  wants to be _batched_. Deferring moves work; batching deletes it, and does not
+  touch the API.
+
 - **`batchDecodeItf8` scratch sizing.** The `new Int32Array(buffer.length)`
   looks like a 4x over-allocation; measured utilisation is **97.5–100%** (ITF8
   values in these blocks are overwhelmingly single-byte) and the `.slice()` copy
@@ -439,16 +461,34 @@ slice decode now, which dropped the per-record `Uint8Array` view, two of the
 three name fields, and a duplicate string per detached record. The shape of the
 rest of the table still holds.
 
+It then grew back by ~0.69 MB when the names started being decoded a block at a
+time (`bindStringReader`). A name is now a `slice` of the one decoded block, so
+54,695 of them are ~1.31 MB of 24-byte slice headers plus the 1.14 MB block they
+point into, against ~1.75 MB of standalone strings before — and **a slice keeps
+its whole name block alive as long as any record from it lives**. That was taken
+knowingly for the decode time; interning is what would recover it, see below.
+
 Per-object costs measured on this V8 (Node 24, 200k instances each): a retained
 `Uint8Array` view is **104 B**, an empty `{}` is **56 B**, a 25-char string is
 **56 B**, and a declared class field is **8 B** — so every field removed from
 `CramRecord` is 437 KB on a 54k-record view. Ranked by what looks reachable:
 
-- **Intern tag string values.** SRR396637 has 164,526 tag values and only
-  **1,084 distinct** ones (`MC` is a CIGAR string, repeated across nearly every
-  record). A per-slice `Map<string, string>` in `parseTagData`'s `Z` branch
-  recovers most of the ~1.3 MB the strings hold, for a few lines. The temporary
-  string is still allocated and collected; only the retained copy is shared.
+- **Intern the strings.** SRR396637 has 164,526 tag values and only **1,084
+  distinct** ones (`MC` is a CIGAR string, repeated across nearly every record),
+  and 27,462 distinct read names for 54,695 records, because the two mates of a
+  pair share one. A per-slice `Map<string, string>` in the string reader shares
+  the retained copy; the temporary is still allocated and collected.
+
+  This is now worth more than it was, and for a second reason. Both values are
+  `slice`s of a decoded block, so interning a read name does not just drop a
+  duplicate — it drops a reference into the block, and enough of them would let
+  the block be collected instead of pinned by whichever record outlives the
+  query. Against that, it puts a hash lookup per value back on a path the
+  batching just made allocation-light, which is exactly the trade that needs
+  measuring rather than assuming. Note V8 copies a slice shorter than 13
+  characters instead of pointing into the parent, so short tag values are
+  already free of the pinning and only the long ones (`MC`, `SA`) benefit.
+
 - **Share one frozen empty `tags`.** A fresh `{}` per record is 56 B whether or
   not it holds anything, so `decodeTags: false` still pays ~3.0 MB of the 4.28
   MB that tags cost. Worth it for that mode and for tagless files.
