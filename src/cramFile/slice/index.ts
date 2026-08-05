@@ -3,6 +3,7 @@ import Constants from '../constants.ts'
 import { buildSliceDecodeContext, trimSliceColumns } from './decodeContext.ts'
 import decodeRecord from './decodeRecord.ts'
 import { type CramFileBlock } from '../file.ts'
+import { memoizeAsync } from '../memoize.ts'
 import CramRecord, { defaultDecodeOptions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
@@ -208,11 +209,11 @@ export default class CramSlice {
   container: CramContainer
   containerPosition: number
   sliceSize: number
-  private _headerResult?: ReturnType<CramSlice['_fetchHeader']>
-  private _blocksResult?: ReturnType<CramSlice['_fetchBlocks']>
-  private _blocksContentIdIndexResult?: ReturnType<
-    CramSlice['_fetchBlocksContentIdIndex']
-  >
+  private _headerMemo = memoizeAsync(() => this._fetchHeader())
+  private _blocksMemo = memoizeAsync(() => this._fetchBlocks())
+  private _blocksContentIdIndexMemo = memoizeAsync(() =>
+    this._fetchBlocksContentIdIndex(),
+  )
 
   constructor(
     container: CramContainer,
@@ -226,13 +227,7 @@ export default class CramSlice {
   }
 
   getHeader() {
-    if (this._headerResult === undefined) {
-      this._headerResult = this._fetchHeader()
-      this._headerResult.catch(() => {
-        this._headerResult = undefined
-      })
-    }
-    return this._headerResult
+    return this._headerMemo()
   }
 
   private async _fetchHeader() {
@@ -266,13 +261,7 @@ export default class CramSlice {
   }
 
   getBlocks() {
-    if (this._blocksResult === undefined) {
-      this._blocksResult = this._fetchBlocks()
-      this._blocksResult.catch(() => {
-        this._blocksResult = undefined
-      })
-    }
-    return this._blocksResult
+    return this._blocksMemo()
   }
 
   private async _fetchBlocks() {
@@ -325,13 +314,7 @@ export default class CramSlice {
   }
 
   _getBlocksContentIdIndex() {
-    if (this._blocksContentIdIndexResult === undefined) {
-      this._blocksContentIdIndexResult = this._fetchBlocksContentIdIndex()
-      this._blocksContentIdIndexResult.catch(() => {
-        this._blocksContentIdIndexResult = undefined
-      })
-    }
-    return this._blocksContentIdIndexResult
+    return this._blocksContentIdIndexMemo()
   }
 
   private async _fetchBlocksContentIdIndex(): Promise<

@@ -7,6 +7,7 @@ import {
 } from '../errors.ts'
 import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
+import { memoizeAsync } from './memoize.ts'
 import { parseHeaderText } from '../sam.ts'
 import SliceRecordCache from './sliceRecordCache.ts'
 import { decodeUtf8, parseItem } from './util.ts'
@@ -116,8 +117,8 @@ export default class CramFile {
   }
   public featureCache: SliceRecordCache
   private header: string | undefined
-  private _definitionResult?: ReturnType<CramFile['_fetchDefinition']>
-  private _samHeaderResult?: ReturnType<CramFile['_fetchSamHeader']>
+  private _definitionMemo = memoizeAsync(() => this._fetchDefinition())
+  private _samHeaderMemo = memoizeAsync(() => this._fetchSamHeader())
   private _referenceInfo?: ReferenceInfo[]
 
   constructor(args: CramFileArgs) {
@@ -153,14 +154,8 @@ export default class CramFile {
     return getSectionParsers(majorVersion)
   }
 
-  async getDefinition() {
-    if (this._definitionResult === undefined) {
-      this._definitionResult = this._fetchDefinition()
-      this._definitionResult.catch(() => {
-        this._definitionResult = undefined
-      })
-    }
-    return this._definitionResult
+  getDefinition() {
+    return this._definitionMemo()
   }
 
   private async _fetchDefinition() {
@@ -178,14 +173,8 @@ export default class CramFile {
     }
   }
 
-  async getSamHeader() {
-    if (this._samHeaderResult === undefined) {
-      this._samHeaderResult = this._fetchSamHeader()
-      this._samHeaderResult.catch(() => {
-        this._samHeaderResult = undefined
-      })
-    }
-    return this._samHeaderResult
+  getSamHeader() {
+    return this._samHeaderMemo()
   }
 
   private async _fetchSamHeader() {
