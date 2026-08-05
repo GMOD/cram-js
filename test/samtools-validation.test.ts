@@ -1,38 +1,54 @@
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { references } from './lib/samtools.ts'
 import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
 
+function dataPath(filename: string) {
+  return path.join(process.cwd(), 'test', 'data', filename)
+}
+
 function getSamtoolsCount(filename: string, region?: string): number {
-  const cramPath = path.join(process.cwd(), 'test', 'data', filename)
-  const regionArg = region ? ` "${region}"` : ''
-  const cmd = `samtools view -c "${cramPath}"${regionArg}`
+  const args = ['view', '-c', dataPath(filename)]
+  if (region) {
+    args.push(region)
+  }
   try {
-    const result = execSync(cmd, { encoding: 'utf8' }).trim()
-    return Number.parseInt(result, 10)
+    return Number.parseInt(
+      execFileSync('samtools', args, {
+        encoding: 'utf8',
+        // as in ./lib/samtools.ts: without this htslib reaches for the EBI
+        // registry for any reference it cannot find on disk
+        env: {
+          ...process.env,
+          REF_PATH: process.env.REF_PATH ?? 'test/data/%s',
+        },
+      }).trim(),
+      10,
+    )
   } catch (error) {
-    throw new Error(`Failed to run samtools: ${cmd}\n${error}`, {
+    throw new Error(`Failed to run samtools view -c on ${filename}`, {
       cause: error,
     })
   }
 }
 
+/**
+ * Reference names in header order.
+ *
+ * Empty only for a file with no @SQ lines. This used to swallow the read
+ * failing too, which the callers below read as "nothing to check" and passed.
+ */
 function getRefNames(filename: string): string[] {
-  const cramPath = path.join(process.cwd(), 'test', 'data', filename)
-  const cmd = String.raw`samtools view -H "${cramPath}" | grep "^@SQ" | sed 's/.*SN:\([^\t]*\).*/\1/'`
-  try {
-    const result = execSync(cmd, {
-      encoding: 'utf8',
-      shell: '/bin/bash',
-    }).trim()
-    return result.split('\n').filter(Boolean)
-  } catch (error) {
-    return []
+  const refs = references(dataPath(filename))
+  if (!refs) {
+    throw new Error(`samtools could not read ${filename}`)
   }
+  return refs.map(r => r.name)
 }
 
 describe('CRAM record count validation against samtools', () => {
@@ -170,11 +186,13 @@ describe('CRAM record count validation against samtools', () => {
 
       // getRecordsForRange uses 0-based coordinates
       const features = await cram.getRecordsForRange(0, 25999, 26499)
+      const refNames = getRefNames('SRR396636.sorted.clip.cram')
+      const samtoolsCount = getSamtoolsCount(
+        'SRR396636.sorted.clip.cram',
+        `${refNames[0]}:${25999 + 1}-26499`,
+      )
 
-      // Note: Small discrepancies (406 vs 404) likely due to boundary handling
-      // differences between CRAM reader and samtools for overlapping records
-      expect(features.length).toBeGreaterThanOrEqual(404)
-      expect(features.length).toBeLessThanOrEqual(410)
+      expect(features.length).toEqual(samtoolsCount)
     })
 
     it('SRR396637.sorted.clip.cram region 163504-175473', async () => {
@@ -187,11 +205,13 @@ describe('CRAM record count validation against samtools', () => {
 
       // getRecordsForRange uses 0-based coordinates
       const features = await cram.getRecordsForRange(0, 163504, 175473)
+      const refNames = getRefNames('SRR396637.sorted.clip.cram')
+      const samtoolsCount = getSamtoolsCount(
+        'SRR396637.sorted.clip.cram',
+        `${refNames[0]}:${163504 + 1}-175473`,
+      )
 
-      // Note: Small discrepancies (5941 vs 5962) likely due to boundary handling
-      // differences between CRAM reader and samtools for overlapping records
-      expect(features.length).toBeGreaterThanOrEqual(5935)
-      expect(features.length).toBeLessThanOrEqual(5970)
+      expect(features.length).toEqual(samtoolsCount)
     })
 
     it('human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram first ref', async () => {
@@ -211,11 +231,11 @@ describe('CRAM record count validation against samtools', () => {
         -1,
         Number.POSITIVE_INFINITY,
       )
+      const file = 'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram'
+      const refNames = getRefNames(file)
+      const samtoolsCount = getSamtoolsCount(file, refNames[0])
 
-      // Note: This file has a 1 record discrepancy (6 vs 7) which may indicate
-      // a decoder issue or boundary condition bug that needs investigation
-      expect(features.length).toBeGreaterThanOrEqual(6)
-      expect(features.length).toBeLessThanOrEqual(7)
+      expect(features.length).toEqual(samtoolsCount)
     })
 
     it('paired.cram region chr20:62501-64500 without viewAsPairs', async () => {
@@ -354,10 +374,13 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
 
       // getRecordsForRange uses 0-based coordinates
       const features = await cram.getRecordsForRange(0, 2, 200)
+      const refNames = getRefNames('ce#tag_padded.tmp.cram')
+      const samtoolsCount = getSamtoolsCount(
+        'ce#tag_padded.tmp.cram',
+        `${refNames[0]}:${2 + 1}-200`,
+      )
 
-      // Note: Small discrepancy (8 vs 7) in boundary handling
-      expect(features.length).toBeGreaterThanOrEqual(7)
-      expect(features.length).toBeLessThanOrEqual(8)
+      expect(features.length).toEqual(samtoolsCount)
     })
   })
 
