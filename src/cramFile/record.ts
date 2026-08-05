@@ -349,37 +349,60 @@ function decodeReadSequenceString(
   return bases.toUpperCase()
 }
 
-const baseNumbers: Record<string, number | undefined> = {
-  a: 0,
-  A: 0,
-  c: 1,
-  C: 1,
-  g: 2,
-  G: 2,
-  t: 3,
-  T: 3,
-  n: 4,
-  N: 4,
+/**
+ * Substitution-matrix row for a reference base, indexed by its ASCII code.
+ *
+ * Filled with 4 rather than left at 0 because anything that is not a called
+ * base substitutes through the N row — which is also where an out-of-range
+ * reference coordinate lands.
+ */
+const SUBSTITUTION_ROW_BY_BASE_CODE = new Uint8Array(128).fill(4)
+for (const [lower, row] of [
+  [0x61 /* a */, 0],
+  [0x63 /* c */, 1],
+  [0x67 /* g */, 2],
+  [0x74 /* t */, 3],
+] as const) {
+  SUBSTITUTION_ROW_BY_BASE_CODE[lower] = row
+  SUBSTITUTION_ROW_BY_BASE_CODE[lower - 32] = row
 }
 
+/**
+ * Resolve one base substitution against the reference, into the arena's byte
+ * columns.
+ *
+ * Runs once per X read feature, which on long-read data is most of them — it
+ * was 9.5% of a decode of the ONT fixture. So it deliberately touches no
+ * strings: `charAt` allocated a one-character string per substitution, which
+ * then went through a string-keyed lookup for its matrix row and produced
+ * another string to take `charCodeAt(0)` of. Both tables are numeric now, and
+ * the matrix's own char codes are precomputed per container.
+ */
 function decodeBaseSubstitution(
   arena: ReadFeatureArena,
   index: number,
   refRegion: RefRegion,
   compressionScheme: CramContainerCompressionScheme,
 ) {
-  // decode base substitution code using the substitution matrix
   const refCoord = arena.refPos[index]! - refRegion.start
-  const refBase = refRegion.seq.charAt(refCoord)
-  if (refBase) {
-    arena.refCodes[index] = refBase.charCodeAt(0)
+  // NaN when refCoord is outside the region, which is the case charAt used to
+  // report as '' — and NaN is the only value not equal to itself
+  const refCode = refRegion.seq.charCodeAt(refCoord)
+  const inRegion = refCode === refCode
+  if (inRegion) {
+    arena.refCodes[index] = refCode
   }
-  // anything that is not a called base substitutes through the N row
-  const baseNumber = baseNumbers[refBase] ?? 4
-  const substitutionScheme = compressionScheme.substitutionMatrix[baseNumber]!
-  const base = substitutionScheme[arena.num[index]!]
-  if (base) {
-    arena.subCodes[index] = base.charCodeAt(0)
+  const row =
+    inRegion && refCode < 128 ? SUBSTITUTION_ROW_BY_BASE_CODE[refCode]! : 4
+  // BS is a 2-bit code, so a value past the row is a malformed file: leave
+  // subCodes at 0, exactly as indexing past the row's strings used to
+  const substitution = arena.num[index]!
+  if (substitution >= 0 && substitution < 4) {
+    const subCode =
+      compressionScheme.substitutionCodeCache[row * 4 + substitution]!
+    if (subCode) {
+      arena.subCodes[index] = subCode
+    }
   }
 }
 

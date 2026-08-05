@@ -75,6 +75,17 @@ function parseSubstitutionMatrix(byteArray: number[]) {
   return matrix
 }
 
+/** the matrix flattened to ASCII codes, so a substitution decode reads a byte */
+function substitutionCodes(matrix: string[][]) {
+  const codes = new Uint8Array(5 * 4)
+  for (let row = 0; row < 5; row++) {
+    for (let i = 0; i < 4; i++) {
+      codes[row * 4 + i] = matrix[row]?.[i]?.charCodeAt(0) ?? 0
+    }
+  }
+  return codes
+}
+
 type DataSeriesCache = {
   [K in DataSeriesEncodingKey]?: CramCodec<DataSeriesTypes[K]>
 }
@@ -86,6 +97,13 @@ export default class CramContainerCompressionScheme {
   // the TD preservation map entry: tag-list index -> three-character tag ids
   public tagIdsDictionary: CramTagDictionary
   public substitutionMatrix: string[][]
+  /**
+   * {@link substitutionMatrix} as ASCII codes, indexed `row * 4 + code`, so
+   * that resolving a substitution reads a byte instead of a one-character
+   * string. Derived, so the name ends in `Cache` — that is what keeps it out of
+   * {@link toJSON} and therefore out of the snapshots.
+   */
+  public substitutionCodeCache: Uint8Array
   public dataSeriesCodecCache: DataSeriesCache = {}
   public tagCodecCache: Record<string, CramCodec> = {}
   public tagEncoding: Record<string, CramEncoding> = {}
@@ -100,6 +118,7 @@ export default class CramContainerCompressionScheme {
     this.referenceRequired = content.preservation.RR ?? true
     this.tagIdsDictionary = content.preservation.TD
     this.substitutionMatrix = parseSubstitutionMatrix(content.preservation.SM)
+    this.substitutionCodeCache = substitutionCodes(this.substitutionMatrix)
     this.dataSeriesEncoding = content.dataSeriesEncoding
     this.tagEncoding = content.tagEncoding
   }
