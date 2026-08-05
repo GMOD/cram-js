@@ -105,6 +105,32 @@ export default abstract class CramCodec<
     return undefined
   }
 
+  /**
+   * A reader for the next value as an unsigned little-endian integer of
+   * `width` bytes — or undefined for a codec that cannot produce its bytes one
+   * at a time, in which case the caller decodes the value and reads the number
+   * out of it.
+   *
+   * This exists because the fixed-width numeric tags are the common case and
+   * the view is pure overhead for them. `AS:C` and `XS:C` are one byte each,
+   * and taking them through the byte-array path allocated a one-element
+   * Uint8Array per tag per record purely to read element 0 back out: 109,390 of
+   * them decoding SRR396637, two per record.
+   *
+   * A value wider than `width` is still consumed in full, so the cursor lands
+   * where the byte-array path would have left it, but only the low `width`
+   * bytes reach the result — matching what `parseTagData` reads out of the
+   * buffer it is handed.
+   */
+  bindUintReader(
+    _width: number,
+    _coreDataBlock: CramFileBlock | undefined,
+    _blocksByContentId: Record<number, CramFileBlock>,
+    _cursors: Cursors,
+  ): (() => number) | undefined {
+    return undefined
+  }
+
   /** {@link bindBytesReader} for a caller that has not bound anything. */
   getBytesSubarray(
     blocksByContentId: Record<number, CramFileBlock>,

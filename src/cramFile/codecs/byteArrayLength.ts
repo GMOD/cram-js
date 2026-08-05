@@ -108,6 +108,41 @@ export default class ByteArrayLengthCodec extends CramCodec<
     }
   }
 
+  /**
+   * The values sub-codec is a `byte` codec, so its own bound decoder already
+   * hands back a number — the view the byte-array path builds is only ever
+   * taken apart again by the caller. Reading the bytes straight through it
+   * skips that entirely.
+   */
+  bindUintReader(
+    width: number,
+    coreDataBlock: CramFileBlock | undefined,
+    blocksByContentId: Record<number, CramFileBlock>,
+    cursors: Cursors,
+  ) {
+    const readLength = this._getLengthCodec().bindDecoder(
+      coreDataBlock,
+      blocksByContentId,
+      cursors,
+    )
+    const readByte = this._getDataCodec().bindDecoder(
+      coreDataBlock,
+      blocksByContentId,
+      cursors,
+    )
+    return () => {
+      const arrayLength = readLength()
+      let value = 0
+      for (let i = 0; i < arrayLength; i += 1) {
+        const byte = readByte()
+        if (i < width) {
+          value |= byte << (i * 8)
+        }
+      }
+      return value >>> 0
+    }
+  }
+
   _getLengthCodec() {
     this._lengthCodecCache ??= this.instantiateCodec(
       this.parameters.lengthsEncoding,

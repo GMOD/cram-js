@@ -282,6 +282,43 @@ function bindDataSeriesDecoders(
 }
 
 /**
+ * Tag types whose value is a fixed number of bytes the caller wants as a
+ * number, and how many bytes that is. `f` is left out deliberately: its four
+ * bytes are an IEEE float rather than an integer, so it keeps the byte-array
+ * path. So do `B` and `H`, which are not scalars at all.
+ */
+const FIXED_WIDTH_TAG_TYPES: Record<string, number | undefined> = {
+  A: 1,
+  C: 1,
+  c: 1,
+  S: 2,
+  s: 2,
+  I: 4,
+  i: 4,
+}
+
+/**
+ * Turn the raw little-endian integer into what the tag type means: a character
+ * for `A`, the value itself for the unsigned types, and a sign-extension for
+ * the signed ones — shifting the sign bit up to bit 31 and back down, which is
+ * the same arithmetic at all three widths.
+ */
+function bindFixedWidthTagReader(
+  type: string,
+  width: number,
+  readUint: () => number,
+): () => TagValue {
+  if (type === 'A') {
+    return () => String.fromCharCode(readUint())
+  }
+  if (type === 'C' || type === 'S' || type === 'I') {
+    return readUint
+  }
+  const shift = 32 - width * 8
+  return () => ((readUint() << shift) >> shift) | 0
+}
+
+/**
  * Bound tag readers, indexed by TL data series value.
  *
  * Every tag binds through its own codec, the same as a data series does, so a
@@ -315,6 +352,19 @@ function bindTagReaders(
       )
       if (readString) {
         boundTagReaders[tagId] = readString
+        continue
+      }
+    }
+    const width = FIXED_WIDTH_TAG_TYPES[type]
+    if (width !== undefined) {
+      const readUint = codec.bindUintReader(
+        width,
+        coreDataBlock,
+        blocksByContentId,
+        cursors,
+      )
+      if (readUint) {
+        boundTagReaders[tagId] = bindFixedWidthTagReader(type, width, readUint)
         continue
       }
     }
