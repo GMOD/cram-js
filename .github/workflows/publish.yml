@@ -31,7 +31,7 @@ jobs:
       # exactly what test/samtoolsAgreement.test.ts did with `seqFetch`.
       - run: pnpm typecheck
       - run: pnpm build
-      - run: pnpm test
+      - run: pnpm test --run
       - run: pnpm test:pack
 
   publish:
