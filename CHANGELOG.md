@@ -1,3 +1,9 @@
+## [11.3.0](https://github.com/GMOD/cram-js/compare/v11.2.0...v11.3.0) (2026-08-06)
+
+### Performance Improvements
+
+- Drop the 'batch' eviction policy, so cacheSize is a real bound
+
 ## [11.2.0](https://github.com/GMOD/cram-js/compare/v11.1.0...v11.2.0) (2026-08-06)
 
 ### Performance Improvements
