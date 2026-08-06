@@ -262,7 +262,10 @@ export default class ReadFeatureArena {
         code: 'B',
         pos,
         refPos,
-        data: [String.fromCharCode(this.payloadByteAt(index)), this.num[index]!],
+        data: [
+          String.fromCharCode(this.payloadByteAt(index)),
+          this.num[index]!,
+        ],
       }
     }
     if (code === RF_QUALS) {

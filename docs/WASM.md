@@ -1,27 +1,27 @@
 # WebAssembly decoding
 
-Every block codec except lzma is [samtools/htscodecs](https://github.com/samtools/htscodecs)
-compiled to a single WebAssembly module. gzip goes through libdeflate, bzip2
-through the emscripten bzip2 port, and lzma/xz is the one decoder still written
-in JS. The module is inlined in the bundle and loads itself, so there is nothing
-to set up.
+Every block codec except lzma is
+[samtools/htscodecs](https://github.com/samtools/htscodecs) compiled to a single
+WebAssembly module. gzip goes through libdeflate, bzip2 through the emscripten
+bzip2 port, and lzma/xz is the one decoder still written in JS. The module is
+inlined in the bundle and loads itself, so there is nothing to set up.
 
 ## Why
 
-CRAM 3.1 was effectively unreadable in JS for years, and the reason was
-fqzcomp, tok3 and the adaptive arithmetic coder. Between them that's thousands
-of lines of context-modelling C, and porting it by hand means signing up to keep
-a second copy correct forever. Compiling the real thing got all of it in one
-step, including the rANS 4x16 and tok3 sub-variants that tools do actually emit.
+CRAM 3.1 was effectively unreadable in JS for years, and the reason was fqzcomp,
+tok3 and the adaptive arithmetic coder. Between them that's thousands of lines
+of context-modelling C, and porting it by hand means signing up to keep a second
+copy correct forever. Compiling the real thing got all of it in one step,
+including the rANS 4x16 and tok3 sub-variants that tools do actually emit.
 
 Running the same C samtools runs also settles the question of whether a block
 decoded correctly: it decodes to the same bytes `samtools view` gets. When
 htscodecs fixes something upstream, picking it up is a script rerun.
 
-Speed comes along with that. Quality scores and read names are where a CRAM
-read spends most of its decoding time, and those are now compiled code rather
-than an interpreted inner loop. gzip gets libdeflate, which is quick even by
-native standards.
+Speed comes along with that. Quality scores and read names are where a CRAM read
+spends most of its decoding time, and those are now compiled code rather than an
+interpreted inner loop. gzip gets libdeflate, which is quick even by native
+standards.
 
 And because the wasm is inlined, it behaves like any other JS dependency. No
 second request, no static asset to copy into your build, no MIME type or CSP
@@ -29,12 +29,12 @@ rules, same story in node, browsers and workers.
 
 ## What it costs
 
-| | |
-| --- | --- |
+|                         |                        |
+| ----------------------- | ---------------------- |
 | `src/wasm/htscodecs.js` | 128 KB (55 KB gzipped) |
-| wasm binary inside it | 113 KB |
-| instantiation | ~5 ms, once |
-| wasm heap | 16 MB floor |
+| wasm binary inside it   | 113 KB                 |
+| instantiation           | ~5 ms, once            |
+| wasm heap               | 16 MB floor            |
 
 The binary stays this small because we only link decoders — no compressor, and
 none of the SIMD-specialized htscodecs variants.
@@ -75,5 +75,4 @@ overlapping.
 
 [CODEC_SUPPORT.md](CODEC_SUPPORT.md) has the update and rebuild scripts, and
 `htscodecs-wasm/build.sh` has the emcc flags the numbers above come from.
-</content>
-</invoke>
+</content> </invoke>

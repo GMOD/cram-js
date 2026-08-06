@@ -599,10 +599,7 @@ export default class CramSlice {
     }
   }
 
-  async _fetchRecords(
-    decodeOptions: Required<DecodeOptions>,
-    opts?: ReadOpts,
-  ) {
+  async _fetchRecords(decodeOptions: Required<DecodeOptions>, opts?: ReadOpts) {
     const { majorVersion } = await this.file.getDefinition()
     const compressionScheme = await this.getCompressionScheme(opts)
     const sliceHeader = await this.getHeader(opts)

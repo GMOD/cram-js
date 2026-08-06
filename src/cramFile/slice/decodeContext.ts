@@ -91,10 +91,8 @@ export function buildSliceDecodeContext({
   // can hand one out (ExternalCodec can), undefined otherwise, in which case
   // decodeReadBases falls back to reading a base at a time
   const baCodec = compressionScheme.getCodecForDataSeries('BA')
-  const decodeBulkBases: BulkBasesDecoder | undefined = baCodec?.bindBytesReader(
-    blocksByContentId,
-    cursors,
-  )
+  const decodeBulkBases: BulkBasesDecoder | undefined =
+    baCodec?.bindBytesReader(blocksByContentId, cursors)
 
   // Read names come out of the RN codec as a string rather than as bytes the
   // record decoder then decodes, so that a codec able to decode its whole block

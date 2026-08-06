@@ -190,7 +190,10 @@ export default class SliceRecordCache {
     }
   }
 
-  private start(key: string, fill: (signal: AbortSignal) => Promise<CramRecord[]>) {
+  private start(
+    key: string,
+    fill: (signal: AbortSignal) => Promise<CramRecord[]>,
+  ) {
     this.drop(key)
     const controller = new AbortController()
     const entry: Entry = {

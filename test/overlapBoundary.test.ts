@@ -37,10 +37,17 @@ test('padded records match samtools spans', async () => {
     1,
     200,
   )
-  expect(
-    feats.map(f => `${f.start}+${f.lengthOnRef}`).sort(),
-  ).toStrictEqual(
-    ['1+101', '1+101', '1+101', '1+101', '1+101', '1+1', '101+1', '27+3'].sort(),
+  expect(feats.map(f => `${f.start}+${f.lengthOnRef}`).sort()).toStrictEqual(
+    [
+      '1+101',
+      '1+101',
+      '1+101',
+      '1+101',
+      '1+101',
+      '1+1',
+      '101+1',
+      '27+3',
+    ].sort(),
   )
 })
 

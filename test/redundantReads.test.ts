@@ -41,7 +41,9 @@ test('a range query issues no duplicate reads', async () => {
   // another read in the same query. `getRecordsForRange` now shares containers
   // across the slices of one query (and deliberately no wider than that; see
   // the comment where it builds the map).
-  const distinct = new Set(reads.map(([length, position]) => `${length}@${position}`))
+  const distinct = new Set(
+    reads.map(([length, position]) => `${length}@${position}`),
+  )
   expect(distinct.size).toBe(reads.length)
 })
 
