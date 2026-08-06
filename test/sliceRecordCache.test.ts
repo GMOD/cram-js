@@ -1,8 +1,20 @@
+import { SharedReadCache } from '@gmod/shared-read-cache'
 import { expect, test } from 'vitest'
 
-import SliceRecordCache from '../src/cramFile/sliceRecordCache.ts'
-
 import type CramRecord from '../src/cramFile/record.ts'
+
+/**
+ * The cache exactly as CramFile configures it -- records as the unit, and the
+ * batch eviction policy. The cancellation behaviour these tests cover lives in
+ * @gmod/shared-read-cache and is tested there too; what is checked here is that
+ * cram's configuration of it still behaves the way cram needs.
+ */
+const makeCache = (maxRecords: number) =>
+  new SharedReadCache<string, CramRecord[]>({
+    maxSize: maxRecords,
+    sizeOf: records => records.length,
+    evictionPolicy: 'batch',
+  })
 
 // the cache only ever reads `.length` off the resolved array
 const records = (n: number) =>
@@ -17,11 +29,11 @@ const records = (n: number) =>
  * are further down.
  */
 function fill(
-  cache: SliceRecordCache,
+  cache: SharedReadCache<string, CramRecord[]>,
   key: string,
   promise: Promise<CramRecord[]>,
 ) {
-  void cache.getOrFill(key, undefined, () => promise).catch(() => undefined)
+  void cache.get(key, undefined, () => promise).catch(() => undefined)
   return promise
 }
 
@@ -37,49 +49,49 @@ function deferred() {
 }
 
 test('serves a cached slice back', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const p = fill(cache, 'a', records(10))
   await p
-  expect(cache.get('a')).toBe(p)
-  expect(cache.get('missing')).toBeUndefined()
+  expect(cache.getIfCached('a')).toBe(p)
+  expect(cache.getIfCached('missing')).toBeUndefined()
 })
 
 test('bounds by record count, not by number of slices', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   // three slices of 40 records: the third must push the first out, even though
   // an entry-counting cache would happily hold all three
   for (const key of ['a', 'b', 'c']) {
     await fill(cache, key, records(40))
   }
-  expect(cache.get('a')).toBeUndefined()
-  expect(cache.get('b')).toBeDefined()
-  expect(cache.get('c')).toBeDefined()
+  expect(cache.getIfCached('a')).toBeUndefined()
+  expect(cache.getIfCached('b')).toBeDefined()
+  expect(cache.getIfCached('c')).toBeDefined()
 })
 
 test('evicts least recently used', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   for (const key of ['a', 'b']) {
     await fill(cache, key, records(40))
   }
   // touch 'a' so 'b' becomes the least recently used
-  void cache.get('a')
+  void cache.getIfCached('a')
   await fill(cache, 'c', records(40))
 
-  expect(cache.get('b')).toBeUndefined()
-  expect(cache.get('a')).toBeDefined()
-  expect(cache.get('c')).toBeDefined()
+  expect(cache.getIfCached('b')).toBeUndefined()
+  expect(cache.getIfCached('a')).toBeDefined()
+  expect(cache.getIfCached('c')).toBeDefined()
 })
 
 test('keeps a slice larger than the whole budget', async () => {
-  const cache = new SliceRecordCache(10)
+  const cache = makeCache(10)
   const p = fill(cache, 'big', records(1000))
   await p
   // it must not evict itself, or it would be re-decoded on every single query
-  expect(cache.get('big')).toBe(p)
+  expect(cache.getIfCached('big')).toBe(p)
 })
 
 test('keeps every slice of one over-budget batch', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   // what getRecordsForRange does: start every slice of the range at once. The
   // caller holds all of them until it returns, so evicting one frees nothing
   // and only guarantees the next identical query re-decodes it
@@ -87,39 +99,39 @@ test('keeps every slice of one over-budget batch', async () => {
   await Promise.all(keys.map(key => fill(cache, key, records(40))))
 
   for (const key of keys) {
-    expect(cache.get(key)).toBeDefined()
+    expect(cache.getIfCached(key)).toBeDefined()
   }
 })
 
 test('evicts the previous batch once a new one lands', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   await Promise.all(['a', 'b'].map(key => fill(cache, key, records(40))))
   await fill(cache, 'c', records(40))
 
   // 'a' and 'b' are no longer protected, so the budget applies to them again
-  expect(cache.get('a')).toBeUndefined()
-  expect(cache.get('b')).toBeDefined()
-  expect(cache.get('c')).toBeDefined()
+  expect(cache.getIfCached('a')).toBeUndefined()
+  expect(cache.getIfCached('b')).toBeDefined()
+  expect(cache.getIfCached('c')).toBeDefined()
 })
 
 test('does not cache a failed decode', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const p = fill(cache, 'a', Promise.reject(new Error('read failed')))
   await expect(p).rejects.toThrow('read failed')
   // a transient failure must not poison the slice for the life of the file
-  expect(cache.get('a')).toBeUndefined()
+  expect(cache.getIfCached('a')).toBeUndefined()
 })
 
 test('a second call for a live key joins rather than decoding again', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   let decodes = 0
   const decode = () => {
     decodes++
     return records(60)
   }
 
-  const first = await cache.getOrFill('a', undefined, decode)
-  const second = await cache.getOrFill('a', undefined, decode)
+  const first = await cache.get('a', undefined, decode)
+  const second = await cache.get('a', undefined, decode)
 
   // the whole point of the cache, and the reason `getOrFill` replaced `set`:
   // asking for a slice that is already there — or already decoding — must not
@@ -128,8 +140,8 @@ test('a second call for a live key joins rather than decoding again', async () =
   expect(second).toBe(first)
 
   await fill(cache, 'b', records(40))
-  expect(cache.get('a')).toBeDefined()
-  expect(cache.get('b')).toBeDefined()
+  expect(cache.getIfCached('a')).toBeDefined()
+  expect(cache.getIfCached('b')).toBeDefined()
 })
 
 // ---------------------------------------------------------------------------
@@ -137,17 +149,17 @@ test('a second call for a live key joins rather than decoding again', async () =
 // ---------------------------------------------------------------------------
 
 test('one consumer aborting does not cancel a decode another is waiting on', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const { promise, resolve } = deferred()
   const leaving = new AbortController()
   const staying = new AbortController()
   let fillSignal: AbortSignal | undefined
 
-  const first = cache.getOrFill('a', leaving.signal, signal => {
+  const first = cache.get('a', leaving.signal, signal => {
     fillSignal = signal
     return promise
   })
-  const second = cache.getOrFill('a', staying.signal, () => promise)
+  const second = cache.get('a', staying.signal, () => promise)
 
   leaving.abort()
   // the decode is still wanted by `staying`, so it must keep going
@@ -160,17 +172,17 @@ test('one consumer aborting does not cancel a decode another is waiting on', asy
 })
 
 test('a decode is cancelled once every consumer has aborted', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const { promise, reject } = deferred()
   const one = new AbortController()
   const two = new AbortController()
   let fillSignal: AbortSignal | undefined
 
-  const first = cache.getOrFill('a', one.signal, signal => {
+  const first = cache.get('a', one.signal, signal => {
     fillSignal = signal
     return promise
   })
-  const second = cache.getOrFill('a', two.signal, () => promise)
+  const second = cache.get('a', two.signal, () => promise)
 
   one.abort()
   expect(fillSignal!.aborted).toBe(false)
@@ -183,22 +195,22 @@ test('a decode is cancelled once every consumer has aborted', async () => {
   await expect(second).rejects.toThrow(/abort/i)
   // the abandoned decode is evicted immediately, not left for a later query to
   // join and be told it was cancelled
-  expect(cache.get('a')).toBeUndefined()
+  expect(cache.getIfCached('a')).toBeUndefined()
 })
 
 test('a consumer with no signal pins the decode', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const { promise, resolve } = deferred()
   const leaving = new AbortController()
   let fillSignal: AbortSignal | undefined
 
-  const first = cache.getOrFill('a', leaving.signal, signal => {
+  const first = cache.get('a', leaving.signal, signal => {
     fillSignal = signal
     return promise
   })
   // a caller that never asked to be cancellable can never give up, so no set of
   // aborts should stop the decode it is waiting on
-  const second = cache.getOrFill('a', undefined, () => promise)
+  const second = cache.get('a', undefined, () => promise)
 
   leaving.abort()
   expect(fillSignal!.aborted).toBe(false)
@@ -209,8 +221,8 @@ test('a consumer with no signal pins the decode', async () => {
 })
 
 test('a hit on a settled slice does not retain the caller', async () => {
-  const cache = new SliceRecordCache(100)
-  await cache.getOrFill('a', undefined, () => records(5))
+  const cache = makeCache(100)
+  await cache.get('a', undefined, () => records(5))
 
   // A settled entry has taken its abort listeners back off its consumers'
   // signals, so a consumer registered after that point could never be
@@ -219,26 +231,26 @@ test('a hit on a settled slice does not retain the caller', async () => {
   // slices constantly, so this grew without bound on exactly the hot path the
   // cache exists to make cheap.
   for (let i = 0; i < 50; i++) {
-    await cache.getOrFill('a', new AbortController().signal, () => records(5))
+    await cache.get('a', new AbortController().signal, () => records(5))
   }
-  expect(cache.consumerCount('a')).toBe(0)
+  expect(cache.waiterCount('a')).toBe(0)
 })
 
 test('a consumer that already aborted does not keep a decode alive', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const { promise, reject } = deferred()
   const live = new AbortController()
   const dead = new AbortController()
   dead.abort()
   let fillSignal: AbortSignal | undefined
 
-  const first = cache.getOrFill('a', live.signal, signal => {
+  const first = cache.get('a', live.signal, signal => {
     fillSignal = signal
     return promise
   })
-  await expect(
-    cache.getOrFill('a', dead.signal, () => promise),
-  ).rejects.toThrow(/abort/i)
+  await expect(cache.get('a', dead.signal, () => promise)).rejects.toThrow(
+    /abort/i,
+  )
 
   // The failure mode being guarded: an `abort` listener never fires on a signal
   // that aborted before it was added, so counting `dead` as a waiter would
@@ -254,29 +266,29 @@ test('a consumer that already aborted does not keep a decode alive', async () =>
 })
 
 test('an already-aborted consumer never joins', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const controller = new AbortController()
   controller.abort()
   let filled = false
 
   await expect(
-    cache.getOrFill('a', controller.signal, () => {
+    cache.get('a', controller.signal, () => {
       filled = true
       return records(1)
     }),
   ).rejects.toThrow(/abort/i)
   expect(filled).toBe(false)
-  expect(cache.get('a')).toBeUndefined()
+  expect(cache.getIfCached('a')).toBeUndefined()
 })
 
 test('a decode every consumer has abandoned is not joined', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   // never settles, modelling a fill that ignores the signal it was handed —
   // `LocalFile` does exactly that, so a cancelled decode really can keep running
   const { promise } = deferred()
   const leaving = new AbortController()
 
-  const first = cache.getOrFill('a', leaving.signal, () => promise)
+  const first = cache.get('a', leaving.signal, () => promise)
   void first.catch(() => undefined)
   leaving.abort()
 
@@ -287,7 +299,7 @@ test('a decode every consumer has abandoned is not joined', async () => {
   // eviction listener in `start` is what makes the doomed entry unfindable, so
   // this is the test that pins that listener.
   let refilled = false
-  const second = await cache.getOrFill('a', undefined, () => {
+  const second = await cache.get('a', undefined, () => {
     refilled = true
     return records(3)
   })
@@ -296,17 +308,17 @@ test('a decode every consumer has abandoned is not joined', async () => {
 })
 
 test('the same signal joining twice counts once', async () => {
-  const cache = new SliceRecordCache(100)
+  const cache = makeCache(100)
   const { promise, reject } = deferred()
   const controller = new AbortController()
   let fillSignal: AbortSignal | undefined
 
   // what a viewAsPairs query does when a read and its mate land in one slice
-  const first = cache.getOrFill('a', controller.signal, signal => {
+  const first = cache.get('a', controller.signal, signal => {
     fillSignal = signal
     return promise
   })
-  const second = cache.getOrFill('a', controller.signal, () => promise)
+  const second = cache.get('a', controller.signal, () => promise)
 
   controller.abort()
   // one signal is one consumer, however many times it joined — otherwise the

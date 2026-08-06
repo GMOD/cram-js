@@ -1,3 +1,4 @@
+import { SharedReadCache } from '@gmod/shared-read-cache'
 import crc32 from 'crc/calculators/crc32'
 
 import {
@@ -9,7 +10,6 @@ import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
 import { memoizeAsync } from './memoize.ts'
 import { parseHeaderText } from '../sam.ts'
-import SliceRecordCache from './sliceRecordCache.ts'
 import { decodeUtf8, parseItem } from './util.ts'
 import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
@@ -21,6 +21,7 @@ import {
 } from './sectionParsers.ts'
 import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
+import type CramRecord from './record.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
@@ -122,7 +123,7 @@ export default class CramFile {
     checkSequenceMD5: boolean
     cacheSize: number
   }
-  public featureCache: SliceRecordCache
+  public featureCache: SharedReadCache<string, CramRecord[]>
   private header: string | undefined
   // Deliberately signal-free, unlike every other memo in the read path. These
   // two are shared file-wide and fetched once for the life of the object — 26
@@ -150,7 +151,17 @@ export default class CramFile {
     // cache of features in a slice, keyed by the slice offset. caches all of
     // the features in a slice, or none. the cache is actually used by the
     // slice object, it's just kept here at the level of the file
-    this.featureCache = new SliceRecordCache(this.options.cacheSize)
+    this.featureCache = new SharedReadCache<string, CramRecord[]>({
+      maxSize: this.options.cacheSize,
+      // records, not bytes: there is no cheap way to size a decoded record, and
+      // a record count at least makes the documented contract true
+      sizeOf: records => records.length,
+      // A range starts every one of its slices at once and holds all of their
+      // records until it returns, so evicting one mid-query frees nothing but
+      // does guarantee the next identical query re-decodes it. Measured at
+      // 117ms against 12ms on a repeated 55,000-record range (ADR 0003).
+      evictionPolicy: 'batch',
+    })
     if (!checkLittleEndian()) {
       throw new Error('Detected big-endian machine, may be unable to run')
     }

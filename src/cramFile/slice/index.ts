@@ -688,7 +688,7 @@ export default class CramSlice {
     // The records come back already decorated with their reference — see
     // applyReferenceSequence, which runs once per slice inside the cached
     // decode rather than once per query over the filtered subset.
-    const records = await this.file.featureCache.getOrFill(
+    const records = await this.file.featureCache.get(
       cacheKey,
       decodeOptions?.signal,
       signal => this._fetchRecords(opts, { signal }),
