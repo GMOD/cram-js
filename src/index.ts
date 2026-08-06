@@ -36,7 +36,10 @@ export {
   default as ReadFeatureArena,
 } from './cramFile/readFeatureArena.ts'
 export { default as CramFile } from './cramFile/index.ts'
-export { DEFAULT_CACHE_IDLE_TIMEOUT_MS } from './cramFile/file.ts'
+export {
+  DEFAULT_CACHE_IDLE_TIMEOUT_MS,
+  DEFAULT_CACHE_SIZE,
+} from './cramFile/file.ts'
 export type { ReferenceInfo, SeqFetch } from './cramFile/file.ts'
 export { default as CraiIndex } from './craiIndex.ts'
 export type { IndexOpts, Slice } from './craiIndex.ts'

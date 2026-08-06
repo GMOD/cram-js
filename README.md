@@ -153,7 +153,12 @@ new IndexedCramFile({
   index, // CraiIndex instance (or any object with getEntriesForRange)
   fetchReferenceSequence, // async (seqId, start, end, refName, opts) => string
   checkSequenceMD5, // default false; set true to verify each slice's reference MD5
-  cacheSize, // max cached records, default 20000
+  cacheSize, // max cached records, default 1000000. records not bytes, so
+  // it does not bound memory; size it to hold several queries, since below one
+  // query's working set it caches nothing at all
+  cacheIdleTimeoutMs, // drop a slice nothing has read for this long,
+  // default 3 minutes, 0 disables. the only thing that lowers the cache while
+  // nothing is happening
 })
 ```
 

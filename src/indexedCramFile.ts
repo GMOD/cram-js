@@ -59,9 +59,11 @@ export default class IndexedCramFile {
    * closed contract fails loudly instead of returning bases shifted by one.
    *
    * @param {number} [args.cacheSize] optional maximum number of CRAM records
-   * to keep in the decoded-slice cache. default 20,000. Slices are cached whole,
-   * so the limit is applied by evicting least-recently-used slices until the
-   * total record count is back under it.
+   * to keep in the decoded-slice cache. default 1,000,000. Slices are cached
+   * whole, so the limit is applied by evicting slices until the total record
+   * count is back under it. Records, not bytes, so it does not bound memory.
+   * Size it to hold several queries — below one query's working set it caches
+   * nothing at all, evicting each slice before the next pan can reuse it.
    *
    * @param {number} [args.cacheIdleTimeoutMs] optional idle timeout for that
    * cache, in ms. default 3 minutes; 0 keeps slices until `cacheSize` evicts

@@ -40,6 +40,35 @@ import type { GenericFilehandle } from 'generic-filehandle2'
  */
 export const DEFAULT_CACHE_IDLE_TIMEOUT_MS = 3 * 60 * 1000
 
+/**
+ * Records to keep in the decoded-slice cache.
+ *
+ * Sized to hold several queries rather than part of one. Below a single query's
+ * working set a budget does not cache less, it caches nothing — each slice
+ * evicted before the next pan reuses it — and 20,000, the previous default, was
+ * far below it. Measured working set for one query on the jb2bench CRAMs:
+ * 40,000 records for a 20kb window at 200x, 420,000 for 50kb at 1000x.
+ *
+ * Six-window 50kb pan, second pass, at 20,000 against this:
+ *
+ *   200x.shortread    1231ms -> 32ms
+ *   1000x.shortread   3167ms -> 279ms
+ *
+ * The old default did not even bound what it claimed to: `evictionPolicy:
+ * 'batch'` spares everything the batch touched, so a 20,000-record budget was
+ * measured holding 420,000. Raising it makes the number honest as well as
+ * useful.
+ *
+ * Records rather than bytes cannot bound memory, and this does not pretend to
+ * (see `cacheSize`). It does mean the budget only ever binds on short-read
+ * data, where records are small and numerous — long-read slices are few and
+ * huge, 2,991 records for a 50kb window at 1000x, so they never approach it.
+ *
+ * Affordable only alongside DEFAULT_CACHE_IDLE_TIMEOUT_MS, which makes it a
+ * peak under panning rather than a level a parked consumer holds.
+ */
+export const DEFAULT_CACHE_SIZE = 1_000_000
+
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 let isLittleEndian: boolean | undefined
 function checkLittleEndian() {
@@ -117,6 +146,19 @@ export type CramFileArgs = CramFileSource & {
    * span, which can be many megabases the query would not otherwise fetch.
    */
   checkSequenceMD5?: boolean
+  /**
+   * Records to keep in the decoded-slice cache. Defaults to
+   * {@link DEFAULT_CACHE_SIZE}.
+   *
+   * Records, not bytes, so this does NOT bound memory — a decoded record has no
+   * cheap size and one long-read slice can retain tens of megabytes. It is a
+   * retention bound in the only unit available, and reads in flight plus the
+   * last settled entry sit outside it either way.
+   *
+   * Size it to hold several queries. Below one query's working set it does not
+   * cache less, it caches nothing: each slice is evicted before the next pan
+   * can reuse it, so the hit rate is zero while the memory is retained anyway.
+   */
   cacheSize?: number
   /**
    * Drop a decoded slice once nothing has asked for it for this many
@@ -176,7 +218,7 @@ export default class CramFile {
       // written against, which for a big slice is many megabases the query
       // itself would never have fetched
       checkSequenceMD5: args.checkSequenceMD5 ?? false,
-      cacheSize: args.cacheSize ?? 20000,
+      cacheSize: args.cacheSize ?? DEFAULT_CACHE_SIZE,
     }
 
     // cache of features in a slice, keyed by the slice offset. caches all of
