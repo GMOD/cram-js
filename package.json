@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GMOD/cram-js.git"
+    "url": "git+https://github.com/GMOD/cram-js.git"
   },
   "type": "module",
   "sideEffects": [
