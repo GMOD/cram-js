@@ -54,9 +54,10 @@ export const DEFAULT_CACHE_IDLE_TIMEOUT_MS = 3 * 60 * 1000
  *   200x.shortread    1231ms -> 32ms
  *   1000x.shortread   3167ms -> 279ms
  *
- * The old default did not even bound what it claimed to: `evictionPolicy:
- * 'batch'` spares everything the batch touched, so a 20,000-record budget was
- * measured holding 420,000. Raising it makes the number honest as well as
+ * The old default did not even bound what it claimed to: the `'batch'` eviction
+ * policy this used at the time spares everything the batch touched, so a
+ * 20,000-record budget was measured holding 420,000. Raising the budget, and
+ * dropping that policy in 11.3.0 (ADR 0005), makes the number honest as well as
  * useful.
  *
  * Records rather than bytes cannot bound memory, and this does not pretend to
@@ -229,15 +230,15 @@ export default class CramFile {
       // records, not bytes: there is no cheap way to size a decoded record, and
       // a record count at least makes the documented contract true
       sizeOf: records => records.length,
-      // A range starts every one of its slices at once and holds all of their
-      // records until it returns, so evicting one mid-query frees nothing but
-      // does guarantee the next identical query re-decodes it. Measured at
-      // 117ms against 12ms on a repeated 55,000-record range (ADR 0003).
-      evictionPolicy: 'batch',
-      // ...and the counterpart to that: 'batch' spares everything the batch
-      // touched, so it is the policy least inclined to give memory back on its
-      // own. cacheSize only bites when a decode settles, which on a parked
-      // consumer is never (ADR 0013).
+      // 'lru', the default, rather than the 'batch' policy this used until
+      // 11.3.0. 'batch' was adopted when cacheSize was 20,000 against queries
+      // needing 420,000 -- it rescues an undersized budget by SPARING whatever
+      // the batch touched, i.e. by exceeding the budget, measured holding
+      // 420,000 against a limit of 20,000. Now that DEFAULT_CACHE_SIZE is above
+      // the working set the two are measurably identical (same refill counts,
+      // times inside noise), so keeping 'batch' bought nothing and cost
+      // cacheSize its meaning: a consumer lowering it to constrain memory got
+      // 21x what it asked for (ADR 0005).
       idleTimeoutMs: args.cacheIdleTimeoutMs ?? DEFAULT_CACHE_IDLE_TIMEOUT_MS,
     })
     if (!checkLittleEndian()) {

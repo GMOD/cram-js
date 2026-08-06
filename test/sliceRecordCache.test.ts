@@ -5,15 +5,15 @@ import type CramRecord from '../src/cramFile/record.ts'
 
 /**
  * The cache exactly as CramFile configures it -- records as the unit, and the
- * batch eviction policy. The cancellation behaviour these tests cover lives in
- * @gmod/shared-read-cache and is tested there too; what is checked here is that
- * cram's configuration of it still behaves the way cram needs.
+ * default 'lru' policy since 11.3.0 (ADR 0005). The cancellation behaviour
+ * these tests cover lives in @gmod/shared-read-cache and is tested there too;
+ * what is checked here is that cram's configuration of it still behaves the way
+ * cram needs.
  */
 const makeCache = (maxRecords: number) =>
   new SharedReadCache<string, CramRecord[]>({
     maxSize: maxRecords,
     sizeOf: records => records.length,
-    evictionPolicy: 'batch',
   })
 
 // the cache only ever reads `.length` off the resolved array
@@ -90,17 +90,23 @@ test('keeps a slice larger than the whole budget', async () => {
   expect(cache.getIfCached('big')).toBe(p)
 })
 
-test('keeps every slice of one over-budget batch', async () => {
+// Until 11.3.0 this asserted the opposite -- that an over-budget batch keeps
+// every slice -- under the 'batch' eviction policy. That policy rescued a
+// too-small cacheSize by exceeding it: measured holding 420,000 records against
+// a limit of 20,000. With cacheSize now above the working set the two policies
+// are measurably identical, so what 'batch' actually bought was cacheSize not
+// meaning anything, and a consumer lowering it to constrain memory got 21x what
+// it asked for. Honouring the budget is the contract now (ADR 0005).
+test('an over-budget batch is evicted back down to the budget', async () => {
   const cache = makeCache(100)
-  // what getRecordsForRange does: start every slice of the range at once. The
-  // caller holds all of them until it returns, so evicting one frees nothing
-  // and only guarantees the next identical query re-decodes it
+  // what getRecordsForRange does: start every slice of the range at once
   const keys = ['a', 'b', 'c', 'd', 'e', 'f']
   await Promise.all(keys.map(key => fill(cache, key, records(40))))
 
-  for (const key of keys) {
-    expect(cache.getIfCached(key)).toBeDefined()
-  }
+  expect(cache.totalSize).toBeLessThanOrEqual(100)
+  // and it evicts from the least-recently-used end, so the newest survive
+  expect(cache.getIfCached('f')).toBeDefined()
+  expect(cache.getIfCached('a')).toBeUndefined()
 })
 
 test('evicts the previous batch once a new one lands', async () => {
