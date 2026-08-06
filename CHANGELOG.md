@@ -1,3 +1,22 @@
+## [11.0.0](https://github.com/GMOD/cram-js/compare/v10.6.1...v11.0.0) (2026-08-06)
+
+### Chores
+
+- Type-check the tests and enforce prettier, as @gmod/bam does
+- Let npm publish stop auto-correcting repository.url
+- Exempt our own packages from the release quarantine
+- Bump pnpm/action-setup to v6.0.10
+- Run the test suite as `pnpm test --run`
+- Emscripten 6.0.5 -> 6.0.6
+
+### Documentation
+
+- Correct what this cache shares with the rest of gmod
+
+### Refactoring
+
+- **BREAKING** Use @gmod/shared-read-cache for the slice record cache
+
 ## [10.6.1](https://github.com/GMOD/cram-js/compare/v10.6.0...v10.6.1) (2026-08-05)
 
 ### Chores
