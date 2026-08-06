@@ -45,11 +45,24 @@ interface Entry {
  * caller alone, by {@link getOrFill} re-checking it after the shared promise
  * settles.
  *
- * That is the reference-counted model `@gmod/abortable-promise-cache` gives
- * `@gmod/tabix` and `@gmod/bbi`. It is implemented here rather than taken as a
- * dependency because that package wants to own the cache, and this one is not a
- * plain LRU — the record-count bound above needs to weigh each entry when its
- * promise resolves, which means owning the entries.
+ * That is the reference-counted model `@gmod/shared-read-cache` now gives
+ * `@gmod/bam`, `@gmod/tabix`, `@gmod/bbi` and `@gmod/nclist`. That package
+ * exists because the four of them were carrying identical copies of it, and its
+ * `sizeOf` seam is exactly the "weigh each entry when its promise resolves"
+ * problem noted here — the objection this comment used to raise against
+ * `@gmod/abortable-promise-cache` no longer applies.
+ *
+ * This one still does not use it, for a different reason: the eviction policy
+ * below is not an LRU. It defers eviction until a whole batch of decodes has
+ * settled and spares everything that batch touched, which is worth 117 ms
+ * against 12 ms on a repeated wide range (see {@link SliceRecordCache.evict}).
+ * The shared package evicts per entry as each read settles. Adopting it would
+ * trade that measured win for deduplication of a cancellation model the two
+ * already agree on, so the copy stays until the package can express this
+ * policy.
+ *
+ * SYNC: ~/src/gmod/shared-read-cache/src/SharedReadCache.ts — same
+ * reference-counted cancellation, different eviction.
  *
  * The earlier version of this cancelled the decode under whichever caller
  * started it and had joiners retry when that caller aborted. It was correct,
