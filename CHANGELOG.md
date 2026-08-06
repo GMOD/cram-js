@@ -1,3 +1,9 @@
+## [11.2.0](https://github.com/GMOD/cram-js/compare/v11.1.0...v11.2.0) (2026-08-06)
+
+### Performance Improvements
+
+- Size the slice cache above one query, not below it
+
 ## [11.1.0](https://github.com/GMOD/cram-js/compare/v11.0.0...v11.1.0) (2026-08-06)
 
 ### Features
