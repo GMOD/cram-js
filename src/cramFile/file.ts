@@ -25,6 +25,21 @@ import type CramRecord from './record.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
+/**
+ * Drop a decoded slice nothing has looked at for three minutes.
+ *
+ * The record budget is enforced when a decode settles, so it does nothing at
+ * all for a consumer sitting still — and jbrowse's `CramAdapter` memoizes one
+ * `IndexedCramFile` for the life of the track, so without this a tab parked on
+ * a region holds its whole last view until the track is closed, times every
+ * track open.
+ *
+ * Three minutes rather than seconds because the target is a user who has gone
+ * away, not one reading the screen in front of them: a pan back a minute later
+ * should still hit. Matches @gmod/bam's DEFAULT_CACHE_IDLE_TIMEOUT_MS.
+ */
+export const DEFAULT_CACHE_IDLE_TIMEOUT_MS = 3 * 60 * 1000
+
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 let isLittleEndian: boolean | undefined
 function checkLittleEndian() {
@@ -103,6 +118,22 @@ export type CramFileArgs = CramFileSource & {
    */
   checkSequenceMD5?: boolean
   cacheSize?: number
+  /**
+   * Drop a decoded slice once nothing has asked for it for this many
+   * milliseconds. Defaults to {@link DEFAULT_CACHE_IDLE_TIMEOUT_MS}; `0` keeps
+   * slices until `cacheSize` evicts them.
+   *
+   * The only thing that lowers the cache while nothing is happening.
+   * `cacheSize` is enforced when a decode settles, so an idle cache stays
+   * wherever it got to — and jbrowse's `CramAdapter` memoizes one
+   * `IndexedCramFile` for the life of the track, so a tab parked on a region
+   * holds its whole last view until the track is closed, times every track
+   * open.
+   *
+   * Timed from the last read of a slice, not from when it was decoded, so
+   * panning back and forth over one region never expires it.
+   */
+  cacheIdleTimeoutMs?: number
   fetchReferenceSequence?: SeqFetch
   validateChecksums?: boolean
 }
@@ -161,10 +192,28 @@ export default class CramFile {
       // does guarantee the next identical query re-decodes it. Measured at
       // 117ms against 12ms on a repeated 55,000-record range (ADR 0003).
       evictionPolicy: 'batch',
+      // ...and the counterpart to that: 'batch' spares everything the batch
+      // touched, so it is the policy least inclined to give memory back on its
+      // own. cacheSize only bites when a decode settles, which on a parked
+      // consumer is never (ADR 0013).
+      idleTimeoutMs: args.cacheIdleTimeoutMs ?? DEFAULT_CACHE_IDLE_TIMEOUT_MS,
     })
     if (!checkLittleEndian()) {
       throw new Error('Detected big-endian machine, may be unable to run')
     }
+  }
+
+  /**
+   * Drops every decoded slice held by the feature cache, and stops the idle
+   * sweep until something is cached again.
+   *
+   * The idle timeout reclaims a view the user has wandered away from, but a
+   * consumer that *knows* it is finished — a closed track, a changed
+   * assembly — should not have to wait three minutes for it. Mirrors
+   * `BamFile.clearFeatureCache`.
+   */
+  clearFeatureCache() {
+    this.featureCache.clear()
   }
 
   /**

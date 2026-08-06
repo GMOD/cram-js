@@ -63,6 +63,11 @@ export default class IndexedCramFile {
    * so the limit is applied by evicting least-recently-used slices until the
    * total record count is back under it.
    *
+   * @param {number} [args.cacheIdleTimeoutMs] optional idle timeout for that
+   * cache, in ms. default 3 minutes; 0 keeps slices until `cacheSize` evicts
+   * them. `cacheSize` is only applied when a decode settles, so it does nothing
+   * for a consumer sitting still — this is what reclaims a parked view.
+   *
    * @param {boolean} [args.checkSequenceMD5] - default false. if true, verifies
    * the MD5 checksum of the reference sequence underlying a slice against the
    * one the slice recorded. Off by default because the check needs the slice's
@@ -80,6 +85,7 @@ export default class IndexedCramFile {
           checkSequenceMD5?: boolean
           validateChecksums?: boolean
           cacheSize?: number
+          cacheIdleTimeoutMs?: number
         } & CramFileSource)
     ),
   ) {
@@ -93,9 +99,19 @@ export default class IndexedCramFile {
         checkSequenceMD5: args.checkSequenceMD5,
         validateChecksums: args.validateChecksums,
         cacheSize: args.cacheSize,
+        cacheIdleTimeoutMs: args.cacheIdleTimeoutMs,
       })
 
     this.index = args.index
+  }
+
+  /**
+   * Drops every decoded slice held by the feature cache. For a consumer that
+   * knows it is finished with this file — a closed track — rather than waiting
+   * out `cacheIdleTimeoutMs`.
+   */
+  clearFeatureCache() {
+    this.cram.clearFeatureCache()
   }
 
   /**
