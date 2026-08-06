@@ -1,3 +1,9 @@
+## [11.1.0](https://github.com/GMOD/cram-js/compare/v11.0.0...v11.1.0) (2026-08-06)
+
+### Features
+
+- Reclaim decoded slices when nothing is using them
+
 ## [11.0.0](https://github.com/GMOD/cram-js/compare/v10.6.1...v11.0.0) (2026-08-06)
 
 ### Chores
