@@ -23,6 +23,7 @@ import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
 
 import type CramRecord from './record.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
+import type { SharedBudget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 /**
@@ -177,6 +178,23 @@ export type CramFileArgs = CramFileSource & {
    * panning back and forth over one region never expires it.
    */
   cacheIdleTimeoutMs?: number
+  /**
+   * A budget shared with other `CramFile`s, so that {@link cacheSize} applies
+   * to their sum rather than to each of them.
+   *
+   * A per-file ceiling is not a bound on a consumer that opens one file per
+   * track, and jbrowse's `CramAdapter` memoizes one `IndexedCramFile` for the
+   * life of the track. @gmod/bam measured what that costs: six tracks browsing
+   * six windows retained 1442 MB with every cache still under its own ceiling,
+   * so nothing was bounding the sum (its ADR 0018).
+   *
+   * **Every member of a budget must weigh in the same unit**, and this cache
+   * weighs *records* — see {@link cacheSize}. So this can be shared with other
+   * `CramFile`s and nothing else: handing it a budget that @gmod/bam or
+   * @gmod/tabix is also in would add records to bytes and bound neither. Give
+   * CRAM its own.
+   */
+  cacheBudget?: SharedBudget
   fetchReferenceSequence?: SeqFetch
   validateChecksums?: boolean
 }
@@ -240,6 +258,7 @@ export default class CramFile {
       // cacheSize its meaning: a consumer lowering it to constrain memory got
       // 21x what it asked for (ADR 0005).
       idleTimeoutMs: args.cacheIdleTimeoutMs ?? DEFAULT_CACHE_IDLE_TIMEOUT_MS,
+      budget: args.cacheBudget,
     })
     if (!checkLittleEndian()) {
       throw new Error('Detected big-endian machine, may be unable to run')

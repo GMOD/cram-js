@@ -6,6 +6,7 @@ import type CramContainer from './cramFile/container/index.ts'
 import type { SeqFetch } from './cramFile/file.ts'
 import type CramRecord from './cramFile/record.ts'
 import type { BaseOpts } from './opts.ts'
+import type { SharedBudget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 export interface CramFileSource {
@@ -70,6 +71,12 @@ export default class IndexedCramFile {
    * them. `cacheSize` is only applied when a decode settles, so it does nothing
    * for a consumer sitting still — this is what reclaims a parked view.
    *
+   * @param {SharedBudget} [args.cacheBudget] optional budget shared with other
+   * `CramFile`s, so `cacheSize` bounds their sum rather than each of them — a
+   * per-file ceiling is no bound at all on a consumer that opens one file per
+   * open track. Members of a budget must weigh in the same unit, and this one
+   * weighs records, so share it only with other CRAM files.
+   *
    * @param {boolean} [args.checkSequenceMD5] - default false. if true, verifies
    * the MD5 checksum of the reference sequence underlying a slice against the
    * one the slice recorded. Off by default because the check needs the slice's
@@ -88,6 +95,7 @@ export default class IndexedCramFile {
           validateChecksums?: boolean
           cacheSize?: number
           cacheIdleTimeoutMs?: number
+          cacheBudget?: SharedBudget
         } & CramFileSource)
     ),
   ) {
@@ -102,6 +110,7 @@ export default class IndexedCramFile {
         validateChecksums: args.validateChecksums,
         cacheSize: args.cacheSize,
         cacheIdleTimeoutMs: args.cacheIdleTimeoutMs,
+        cacheBudget: args.cacheBudget,
       })
 
     this.index = args.index
