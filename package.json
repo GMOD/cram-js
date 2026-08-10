@@ -23,9 +23,9 @@
     "url": "https://github.com/rbuels"
   },
   "files": [
-    "src",
     "dist",
-    "esm"
+    "esm",
+    "src"
   ],
   "scripts": {
     "test": "vitest",
@@ -40,8 +40,8 @@
     "build:esm": "tsc --outDir esm",
     "build:es5": "tsc --module commonjs --moduleResolution bundler --outDir dist",
     "postbuild:es5": "echo '{\"type\": \"commonjs\"}' > dist/package.json",
-    "preversion": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test --run && pnpm clean && pnpm build:esm && pnpm build:es5",
-    "version": "git-cliff --tag v$npm_package_version --unreleased --prepend CHANGELOG.md && git add CHANGELOG.md",
+    "preversion": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm test --run && pnpm clean && pnpm build:esm && pnpm build:es5 && pnpm test:pack",
+    "version": "git-cliff --tag v$npm_package_version --unreleased --prepend CHANGELOG.md && prettier --write CHANGELOG.md && git add CHANGELOG.md",
     "postversion": "git push --follow-tags",
     "build": "pnpm build:wasm && pnpm build:esm && pnpm build:es5",
     "benchonly": "vitest bench",
