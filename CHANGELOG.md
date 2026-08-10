@@ -1,3 +1,9 @@
+## [11.4.0](https://github.com/GMOD/cram-js/compare/v11.3.0...v11.4.0) (2026-08-10)
+
+### Features
+
+- CacheBudget, so several files can share one ceiling
+
 ## [11.3.0](https://github.com/GMOD/cram-js/compare/v11.2.0...v11.3.0) (2026-08-06)
 
 ### Performance Improvements
