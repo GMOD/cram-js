@@ -1,3 +1,22 @@
+## [12.0.0](https://github.com/GMOD/cram-js/compare/v11.4.1...v12.0.0) (2026-08-11)
+
+### Bug Fixes
+
+- Make record.tags read-only loudly, and say so in the migration notes ([9bc951b](https://github.com/GMOD/cram-js/commit/9bc951bec9cd402fce19492c47a0ca45c0af81b9))
+
+### Chores
+
+- Render only the commit subject, and link the commit ([effa92f](https://github.com/GMOD/cram-js/commit/effa92fe3f19b9d97a583e069155bdc4b44e1447))
+
+### Performance Improvements
+
+- **BREAKING** Replace record.mate with two numeric fields ([6785856](https://github.com/GMOD/cram-js/commit/6785856cde7bd9bcf1925987b5a06168186bf11a))
+- Store aux tags in a per-slice column, and add getTag ([8201605](https://github.com/GMOD/cram-js/commit/82016059cd448e8a601169720d71e4ff90056fe0))
+
+### Refactoring
+
+- Name the mate position fields for the next segment, as SAM does ([9e3dde5](https://github.com/GMOD/cram-js/commit/9e3dde5e0be0a11d03025eab3ecf1ee90f4abdc2))
+
 ## [11.4.1](https://github.com/GMOD/cram-js/compare/v11.4.0...v11.4.1) (2026-08-10)
 
 ### Bug Fixes
