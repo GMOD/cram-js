@@ -738,12 +738,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "x1",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 799,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -766,12 +762,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "x1",
-              "sequenceId": 0,
-              "start": 15,
-              "uniqueId": 798,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 15,
             "qualityScores": [
               9,
               9,
@@ -794,12 +786,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "x2",
-              "sequenceId": 0,
-              "start": 6,
-              "uniqueId": 801,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 6,
             "qualityScores": [
               9,
               9,
@@ -822,12 +810,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "x2",
-              "sequenceId": 0,
-              "start": 9,
-              "uniqueId": 800,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9,
             "qualityScores": [
               9,
               9,
@@ -850,12 +834,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "x3",
-              "sequenceId": 0,
-              "start": 6,
-              "uniqueId": 803,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 6,
             "qualityScores": [
               9,
               9,
@@ -878,12 +858,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "x3",
-              "sequenceId": 0,
-              "start": 9,
-              "uniqueId": 802,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9,
             "qualityScores": [
               9,
               9,
@@ -906,12 +882,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 0,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -1025,12 +997,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 15,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 15,
             "qualityScores": [
               9,
               9,
@@ -1433,12 +1401,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "y1",
-              "sequenceId": 1,
-              "start": 0,
-              "uniqueId": 1613,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -1461,12 +1425,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "y1",
-              "sequenceId": 1,
-              "start": 15,
-              "uniqueId": 1612,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 15,
             "qualityScores": [
               9,
               9,
@@ -1489,12 +1449,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "y2",
-              "sequenceId": 1,
-              "start": 6,
-              "uniqueId": 1615,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 6,
             "qualityScores": [
               9,
               9,
@@ -1517,12 +1473,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "y2",
-              "sequenceId": 1,
-              "start": 9,
-              "uniqueId": 1614,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9,
             "qualityScores": [
               9,
               9,
@@ -1545,12 +1497,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 6,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 6,
             "qualityScores": [
               9,
               9,
@@ -1573,12 +1521,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9,
             "qualityScores": [
               9,
               9,
@@ -1601,12 +1545,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 0,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -1724,12 +1664,8 @@ exports[`can dump the whole xx#tlen2.tmp.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 5,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 15,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 15,
             "qualityScores": [
               9,
               9,

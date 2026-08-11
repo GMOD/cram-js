@@ -2356,12 +2356,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999747,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999747,
             "qualityScores": [
               34,
               23,
@@ -3100,12 +3096,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999702,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999702,
             "qualityScores": [
               37,
               36,
@@ -3844,12 +3836,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999702,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999702,
             "qualityScores": [
               37,
               36,
@@ -4587,12 +4575,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999691,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999691,
             "qualityScores": [
               38,
               36,
@@ -5331,12 +5315,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000343,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000343,
             "qualityScores": [
               35,
               30,
@@ -6075,12 +6055,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999745,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999745,
             "qualityScores": [
               35,
               34,
@@ -6819,12 +6795,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000305,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000305,
             "qualityScores": [
               32,
               35,
@@ -7563,12 +7535,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999708,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999708,
             "qualityScores": [
               39,
               37,
@@ -8307,12 +8275,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000298,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000298,
             "qualityScores": [
               35,
               36,
@@ -9051,12 +9015,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000334,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000334,
             "qualityScores": [
               35,
               35,
@@ -9795,12 +9755,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999714,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999714,
             "qualityScores": [
               37,
               37,
@@ -10539,12 +10495,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000295,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000295,
             "qualityScores": [
               35,
               37,
@@ -11283,12 +11235,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000284,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000284,
             "qualityScores": [
               26,
               29,
@@ -12027,12 +11975,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 51,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999669,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999669,
             "qualityScores": [
               2,
               2,
@@ -12477,12 +12421,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000235,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000235,
             "qualityScores": [
               36,
               33,
@@ -13221,12 +13161,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999606,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999606,
             "qualityScores": [
               29,
               25,
@@ -13965,12 +13901,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000256,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000256,
             "qualityScores": [
               32,
               33,
@@ -14709,12 +14641,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000317,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000317,
             "qualityScores": [
               32,
               33,
@@ -15453,12 +15381,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1123,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000256,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000256,
             "qualityScores": [
               35,
               34,
@@ -16196,12 +16120,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999759,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999759,
             "qualityScores": [
               34,
               38,
@@ -16940,12 +16860,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 57,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999693,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999693,
             "qualityScores": [
               2,
               2,
@@ -17424,12 +17340,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 69,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 12,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 12,
             "qualityScores": [
               2,
               2,
@@ -17551,12 +17463,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 137,
             "lengthOnRef": 35,
             "mappingQuality": 37,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 12,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 12,
             "qualityScores": [
               2,
               2,
@@ -17905,12 +17813,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 35,
             "mappingQuality": 29,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000273,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000273,
             "qualityScores": [
               2,
               2,
@@ -18258,12 +18162,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999704,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999704,
             "qualityScores": [
               27,
               24,
@@ -19002,12 +18902,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999721,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999721,
             "qualityScores": [
               36,
               35,
@@ -19746,12 +19642,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 96,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000306,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000306,
             "qualityScores": [
               26,
               23,
@@ -20466,12 +20358,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000306,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000306,
             "qualityScores": [
               32,
               35,
@@ -21210,12 +21098,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000314,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000314,
             "qualityScores": [
               35,
               35,
@@ -21954,12 +21838,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999752,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999752,
             "qualityScores": [
               26,
               37,
@@ -22698,12 +22578,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1123,
             "lengthOnRef": 91,
             "mappingQuality": 29,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000345,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000345,
             "qualityScores": [
               21,
               32,
@@ -23388,12 +23264,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000345,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000345,
             "qualityScores": [
               35,
               35,
@@ -24132,12 +24004,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999740,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999740,
             "qualityScores": [
               38,
               26,
@@ -24875,12 +24743,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999740,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999740,
             "qualityScores": [
               35,
               36,
@@ -25619,12 +25483,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000259,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000259,
             "qualityScores": [
               32,
               37,
@@ -26363,12 +26223,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999720,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999720,
             "qualityScores": [
               38,
               38,
@@ -27107,12 +26963,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999705,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999705,
             "qualityScores": [
               36,
               37,
@@ -27851,12 +27703,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000320,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000320,
             "qualityScores": [
               28,
               29,
@@ -28595,12 +28443,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000278,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000278,
             "qualityScores": [
               32,
               35,
@@ -29339,12 +29183,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000348,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000348,
             "qualityScores": [
               35,
               36,
@@ -30083,12 +29923,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000360,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000360,
             "qualityScores": [
               32,
               36,
@@ -30827,12 +30663,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000352,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000352,
             "qualityScores": [
               35,
               34,
@@ -31571,12 +31403,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999720,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999720,
             "qualityScores": [
               34,
               35,
@@ -32315,12 +32143,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999748,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999748,
             "qualityScores": [
               35,
               37,
@@ -33059,12 +32883,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000262,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000262,
             "qualityScores": [
               33,
               37,
@@ -33803,12 +33623,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000262,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000262,
             "qualityScores": [
               33,
               37,
@@ -34546,12 +34362,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 121,
             "lengthOnRef": 101,
             "mappingQuality": 37,
-            "mate": {
-              "flags": 3,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 34,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 34,
             "qualityScores": [
               37,
               38,
@@ -35287,12 +35099,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 181,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 34,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 34,
             "qualityScores": [
               2,
               2,
@@ -35414,12 +35222,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000321,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000321,
             "qualityScores": [
               32,
               35,
@@ -36158,12 +35962,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000321,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000321,
             "qualityScores": [
               32,
               35,
@@ -36901,12 +36701,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999766,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999766,
             "qualityScores": [
               36,
               39,
@@ -37645,12 +37441,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000378,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000378,
             "qualityScores": [
               32,
               35,
@@ -38389,12 +38181,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 35,
             "mappingQuality": 29,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000422,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000422,
             "qualityScores": [
               11,
               25,
@@ -38743,12 +38531,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000356,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000356,
             "qualityScores": [
               26,
               25,
@@ -39487,12 +39271,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999813,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999813,
             "qualityScores": [
               38,
               35,
@@ -40231,12 +40011,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000390,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000390,
             "qualityScores": [
               32,
               35,
@@ -40975,12 +40751,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000328,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000328,
             "qualityScores": [
               36,
               37,
@@ -41719,12 +41491,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999757,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999757,
             "qualityScores": [
               17,
               35,
@@ -42463,12 +42231,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000308,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000308,
             "qualityScores": [
               33,
               32,
@@ -43207,12 +42971,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999795,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999795,
             "qualityScores": [
               32,
               34,
@@ -43951,12 +43711,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 88,
             "mappingQuality": 29,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000358,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000358,
             "qualityScores": [
               32,
               32,
@@ -44621,12 +44377,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000358,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000358,
             "qualityScores": [
               32,
               35,
@@ -45365,12 +45117,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000380,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000380,
             "qualityScores": [
               32,
               35,
@@ -46109,12 +45857,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 80,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000380,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000380,
             "qualityScores": [
               32,
               35,
@@ -46733,12 +46477,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999749,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999749,
             "qualityScores": [
               39,
               39,
@@ -47477,12 +47217,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999812,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999812,
             "qualityScores": [
               38,
               39,
@@ -48221,12 +47957,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999829,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999829,
             "qualityScores": [
               38,
               28,
@@ -48965,12 +48697,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 74,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000309,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000309,
             "qualityScores": [
               32,
               36,
@@ -49554,12 +49282,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000402,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000402,
             "qualityScores": [
               32,
               35,
@@ -50298,12 +50022,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000337,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000337,
             "qualityScores": [
               32,
               35,
@@ -51042,12 +50762,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999771,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999771,
             "qualityScores": [
               38,
               35,
@@ -51786,12 +51502,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999761,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999761,
             "qualityScores": [
               37,
               33,
@@ -52530,12 +52242,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999770,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999770,
             "qualityScores": [
               38,
               38,
@@ -53274,12 +52982,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000367,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000367,
             "qualityScores": [
               32,
               37,
@@ -54018,12 +53722,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000315,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000315,
             "qualityScores": [
               32,
               37,
@@ -54762,12 +54462,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000334,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000334,
             "qualityScores": [
               35,
               36,
@@ -55506,12 +55202,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000399,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000399,
             "qualityScores": [
               36,
               36,
@@ -56250,12 +55942,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999766,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999766,
             "qualityScores": [
               27,
               35,
@@ -56994,12 +56682,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999771,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999771,
             "qualityScores": [
               39,
               39,
@@ -57738,12 +57422,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999790,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999790,
             "qualityScores": [
               34,
               24,
@@ -58482,12 +58162,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000403,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000403,
             "qualityScores": [
               32,
               33,
@@ -59226,12 +58902,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999833,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999833,
             "qualityScores": [
               38,
               33,
@@ -59969,12 +59641,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999833,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999833,
             "qualityScores": [
               14,
               30,
@@ -60713,12 +60381,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000349,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000349,
             "qualityScores": [
               32,
               36,
@@ -61457,12 +61121,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000378,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000378,
             "qualityScores": [
               32,
               36,
@@ -62201,12 +61861,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 35,
             "mappingQuality": 17,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999721,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999721,
             "qualityScores": [
               2,
               2,
@@ -62555,12 +62211,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999856,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999856,
             "qualityScores": [
               22,
               18,
@@ -63299,12 +62951,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999799,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999799,
             "qualityScores": [
               36,
               38,
@@ -64043,12 +63691,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000422,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000422,
             "qualityScores": [
               33,
               37,
@@ -64787,12 +64431,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999796,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999796,
             "qualityScores": [
               37,
               39,
@@ -65531,12 +65171,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000323,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000323,
             "qualityScores": [
               32,
               35,
@@ -66275,12 +65911,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1123,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000408,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000408,
             "qualityScores": [
               35,
               35,
@@ -67018,12 +66650,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000407,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000407,
             "qualityScores": [
               35,
               35,
@@ -67762,12 +67390,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000497,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000497,
             "qualityScores": [
               32,
               36,
@@ -68506,12 +68130,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 9999833,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 9999833,
             "qualityScores": [
               30,
               36,
@@ -69250,12 +68870,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 60,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10000394,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10000394,
             "qualityScores": [
               32,
               35,
@@ -71206,12 +70822,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999666,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999666,
             "qualityScores": [
               29,
               37,
@@ -71951,12 +71563,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000325,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000325,
             "qualityScores": [
               35,
               29,
@@ -72696,12 +72304,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1123,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000325,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000325,
             "qualityScores": [
               27,
               31,
@@ -73440,12 +73044,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 86,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000343,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000343,
             "qualityScores": [
               31,
               31,
@@ -74102,12 +73702,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999747,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999747,
             "qualityScores": [
               38,
               40,
@@ -74847,12 +74443,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999670,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999670,
             "qualityScores": [
               38,
               38,
@@ -75592,12 +75184,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999698,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999698,
             "qualityScores": [
               35,
               37,
@@ -76337,12 +75925,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999670,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999670,
             "qualityScores": [
               35,
               37,
@@ -77081,12 +76665,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999668,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999668,
             "qualityScores": [
               31,
               36,
@@ -77826,12 +77406,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999763,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999763,
             "qualityScores": [
               38,
               38,
@@ -78571,12 +78147,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999763,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999763,
             "qualityScores": [
               37,
               39,
@@ -79315,12 +78887,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 74,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000245,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000245,
             "qualityScores": [
               32,
               35,
@@ -79905,12 +79473,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000332,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000332,
             "qualityScores": [
               35,
               36,
@@ -80650,12 +80214,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999703,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999703,
             "qualityScores": [
               37,
               34,
@@ -81395,12 +80955,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999726,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999726,
             "qualityScores": [
               37,
               37,
@@ -82140,12 +81696,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999700,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999700,
             "qualityScores": [
               31,
               37,
@@ -82885,12 +82437,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000280,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000280,
             "qualityScores": [
               32,
               32,
@@ -83629,12 +83177,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999681,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999681,
             "qualityScores": [
               25,
               22,
@@ -84374,12 +83918,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999729,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999729,
             "qualityScores": [
               37,
               36,
@@ -85119,12 +84659,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1145,
             "lengthOnRef": 35,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 3,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 12,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 12,
             "qualityScores": [
               2,
               2,
@@ -85470,12 +85006,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 181,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 12,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 12,
             "qualityScores": [
               2,
               2,
@@ -85597,12 +85129,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000456,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000456,
             "qualityScores": [
               32,
               35,
@@ -86342,12 +85870,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000292,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000292,
             "qualityScores": [
               36,
               33,
@@ -87084,12 +86608,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 69,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 14,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 14,
             "qualityScores": [
               25,
               28,
@@ -87210,12 +86730,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 137,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 14,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 14,
             "qualityScores": [
               33,
               36,
@@ -87954,12 +87470,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999721,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999721,
             "qualityScores": [
               37,
               33,
@@ -88699,12 +88211,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999700,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999700,
             "qualityScores": [
               37,
               34,
@@ -89444,12 +88952,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999767,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999767,
             "qualityScores": [
               37,
               37,
@@ -90189,12 +89693,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 121,
             "lengthOnRef": 54,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 3,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 17,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 17,
             "qualityScores": [
               2,
               2,
@@ -90655,12 +90155,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 181,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 17,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 17,
             "qualityScores": [
               2,
               2,
@@ -90782,12 +90278,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000352,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000352,
             "qualityScores": [
               32,
               35,
@@ -91526,12 +91018,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000263,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000263,
             "qualityScores": [
               32,
               36,
@@ -92271,12 +91759,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1123,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000371,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000371,
             "qualityScores": [
               34,
               35,
@@ -93015,12 +92499,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999750,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999750,
             "qualityScores": [
               38,
               22,
@@ -93760,12 +93240,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 66,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000302,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000302,
             "qualityScores": [
               32,
               35,
@@ -94302,12 +93778,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999705,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999705,
             "qualityScores": [
               35,
               39,
@@ -95046,12 +94518,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999722,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999722,
             "qualityScores": [
               32,
               39,
@@ -95791,12 +95259,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999712,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999712,
             "qualityScores": [
               24,
               37,
@@ -96535,12 +95999,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999711,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999711,
             "qualityScores": [
               37,
               37,
@@ -97279,12 +96739,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999687,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999687,
             "qualityScores": [
               22,
               38,
@@ -98023,12 +97479,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999729,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999729,
             "qualityScores": [
               33,
               35,
@@ -98766,12 +98218,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999729,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999729,
             "qualityScores": [
               36,
               35,
@@ -99510,12 +98958,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999716,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999716,
             "qualityScores": [
               27,
               38,
@@ -100255,12 +99699,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999722,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999722,
             "qualityScores": [
               2,
               37,
@@ -100999,12 +100439,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999742,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999742,
             "qualityScores": [
               37,
               38,
@@ -101743,12 +101179,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999717,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999717,
             "qualityScores": [
               33,
               37,
@@ -102487,12 +101919,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000367,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000367,
             "qualityScores": [
               32,
               35,
@@ -103231,12 +102659,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999744,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999744,
             "qualityScores": [
               2,
               39,
@@ -103975,12 +103399,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               38,
               37,
@@ -104720,12 +104140,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               30,
               23,
@@ -105464,12 +104880,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999729,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999729,
             "qualityScores": [
               38,
               39,
@@ -106208,12 +105620,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999697,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999697,
             "qualityScores": [
               38,
               39,
@@ -106953,12 +106361,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1107,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999697,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999697,
             "qualityScores": [
               39,
               39,
@@ -107696,12 +107100,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000325,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000325,
             "qualityScores": [
               32,
               35,
@@ -108441,12 +107841,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000348,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000348,
             "qualityScores": [
               32,
               34,
@@ -109185,12 +108581,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000348,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000348,
             "qualityScores": [
               32,
               35,
@@ -109928,12 +109320,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999721,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999721,
             "qualityScores": [
               38,
               39,
@@ -110673,12 +110061,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999603,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999603,
             "qualityScores": [
               38,
               38,
@@ -111418,12 +110802,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999696,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999696,
             "qualityScores": [
               36,
               25,
@@ -112161,12 +111541,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999696,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999696,
             "qualityScores": [
               36,
               37,
@@ -112905,12 +112281,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000346,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000346,
             "qualityScores": [
               36,
               37,
@@ -113649,12 +113021,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999730,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999730,
             "qualityScores": [
               38,
               38,
@@ -114393,12 +113761,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999728,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999728,
             "qualityScores": [
               38,
               39,
@@ -115138,12 +114502,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999714,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999714,
             "qualityScores": [
               37,
               38,
@@ -115882,12 +115242,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999724,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999724,
             "qualityScores": [
               37,
               38,
@@ -116627,12 +115983,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000335,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000335,
             "qualityScores": [
               35,
               37,
@@ -117372,12 +116724,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               38,
               30,
@@ -118117,12 +117465,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999761,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999761,
             "qualityScores": [
               34,
               38,
@@ -118862,12 +118206,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999703,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999703,
             "qualityScores": [
               37,
               36,
@@ -119607,12 +118947,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999729,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999729,
             "qualityScores": [
               36,
               34,
@@ -120352,12 +119688,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999717,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999717,
             "qualityScores": [
               37,
               38,
@@ -121097,12 +120429,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000337,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000337,
             "qualityScores": [
               32,
               35,
@@ -121842,12 +121170,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999771,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999771,
             "qualityScores": [
               26,
               35,
@@ -122587,12 +121911,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999730,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999730,
             "qualityScores": [
               32,
               39,
@@ -123331,12 +122651,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999750,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999750,
             "qualityScores": [
               34,
               37,
@@ -124076,12 +123392,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999728,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999728,
             "qualityScores": [
               37,
               38,
@@ -124821,12 +124133,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999695,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999695,
             "qualityScores": [
               37,
               39,
@@ -125565,12 +124873,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000377,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000377,
             "qualityScores": [
               35,
               36,
@@ -126309,12 +125613,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000368,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000368,
             "qualityScores": [
               32,
               35,
@@ -127053,12 +126353,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999733,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999733,
             "qualityScores": [
               38,
               34,
@@ -127797,12 +127093,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999746,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999746,
             "qualityScores": [
               20,
               38,
@@ -128542,12 +127834,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               33,
               38,
@@ -129287,12 +128575,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000216,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000216,
             "qualityScores": [
               32,
               35,
@@ -130032,12 +129316,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000414,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000414,
             "qualityScores": [
               36,
               36,
@@ -130776,12 +130056,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000328,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000328,
             "qualityScores": [
               32,
               35,
@@ -131520,12 +130796,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999711,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999711,
             "qualityScores": [
               33,
               32,
@@ -132265,12 +131537,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999710,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999710,
             "qualityScores": [
               36,
               28,
@@ -133009,12 +132277,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000351,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000351,
             "qualityScores": [
               32,
               36,
@@ -133753,12 +133017,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               37,
               36,
@@ -134497,12 +133757,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999766,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999766,
             "qualityScores": [
               30,
               25,
@@ -135240,12 +134496,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999766,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999766,
             "qualityScores": [
               36,
               38,
@@ -135984,12 +135236,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999728,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999728,
             "qualityScores": [
               36,
               37,
@@ -136729,12 +135977,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000302,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000302,
             "qualityScores": [
               33,
               37,
@@ -137474,12 +136718,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000372,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000372,
             "qualityScores": [
               32,
               37,
@@ -138218,12 +137458,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000349,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000349,
             "qualityScores": [
               32,
               37,
@@ -138962,12 +138198,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 95,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999740,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999740,
             "qualityScores": [
               2,
               2,
@@ -139677,12 +138909,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000368,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000368,
             "qualityScores": [
               35,
               37,
@@ -140421,12 +139649,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000347,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000347,
             "qualityScores": [
               33,
               37,
@@ -141165,12 +140389,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999722,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999722,
             "qualityScores": [
               37,
               36,
@@ -141909,12 +141129,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999749,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999749,
             "qualityScores": [
               36,
               33,
@@ -143877,12 +143093,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000346,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000346,
             "qualityScores": [
               25,
               25,
@@ -144622,12 +143834,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999702,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999702,
             "qualityScores": [
               38,
               38,
@@ -145365,12 +144573,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 69,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 43,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 43,
             "qualityScores": [
               29,
               31,
@@ -145491,12 +144695,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 137,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 43,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 43,
             "qualityScores": [
               32,
               34,
@@ -146234,12 +145434,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999724,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999724,
             "qualityScores": [
               37,
               34,
@@ -146979,12 +146175,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999745,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999745,
             "qualityScores": [
               36,
               38,
@@ -147724,12 +146916,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999749,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999749,
             "qualityScores": [
               33,
               36,
@@ -148469,12 +147657,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999746,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999746,
             "qualityScores": [
               37,
               37,
@@ -149214,12 +148398,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000365,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000365,
             "qualityScores": [
               32,
               37,
@@ -149959,12 +149139,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000392,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000392,
             "qualityScores": [
               32,
               35,
@@ -150704,12 +149880,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999727,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999727,
             "qualityScores": [
               38,
               38,
@@ -151449,12 +150621,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999722,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999722,
             "qualityScores": [
               36,
               37,
@@ -152194,12 +151362,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000340,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000340,
             "qualityScores": [
               36,
               36,
@@ -152939,12 +152103,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000411,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000411,
             "qualityScores": [
               32,
               36,
@@ -153683,12 +152843,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000411,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000411,
             "qualityScores": [
               32,
               36,
@@ -154428,12 +153584,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000411,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000411,
             "qualityScores": [
               32,
               36,
@@ -155172,12 +154324,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000401,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000401,
             "qualityScores": [
               35,
               36,
@@ -155917,12 +155065,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000405,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000405,
             "qualityScores": [
               35,
               36,
@@ -156662,12 +155806,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999761,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999761,
             "qualityScores": [
               30,
               24,
@@ -157407,12 +156547,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000350,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000350,
             "qualityScores": [
               36,
               35,
@@ -158152,12 +157288,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000399,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000399,
             "qualityScores": [
               32,
               35,
@@ -158896,12 +158028,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000393,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000393,
             "qualityScores": [
               32,
               35,
@@ -159641,12 +158769,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000220,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000220,
             "qualityScores": [
               35,
               36,
@@ -160386,12 +159510,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000368,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000368,
             "qualityScores": [
               36,
               36,
@@ -161131,12 +160251,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999758,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999758,
             "qualityScores": [
               35,
               39,
@@ -161876,12 +160992,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999722,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999722,
             "qualityScores": [
               29,
               38,
@@ -162621,12 +161733,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000411,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000411,
             "qualityScores": [
               21,
               30,
@@ -163364,12 +162472,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 69,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 50,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 50,
             "qualityScores": [
               36,
               32,
@@ -163490,12 +162594,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 137,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 50,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 50,
             "qualityScores": [
               33,
               35,
@@ -164233,12 +163333,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999772,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999772,
             "qualityScores": [
               37,
               38,
@@ -164978,12 +164074,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999636,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999636,
             "qualityScores": [
               24,
               29,
@@ -165723,12 +164815,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 41,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999698,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999698,
             "qualityScores": [
               2,
               2,
@@ -166115,12 +165203,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999746,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999746,
             "qualityScores": [
               37,
               37,
@@ -166860,12 +165944,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999732,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999732,
             "qualityScores": [
               27,
               37,
@@ -167605,12 +166685,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 96,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999722,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999722,
             "qualityScores": [
               2,
               2,
@@ -168327,12 +167403,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000348,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000348,
             "qualityScores": [
               35,
               34,
@@ -169072,12 +168144,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000430,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000430,
             "qualityScores": [
               20,
               31,
@@ -169817,12 +168885,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000386,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000386,
             "qualityScores": [
               35,
               35,
@@ -170562,12 +169626,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000359,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000359,
             "qualityScores": [
               32,
               36,
@@ -171307,12 +170367,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999714,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999714,
             "qualityScores": [
               15,
               36,
@@ -172052,12 +171108,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 75,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999723,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999723,
             "qualityScores": [
               2,
               2,
@@ -172647,12 +171699,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000332,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000332,
             "qualityScores": [
               36,
               34,
@@ -173392,12 +172440,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000348,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000348,
             "qualityScores": [
               32,
               35,
@@ -174137,12 +173181,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000422,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000422,
             "qualityScores": [
               35,
               35,
@@ -174882,12 +173922,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 95,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000349,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000349,
             "qualityScores": [
               32,
               35,
@@ -175597,12 +174633,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 99,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999774,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999774,
             "qualityScores": [
               38,
               37,
@@ -176342,12 +175374,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999769,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999769,
             "qualityScores": [
               37,
               38,
@@ -177087,12 +176115,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               25,
               36,
@@ -177832,12 +176856,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999780,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999780,
             "qualityScores": [
               35,
               39,
@@ -178577,12 +177597,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999776,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999776,
             "qualityScores": [
               29,
               25,
@@ -179321,12 +178337,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000381,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000381,
             "qualityScores": [
               32,
               35,
@@ -180065,12 +179077,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000367,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000367,
             "qualityScores": [
               33,
               34,
@@ -180809,12 +179817,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000407,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000407,
             "qualityScores": [
               35,
               37,
@@ -181553,12 +180557,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000362,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000362,
             "qualityScores": [
               32,
               37,
@@ -182297,12 +181297,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000387,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000387,
             "qualityScores": [
               32,
               36,
@@ -183042,12 +182038,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000387,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000387,
             "qualityScores": [
               32,
               36,
@@ -183786,12 +182778,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000387,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000387,
             "qualityScores": [
               32,
               36,
@@ -184530,12 +183518,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999744,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999744,
             "qualityScores": [
               35,
               30,
@@ -185274,12 +184258,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999738,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999738,
             "qualityScores": [
               37,
               37,
@@ -186018,12 +184998,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000351,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000351,
             "qualityScores": [
               35,
               35,
@@ -186762,12 +185738,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000392,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000392,
             "qualityScores": [
               32,
               35,
@@ -187507,12 +186479,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999741,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999741,
             "qualityScores": [
               33,
               39,
@@ -188252,12 +187220,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000374,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000374,
             "qualityScores": [
               36,
               35,
@@ -188997,12 +187961,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999723,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999723,
             "qualityScores": [
               39,
               37,
@@ -189742,12 +188702,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 73,
             "lengthOnRef": 35,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 67,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 67,
             "qualityScores": [
               2,
               2,
@@ -190095,12 +189051,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 133,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 67,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 67,
             "qualityScores": [
               2,
               2,
@@ -190222,12 +189174,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000323,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000323,
             "qualityScores": [
               36,
               34,
@@ -190966,12 +189914,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000443,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000443,
             "qualityScores": [
               35,
               35,
@@ -191711,12 +190655,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999726,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999726,
             "qualityScores": [
               37,
               33,
@@ -192456,12 +191396,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000419,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000419,
             "qualityScores": [
               35,
               35,
@@ -193201,12 +192137,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000390,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000390,
             "qualityScores": [
               34,
               31,
@@ -193946,12 +192878,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000405,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000405,
             "qualityScores": [
               35,
               35,
@@ -194690,12 +193618,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000400,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000400,
             "qualityScores": [
               32,
               35,
@@ -195434,12 +194358,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000348,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000348,
             "qualityScores": [
               32,
               34,
@@ -196178,12 +195098,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000326,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000326,
             "qualityScores": [
               32,
               35,
@@ -196922,12 +195838,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999780,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999780,
             "qualityScores": [
               38,
               38,
@@ -197666,12 +196578,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 96,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999753,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999753,
             "qualityScores": [
               2,
               2,
@@ -198387,12 +197295,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999743,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999743,
             "qualityScores": [
               34,
               35,
@@ -199130,12 +198034,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999743,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999743,
             "qualityScores": [
               36,
               36,
@@ -199874,12 +198774,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000416,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000416,
             "qualityScores": [
               32,
               35,
@@ -200618,12 +199514,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 86,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000434,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000434,
             "qualityScores": [
               26,
               14,
@@ -201279,12 +200171,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000392,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000392,
             "qualityScores": [
               32,
               35,
@@ -202023,12 +200911,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000368,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000368,
             "qualityScores": [
               34,
               35,
@@ -202767,12 +201651,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000391,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000391,
             "qualityScores": [
               33,
               36,
@@ -203510,12 +202390,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000391,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000391,
             "qualityScores": [
               33,
               36,
@@ -204254,12 +203130,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999791,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999791,
             "qualityScores": [
               38,
               34,
@@ -204998,12 +203870,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 89,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000371,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000371,
             "qualityScores": [
               29,
               35,
@@ -205677,12 +204545,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000424,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000424,
             "qualityScores": [
               33,
               35,
@@ -206421,12 +205285,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999746,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999746,
             "qualityScores": [
               23,
               38,
@@ -207164,12 +206024,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999746,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999746,
             "qualityScores": [
               26,
               38,
@@ -207908,12 +206764,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 121,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 3,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 73,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 73,
             "qualityScores": [
               26,
               38,
@@ -208649,12 +207501,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 181,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 73,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 73,
             "qualityScores": [
               2,
               2,
@@ -208776,12 +207624,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000423,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000423,
             "qualityScores": [
               32,
               36,
@@ -209520,12 +208364,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999783,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999783,
             "qualityScores": [
               37,
               34,
@@ -210263,12 +209103,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999783,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999783,
             "qualityScores": [
               32,
               38,
@@ -211007,12 +209843,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 73,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 75,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 75,
             "qualityScores": [
               35,
               37,
@@ -211749,12 +210581,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 133,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 75,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 75,
             "qualityScores": [
               32,
               36,
@@ -211875,12 +210703,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999763,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999763,
             "qualityScores": [
               37,
               38,
@@ -212619,12 +211443,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999749,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999749,
             "qualityScores": [
               27,
               33,
@@ -213362,12 +212182,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999749,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999749,
             "qualityScores": [
               23,
               33,
@@ -215214,12 +214030,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000360,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000360,
             "qualityScores": [
               32,
               35,
@@ -215958,12 +214770,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000367,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000367,
             "qualityScores": [
               33,
               34,
@@ -216702,12 +215510,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000373,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000373,
             "qualityScores": [
               36,
               35,
@@ -217446,12 +216250,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000421,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000421,
             "qualityScores": [
               32,
               35,
@@ -218190,12 +216990,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000421,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000421,
             "qualityScores": [
               32,
               35,
@@ -218933,12 +217729,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000423,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000423,
             "qualityScores": [
               34,
               35,
@@ -219678,12 +218470,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 121,
             "lengthOnRef": 35,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 3,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 80,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 80,
             "qualityScores": [
               2,
               2,
@@ -220030,12 +218818,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 181,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 80,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 80,
             "qualityScores": [
               2,
               2,
@@ -220157,12 +218941,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000413,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000413,
             "qualityScores": [
               32,
               36,
@@ -220901,12 +219681,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000441,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000441,
             "qualityScores": [
               14,
               21,
@@ -221645,12 +220421,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000382,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000382,
             "qualityScores": [
               36,
               34,
@@ -222389,12 +221161,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1097,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 81,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 81,
             "qualityScores": [
               35,
               36,
@@ -223130,12 +221898,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 133,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 81,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 81,
             "qualityScores": [
               32,
               37,
@@ -223256,12 +222020,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999795,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999795,
             "qualityScores": [
               38,
               39,
@@ -224000,12 +222760,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999942,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999942,
             "qualityScores": [
               32,
               31,
@@ -224744,12 +223500,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999768,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999768,
             "qualityScores": [
               37,
               33,
@@ -225488,12 +224240,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 36,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999814,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999814,
             "qualityScores": [
               38,
               39,
@@ -226232,12 +224980,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000389,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000389,
             "qualityScores": [
               32,
               35,
@@ -226976,12 +225720,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000439,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000439,
             "qualityScores": [
               34,
               35,
@@ -227720,12 +226460,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000364,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000364,
             "qualityScores": [
               35,
               36,
@@ -228464,12 +227200,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000412,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000412,
             "qualityScores": [
               36,
               36,
@@ -229208,12 +227940,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999797,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999797,
             "qualityScores": [
               31,
               35,
@@ -229952,12 +228680,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000419,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000419,
             "qualityScores": [
               36,
               36,
@@ -230696,12 +229420,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000411,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000411,
             "qualityScores": [
               33,
               34,
@@ -231440,12 +230160,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000384,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000384,
             "qualityScores": [
               32,
               35,
@@ -232184,12 +230900,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000384,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000384,
             "qualityScores": [
               32,
               35,
@@ -232927,12 +231639,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000431,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000431,
             "qualityScores": [
               35,
               36,
@@ -233671,12 +232379,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999755,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999755,
             "qualityScores": [
               36,
               37,
@@ -234414,12 +233118,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999755,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999755,
             "qualityScores": [
               35,
               36,
@@ -235158,12 +233858,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000435,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000435,
             "qualityScores": [
               35,
               35,
@@ -235902,12 +234598,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 64,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000457,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000457,
             "qualityScores": [
               22,
               33,
@@ -236432,12 +235124,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999770,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999770,
             "qualityScores": [
               32,
               34,
@@ -237176,12 +235864,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999784,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999784,
             "qualityScores": [
               37,
               32,
@@ -237920,12 +236604,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000376,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000376,
             "qualityScores": [
               32,
               33,
@@ -238664,12 +237344,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000411,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000411,
             "qualityScores": [
               32,
               33,
@@ -239408,12 +238084,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000392,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000392,
             "qualityScores": [
               32,
               33,
@@ -240152,12 +238824,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000417,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000417,
             "qualityScores": [
               32,
               35,
@@ -240897,12 +239565,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999768,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999768,
             "qualityScores": [
               34,
               38,
@@ -241642,12 +240306,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 98,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999765,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999765,
             "qualityScores": [
               2,
               2,
@@ -242375,12 +241035,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999798,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999798,
             "qualityScores": [
               30,
               35,
@@ -243120,12 +241776,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000330,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000330,
             "qualityScores": [
               26,
               25,
@@ -243865,12 +242517,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000331,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000331,
             "qualityScores": [
               29,
               30,
@@ -244610,12 +243258,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 73,
             "lengthOnRef": 36,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 94,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 94,
             "qualityScores": [
               25,
               22,
@@ -244968,12 +243612,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 133,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 94,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 94,
             "qualityScores": [
               25,
               28,
@@ -245094,12 +243734,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000320,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000320,
             "qualityScores": [
               32,
               33,
@@ -245839,12 +244475,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000422,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000422,
             "qualityScores": [
               32,
               37,
@@ -246584,12 +245216,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1187,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000422,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000422,
             "qualityScores": [
               33,
               37,
@@ -247328,12 +245956,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000414,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000414,
             "qualityScores": [
               32,
               37,
@@ -248073,12 +246697,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 35,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999744,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999744,
             "qualityScores": [
               2,
               2,
@@ -248428,12 +247048,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000396,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000396,
             "qualityScores": [
               32,
               35,
@@ -249173,12 +247789,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000451,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000451,
             "qualityScores": [
               35,
               35,
@@ -249918,12 +248530,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 145,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999527,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999527,
             "qualityScores": [
               12,
               32,
@@ -250663,12 +249271,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000393,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000393,
             "qualityScores": [
               32,
               35,
@@ -251408,12 +250012,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 10000398,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 10000398,
             "qualityScores": [
               32,
               36,
@@ -252153,12 +250753,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999768,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999768,
             "qualityScores": [
               36,
               37,
@@ -252898,12 +251494,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 1171,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999779,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999779,
             "qualityScores": [
               36,
               36,
@@ -253642,12 +252234,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 9999779,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 9999779,
             "qualityScores": [
               36,
               38,
@@ -254816,12 +253404,8 @@ exports[`can dump the whole human_g1k_v37.20.21.1-100#NA12878.20.21.1-100.100-Se
           {
             "cramFlags": 3,
             "flags": 77,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": -1,
-              "start": -1,
-            },
+            "mateSequenceId": -1,
+            "mateStart": -1,
             "qualityScores": [
               35,
               37,

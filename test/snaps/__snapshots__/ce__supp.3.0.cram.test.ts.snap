@@ -495,12 +495,8 @@ exports[`can dump the whole ce#supp.3.0.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 50,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": -1,
-              "start": -1,
-            },
+            "mateSequenceId": -1,
+            "mateStart": -1,
             "qualityScores": [
               255,
               255,
@@ -626,12 +622,8 @@ exports[`can dump the whole ce#supp.3.0.cram without error 1`] = `
             "flags": 2147,
             "lengthOnRef": 50,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": -1,
-              "start": -1,
-            },
+            "mateSequenceId": -1,
+            "mateStart": -1,
             "qualityScores": [
               255,
               255,

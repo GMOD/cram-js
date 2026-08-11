@@ -137054,12 +137054,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
     "flags": 163,
     "lengthOnRef": 101,
     "mappingQuality": 60,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 100256,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 100256,
     "qualityScores": [
       32,
       33,
@@ -137636,12 +137632,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
     "flags": 163,
     "lengthOnRef": 101,
     "mappingQuality": 60,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 100317,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 100317,
     "qualityScores": [
       32,
       33,
@@ -138218,12 +138210,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
     "flags": 1123,
     "lengthOnRef": 101,
     "mappingQuality": 60,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 100256,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 100256,
     "qualityScores": [
       35,
       34,
@@ -138799,12 +138787,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
     "flags": 147,
     "lengthOnRef": 101,
     "mappingQuality": 60,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 99759,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 99759,
     "qualityScores": [
       34,
       38,
@@ -139387,12 +139371,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
     "flags": 1107,
     "lengthOnRef": 57,
     "mappingQuality": 60,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 99693,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 99693,
     "qualityScores": [
       2,
       2,
@@ -139793,12 +139773,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
   {
     "cramFlags": 3,
     "flags": 69,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 100012,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 100012,
     "qualityScores": [
       2,
       2,
@@ -139920,12 +139896,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 1`] = `
     "flags": 137,
     "lengthOnRef": 35,
     "mappingQuality": 37,
-    "mate": {
-      "flags": 2,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 100012,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 100012,
     "qualityScores": [
       2,
       2,
@@ -140229,12 +140201,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 2`] = `
   {
     "cramFlags": 3,
     "flags": 141,
-    "mate": {
-      "flags": 2,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       2,
       2,
@@ -140354,12 +140322,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 2`] = `
   {
     "cramFlags": 3,
     "flags": 77,
-    "mate": {
-      "flags": 2,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       2,
       2,
@@ -140479,12 +140443,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 2`] = `
   {
     "cramFlags": 3,
     "flags": 141,
-    "mate": {
-      "flags": 2,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       2,
       2,
@@ -140604,12 +140564,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 2`] = `
   {
     "cramFlags": 3,
     "flags": 77,
-    "mate": {
-      "flags": 2,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       2,
       2,
@@ -140729,12 +140685,8 @@ exports[`can read human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram 2`] = `
   {
     "cramFlags": 3,
     "flags": 141,
-    "mate": {
-      "flags": 2,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       2,
       2,
@@ -1668576,12 +1668528,8 @@ exports[`can read the first chrom of ce#supp.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 50,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       255,
       255,
@@ -1668707,12 +1668655,8 @@ exports[`can read the first chrom of ce#supp.tmp.cram without error 1`] = `
     "flags": 2147,
     "lengthOnRef": 50,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": -1,
-      "start": -1,
-    },
+    "mateSequenceId": -1,
+    "mateStart": -1,
     "qualityScores": [
       255,
       255,
@@ -1675949,12 +1675893,8 @@ exports[`can read the first chrom of xx#pair.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "a1",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 400,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1675982,12 +1675922,8 @@ exports[`can read the first chrom of xx#pair.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "a1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 397,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676015,12 +1675951,8 @@ exports[`can read the first chrom of xx#pair.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "b1",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 401,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1676048,12 +1675980,8 @@ exports[`can read the first chrom of xx#pair.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "b1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 398,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676081,12 +1676009,8 @@ exports[`can read the first chrom of xx#pair.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "c1",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 402,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1676114,12 +1676038,8 @@ exports[`can read the first chrom of xx#pair.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "c1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 399,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676152,12 +1676072,8 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "flags": 67,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "S",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 399,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1676185,12 +1676101,8 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "flags": 131,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "S",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 400,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676218,12 +1676130,8 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "flags": 67,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "S",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 401,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1676251,12 +1676159,8 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "flags": 131,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "S",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 402,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676284,12 +1676188,8 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "flags": 67,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "S",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 403,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1676317,12 +1676217,8 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "flags": 131,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "S",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 402,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676522,12 +1676418,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x1",
-      "sequenceId": 0,
-      "start": 15,
-      "uniqueId": 736,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1676550,12 +1676442,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 735,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676578,12 +1676466,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x2",
-      "sequenceId": 0,
-      "start": 9,
-      "uniqueId": 738,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1676606,12 +1676490,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x2",
-      "sequenceId": 0,
-      "start": 6,
-      "uniqueId": 737,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1676634,12 +1676514,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x3",
-      "sequenceId": 0,
-      "start": 9,
-      "uniqueId": 740,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1676662,12 +1676538,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x3",
-      "sequenceId": 0,
-      "start": 6,
-      "uniqueId": 739,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1676690,12 +1676562,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 15,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1676718,12 +1676586,8 @@ exports[`can read the first chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 0,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676751,12 +1676615,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 799,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676779,12 +1676639,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x1",
-      "sequenceId": 0,
-      "start": 15,
-      "uniqueId": 798,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1676807,12 +1676663,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x2",
-      "sequenceId": 0,
-      "start": 6,
-      "uniqueId": 801,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1676835,12 +1676687,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x2",
-      "sequenceId": 0,
-      "start": 9,
-      "uniqueId": 800,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1676863,12 +1676711,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x3",
-      "sequenceId": 0,
-      "start": 6,
-      "uniqueId": 803,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1676891,12 +1676735,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "x3",
-      "sequenceId": 0,
-      "start": 9,
-      "uniqueId": 802,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1676919,12 +1676759,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 15,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1676947,12 +1676783,8 @@ exports[`can read the first chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 0,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1676980,12 +1676812,8 @@ exports[`can read the first chrom of xx#triplet.tmp.cram without error 1`] = `
     "flags": 67,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 5,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 5,
     "qualityScores": [
       9,
       9,
@@ -1677013,12 +1676841,8 @@ exports[`can read the first chrom of xx#triplet.tmp.cram without error 1`] = `
     "flags": 35,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 10,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1677046,12 +1676870,8 @@ exports[`can read the first chrom of xx#triplet.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 0,
-      "start": 0,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1677084,12 +1676904,8 @@ exports[`can read the first chrom of xx#unsorted.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "a1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 731,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1677117,12 +1676933,8 @@ exports[`can read the first chrom of xx#unsorted.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "a1",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 730,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1677150,12 +1676962,8 @@ exports[`can read the first chrom of xx#unsorted.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "c1",
-      "sequenceId": 0,
-      "start": 10,
-      "uniqueId": 1129,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1677183,12 +1676991,8 @@ exports[`can read the first chrom of xx#unsorted.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "c1",
-      "sequenceId": 0,
-      "start": 0,
-      "uniqueId": 1128,
-    },
+    "mateSequenceId": 0,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1677889,12 +1677693,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y1",
-      "sequenceId": 1,
-      "start": 15,
-      "uniqueId": 1550,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1677917,12 +1677717,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y1",
-      "sequenceId": 1,
-      "start": 0,
-      "uniqueId": 1549,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1677945,12 +1677741,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y2",
-      "sequenceId": 1,
-      "start": 9,
-      "uniqueId": 1552,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1677973,12 +1677765,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y2",
-      "sequenceId": 1,
-      "start": 6,
-      "uniqueId": 1551,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1678001,12 +1677789,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 9,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1678029,12 +1677813,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 6,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1678057,12 +1677837,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 15,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1678085,12 +1677861,8 @@ exports[`can read the second chrom of xx#tlen.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 0,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1678118,12 +1677890,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 15,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1678146,12 +1677914,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y1",
-      "sequenceId": 1,
-      "start": 0,
-      "uniqueId": 1613,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1678174,12 +1677938,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y1",
-      "sequenceId": 1,
-      "start": 15,
-      "uniqueId": 1612,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 15,
     "qualityScores": [
       9,
       9,
@@ -1678202,12 +1677962,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y2",
-      "sequenceId": 1,
-      "start": 6,
-      "uniqueId": 1615,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1678230,12 +1677986,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "y2",
-      "sequenceId": 1,
-      "start": 9,
-      "uniqueId": 1614,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1678258,12 +1678010,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 6,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 6,
     "qualityScores": [
       9,
       9,
@@ -1678286,12 +1678034,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 9,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 9,
     "qualityScores": [
       9,
       9,
@@ -1678314,12 +1678058,8 @@ exports[`can read the second chrom of xx#tlen2.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 5,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 0,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1678347,12 +1678087,8 @@ exports[`can read the second chrom of xx#triplet.tmp.cram without error 1`] = `
     "flags": 67,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "a1",
-      "sequenceId": 1,
-      "start": 5,
-      "uniqueId": 892,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 5,
     "qualityScores": [
       9,
       9,
@@ -1678380,12 +1678116,8 @@ exports[`can read the second chrom of xx#triplet.tmp.cram without error 1`] = `
     "flags": 3,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "readName": "a1",
-      "sequenceId": 1,
-      "start": 0,
-      "uniqueId": 891,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,
@@ -1678418,12 +1678150,8 @@ exports[`can read the second chrom of xx#unsorted.tmp.cram without error 1`] = `
     "flags": 99,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 1,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 10,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 10,
     "qualityScores": [
       9,
       9,
@@ -1678451,12 +1678179,8 @@ exports[`can read the second chrom of xx#unsorted.tmp.cram without error 1`] = `
     "flags": 147,
     "lengthOnRef": 10,
     "mappingQuality": 1,
-    "mate": {
-      "flags": 0,
-      "readName": undefined,
-      "sequenceId": 1,
-      "start": 0,
-    },
+    "mateSequenceId": 1,
+    "mateStart": 0,
     "qualityScores": [
       9,
       9,

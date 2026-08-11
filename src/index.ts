@@ -1,4 +1,4 @@
-export { CramRecord } from './cramFile/record.ts'
+export { CramRecord, NO_MATE } from './cramFile/record.ts'
 export {
   CIGAR_DEL,
   CIGAR_DIFF,

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import CramRecord from '../src/cramFile/record.ts'
+import CramRecord, { NO_MATE } from '../src/cramFile/record.ts'
 import { associateIntraSliceMates } from '../src/cramFile/slice/index.ts'
 
 // A minimal mapped, paired record. `mateRecordNumber` is what the decode leaves
@@ -20,7 +20,8 @@ function makeRecord(start: number, mateRecordNumber: number | undefined) {
     readFeatureArena: undefined,
     readFeatureStart: 0,
     readFeatureCount: 0,
-    mate: undefined,
+    mateSequenceId: NO_MATE,
+    mateStart: -1,
     readGroupId: 0,
     readName: `read${start}`,
     sequenceId: 0,
@@ -34,8 +35,8 @@ function makeRecord(start: number, mateRecordNumber: number | undefined) {
 test('associates a plain forward mate pointer', () => {
   const records = [makeRecord(10, 1), makeRecord(30, undefined)]
   associateIntraSliceMates(records)
-  expect(records[0]!.mate?.start).toBe(30)
-  expect(records[1]!.mate?.start).toBe(10)
+  expect(records[0]!.mateStart).toBe(30)
+  expect(records[1]!.mateStart).toBe(10)
   // leftmost positive, rightmost negative, per the SAM spec
   expect(records[0]!.templateLength).toBe(30)
   expect(records[1]!.templateLength).toBe(-30)
@@ -64,5 +65,5 @@ test('still rejects a mate pointer past the end of the slice', () => {
   const records = [makeRecord(10, 5), makeRecord(30, undefined)]
   // out of range, so nothing is associated at all rather than throwing
   associateIntraSliceMates(records)
-  expect(records[0]!.mate).toBeUndefined()
+  expect(records[0]!.hasMate()).toBe(false)
 })

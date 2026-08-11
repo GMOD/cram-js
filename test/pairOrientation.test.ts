@@ -1,8 +1,6 @@
 import { expect, test } from 'vitest'
 
-import CramRecord from '../src/cramFile/record.ts'
-
-import type { MateRecord } from '../src/cramFile/record.ts'
+import CramRecord, { NO_MATE } from '../src/cramFile/record.ts'
 
 const PAIRED = 0x1
 const REVERSE = 0x10
@@ -22,7 +20,8 @@ function makeRecord({
   flags: number
   sequenceId: number
   start: number
-  mate?: MateRecord
+  /** the mate's locus, as the two fields the record now stores */
+  mate?: { sequenceId: number; start: number }
   templateLength?: number
 }) {
   const args: RecordArgs = {
@@ -38,7 +37,8 @@ function makeRecord({
     uniqueId: 1,
     start,
     tags: {},
-    mate,
+    mateSequenceId: mate ? mate.sequenceId : NO_MATE,
+    mateStart: mate ? mate.start : -1,
     readName: undefined,
     templateSize: undefined,
     mateRecordNumber: undefined,

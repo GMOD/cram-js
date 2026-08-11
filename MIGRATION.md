@@ -1,5 +1,39 @@
 # Migration
 
+## v11 → v12: `record.mate` is two numbers, not an object
+
+`CramRecord.mate` is gone, along with the `MateRecord` type it was declared with
+(that type was never re-exported from the package root, so only a deep import
+could have named it). The mate's locus now lives directly on the record:
+
+| before (≤ 11)            | now (12)                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| `record.mate`            | `record.hasMate()`                                                                        |
+| `record.mate.sequenceId` | `record.mateSequenceId`                                                                   |
+| `record.mate.start`      | `record.mateStart`                                                                        |
+| `record.mate.readName`   | gone — the two mates of a pair share a name, so use `record.readName`                     |
+| `record.mate.flags`      | gone — already folded into `record.flags` as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding |
+| `record.mate.uniqueId`   | gone                                                                                      |
+
+`toJSON()` follows: its `mate` key is replaced by `mateSequenceId` and
+`mateStart`, present only when `hasMate()`.
+
+Migrating:
+
+- **Test `hasMate()`, not truthiness of a field.** `mateSequenceId` is `NO_MATE`
+  (`-2`, exported) when there is no mate, which is deliberately distinct from
+  `-1` — a mate that exists but is unplaced. A paired read whose mate is
+  unmapped decodes with `NS = -1`, and `getPairOrientation()` has to tell that
+  apart from "no mate known", which falls back to the read1-first rule.
+  `record.mateSequenceId < 0` would conflate the two.
+- The three dropped fields were written on every paired record and read by
+  nothing, in this library or in jbrowse.
+
+Why: the object cost an allocation per paired record — ~150k on a 19 kb query
+against 1000x-coverage short reads — and gave every record a reference to its
+mate, which pinned whole slices in the record cache. Two numbers also cross a
+worker boundary, which an object graph cannot; that is what this unblocks.
+
 ## v9 → v10: coordinates are 0-based half-open
 
 Every coordinate this library hands out or takes in is **0-based half-open**.

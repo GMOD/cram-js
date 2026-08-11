@@ -18,7 +18,10 @@ forced GC, `heapUsed + arrayBuffers`:
 Long reads put nearly everything in **read features** — that 37-record ONT slice
 decodes 213,602 of them, 118 KB of features per record. Short reads have about
 two features each and put nearly everything in **per-record objects** instead:
-the record, its quality scores, its mate, its tags, its name.
+the record, its quality scores, its tags, its name. (Its mate used to be on that
+list — a `MateRecord` per paired record, so one per record on a paired
+short-read file. It is now two numbers on the record itself; see
+[the migration note](../MIGRATION.md).)
 
 ## The costs that drive the design
 

@@ -1,7 +1,7 @@
 import { CramMalformedError } from '../../errors.ts'
 import Constants from '../constants.ts'
 import { readQualityScores } from '../qualityColumn.ts'
-import { type MateRecord, type ReadFeature } from '../record.ts'
+import { NO_MATE, type ReadFeature } from '../record.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursors } from '../codecs/_base.ts'
@@ -368,7 +368,8 @@ export default function decodeRecord(
     readName = decodeReadName()
   }
 
-  let mate: MateRecord | undefined
+  let mateSequenceId = NO_MATE
+  let mateStart = -1
   let templateSize: number | undefined
   let mateRecordNumber: number | undefined
   // mate record
@@ -376,23 +377,19 @@ export default function decodeRecord(
     // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
     // matter for javascript
     const mateFlags = bd.MF()
-    let mateReadName: string | undefined
     if (!readNamesIncluded) {
       // the two mates of a pair share a name, so this is the record's own name
       // as well — one string rather than the two the deferred path decoded
       readName = decodeReadName()
-      mateReadName = readName
     }
-    const mateSequenceId = bd.NS()
+    const declaredSequenceId = bd.NS()
     // NP is an absolute 1-based position, never a delta
-    const mateAlignmentStart = bd.NP() - 1
-    if (mateFlags || mateSequenceId > -1) {
-      mate = {
-        flags: mateFlags,
-        sequenceId: mateSequenceId,
-        start: mateAlignmentStart,
-        readName: mateReadName,
-      }
+    const declaredStart = bd.NP() - 1
+    // a nonzero MF means the mate exists even when NS is -1, i.e. it is
+    // unplaced — kept apart from NO_MATE, see the constant's note
+    if (mateFlags || declaredSequenceId > -1) {
+      mateSequenceId = declaredSequenceId
+      mateStart = declaredStart
     }
 
     templateSize = bd.TS()
@@ -488,7 +485,8 @@ export default function decodeRecord(
     start: alignmentStart,
     readGroupId,
     readName,
-    mate,
+    mateSequenceId,
+    mateStart,
     templateSize,
     mateRecordNumber,
     readFeatureArena,

@@ -330,12 +330,8 @@ exports[`can dump the whole xx#pair.2.1.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "a1",
-              "sequenceId": 0,
-              "start": 10,
-              "uniqueId": 10306,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -363,12 +359,8 @@ exports[`can dump the whole xx#pair.2.1.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "b1",
-              "sequenceId": 0,
-              "start": 10,
-              "uniqueId": 10307,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -396,12 +388,8 @@ exports[`can dump the whole xx#pair.2.1.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "c1",
-              "sequenceId": 0,
-              "start": 10,
-              "uniqueId": 10308,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -429,12 +417,8 @@ exports[`can dump the whole xx#pair.2.1.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "a1",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 10303,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -462,12 +446,8 @@ exports[`can dump the whole xx#pair.2.1.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "b1",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 10304,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -495,12 +475,8 @@ exports[`can dump the whole xx#pair.2.1.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "c1",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 10305,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,

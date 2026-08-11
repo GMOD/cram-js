@@ -355,12 +355,8 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "S",
-              "sequenceId": 0,
-              "start": 10,
-              "uniqueId": 399,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -388,12 +384,8 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "flags": 131,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "S",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 400,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -421,12 +413,8 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "S",
-              "sequenceId": 0,
-              "start": 10,
-              "uniqueId": 401,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -454,12 +442,8 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "flags": 131,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "S",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 402,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -487,12 +471,8 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "S",
-              "sequenceId": 0,
-              "start": 10,
-              "uniqueId": 403,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -520,12 +500,8 @@ exports[`can dump the whole xx#repeated.tmp.cram without error 1`] = `
             "flags": 131,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "S",
-              "sequenceId": 0,
-              "start": 0,
-              "uniqueId": 402,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,

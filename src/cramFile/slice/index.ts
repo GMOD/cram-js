@@ -124,11 +124,12 @@ function associateIntraSliceMate(
   thisRecord: CramRecord,
   mateRecord: CramRecord,
 ) {
-  const complicatedMultiSegment = !!(
-    mateRecord.mate ||
+  // `hasMate()` is already a boolean, where the `mate` object this replaced
+  // needed coercing, so the surrounding `!!` is gone
+  const complicatedMultiSegment =
+    mateRecord.hasMate() ||
     (mateRecord.mateRecordNumber !== undefined &&
       mateRecord.mateRecordNumber !== currentRecordNumber)
-  )
 
   // Deal with lossy read names — assign a synthetic name from uniqueId
   // so that paired records share the same name
@@ -138,27 +139,15 @@ function associateIntraSliceMate(
     mateRecord.setSyntheticReadName(syntheticName)
   }
 
-  thisRecord.mate = {
-    sequenceId: mateRecord.sequenceId,
-    start: mateRecord.start,
-    uniqueId: mateRecord.uniqueId,
-  }
-  if (mateRecord.readName) {
-    thisRecord.mate.readName = mateRecord.readName
-  }
+  thisRecord.mateSequenceId = mateRecord.sequenceId
+  thisRecord.mateStart = mateRecord.start
 
   // the mate record might have its own mate pointer, if this is some kind of
   // multi-segment (more than paired) scheme, so only relate that one back to this one
   // if it does not have any other relationship
-  if (!mateRecord.mate && mateRecord.mateRecordNumber === undefined) {
-    mateRecord.mate = {
-      sequenceId: thisRecord.sequenceId,
-      start: thisRecord.start,
-      uniqueId: thisRecord.uniqueId,
-    }
-    if (thisRecord.readName) {
-      mateRecord.mate.readName = thisRecord.readName
-    }
+  if (!mateRecord.hasMate() && mateRecord.mateRecordNumber === undefined) {
+    mateRecord.mateSequenceId = thisRecord.sequenceId
+    mateRecord.mateStart = thisRecord.start
   }
 
   // make sure the proper flags and cramFlags are set on both records

@@ -530,12 +530,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
           {
             "cramFlags": 3,
             "flags": 77,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": -1,
-              "start": -1,
-            },
+            "mateSequenceId": -1,
+            "mateStart": -1,
             "qualityScores": [
               2,
               2,
@@ -649,12 +645,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0303_unmapped.cram without
           {
             "cramFlags": 3,
             "flags": 141,
-            "mate": {
-              "flags": 2,
-              "readName": undefined,
-              "sequenceId": -1,
-              "start": -1,
-            },
+            "mateSequenceId": -1,
+            "mateStart": -1,
             "qualityScores": [
               2,
               2,

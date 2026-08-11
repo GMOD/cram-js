@@ -396,12 +396,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
             "flags": 99,
             "lengthOnRef": 80,
             "mappingQuality": 40,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 1199,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 1199,
             "qualityScores": undefined,
             "readBases": undefined,
             "readFeatures": [
@@ -552,12 +548,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1004_qual.cram without err
             "flags": 147,
             "lengthOnRef": 80,
             "mappingQuality": 40,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 999,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 999,
             "qualityScores": undefined,
             "readBases": undefined,
             "readFeatures": [

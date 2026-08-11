@@ -575,12 +575,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 254,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -1132,12 +1128,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 254,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -1689,12 +1681,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 254,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -2246,12 +2234,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 254,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -2803,12 +2787,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 254,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -3869,12 +3849,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 254,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -4426,12 +4402,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 254,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -4983,12 +4955,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 1,
-              "start": 254,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -6047,12 +6015,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 2,
-              "start": 254,
-            },
+            "mateSequenceId": 2,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -6604,12 +6568,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 2,
-              "start": 254,
-            },
+            "mateSequenceId": 2,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,
@@ -7666,12 +7626,8 @@ exports[`can dump the whole hg19mini#cram_with_crai_index.cram without error 1`]
             "flags": 99,
             "lengthOnRef": 76,
             "mappingQuality": 0,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 3,
-              "start": 254,
-            },
+            "mateSequenceId": 3,
+            "mateStart": 254,
             "qualityScores": [
               33,
               33,

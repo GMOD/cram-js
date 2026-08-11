@@ -401,12 +401,8 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 5,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 5,
             "qualityScores": [
               9,
               9,
@@ -434,12 +430,8 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "flags": 35,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 1,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 10,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 10,
             "qualityScores": [
               9,
               9,
@@ -467,12 +459,8 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "flags": 0,
-              "readName": undefined,
-              "sequenceId": 0,
-              "start": 0,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,
@@ -836,12 +824,8 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "flags": 67,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "a1",
-              "sequenceId": 1,
-              "start": 5,
-              "uniqueId": 10714,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 5,
             "qualityScores": [
               9,
               9,
@@ -869,12 +853,8 @@ exports[`can dump the whole xx#triplet.2.1.cram without error 1`] = `
             "flags": 3,
             "lengthOnRef": 10,
             "mappingQuality": 1,
-            "mate": {
-              "readName": "a1",
-              "sequenceId": 1,
-              "start": 0,
-              "uniqueId": 10713,
-            },
+            "mateSequenceId": 1,
+            "mateStart": 0,
             "qualityScores": [
               9,
               9,

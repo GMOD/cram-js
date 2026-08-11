@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
-import CramRecord from '../src/cramFile/record.ts'
+import CramRecord, { NO_MATE } from '../src/cramFile/record.ts'
 
 import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
 
@@ -22,7 +22,8 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
     readFeatureArena: arena,
     readFeatureStart: 0,
     readFeatureCount: arena.length,
-    mate: undefined,
+    mateSequenceId: NO_MATE,
+    mateStart: -1,
     readGroupId: 0,
     readName: undefined,
     sequenceId: 0,

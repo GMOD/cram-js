@@ -446,12 +446,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mate": {
-              "readName": "r1",
-              "sequenceId": 0,
-              "start": 1199,
-              "uniqueId": 553,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 1199,
             "qualityScores": [
               2,
               2,
@@ -591,12 +587,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mate": {
-              "readName": "r1",
-              "sequenceId": 0,
-              "start": 999,
-              "uniqueId": 552,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 999,
             "qualityScores": [
               2,
               2,
@@ -736,12 +728,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mate": {
-              "readName": "r2",
-              "sequenceId": 0,
-              "start": 1199,
-              "uniqueId": 555,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 1199,
             "qualityScores": [
               2,
               2,
@@ -881,12 +869,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mate": {
-              "readName": "r2",
-              "sequenceId": 0,
-              "start": 999,
-              "uniqueId": 554,
-            },
+            "mateSequenceId": 0,
+            "mateStart": 999,
             "qualityScores": [
               2,
               2,

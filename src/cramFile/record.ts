@@ -406,15 +406,16 @@ function decodeBaseSubstitution(
   }
 }
 
-export interface MateRecord {
-  readName?: string
-  sequenceId: number
-  /** 0-based */
-  start: number
-  flags?: number
-
-  uniqueId?: number
-}
+/**
+ * {@link CramRecord.mateSequenceId} when the record carries no mate information
+ * at all.
+ *
+ * Distinct from `-1`, which is a mate that *exists* but is unplaced — a paired
+ * read whose mate is unmapped decodes with `NS = -1` and `MF & CRAM_M_UNMAP`,
+ * and {@link CramRecord.getPairOrientation} has to tell that apart from "no
+ * mate known", which falls back to the read1-first rule instead.
+ */
+export const NO_MATE = -2
 
 /**
  * Class of each CRAM record returned by this API.
@@ -453,7 +454,22 @@ export default class CramRecord {
    */
   public readName: string | undefined
   public mateRecordNumber?: number
-  public mate?: MateRecord
+  /**
+   * The mate's reference sequence id, or {@link NO_MATE} when this record
+   * carries no mate information; `-1` for a mate that exists but is unplaced.
+   * Read it through {@link hasMate} rather than comparing by hand.
+   *
+   * This and {@link mateStart} used to be a `mate` object, alongside the mate's
+   * read name, flags and uniqueId. Those three were written and never read —
+   * the flags' only real content is folded into this record's own {@link flags}
+   * as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding — and the object cost an
+   * allocation per paired record (~150k on a 1000x 19kb query) plus a
+   * reference from every record to its mate, which pinned whole slices in the
+   * record cache and cannot cross a worker boundary. Two numbers can.
+   */
+  public mateSequenceId: number
+  /** the mate's 0-based start; meaningless unless {@link hasMate} */
+  public mateStart: number
   public uniqueId: number
   public sequenceId: number
   public readGroupId: number
@@ -568,7 +584,8 @@ export default class CramRecord {
     readFeatureArena,
     readFeatureStart,
     readFeatureCount,
-    mate,
+    mateSequenceId,
+    mateStart,
     readGroupId,
     readName,
     sequenceId,
@@ -597,12 +614,16 @@ export default class CramRecord {
     this.readFeatureArena = readFeatureArena
     this.readFeatureStart = readFeatureStart
     this.readFeatureCount = readFeatureCount
-    if (mate) {
-      this.mate = mate
-    }
+    this.mateSequenceId = mateSequenceId
+    this.mateStart = mateStart
     if (mateRecordNumber !== undefined) {
       this.mateRecordNumber = mateRecordNumber
     }
+  }
+
+  /** whether {@link mateSequenceId} and {@link mateStart} hold a real mate */
+  hasMate() {
+    return this.mateSequenceId !== NO_MATE
   }
 
   // BAM flags — see SAM/BAM spec §1.4 (Flag field):
@@ -1063,14 +1084,14 @@ export default class CramRecord {
       return undefined
     }
     const isRead1 = !!(f & Constants.BAM_FREAD1)
-    const mate = this.mate
+    const mateSequenceId = this.mateSequenceId
     const selfIsLeft =
-      mate === undefined
+      mateSequenceId === NO_MATE
         ? isRead1
-        : this.sequenceId !== mate.sequenceId
-          ? this.sequenceId < mate.sequenceId
-          : this.start !== mate.start
-            ? this.start < mate.start
+        : this.sequenceId !== mateSequenceId
+          ? this.sequenceId < mateSequenceId
+          : this.start !== this.mateStart
+            ? this.start < this.mateStart
             : isRead1
     return PAIR_ORIENTATION_TABLE[((f >> 4) & 0x7) | (selfIsLeft ? 8 : 0)]
   }
@@ -1164,8 +1185,9 @@ export default class CramRecord {
     if (readFeatures !== undefined) {
       data.readFeatures = readFeatures
     }
-    if (this.mate !== undefined) {
-      data.mate = this.mate
+    if (this.hasMate()) {
+      data.mateSequenceId = this.mateSequenceId
+      data.mateStart = this.mateStart
     }
     if (this.mateRecordNumber !== undefined) {
       data.mateRecordNumber = this.mateRecordNumber
