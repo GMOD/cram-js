@@ -1,3 +1,17 @@
+## [12.0.1](https://github.com/GMOD/cram-js/compare/v12.0.0...v12.0.1) (2026-08-11)
+
+### Chores
+
+- Create a GitHub release for each published tag ([f6e01b1](https://github.com/GMOD/cram-js/commit/f6e01b10582d70111d2843c78fd0058ae27d5e2f))
+- Gitignore the local Claude settings and agent worktrees ([4d50411](https://github.com/GMOD/cram-js/commit/4d50411eae49576cf71f853b774aad20096c1fe9))
+
+### Documentation
+
+- Make TODO.md only open work, and move the rest to ADRs ([e67c614](https://github.com/GMOD/cram-js/commit/e67c61439a01556afcc80140f24f514dab4915fb))
+- Fill the gaps in MIGRATION.md, and stop it pointing at a removed field ([1c12aa3](https://github.com/GMOD/cram-js/commit/1c12aa31c1dfa143546bb9bd25650827b1373699))
+- Cut the README to what a new user needs, move the reference to docs/API.md ([453cbe2](https://github.com/GMOD/cram-js/commit/453cbe22685584b7aab83465ed44ede56b0076fb))
+- Correct the slice-cache and mismatch-window docs, and drop the dead docs script ([59181b5](https://github.com/GMOD/cram-js/commit/59181b5d10577944596e146f5de72071eb6cc10f))
+
 ## [12.0.0](https://github.com/GMOD/cram-js/compare/v11.4.1...v12.0.0) (2026-08-11)
 
 ### Bug Fixes
