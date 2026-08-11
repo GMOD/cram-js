@@ -21,6 +21,11 @@ export default defineConfig(
       'src/seek-bzip',
       'coverage',
       'vitest.config.ts',
+      // agent worktrees are whole checkouts of this repo living inside it, so
+      // without this eslint lints every one of them against the root
+      // tsconfig.lint.json and fails on files that are not in it. gitignored,
+      // but eslint does not read .gitignore
+      '.claude/**',
     ],
   },
   {
