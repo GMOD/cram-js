@@ -664,11 +664,37 @@ export default class CramSlice {
     }
   }
 
+  /**
+   * Decode this slice in a worker, or undefined if it could not be.
+   *
+   * Undefined rather than throwing for every reason short of a malformed file:
+   * no pool available (node, or a host without Blob URLs), a slice of unknown
+   * size, or a pool that failed to start. The caller decodes in-process instead,
+   * so the pool is an optimisation that can always be declined — which matters
+   * because it is on by default, and a consumer must not lose the ability to read
+   * a file because its worker could not launch.
+   *
+   * A decode error from inside the worker *does* propagate: a malformed CRAM must
+   * fail rather than quietly re-decode on the main thread and fail there.
+   */
+  private async _fetchRecordsInWorker(
+    decodeOptions: Required<DecodeOptions>,
+    opts?: ReadOpts,
+  ): Promise<CramRecord[] | undefined> {
+    const pool = await this.file.getSliceWorkerPool()
+    if (!pool) {
+      return undefined
+    }
+    const request = await this.buildDecodeRequest(decodeOptions, opts)
+    if (!request) {
+      return undefined
+    }
+    return pool.decodeSlice(request)
+  }
+
   async _fetchRecords(decodeOptions: Required<DecodeOptions>, opts?: ReadOpts) {
     const { majorVersion } = await this.file.getDefinition()
-    const compressionScheme = await this.getCompressionScheme(opts)
     const sliceHeader = await this.getHeader(opts)
-    const blocksByContentId = await this._getBlocksContentIdIndex(opts)
 
     const md5Region = await this.checkReferenceMd5(
       sliceHeader,
@@ -680,6 +706,23 @@ export default class CramSlice {
     if (!isMappedSliceHeader(header)) {
       throw new CramMalformedError('slice header not mapped')
     }
+
+    // Try a worker first. Everything above this point is header-sized and
+    // memoized; everything below it is the decode, which is what moves.
+    //
+    // The reference is applied here either way — `fetchReferenceSequence` is a
+    // caller-supplied callback and cannot cross into a worker — so a
+    // worker-decoded slice is decorated by exactly the same code as an
+    // in-process one, and `getRecords`' contract of handing back decorated
+    // records is unchanged.
+    const fromWorker = await this._fetchRecordsInWorker(decodeOptions, opts)
+    if (fromWorker) {
+      await this.applyReferenceSequence(fromWorker, header, md5Region, opts)
+      return fromWorker
+    }
+
+    const compressionScheme = await this.getCompressionScheme(opts)
+    const blocksByContentId = await this._getBlocksContentIdIndex(opts)
 
     const ctx = buildSliceDecodeContext({
       compressionScheme,

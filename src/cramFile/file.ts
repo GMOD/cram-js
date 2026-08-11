@@ -7,6 +7,7 @@ import {
   CramUnimplementedError,
 } from '../errors.ts'
 import { open } from '../io.ts'
+import { getSharedSliceWorkerPool } from '../sliceWorkerPool.ts'
 import CramContainer from './container/index.ts'
 import { memoizeAsync } from './memoize.ts'
 import { parseBlockFromBuffer, uncompressBlockContent } from './parseBlock.ts'
@@ -195,6 +196,30 @@ export type CramFileArgs = CramFileSource & {
   cacheBudget?: SharedBudget
   fetchReferenceSequence?: SeqFetch
   validateChecksums?: boolean
+  /**
+   * Decode slices on a shared pool of workers. Default true, and a no-op
+   * wherever workers cannot be launched — node, or a browser context without
+   * Blob URLs — where the decode simply stays in-process.
+   *
+   * Worth having because a slice decode is the expensive part of a query and
+   * slices are independent: at jb2bench's 19kb region a query touches 16 slices
+   * on 1000x-coverage short reads and 22 on long reads. Even at one slice, the
+   * decode is off the main thread, which is what a UI notices.
+   *
+   * Set false to keep everything in-process — for a consumer that runs
+   * `@gmod/cram` inside its own worker already, where a nested pool buys nothing
+   * and costs a second wasm instance per worker.
+   */
+  useSliceWorkerPool?: boolean
+  /**
+   * Workers in the shared pool. Defaults to
+   * `min(navigator.hardwareConcurrency, 4)`.
+   *
+   * Only honoured by whoever creates the pool: it is process-wide, so the first
+   * `CramFile` to need one fixes the size. A consumer opening one file per track
+   * wants that — a pool per track would put `4 x tracks` workers on the machine.
+   */
+  numSliceWorkers?: number
 }
 
 export type CramFileBlock = BlockHeader & {
@@ -208,6 +233,8 @@ export type CramFileBlock = BlockHeader & {
 export default class CramFile {
   private file: GenericFilehandle
   public validateChecksums: boolean
+  private useSliceWorkerPool: boolean
+  private numSliceWorkers: number | undefined
   public fetchReferenceSequenceCallback?: SeqFetch
   public options: {
     checkSequenceMD5: boolean
@@ -226,9 +253,44 @@ export default class CramFile {
   private _samHeaderMemo = memoizeAsync(() => this._fetchSamHeader())
   private _referenceInfo?: ReferenceInfo[]
 
+  /**
+   * The shared slice-decode pool, or undefined when slices decode in-process.
+   *
+   * Resolved once and remembered, including the undefined: `getSharedSliceWorkerPool`
+   * is cheap to call repeatedly but this runs once per slice, and a pool that
+   * failed to start should not be retried per slice for the life of the file.
+   */
+  private _sliceWorkerPoolMemo = memoizeAsync(() =>
+    this._fetchSliceWorkerPool(),
+  )
+
+  async getSliceWorkerPool() {
+    return this._sliceWorkerPoolMemo()
+  }
+
+  private async _fetchSliceWorkerPool() {
+    if (!this.useSliceWorkerPool) {
+      return undefined
+    }
+    try {
+      return await getSharedSliceWorkerPool(this.numSliceWorkers)
+    } catch (e) {
+      // A pool that will not start must not stop the file being read: the
+      // caller falls back to decoding in-process. Warned once per file rather
+      // than swallowed, because silently losing the parallelism is the kind of
+      // thing that otherwise shows up as an unexplained slowdown.
+      console.warn(
+        `cram: could not start the slice worker pool, decoding in-process instead: ${String(e)}`,
+      )
+      return undefined
+    }
+  }
+
   constructor(args: CramFileArgs) {
     this.file = open(args.url, args.path, args.filehandle)
     this.validateChecksums = args.validateChecksums ?? false
+    this.useSliceWorkerPool = args.useSliceWorkerPool ?? true
+    this.numSliceWorkers = args.numSliceWorkers
     this.fetchReferenceSequenceCallback = args.fetchReferenceSequence
     this.options = {
       // off unless asked for: the check needs the whole span a slice was

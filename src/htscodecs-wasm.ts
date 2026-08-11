@@ -18,6 +18,19 @@ async function getModule() {
   return modulePromise
 }
 
+/**
+ * Instantiate the wasm module now rather than on the first block that needs it.
+ *
+ * For the slice-decode worker pool: compiling and instantiating the module is
+ * one-off work of the same order as decoding a small slice, and without this
+ * every worker pays it on its first dispatch — so the first batch of a query,
+ * which is the one a user is waiting on, would be the slowest. Called during the
+ * pool's init handshake, before any slice is sent.
+ */
+export async function warmupWasm() {
+  await getModule()
+}
+
 function copyToWasm(module: HtsCodecsModule, data: Uint8Array) {
   const ptr = module._malloc(data.length)
   module.HEAPU8.set(data, ptr)
