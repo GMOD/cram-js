@@ -61,13 +61,26 @@ parser — which is what ADR 0006 declined and still declines.
   ms**, with identical emission counts. It is one subtraction per emission
   against an argument that is 0 in the default case, inside a loop that already
   reads six columns.
-- **It only pays off if the consumer takes it.** The 17% is recovered when
-  jbrowse deletes its copy and passes its own callback in; until then this is an
-  unused option and a window fix.
-- The remaining conventions jbrowse has to reconcile on its side are its type
-  constants (which it can renumber to the CRAM feature codes, since it compares
-  them symbolically everywhere) and a clip's `length`, which its object-building
-  consumer can set once rather than per emission.
+- **It paid off, mostly.** jbrowse took it in
+  `refactor(alignments): drive CRAM mismatches off @gmod/cram's own walk`,
+  deleting its 110-line copy. Measured after the fact, interleaved and min of 13
+  rounds: **1.047x and 1.066x** on 628 ONT reads, **1.046x and 1.119x** on
+  80,177 short ones. So ~5% against the hand-inlined copy rather than the 17% a
+  translator cost — the remainder is the walk living across a package boundary,
+  and no option here can remove it.
+- **A consumer should reuse its options object.** jbrowse allocates one
+  module-level `{start, end, origin}` and mutates it per call: a fresh literal
+  per read per render pass measured 16.5ms → 20.7ms on those 80,177 short reads,
+  most of the cost of delegating at all. That is safe by construction here —
+  `forEachMismatch` reads all three fields before the walk starts and retains
+  none of them — and this ADR is where that guarantee lives, so do not start
+  retaining the options object.
+- The conventions jbrowse reconciled on its side, as predicted: its type
+  constants are the CRAM feature codes now (it compared them symbolically
+  everywhere, and none was serialized), and a clip's `length` is set in the one
+  consumer that builds objects rather than per emission. The deletion and skip
+  sentinels it used to emit — `'*'` and `'N'` where this walk reports no bases —
+  turned out to be read by nothing at all.
 
 ## Evidence
 
