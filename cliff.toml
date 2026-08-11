@@ -18,7 +18,7 @@ body = """
 ### {{ group | striptags | trim }}
 
 {% for commit in commits %}\
-- {% if commit.breaking %}**BREAKING** {% endif %}{{ commit.message | upper_first }}
+- {% if commit.breaking %}**BREAKING** {% endif %}{{ commit.message | split(pat="\n") | first | trim | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/GMOD/cram-js/commit/{{ commit.id }}))
 {% endfor %}
 {% endfor %}\
 """
