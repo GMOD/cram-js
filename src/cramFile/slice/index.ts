@@ -12,6 +12,7 @@ import type { BaseOpts, ReadOpts } from '../../opts.ts'
 import type CramContainer from '../container/index.ts'
 import type CramFile from '../file.ts'
 import type { DecodeOptions } from '../record.ts'
+import type { SliceDecodeRequest } from './decodeSliceFromBytes.ts'
 import type {
   MappedSliceHeader,
   UnmappedSliceHeader,
@@ -599,6 +600,67 @@ export default class CramSlice {
       if (region) {
         record.addReferenceSequence(region, compressionScheme)
       }
+    }
+  }
+
+  /**
+   * Everything a worker needs to decode this slice, or undefined when it cannot
+   * be described that way.
+   *
+   * The one case it cannot: a slice reached without an index has no known size,
+   * so its blocks are read one at a time and there is no single byte range to
+   * hand over. Every indexed query — which is every query through
+   * `IndexedCramFile` — takes the first branch.
+   *
+   * Reads only what `_fetchRecords` reads anyway, and all of it is either already
+   * memoized on the container or the one big payload read that dominates the
+   * slice either way, so building this costs nothing extra when it is used and a
+   * few memo hits when it is not.
+   */
+  async buildDecodeRequest(
+    decodeOptions: Required<DecodeOptions>,
+    opts?: ReadOpts,
+  ): Promise<SliceDecodeRequest | undefined> {
+    if (!this.sliceSize) {
+      return undefined
+    }
+    const { majorVersion } = await this.file.getDefinition()
+    const compressionHeaderBlock =
+      await this.container.getCompressionHeaderBlock(opts)
+    if (!compressionHeaderBlock) {
+      return undefined
+    }
+    const sliceHeader = await this.getHeader(opts)
+    const header = sliceHeader.parsedContent
+    if (!isMappedSliceHeader(header)) {
+      throw new CramMalformedError('slice header not mapped')
+    }
+
+    const containerHeader = await this.container.getHeader(opts)
+    const sliceFilePosition =
+      containerHeader._endPosition + this.containerPosition
+    const blocksFilePosition = sliceHeader._endPosition
+    const headerSize = blocksFilePosition - sliceFilePosition
+    const sliceBytes = await this.file.read(
+      this.sliceSize - headerSize,
+      blocksFilePosition,
+      opts,
+    )
+
+    return {
+      majorVersion,
+      compressionHeaderContent: compressionHeaderBlock.content,
+      compressionHeaderContentPosition: compressionHeaderBlock.contentPosition,
+      containerKey: this.container.filePosition,
+      sliceBytes,
+      blocksFilePosition,
+      numBlocks: header.numBlocks,
+      refSeqId: header.refSeqId,
+      refSeqStart: header.refSeqStart,
+      numRecords: header.numRecords,
+      uniqueIdBase: sliceHeader.contentPosition + header.recordCounter + 1,
+      decodeTags: decodeOptions.decodeTags,
+      validateChecksums: this.file.validateChecksums,
     }
   }
 
