@@ -1,3 +1,27 @@
+## [13.1.0](https://github.com/GMOD/cram-js/compare/v13.0.0...v13.1.0) (2026-08-11)
+
+### Bug Fixes
+
+- Regenerate the worker bundle from a current esm/ ([c71f133](https://github.com/GMOD/cram-js/commit/c71f13351b282340bea54269aa1a7a1983fc5e20))
+
+### Chores
+
+- Regenerate the worker bundle for the rebased base ([accd9a9](https://github.com/GMOD/cram-js/commit/accd9a964d103fd9eb77984ac8edeea07d8a7481))
+
+### Documentation
+
+- Measured numbers for the slice pool, and the threshold that was rejected ([3f25135](https://github.com/GMOD/cram-js/commit/3f2513590817379eb5a58db02aad97532e2aeda8))
+
+### Features
+
+- A transfer protocol for decoded slices ([8a64d70](https://github.com/GMOD/cram-js/commit/8a64d703aae9324d3335b16f2554223e686e8dd3))
+- Decode a slice from its bytes alone ([dfde75e](https://github.com/GMOD/cram-js/commit/dfde75efe49a24d135696e86abcf9de7741743b7))
+- Decode slices on a worker pool ([e5dce80](https://github.com/GMOD/cram-js/commit/e5dce8022c0c4d245a4b5a1c5fa8cefcf87831ef))
+
+### Refactoring
+
+- Lift block parsing and decompression out of CramFile ([07ac8c6](https://github.com/GMOD/cram-js/commit/07ac8c67efb6cc86937c8c8a588ad1a0cb385639))
+
 ## [13.0.0](https://github.com/GMOD/cram-js/compare/v12.0.1...v13.0.0) (2026-08-11)
 
 ### Chores
