@@ -14,3 +14,5 @@ esm
 .idea
 *.cpuprofile
 esm_*/
+.claude/settings.local.json
+.claude/worktrees/
