@@ -435,8 +435,8 @@ exports[`can dump the whole ce#supp.tmp.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 50,
             "mappingQuality": 1,
-            "mateSequenceId": -1,
-            "mateStart": -1,
+            "nextSequenceId": -1,
+            "nextStart": -1,
             "qualityScores": [
               255,
               255,
@@ -562,8 +562,8 @@ exports[`can dump the whole ce#supp.tmp.cram without error 1`] = `
             "flags": 2147,
             "lengthOnRef": 50,
             "mappingQuality": 1,
-            "mateSequenceId": -1,
-            "mateStart": -1,
+            "nextSequenceId": -1,
+            "nextStart": -1,
             "qualityScores": [
               255,
               255,

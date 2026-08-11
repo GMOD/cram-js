@@ -407,15 +407,22 @@ function decodeBaseSubstitution(
 }
 
 /**
- * {@link CramRecord.mateSequenceId} when the record carries no mate information
- * at all.
+ * {@link CramRecord.nextSequenceId} when this record does not say where the next
+ * segment of its template is.
  *
- * Distinct from `-1`, which is a mate that *exists* but is unplaced — a paired
- * read whose mate is unmapped decodes with `NS = -1` and `MF & CRAM_M_UNMAP`,
- * and {@link CramRecord.getPairOrientation} has to tell that apart from "no
- * mate known", which falls back to the read1-first rule instead.
+ * Note this is *not* "the read is unpaired" — that is `flags & BAM_FPAIRED`, and
+ * {@link CramRecord.getPairOrientation} tests it first. A paired read reaches
+ * here whenever the file did not carry the position: neither `CRAM_FLAG_DETACHED`
+ * nor `CRAM_FLAG_MATE_DOWNSTREAM`, or an intra-slice pointer that association
+ * could not follow.
+ *
+ * Distinct from `-1`, which *is* a position — an unplaced next segment, as a
+ * paired read with an unmapped mate decodes to (`NS = -1`, `MF & CRAM_M_UNMAP`).
+ * `getPairOrientation` compares `-1` as a real value but falls back to the
+ * read1-first rule for `NEXT_UNKNOWN`, so that both halves of such a pair still
+ * agree; a `< 0` test would conflate the two and make them disagree.
  */
-export const NO_MATE = -2
+export const NEXT_UNKNOWN = -2
 
 /**
  * Class of each CRAM record returned by this API.
@@ -455,21 +462,31 @@ export default class CramRecord {
   public readName: string | undefined
   public mateRecordNumber?: number
   /**
-   * The mate's reference sequence id, or {@link NO_MATE} when this record
-   * carries no mate information; `-1` for a mate that exists but is unplaced.
-   * Read it through {@link hasMate} rather than comparing by hand.
+   * Reference sequence id of the next segment in this read's template — SAM's
+   * `RNEXT`, from CRAM's `NS` data series — or {@link NEXT_UNKNOWN} when the file
+   * did not say. Test {@link hasNextPosition} rather than comparing by hand, and
+   * read that constant's note before assuming `< 0` means "no mate".
    *
-   * This and {@link mateStart} used to be a `mate` object, alongside the mate's
-   * read name, flags and uniqueId. Those three were written and never read —
-   * the flags' only real content is folded into this record's own {@link flags}
-   * as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding — and the object cost an
-   * allocation per paired record (~150k on a 1000x 19kb query) plus a
-   * reference from every record to its mate, which pinned whole slices in the
-   * record cache and cannot cross a worker boundary. Two numbers can.
+   * Named for the segment rather than the mate to match SAM, BAM and
+   * `@gmod/bam`, which all call these fields `RNEXT`/`PNEXT` — the mate wording
+   * stays on the *flag* accessors ({@link isMateUnmapped},
+   * {@link isMateReverseComplemented}), exactly as SAM splits it.
+   *
+   * This and {@link nextStart} used to be a `mate` object carrying the mate's
+   * read name, flags and uniqueId as well. Those three were written and never
+   * read — the flags' only real content is folded into this record's own
+   * {@link flags} as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding — and the
+   * object cost an allocation per paired record (~150k on a 19kb query against
+   * 1000x coverage) plus a reference from every record to its mate, which pinned
+   * whole slices in the record cache and cannot cross a worker boundary. Two
+   * numbers can.
    */
-  public mateSequenceId: number
-  /** the mate's 0-based start; meaningless unless {@link hasMate} */
-  public mateStart: number
+  public nextSequenceId: number
+  /**
+   * 0-based start of the next segment in this read's template — SAM's `PNEXT`,
+   * from CRAM's `NP`. Meaningless unless {@link hasNextPosition}.
+   */
+  public nextStart: number
   public uniqueId: number
   public sequenceId: number
   public readGroupId: number
@@ -584,8 +601,8 @@ export default class CramRecord {
     readFeatureArena,
     readFeatureStart,
     readFeatureCount,
-    mateSequenceId,
-    mateStart,
+    nextSequenceId,
+    nextStart,
     readGroupId,
     readName,
     sequenceId,
@@ -614,16 +631,24 @@ export default class CramRecord {
     this.readFeatureArena = readFeatureArena
     this.readFeatureStart = readFeatureStart
     this.readFeatureCount = readFeatureCount
-    this.mateSequenceId = mateSequenceId
-    this.mateStart = mateStart
+    this.nextSequenceId = nextSequenceId
+    this.nextStart = nextStart
     if (mateRecordNumber !== undefined) {
       this.mateRecordNumber = mateRecordNumber
     }
   }
 
-  /** whether {@link mateSequenceId} and {@link mateStart} hold a real mate */
-  hasMate() {
-    return this.mateSequenceId !== NO_MATE
+  /**
+   * Whether {@link nextSequenceId} and {@link nextStart} hold a position at all.
+   *
+   * Deliberately not `hasMate`: a paired read whose mate this file does not
+   * locate returns `false` here while still having a mate, and a read whose next
+   * segment is unplaced returns `true` with a `nextSequenceId` of `-1`. The
+   * question is whether the *position* is known — "is there a mate" is
+   * {@link isPaired}.
+   */
+  hasNextPosition() {
+    return this.nextSequenceId !== NEXT_UNKNOWN
   }
 
   // BAM flags — see SAM/BAM spec §1.4 (Flag field):
@@ -1084,14 +1109,14 @@ export default class CramRecord {
       return undefined
     }
     const isRead1 = !!(f & Constants.BAM_FREAD1)
-    const mateSequenceId = this.mateSequenceId
+    const nextSequenceId = this.nextSequenceId
     const selfIsLeft =
-      mateSequenceId === NO_MATE
+      nextSequenceId === NEXT_UNKNOWN
         ? isRead1
-        : this.sequenceId !== mateSequenceId
-          ? this.sequenceId < mateSequenceId
-          : this.start !== this.mateStart
-            ? this.start < this.mateStart
+        : this.sequenceId !== nextSequenceId
+          ? this.sequenceId < nextSequenceId
+          : this.start !== this.nextStart
+            ? this.start < this.nextStart
             : isRead1
     return PAIR_ORIENTATION_TABLE[((f >> 4) & 0x7) | (selfIsLeft ? 8 : 0)]
   }
@@ -1185,9 +1210,9 @@ export default class CramRecord {
     if (readFeatures !== undefined) {
       data.readFeatures = readFeatures
     }
-    if (this.hasMate()) {
-      data.mateSequenceId = this.mateSequenceId
-      data.mateStart = this.mateStart
+    if (this.hasNextPosition()) {
+      data.nextSequenceId = this.nextSequenceId
+      data.nextStart = this.nextStart
     }
     if (this.mateRecordNumber !== undefined) {
       data.mateRecordNumber = this.mateRecordNumber

@@ -458,8 +458,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0401_mapped.cram without e
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mateSequenceId": -1,
-            "mateStart": -1,
+            "nextSequenceId": -1,
+            "nextStart": -1,
             "qualityScores": [
               2,
               2,

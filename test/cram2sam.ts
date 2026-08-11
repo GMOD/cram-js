@@ -233,7 +233,7 @@ async function run() {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _rnext =
-      record.sequenceId === record.mateSequenceId
+      record.sequenceId === record.nextSequenceId
         ? '='
         : seqList[record.sequenceId]
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

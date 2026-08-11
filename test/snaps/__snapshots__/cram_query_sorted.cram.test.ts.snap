@@ -614,8 +614,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 99,
             "lengthOnRef": 101,
             "mappingQuality": 255,
-            "mateSequenceId": 6,
-            "mateStart": 15,
+            "nextSequenceId": 6,
+            "nextStart": 15,
             "qualityScores": [
               8,
               6,
@@ -1264,8 +1264,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 147,
             "lengthOnRef": 101,
             "mappingQuality": 255,
-            "mateSequenceId": 6,
-            "mateStart": 20,
+            "nextSequenceId": 6,
+            "nextStart": 20,
             "qualityScores": [
               8,
               6,
@@ -1878,8 +1878,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 255,
-            "mateSequenceId": 6,
-            "mateStart": 301,
+            "nextSequenceId": 6,
+            "nextStart": 301,
             "qualityScores": [
               8,
               6,
@@ -2126,8 +2126,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 163,
             "lengthOnRef": 101,
             "mappingQuality": 255,
-            "mateSequenceId": 6,
-            "mateStart": 0,
+            "nextSequenceId": 6,
+            "nextStart": 0,
             "qualityScores": [
               5,
               14,
@@ -2698,8 +2698,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 89,
             "lengthOnRef": 101,
             "mappingQuality": 255,
-            "mateSequenceId": -1,
-            "mateStart": -1,
+            "nextSequenceId": -1,
+            "nextStart": -1,
             "qualityScores": [
               8,
               6,
@@ -3329,8 +3329,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
           {
             "cramFlags": 3,
             "flags": 165,
-            "mateSequenceId": 6,
-            "mateStart": 0,
+            "nextSequenceId": 6,
+            "nextStart": 0,
             "qualityScores": [
               5,
               14,
@@ -3915,8 +3915,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 83,
             "lengthOnRef": 101,
             "mappingQuality": 255,
-            "mateSequenceId": 6,
-            "mateStart": 301,
+            "nextSequenceId": 6,
+            "nextStart": 301,
             "qualityScores": [
               8,
               6,
@@ -4163,8 +4163,8 @@ exports[`can dump the whole cram_query_sorted.cram without error 1`] = `
             "flags": 163,
             "lengthOnRef": 97,
             "mappingQuality": 255,
-            "mateSequenceId": 6,
-            "mateStart": 0,
+            "nextSequenceId": 6,
+            "nextStart": 0,
             "qualityScores": [
               5,
               14,

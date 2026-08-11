@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 
-import CramRecord, { NO_MATE } from '../src/cramFile/record.ts'
+import CramRecord, { NEXT_UNKNOWN } from '../src/cramFile/record.ts'
 
 const PAIRED = 0x1
 const REVERSE = 0x10
@@ -37,8 +37,8 @@ function makeRecord({
     uniqueId: 1,
     start,
     tags: {},
-    mateSequenceId: mate ? mate.sequenceId : NO_MATE,
-    mateStart: mate ? mate.start : -1,
+    nextSequenceId: mate ? mate.sequenceId : NEXT_UNKNOWN,
+    nextStart: mate ? mate.start : -1,
     readName: undefined,
     templateSize: undefined,
     mateRecordNumber: undefined,

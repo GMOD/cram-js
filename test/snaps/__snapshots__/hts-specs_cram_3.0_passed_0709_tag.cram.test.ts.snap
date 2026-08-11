@@ -446,8 +446,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mateSequenceId": 0,
-            "mateStart": 1199,
+            "nextSequenceId": 0,
+            "nextStart": 1199,
             "qualityScores": [
               2,
               2,
@@ -587,8 +587,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mateSequenceId": 0,
-            "mateStart": 999,
+            "nextSequenceId": 0,
+            "nextStart": 999,
             "qualityScores": [
               2,
               2,
@@ -728,8 +728,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 99,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mateSequenceId": 0,
-            "mateStart": 1199,
+            "nextSequenceId": 0,
+            "nextStart": 1199,
             "qualityScores": [
               2,
               2,
@@ -869,8 +869,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0709_tag.cram without erro
             "flags": 147,
             "lengthOnRef": 100,
             "mappingQuality": 40,
-            "mateSequenceId": 0,
-            "mateStart": 999,
+            "nextSequenceId": 0,
+            "nextStart": 999,
             "qualityScores": [
               2,
               2,

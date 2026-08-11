@@ -375,8 +375,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1007_seq.cram without erro
             "flags": 99,
             "lengthOnRef": 80,
             "mappingQuality": 40,
-            "mateSequenceId": 0,
-            "mateStart": 1209,
+            "nextSequenceId": 0,
+            "nextStart": 1209,
             "qualityScores": [
               255,
               255,
@@ -508,8 +508,8 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1007_seq.cram without erro
             "flags": 147,
             "lengthOnRef": 80,
             "mappingQuality": 40,
-            "mateSequenceId": 0,
-            "mateStart": 1009,
+            "nextSequenceId": 0,
+            "nextStart": 1009,
             "qualityScores": [
               255,
               255,

@@ -250,15 +250,15 @@ export default class IndexedCramFile {
         const name = requireReadName(cramRecord)
         if (
           unmatedReadNames.has(name) &&
-          cramRecord.hasMate() &&
-          (cramRecord.mateSequenceId === seq || pairAcrossChr) &&
-          Math.abs(cramRecord.start - cramRecord.mateStart) < maxInsertSize
+          cramRecord.hasNextPosition() &&
+          (cramRecord.nextSequenceId === seq || pairAcrossChr) &&
+          Math.abs(cramRecord.start - cramRecord.nextStart) < maxInsertSize
         ) {
           matePromises.push(
             this.index.getEntriesForRange(
-              cramRecord.mateSequenceId,
-              cramRecord.mateStart,
-              cramRecord.mateStart + 1,
+              cramRecord.nextSequenceId,
+              cramRecord.nextStart,
+              cramRecord.nextStart + 1,
               { signal },
             ),
           )

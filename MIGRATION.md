@@ -1,31 +1,41 @@
 # Migration
 
-## v11 → v12: `record.mate` is two numbers, not an object
+## v11 → v12: `record.mate` is two numbers named for the next segment
 
 `CramRecord.mate` is gone, along with the `MateRecord` type it was declared with
 (that type was never re-exported from the package root, so only a deep import
-could have named it). The mate's locus now lives directly on the record:
+could have named it). What is left of it — the position — sits directly on the
+record, under SAM's names for those fields rather than this library's:
 
 | before (≤ 11)            | now (12)                                                                                  |
 | ------------------------ | ----------------------------------------------------------------------------------------- |
-| `record.mate`            | `record.hasMate()`                                                                        |
-| `record.mate.sequenceId` | `record.mateSequenceId`                                                                   |
-| `record.mate.start`      | `record.mateStart`                                                                        |
+| `record.mate`            | `record.hasNextPosition()`                                                                |
+| `record.mate.sequenceId` | `record.nextSequenceId` (SAM `RNEXT`, CRAM `NS`)                                          |
+| `record.mate.start`      | `record.nextStart` (SAM `PNEXT`, CRAM `NP`)                                               |
 | `record.mate.readName`   | gone — the two mates of a pair share a name, so use `record.readName`                     |
 | `record.mate.flags`      | gone — already folded into `record.flags` as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding |
 | `record.mate.uniqueId`   | gone                                                                                      |
 
-`toJSON()` follows: its `mate` key is replaced by `mateSequenceId` and
-`mateStart`, present only when `hasMate()`.
+`toJSON()` follows: its `mate` key is replaced by `nextSequenceId` and
+`nextStart`, present only when `hasNextPosition()`.
+
+The `next*` naming matches SAM, BAM and `@gmod/bam`, which all call these fields
+`RNEXT`/`PNEXT`, and CRAM's own `NS`/`NP` ("**next** fragment"). Note SAM splits
+the vocabulary and so does this library: the _flag_ accessors keep the mate
+wording, so `isMateUnmapped()` and `isMateReverseComplemented()` are unchanged.
 
 Migrating:
 
-- **Test `hasMate()`, not truthiness of a field.** `mateSequenceId` is `NO_MATE`
-  (`-2`, exported) when there is no mate, which is deliberately distinct from
-  `-1` — a mate that exists but is unplaced. A paired read whose mate is
-  unmapped decodes with `NS = -1`, and `getPairOrientation()` has to tell that
-  apart from "no mate known", which falls back to the read1-first rule.
-  `record.mateSequenceId < 0` would conflate the two.
+- **Test `hasNextPosition()`, not truthiness of a field, and not `< 0`.**
+  `nextSequenceId` is `NEXT_UNKNOWN` (`-2`, exported) when the file did not give
+  a position, which is deliberately distinct from `-1` — a next segment that has
+  a position but is unplaced, as a paired read with an unmapped mate decodes to
+  (`NS = -1`). `getPairOrientation()` compares `-1` as a real value but falls
+  back to the read1-first rule for `NEXT_UNKNOWN`, so both halves of such a pair
+  still agree on their orientation; conflating the two makes them disagree.
+- `hasNextPosition()` is **not** "does this read have a mate" — that is
+  `isPaired()`. A paired read whose mate this file does not locate returns
+  `false`.
 - The three dropped fields were written on every paired record and read by
   nothing, in this library or in jbrowse.
 

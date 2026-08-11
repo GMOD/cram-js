@@ -1,7 +1,7 @@
 import { CramMalformedError } from '../../errors.ts'
 import Constants from '../constants.ts'
 import { readQualityScores } from '../qualityColumn.ts'
-import { NO_MATE, type ReadFeature } from '../record.ts'
+import { NEXT_UNKNOWN, type ReadFeature } from '../record.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursors } from '../codecs/_base.ts'
@@ -368,8 +368,8 @@ export default function decodeRecord(
     readName = decodeReadName()
   }
 
-  let mateSequenceId = NO_MATE
-  let mateStart = -1
+  let nextSequenceId = NEXT_UNKNOWN
+  let nextStart = -1
   let templateSize: number | undefined
   let mateRecordNumber: number | undefined
   // mate record
@@ -385,11 +385,11 @@ export default function decodeRecord(
     const declaredSequenceId = bd.NS()
     // NP is an absolute 1-based position, never a delta
     const declaredStart = bd.NP() - 1
-    // a nonzero MF means the mate exists even when NS is -1, i.e. it is
-    // unplaced — kept apart from NO_MATE, see the constant's note
+    // a nonzero MF means the next segment is located even when NS is -1, i.e. it
+    // is unplaced — kept apart from NEXT_UNKNOWN, see the constant's note
     if (mateFlags || declaredSequenceId > -1) {
-      mateSequenceId = declaredSequenceId
-      mateStart = declaredStart
+      nextSequenceId = declaredSequenceId
+      nextStart = declaredStart
     }
 
     templateSize = bd.TS()
@@ -485,8 +485,8 @@ export default function decodeRecord(
     start: alignmentStart,
     readGroupId,
     readName,
-    mateSequenceId,
-    mateStart,
+    nextSequenceId,
+    nextStart,
     templateSize,
     mateRecordNumber,
     readFeatureArena,
