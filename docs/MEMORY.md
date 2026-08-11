@@ -125,24 +125,31 @@ short-read fixtures. The general form of the same lesson:
 
 ## The slice cache
 
-`cacheSize` (default 20,000) bounds the decoded-slice cache by **record count**,
-not by slices: one slice holds anywhere from a handful of records to tens of
-thousands, so a slice-counting bound is meaningless — 20,000 slices of long
-reads is hundreds of gigabytes.
+`cacheSize` (default 1,000,000) bounds the decoded-slice cache by **record
+count**, not by slices: one slice holds anywhere from a handful of records to
+tens of thousands, so a slice-counting bound is meaningless — 20,000 slices of
+long reads is hundreds of gigabytes.
 
-Eviction waits until nothing is decoding, and spares every slice the batch that
-just finished touched. This matters more than it sounds. `getRecordsForRange`
-starts every slice of a range at once and holds all of their records until it
-returns, so evicting one mid-query frees nothing — it only guarantees the next
-identical query re-decodes it. A range holding more records than the whole
-budget would otherwise evict its own earlier slices as its later ones landed,
-which is the worst case for a plain LRU: repeating one 54,695-record query
-against the default budget re-read 1.9 MB and re-inflated 6.0 MB every time, 117
-ms against the 13 ms it takes when the slices survive.
+The number has to sit **above one query's working set**, which is why the
+default is what it is. `getRecordsForRange` starts every slice of a range at
+once and holds all of their records until it returns, so a budget below that
+does not cache less — it caches _nothing_, evicting each slice before the next
+pan can reuse it while retaining the memory anyway. A 50kb window on 200x
+short-read data is 90,000 records; the old 20,000 default was 4.5x below it.
+[ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has the working
+sets.
 
-So the cache can exceed `cacheSize` while a query is in flight, by that query's
-own records — which the caller is holding anyway — and settles back to the bound
-once it finishes.
+Eviction is plain LRU, so `cacheSize` is a bound that is honoured. It used to be
+a `'batch'` policy that spared everything an in-flight query touched, which
+rescued a too-small budget by exceeding it — 420,000 records held against a
+stated 20,000. At a budget above the working set the two measure identically, so
+the policy was dropped rather than kept for the case where it lies about the
+limit: [ADR 0005](adr/0005-drop-the-batch-eviction-policy.md).
+
+Two other knobs: `cacheIdleTimeoutMs` (default 3 minutes) drops slices nothing
+has read for that long, which is the only thing that lowers the cache while
+nothing is happening, and `cacheBudget` lets several `CramFile`s share one
+ceiling.
 
 ## Measuring it
 

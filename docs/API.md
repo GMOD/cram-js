@@ -209,7 +209,9 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
   reverse-complemented.
 
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
-  `opts` is an optional `{ start, end }` 0-based half-open reference range.
+  `opts` is an optional `{ start, end }` reference range: 0-based like
+  everything else here, but **closed**, so a difference exactly at `end` is
+  reported. That inconsistency is known, and tracked in [TODO.md](../TODO.md).
 - `forEachMismatch(callback, opts?)` — the same differences, reported to
   `callback(code, refPos, length, bases, qual, refBaseCode, clipLength)` without
   allocating per difference.

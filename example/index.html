@@ -28,17 +28,15 @@
             status.className = 'error'
           }
           const r = []
-          records.forEach(record => {
-            if (record.readFeatures != undefined) {
-              record.readFeatures.forEach(({ code, pos, refPos, ref, sub }) => {
-                if (code === 'X') {
-                  r.push(
-                    `${record.readName} shows a base substitution at ${refPos}`,
-                  )
-                }
-              })
+          for (const record of records) {
+            for (const m of record.getMismatches()) {
+              if (String.fromCharCode(m.code) === 'X') {
+                r.push(
+                  `${record.readName} shows a base substitution at ${m.refPos}`,
+                )
+              }
             }
-          })
+          }
           document.getElementById('output').innerHTML = r.join('\n')
         } catch (e) {
           status.textContent = `Error: ${e.message}`

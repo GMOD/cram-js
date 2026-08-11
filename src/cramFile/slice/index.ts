@@ -423,7 +423,7 @@ export default class CramSlice {
 
       if (seq.length !== sliceHeader.refSeqSpan) {
         throw new CramArgumentError(
-          'seqFetch callback returned a reference sequence of the wrong length',
+          'fetchReferenceSequence callback returned a reference sequence of the wrong length',
         )
       }
 

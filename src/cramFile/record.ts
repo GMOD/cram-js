@@ -1114,12 +1114,13 @@ export default class CramRecord {
    * {@link Mismatch}).
    *
    * `ref`/`sub` bases and quality scores are only as populated as the file and
-   * the `seqFetch` allowed: without a reference, a substitution reports as 'N'
-   * with a `refBaseCode` of 0.
+   * `fetchReferenceSequence` allowed: without a reference, a substitution
+   * reports as 'N' with a `refBaseCode` of 0.
    *
    * @param callback called as
    *   `(code, refPos, length, bases, qual, refBaseCode, clipLength)`
-   * @param opts optional 1-based closed reference range to restrict to
+   * @param opts optional reference range to restrict to — 0-based, and closed
+   *   at both ends; see {@link MismatchOptions}
    */
   forEachMismatch(callback: MismatchCallback, opts?: MismatchOptions) {
     forEachMismatch(

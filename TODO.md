@@ -110,6 +110,10 @@ too, which is the item below.
   [ADR 0006](docs/adr/0006-cigar-as-a-callback-walk.md). The mismatch walk emits
   jbrowse's own vocabulary, which is exactly why it has not moved.
 
+  Whichever way that goes, **`MismatchOptions`' window is closed at both ends**
+  where every other range in this library is half-open, which is a wart worth
+  fixing on its own. It is breaking, so it wants to land with a major.
+
 - `growUint8`/`growInt32`/`nextCapacity` in `readFeatureArena.ts`, the same
   helpers in `tagColumn.ts`, and `qualityColumn.ts`'s inline grow loop are the
   same geometric-growth-then-trim written three times.

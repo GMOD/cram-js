@@ -81,7 +81,13 @@ export type MismatchCallback = (
 ) => void
 
 export interface MismatchOptions {
-  /** only report differences touching this 1-based closed reference range */
+  /**
+   * Only report differences touching this reference range. 0-based, like every
+   * coordinate this library takes — but **closed**, unlike every other range it
+   * takes: a difference exactly at `end` is reported. That is a wart, and
+   * reconciling it with jbrowse's copy of this walk (which uses a half-open
+   * window) is in `TODO.md`.
+   */
   start?: number
   end?: number
 }
