@@ -6,20 +6,18 @@ import {
   CramMalformedError,
   CramUnimplementedError,
 } from '../errors.ts'
-import * as htscodecs from '../htscodecs/index.ts'
 import { open } from '../io.ts'
-import { memoizeAsync } from './memoize.ts'
-import { parseHeaderText } from '../sam.ts'
-import { decodeUtf8, parseItem } from './util.ts'
-import { unzip } from '../unzip.ts'
 import CramContainer from './container/index.ts'
+import { memoizeAsync } from './memoize.ts'
+import { parseBlockFromBuffer, uncompressBlockContent } from './parseBlock.ts'
+import { parseHeaderText } from '../sam.ts'
 import {
   type BlockHeader,
   type CompressionMethod,
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers.ts'
-import { xzDecompress } from '../xz-decompress/xz-decompress.ts'
+import { decodeUtf8, parseItem } from './util.ts'
 
 import type CramRecord from './record.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
@@ -477,39 +475,20 @@ export default class CramFile {
     return new CramContainer(this, position)
   }
 
-  async _uncompress(
+  /**
+   * Kept as a method for its call sites; the work is in `parseBlock.ts`, which a
+   * worker can reach without a `CramFile`.
+   */
+  _uncompress(
     compressionMethod: CompressionMethod,
     inputBuffer: Uint8Array,
     uncompressedSize: number,
   ): Promise<Uint8Array> {
-    let buf: Uint8Array
-    if (compressionMethod === 'gzip') {
-      buf = await unzip(inputBuffer, uncompressedSize)
-    } else if (compressionMethod === 'bzip2') {
-      buf = await htscodecs.bz2_uncompress(inputBuffer, uncompressedSize)
-    } else if (compressionMethod === 'lzma') {
-      buf = await xzDecompress(inputBuffer)
-    } else if (compressionMethod === 'rans') {
-      buf = await htscodecs.rans_uncompress(inputBuffer)
-    } else if (compressionMethod === 'rans4x16') {
-      buf = await htscodecs.r4x16_uncompress(inputBuffer)
-    } else if (compressionMethod === 'arith') {
-      buf = await htscodecs.arith_uncompress(inputBuffer)
-    } else if (compressionMethod === 'fqzcomp') {
-      buf = await htscodecs.fqzcomp_uncompress(inputBuffer)
-    } else if (compressionMethod === 'tok3') {
-      buf = await htscodecs.tok3_uncompress(inputBuffer)
-    } else {
-      throw new CramUnimplementedError(
-        `${compressionMethod} decompression not yet implemented`,
-      )
-    }
-    if (buf.length !== uncompressedSize) {
-      throw new CramMalformedError(
-        `${compressionMethod} decompression produced ${buf.length} bytes, expected ${uncompressedSize}`,
-      )
-    }
-    return buf
+    return uncompressBlockContent(
+      compressionMethod,
+      inputBuffer,
+      uncompressedSize,
+    )
   }
 
   async readBlock(position: number, opts?: ReadOpts) {
@@ -539,81 +518,13 @@ export default class CramFile {
     filePosition: number,
   ) {
     const { majorVersion } = await this.getDefinition()
-    const sectionParsers = await this._getSectionParsers()
-    const { cramBlockHeader } = sectionParsers
-
-    const headerBytes = buffer.subarray(
+    return parseBlockFromBuffer({
+      buffer,
       bufferOffset,
-      bufferOffset + cramBlockHeader.maxLength,
-    )
-    const blockHeader = parseItem(
-      headerBytes,
-      cramBlockHeader.parser,
-      0,
       filePosition,
-    )
-    const blockContentPosition = blockHeader._endPosition
-    const contentOffset = bufferOffset + blockHeader._size
-
-    const d = buffer.subarray(
-      contentOffset,
-      contentOffset + blockHeader.compressedSize,
-    )
-    // Per CRAM spec (PR #681), blocks with uncompressed size 0 are treated as
-    // empty regardless of the method byte — htsjdk has produced invalid empty
-    // RANS blocks that would otherwise fail to decompress.
-    const uncompressedData =
-      blockHeader.uncompressedSize === 0
-        ? new Uint8Array(0)
-        : blockHeader.compressionMethod !== 'raw'
-          ? await this._uncompress(
-              blockHeader.compressionMethod,
-              d,
-              blockHeader.uncompressedSize,
-            )
-          : d
-
-    const block: CramFileBlock = {
-      ...blockHeader,
-      _endPosition: blockContentPosition,
-      contentPosition: blockContentPosition,
-      content: uncompressedData,
-    }
-    if (majorVersion >= 3) {
-      const crcOffset = contentOffset + blockHeader.compressedSize
-      const crcBytes = buffer.subarray(
-        crcOffset,
-        crcOffset + sectionParsers.cramBlockCrc32.maxLength,
-      )
-      const crc = parseItem(
-        crcBytes,
-        sectionParsers.cramBlockCrc32.parser,
-        0,
-        blockContentPosition + blockHeader.compressedSize,
-      )
-      block.crc32 = crc.crc32
-
-      if (this.validateChecksums) {
-        const blockData = buffer.subarray(
-          bufferOffset,
-          bufferOffset + blockHeader._size + blockHeader.compressedSize,
-        )
-        const calculatedCrc32 = crc32(blockData) >>> 0
-        if (calculatedCrc32 !== crc.crc32) {
-          throw new CramMalformedError(
-            `crc mismatch in block data: recorded CRC32 = ${crc.crc32}, but calculated CRC32 = ${calculatedCrc32}`,
-          )
-        }
-      }
-
-      block._endPosition = crc._endPosition
-      block._size =
-        block.compressedSize + sectionParsers.cramBlockCrc32.maxLength
-    } else {
-      block._endPosition = blockContentPosition + block.compressedSize
-      block._size = block.compressedSize
-    }
-
-    return block
+      majorVersion,
+      sectionParsers: await this._getSectionParsers(),
+      validateChecksums: this.validateChecksums,
+    })
   }
 }
