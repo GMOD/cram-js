@@ -61,15 +61,18 @@ never has a NUL before its delimiter and takes the same expression unchanged.
   whole block alive as long as any record from it lives** — invisible until
   someone holds one record out of a query. Interning recovers it and more (29.49
   MB, below where the file sat before any of this) but costs 10–20% of the
-  decode, so it was tried and reverted; see `TODO.md` for the numbers and for
-  why hashing a string cannot be cheaper than slicing one.
+  decode, so it was tried and reverted; see
+  [ADR 0007](0007-optimizations-measured-and-rejected.md) for the numbers and
+  for why hashing a string cannot be cheaper than slicing one.
   - Tag values mostly escape this: V8 copies a slice shorter than 13 characters
     instead of pointing into the parent, so short values do not pin the block
     and it is collected after the decode. Adding Z tags cost only a further
     +0.18 MB.
 - Laziness is now competing for what is left, which is ~1.4% of the decode, and
-  would have to buy that with a public field's field-ness. It is recorded in
-  `TODO.md` under measured-and-not-worth-doing rather than left open.
+  would have to buy that with a public field's field-ness. That is what settles
+  it against deferring the read name, rather than leaving the idea open; see
+  also [ADR 0007](0007-optimizations-measured-and-rejected.md), which lists the
+  other optimizations that were measured and not taken.
 
 ## Evidence
 

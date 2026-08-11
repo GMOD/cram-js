@@ -172,7 +172,8 @@ a loaded one, so re-measure before quoting any timing here.
 
 ## What is deliberately not done
 
-[TODO.md](../TODO.md) records the measured-and-rejected ones with their numbers
-— per-record typed arrays, coalescing single-base insertions, a positional
-`CramRecord` constructor — along with the remaining wins that have been measured
-but not taken.
+[ADR 0007](adr/0007-optimizations-measured-and-rejected.md) records the
+measured-and-rejected ones with their numbers — interning the decoded strings,
+per-record typed arrays, coalescing single-base insertions, a positional
+`CramRecord` constructor. [TODO.md](../TODO.md) has the remaining wins that have
+been measured but not yet taken.

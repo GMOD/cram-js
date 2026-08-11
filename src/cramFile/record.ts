@@ -141,7 +141,8 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
  * and one `TextDecoder` call on every record, and on a 100bp short read that
  * fixed cost swamps the work: **+141%** on SRR396637 and **+253%** on
  * SRR396636, where a substring plus a native `toUpperCase` is simply cheaper.
- * Same trade as the read-feature arena and the typed CIGAR — see TODO.md.
+ * Same trade as the read-feature arena and the typed CIGAR — a fixed per-record
+ * cost that only a long read amortizes; see `docs/MEMORY.md`.
  *
  * Both forms produce byte-identical output on every record of all three
  * datasets. The exact crossover is unmeasured: what is measured is 100bp

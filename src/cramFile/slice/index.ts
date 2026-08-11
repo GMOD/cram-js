@@ -501,6 +501,17 @@ export default class CramSlice {
    * Computing it from every record rather than from one query's matches is what
    * makes it a property of the slice, and so cacheable; it is also the widest
    * any sequence of queries against the slice could have asked for in total.
+   *
+   * The trade, which is the right one but worth knowing: resolving the
+   * reference is part of decoding a slice now, rather than something layered on
+   * after — arguably the truer model, since a CRAM record is
+   * reference-compressed and its bases do not exist without the reference. But
+   * it means a **failed `fetchReferenceSequence` discards the decode too**:
+   * `SliceRecordCache` drops rejected promises, so a flaky sequence adapter
+   * costs a re-inflate of the slice on retry where before it only cost the
+   * decoration. Worth revisiting only if that shows up in practice, and the fix
+   * — caching the decoded records and the reference resolution as separate
+   * memos — reintroduces most of the bookkeeping this removed.
    */
   private async applyReferenceSequence(
     records: CramRecord[],

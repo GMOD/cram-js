@@ -7,20 +7,25 @@ The distinction from the other documents here:
 
 - **`docs/adr/`** — a decision that was taken, why, and what it costs. Written
   once, then amended only to supersede it.
-- **[`TODO.md`](../../TODO.md)** — work investigated and measured but _not_
-  done, including things deliberately rejected. Facts and measurements, not
-  decisions.
+- **[`TODO.md`](../../TODO.md)** — work that is measured, still open, and that
+  we want to do. Facts and measurements, not decisions; an item leaves the file
+  when it lands. Things measured and deliberately rejected are a decision, so
+  they are here, in [0007](0007-optimizations-measured-and-rejected.md).
 - **[`docs/MEMORY.md`](../MEMORY.md)**,
   **[`docs/READ_FEATURES.md`](../READ_FEATURES.md)**,
   **[`docs/WASM.md`](../WASM.md)**,
   **[`docs/CODEC_SUPPORT.md`](../CODEC_SUPPORT.md)** — how a part of the library
   works today, for someone using or changing it.
 
-| #                                               | decision                                                   | status   |
-| ----------------------------------------------- | ---------------------------------------------------------- | -------- |
-| [0001](0001-codec-binding-seam.md)              | Codecs bind their own per-slice fast paths                 | accepted |
-| [0002](0002-batch-decoding-over-lazy-fields.md) | Batch per-record work rather than defer it behind a getter | accepted |
-| [0003](0003-abortsignal-on-the-read-path.md)    | Cancel per-query reads, reference-count the shared ones    | accepted |
+| #                                                    | decision                                                       | status   |
+| ---------------------------------------------------- | -------------------------------------------------------------- | -------- |
+| [0001](0001-codec-binding-seam.md)                   | Codecs bind their own per-slice fast paths                     | accepted |
+| [0002](0002-batch-decoding-over-lazy-fields.md)      | Batch per-record work rather than defer it behind a getter     | accepted |
+| [0003](0003-abortsignal-on-the-read-path.md)         | Cancel per-query reads, reference-count the shared ones        | accepted |
+| [0004](0004-size-the-slice-cache-above-one-query.md) | Size the slice cache above one query, and reclaim it when idle | accepted |
+| [0005](0005-drop-the-batch-eviction-policy.md)       | Drop the `'batch'` eviction policy                             | accepted |
+| [0006](0006-cigar-as-a-callback-walk.md)             | Walk the CIGAR with a callback, not an array                   | accepted |
+| [0007](0007-optimizations-measured-and-rejected.md)  | Optimizations measured and rejected                            | accepted |
 
 ## Writing one
 

@@ -80,8 +80,9 @@ function nextCapacity(current: number, needed: number) {
  *   alignment strings. They stay a `string[]`, which is also the cheapest thing
  *   to hand across a worker boundary: 15 ms for 153,677 strings against 112 ms
  *   to encode the same set into bytes. Deliberately *not* deduplicated — see
- *   TODO.md, where interning cost 10-20% of the decode, because hashing a string
- *   means reading every character of it.
+ *   `docs/adr/0007-optimizations-measured-and-rejected.md`, where interning cost
+ *   10-20% of the decode, because hashing a string means reading every
+ *   character of it.
  * - **`B`-array tags are absent from every performance fixture** but present in
  *   the type-coverage ones (`auxf#values`, `ML_test`), so {@link arrays} is a
  *   correctness lane rather than a fast one.

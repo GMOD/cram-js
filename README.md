@@ -376,8 +376,8 @@ mismatches.
 
 [docs/adr/](docs/adr/) records the decisions that shape how the decoder is put
 together — what was decided, the measurement that settled it, and what it costs.
-[TODO.md](TODO.md) is the other half: work investigated and measured but not
-done, including what was deliberately rejected.
+That includes what was measured and deliberately _not_ done. [TODO.md](TODO.md)
+is the other half: work that is measured, still open, and that we want to do.
 
 ## Academic Use
 
