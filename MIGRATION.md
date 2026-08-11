@@ -1,5 +1,9 @@
 # Migration
 
+Every breaking change back to v9, newest first. If you are coming from several
+majors back, read down — a later entry can supersede an earlier one, and where
+it does the earlier entry says so.
+
 ## v11 → v12: `record.tags` is a column, and `getTag` reads one tag
 
 Tags now live in a per-slice `TagColumn` rather than a `Record` per record, in
@@ -68,6 +72,36 @@ against 1000x-coverage short reads — and gave every record a reference to its
 mate, which pinned whole slices in the record cache. Two numbers also cross a
 worker boundary, which an object graph cannot; that is what this unblocks.
 
+## v10 → v11: `featureCache` is a `SharedReadCache`
+
+`CramFile.featureCache` is a `SharedReadCache` from `@gmod/shared-read-cache`
+rather than this package's own `SliceRecordCache`. The field is public, so a
+consumer reaching into it — shedding memory under pressure is the usual reason —
+has to be updated:
+
+| before (≤ 10)               | now (11)                      |
+| --------------------------- | ----------------------------- |
+| `featureCache.getOrFill(…)` | `featureCache.get(…)`         |
+| `featureCache.get(…)`       | `featureCache.getIfCached(…)` |
+| `featureCache.maxRecords`   | `featureCache.maxSize`        |
+
+Behaviour is unchanged by the swap itself; cram was the third of the four gmod
+packages to stop carrying its own copy of this cache. If all you do is construct
+a `CramFile` and read records, nothing changes.
+
+Two things did change inside v11, both non-breaking but worth knowing when you
+arrive from v10:
+
+- **`cacheSize` defaults to 1,000,000 records, up from 20,000.** The old default
+  sat below the working set of a single query, so it cached nothing while
+  retaining the memory anyway — see
+  [ADR 0004](docs/adr/0004-size-the-slice-cache-above-one-query.md). If you set
+  `cacheSize` yourself, it is now a real bound and is enforced as one
+  ([ADR 0005](docs/adr/0005-drop-the-batch-eviction-policy.md)).
+- **An idle cache reclaims itself** after `cacheIdleTimeoutMs` (default 3
+  minutes), and `clearFeatureCache()` empties it on demand. Several `CramFile`s
+  can share one ceiling by passing the same `cacheBudget`.
+
 ## v9 → v10: coordinates are 0-based half-open
 
 Every coordinate this library hands out or takes in is **0-based half-open**.
@@ -79,15 +113,15 @@ do.
 
 What changed:
 
-| before (≤ 9)                                        | now (10)                                           |
-| --------------------------------------------------- | -------------------------------------------------- |
-| `record.alignmentStart` (1-based)                   | `record.start` (0-based)                           |
-| `record.mate.alignmentStart`                        | `record.mate.start`                                |
-| `seqFetch(id, start, end)` 1-based closed           | `fetchReferenceSequence(id, start, end)` half-open |
-| `getRecordsForRange(id, start, end)` 1-based closed | 0-based half-open                                  |
-| `readFeature.pos` / `.refPos` (1-based)             | 0-based                                            |
-| `Mismatch.refPos`, `forEachMismatch` opts           | 0-based half-open                                  |
-| `CraiIndex` entry `.start` (1-based)                | 0-based                                            |
+| before (≤ 9)                                        | now (10)                                                         |
+| --------------------------------------------------- | ---------------------------------------------------------------- |
+| `record.alignmentStart` (1-based)                   | `record.start` (0-based)                                         |
+| `record.mate.alignmentStart`                        | `record.nextStart` (was `record.mate.start` in 10–11; see above) |
+| `seqFetch(id, start, end)` 1-based closed           | `fetchReferenceSequence(id, start, end)` half-open               |
+| `getRecordsForRange(id, start, end)` 1-based closed | 0-based half-open                                                |
+| `readFeature.pos` / `.refPos` (1-based)             | 0-based                                                          |
+| `Mismatch.refPos`, `forEachMismatch` opts           | 0-based half-open                                                |
+| `CraiIndex` entry `.start` (1-based)                | 0-based                                                          |
 
 Migrating:
 
@@ -107,3 +141,35 @@ Migrating:
 
 Converting back out to a 1-based text format (SAM `POS`, a locus string for a
 user) means adding 1 — that is now the only place the conversion appears.
+
+## v8 → v9: read features are columns, and mismatches have an API
+
+Read features decode into a per-slice `ReadFeatureArena` of typed-array columns
+at 19 bytes a feature, rather than an `{code, pos, refPos, data}` object per
+feature at 64 (81 once substitutions were widened). That took a decoded ONT
+slice from 20.41 MB to 7.42 MB.
+
+`record.readFeatures` still reads the same: same shape, same values, the 189
+dump snapshots untouched. But it is a **getter that rebuilds the array on each
+access**, so:
+
+- **Assigning to it throws.** Build records from plain features with
+  `arenaFromReadFeatures()`, exported from the package root.
+- **The array has no stable identity**, and mutating a feature you got from it
+  writes into a throwaway object. Read in bulk through the columns instead.
+
+Alongside it, `record.getMismatches(opts?)` and
+`record.forEachMismatch(cb, opts?)` report the differences from the reference
+(X/I/D/N/S/H) with an optional reference window. Prefer them: `readFeatures` was
+the documented way to parse CRAM and it is too low level to use correctly.
+Interpreting it means knowing that `i` and `I` are both insertions with
+different payloads, that a run of `i` is one insertion, that `b` aligns as
+matches, that an `X` feature's `data` is a substitution-matrix index rather than
+a base, and that `q`/`Q` carry only quality — their `refPos` comes from a read
+position the reference never reaches, so it can point backwards into an
+insertion. Every one of those has been a bug in a downstream consumer.
+`RF_POSITIONAL` marks which codes carry alignment geometry, for a consumer
+walking the columns directly.
+
+Also in v9: `getCigarString()` returns `'*'` rather than `''` for a mapped
+record with no operations, which is what SAM and samtools spell.
