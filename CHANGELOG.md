@@ -1,3 +1,14 @@
+## [13.0.0](https://github.com/GMOD/cram-js/compare/v12.0.1...v13.0.0) (2026-08-11)
+
+### Chores
+
+- Enforce type strippability in tsconfig ([3b8f925](https://github.com/GMOD/cram-js/commit/3b8f925d0928de0865c5e167bc0855547355dc22))
+- Keep eslint out of agent worktrees ([630be64](https://github.com/GMOD/cram-js/commit/630be646ed761e1b445cf79b571cf44996a3a4ef))
+
+### Features
+
+- **BREAKING** Half-open mismatch window, and an origin for the reported positions ([ed7799b](https://github.com/GMOD/cram-js/commit/ed7799bb8440a7b3c2dff67b20faf9a8a24f1025))
+
 ## [12.0.1](https://github.com/GMOD/cram-js/compare/v12.0.0...v12.0.1) (2026-08-11)
 
 ### Chores

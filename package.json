@@ -1,6 +1,6 @@
 {
   "name": "@gmod/cram",
-  "version": "12.0.1",
+  "version": "13.0.0",
   "packageManager": "pnpm@11.15.1",
   "description": "read CRAM files with pure Javascript",
   "license": "MIT",
