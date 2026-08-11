@@ -685,6 +685,25 @@ export default class CramRecord {
   }
 
   /**
+   * Assigning tags is no longer supported. This exists for the same reason
+   * {@link readFeatures}' setter does — so the failure says what happened
+   * instead of V8's "Cannot set property tags of #<CramRecord> which has only a
+   * getter", which is a confusing thing to hit on a property that was a writable
+   * field until v12.
+   *
+   * There is deliberately no working setter, by the same argument as there: a
+   * stored object and the column would disagree, and {@link getTag} reads the
+   * column. Build the tags into a {@link TagColumn} instead.
+   */
+  set tags(_value: Record<string, TagValue>) {
+    throw new TypeError(
+      'CramRecord.tags is read-only: it is materialised from the columnar ' +
+        'tagColumn. To build a record with tags, push them into a TagColumn ' +
+        'and pass it as tagColumn with tagStart/tagCount.',
+    )
+  }
+
+  /**
    * Whether {@link nextSequenceId} and {@link nextStart} hold a position at all.
    *
    * Deliberately not `hasMate`: a paired read whose mate this file does not

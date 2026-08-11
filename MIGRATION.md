@@ -1,5 +1,29 @@
 # Migration
 
+## v11 → v12: `record.tags` is a column, and `getTag` reads one tag
+
+Tags now live in a per-slice `TagColumn` rather than a `Record` per record, in
+the same shape `readFeatureArena` uses: `record.tagStart`/`tagCount` name a run
+of slots.
+
+**`record.tags` still works and returns the same object it always did**, built
+from the column on first access and then cached. Nothing has to change to keep
+reading it. Two things do change:
+
+- **Prefer `record.getTag(name)` for a single tag.** It reads the record's own
+  slots instead of building an object holding every tag on the read, which
+  measures 3.8–7.8x faster. `@gmod/bam` has had the same method for the same
+  reason.
+- **`tags` is now read-only.** It was a writable field; it is now a getter, and
+  assigning to it throws a `TypeError` explaining what to do instead. If you
+  were mutating it, build a `TagColumn` and pass it as `tagColumn` with
+  `tagStart`/`tagCount`. Reading, spreading and `Object.keys` are unaffected —
+  but note `tags` is no longer an _own_ enumerable property, so `{ ...record }`
+  no longer carries it (`{ ...record.tags }` does, and `toJSON()` is unchanged).
+
+`TagColumn`, `TagValue` and the `TAG_*` kind constants are exported from the
+package root for consumers reading the columns directly.
+
 ## v11 → v12: `record.mate` is two numbers named for the next segment
 
 `CramRecord.mate` is gone, along with the `MateRecord` type it was declared with
