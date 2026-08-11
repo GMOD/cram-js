@@ -4,6 +4,42 @@ Every breaking change back to v9, newest first. If you are coming from several
 majors back, read down — a later entry can supersede an earlier one, and where
 it does the earlier entry says so.
 
+All coordinates are 0-based half-open.
+
+## v12 → v13: the mismatch window is half-open, and positions take an `origin`
+
+`getMismatches(opts)` and `forEachMismatch(cb, opts)` took a window that was
+**closed at both ends** — a difference exactly at `end` was reported — where
+every other range in this library is 0-based half-open. It is now half-open too:
+
+```js
+// before (≤ 12): reports a substitution at exactly 120
+record.getMismatches({ start: 100, end: 120 })
+
+// now (13): 120 is outside [100, 120)
+record.getMismatches({ start: 100, end: 121 })
+```
+
+If you were passing a half-open viewport and subtracting 1 to compensate, drop
+the subtraction. If you were passing a closed range, add 1 to `end`. Nothing
+else about which differences are reported has changed, and a spanning deletion
+still counts as touching the window if any of its bases do.
+
+New in the same options object: **`origin`**, which the reported positions are
+relative to. `origin: record.start` gives read-relative positions, and 0 — the
+default — gives reference ones:
+
+```js
+record.forEachMismatch(cb, { start, end, origin: record.start })
+```
+
+The window stays in reference coordinates while the output moves, so a consumer
+working in read-relative space can still clip to a genomic viewport without
+converting either one. It exists so such a consumer can hand its own callback
+straight to the walk: converting afterwards costs an extra indirect call per
+difference, which measured **+17%** on jbrowse's plotting path. See
+[ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md).
+
 ## v11 → v12: `record.tags` is a column, and `getTag` reads one tag
 
 Tags now live in a per-slice `TagColumn` rather than a `Record` per record, in

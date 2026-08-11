@@ -82,14 +82,28 @@ export type MismatchCallback = (
 
 export interface MismatchOptions {
   /**
-   * Only report differences touching this reference range. 0-based, like every
-   * coordinate this library takes — but **closed**, unlike every other range it
-   * takes: a difference exactly at `end` is reported. That is a wart, and
-   * reconciling it with jbrowse's copy of this walk (which uses a half-open
-   * window) is in `TODO.md`.
+   * Only report differences touching this reference range: 0-based half-open,
+   * like every other range this library takes. A difference exactly at `end` is
+   * outside it.
    */
   start?: number
   end?: number
+  /**
+   * Report positions relative to this reference coordinate, rather than as
+   * absolute reference positions. `record.start` gives read-relative
+   * positions; the default of 0 gives reference ones.
+   *
+   * This exists so a consumer with its own coordinate convention can hand its
+   * own callback straight to this walk. Converting afterwards means a second
+   * callback between this one and the consumer's, and that indirect call is
+   * ~17% of the walk — see
+   * `docs/adr/0008-emit-into-the-consumers-callback.md`.
+   *
+   * The window is *not* relative to it: `start`/`end` stay absolute, because
+   * they describe a region of the reference rather than a position in the
+   * output.
+   */
+  origin?: number
 }
 
 /**
@@ -101,6 +115,10 @@ export interface MismatchOptions {
  * insertion, emitted at the position where the run starts and ahead of any
  * substitution at that same position, which is the order the read features
  * themselves are in.
+ *
+ * The window is tested in reference coordinates and the position is *emitted*
+ * relative to `origin`, so a consumer working in read-relative coordinates
+ * still clips to a genomic viewport without converting either one itself.
  */
 export function forEachMismatch(
   arena: ReadFeatureArena | undefined,
@@ -111,6 +129,7 @@ export function forEachMismatch(
   qualStart: number,
   windowStart: number,
   windowEnd: number,
+  origin: number,
   callback: MismatchCallback,
 ) {
   if (arena !== undefined) {
@@ -136,10 +155,10 @@ export function forEachMismatch(
           insertedLength > 0 &&
           (code !== RF_INSERT_BASE || rPos !== insertionPos)
         ) {
-          if (insertionPos >= windowStart && insertionPos <= windowEnd) {
+          if (insertionPos >= windowStart && insertionPos < windowEnd) {
             callback(
               RF_INSERTION,
-              insertionPos,
+              insertionPos - origin,
               0,
               insertedBases,
               -1,
@@ -153,13 +172,15 @@ export function forEachMismatch(
 
         // the data value for D/N/H, the payload length for I/i/S
         const n = num[i]!
-        const touchesWindow = rPos <= windowEnd && rPos >= windowStart
+        const touchesWindow = rPos < windowEnd && rPos >= windowStart
+        // every emitted position is relative to `origin`, which defaults to 0
+        const outPos = rPos - origin
 
         if (code === RF_SUBST) {
           if (touchesWindow) {
             callback(
               RF_SUBST,
-              rPos,
+              outPos,
               1,
               // an unresolved substitution reads as N, matching getReadBases()
               // and the substitution matrix's own fallback row
@@ -173,16 +194,24 @@ export function forEachMismatch(
           }
         } else if (code === RF_INSERTION) {
           if (touchesWindow) {
-            callback(RF_INSERTION, rPos, 0, arena.payloadStringAt(i), -1, 0, n)
+            callback(
+              RF_INSERTION,
+              outPos,
+              0,
+              arena.payloadStringAt(i),
+              -1,
+              0,
+              n,
+            )
           }
         } else if (code === RF_DELETION || code === RF_REF_SKIP) {
           // spans n reference bases, so it is in view if any of them are
-          if (rPos <= windowEnd && rPos + n > windowStart) {
-            callback(code, rPos, n, '', -1, 0, 0)
+          if (rPos < windowEnd && rPos + n > windowStart) {
+            callback(code, outPos, n, '', -1, 0, 0)
           }
         } else if (code === RF_SOFT_CLIP || code === RF_HARD_CLIP) {
           if (touchesWindow) {
-            callback(code, rPos, 0, '', -1, 0, n)
+            callback(code, outPos, 0, '', -1, 0, n)
           }
         } else if (code === RF_INSERT_BASE) {
           insertionPos = rPos
@@ -202,7 +231,7 @@ export function forEachMismatch(
           if (touchesWindow && refCode !== 0 && base !== upperCase(refCode)) {
             callback(
               RF_SUBST,
-              rPos,
+              outPos,
               1,
               String.fromCharCode(base),
               n,
@@ -219,11 +248,11 @@ export function forEachMismatch(
     if (
       insertedLength > 0 &&
       insertionPos >= windowStart &&
-      insertionPos <= windowEnd
+      insertionPos < windowEnd
     ) {
       callback(
         RF_INSERTION,
-        insertionPos,
+        insertionPos - origin,
         0,
         insertedBases,
         -1,

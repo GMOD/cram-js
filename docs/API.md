@@ -209,12 +209,26 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
   reverse-complemented.
 
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
-  `opts` is an optional `{ start, end }` reference range: 0-based like
-  everything else here, but **closed**, so a difference exactly at `end` is
-  reported. That inconsistency is known, and tracked in [TODO.md](../TODO.md).
 - `forEachMismatch(callback, opts?)` — the same differences, reported to
   `callback(code, refPos, length, bases, qual, refBaseCode, clipLength)` without
   allocating per difference.
+
+  `opts` is `{ start, end, origin }`, all optional. `start`/`end` are a 0-based
+  half-open **reference** range to restrict to; a spanning deletion or skip
+  counts as inside it if any of its bases are. `origin` is what the reported
+  positions are relative to — `origin: record.start` gives read-relative
+  positions, and the default of 0 gives reference ones. The window stays
+  absolute either way, so a read-relative consumer can still clip to a genomic
+  viewport:
+
+  ```js
+  record.forEachMismatch(cb, { start, end, origin: record.start })
+  ```
+
+  `origin` is there so a consumer with its own coordinate convention can pass
+  its own callback straight in. Converting positions afterwards needs a second
+  callback in between, and that indirect call measured +17% of the walk — see
+  [ADR 0008](adr/0008-emit-into-the-consumers-callback.md).
 
 Both mismatch methods need `fetchReferenceSequence` configured before they can
 tell you the actual bases involved in a substitution. Without it you still get

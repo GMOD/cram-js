@@ -1119,8 +1119,9 @@ export default class CramRecord {
    *
    * @param callback called as
    *   `(code, refPos, length, bases, qual, refBaseCode, clipLength)`
-   * @param opts optional reference range to restrict to — 0-based, and closed
-   *   at both ends; see {@link MismatchOptions}
+   * @param opts optional 0-based half-open reference range to restrict to, and
+   *   an `origin` the reported positions are relative to; see
+   *   {@link MismatchOptions}
    */
   forEachMismatch(callback: MismatchCallback, opts?: MismatchOptions) {
     forEachMismatch(
@@ -1131,6 +1132,7 @@ export default class CramRecord {
       this.qualityStart,
       opts?.start ?? Number.NEGATIVE_INFINITY,
       opts?.end ?? Number.POSITIVE_INFINITY,
+      opts?.origin ?? 0,
       callback,
     )
   }

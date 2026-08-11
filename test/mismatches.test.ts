@@ -145,6 +145,49 @@ test('the window restricts to differences touching the range', () => {
   ])
 })
 
+test('the window is half-open, so `end` is outside it', () => {
+  const record = makeRecord([
+    { code: 'X', data: 0, pos: 0, refPos: 120, sub: 'T' },
+  ])
+  expect(record.getMismatches({ start: 100, end: 121 }).map(show)).toEqual([
+    'X@120/1ref/"T"',
+  ])
+  // 120 is the first position outside [100, 120)
+  expect(record.getMismatches({ start: 100, end: 120 })).toEqual([])
+  expect(record.getMismatches({ start: 120, end: 121 }).map(show)).toEqual([
+    'X@120/1ref/"T"',
+  ])
+})
+
+test('a spanning deletion is outside a window that ends where it starts', () => {
+  const record = makeRecord([{ code: 'D', data: 10, pos: 1, refPos: 104 }])
+  // the deletion covers 104-113, so [100, 104) does not touch it
+  expect(record.getMismatches({ start: 100, end: 104 })).toEqual([])
+  expect(record.getMismatches({ start: 100, end: 105 }).map(show)).toEqual([
+    'D@104/10ref',
+  ])
+})
+
+test('origin shifts every reported position, and not the window', () => {
+  const record = makeRecord([
+    { code: 'S', data: 'AC', pos: 0, refPos: 100 },
+    { code: 'i', data: 'A', pos: 2, refPos: 102 },
+    { code: 'X', data: 0, pos: 3, refPos: 104, sub: 'T' },
+    { code: 'D', data: 3, pos: 4, refPos: 106 },
+  ])
+  // record.start is 100, so an origin of 100 gives read-relative positions
+  expect(record.getMismatches({ origin: record.start }).map(show)).toEqual([
+    'S@0/2read',
+    'I@2/"A"/1read',
+    'X@4/1ref/"T"',
+    'D@6/3ref',
+  ])
+  // the window stays in reference coordinates while the output does not
+  expect(
+    record.getMismatches({ start: 104, end: 105, origin: 100 }).map(show),
+  ).toEqual(['X@4/1ref/"T"'])
+})
+
 test('forEachMismatch allocates nothing per difference', () => {
   const record = makeRecord([
     { code: 'X', data: 0, pos: 4, refPos: 104, sub: 'T' },

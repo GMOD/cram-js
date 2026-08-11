@@ -26,6 +26,7 @@ The distinction from the other documents here:
 | [0005](0005-drop-the-batch-eviction-policy.md)       | Drop the `'batch'` eviction policy                             | accepted |
 | [0006](0006-cigar-as-a-callback-walk.md)             | Walk the CIGAR with a callback, not an array                   | accepted |
 | [0007](0007-optimizations-measured-and-rejected.md)  | Optimizations measured and rejected                            | accepted |
+| [0008](0008-emit-into-the-consumers-callback.md)     | Emit into the consumer's callback, not into a translator       | accepted |
 
 ## Writing one
 

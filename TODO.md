@@ -108,11 +108,22 @@ too, which is the item below.
   tractable was that the CIGAR has a single spec-defined vocabulary, so it could
   move in here without dragging a consumer's render types along — see
   [ADR 0006](docs/adr/0006-cigar-as-a-callback-walk.md). The mismatch walk emits
-  jbrowse's own vocabulary, which is exactly why it has not moved.
+  jbrowse's own vocabulary, which is why it had not moved.
 
-  Whichever way that goes, **`MismatchOptions`' window is closed at both ends**
-  where every other range in this library is half-open, which is a wart worth
-  fixing on its own. It is breaking, so it wants to land with a major.
+  **This side is now done.** Delegating used to cost +17% of jbrowse's plotting
+  path, because translating the vocabulary put a second callback between the two
+  walks; `MismatchOptions.origin` and the half-open window remove the two
+  coordinate conversions that translator existed for, so jbrowse can pass its
+  own callback straight in — see
+  [ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md). What is left is
+  jbrowse's side: renumbering its `*_TYPE` constants to the CRAM feature codes
+  (it compares them symbolically everywhere, and nothing serializes them), and
+  setting a clip's `length` in the one consumer that builds objects rather than
+  per emission. Then its copy deletes.
+
+  Note the equivalent for BAM is not available: that walk needs a reference in
+  jbrowse's own packed form, which a BAM file does not carry, so it stays in
+  `@jbrowse/cigar-utils` rather than moving into `@gmod/bam`.
 
 - `growUint8`/`growInt32`/`nextCapacity` in `readFeatureArena.ts`, the same
   helpers in `tagColumn.ts`, and `qualityColumn.ts`'s inline grow loop are the
