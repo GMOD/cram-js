@@ -61,13 +61,30 @@ parser — which is what ADR 0006 declined and still declines.
   ms**, with identical emission counts. It is one subtraction per emission
   against an argument that is 0 in the default case, inside a loop that already
   reads six columns.
-- **It paid off, mostly.** jbrowse took it in
+- **It paid off.** jbrowse took it in
   `refactor(alignments): drive CRAM mismatches off @gmod/cram's own walk`,
-  deleting its 110-line copy. Measured after the fact, interleaved and min of 13
-  rounds: **1.047x and 1.066x** on 628 ONT reads, **1.046x and 1.119x** on
-  80,177 short ones. So ~5% against the hand-inlined copy rather than the 17% a
-  translator cost — the remainder is the walk living across a package boundary,
-  and no option here can remove it.
+  deleting its 110-line copy. Measured after the fact against that copy,
+  interleaved, min of 13 rounds, **on a bundle** — which is what jbrowse ships,
+  and which turns out to be the only honest way to measure this:
+
+  | corpus             | delegating vs. the in-repo copy |
+  | ------------------ | ------------------------------- |
+  | 628 ONT reads      | 0.999x, 1.013x, 1.021x — parity |
+  | 80,177 short reads | 1.088x, 1.111x, 1.132x — ~10%   |
+
+  What remains is **one extra call per read**, not per emission: a consumer
+  reaches the walk through `record.forEachMismatch`, so there is a hop the
+  consumer's own copy did not have. A long read amortizes it over ~5,000
+  emissions and a short read has ~7, which is the entire difference between
+  those two rows.
+
+- **Do not measure this under node's ESM loader.** The same numbers taken
+  unbundled show a further ~6% that nobody pays: the _identical_ walk, moved to
+  another module and changed in no other way, measured **1.065x unbundled and
+  0.993x bundled**. A module boundary costs something under the loader and
+  nothing after a bundler has erased it. This is a new trap, distinct from the
+  two ADR 0006 records, and it points the other way — here the naive harness
+  made a real change look worse than it is.
 - **A consumer should reuse its options object.** jbrowse allocates one
   module-level `{start, end, origin}` and mutates it per call: a fresh literal
   per read per render pass measured 16.5ms → 20.7ms on those 80,177 short reads,
@@ -84,11 +101,21 @@ parser — which is what ADR 0006 declined and still declines.
 
 ## Evidence
 
-Both figures above are one variant per process, alternating, fastest of 9, with
-identity checked before timing — the method `docs/MEMORY.md` describes and the
-traps ADR 0006 documents. The +17% was measured in jbrowse against its real call
-site; the `origin` cost was measured here, against 12.0.1 extracted from its
-published tarball rather than a second copy of this tree.
+The +17% and the `origin` cost were measured one variant per process,
+alternating, fastest of 9, with identity checked before timing — the method
+`docs/MEMORY.md` describes and the traps ADR 0006 documents. The +17% was
+measured in jbrowse against its real call site; the `origin` cost here, against
+12.0.1 from its published tarball rather than a second copy of this tree.
+
+The after-the-fact figures in **Consequences** were taken differently, and the
+difference matters. Separate processes could not resolve them: on a loaded box
+the same comparison read anywhere from 1.056x to 1.23x. Interleaving both
+variants in one process — jbrowse's own harness design, in
+`plugins/alignments/benches/mismatchWalk.bench.ts` — gave a ratio stable to
+about ±2%, and is safe here because both variants drive the _same_ callback, so
+neither walk's call site sees a second shape. Interleaving more than two
+variants is not safe: a four-way run inflated every absolute number by 60% and
+its ratios disagreed with the pairwise ones. Compare two things at a time.
 
 The equivalent BAM change is **not** available and is not planned: jbrowse's BAM
 mismatch walk needs a reference sequence in jbrowse's own packed form, which a
