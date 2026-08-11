@@ -27,10 +27,44 @@ rejected. Block decompression is only **24–35%** of a cold CRAM query:
 Amdahl caps a decompression-only pool at ~1.33x, and the real figure is lower
 still because the heavy blocks within one slice are few — on the ONT slice a
 single 19.1 ms block is 74% of that slice's decompression, so there is barely
-anything to spread. Modelled end to end it came out at **1.05–1.46x**.
+anything to spread. Modelled end to end it came out at **1.05–1.46x**, against
+the 2.0–2.8x measured below for the whole slice.
 
 So the unit of work is the whole slice: decompression, the record decode, and
 mate association. That is ~95% of a query rather than a quarter of it.
+
+## Measured
+
+Four threads against in-process, decode only, jb2bench's 19 kb region. Taken
+with `node:worker_threads` rather than in a browser, so the numbers cover the
+decode and the transfer but not a real browser `Worker`:
+
+| fixture         | slices | in-process | pooled |           |
+| --------------- | ------ | ---------- | ------ | --------- |
+| 1000x.longread  | 22     | 1345 ms    | 484 ms | **2.78x** |
+| 200x.longread   | 6      | 348 ms     | 137 ms | **2.54x** |
+| 1000x.shortread | 16     | 323 ms     | 158 ms | **2.04x** |
+| 200x.shortread  | 4      | 69 ms      | 51 ms  | 1.35x     |
+
+Short of 4x because deserialising the payload happens on the host and is serial,
+and because slices are uneven — a query waits for its largest.
+
+**There is no slice-count threshold, and one was measured for and rejected.** An
+early run put a 2-slice query at 0.72x and a threshold was written to skip the
+pool below four slices; the 0.72x then failed to reproduce. Sweeping slice count
+on the same corpus with a median of 9 rather than 3 gives a clean monotonic
+curve:
+
+| slices          | 1     | 2     | 3     | 4     |
+| --------------- | ----- | ----- | ----- | ----- |
+| 20x.shortread   | 0.96x | 1.16x | 1.49x | 1.72x |
+| 1000x.shortread | 1.21x | 1.34x | 1.69x | 1.58x |
+
+Parity at one slice, a win from two up. The lesson is the ordinary one — a
+median of 3 on a 40 ms workload is not a measurement — but it is recorded
+because the threshold was nearly shipped on the strength of it. Note also that a
+single-slice query does not occur in isolation: a viewport is panned, so the
+pool is warm and the marginal query is what matters.
 
 ## The width is there where it matters
 
@@ -46,9 +80,10 @@ jb2bench's own 19 kb region:
 | 200x.longread   | 335     | 6      |
 | 1000x.longread  | 1,683   | **22** |
 
-Deep files — the slow ones — have plenty. Shallow files fall to one or two, and
-they are already fast. Note that even at one slice the decode is off the main
-thread, which is the part a UI notices; throughput is the secondary benefit.
+Deep files — the slow ones — have plenty. Shallow files fall to one or two,
+where the measurements above put the pool at parity to 1.16x. Note that even at
+one slice the decode is off the main thread, which is the part a UI notices;
+throughput is the secondary benefit.
 
 ## What crosses the boundary
 
