@@ -11,7 +11,7 @@ The distinction from the other documents here:
   we want to do. Facts and measurements, not decisions; an item leaves the file
   when it lands. Things measured and deliberately rejected are a decision, so
   they are here, in [0007](0007-optimizations-measured-and-rejected.md).
-- **[`docs/MEMORY.md`](../MEMORY.md)**,
+- **[`docs/API.md`](../API.md)**, **[`docs/MEMORY.md`](../MEMORY.md)**,
   **[`docs/READ_FEATURES.md`](../READ_FEATURES.md)**,
   **[`docs/WASM.md`](../WASM.md)**,
   **[`docs/CODEC_SUPPORT.md`](../CODEC_SUPPORT.md)** — how a part of the library

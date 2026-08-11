@@ -60,10 +60,10 @@ Within the heap nothing piles up between calls: every allocation is freed before
 the decode returns.
 
 On a large query, the decoded records on the JS heap outweigh the wasm heap
-anyway. `IndexedCramFile`'s `cacheSize` (default 20000 records) is the knob for
-that one, and bulk consumers can read the columnar `readFeatureArena` to skip
-materializing per-feature objects — see
-[the README](../README.md#reading-differences-from-the-reference).
+anyway. `IndexedCramFile`'s `cacheSize` (default 1,000,000 records) is the knob
+for that one, and bulk consumers can read the columnar `readFeatureArena` to
+skip materializing per-feature objects — see
+[MEMORY.md](MEMORY.md#columns-not-objects).
 
 ## Threading
 

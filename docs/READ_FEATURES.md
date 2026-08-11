@@ -15,7 +15,7 @@ know is below.
 from the reference: substitutions, insertions (under either encoding),
 deletions, reference skips, and soft and hard clips. So if differences are what
 you're after, that function is the whole story — see
-[Reading differences from the reference](../README.md#reading-differences-from-the-reference).
+[What to ask a record](../README.md#what-to-ask-a-record).
 
 What it deliberately leaves out, because none of these are differences:
 

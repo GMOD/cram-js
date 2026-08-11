@@ -137,7 +137,7 @@ Migrating:
 - Unplaced records now report `start` of `-1` rather than `0`, matching what BAM
   has always stored. If you fetch them, the query moves with them:
   `getRecordsForRange(-1, -1, end)`, not `(-1, 0, end)`, which now returns
-  nothing. See [Unplaced reads](README.md#indexedcramfile).
+  nothing. See [Unplaced reads](docs/API.md#unplaced-reads).
 
 Converting back out to a 1-based text format (SAM `POS`, a locus string for a
 user) means adding 1 — that is now the only place the conversion appears.
