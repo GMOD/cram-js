@@ -2,6 +2,7 @@ import { expect, test } from 'vitest'
 
 import CramRecord, { NEXT_UNKNOWN } from '../src/cramFile/record.ts'
 import { associateIntraSliceMates } from '../src/cramFile/slice/index.ts'
+import TagColumn from '../src/cramFile/tagColumn.ts'
 
 // A minimal mapped, paired record. `mateRecordNumber` is what the decode leaves
 // behind for an intra-slice mate — `NF + recordNumber + 1`, so a well-formed one
@@ -28,7 +29,9 @@ function makeRecord(start: number, mateRecordNumber: number | undefined) {
     uniqueId: start,
     templateSize: undefined,
     start,
-    tags: {},
+    tagColumn: new TagColumn(),
+    tagStart: 0,
+    tagCount: 0,
   })
 }
 

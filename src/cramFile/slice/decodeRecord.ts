@@ -2,6 +2,7 @@ import { CramMalformedError } from '../../errors.ts'
 import Constants from '../constants.ts'
 import { readQualityScores } from '../qualityColumn.ts'
 import { NEXT_UNKNOWN, type ReadFeature } from '../record.ts'
+import { TAG_CHAR, TAG_NUMBER } from '../tagColumn.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursors } from '../codecs/_base.ts'
@@ -9,6 +10,8 @@ import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
 import type { QualityColumn } from '../qualityColumn.ts'
 import type ReadFeatureArena from '../readFeatureArena.ts'
+import type TagColumn from '../tagColumn.ts'
+import type { TagValue } from '../tagColumn.ts'
 
 /** Data series whose codecs yield a Uint8Array rather than a number. */
 export type ByteArraySeries = {
@@ -283,10 +286,11 @@ function decodeReadBases(
  * name and its one-character type, split out of the three-character tag id
  * ahead of time so the per-record loop does no string work.
  */
-export type TagValue = string | number | number[] | undefined
-
 export interface TagDescriptor {
-  name: string
+  /** this tag's key in the slice's {@link TagColumn}, resolved once per slice */
+  keyId: number
+  /** one of `tagColumn.ts`'s `TAG_*` constants, likewise resolved once */
+  kind: number
   /**
    * The tag's value for the next record, with its type already resolved — see
    * `bindTagDecoders`. The type is fixed for the slice, so dispatching on it
@@ -307,6 +311,8 @@ export interface SliceDecodeContext {
   arena: ReadFeatureArena
   /** columnar quality-score storage shared by every record in the slice */
   qualityColumn: QualityColumn
+  /** columnar aux-tag storage shared by every record in the slice */
+  tagColumn: TagColumn
   /** indexed by TL data series value */
   tagDescriptorsByTL: TagDescriptor[][]
   cursors: Cursors
@@ -332,6 +338,7 @@ export default function decodeRecord(
     rfSchema,
     arena,
     qualityColumn,
+    tagColumn,
     tagDescriptorsByTL,
     cursors,
     decodeBulkBases,
@@ -414,7 +421,10 @@ export default function decodeRecord(
     throw new CramMalformedError('invalid TL index')
   }
 
-  const tags: Record<string, TagValue> = {}
+  // tags go into the slice's column rather than a Record per record; this
+  // record's are the slots `[tagStart, tagStart + tagCount)`
+  const tagStart = tagColumn.length
+  let tagCount = 0
   if (decodeTags) {
     const descriptors = tagDescriptorsByTL[TLindex]
     if (!descriptors) {
@@ -423,8 +433,26 @@ export default function decodeRecord(
       )
     }
     for (const descriptor of descriptors) {
-      tags[descriptor.name] = descriptor.read()
+      const { keyId, kind } = descriptor
+      const value = descriptor.read()
+      // Dispatched on the value, not on `kind` alone: the generic tag reader
+      // returns the raw number when a tag's codec decodes to one directly,
+      // whatever the tag's declared type, and the `tags` object stored that
+      // number as-is. `kind` still decides between a plain number and an `A`
+      // tag's character code, which the value cannot distinguish.
+      if (typeof value === 'number') {
+        tagColumn.pushNumber(
+          keyId,
+          kind === TAG_CHAR ? TAG_CHAR : TAG_NUMBER,
+          value,
+        )
+      } else if (typeof value === 'string') {
+        tagColumn.pushString(keyId, value)
+      } else if (value !== undefined) {
+        tagColumn.pushArray(keyId, value)
+      }
     }
+    tagCount = tagColumn.length - tagStart
   }
 
   let readFeatureArena: ReadFeatureArena | undefined
@@ -500,7 +528,9 @@ export default function decodeRecord(
     qualityColumn: qualityStart < 0 ? undefined : qualityColumn.bytes,
     qualityStart,
     readBases,
-    tags,
+    tagColumn,
+    tagStart,
+    tagCount,
     uniqueId,
   }
 }

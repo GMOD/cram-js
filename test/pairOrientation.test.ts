@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 
 import CramRecord, { NEXT_UNKNOWN } from '../src/cramFile/record.ts'
+import TagColumn from '../src/cramFile/tagColumn.ts'
 
 const PAIRED = 0x1
 const REVERSE = 0x10
@@ -36,7 +37,9 @@ function makeRecord({
     sequenceId,
     uniqueId: 1,
     start,
-    tags: {},
+    tagColumn: new TagColumn(),
+    tagStart: 0,
+    tagCount: 0,
     nextSequenceId: mate ? mate.sequenceId : NEXT_UNKNOWN,
     nextStart: mate ? mate.start : -1,
     readName: undefined,

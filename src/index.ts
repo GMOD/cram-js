@@ -35,6 +35,14 @@ export {
   arenaFromReadFeatures,
   default as ReadFeatureArena,
 } from './cramFile/readFeatureArena.ts'
+export {
+  TAG_ARRAY,
+  TAG_CHAR,
+  TAG_NUMBER,
+  TAG_STRING,
+  default as TagColumn,
+} from './cramFile/tagColumn.ts'
+export type { TagValue } from './cramFile/tagColumn.ts'
 export { default as CramFile } from './cramFile/index.ts'
 export {
   DEFAULT_CACHE_IDLE_TIMEOUT_MS,

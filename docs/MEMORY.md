@@ -18,10 +18,17 @@ forced GC, `heapUsed + arrayBuffers`:
 Long reads put nearly everything in **read features** — that 37-record ONT slice
 decodes 213,602 of them, 118 KB of features per record. Short reads have about
 two features each and put nearly everything in **per-record objects** instead:
-the record, its quality scores, its tags, its name. (Its mate used to be on that
-list — a `MateRecord` per paired record, so one per record on a paired
-short-read file. It is now two numbers on the record itself; see
-[the migration note](../MIGRATION.md).)
+the record, its quality scores, its name. Two things used to be on that list and
+are now columns — see [the migration note](../MIGRATION.md) for both:
+
+- its **mate**, a `MateRecord` per paired record, now two numbers on the record.
+- its **tags**, a `Record` per record, now
+  [`TagColumn`](../src/cramFile/tagColumn.ts). Note this one is **not** a memory
+  technique, unlike everything else in this document: it came out break-even
+  (−0.06 MB on SRR396637, +0.20 MB on SRR396636) and was taken so that tags can
+  cross a worker boundary by transfer (243 ms of structured clone → 11 ms) and
+  so that `getTag(name)` can answer for one tag without building the object. Its
+  header comment has the full numbers.
 
 ## The costs that drive the design
 

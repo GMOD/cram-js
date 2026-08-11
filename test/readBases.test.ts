@@ -2,6 +2,7 @@ import { expect, test } from 'vitest'
 
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord, { NEXT_UNKNOWN } from '../src/cramFile/record.ts'
+import TagColumn from '../src/cramFile/tagColumn.ts'
 
 import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
 
@@ -30,7 +31,9 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
     uniqueId: 1,
     templateSize: undefined,
     start: 101,
-    tags: {},
+    tagColumn: new TagColumn(),
+    tagStart: 0,
+    tagCount: 0,
   })
   const refRegion: RefRegion = { start: 101, end: 110, seq: 'ACGTACGTAC' }
   record._refRegion = refRegion

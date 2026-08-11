@@ -35,6 +35,8 @@ import type {
 } from './mismatches.ts'
 import type ReadFeatureArena from './readFeatureArena.ts'
 import type decodeRecord from './slice/decodeRecord.ts'
+import type TagColumn from './tagColumn.ts'
+import type { TagValue } from './tagColumn.ts'
 
 // Precomputed pair orientation strings, indexed by
 //   ((flags >> 4) & 0x7) | (selfIsLeft ? 8 : 0)
@@ -428,7 +430,16 @@ export const NEXT_UNKNOWN = -2
  * Class of each CRAM record returned by this API.
  */
 export default class CramRecord {
-  public tags: Record<string, string | number | number[] | undefined>
+  /**
+   * Columnar storage for this record's aux tags, shared with every other record
+   * in the same slice. Prefer {@link getTag} over {@link tags}, which has to
+   * build an object to answer one question.
+   */
+  public tagColumn: TagColumn
+  /** index of this record's first tag in {@link tagColumn} */
+  public tagStart: number
+  public tagCount: number
+  private _cachedTags: Record<string, TagValue> | undefined
   public flags: number
   public cramFlags: number
   public readBases?: string | null
@@ -609,7 +620,9 @@ export default class CramRecord {
     uniqueId,
     templateSize,
     start,
-    tags,
+    tagColumn,
+    tagStart,
+    tagCount,
   }: ReturnType<typeof decodeRecord>) {
     this.flags = flags
     this.cramFlags = cramFlags
@@ -622,7 +635,9 @@ export default class CramRecord {
     this.sequenceId = sequenceId!
     this.uniqueId = uniqueId
     this.start = start
-    this.tags = tags
+    this.tagColumn = tagColumn
+    this.tagStart = tagStart
+    this.tagCount = tagCount
     this.readName = readName
     if (readBases) {
       this.readBases = readBases
@@ -636,6 +651,37 @@ export default class CramRecord {
     if (mateRecordNumber !== undefined) {
       this.mateRecordNumber = mateRecordNumber
     }
+  }
+
+  /**
+   * This record's value for the aux tag `name`, or undefined if it has none.
+   *
+   * Prefer this over {@link tags} whenever you want one tag: it scans this
+   * record's own slots in the slice's column — eleven of them on minimap2
+   * output — rather than building a `Record` of every tag on the read to answer
+   * for one. `@gmod/bam` exposes the same method for the same reason, and
+   * jbrowse's `extractFeatureTagValue` already prefers it where it exists.
+   */
+  getTag(name: string) {
+    return this.tagColumn.getTag(this.tagStart, this.tagCount, name)
+  }
+
+  /**
+   * Every aux tag on this record, as the object this API has always handed out.
+   *
+   * Built from the slice's column on first access and then cached, so a consumer
+   * that asks repeatedly pays once — but a consumer that wants a single tag
+   * should call {@link getTag} and never materialise this. Cached rather than
+   * rebuilt per access (as {@link readFeatures} is) because the object is small,
+   * bounded by the tags on one read, and consumers reasonably expect a stable
+   * identity from a property that used to be a plain field.
+   */
+  get tags(): Record<string, TagValue> {
+    this._cachedTags ??= this.tagColumn.materialize(
+      this.tagStart,
+      this.tagCount,
+    )
+    return this._cachedTags
   }
 
   /**

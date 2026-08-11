@@ -8,6 +8,7 @@ import {
   trimQualityColumn,
 } from '../qualityColumn.ts'
 import ReadFeatureArena from '../readFeatureArena.ts'
+import TagColumn, { TAG_CHAR, TAG_NUMBER } from '../tagColumn.ts'
 import { readNullTerminatedStringFromBuffer } from '../util.ts'
 
 import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
@@ -22,8 +23,8 @@ import type {
   ByteArraySeries,
   NumericSeries,
   SliceDecodeContext,
-  TagValue,
 } from './decodeRecord.ts'
+import type { TagValue } from '../tagColumn.ts'
 
 export interface SliceDecodeContextArgs {
   compressionScheme: CramContainerCompressionScheme
@@ -119,16 +120,20 @@ export function buildSliceDecodeContext({
       )
     : growableQualityColumn()
 
+  const tagColumn = new TagColumn()
+
   return {
     bd,
     rfSchema: buildRFSchema(bd, majorVersion),
     arena: new ReadFeatureArena(),
     qualityColumn,
+    tagColumn,
     tagDescriptorsByTL: bindTagReaders(
       compressionScheme,
       blocksByContentId,
       coreDataBlock,
       cursors,
+      tagColumn,
     ),
     cursors,
     decodeBulkBases,
@@ -296,20 +301,23 @@ const FIXED_WIDTH_TAG_TYPES: Record<string, number | undefined> = {
 }
 
 /**
- * Turn the raw little-endian integer into what the tag type means: a character
- * for `A`, the value itself for the unsigned types, and a sign-extension for
- * the signed ones — shifting the sign bit up to bit 31 and back down, which is
- * the same arithmetic at all three widths.
+ * Turn the raw little-endian integer into what the tag type means: the value
+ * itself for the unsigned types, and a sign-extension for the signed ones —
+ * shifting the sign bit up to bit 31 and back down, which is the same arithmetic
+ * at all three widths.
+ *
+ * `A` is not special-cased here any more. It reads as its character code and
+ * {@link TagColumn} turns that back into a one-character string on access, which
+ * keeps `A` tags in the numeric column — worth having, because `tp` is one of
+ * minimap2's eleven per-read tags and so accounts for half of all non-numeric
+ * tag values on a short-read file.
  */
 function bindFixedWidthTagReader(
   type: string,
   width: number,
   readUint: () => number,
 ): () => TagValue {
-  if (type === 'A') {
-    return () => String.fromCharCode(readUint())
-  }
-  if (type === 'C' || type === 'S' || type === 'I') {
+  if (type === 'A' || type === 'C' || type === 'S' || type === 'I') {
     return readUint
   }
   const shift = 32 - width * 8
@@ -337,6 +345,7 @@ function bindTagReaders(
   blocksByContentId: Record<number, CramFileBlock>,
   coreDataBlock: CramFileBlock | undefined,
   cursors: Cursors,
+  tagColumn: TagColumn,
 ) {
   const boundTagReaders: Record<string, () => TagValue> = {}
   for (const tagId of Object.keys(compressionScheme.tagEncoding)) {
@@ -376,16 +385,25 @@ function bindTagReaders(
   }
 
   return compressionScheme.tagIdsDictionary.map(tagIds =>
-    tagIds.map(tagId => ({
-      name: tagId.slice(0, 2),
-      read:
-        boundTagReaders[tagId] ??
-        (() => {
-          throw new CramMalformedError(
-            `tag ${tagId} is in the tag dictionary but has no encoding`,
-          )
-        }),
-    })),
+    tagIds.map(tagId => {
+      const type = tagId[2]!
+      return {
+        keyId: tagColumn.keyIdFor(tagId.slice(0, 2)),
+        // Only `A` versus everything-else, resolved here once per tag id per
+        // slice. The record loop dispatches on the decoded value's own type for
+        // the rest, and TAG_STRING/TAG_ARRAY are set by the column's push
+        // methods; a character code is the one case a value cannot self-report,
+        // since it arrives as a plain number.
+        kind: type === 'A' ? TAG_CHAR : TAG_NUMBER,
+        read:
+          boundTagReaders[tagId] ??
+          (() => {
+            throw new CramMalformedError(
+              `tag ${tagId} is in the tag dictionary but has no encoding`,
+            )
+          }),
+      }
+    }),
   )
 }
 
@@ -399,6 +417,9 @@ export function trimSliceColumns(
   records: CramRecord[],
 ) {
   ctx.arena.trim()
+  // the tag column is reached through the records' `tagColumn` reference rather
+  // than by value, so trimming its arrays needs no re-pointing
+  ctx.tagColumn.trim()
 
   // trimming replaces the array, so the records handed the untrimmed one need
   // re-pointing; an external column is the QS block and never moved

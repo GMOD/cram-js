@@ -255,7 +255,15 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 - `qualityColumn`, `qualityStart` — every quality score in the record's slice
   laid end to end, and this record's offset into it. Hoist these out of a
   per-base loop and index `qualityColumn[qualityStart + i]`.
-- `tags` — auxiliary tags object
+- `getTag(name)` — one auxiliary tag's value, read straight out of the record's
+  slots in the slice's tag column. **Prefer this whenever you want one tag**: it
+  is 3.8–7.8x faster than going through `tags`, which has to build an object
+  holding every tag on the read to answer for one.
+- `tags` — every auxiliary tag as an object. Built from the column on first
+  access and then cached, so repeat reads are free but the first one is not.
+- `tagColumn`, `tagStart`, `tagCount` — the columnar storage the tags decode
+  into, shared across every record in a slice, in the same shape as
+  `readFeatureArena` below.
 - `readFeatures` — the raw read features, as an array. Prefer `getMismatches()`;
   see [docs/READ_FEATURES.md](docs/READ_FEATURES.md) if you really do need this
   level. The array is rebuilt on every access, so pull it into a local rather
