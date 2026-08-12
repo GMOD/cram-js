@@ -49,6 +49,39 @@ decode and the transfer but not a real browser `Worker`:
 Short of 4x because deserialising the payload happens on the host and is serial,
 and because slices are uneven — a query waits for its largest.
 
+### In a browser, nested inside another worker
+
+The table above was the only one for a while, and it left the configuration
+consumers actually ship unmeasured. jbrowse runs `@gmod/cram` inside its own RPC
+worker, so this pool is a **nested** worker: a `Worker` constructed from a Blob
+URL from inside a `Worker`. Headless Chrome, 16 cores, same 19 kb region, the
+byte ranges warm (so the comparison is the decode, not the fetch), interleaved,
+fastest of 5 reps x 5 rounds:
+
+| fixture         | slices | in-process | pooled |           |
+| --------------- | ------ | ---------- | ------ | --------- |
+| 1000x.longread  | 22     | 2258 ms    | 629 ms | **3.59x** |
+| 200x.longread   | 6      | 552 ms     | 239 ms | **2.31x** |
+| 1000x.shortread | 16     | 564 ms     | 256 ms | **2.21x** |
+| 200x.shortread  | 4      | 179 ms     | 85 ms  | **2.10x** |
+| 20x.shortread   | 2      | 131 ms     | 67 ms  | **1.95x** |
+| 20x.longread    | 1      | 82 ms      | 87 ms  | 0.93x     |
+
+So the nested case works and pays — nested workers and Blob URLs are both fine —
+and the single-slice row is parity, agreeing with the 0.96x the slice-count
+sweep below found under node.
+
+**Measure this interleaved, not as two blocks.** Running all the in-process
+rounds and then all the pooled ones put 200x.longread at 0.74x, and a repeat of
+that same arrangement at 2.26x. Nothing about the code changed between them; the
+machine drifted between the two blocks and the drift landed in the ratio.
+Alternating the variants puts it in both instead. This is the third harness trap
+in this repo's history to produce a confident number that was not real — see
+[ADR 0006](adr/0006-cigar-as-a-callback-walk.md) and
+[ADR 0008](adr/0008-emit-into-the-consumers-callback.md#evidence) for the other
+two — and it is the same lesson as the rejected threshold below, which was very
+nearly shipped on the strength of a 0.72x that came from the same kind of run.
+
 **There is no slice-count threshold, and one was measured for and rejected.** An
 early run put a 2-slice query at 0.72x and a threshold was written to skip the
 pool below four slices; the 0.72x then failed to reproduce. Sweeping slice count
@@ -136,9 +169,27 @@ no consumer wiring, matching how the wasm is handled (see [WASM.md](WASM.md)):
 ```
 src/worker/sliceWorkerEntry.ts        the message loop, and nothing else
   -> tsc            esm/worker/sliceWorkerEntry.js
-  -> webpack        src/wasm/cram-worker-inlined.js     (webpack.worker.config.js)
-  -> inline-worker  src/wasm/cram-worker-source.js      (~394 KB, tracked)
+  -> webpack        build/worker/cram-worker-inlined.js  (webpack.worker.config.js)
+  -> inline-worker  src/wasm/cram-worker-source.js       (~405 KB, tracked)
 ```
+
+The intermediate goes to `build/`, which is gitignored, and **not** to
+`src/wasm/` where it used to. `allowJs` makes everything under `src/` a tsc
+input, so from there it was compiled into `esm/` and `dist/` too and published
+three times over with two sourcemaps — about a megabyte of a file nothing
+imports. Only the string module is real, and that one is tracked, for the reason
+[WASM.md](WASM.md) gives for the wasm bundle.
+
+Two things follow from the intermediate not being a published file:
+
+- Terser is configured with `extractComments: false` so license banners stay
+  **inside** the bundle. Extracted, the notice would sit in `build/` while the
+  code it covers travelled on into every consumer under a banner naming a file
+  that does not exist.
+- `inline-worker.sh` writes `/** @type {string} */` above the generated const.
+  Without it tsc infers the type of a 400,000-character bundle as a string
+  literal type and writes the whole thing out again as a 440 KB `.d.ts`, in both
+  output dirs, for every consumer's tsc to parse. Annotated, it is 87 bytes.
 
 `pnpm build:worker` does the last two steps. It is wired into `pnpm build`, and
 **`build:esm` runs on both sides of it** — once to give webpack something to

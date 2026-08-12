@@ -215,18 +215,32 @@ export interface CramFileOptions {
    * on 1000x-coverage short reads and 22 on long reads. Even at one slice, the
    * decode is off the main thread, which is what a UI notices.
    *
-   * Set false to keep everything in-process — for a consumer that runs
-   * `@gmod/cram` inside its own worker already, where a nested pool buys nothing
-   * and costs a second wasm instance per worker.
+   * Leave it on inside another worker. This used to say a nested pool "buys
+   * nothing" for a consumer already running `@gmod/cram` in its own worker,
+   * which was a guess and is measured wrong: nested in a browser worker — the
+   * arrangement jbrowse ships — the pool is worth 2.1-3.6x from four slices up,
+   * and parity at one. A worker is still one thread, so the decode is serial in
+   * there without this. See docs/WORKERS.md.
+   *
+   * Set false to keep everything in-process. The reason to is host-wide worker
+   * budget rather than per-query speed: the pool is process-wide *per JS
+   * context*, so a consumer that runs several worker contexts gets one pool in
+   * each, and `numSliceWorkers` is how to size that down.
    */
   useSliceWorkerPool?: boolean
   /**
    * Workers in the shared pool. Defaults to
    * `min(navigator.hardwareConcurrency, 4)`.
    *
-   * Only honoured by whoever creates the pool: it is process-wide, so the first
+   * Only honoured by whoever creates the pool: the pool is shared, so the first
    * `CramFile` to need one fixes the size. A consumer opening one file per track
    * wants that — a pool per track would put `4 x tracks` workers on the machine.
+   *
+   * Shared **per JS context**, though, which is not the same as per machine once
+   * the consumer is itself running workers. jbrowse assigns tracks round-robin
+   * over as many as five RPC workers, so five CRAM tracks land in five contexts
+   * and get five pools: 4 x 5 slice workers, not 4. Size this down if the host
+   * spreads CRAM across contexts like that.
    */
   numSliceWorkers?: number
 }
