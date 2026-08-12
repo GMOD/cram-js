@@ -15,7 +15,10 @@ import CramFile from '../src/cramFile/index.ts'
 import { decodeSliceFromBytes } from '../src/cramFile/slice/decodeSliceFromBytes.ts'
 import { CramMalformedError } from '../src/errors.ts'
 import { IndexedCramFile } from '../src/index.ts'
-import { createSliceWorkerPool } from '../src/sliceWorkerPool.ts'
+import {
+  createSliceWorkerPool,
+  destroySharedSliceWorkerPool,
+} from '../src/sliceWorkerPool.ts'
 
 import type { SliceDecodeRequest } from '../src/cramFile/slice/decodeSliceFromBytes.ts'
 
@@ -222,4 +225,65 @@ test('slices spread across workers rather than piling on one', async () => {
   ])
   expect(perWorker.filter(n => n > 0).length).toBeGreaterThan(1)
   pool.destroy()
+})
+
+// The options below are documented in docs/WORKERS.md and were unreachable in
+// 13.1.0: `IndexedCramFile` forwarded CramFile's arguments field by field and
+// these two were not in the list, so `useSliceWorkerPool: false` was a tsc error
+// on the way in and a no-op if you cast past it. Everything else in this file
+// drives the pool directly, which is exactly why that gap survived — these
+// go through the public constructor on purpose.
+
+function poolOf(file: IndexedCramFile) {
+  return file.cram.getSliceWorkerPool()
+}
+
+function indexedFile(options: Record<string, unknown>) {
+  return new IndexedCramFile({
+    cramFilehandle: new LocalFile(PATH),
+    index: new CraiIndex({ filehandle: new LocalFile(`${PATH}.crai`) }),
+    fetchReferenceSequence: seqFetch,
+    checkSequenceMD5: false,
+    ...options,
+  })
+}
+
+test('IndexedCramFile forwards useSliceWorkerPool to the file it builds', async () => {
+  installStubWorker('decode', [])
+  destroySharedSliceWorkerPool()
+
+  await expect(
+    poolOf(indexedFile({ useSliceWorkerPool: false })),
+  ).resolves.toBe(undefined)
+  // and the default is still on, so the assertion above is about the option
+  // rather than about the pool being unavailable in this environment
+  await expect(poolOf(indexedFile({}))).resolves.toBeDefined()
+
+  destroySharedSliceWorkerPool()
+})
+
+test('IndexedCramFile forwards numSliceWorkers to the file it builds', async () => {
+  let built = 0
+  class CountingWorker {
+    onmessage: ((e: { data: unknown }) => void) | null = null
+    onerror: (() => void) | null = null
+    constructor() {
+      built++
+    }
+    postMessage(msg: HostMessage) {
+      if (msg.type === 'init') {
+        this.onmessage?.({ data: { type: 'ready' } })
+      }
+    }
+    terminate() {
+      // the constructor count is what this stub is for
+    }
+  }
+  vi.stubGlobal('Worker', CountingWorker)
+  destroySharedSliceWorkerPool()
+
+  await poolOf(indexedFile({ numSliceWorkers: 3 }))
+  expect(built).toBe(3)
+
+  destroySharedSliceWorkerPool()
 })

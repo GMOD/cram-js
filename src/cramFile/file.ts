@@ -140,7 +140,16 @@ function parseReferenceInfo(
     })
 }
 
-export type CramFileArgs = CramFileSource & {
+/**
+ * Everything a `CramFile` takes except where the bytes come from.
+ *
+ * Split out from {@link CramFileArgs} so `IndexedCramFile` can forward the whole
+ * set structurally instead of naming each field. It named them, and that is how
+ * `useSliceWorkerPool` and `numSliceWorkers` came to be documented options that
+ * no consumer could reach: the only public entry point silently dropped them.
+ * Add options here and both constructors take them.
+ */
+export interface CramFileOptions {
   /**
    * Verify each slice's recorded reference MD5 against the sequence it is being
    * decoded with. Default false — the check needs the slice's whole reference
@@ -221,6 +230,8 @@ export type CramFileArgs = CramFileSource & {
    */
   numSliceWorkers?: number
 }
+
+export type CramFileArgs = CramFileSource & CramFileOptions
 
 export type CramFileBlock = BlockHeader & {
   _endPosition: number

@@ -3,10 +3,9 @@ import { type DecodeOptions } from './cramFile/record.ts'
 
 import type { IndexOpts, Slice } from './craiIndex.ts'
 import type CramContainer from './cramFile/container/index.ts'
-import type { SeqFetch } from './cramFile/file.ts'
+import type { CramFileOptions } from './cramFile/file.ts'
 import type CramRecord from './cramFile/record.ts'
 import type { BaseOpts } from './opts.ts'
-import type { SharedBudget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 export interface CramFileSource {
@@ -36,82 +35,47 @@ export interface CramIndexLike {
   ) => Promise<boolean>
 }
 
+export type IndexedCramFileArgs = {
+  index: CramIndexLike
+} & (
+  { cram: CramFile } | ({ cram?: undefined } & CramFileSource & CramFileOptions)
+)
+
 export default class IndexedCramFile {
   public cram: CramFile
   public index: CramIndexLike
 
   /**
+   * @param args.index an object supporting
+   * `getEntriesForRange(seqId, start, end)`, normally a {@link CraiIndex}.
    *
-   * @param {object} args
-   * @param {Index-like} args.index object that supports
-   * getEntriesForRange(seqId,start,end) -> Promise[Array[index entries]]
-   *
-   * @param {CramFile} [args.cram] pre-constructed CramFile. If omitted,
-   * provide cramPath, cramUrl, or cramFilehandle instead.
-   *
-   * @param {string} [args.cramPath] local file path to the CRAM file
-   * @param {string} [args.cramUrl] remote URL of the CRAM file
-   * @param {FileHandle} [args.cramFilehandle] generic-filehandle2 or similar
-   *
-   * @param {Function} [args.fetchReferenceSequence] async (seqId, start, end) => string
-   * returning reference sequence for a region; seqId is numeric, coords 0-based
-   * half-open (so the string must be exactly `end - start` long). Renamed from
-   * `seqFetch` in v10 so a callback still written against the old 1-based
-   * closed contract fails loudly instead of returning bases shifted by one.
-   *
-   * @param {number} [args.cacheSize] optional maximum number of CRAM records
-   * to keep in the decoded-slice cache. default 1,000,000. Slices are cached
-   * whole, so the limit is applied by evicting slices until the total record
-   * count is back under it. Records, not bytes, so it does not bound memory.
-   * Size it to hold several queries — below one query's working set it caches
-   * nothing at all, evicting each slice before the next pan can reuse it.
-   *
-   * @param {number} [args.cacheIdleTimeoutMs] optional idle timeout for that
-   * cache, in ms. default 3 minutes; 0 keeps slices until `cacheSize` evicts
-   * them. `cacheSize` is only applied when a decode settles, so it does nothing
-   * for a consumer sitting still — this is what reclaims a parked view.
-   *
-   * @param {SharedBudget} [args.cacheBudget] optional budget shared with other
-   * `CramFile`s, so `cacheSize` bounds their sum rather than each of them — a
-   * per-file ceiling is no bound at all on a consumer that opens one file per
-   * open track. Members of a budget must weigh in the same unit, and this one
-   * weighs records, so share it only with other CRAM files.
-   *
-   * @param {boolean} [args.checkSequenceMD5] - default false. if true, verifies
-   * the MD5 checksum of the reference sequence underlying a slice against the
-   * one the slice recorded. Off by default because the check needs the slice's
-   * whole reference span, which in some applications is an inconvenient amount
-   * (many megabases) of sequence to fetch.
+   * @param args.cram a pre-constructed `CramFile`. If omitted, give one of
+   * `cramFilehandle` / `cramUrl` / `cramPath` and any of
+   * {@link CramFileOptions} — `fetchReferenceSequence`, the cache settings,
+   * `useSliceWorkerPool`, and the rest — which are forwarded to the `CramFile`
+   * this builds. Those options are documented on {@link CramFileOptions}
+   * itself; they used to be re-documented here, next to a constructor that
+   * re-listed them, and both copies drifted from the real set.
    */
-  constructor(
-    args: {
-      index: CramIndexLike
-    } & (
-      | { cram: CramFile }
-      | ({
-          cram?: undefined
-          fetchReferenceSequence?: SeqFetch
-          checkSequenceMD5?: boolean
-          validateChecksums?: boolean
-          cacheSize?: number
-          cacheIdleTimeoutMs?: number
-          cacheBudget?: SharedBudget
-        } & CramFileSource)
-    ),
-  ) {
-    this.cram =
-      args.cram ??
-      new CramFile({
-        url: args.cramUrl,
-        path: args.cramPath,
-        filehandle: args.cramFilehandle,
-        fetchReferenceSequence: args.fetchReferenceSequence,
-        checkSequenceMD5: args.checkSequenceMD5,
-        validateChecksums: args.validateChecksums,
-        cacheSize: args.cacheSize,
-        cacheIdleTimeoutMs: args.cacheIdleTimeoutMs,
-        cacheBudget: args.cacheBudget,
+  constructor(args: IndexedCramFileArgs) {
+    if (args.cram) {
+      this.cram = args.cram
+    } else {
+      // Everything that is not the source is forwarded as a group rather than
+      // field by field. The field-by-field version is what dropped
+      // `useSliceWorkerPool` and `numSliceWorkers` in 13.1.0 — they were
+      // documented, and unreachable through this class, which is the only entry
+      // point most consumers use. `index` and `cram` come off so what reaches
+      // CramFile is exactly its own options.
+      const { cramUrl, cramPath, cramFilehandle, index, cram, ...options } =
+        args
+      this.cram = new CramFile({
+        ...options,
+        url: cramUrl,
+        path: cramPath,
+        filehandle: cramFilehandle,
       })
+    }
 
     this.index = args.index
   }
