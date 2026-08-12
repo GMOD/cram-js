@@ -197,11 +197,16 @@ Two things follow from the intermediate not being a published file:
 **`build:esm` runs on both sides of it** — once to give webpack something to
 bundle, once more so the regenerated string module reaches `esm/` and `dist/`.
 
-Unlike `bgzf-filehandle`, whose equivalent artifact no script in that repo
-produces, this one is built by the build. That matters because `preversion` runs
-`pnpm build`: a generated artifact nothing regenerates is one `npm version` can
-commit unreviewed part-way through a release. It rebuilds byte-for-byte, so
+It matters that the build produces it, because `preversion` runs `pnpm build`: a
+generated artifact nothing regenerates is one `npm version` can commit
+unreviewed part-way through a release. It rebuilds byte-for-byte, so
 `git status` stays clean — check it the same way as the wasm bundle.
+
+(This used to say `bgzf-filehandle`'s equivalent artifact was produced by no
+script in that repo. That is not true and may never have been: its root
+`build:wasm` delegates to the `bgzf-wasm-build` workspace package in `crate/`,
+whose own `build` ends in `build:worker-bundle`, which runs webpack and then
+`inline-worker.sh`. Checked 2026-08-12.)
 
 The size is the cost of the inline approach: the worker carries the decoder
 _and_ the base64 wasm, so it is ~394 KB that every consumer downloads whether or

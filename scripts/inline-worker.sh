@@ -4,10 +4,12 @@ set -euo pipefail
 # Wrap the bundled worker as a string module, so the pool can launch it from a
 # Blob URL without the consumer configuring anything.
 #
-# SYNC: @gmod/bgzf-filehandle scripts/inline-worker.sh. Unlike that one, this is
-# wired into `pnpm build` — see build:worker — because `preversion` runs the
-# build, and a generated artifact no script produces is one `npm version` can
-# commit unreviewed part-way through a release.
+# SYNC: @gmod/bgzf-filehandle scripts/inline-worker.sh, which took this file's
+# build/-not-src/ output dir and its type annotation in its own 6.5.0. Both are
+# wired into `pnpm build` — here via build:worker, there via the crate
+# workspace package — because `preversion` runs the build, and a generated
+# artifact no script produces is one `npm version` can commit unreviewed
+# part-way through a release.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 WORKER_FILE="$ROOT_DIR/build/worker/cram-worker-inlined.js"
