@@ -128,6 +128,36 @@ where the measurements above put the pool at parity to 1.16x. Note that even at
 one slice the decode is off the main thread, which is the part a UI notices;
 throughput is the secondary benefit.
 
+### And it grows with the region, up to a point
+
+19 kb is jb2bench's window, not a limit. Sweeping the region on the same
+fixture, same run conditions, browser, warm bytes, interleaved:
+
+| fixture         | region     | records   | in-process | pooled  |           |
+| --------------- | ---------- | --------- | ---------- | ------- | --------- |
+| 1000x.shortread | 19 kb      | 153,677   | 413 ms     | 252 ms  | 1.64x     |
+| 1000x.shortread | **100 kb** | 802,801   | 1822 ms    | 676 ms  | **2.69x** |
+| 1000x.shortread | 250 kb     | 2,000,000 | 4322 ms    | 2317 ms | 1.87x     |
+| 1000x.longread  | **100 kb** | 3,642     | 4094 ms    | 1204 ms | **3.40x** |
+
+It peaks rather than climbing: 250 kb falls back to 1.87x. Deserialising the
+payload happens on the host and is serial, so past some width that serial share
+grows faster than the parallel one — the same Amdahl ceiling noted above, now
+visible as a turning point rather than only as a cap.
+
+**A consumer that gates its queries by size never reaches the peak.** jbrowse
+caps a pileup on estimated fetch bytes (5 MB for CRAM) and on screen density,
+and 100 kb of `1000x.shortread.cram` is about 11.9 MB — refused outright, with a
+force-load banner instead. The crossover for that fixture is near 40 kb, so a
+jbrowse pileup lives permanently in the 19-40 kb band, which is the _shallow_
+end of this table. That is structural rather than incidental, and it is most of
+why the end-to-end win measured there is around 1.1x while the decode alone is
+2.2x.
+
+So the pool is worth much more to a consumer that decodes a large region in one
+go — a whole-contig scan, an export, an analysis script, a force-load — than to
+an interactive pileup that is deliberately kept small.
+
 ## What crosses the boundary
 
 Neither direction can send the obvious thing.
