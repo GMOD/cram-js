@@ -39,8 +39,24 @@ for (const record of records) {
 ```
 
 `cramPath` can also be `cramUrl` or `cramFilehandle` (and `CraiIndex` takes
-`url` or `filehandle`), so the same code runs in a browser. See the
-[example directory](./example) for a `<script>`-tag setup.
+`url` or `filehandle`), so the same code runs in a browser.
+
+### Without a bundler
+
+The package also ships a standalone browser build for consumers that load it
+from a `<script>` tag rather than through npm — igv.js among them. It puts the
+same exports on `window.gmodCRAM`:
+
+```html
+<script src="https://unpkg.com/@gmod/cram/dist/cram-bundle.js"></script>
+<script>
+  const { IndexedCramFile, CraiIndex } = window.gmodCRAM
+</script>
+```
+
+See the [example directory](./example) for a working page. Nothing else in this
+repo imports `dist/cram-bundle.js` — it exists for those consumers, which is
+worth knowing before deciding it looks unused.
 
 ## Three things to know
 
@@ -102,6 +118,28 @@ quality scores, which are stored as one array per slice rather than per record.
 [docs/API.md](docs/API.md) has all of it; [docs/MEMORY.md](docs/MEMORY.md)
 explains why it is shaped that way.
 
+## Slices decode on a worker pool
+
+A query decodes one or more slices, slices are independent, and since 12.1 they
+decode on a shared pool of workers wherever the host has them. This is on by
+default and needs no configuration — the worker ships inlined, like the wasm, so
+there is nothing to serve or wire up:
+
+```js
+// already parallel
+const records = await indexedFile.getRecordsForRange(refId, 10000, 20000)
+```
+
+In a browser it is worth 2.1-3.6x once a query touches four or more slices, and
+parity on the one-slice queries that shallow files give. **Leave it on even if
+you already run this library inside your own worker** — a worker is one thread,
+and the pool nested inside one is where those numbers were measured.
+
+`useSliceWorkerPool: false` turns it off and `numSliceWorkers` sizes it; the
+reason to reach for either is a host that runs several worker contexts, since
+the pool is shared per context rather than per machine.
+[docs/WORKERS.md](docs/WORKERS.md) has the measurements.
+
 ## Cancelling a query
 
 Pass an `AbortSignal` and the query stops decoding and drops the fetch it has in
@@ -132,6 +170,8 @@ everyone. Thread the signal through consistently.
 - [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md) — which codecs are supported
 - [docs/WASM.md](docs/WASM.md) — the inlined wasm build: 55 KB gzipped, ~5 ms
   one-time startup, 16 MB heap
+- [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool: what it is worth,
+  what crosses the boundary, and how the inlined worker is built
 - [docs/adr/](docs/adr/) — why the decoder is put together the way it is, with
   the measurements that settled each decision, and [TODO.md](TODO.md) for what
   is still open

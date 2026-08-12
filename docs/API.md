@@ -19,10 +19,12 @@ new IndexedCramFile({
   // it does not bound memory; size it to hold several queries, since below one
   // query's working set it caches nothing at all
   useSliceWorkerPool, // default true; decode slices on a shared worker pool
-  // where the host has workers, and in-process where it does not. set false if
-  // you already run @gmod/cram inside your own worker
+  // where the host has workers, and in-process where it does not. leave it on
+  // inside your own worker too — a worker is still one thread, and nested in
+  // one the pool measures 2.1-3.6x from four slices up (docs/WORKERS.md)
   numSliceWorkers, // pool size, default min(hardwareConcurrency, 4). the pool
-  // is process-wide, so the first file to need one fixes the size
+  // is shared per JS context, so the first file to need one fixes the size —
+  // and a host running several worker contexts gets one pool in each
   cacheIdleTimeoutMs, // drop a slice nothing has read for this long,
   // default 3 minutes, 0 disables. the only thing that lowers the cache while
   // nothing is happening

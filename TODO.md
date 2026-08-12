@@ -50,80 +50,50 @@ a copy and a synthesized `Response` per read. Locally it is a real
 So: worth doing, but as an allocation/syscall win, not a network one. Measured
 at the CramFile→filehandle boundary.
 
-## Thread the stop token into jbrowse's `CramAdapter`
+## Measure what a cancelled CRAM navigation abandons
 
-This library's side is done — `getRecordsForRange` takes a `signal`, and
-[ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md) records how it is
-threaded. The consumer side is still open, and it is a three-line diff:
-`CramAdapter.getFeatures` already has the `stopToken` and already calls
-`checkStopToken` either side of the fetch; only the fetch itself is missing the
-signal. It needs to become what `BamAdapter.ts` already does:
+The threading itself is **done on both sides**. This library has taken a
+`signal` since v10 ([ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md)),
+and jbrowse's `CramAdapter.getFeatures` now wraps its read in
+`withStopTokenSignal` the way `BamAdapter` does, with a unit test pinning that
+the signal is threaded and driven by that call's token.
 
-```js
-onProgress =>
-  withStopTokenSignal(stopToken, signal =>
-    cram.getRecordsForRange(refId, start, end, { onProgress, signal }),
-  ),
-```
+What is left is the measurement: nobody has established what a cancelled CRAM
+navigation actually gives up. The figure quoted in the ADR is from the BAM path.
 
-Two things to do there while it is open:
-
-- `products/jbrowse-web/browser-tests/suites/fetch-cancellation.ts` covers this
-  end to end for BAM and has a long comment on why jest cannot: the mechanisms
-  are a worker `postMessage`, a synchronous XHR that only exists in a worker
-  global, and an `AbortSignal` whose whole purpose is what it does to a socket.
-  A CRAM case belongs alongside it.
-- Nobody has measured what a cancelled CRAM navigation actually abandons. The
-  figure quoted in the ADR is from the BAM path.
+A browser-level case was considered and declined. jest cannot cover what the
+signal does to a socket —
+`products/jbrowse-web/browser-tests/suites/fetch-cancellation.ts` covers that
+end for BAM and explains at length why — but a CRAM case there needs a pileup
+deep enough to still be downloading after 2.5 s at 50 KB/s, and the only fixture
+that qualifies is a ~9 MB binary. The abort machinery under test is shared with
+the BAM case, so the fixture was judged not worth the repository weight. Revisit
+if CRAM ever diverges from that path.
 
 ## Pack or privatise `payloadOffsets`
 
 On the ONT slice `payloadOffsets` is 854 KB, **11.5%** of the 7.42 MB the
 records retain, and the offsets are monotonic — a per-record base offset would
-collapse them. Auditing what jbrowse actually reads: `readFeaturesToMismatches`
-and `readFeaturesToNumericCIGAR` destructure `codes`, `pos`, `refPos`, `num`,
-`refCodes`, `subCodes` and call `payloadStringAt(i)`. **Neither ever touches
-`payloadOffsets` or `payloadBytes`**, so this is free to change: the only cost
-is that `payloadBytesAt` / `payloadStringAt` have to unpack, which is where the
-reads already go.
+collapse them. Auditing what the render path actually reads: the mismatch walk
+(now this repo's own `forEachMismatch`, since jbrowse deleted its copy) and
+jbrowse's `readFeaturesToNumericCIGAR` destructure `codes`, `pos`, `refPos`,
+`num`, `refCodes`, `subCodes` and call `payloadStringAt(i)`. **Neither ever
+touches `payloadOffsets` or `payloadBytes`**, so this is free to change: the
+only cost is that `payloadBytesAt` / `payloadStringAt` have to unpack, which is
+where the reads already go.
 
 The neighbouring idea is **not** free and is not proposed: `refCodes`/`subCodes`
 together are 427 KB (5.7%) and would fit in the spare bits of an X feature's
-`num` (a 0–3 substitution-matrix index), but they are genuinely public — the
-walk that reads them is on jbrowse's render path. Packing them is a breaking
-change for 5.7%, and privatising the layout would mean cram-js owning that walk
-too, which is the item below.
+`num` (a 0–3 substitution-matrix index), but they are genuinely public. Packing
+them is a breaking change for 5.7%.
+
+The obstacle that used to be listed here — that privatising the layout would
+mean cram-js owning the mismatch walk — is gone: it owns it now, since jbrowse
+deleted its copy and drives `forEachMismatch`
+([ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md)). What is left is
+the plain compatibility argument, `readFeatures` being reachable by anyone.
 
 ## Simplifications (no perf angle)
-
-- The read-features-to-mismatches walk exists twice:
-  `src/cramFile/mismatches.ts` here and
-  `plugins/alignments/src/CramAdapter/readFeaturesToMismatches.ts` in jbrowse,
-  which does not use ours. They are the same walk and disagree in details —
-  soft-clip `length` 0 against 1, deletion `bases` `''` against `'*'`, a closed
-  window against a half-open one. Either jbrowse adopts `forEachMismatch` or
-  this repo is carrying a second, unexercised copy of its own trickiest walk.
-
-  The CIGAR walk had the same split and no longer does; what made that one
-  tractable was that the CIGAR has a single spec-defined vocabulary, so it could
-  move in here without dragging a consumer's render types along — see
-  [ADR 0006](docs/adr/0006-cigar-as-a-callback-walk.md). The mismatch walk emits
-  jbrowse's own vocabulary, which is why it had not moved.
-
-  **This side is now done.** Delegating used to cost +17% of jbrowse's plotting
-  path, because translating the vocabulary put a second callback between the two
-  walks; `MismatchOptions.origin` and the half-open window remove the two
-  coordinate conversions that translator existed for, so jbrowse can pass its
-  own callback straight in — see
-  [ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md). What is left is
-  jbrowse's side: renumbering its `*_TYPE` constants to the CRAM feature codes
-  (it compares them symbolically everywhere, and nothing serializes them), and
-  setting a clip's `length` in the one consumer that builds objects rather than
-  per emission. Then its copy deletes.
-
-  Note the equivalent for BAM is not available: that walk needs a reference in
-  jbrowse's own packed form, which a BAM file does not carry, so it stays in
-  `@jbrowse/cigar-utils` rather than moving into `@gmod/bam`.
 
 - `growUint8`/`growInt32`/`nextCapacity` in `readFeatureArena.ts`, the same
   helpers in `tagColumn.ts`, and `qualityColumn.ts`'s inline grow loop are the

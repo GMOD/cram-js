@@ -10,7 +10,9 @@ const records = await indexedFile.getRecordsForRange(0, 1000, 2000)
 ```
 
 Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`
-— see [the constructor options](../README.md).
+— see [the constructor options](API.md#indexedcramfile). Both go to
+`IndexedCramFile` as well as to `CramFile`; through 13.1.0 they reached only the
+latter, which is to say they were unreachable.
 
 ## Why the whole slice, and not just decompression
 
