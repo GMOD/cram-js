@@ -1,3 +1,24 @@
+## [13.2.0](https://github.com/GMOD/cram-js/compare/v13.1.0...v13.2.0) (2026-08-12)
+
+### Bug Fixes
+
+- Forward the slice-pool options through IndexedCramFile ([11f8f64](https://github.com/GMOD/cram-js/commit/11f8f6497892d1c73d19a1edd5346dd737313a3c))
+
+### Chores
+
+- Stop publishing the worker build's intermediates ([da7cdbc](https://github.com/GMOD/cram-js/commit/da7cdbcdb078841806ea18f780eabb1fc3a3e18d))
+
+### Documentation
+
+- Record what ADR 0008 actually bought, now that jbrowse has taken it ([d265c95](https://github.com/GMOD/cram-js/commit/d265c9543f20b50ef96043de3de4747187021a9e))
+- Correct ADR 0008's numbers, and record the harness trap behind them ([f90d93a](https://github.com/GMOD/cram-js/commit/f90d93a9c368f63967f32abfee9f1cc661495ff6))
+- Measure the pool in a browser, nested inside another worker ([d7145df](https://github.com/GMOD/cram-js/commit/d7145df03178f4cda6aae70e6be1e6a48d9181f8))
+- Name the browser bundle, the worker pool, and retire two landed TODOs ([cbf1857](https://github.com/GMOD/cram-js/commit/cbf185756891783b03b01359314cb165baa9192f))
+
+### Tests
+
+- Let test:pack see the shape of the tarball, not just its behaviour ([2acf69e](https://github.com/GMOD/cram-js/commit/2acf69e2172b0b71f097f81c6b8eabd192e6dc08))
+
 ## [13.1.0](https://github.com/GMOD/cram-js/compare/v13.0.0...v13.1.0) (2026-08-11)
 
 ### Bug Fixes
