@@ -1,6 +1,8 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import TerserPlugin from 'terser-webpack-plugin'
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
@@ -20,9 +22,25 @@ export default {
   target: 'webworker',
   entry: './esm/worker/sliceWorkerEntry.js',
   output: {
-    path: path.resolve(__dirname, 'src/wasm'),
+    // NOT src/wasm, where this used to land. `allowJs` makes everything under
+    // src/ a tsc input, so this intermediate was compiled to both esm/ and
+    // dist/ and published three times over with two sourcemaps — ~1 MB of an
+    // artifact nothing imports. Only the string module inline-worker.sh derives
+    // from it is real, and that one does belong in src/wasm and in git.
+    path: path.resolve(__dirname, 'build/worker'),
     filename: 'cram-worker-inlined.js',
     iife: true,
+  },
+  optimization: {
+    minimizer: [
+      // Keep the license banners in the bundle instead of webpack's default of
+      // extracting them to a sidecar .LICENSE.txt. The bundle here is not a
+      // file we ship — it becomes a string inside one — so an extracted notice
+      // would be left behind in build/ while the code it covers (is-buffer,
+      // MIT) travelled on into every consumer with a banner pointing at a file
+      // that does not exist.
+      new TerserPlugin({ extractComments: false }),
+    ],
   },
   performance: {
     // the inlined htscodecs wasm is ~130 KB of base64 on its own, so the size

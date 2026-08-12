@@ -8,6 +8,9 @@ export default defineConfig(
     ignores: [
       'esm/**/*',
       'dist/**/*',
+      // where webpack drops the worker bundle before inline-worker.sh wraps it.
+      // gitignored, but eslint does not read .gitignore
+      'build/**/*',
       '*.js',
       '*.mjs',
       'src/wasm/*',

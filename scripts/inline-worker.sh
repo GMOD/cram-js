@@ -10,7 +10,7 @@ set -euo pipefail
 # commit unreviewed part-way through a release.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-WORKER_FILE="$ROOT_DIR/src/wasm/cram-worker-inlined.js"
+WORKER_FILE="$ROOT_DIR/build/worker/cram-worker-inlined.js"
 OUTPUT_FILE="$ROOT_DIR/src/wasm/cram-worker-source.js"
 
 if [ ! -f "$WORKER_FILE" ]; then
@@ -18,15 +18,21 @@ if [ ! -f "$WORKER_FILE" ]; then
   exit 1
 fi
 
+# The `@type {string}` is load-bearing, not decoration. tsc reads this file
+# under `allowJs` and emits a .d.ts for it over the top of any hand-written one;
+# left to infer, it writes out the whole bundle a second time as a string
+# literal type — a 440 KB .d.ts that shipped in both esm/ and dist/ and that
+# every consumer's tsc then had to parse. Annotated, the declaration is one line.
 {
   echo "// Auto-generated - do not edit. Run pnpm build:worker to regenerate."
   echo "// eslint-disable-next-line"
-  printf 'export default '
+  printf '/** @type {string} */\nconst workerSource = '
   node -e '
     const fs = require("fs")
     process.stdout.write(JSON.stringify(fs.readFileSync(process.argv[1], "utf8")))
   ' "$WORKER_FILE"
   echo ""
+  echo "export default workerSource"
 } > "$OUTPUT_FILE"
 
 echo "worker inlined into $OUTPUT_FILE ($(wc -c <"$OUTPUT_FILE") bytes)"
