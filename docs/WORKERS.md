@@ -14,6 +14,14 @@ Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`
 `IndexedCramFile` as well as to `CramFile`; through 13.1.0 they reached only the
 latter, which is to say they were unreachable.
 
+The pool is shared **per JS context**, so a host that runs several — jbrowse
+spreads tracks over up to five RPC workers — gets one in each, and should size
+them with `numSliceWorkers` accordingly. Why that rather than one pool shared
+across contexts, which `@gmod/bgzf-filehandle` already implements and which
+would bound the total by construction, is
+[ADR 0009](adr/0009-one-pool-per-context-sized-for-the-host.md), with the
+measurements on both sides.
+
 ## Why the whole slice, and not just decompression
 
 `@gmod/bgzf-filehandle` parallelises inflate, because for BAM that is
