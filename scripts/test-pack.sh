@@ -15,6 +15,43 @@ trap 'rm -rf "$SCRATCH"' EXIT
 cd "$PKG_DIR"
 TARBALL="$(npm pack --silent --pack-destination "$SCRATCH")"
 
+# What the tarball CONTAINS, before anything is installed from it. `pnpm test`
+# runs against src/, so nothing else in the repo can see the package's shape,
+# and 13.1.0 shipped ~1.9 MB of build droppings on exactly that blind spot.
+# Both checks below are for defects that shipped, not hypotheticals.
+check_tarball_contents() {
+  local listing
+  listing="$(tar tzf "$SCRATCH/$TARBALL")"
+
+  # (1) webpack's worker intermediate. It used to be written into src/wasm/,
+  # where `allowJs` made it a tsc input, so it was compiled into esm/ and dist/
+  # and published three times with two sourcemaps. Nothing imports it. It now
+  # goes to a gitignored build/ — if one reappears here, that broke.
+  local intermediates
+  intermediates="$(grep -E '\-inlined\.js(\.map)?$' <<<"$listing" || true)"
+  if [ -n "$intermediates" ]; then
+    echo "error: build intermediates in the tarball; webpack should write these to build/, not src/wasm/:" >&2
+    echo "$intermediates" >&2
+    return 1
+  fi
+
+  # (2) a declaration file that is really a bundle. tsc emits a .d.ts for the
+  # inlined worker under allowJs, and left to infer the type of a 400,000-char
+  # string it writes the whole bundle out again as a literal type — 440 KB, in
+  # both output dirs, for every consumer's tsc to parse. inline-worker.sh
+  # annotates the const to keep it at ~87 bytes. 32 KB is far above any
+  # hand-written declaration here and far below a regression.
+  local big
+  big="$(tar tzvf "$SCRATCH/$TARBALL" |
+    awk '$NF ~ /\.d\.ts$/ && $3 > 32768 { print $3, $NF }')"
+  if [ -n "$big" ]; then
+    echo "error: oversized .d.ts in the tarball — a literal type of a bundle, not a declaration:" >&2
+    echo "$big" >&2
+    return 1
+  fi
+}
+check_tarball_contents
+
 # Small fixture (~3KB) that exercises rANS decompression via the wasm
 # bundle. Indexed so we can hit the IndexedCramFile read path.
 FIXTURE_DIR="$SCRATCH/data"
