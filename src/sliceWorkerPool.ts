@@ -18,7 +18,6 @@
  */
 import { deserializeSliceRecords } from './cramFile/sliceTransfer.ts'
 import { CramMalformedError, CramUnimplementedError } from './errors.ts'
-import workerSource from './wasm/cram-worker-source.js'
 
 import type CramRecord from './cramFile/record.ts'
 import type { SliceDecodeRequest } from './cramFile/slice/decodeSliceFromBytes.ts'
@@ -173,10 +172,37 @@ class ManagedWorker {
 
 let cachedBlobUrl: string | undefined
 
-function getWorkerBlobUrl() {
-  cachedBlobUrl ??= URL.createObjectURL(
-    new Blob([workerSource], { type: 'application/javascript' }),
-  )
+/**
+ * The worker bundle, fetched only when a pool is actually started.
+ *
+ * **The dynamic import is about bundle weight, and only that.** The bundle is a
+ * ~400 KB base64 string, and a static import pins it into the initial bundle of
+ * every consumer that can reach `CramFile` — which is all of them, since
+ * `file.ts` imports this module to start the pool. Measured with esbuild,
+ * bundling and minifying `IndexedCramFile` + `CraiIndex`:
+ *
+ * ```
+ * static    534 KB total, of which the worker string is 266 KB — half
+ * dynamic   268 KB total, worker string deferred to a split chunk
+ * ```
+ *
+ * So half the library's bundled weight came off every consumer, including one
+ * that never enables the pool, and including one running under node where the
+ * pool cannot start at all. It costs nothing to defer, because this function is
+ * already only called from `createSliceWorkerPool`, which is async.
+ *
+ * This is the same trick, for the same reason, that jbrowse applies to
+ * `@gmod/bgzf-filehandle`'s equivalent blob in `util/bgzfWorkerPool.ts` —
+ * there it took an entry point from 54.7 KB to 114 B.
+ */
+async function getWorkerBlobUrl() {
+  if (cachedBlobUrl === undefined) {
+    const { default: workerSource } =
+      await import('./wasm/cram-worker-source.js')
+    cachedBlobUrl = URL.createObjectURL(
+      new Blob([workerSource], { type: 'application/javascript' }),
+    )
+  }
   return cachedBlobUrl
 }
 
@@ -244,7 +270,7 @@ export async function createSliceWorkerPool(
       'cannot create a cram slice worker pool: this context has no Worker and Blob URL support',
     )
   }
-  const url = workerUrl ?? getWorkerBlobUrl()
+  const url = workerUrl ?? (await getWorkerBlobUrl())
   const count = numWorkers ?? Math.min(navigator.hardwareConcurrency, 4)
   const workers: ManagedWorker[] = []
   for (let i = 0; i < count; i++) {
