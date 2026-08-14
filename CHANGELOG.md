@@ -1,3 +1,15 @@
+## [13.3.0](https://github.com/GMOD/cram-js/compare/v13.2.0...v13.3.0) (2026-08-14)
+
+### Documentation
+
+- Bgzf-filehandle does build its worker bundle, contrary to this note ([1a87a94](https://github.com/GMOD/cram-js/commit/1a87a944b9b79b35e92240e3a7155fe47e50ac19))
+- ADR 0009, why the pool is per context rather than shared across them ([3b7be55](https://github.com/GMOD/cram-js/commit/3b7be559a7c5273030171f27cddd9ba444ab3aee))
+- The pool's win grows with the region, and where a consumer can reach it ([a938be0](https://github.com/GMOD/cram-js/commit/a938be005fe9f38c5122791ba4a7239cbdb5cc13))
+
+### Performance Improvements
+
+- Code-split the worker bundle, halving what a consumer bundles ([ba940cc](https://github.com/GMOD/cram-js/commit/ba940ccceb44bc49751f8e5fd145c9f8990a1429))
+
 ## [13.2.0](https://github.com/GMOD/cram-js/compare/v13.1.0...v13.2.0) (2026-08-12)
 
 ### Bug Fixes
