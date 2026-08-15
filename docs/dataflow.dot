@@ -32,7 +32,7 @@ digraph cram {
   }
 
   subgraph cluster_wasm {
-    label="WebAssembly — inlined base64, lazy singleton per JS context"
+    label="WebAssembly — inlined in the bundle, lazy singleton per JS context"
     labelloc=b
     color="#b5793f" fontcolor="#b5793f" fontsize=10
 

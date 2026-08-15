@@ -13,8 +13,7 @@ blocks — so `src/xz-decompress/` carries
 module, instantiated straight off a `data:` URI. Only the streaming wrapper
 around it is JS.
 
-[dataflow.dot](dataflow.dot) ([rendered](dataflow.svg)) shows where both sit in
-a query.
+[dataflow.md](dataflow.md) shows where both sit in a query.
 
 ## Why
 

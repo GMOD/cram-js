@@ -163,7 +163,7 @@ everyone. Thread the signal through consistently.
 - [docs/MEMORY.md](docs/MEMORY.md) — what a decoded slice retains
 - [docs/READ_FEATURES.md](docs/READ_FEATURES.md) — the raw alignment encoding
 - [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md) — which codecs are supported
-- [docs/dataflow.svg](docs/dataflow.svg) — a query end to end
+- [docs/dataflow.md](docs/dataflow.md) — a query end to end, diagrammed
 - [docs/optimizations.md](docs/optimizations.md) — why the path looks that way
 - [docs/WASM.md](docs/WASM.md) — the inlined wasm build
 - [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool

@@ -1,7 +1,7 @@
 # Optimizations
 
-Why the query path looks the way it does. The path itself is drawn in
-[dataflow.dot](dataflow.dot) ([rendered](dataflow.svg)).
+Why the query path looks the way it does. The path itself is walked in
+[dataflow.md](dataflow.md).
 
 CRAM spends its time somewhere different from the BGZF formats. Block
 decompression is only **24–35%** of a cold query, so a query is dominated by the
