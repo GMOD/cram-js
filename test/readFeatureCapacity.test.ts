@@ -57,7 +57,14 @@ async function firstSliceOf(name: string) {
   for (const r of records) {
     features += r.readFeatureCount
   }
-  return { capacity: ctx.arena.codes.length, features, records: records.length }
+  const decoded = records.find(r => r.readFeatureArena)?.readFeatureArena
+  return {
+    capacity: ctx.arena.codes.length,
+    payloadCapacity: ctx.arena.payloadBytes.length,
+    payloadUsed: decoded?.payloadLength ?? 0,
+    features,
+    records: records.length,
+  }
 }
 
 test.each([
@@ -69,4 +76,19 @@ test.each([
   const { capacity, features } = await firstSliceOf(name)
   expect(features).toBe(count)
   expect(capacity).toBe(features)
+})
+
+// The payload side is a bound, not a count, and the term that makes it one is
+// the feature count: B and i take a byte each from BA, whose block size says
+// nothing about how many of them there are. Without it the ONT slice fell
+// 15,482 bytes short and paid a doubling to 564,890 plus the copy.
+test.each([
+  'HG002_ONTrel2_16x_RG_HP10xtrioRTG.cram',
+  'volvox-long-reads-sv.cram',
+  'hard_clipping.cram',
+  'SRR396637.sorted.clip.cram',
+])('%s: the payload arena is built big enough never to grow', async name => {
+  const { payloadCapacity, payloadUsed } = await firstSliceOf(name)
+  expect(payloadUsed).toBeGreaterThan(0)
+  expect(payloadCapacity).toBeGreaterThanOrEqual(payloadUsed)
 })

@@ -508,7 +508,7 @@ export default class CramSlice {
    * after — arguably the truer model, since a CRAM record is
    * reference-compressed and its bases do not exist without the reference. But
    * it means a **failed `fetchReferenceSequence` discards the decode too**:
-   * `SliceRecordCache` drops rejected promises, so a flaky sequence adapter
+   * `featureCache` drops rejected promises, so a flaky sequence adapter
    * costs a re-inflate of the slice on retry where before it only cost the
    * decoration. Worth revisiting only if that shows up in practice, and the fix
    * — caching the decoded records and the reference resolution as separate
@@ -796,7 +796,7 @@ export default class CramSlice {
 
     // The decode runs under the signal the *cache* hands back, not under this
     // caller's: a slice is shared between concurrent queries, and it must
-    // survive until every one of them has given up. `SliceRecordCache` does
+    // survive until every one of them has given up. `featureCache` does
     // that ref-counting and reports this caller's own cancellation to this
     // caller alone.
     //

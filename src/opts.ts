@@ -10,7 +10,7 @@ export interface BaseOpts {
    * Cancels the reads issued on this call's behalf.
    *
    * Reads shared with another in-flight query are *not* cancelled out from
-   * under it — see {@link SliceRecordCache} and `CraiIndex.getIndexData`, which
+   * under it — see `CramFile.featureCache` and `CraiIndex.getIndexData`, which
    * both start over rather than let one caller's cancellation surface as
    * another's failure. What aborting guarantees is that *this* call rejects,
    * and that no further bytes are fetched only for it.

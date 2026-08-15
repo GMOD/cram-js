@@ -145,7 +145,7 @@ export default class IndexedCramFile {
     // first-caller-wins basis (see `memoizeAsync`), which is sound only while
     // every caller of one memo is the same query. A file-level container cache
     // would put the first query's signal in charge of a header every later query
-    // depends on — the leak `SliceRecordCache` and `CraiIndex` handle explicitly,
+    // depends on — the leak `CramFile.featureCache` and `CraiIndex` handle explicitly,
     // reappearing at a third site with nothing to handle it.
     const containers = new Map<number, CramContainer>()
 

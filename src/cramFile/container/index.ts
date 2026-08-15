@@ -11,7 +11,7 @@ import type CramFile from '../file.ts'
 // A container is built fresh for every query — `CramFile.getContainerAtPosition`
 // constructs one rather than looking one up — so the memos below are private to
 // one query and a signal can be threaded straight through them. See
-// `memoizeAsync` for why that matters, and `SliceRecordCache` for the one read
+// `memoizeAsync` for why that matters, and `CramFile.featureCache` for the one read
 // that *is* shared between queries.
 export default class CramContainer {
   file: CramFile

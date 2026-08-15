@@ -6,7 +6,7 @@
  * content-id index — and every one of them has to drop a rejection rather than
  * keep it. Caching the rejected promise would let one transient read error
  * poison that header for the lifetime of the file, with every later query
- * re-awaiting the same failure. `SliceRecordCache` documents the same hazard
+ * re-awaiting the same failure. `CramFile.featureCache` documents the same hazard
  * for decoded records.
  *
  * Concurrent callers still share one in-flight fetch; only a *settled*
@@ -19,7 +19,7 @@
  * live on — `CramContainer` and `CramSlice` — are built fresh per query, so
  * every caller of one memo is in practice the same query carrying the same
  * signal. The one read genuinely shared between queries is the decoded slice in
- * `SliceRecordCache`, which handles the cross-query case explicitly rather than
+ * `CramFile.featureCache`, which handles the cross-query case explicitly rather than
  * relying on this.
  */
 export function memoizeAsync<A extends unknown[], T>(

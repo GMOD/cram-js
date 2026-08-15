@@ -159,10 +159,14 @@ export function buildSliceDecodeContext({
  * here, long-read and short: 213,602 features against a 213,602-byte block on
  * the ONT slice, 19,849 against 19,849 on SRR396637, and so on down to 12.
  *
- * The payload figure is a bound rather than a count: the byte-array series a
- * feature's bytes come from (I/S/b/q, and B one byte at a time) hold their
- * values in blocks of their own, so the sum of those blocks covers whatever the
- * features take out of them, plus the stop bytes and lengths that separate them.
+ * The payload figure is a bound rather than a count. I/S/b/q take their bytes
+ * from byte-array series with blocks of their own, so those blocks cover them
+ * with the stop bytes and lengths thrown in. B and i take one base each from BA,
+ * whose block is every read base in the slice and says nothing about how many
+ * features want one — but there is at most one per feature, so adding `slots`
+ * bounds them without reading BA. Without that term the sum falls short wherever
+ * B or i appear: the ONT slice wanted 297,927 bytes against 282,445 of I/S/b/q
+ * blocks, and paid a doubling to 564,890 plus the copy for the difference.
  *
  * Both are wanted because growing the arena means copying seven columns, and on
  * a long-read slice that is where the reallocation time goes — 4.4% of a decode
@@ -201,7 +205,7 @@ function readFeatureCapacity(
 
   const slots = sizeOfSoleBlock(compressionScheme.dataSeriesEncoding.FC)
 
-  let payload = 0
+  let payload = slots ?? 0
   for (const ds of ['IN', 'SC', 'BB', 'QQ'] as const) {
     payload += sizeOfSoleBlock(compressionScheme.dataSeriesEncoding[ds]) ?? 0
   }
