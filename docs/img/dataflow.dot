@@ -1,43 +1,56 @@
+// Source for docs/img/dataflow.svg, which README.md embeds.
+// Regenerate with: dot -Tsvg docs/img/dataflow.dot -o docs/img/dataflow.svg
+//
+// Palette matches bam-js/tabix-js docs/img/dataflow.dot: blue for entry/exit,
+// green for I/O, orange for wasm, yellow for cached/shared state. cram's
+// decode path has real internal structure (cache fill, worker pool, JS
+// codecs), so unlike the other two this diagram keeps that structure instead
+// of collapsing to a single spine — the clusters are that structure, not
+// decoration.
 digraph cram {
   rankdir=TB
   compound=true
   newrank=true
+  bgcolor="white"
+  nodesep=0.3
+  ranksep=0.36
   fontname="Helvetica"
-  node [shape=box style=rounded fontname="Helvetica" fontsize=10 margin="0.14,0.08"]
-  edge [fontname="Helvetica" fontsize=9 color="#555555"]
+  node [shape=box style="filled,rounded" fillcolor="#f6f8fa" color="#57606a"
+        fontname="Helvetica" fontsize=10 margin="0.14,0.08"]
+  edge [fontname="Helvetica" fontsize=9 color="#57606a"]
 
-  query [label="IndexedCramFile.getRecordsForRange(seqId, start, end)"]
-  crai  [label="CraiIndex — read .crai, gunzip, parse\n→ slice entries covering the range"]
-  cont  [label="CramContainer — read container header +\ncompression header block (memoized per query)"]
-  cache [label="CramFile.featureCache\nhit?" shape=diamond style="" height=0.75 width=2.2]
-  out   [label="filter, then viewAsPairs mate pass\n→ CramRecord[]"]
+  query [label="IndexedCramFile.getRecordsForRange(seqId, start, end)" fillcolor="#ddf4ff" color="#0969da"]
+  crai  [label="CraiIndex — read .crai, gunzip, parse\n→ slice entries covering the range" fillcolor="#dafbe1" color="#1a7f37"]
+  cont  [label="CramContainer — read container header +\ncompression header block (memoized per query)" fillcolor="#dafbe1" color="#1a7f37"]
+  cache [label="CramFile.featureCache\nhit?" shape=diamond style="filled" fillcolor="#fff8c5" color="#9a6700" height=0.75 width=2.2]
+  out   [label="filter, then viewAsPairs mate pass\n→ CramRecord[]" fillcolor="#ddf4ff" color="#0969da"]
 
   subgraph cluster_fill {
     label="cache fill — once per slice, keyed container:slice"
-    color="#999999" fontcolor="#666666" fontsize=10 style=dashed
+    color="#d0d7de" fontcolor="#57606a" fontsize=10 style=dashed
 
     req [label="CramSlice.buildDecodeRequest\none read of the slice's whole block region\n→ bytes + numbers only (SliceDecodeRequest)"]
 
     subgraph cluster_decode {
       label="pool worker if Worker + Blob URL, else in-process"
-      color="#3f6fb5" fontcolor="#3f6fb5" fontsize=10
+      color="#57606a" fontcolor="#57606a" fontsize=10
 
       walk  [label="parseBlockFromBuffer × numBlocks\nserial: each header locates the next"]
-      uncmp [label="uncompressBlockContent\nper block, by its method byte"]
+      uncmp [label="uncompressBlockContent\nper block, by its method byte" fillcolor="#ffd8b5" color="#bc4c00"]
       ctx   [label="buildSliceDecodeContext\nJS data-series codecs: external, huffman,\nbeta, gamma, subexp, byteArray*"]
       recs  [label="decodeRecord × numRecords\n→ read-feature / tag / quality columns\nthen associateIntraSliceMates"]
     }
 
-    ref [label="applyReferenceSequence — main thread only\nfetchReferenceSequence callback\n→ substitutions resolved, refRegion attached"]
+    ref [label="applyReferenceSequence — main thread only\nfetchReferenceSequence callback\n→ substitutions resolved, refRegion attached" fillcolor="#dafbe1" color="#1a7f37"]
   }
 
   subgraph cluster_wasm {
     label="WebAssembly — inlined in the bundle, lazy singleton per JS context"
     labelloc=b
-    color="#b5793f" fontcolor="#b5793f" fontsize=10
+    color="#bc4c00" fontcolor="#bc4c00" fontsize=10
 
-    hts [label="htscodecs.wasm\ngzip (libdeflate), bzip2, rans,\nrans4x16, arith, fqzcomp, tok3" style="rounded,filled" fillcolor="#fdf0e4"]
-    xz  [label="xz-embedded.wasm\nlzma" style="rounded,filled" fillcolor="#fdf0e4"]
+    hts [label="htscodecs.wasm\ngzip (libdeflate), bzip2, rans,\nrans4x16, arith, fqzcomp, tok3" style="filled,rounded" fillcolor="#ffd8b5" color="#bc4c00"]
+    xz  [label="xz-embedded.wasm\nlzma" style="filled,rounded" fillcolor="#ffd8b5" color="#bc4c00"]
   }
 
   query -> crai
@@ -52,9 +65,25 @@ digraph cram {
   ref   -> out   [label="  decoded slice, cached"]
   cache -> out   [label="  hit: already decoded and decorated"]
 
-  crai  -> hts   [style=dashed color="#b5793f" constraint=false]
-  uncmp -> hts   [style=dashed color="#b5793f" constraint=false]
-  uncmp -> xz    [style=dashed color="#b5793f" constraint=false]
+  crai  -> hts   [style=dashed color="#bc4c00" constraint=false]
+  uncmp -> hts   [style=dashed color="#bc4c00" constraint=false]
+  uncmp -> xz    [style=dashed color="#bc4c00" constraint=false]
 
   { rank=same; recs; hts; xz }
+
+  subgraph cluster_legend {
+    label="Legend"
+    labelloc="t"
+    fontname="Helvetica"
+    fontsize=10
+    fontcolor="#57606a"
+    color="#d0d7de"
+    style="rounded"
+    margin=10
+    node [shape=box style="filled,rounded" fontsize=9 margin="0.1,0.04"]
+    l1 [label="I/O" fillcolor="#dafbe1" color="#1a7f37"]
+    l2 [label="wasm" fillcolor="#ffd8b5" color="#bc4c00"]
+    l3 [label="cached / shared" fillcolor="#fff8c5" color="#9a6700"]
+    l1 -> l2 -> l3 [style=invis]
+  }
 }
