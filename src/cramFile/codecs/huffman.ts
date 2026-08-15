@@ -1,5 +1,5 @@
 import CramCodec from './_base.ts'
-import { CramMalformedError } from '../../errors.ts'
+import { CramBufferOverrunError, CramMalformedError } from '../../errors.ts'
 
 import type { Cursor, Cursors } from './_base.ts'
 import type { HuffmanEncoding } from '../encoding.ts'
@@ -14,6 +14,16 @@ function getBitsInline(
   numBits: number,
 ): number {
   let { bytePosition, bitPosition } = cursor
+
+  // Past the end the block reads as `undefined >> n`, i.e. as zero bits, and
+  // the all-zeros code is a real entry in a canonical table — the shortest one,
+  // so the most frequent symbol. Without this an empty core block decoded as
+  // that symbol for every record, forever, instead of reporting the truncation.
+  if ((data.length - bytePosition) * 8 - (7 - bitPosition) < numBits) {
+    throw new CramBufferOverrunError(
+      'read beyond end of core block; file seems truncated',
+    )
+  }
 
   // Fast path for single bit (common in huffman)
   if (numBits === 1) {

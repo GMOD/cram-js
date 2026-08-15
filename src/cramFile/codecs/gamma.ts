@@ -43,8 +43,8 @@ function decodeGammaInline(
   let { bytePosition, bitPosition } = cursor
   let length = 1
 
-  // Count leading zeros (each 0 bit increases length). A truncated core block
-  // reads as zeros forever, so guard against running off the end.
+  // Count leading zeros (each 0 bit increases length). Past the end the block
+  // reads as zeros forever, so guard against running off it.
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
     if (bytePosition >= data.length) {
@@ -68,6 +68,14 @@ function decodeGammaInline(
   let readBits = 0
   const bitsToRead = length - 1
   if (bitsToRead > 0) {
+    // The prefix loop above guards itself; these bits need their own check, or
+    // a block that ends on the terminating 1 supplies the value out of nothing.
+    // `[0x01]` decoded to 128 rather than reporting the truncation.
+    if ((data.length - bytePosition) * 8 - (7 - bitPosition) < bitsToRead) {
+      throw new CramBufferOverrunError(
+        'read beyond end of core block; file seems truncated',
+      )
+    }
     // Optimized multi-bit read
     for (let i = 0; i < bitsToRead; i++) {
       readBits <<= 1
