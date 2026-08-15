@@ -9,6 +9,7 @@
  */
 
 import { xzdecompressWasm as wasmBase64 } from './wasm.ts'
+import { memoizeAsync } from '../cramFile/memoize.ts'
 
 const XZ_OK = 0
 const XZ_STREAM_END = 1
@@ -77,11 +78,13 @@ class XzContext {
   }
 }
 
-let _moduleInstancePromise: Promise<void> | undefined
-let _moduleInstance: WebAssembly.Instance | undefined
 const _emptyInput = new Uint8Array(0)
 
-async function _getModuleInstance() {
+// Through memoizeAsync rather than a hand-rolled promise cache, for the reason
+// that helper documents: a cached *rejection* poisons lzma decoding for the life
+// of the process, so one transient failure to instantiate would fail every later
+// lzma block with the same error and never try again.
+const getModuleInstance = memoizeAsync(async () => {
   const base64Wasm = wasmBase64.replace('data:application/wasm;base64,', '')
   const binaryString = atob(base64Wasm)
   const len = binaryString.length
@@ -90,16 +93,11 @@ async function _getModuleInstance() {
     wasmBytes[i] = binaryString.charCodeAt(i)
   }
   const module = await WebAssembly.instantiate(wasmBytes.buffer, {})
-  _moduleInstance = module.instance
-}
+  return module.instance
+})
 
 export async function xzDecompress(input: Uint8Array): Promise<Uint8Array> {
-  if (!_moduleInstance) {
-    await (_moduleInstancePromise ||
-      (_moduleInstancePromise = _getModuleInstance()))
-  }
-
-  const context = new XzContext(_moduleInstance!)
+  const context = new XzContext(await getModuleInstance())
   const chunks: Uint8Array[] = []
   let offset = 0
   let eofSignaled = false

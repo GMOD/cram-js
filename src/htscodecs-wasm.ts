@@ -1,22 +1,13 @@
+import { memoizeAsync } from './cramFile/memoize.ts'
 import createHtsCodecsModule from './wasm/htscodecs.js'
 
 type HtsCodecsModule = Awaited<ReturnType<typeof createHtsCodecsModule>>
 
-let moduleInstance: HtsCodecsModule | null = null
-let modulePromise: Promise<HtsCodecsModule> | null = null
-
-async function getModule() {
-  if (moduleInstance) {
-    return moduleInstance
-  }
-  if (!modulePromise) {
-    modulePromise = createHtsCodecsModule().then(m => {
-      moduleInstance = m
-      return m
-    })
-  }
-  return modulePromise
-}
+// Through memoizeAsync, which forgets a rejection: the hand-rolled cache this
+// replaced kept one, so a single failed instantiation — an out-of-memory at a
+// bad moment, say — would have failed every compressed block for the life of the
+// process with the same error and never tried again.
+const getModule = memoizeAsync(() => createHtsCodecsModule())
 
 /**
  * Instantiate the wasm module now rather than on the first block that needs it.
