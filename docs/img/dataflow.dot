@@ -30,10 +30,12 @@ digraph cramjs {
   subgraph cluster_decode {
     label="slice decode — worker if available"
     fontname="Helvetica" fontsize=9 fontcolor="#0969da" color="#0969da"
+    margin=10
 
     walk  [label="parse block headers"]
     uncmp [label="uncompress blocks" fillcolor="#ffd8b5" color="#bc4c00"]
     recs  [label="decode records\nJS data-series codecs"]
+    cols  [label="read-feature arena,\ntag and quality columns"]
   }
 
   subgraph cluster_wasm {
@@ -53,7 +55,8 @@ digraph cramjs {
   read  -> walk  [lhead=cluster_decode]
   walk  -> uncmp
   uncmp -> recs
-  recs  -> ref   [ltail=cluster_decode]
+  recs  -> cols
+  cols  -> ref   [ltail=cluster_decode]
   ref   -> out
   cache -> out   [label=" hit "]
 
