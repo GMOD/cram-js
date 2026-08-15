@@ -31,7 +31,7 @@ function benchCram(
         const cram = new IndexedCramFileBranch1({
           cramPath,
           index: new CraiIndexBranch1({ path: `${cramPath}.crai` }),
-          seqFetch,
+          fetchReferenceSequence: seqFetch,
           checkSequenceMD5: false,
         })
         await cram.getRecordsForRange(seqId, start, end)
@@ -45,7 +45,7 @@ function benchCram(
         const cram = new IndexedCramFileBranch2({
           cramPath,
           index: new CraiIndexBranch2({ path: `${cramPath}.crai` }),
-          seqFetch,
+          fetchReferenceSequence: seqFetch,
           checkSequenceMD5: false,
         })
         await cram.getRecordsForRange(seqId, start, end)

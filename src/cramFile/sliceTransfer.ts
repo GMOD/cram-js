@@ -109,7 +109,7 @@ export interface ArenaTransfer {
   pos: ReadFeatureArena['pos']
   refPos: ReadFeatureArena['refPos']
   num: ReadFeatureArena['num']
-  payloadOffsets: ReadFeatureArena['payloadOffsets']
+  payloadChunks: ReadFeatureArena['payloadChunks']
   payloadBytes: ReadFeatureArena['payloadBytes']
   refCodes: ReadFeatureArena['refCodes']
   subCodes: ReadFeatureArena['subCodes']
@@ -271,7 +271,7 @@ export function serializeSliceRecords(records: CramRecord[]): {
         pos: arena.pos,
         refPos: arena.refPos,
         num: arena.num,
-        payloadOffsets: arena.payloadOffsets,
+        payloadChunks: arena.payloadChunks,
         payloadBytes: arena.payloadBytes,
         refCodes: arena.refCodes,
         subCodes: arena.subCodes,
@@ -311,7 +311,7 @@ export function serializeSliceRecords(records: CramRecord[]): {
     add(arenaTransfer.pos)
     add(arenaTransfer.refPos)
     add(arenaTransfer.num)
-    add(arenaTransfer.payloadOffsets)
+    add(arenaTransfer.payloadChunks)
     add(arenaTransfer.payloadBytes)
     add(arenaTransfer.refCodes)
     add(arenaTransfer.subCodes)
@@ -406,7 +406,9 @@ function rebuildArena(t: ArenaTransfer) {
   arena.pos = t.pos
   arena.refPos = t.refPos
   arena.num = t.num
-  arena.payloadOffsets = t.payloadOffsets
+  arena.payloadChunks = t.payloadChunks
+  // the sender trimmed, so the checkpoints match these columns already
+  arena.indexedLength = t.length
   arena.payloadBytes = t.payloadBytes
   arena.refCodes = t.refCodes
   arena.subCodes = t.subCodes

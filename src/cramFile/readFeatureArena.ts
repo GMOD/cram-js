@@ -53,6 +53,49 @@ for (const code of [
 const INITIAL_SLOTS = 1024
 const INITIAL_PAYLOAD_BYTES = 1024
 
+/** {@link RF_PAYLOAD}: exactly one byte, since `num` is B's quality score */
+const PAYLOAD_ONE_BYTE = 1
+/** {@link RF_PAYLOAD}: `num` bytes */
+const PAYLOAD_NUM = 2
+
+/**
+ * How many bytes of {@link ReadFeatureArena.payloadBytes} a slot occupies, by
+ * feature code — 0 for the codes carrying none, which is what the table is left
+ * at. This is what makes {@link ReadFeatureArena.payloadChunks} possible, since
+ * it means a slot's payload length is already on the record.
+ *
+ * `i` is `num` like the rest rather than a second one-byte case: the decoder
+ * writes `num = 1` for it, so the two agree. B is the only code whose `num` is
+ * something other than a length.
+ */
+const RF_PAYLOAD = new Uint8Array(128)
+RF_PAYLOAD[RF_BASE_QUAL] = PAYLOAD_ONE_BYTE
+for (const code of [
+  RF_BASES,
+  RF_INSERTION,
+  RF_INSERT_BASE,
+  RF_QUALS,
+  RF_SOFT_CLIP,
+]) {
+  RF_PAYLOAD[code] = PAYLOAD_NUM
+}
+
+/**
+ * Slots per entry in {@link ReadFeatureArena.payloadChunks}.
+ *
+ * Eight puts the checkpoints at half a byte per slot and bounds a lookup at
+ * seven steps. The column it replaced was a full `Int32Array` offset per slot:
+ * 834 KB on the ONT slice against 104 KB here, and three quarters of it indexed
+ * nothing, since only 24.9% of that slice's features carry bytes at all.
+ */
+const PAYLOAD_CHUNK_SHIFT = 3
+const PAYLOAD_CHUNK_SLOTS = 1 << PAYLOAD_CHUNK_SHIFT
+
+/** checkpoints needed to cover `slots` slots */
+function chunksFor(slots: number) {
+  return (slots + PAYLOAD_CHUNK_SLOTS - 1) >> PAYLOAD_CHUNK_SHIFT
+}
+
 /**
  * Struct-of-arrays storage for the read features of every record in one slice.
  *
@@ -93,8 +136,28 @@ export default class ReadFeatureArena {
    * length of the payload for I/S/b/i/q.
    */
   num: Int32Array
-  /** offset into {@link payloadBytes} for I/S/b/i/q/B; meaningless otherwise */
-  payloadOffsets: Int32Array
+  /**
+   * The offset into {@link payloadBytes} of every
+   * {@link PAYLOAD_CHUNK_SLOTS}-th slot, from which {@link payloadOffsetAt}
+   * derives the rest. Built by {@link trim}, once the slice is decoded.
+   *
+   * A per-slot offset column was the obvious layout and is pure redundancy:
+   * payloads are appended in slot order and a slot's length is already known
+   * from its code and `num` (see {@link RF_PAYLOAD}), so the offsets are a
+   * running prefix sum — checked over every slot of all three performance
+   * fixtures, at zero deviations. What the column bought was O(1) random
+   * access, which this keeps to within seven steps for an eighth of the memory.
+   */
+  payloadChunks: Int32Array
+  /**
+   * The {@link length} {@link payloadChunks} was built for, so that a read
+   * against an arena still being filled rebuilds rather than answering from a
+   * stale index. −1 marks it as never built.
+   *
+   * Public for the same reason every column here is: `sliceTransfer` rebuilds
+   * an arena field by field, and one arriving from a worker is already indexed.
+   */
+  indexedLength = -1
   /**
    * Concatenated raw bytes of the features that carry a byte payload — the
    * inserted/clipped/verbatim bases of I/S/b/i, the quality scores of q, and
@@ -122,7 +185,7 @@ export default class ReadFeatureArena {
     this.pos = new Int32Array(slots)
     this.refPos = new Int32Array(slots)
     this.num = new Int32Array(slots)
-    this.payloadOffsets = new Int32Array(slots)
+    this.payloadChunks = new Int32Array(chunksFor(slots))
     this.refCodes = new Uint8Array(slots)
     this.subCodes = new Uint8Array(slots)
     this.payloadBytes = new Uint8Array(payloadBytes)
@@ -140,7 +203,6 @@ export default class ReadFeatureArena {
       this.pos = grow(this.pos, capacity)
       this.refPos = grow(this.refPos, capacity)
       this.num = grow(this.num, capacity)
-      this.payloadOffsets = grow(this.payloadOffsets, capacity)
       this.refCodes = grow(this.refCodes, capacity)
       this.subCodes = grow(this.subCodes, capacity)
     }
@@ -156,10 +218,15 @@ export default class ReadFeatureArena {
     }
   }
 
-  /** Record `bytes` as slot `index`'s byte payload. Does not set `num`. */
+  /**
+   * Record `bytes` as slot `index`'s byte payload. Does not set `num`.
+   *
+   * `index` is taken for the assertion it documents rather than used: payloads
+   * go to the end of {@link payloadBytes}, and {@link payloadOffsetAt} depends
+   * on them being appended in slot order.
+   */
   setPayload(index: number, bytes: Uint8Array) {
     this.reservePayload(bytes.length)
-    this.payloadOffsets[index] = this.payloadLength
     this.payloadBytes.set(bytes, this.payloadLength)
     this.payloadLength += bytes.length
   }
@@ -167,11 +234,18 @@ export default class ReadFeatureArena {
   /** Record a single byte as slot `index`'s payload. Does not set `num`. */
   setPayloadByte(index: number, byte: number) {
     this.reservePayload(1)
-    this.payloadOffsets[index] = this.payloadLength
     this.payloadBytes[this.payloadLength++] = byte
   }
 
-  /** Release the capacity decoding over-allocated; the arena outlives it. */
+  /**
+   * Release the capacity decoding over-allocated, and index the payloads.
+   *
+   * The checkpoints are built here, in one pass, rather than maintained as
+   * payloads are appended: a slice decodes once and the columns are complete
+   * only when it finishes, so this is where every slot's code and `num` are
+   * final. Reading an arena that has not been trimmed still works — see
+   * {@link indexedLength} — it just builds the index on the first read.
+   */
   trim() {
     if (this.length < this.codes.length) {
       const n = this.length
@@ -179,13 +253,70 @@ export default class ReadFeatureArena {
       this.pos = this.pos.slice(0, n)
       this.refPos = this.refPos.slice(0, n)
       this.num = this.num.slice(0, n)
-      this.payloadOffsets = this.payloadOffsets.slice(0, n)
       this.refCodes = this.refCodes.slice(0, n)
       this.subCodes = this.subCodes.slice(0, n)
     }
     if (this.payloadLength < this.payloadBytes.length) {
       this.payloadBytes = this.payloadBytes.slice(0, this.payloadLength)
     }
+    this.indexPayloads()
+  }
+
+  /** Fill {@link payloadChunks} from the columns as they stand. */
+  private indexPayloads() {
+    const { codes, num, length } = this
+    this.indexedLength = length
+    const chunks = new Int32Array(chunksFor(length))
+    let offset = 0
+    for (let i = 0; i < length; i++) {
+      if ((i & (PAYLOAD_CHUNK_SLOTS - 1)) === 0) {
+        chunks[i >> PAYLOAD_CHUNK_SHIFT] = offset
+      }
+      const payload = RF_PAYLOAD[codes[i]!]!
+      if (payload === PAYLOAD_NUM) {
+        offset += num[i]!
+      } else if (payload === PAYLOAD_ONE_BYTE) {
+        offset += 1
+      }
+    }
+    this.payloadChunks = chunks
+  }
+
+  /**
+   * Where slot `index`'s payload starts in {@link payloadBytes}.
+   *
+   * Walks forward from the nearest checkpoint, so at most
+   * {@link PAYLOAD_CHUNK_SLOTS} − 1 slots. Only the four accessors below need
+   * it; a caller walking a whole record in order is better off carrying the
+   * running offset itself, as `decodeReadSequenceBytes` does.
+   */
+  payloadOffsetAt(index: number) {
+    if (this.indexedLength !== this.length) {
+      this.indexPayloads()
+    }
+    let offset = this.payloadChunks[index >> PAYLOAD_CHUNK_SHIFT]!
+    const { codes, num } = this
+    for (let i = index & ~(PAYLOAD_CHUNK_SLOTS - 1); i < index; i++) {
+      const payload = RF_PAYLOAD[codes[i]!]!
+      if (payload === PAYLOAD_NUM) {
+        offset += num[i]!
+      } else if (payload === PAYLOAD_ONE_BYTE) {
+        offset += 1
+      }
+    }
+    return offset
+  }
+
+  /**
+   * The bytes slot `index` contributes to {@link payloadBytes} — 0 for a
+   * feature that carries none. For walking a record while tracking the offset.
+   */
+  payloadLengthAt(index: number) {
+    const payload = RF_PAYLOAD[this.codes[index]!]!
+    if (payload === PAYLOAD_NUM) {
+      return this.num[index]!
+    }
+    return payload === PAYLOAD_ONE_BYTE ? 1 : 0
   }
 
   /**
@@ -197,7 +328,7 @@ export default class ReadFeatureArena {
    * for B, the only other code that carries bytes.
    */
   payloadBytesAt(index: number) {
-    const offset = this.payloadOffsets[index]!
+    const offset = this.payloadOffsetAt(index)
     return this.payloadBytes.subarray(offset, offset + this.num[index]!)
   }
 
@@ -209,7 +340,7 @@ export default class ReadFeatureArena {
    * the quality was 0, which then read as a NUL instead of the base.
    */
   payloadByteAt(index: number) {
-    return this.payloadBytes[this.payloadOffsets[index]!]!
+    return this.payloadBytes[this.payloadOffsetAt(index)]!
   }
 
   /** Slot `index`'s payload decoded as a string — the I/S/b/i `data` value. */
@@ -348,5 +479,8 @@ export function arenaFromReadFeatures(features: ReadFeature[]) {
       }
     }
   }
+  // the payload checkpoints are built here, so a synthesised arena is readable
+  // on the same terms as a decoded one
+  arena.trim()
   return arena
 }

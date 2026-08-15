@@ -24,7 +24,7 @@ const COLUMNS = [
   'pos',
   'refPos',
   'num',
-  'payloadOffsets',
+  'payloadChunks',
   'refCodes',
   'subCodes',
   'payloadBytes',
@@ -82,7 +82,7 @@ for (const c of selected) {
       byCode[code] = (byCode[code] ?? 0) + 1
       if (PAYLOAD_CODES.has(code)) {
         withPayload++
-        if (arena.payloadOffsets[i] !== running) {
+        if (arena.payloadOffsetAt(i) !== running) {
           notPrefixSum++
         }
         // B carries exactly one byte; for the rest `num` is the payload length
@@ -111,5 +111,7 @@ for (const c of selected) {
   console.log(
     `  slots carrying bytes: ${withPayload} of ${features} (${((100 * withPayload) / features).toFixed(1)}%), indexing ${kb(payloadUsed)}`,
   )
+  // payloadOffsetAt derives each offset from the checkpoints, so this is also
+  // the check that the derivation agrees with the appends it is derived from
   console.log(`  offsets that are not the prefix sum: ${notPrefixSum}`)
 }

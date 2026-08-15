@@ -201,8 +201,7 @@ function decodeReadSequenceBytes(
   refRegion: RefRegion,
   regionSeqOffset: number,
 ) {
-  const { codes, pos, num, subCodes } = arena
-  const { payloadBytes, payloadOffsets } = arena
+  const { codes, pos, num, subCodes, payloadBytes } = arena
   const refSeq = refRegion.seq
   const readLength = cramRecord.readLength
   const featureStart = cramRecord.readFeatureStart
@@ -242,9 +241,18 @@ function decodeReadSequenceBytes(
     regionPos += count
   }
 
+  // one lookup for the record, then advanced per feature, rather than a lookup
+  // per payload — see ReadFeatureArena.payloadOffsetAt
+  let payloadOffset = featureCount > 0 ? arena.payloadOffsetAt(featureStart) : 0
+
   for (let f = 0; f < featureCount && outPos < readLength; f++) {
     const i = featureStart + f
     const code = codes[i]!
+    const payloadLength = arena.payloadLengthAt(i)
+    const off = payloadOffset
+    // advanced before the q/Q skip below, since a q carries bytes even though
+    // it emits none: leaving it out desynchronises every payload after it
+    payloadOffset += payloadLength
     // q/Q describe quality, not geometry: neither emits bases nor moves along
     // the reference
     if (!RF_POSITIONAL[code]) {
@@ -273,7 +281,7 @@ function decodeReadSequenceBytes(
       regionPos += 1
     } else if (code === RF_BASE_QUAL) {
       grow(outPos + 1)
-      const base = payloadBytes[payloadOffsets[i]!]!
+      const base = payloadBytes[off]!
       out[outPos++] = base >= 97 && base <= 122 ? base - 32 : base
       regionPos += 1
     } else if (
@@ -284,7 +292,6 @@ function decodeReadSequenceBytes(
     ) {
       // the payload is already bytes in the arena, so no decode is needed here
       const n = num[i]!
-      const off = payloadOffsets[i]!
       grow(outPos + n)
       for (let j = 0; j < n; j++) {
         const c = payloadBytes[off + j]!
