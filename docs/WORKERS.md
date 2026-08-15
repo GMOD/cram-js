@@ -258,5 +258,14 @@ whose own `build` ends in `build:worker-bundle`, which runs webpack and then
 `inline-worker.sh`. Checked 2026-08-12.)
 
 The size is the cost of the inline approach: the worker carries the decoder
-_and_ the base64 wasm, so it is ~394 KB that every consumer downloads whether or
-not they enable the pool. That was a deliberate trade for zero consumer wiring.
+_and_ the wasm, so the string module is 395 KB (96 KB gzipped). That was a
+deliberate trade for zero consumer wiring.
+
+It is **not** 395 KB every consumer downloads, which this said until 13.3.0 and
+which the code-split fixed: `sliceWorkerPool.ts` reaches the bundle through a
+dynamic `import()` inside `getWorkerBlobUrl`, which is only called when a pool
+is actually started, so a bundler puts it in a chunk of its own. Bundling
+`IndexedCramFile` + `CraiIndex` with esbuild, that is 268 KB against 534 KB — a
+consumer who never enables the pool, or who runs under node where it cannot
+start at all, loads none of it. (The bytes are in the npm tarball either way, as
+`src/`, `esm/` and `dist/` copies; what moved is what reaches a browser.)

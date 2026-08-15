@@ -260,7 +260,8 @@ let cachedBlobUrl: string | undefined
  * The worker bundle, fetched only when a pool is actually started.
  *
  * **The dynamic import is about bundle weight, and only that.** The bundle is a
- * ~400 KB base64 string, and a static import pins it into the initial bundle of
+ * 395 KB string — the worker's code with the wasm inlined inside it, not base64
+ * despite how it reads — and a static import pins it into the initial bundle of
  * every consumer that can reach `CramFile` — which is all of them, since
  * `file.ts` imports this module to start the pool. Measured with esbuild,
  * bundling and minifying `IndexedCramFile` + `CraiIndex`:

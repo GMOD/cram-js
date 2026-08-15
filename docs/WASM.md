@@ -86,9 +86,15 @@ worth more than the bytes.
   unit.
 - **The heap only grows** (see [Memory](#memory)), so peak tracks the largest
   single block ever decompressed.
-- **The worker bundle carries its own copy**, decoder plus base64 wasm, so it is
-  ~394 KB that ships whether or not the pool is enabled — see
-  [WORKERS.md](WORKERS.md#building-the-bundle).
+- **The worker bundle carries its own copy** of the decoder and the wasm, so
+  `src/wasm/cram-worker-source.js` is 395 KB (96 KB gzipped) in the published
+  package — see [WORKERS.md](WORKERS.md#building-the-bundle). This used to say
+  those bytes ship "whether or not the pool is enabled", which stopped being
+  true when the bundle was code-split: `sliceWorkerPool.ts` imports it
+  dynamically, from a function only called when a pool actually starts, so a
+  bundler leaves it in a chunk nobody who never enables the pool loads. Measured
+  with esbuild over `IndexedCramFile` + `CraiIndex`, that took an entry point
+  from 534 KB to 268 KB.
 - **No SIMD, no wasm threads**, which is a real ceiling on single-block
   throughput; the parallelism comes from slices instead (below).
 
@@ -104,6 +110,14 @@ worth more than the bytes.
 
 The binary stays this small because we only link decoders — no compressor, and
 none of the SIMD-specialized htscodecs variants.
+
+**Only the lzma module is base64.** `src/xz-decompress/wasm.ts` really is a
+`data:application/wasm;base64,` URI, and this file used to describe the
+htscodecs bundle the same way. It is not: emscripten's `SINGLE_FILE=1` writes
+the binary as a string of one character per byte, unpacked by the
+`b[c] = ~f >> 8 & f` loop at the top of `htscodecs.js`. That is why 113 KB of
+wasm fits in a 128 KB file, where base64 would have needed 151 KB of it — worth
+knowing before anyone tries to "fix" the encoding or measures the wrong thing.
 
 Instantiation waits for the first compressed block rather than happening at
 import time, and the instance is then reused for the life of the process however
