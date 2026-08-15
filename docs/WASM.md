@@ -11,8 +11,7 @@ decoder: htscodecs has no lzma codec at all — htslib links liblzma for those
 blocks — so `src/xz-decompress/` carries
 [xz-embedded](https://tukaani.org/xz/embedded.html) as its own 16 KB base64
 module, instantiated straight off a `data:` URI. Only the streaming wrapper
-around it is JS. (This file used to say lzma was "the one decoder still written
-in JS", which was wrong in both halves.)
+around it is JS.
 
 [dataflow.dot](dataflow.dot) ([rendered](dataflow.svg)) shows where both sit in
 a query.
@@ -73,11 +72,9 @@ alternative it was picked over:
   not also the one compiling the module.
 
 The wasm being inlined is a separate axis, and the trade there is explicit: a
-128 KB bundle every consumer downloads, in exchange for behaving like any other
-JS dependency — no second request, no asset to copy into a build, no MIME type
-or CSP rule, and the same story in node, browsers and workers. For a decoder
-that is useless without its codecs, a build step nobody has to know about is
-worth more than the bytes.
+128 KB bundle every consumer downloads, in exchange for the frictionlessness
+above. For a decoder that is useless without its codecs, a build step nobody has
+to know about is worth more than the bytes.
 
 ### Where it is not optimal
 
@@ -88,13 +85,12 @@ worth more than the bytes.
   single block ever decompressed.
 - **The worker bundle carries its own copy** of the decoder and the wasm, so
   `src/wasm/cram-worker-source.js` is 395 KB (96 KB gzipped) in the published
-  package — see [WORKERS.md](WORKERS.md#building-the-bundle). This used to say
-  those bytes ship "whether or not the pool is enabled", which stopped being
-  true when the bundle was code-split: `sliceWorkerPool.ts` imports it
-  dynamically, from a function only called when a pool actually starts, so a
-  bundler leaves it in a chunk nobody who never enables the pool loads. Measured
-  with esbuild over `IndexedCramFile` + `CraiIndex`, that took an entry point
-  from 534 KB to 268 KB.
+  package — see [WORKERS.md](WORKERS.md#building-the-bundle). Those bytes are
+  code-split, at least: `sliceWorkerPool.ts` imports the bundle dynamically,
+  from a function only called when a pool actually starts, so a bundler leaves
+  it in a chunk nobody who never enables the pool loads. Measured with esbuild
+  over `IndexedCramFile` + `CraiIndex`, that took an entry point from 534 KB to
+  268 KB.
 - **No SIMD, no wasm threads**, which is a real ceiling on single-block
   throughput; the parallelism comes from slices instead (below).
 
@@ -108,26 +104,17 @@ worth more than the bytes.
 | wasm heap                   | 16 MB floor            |
 | `src/xz-decompress/wasm.ts` | 16 KB, lzma only       |
 
-The binary stays this small because we only link decoders — no compressor, and
-none of the SIMD-specialized htscodecs variants.
-
 **Only the lzma module is base64.** `src/xz-decompress/wasm.ts` really is a
-`data:application/wasm;base64,` URI, and this file used to describe the
-htscodecs bundle the same way. It is not: emscripten's `SINGLE_FILE=1` writes
-the binary as a string of one character per byte, unpacked by the
-`b[c] = ~f >> 8 & f` loop at the top of `htscodecs.js`. That is why 113 KB of
-wasm fits in a 128 KB file, where base64 would have needed 151 KB of it — worth
-knowing before anyone tries to "fix" the encoding or measures the wrong thing.
+`data:application/wasm;base64,` URI, but the htscodecs bundle is not:
+emscripten's `SINGLE_FILE=1` writes the binary as a string of one character per
+byte, unpacked by the `b[c] = ~f >> 8 & f` loop at the top of `htscodecs.js`.
+That is why 113 KB of wasm fits in a 128 KB file, where base64 would have needed
+151 KB of it — worth knowing before anyone tries to "fix" the encoding or
+measures the wrong thing.
 
-Instantiation waits for the first compressed block rather than happening at
-import time, and the instance is then reused for the life of the process however
-many CRAM files you open. Since that first instantiation is async, every decoder
-entry point in `src/htscodecs-wasm.ts` is async too; once it's done, calls
-resolve against an instance that already exists.
-
-Each decode copies its input into the wasm heap and copies the output back out
-to a JS `Uint8Array`. Those two copies are what you pay at the boundary, and
-they're the reason this is worth doing per block and not per record.
+Because that first instantiation is async, every decoder entry point in
+`src/htscodecs-wasm.ts` is async too; once it has happened, calls resolve
+against an instance that already exists.
 
 ## Memory
 

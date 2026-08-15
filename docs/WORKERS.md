@@ -251,11 +251,10 @@ generated artifact nothing regenerates is one `npm version` can commit
 unreviewed part-way through a release. It rebuilds byte-for-byte, so
 `git status` stays clean — check it the same way as the wasm bundle.
 
-(This used to say `bgzf-filehandle`'s equivalent artifact was produced by no
-script in that repo. That is not true and may never have been: its root
+`bgzf-filehandle` regenerates its equivalent artifact the same way: its root
 `build:wasm` delegates to the `bgzf-wasm-build` workspace package in `crate/`,
-whose own `build` ends in `build:worker-bundle`, which runs webpack and then
-`inline-worker.sh`. Checked 2026-08-12.)
+whose own `build` ends in `build:worker-bundle`, running webpack and then
+`inline-worker.sh` (checked 2026-08-12).
 
 The size is the cost of the inline approach: the worker carries the decoder
 _and_ the wasm, so the string module is 395 KB (96 KB gzipped). That was a
