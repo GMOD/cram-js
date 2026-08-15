@@ -107,8 +107,8 @@ function chunksFor(slots: number) {
  * data — a 37-record ONT slice decodes 213k of them — and an
  * `{code, pos, refPos, data}` object costs 64 bytes before
  * `addReferenceSequence` widens the substitutions to 81. Here each feature is
- * 19 bytes of typed-array columns and the fixed per-array overhead is amortised
- * across the whole slice.
+ * 15 bytes of typed-array columns, plus its share of {@link payloadChunks}, and
+ * the fixed per-array overhead is amortised across the whole slice.
  *
  * The columns are deliberately *per slice*, not per record: giving each record
  * its own typed arrays makes short-read files about twice as expensive as

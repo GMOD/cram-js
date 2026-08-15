@@ -61,13 +61,22 @@ once per record.
 An `{code, pos, refPos, data}` object costs 64 bytes, and 81 once
 `addReferenceSequence` adds `ref`/`sub` to a substitution — and adding a
 property the object was not constructed with moves V8's properties
-out-of-object, which is 11.7% of retained heap on its own. As columns it is 19
+out-of-object, which is 11.7% of retained heap on its own. As columns it is 15
 bytes per feature.
 
 The columns are deliberately **per slice, not per record**. Giving each record
 its own typed arrays makes short-read files about twice as expensive as plain
 objects, because ~100 bytes of fixed overhead lands on the ~2 features a short
 read carries. See [read-features.md](read-features.md) for how to read them.
+
+Not every column is stored per feature. A feature's payload offset used to be,
+at 4 bytes each, and was pure redundancy — payloads are appended in slot order
+and a slot's length is already known from its code and `num`, so the offsets
+were a running prefix sum, and three quarters of them indexed a feature carrying
+no bytes at all. `payloadChunks` keeps one every eighth slot and derives the
+rest, which is the 4 bytes that took a feature from 19 to 15:
+[ADR 0010](adr/0010-checkpoint-the-payload-offsets.md).
+`scripts/arena-columns.ts` is how to see what each column currently costs.
 
 ### Quality scores — `qualityColumn`
 

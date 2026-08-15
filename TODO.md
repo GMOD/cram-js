@@ -9,9 +9,9 @@ done, live in [docs/adr/](docs/adr/) — see
 [ADR 0007](docs/adr/0007-optimizations-measured-and-rejected.md) before
 proposing an optimization, in case it has already been tried.
 
-Numbers below were measured on this repo around v8.7.0, except the
-`payloadOffsets` item, re-measured at v13.3.0 with `scripts/arena-columns.ts`.
-Read the method note at the bottom before trusting or re-running them.
+Numbers below were measured on this repo around v8.7.0, except the arena ones,
+taken at v13.3.0 with `scripts/arena-columns.ts`. Read the method note at the
+bottom before trusting or re-running them.
 
 ## Cache containers and compression schemes across queries
 
@@ -71,47 +71,35 @@ that qualifies is a ~9 MB binary. The abort machinery under test is shared with
 the BAM case, so the fixture was judged not worth the repository weight. Revisit
 if CRAM ever diverges from that path.
 
-## Drop `payloadOffsets`, and decide the arena's random access with it
+## Derive `refPos` rather than storing it
 
-`scripts/arena-columns.ts` takes an arena apart; run it before touching this. On
-the ONT slice `payloadOffsets` is **834 KB, 19.6% of the arena** and 11.5% of
-the 7.10 MB the records retain. Three facts about it, all from that script:
+`scripts/arena-columns.ts` takes an arena apart; run it before touching this.
+`refPos` is **834 KB on the ONT slice, 23.7% of the arena** now that
+`payloadOffsets` is gone, and it is derivable: the decoder computes it as
+`readPos + alignmentStart - 1 + refDelta`, where `refDelta` accumulates over a
+record's features in order. So it is the same shape as `payloadOffsets` was, and
+[ADR 0010](docs/adr/0010-checkpoint-the-payload-offsets.md) is the worked
+example — checkpoints every eighth slot took that column to an eighth of its
+size, for −9.4% retained heap on ONT, with the accessors unchanged.
 
-- **75% of the column indexes nothing.** Only 53,292 of ONT's 213,602 slots
-  carry bytes at all (13.9% on SRR396637, since a short read's features are
-  nearly all X). The other 160,310 hold a zero that no accessor may read.
-- **It is 2.9x the data it indexes** — 834 KB of offsets over 291 KB of
-  `payloadBytes`.
-- **It is exactly the running prefix sum** of the lengths already in `code` and
-  `num` (B is one byte, the rest take `num`), verified at **0 deviations** over
-  every slot of ONT, SRR396636 and SRR396637.
+It is the **harder** case, though, and the reason is not size:
 
-So the column is fully redundant and the question is not how to pack it but
-**whether the arena keeps O(1) random access on every column**. That is a
-decision for the arena, not for this one column: `refPos` is the same 834 KB and
-the same shape — derivable from `pos` plus a running per-record delta — and
-`pos`, `refPos` and `num` are 59% of the arena between them. Decide it once.
+- `payloadOffsets` was reached only through four accessors, so nothing outside
+  the arena could tell. **`refPos` is a public column that consumers read
+  directly** — jbrowse destructures it in its own walks. Deriving it means
+  either keeping a column that is now a cache, or a breaking change.
+- The derivation needs the record, not just the slot: `alignmentStart` is per
+  record, and `refDelta` accumulates from that record's first feature. A
+  checkpoint every eighth slot within one record works, but the arena would have
+  to know where records begin, which today only the records know.
 
-What each option costs, since the obvious two are not equivalent:
-
-- **A per-record base offset** — what this item used to propose — is 8 bytes per
-  record: 296 B against 834 KB saved on ONT, but 437 KB against 422 KB saved on
-  SRR396637. A long-read win and a **wash on short reads**.
-- **Checkpoints every K slots** scale with features instead, so they win on both
-  (K=8 leaves 104 KB on ONT), at up to K−1 steps per lookup.
-
-Either way the three readers are already sequential over one record's features —
-`decodeReadSequenceBytes`, the string form beside it, and `forEachMismatch` — so
-they can carry a running offset and pay nothing per feature. What blocks it is
-that `payloadBytesAt(i)` / `payloadStringAt(i)` / `payloadByteAt(i)` take an
-index and nothing else, and `ReadFeatureArena` is exported. Changing them is a
-breaking change for a win that is ~11% on long reads and ~0 on short ones, which
-is the trade to weigh before starting — the earlier note here called this "free
-to change" on the strength of consumers not reading the column, which is true
-and is not the same thing.
+`pos` and `num` are the same 834 KB each and are **not** derivable — `pos` is
+the FP delta accumulated, and `num` is genuine per-feature data. With
+`payloadOffsets` gone those three are 71% of the arena, so `refPos` is the last
+easy 24% of it.
 
 The neighbouring idea is **not** free and is not proposed: `refCodes`/`subCodes`
-together are 417 KB (9.8% of the arena) and would fit in the spare bits of an X
+together are 417 KB (11.8% of the arena) and would fit in the spare bits of an X
 feature's `num` (a 0–3 substitution-matrix index), but they are genuinely
 public. Packing them is a breaking change for less than the above.
 

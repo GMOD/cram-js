@@ -170,13 +170,20 @@ Read features, quality scores and aux tags are stored as one set of typed arrays
 per slice plus an offset per record, rather than as objects per record. A
 retained `Uint8Array` view is **104 bytes whatever it points at**, so a
 per-record view over ~100 bytes costs more than the bytes; the columns pay that
-fixed cost once per slice. Read features go from 64–81 bytes each to 19, and the
+fixed cost once per slice. Read features go from 64–81 bytes each to 15, and the
 quality column removed 104 bytes per record (−12.8% retained on SRR396637).
 
 The columns are per slice and not per record for the same reason in the other
 direction — giving each record its own typed arrays makes short-read files about
 twice as expensive as plain objects. [memory.md](memory.md#columns-not-objects)
 has the numbers, and [read-features.md](read-features.md) how to read them.
+
+A column that is derivable is not stored per feature at all. Payload offsets
+were, at 4 bytes each, until it turned out they were the running prefix sum of
+lengths the arena already had — and that three quarters of them pointed at a
+feature carrying no bytes. One checkpoint every eighth slot replaced them, for
+−9.4% retained heap on a long-read slice with the accessors unchanged
+([ADR 0010](adr/0010-checkpoint-the-payload-offsets.md)).
 
 `TagColumn` is the exception, and worth knowing before anyone "improves" it on
 the assumption that it saved heap: it came out break-even (−0.06 MB on

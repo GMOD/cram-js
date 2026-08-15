@@ -31,6 +31,7 @@ How this differs from the other documents here:
 | [0007](0007-optimizations-measured-and-rejected.md)     | Optimizations measured and rejected                            | accepted |
 | [0008](0008-emit-into-the-consumers-callback.md)        | Emit into the consumer's callback, not into a translator       | accepted |
 | [0009](0009-one-pool-per-context-sized-for-the-host.md) | One slice pool per JS context, sized by the host               | accepted |
+| [0010](0010-checkpoint-the-payload-offsets.md)          | Checkpoint the payload offsets, one per eight slots            | accepted |
 
 ## Writing one
 
