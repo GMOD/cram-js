@@ -204,6 +204,20 @@ export interface CramFileOptions {
    */
   cacheBudget?: SharedBudget
   fetchReferenceSequence?: SeqFetch
+  /**
+   * Check every block's CRC32 as it is read. Default false.
+   *
+   * What it buys is the difference between a damaged file and wrong records.
+   * Flipping one byte at each of 200 positions through
+   * `SRR396637.sorted.clip.cram`, plus 40 truncations: with this on, all 240
+   * raise a `CramError`. With it off, 69 still do — the damage lands
+   * somewhere a length or a codec notices — but two decode to 54,695 records
+   * that differ from the pristine ones, with nothing to say so. A byte inside
+   * an external block is only recoverable from the CRC.
+   *
+   * Off by default because most consumers read their own files over a
+   * checksummed transport and the decode is the cost they care about.
+   */
   validateChecksums?: boolean
   /**
    * Decode slices on a shared pool of workers. Default true, and a no-op

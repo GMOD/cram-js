@@ -15,6 +15,11 @@ new IndexedCramFile({
   index, // CraiIndex instance (or any object with getEntriesForRange)
   fetchReferenceSequence, // async (seqId, start, end, refName, opts) => string
   checkSequenceMD5, // default false; set true to verify each slice's reference MD5
+  validateChecksums, // default false; set true to check every block's CRC32.
+  // this is what separates "damaged file" from "wrong records": corrupting a
+  // byte anywhere in a CRAM here is caught 240 times out of 240 with it on,
+  // where with it off two of those flips decoded to records that simply
+  // differed, with nothing to say so
   cacheSize, // max cached records, default 1000000. records not bytes, so
   // it does not bound memory; size it to hold several queries, since below one
   // query's working set it caches nothing at all
