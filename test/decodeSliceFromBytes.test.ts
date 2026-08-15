@@ -169,8 +169,8 @@ for (const path of cases) {
 // One pool serves every CRAM in the context, and the scheme cache is keyed on a
 // container's file position — which two files share whenever their SAM headers
 // are the same length, as two samples from one pipeline usually are. These two
-// fixtures both have a container at 418, and before 13.3.1 the second file
-// decoded with the first one's codecs and was reported malformed.
+// fixtures both have a container at 418: served the first file's codecs, the
+// second is reported malformed.
 test('the scheme cache does not confuse two files whose containers coincide', async () => {
   clearSchemeCache()
   const paths = [
