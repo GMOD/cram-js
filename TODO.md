@@ -93,19 +93,29 @@ deleted its copy and drives `forEachMismatch`
 ([ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md)). What is left is
 the plain compatibility argument, `readFeatures` being reachable by anyone.
 
-## Simplifications (no perf angle)
+## Decide whether the worker pool should ever shut down
 
-- `growUint8`/`growInt32`/`nextCapacity` in `readFeatureArena.ts`, the same
-  helpers in `tagColumn.ts`, and `qualityColumn.ts`'s inline grow loop are the
-  same geometric-growth-then-trim written three times.
+It does not today. `destroySharedSliceWorkerPool()` is exported and nothing
+calls it internally, so the first CRAM a page touches starts four workers that
+live until the tab closes — with their wasm heaps, a 16 MB floor each, so up to
+80 MB and four threads held after every CRAM track is gone.
 
-- `CramRecord`'s constructor parameter is `ReturnType<typeof decodeRecord>`, so
-  every key is required and building a record by hand means spelling out seven
-  explicit `undefined`s (see `test/pairOrientation.test.ts`). A named
-  `CramRecordArgs` interface with the optional fields marked optional fixes that
-  at no runtime cost. Do **not** take the other option and make the constructor
-  positional — that was measured and rejected, see
-  [ADR 0007](docs/adr/0007-optimizations-measured-and-rejected.md).
+That is an asymmetry with the record cache, where the same argument was already
+accepted: `cacheIdleTimeoutMs` exists precisely because "jbrowse's `CramAdapter`
+memoizes one `IndexedCramFile` for the life of the track", and a parked tab
+should not hold its last view. The pool is the larger number of the two and has
+no equivalent.
+
+It is left open rather than done because the trade is real in both directions.
+Teardown costs a worker spawn plus the wasm instantiation per worker on the next
+query — ~5 ms each, and the pool is shared, so the next query to arrive pays for
+everyone. And "idle" is a coarser condition here: the pool is per JS context, so
+it means no CRAM anywhere in the context has queried recently, which one file
+cannot know. A `CramFile` that knows it is finished can call
+`destroySharedSliceWorkerPool()` today, but only if it is the last one.
+
+Nothing here is measured yet; the 80 MB is arithmetic (`docs/MEMORY.md`), not an
+observation of a real page.
 
 ## Method note
 

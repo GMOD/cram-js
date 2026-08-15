@@ -25,13 +25,15 @@ function makeRecord({
   mate?: { sequenceId: number; start: number }
   templateLength?: number
 }) {
+  // the fields a record without read features, tags, quality or a mate pointer
+  // actually has — the rest are optional on CramRecordArgs, where they used to
+  // be required because the type was the decoder's return type
   const args: RecordArgs = {
     flags,
     cramFlags: 0,
     readLength: 100,
     mappingQuality: 60,
     lengthOnRef: 100,
-    qualityColumn: undefined,
     qualityStart: -1,
     readGroupId: 0,
     sequenceId,
@@ -42,13 +44,8 @@ function makeRecord({
     tagCount: 0,
     nextSequenceId: mate ? mate.sequenceId : NEXT_UNKNOWN,
     nextStart: mate ? mate.start : -1,
-    readName: undefined,
-    templateSize: undefined,
-    mateRecordNumber: undefined,
-    readFeatureArena: undefined,
     readFeatureStart: 0,
     readFeatureCount: 0,
-    readBases: undefined,
   }
   const record = new CramRecord(args)
   record.templateLength = templateLength

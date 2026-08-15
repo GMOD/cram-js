@@ -34,7 +34,6 @@ import type {
   MismatchOptions,
 } from './mismatches.ts'
 import type ReadFeatureArena from './readFeatureArena.ts'
-import type decodeRecord from './slice/decodeRecord.ts'
 import type TagColumn from './tagColumn.ts'
 import type { TagValue } from './tagColumn.ts'
 
@@ -95,6 +94,52 @@ export interface DecodeOptions {
 
 export const defaultDecodeOptions: Required<DecodeOptions> = {
   decodeTags: true,
+}
+
+/**
+ * Everything {@link CramRecord}'s constructor takes.
+ *
+ * The decode fills this in — `decodeRecord`'s return type is checked against it
+ * — but it is written out here rather than being `ReturnType<typeof
+ * decodeRecord>`, which is what it used to be. That made every field required
+ * whether or not the record has one, so building a record by hand meant spelling
+ * out seven explicit `undefined`s (see `test/pairOrientation.test.ts`) to satisfy
+ * a type whose only real content was "whatever the decoder happens to return".
+ *
+ * Deliberately still an options object rather than a positional constructor:
+ * positional was measured and rejected, see
+ * `docs/adr/0007-optimizations-measured-and-rejected.md`.
+ */
+export interface CramRecordArgs {
+  flags: number
+  cramFlags: number
+  readLength: number
+  /** 0-based start of the alignment on the reference */
+  start: number
+  sequenceId: number
+  readGroupId: number
+  uniqueId: number
+  /** {@link NEXT_UNKNOWN} when the file does not locate the next segment */
+  nextSequenceId: number
+  nextStart: number
+  /** offset into `qualityColumn`, or -1 for a record carrying no scores */
+  qualityStart: number
+  readFeatureStart: number
+  readFeatureCount: number
+  tagColumn: TagColumn
+  tagStart: number
+  tagCount: number
+  mappingQuality?: number
+  lengthOnRef?: number
+  /** the slice's quality column; undefined when this record has no scores */
+  qualityColumn?: Uint8Array
+  mateRecordNumber?: number
+  /** null for a `*` record, which is not the same as absent */
+  readBases?: string | null
+  /** the slice's read-feature arena; undefined when this record has none */
+  readFeatureArena?: ReadFeatureArena
+  readName?: string
+  templateSize?: number
 }
 
 function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
@@ -624,7 +669,7 @@ export default class CramRecord {
     tagColumn,
     tagStart,
     tagCount,
-  }: ReturnType<typeof decodeRecord>) {
+  }: CramRecordArgs) {
     this.flags = flags
     this.cramFlags = cramFlags
     this.readLength = readLength
@@ -633,7 +678,7 @@ export default class CramRecord {
     this.qualityColumn = qualityColumn
     this.qualityStart = qualityStart
     this.readGroupId = readGroupId
-    this.sequenceId = sequenceId!
+    this.sequenceId = sequenceId
     this.uniqueId = uniqueId
     this.start = start
     this.tagColumn = tagColumn

@@ -1,9 +1,11 @@
+import { dataSeriesTypes } from '../codecs/dataSeriesTypes.ts'
 import { instantiateCodec } from '../codecs/index.ts'
 
 import type CramCodec from '../codecs/_base.ts'
 import type {
   DataSeriesEncodingKey,
   DataSeriesEncodingMap,
+  DataSeriesTypes,
 } from '../codecs/dataSeriesTypes.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type {
@@ -11,45 +13,11 @@ import type {
   CramTagDictionary,
 } from '../sectionParsers.ts'
 
-// the hardcoded data type to be decoded for each core
-// data field
-const dataSeriesTypes = {
-  BF: 'int',
-  CF: 'int',
-  RI: 'int',
-  RL: 'int',
-  AP: 'int',
-  RG: 'int',
-  MF: 'int',
-  NS: 'int',
-  NP: 'int',
-  TS: 'int',
-  NF: 'int',
-  TC: 'byte',
-  TN: 'int',
-  FN: 'int',
-  FC: 'byte',
-  FP: 'int',
-  BS: 'byte',
-  IN: 'byteArray',
-  SC: 'byteArray',
-  DL: 'int',
-  BA: 'byte',
-  BB: 'byteArray',
-  RS: 'int',
-  PD: 'int',
-  HC: 'int',
-  MQ: 'int',
-  RN: 'byteArray',
-  QS: 'byte',
-  QQ: 'byteArray',
-  TL: 'int',
-  // TM: 'ignore',
-  // TV: 'ignore',
-} as const
-
+// the data series table lives with the key union it defines, in
+// codecs/dataSeriesTypes.ts; re-exported here for the call sites that have
+// always reached for it through the compression scheme
 export { dataSeriesTypes }
-export type DataSeriesTypes = typeof dataSeriesTypes
+export type { DataSeriesTypes }
 
 // For each reference base index 0..4 (A,C,G,T,N), the three other bases plus N
 // (or T for ref=N), in the order they're packed into the 2-bit substitution code
