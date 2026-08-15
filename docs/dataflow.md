@@ -45,12 +45,16 @@ without materializing anything.
 
 ## Where the slice decode happens
 
-Everything in the blue box moves to a worker when the host has one — a `Worker`
-from a Blob URL, both of them inlined, so there is nothing to configure. The
-unit is the **whole slice**, not just decompression: block decompression is only
-24–35% of a cold query, so a decompression-only pool caps out around 1.33x where
-this measures 2.0–3.6x. Anything that cannot start a pool decodes in-process
-instead, which is the same code on the same thread that asked.
+Everything in the blue box runs on a **worker pool** when the host has one — a
+`Worker` from a Blob URL, both of them inlined, so there is nothing to
+configure. The pool is shared per JS context, as in
+[bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md), but the
+unit is the **whole slice** rather than just decompression, which is why it is a
+box around several steps there and a single node in bam's diagram: block
+decompression is only 24–35% of a cold query, so a decompression-only pool caps
+out around 1.33x where this measures 2.0–3.6x. Anything that cannot start a pool
+decodes in-process instead, which is the same code on the same thread that
+asked.
 
 Two things stay behind on the main thread whatever happens. The slice is
 described to the worker as **bytes and numbers only** — a `CramFile` holds a

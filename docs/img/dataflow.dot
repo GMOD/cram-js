@@ -8,7 +8,9 @@
 //
 // SYNC: ~/src/gmod/bam-js/docs/img/dataflow.dot — same palette, legend and
 // spine. The two clusters are the one thing cram adds: what moves to a worker,
-// and what is wasm.
+// and what is wasm. bam draws its pool as a single node off a dashed "optional"
+// edge because only decompression moves; here the unit is the whole slice, so
+// the pool has to be a box around several steps. Same term, different mark.
 digraph cramjs {
   rankdir=TB
   compound=true
@@ -28,7 +30,7 @@ digraph cramjs {
   out   [label="CramRecord[]" fillcolor="#ddf4ff" color="#0969da"]
 
   subgraph cluster_decode {
-    label="slice decode — worker if available"
+    label="worker pool — whole slice, if available"
     fontname="Helvetica" fontsize=9 fontcolor="#0969da" color="#0969da"
     margin=10
 
