@@ -1,14 +1,17 @@
 import {
+  PAYLOAD_NUM,
   RF_BASE_QUAL,
   RF_DELETION,
   RF_HARD_CLIP,
   RF_INSERTION,
   RF_INSERT_BASE,
+  RF_PAYLOAD,
   RF_POSITIONAL,
   RF_REF_SKIP,
   RF_SOFT_CLIP,
   RF_SUBST,
 } from './readFeatureArena.ts'
+import { decodeUtf8 } from './util.ts'
 
 import type ReadFeatureArena from './readFeatureArena.ts'
 
@@ -133,14 +136,24 @@ export function forEachMismatch(
   callback: MismatchCallback,
 ) {
   if (arena !== undefined) {
-    const { codes, pos, refPos, num, refCodes, subCodes } = arena
+    const { codes, pos, refPos, num, refCodes, subCodes, payloadBytes } = arena
     const end = featureStart + featureCount
     let insertedBases = ''
     let insertedLength = 0
     let insertionPos = 0
+    // One lookup for the record, then advanced per feature. Deriving each
+    // payload's offset instead would walk back to the nearest checkpoint on
+    // every insertion, which on a long read is most of the features it emits.
+    // Advanced outside the RF_POSITIONAL test below, since a q carries bytes
+    // while emitting nothing: skipping it desynchronises every payload after.
+    let payloadOffset =
+      featureCount > 0 ? arena.payloadOffsetAt(featureStart) : 0
 
     for (let i = featureStart; i < end; i++) {
       const code = codes[i]!
+      const payloadKind = RF_PAYLOAD[code]!
+      const payloadAt = payloadOffset
+      payloadOffset += payloadKind === PAYLOAD_NUM ? num[i]! : payloadKind
       // q/Q report where a quality score sits in the read, so their refPos is
       // not an alignment position — see RF_POSITIONAL. Letting one through here
       // would flush the insertion accumulator below and split one insertion in
@@ -198,7 +211,7 @@ export function forEachMismatch(
               RF_INSERTION,
               outPos,
               0,
-              arena.payloadStringAt(i),
+              decodeUtf8(payloadBytes.subarray(payloadAt, payloadAt + n)),
               -1,
               0,
               n,
@@ -215,7 +228,8 @@ export function forEachMismatch(
           }
         } else if (code === RF_INSERT_BASE) {
           insertionPos = rPos
-          insertedBases += arena.payloadStringAt(i)
+          // always exactly one byte, so no decoder is needed for it
+          insertedBases += String.fromCharCode(payloadBytes[payloadAt]!)
           insertedLength += n
         } else if (code === RF_BASE_QUAL) {
           // B stores one read base verbatim with its own quality score, rather
@@ -226,7 +240,7 @@ export function forEachMismatch(
           // guessing. Reported as a substitution because that is what it is to
           // a consumer; `num` is B's quality, which is the one the file
           // preserved for this base.
-          const base = upperCase(arena.payloadByteAt(i))
+          const base = upperCase(payloadBytes[payloadAt]!)
           const refCode = refCodes[i]!
           if (touchesWindow && refCode !== 0 && base !== upperCase(refCode)) {
             callback(

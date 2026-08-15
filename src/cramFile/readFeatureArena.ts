@@ -54,9 +54,9 @@ const INITIAL_SLOTS = 1024
 const INITIAL_PAYLOAD_BYTES = 1024
 
 /** {@link RF_PAYLOAD}: exactly one byte, since `num` is B's quality score */
-const PAYLOAD_ONE_BYTE = 1
+export const PAYLOAD_ONE_BYTE = 1
 /** {@link RF_PAYLOAD}: `num` bytes */
-const PAYLOAD_NUM = 2
+export const PAYLOAD_NUM = 2
 
 /**
  * How many bytes of {@link ReadFeatureArena.payloadBytes} a slot occupies, by
@@ -67,8 +67,12 @@ const PAYLOAD_NUM = 2
  * `i` is `num` like the rest rather than a second one-byte case: the decoder
  * writes `num = 1` for it, so the two agree. B is the only code whose `num` is
  * something other than a length.
+ *
+ * Exported for the walks that track the offset themselves: the values are
+ * chosen so that `kind === PAYLOAD_NUM ? num[i] : kind` is the length, since
+ * {@link PAYLOAD_ONE_BYTE} is 1 and a code with no payload is 0.
  */
-const RF_PAYLOAD = new Uint8Array(128)
+export const RF_PAYLOAD = new Uint8Array(128)
 RF_PAYLOAD[RF_BASE_QUAL] = PAYLOAD_ONE_BYTE
 for (const code of [
   RF_BASES,
