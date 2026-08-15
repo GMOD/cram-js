@@ -10,6 +10,7 @@ import CramFile from '../src/cramFile/index.ts'
 import {
   clearSchemeCache,
   decodeSliceFromBytes,
+  schemeCacheSize,
 } from '../src/cramFile/slice/decodeSliceFromBytes.ts'
 import { deserializeSliceRecords } from '../src/cramFile/sliceTransfer.ts'
 import { IndexedCramFile } from '../src/index.ts'
@@ -188,4 +189,45 @@ test('the scheme cache serves several slices of one container', async () => {
     total += deserializeSliceRecords(payload).length
   }
   expect(total).toBeGreaterThan(0)
+})
+
+// The cache used to be unbounded, on the reasoning that a worker sees "tens,
+// not thousands" of containers. A worker lives as long as the page, and the
+// queries the pool is worth the most to are the ones that walk a whole contig,
+// so this pins that a long walk cannot grow it without limit — and that records
+// decoded after eviction are still correct, since a re-parsed scheme has to be
+// as good as the one it replaced.
+test('the scheme cache is bounded by a walk over many containers', async () => {
+  clearSchemeCache()
+  const path = 'test/data/ce#1000.tmp.cram'
+  const slices = await findSlices(path)
+  const file = new CramFile({
+    filehandle: new LocalFile(path),
+    fetchReferenceSequence: seqFetch,
+    checkSequenceMD5: false,
+  })
+
+  const containers = [...new Set(slices.map(s => s.containerStart))]
+  expect(containers.length).toBeGreaterThan(16)
+
+  const first = slices[0]!
+  const decode = async (entry: (typeof slices)[number]) => {
+    const req = await file
+      .getContainerAtPosition(entry.containerStart)
+      .getSlice(entry.sliceStart, entry.sliceBytes)
+      .buildDecodeRequest({ decodeTags: true })
+    const { payload } = await decodeSliceFromBytes(req!)
+    return deserializeSliceRecords(payload)
+  }
+
+  const before = (await decode(first)).map(observe)
+
+  for (const entry of slices) {
+    await decode(entry)
+  }
+  expect(schemeCacheSize()).toBeLessThanOrEqual(16)
+
+  // the first container is long evicted by now; decoding it again re-parses
+  const after = (await decode(first)).map(observe)
+  expect(after).toEqual(before)
 })

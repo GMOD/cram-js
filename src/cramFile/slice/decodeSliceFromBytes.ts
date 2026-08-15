@@ -66,27 +66,52 @@ export interface SliceDecodeRequest {
 }
 
 /**
- * Parsed compression schemes, by container.
+ * How many parsed compression schemes one worker keeps.
  *
- * Lives for the worker's lifetime and is never evicted, which is safe because it
- * is keyed on a file position and bounded by the containers one worker is asked
- * about — tens, not thousands, and each is a handful of codec objects. A pool is
- * created per page, not per query.
+ * The point of the cache is that a container holds several slices, so what has
+ * to fit is the containers a pool is working through at one time, not the
+ * containers a session visits. Sixteen is far above the first and far below the
+ * second.
+ *
+ * It used to be unbounded, on the reasoning that a worker is asked about "tens,
+ * not thousands" of containers. That holds for a pileup and not at all for the
+ * queries this pool is worth the most to — docs/WORKERS.md names a whole-contig
+ * scan, an export and a force-load, and those walk thousands of containers
+ * through a worker that lives as long as the page. Each entry retains a codec
+ * per data series and per tag seen, huffman tables included, so the growth was
+ * real rather than nominal.
+ */
+const SCHEME_CACHE_SIZE = 16
+
+/**
+ * Parsed compression schemes, by container, most-recently-used last.
+ *
+ * A `Map` iterates in insertion order, so re-inserting on a hit is the whole of
+ * the LRU bookkeeping and the oldest key is always the first one.
  */
 const schemeCache = new Map<number, CramContainerCompressionScheme>()
 
 function getScheme(req: SliceDecodeRequest) {
-  let scheme = schemeCache.get(req.containerKey)
-  if (!scheme) {
-    const sectionParsers = getSectionParsers(req.majorVersion)
-    const parsed = parseItem(
-      req.compressionHeaderContent,
-      sectionParsers.cramCompressionHeader.parser,
-      0,
-      req.compressionHeaderContentPosition,
-    )
-    scheme = new CramContainerCompressionScheme(parsed)
-    schemeCache.set(req.containerKey, scheme)
+  const cached = schemeCache.get(req.containerKey)
+  if (cached) {
+    // re-insert so this key becomes the newest
+    schemeCache.delete(req.containerKey)
+    schemeCache.set(req.containerKey, cached)
+    return cached
+  }
+
+  const sectionParsers = getSectionParsers(req.majorVersion)
+  const parsed = parseItem(
+    req.compressionHeaderContent,
+    sectionParsers.cramCompressionHeader.parser,
+    0,
+    req.compressionHeaderContentPosition,
+  )
+  const scheme = new CramContainerCompressionScheme(parsed)
+
+  schemeCache.set(req.containerKey, scheme)
+  if (schemeCache.size > SCHEME_CACHE_SIZE) {
+    schemeCache.delete(schemeCache.keys().next().value!)
   }
   return scheme
 }
@@ -94,6 +119,11 @@ function getScheme(req: SliceDecodeRequest) {
 /** Drop the worker's parsed-scheme cache. Exported for the tests. */
 export function clearSchemeCache() {
   schemeCache.clear()
+}
+
+/** How many schemes are cached. Exported for the tests. */
+export function schemeCacheSize() {
+  return schemeCache.size
 }
 
 /**
