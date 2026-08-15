@@ -176,6 +176,7 @@ everyone. Thread the signal through consistently.
 - [docs/adr/](docs/adr/) — why the decoder is put together the way it is, with
   the measurements that settled each decision, and [TODO.md](TODO.md) for what
   is still open
+- [CONTRIBUTING.md](CONTRIBUTING.md) — development, release and publishing
 
 ## Academic Use
 
@@ -186,12 +187,3 @@ most recent JBrowse paper at [jbrowse.org](http://jbrowse.org).
 ## License
 
 MIT © [Robert Buels](https://github.com/rbuels)
-
-## Publishing
-
-[Trusted publishing](https://docs.npmjs.com/about-trusted-publishing) via GitHub
-Actions.
-
-```bash
-pnpm version patch  # or minor/major
-```
