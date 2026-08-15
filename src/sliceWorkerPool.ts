@@ -81,34 +81,81 @@ interface Pending {
   reject: (err: Error) => void
 }
 
+/**
+ * The pool could not take this slice — it was destroyed, or every worker in it
+ * has died. Never a statement about the file, which is why `CramSlice` catches
+ * this one class and decodes in-process instead of failing the query. An error
+ * the worker itself reported keeps its own class (see {@link reviveError}) and
+ * propagates.
+ */
+export class CramSliceWorkerUnavailableError extends Error {}
+
+/**
+ * How long a worker gets to answer the init handshake before the pool gives up
+ * on it and the caller decodes in-process.
+ *
+ * The handshake is a `postMessage` round trip plus `warmupWasm`, so single-digit
+ * milliseconds on an idle machine and well under a second on a loaded one — but
+ * this is not a performance budget, it is the backstop for a worker that will
+ * never answer at all and reports no error either. That happens: a host that
+ * blocks the Blob URL, an extension that intercepts the script. Without it those
+ * hang every read of the file forever, since the pool is awaited before the
+ * decode and there is nothing to time it out further up.
+ */
+const WORKER_STARTUP_TIMEOUT_MS = 30_000
+
 class ManagedWorker {
   private worker: Worker
   private pending = new Map<number, Pending>()
   private nextRequestId = 0
   private readyResolve?: () => void
+  private readyReject?: (err: Error) => void
+  private startupTimer?: ReturnType<typeof setTimeout>
   readyPromise: Promise<void>
   /** slices dispatched and not yet returned, for least-loaded scheduling */
   inFlight = 0
+  /**
+   * Set once this worker has failed or been terminated. The scheduler skips it
+   * from then on — without this a dead worker looks like the *best* candidate,
+   * since failing its slices resets `inFlight` to 0 and least-loaded then sends
+   * it everything.
+   */
+  failed = false
 
   constructor(workerUrl: string | URL) {
     this.worker = new Worker(workerUrl)
-    this.readyPromise = new Promise<void>(resolve => {
+    this.readyPromise = new Promise<void>((resolve, reject) => {
       this.readyResolve = resolve
+      this.readyReject = reject
     })
+    // Rejecting `readyPromise` is what this timer is for; see the constant.
+    this.startupTimer = setTimeout(() => {
+      this.fail(
+        new CramSliceWorkerUnavailableError(
+          `cram slice worker did not start within ${WORKER_STARTUP_TIMEOUT_MS}ms`,
+        ),
+      )
+    }, WORKER_STARTUP_TIMEOUT_MS)
     this.worker.onmessage = e => {
       this.handleMessage(e.data as WorkerMessage)
     }
-    // A worker that dies outright (an OOM on a huge slice, say) reports no
-    // requestId, so every slice waiting on it has to fail rather than hang.
+    // A worker that dies outright reports no requestId, so every slice waiting
+    // on it has to fail rather than hang. Two cases reach here and both must:
+    // a death mid-decode (an OOM on a huge slice, say), and a worker whose
+    // script never loaded at all — a CSP that refuses `blob:` worker-src is the
+    // common one, and before this rejected `readyPromise` it hung the pool's
+    // init, and with it every query against the file.
     this.worker.onerror = () => {
-      this.failAll(new Error('cram slice worker failed'))
+      this.fail(new CramSliceWorkerUnavailableError('cram slice worker failed'))
     }
   }
 
   private handleMessage(msg: WorkerMessage) {
     if (msg.type === 'ready') {
+      this.clearStartupTimer()
       this.readyResolve?.()
       this.readyResolve = undefined
+      this.readyReject = undefined
       return
     }
     const cb = this.pending.get(msg.requestId)
@@ -124,6 +171,24 @@ class ManagedWorker {
     }
   }
 
+  private clearStartupTimer() {
+    if (this.startupTimer !== undefined) {
+      clearTimeout(this.startupTimer)
+      this.startupTimer = undefined
+    }
+  }
+
+  /** Retire this worker: fail whatever it was carrying, and its startup too. */
+  private fail(err: Error) {
+    this.failed = true
+    this.clearStartupTimer()
+    const reject = this.readyReject
+    this.readyResolve = undefined
+    this.readyReject = undefined
+    reject?.(err)
+    this.failAll(err)
+  }
+
   private failAll(err: Error) {
     for (const [id, cb] of this.pending) {
       this.pending.delete(id)
@@ -134,8 +199,10 @@ class ManagedWorker {
 
   decodeSlice(request: SliceDecodeRequest) {
     const requestId = this.nextRequestId++
+    let settle: Pending | undefined
     const promise = new Promise<CramRecord[]>((resolve, reject) => {
-      this.pending.set(requestId, { resolve, reject })
+      settle = { resolve, reject }
+      this.pending.set(requestId, settle)
     })
     this.inFlight++
     // The slice bytes are transferred, not copied — but only after being sliced
@@ -145,18 +212,31 @@ class ManagedWorker {
     // bytes, which is the smaller side of the operation.
     const bytes = request.sliceBytes.slice()
     const header = request.compressionHeaderContent.slice()
-    this.worker.postMessage(
-      {
-        type: 'decodeSlice',
-        requestId,
-        request: {
-          ...request,
-          sliceBytes: bytes,
-          compressionHeaderContent: header,
+    try {
+      this.worker.postMessage(
+        {
+          type: 'decodeSlice',
+          requestId,
+          request: {
+            ...request,
+            sliceBytes: bytes,
+            compressionHeaderContent: header,
+          },
         },
-      },
-      [bytes.buffer, header.buffer],
-    )
+        [bytes.buffer, header.buffer],
+      )
+    } catch (e) {
+      // A post that throws — a request that will not clone, a worker already
+      // gone — leaves nothing to answer this requestId, so settle it here or the
+      // slice waits forever.
+      this.pending.delete(requestId)
+      this.inFlight--
+      settle?.reject(
+        new CramSliceWorkerUnavailableError(
+          `could not send a slice to a cram worker: ${String(e)}`,
+        ),
+      )
+    }
     return promise
   }
 
@@ -166,7 +246,9 @@ class ManagedWorker {
 
   terminate() {
     this.worker.terminate()
-    this.failAll(new Error('cram slice worker pool destroyed'))
+    this.fail(
+      new CramSliceWorkerUnavailableError('cram slice worker pool destroyed'),
+    )
   }
 }
 
@@ -279,25 +361,47 @@ export async function createSliceWorkerPool(
   for (const w of workers) {
     w.init()
   }
-  await Promise.all(workers.map(w => w.readyPromise))
+  try {
+    await Promise.all(workers.map(w => w.readyPromise))
+  } catch (e) {
+    // One worker that cannot start says the whole arrangement is unavailable
+    // here, so tear the rest down rather than run a pool of unknown width — and
+    // reject, which is what `CramFile` turns into the in-process fallback.
+    for (const w of workers) {
+      w.terminate()
+    }
+    throw e
+  }
 
   let destroyed = false
   return {
     decodeSlice(request) {
       if (destroyed) {
         return Promise.reject(
-          new Error('cram slice worker pool has been destroyed'),
+          new CramSliceWorkerUnavailableError(
+            'cram slice worker pool has been destroyed',
+          ),
         )
       }
       // Least-loaded rather than round-robin. A query dispatches all its slices
       // at once and they are not the same size — a long-read slice can be
       // hundreds of times the work of a short-read one — so round-robin lands
       // several large slices on one worker while others idle.
-      let chosen = workers[0]!
+      let chosen: ManagedWorker | undefined
       for (const w of workers) {
-        if (w.inFlight < chosen.inFlight) {
+        if (
+          !w.failed &&
+          (chosen === undefined || w.inFlight < chosen.inFlight)
+        ) {
           chosen = w
         }
+      }
+      if (chosen === undefined) {
+        return Promise.reject(
+          new CramSliceWorkerUnavailableError(
+            'every cram slice worker has failed',
+          ),
+        )
       }
       return chosen.decodeSlice(request)
     },

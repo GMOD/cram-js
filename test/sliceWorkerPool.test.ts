@@ -175,6 +175,145 @@ test('a worker that dies rejects its slice rather than hanging', async () => {
   pool.destroy()
 })
 
+// The three tests below are about a worker that never becomes usable, which is
+// not exotic: a Content-Security-Policy that refuses `blob:` worker-src is the
+// ordinary way a host breaks this pool, and the script then fails to load. Until
+// 13.3.0 `readyPromise` had no rejection path at all, so `createSliceWorkerPool`
+// awaited it forever — and since `CramSlice` awaits the pool before decoding,
+// every read of every file hung rather than falling back in-process.
+
+/** A worker that reports failure instead of ever answering the handshake. */
+function installFailingWorker() {
+  class FailingWorker {
+    onmessage: ((e: { data: unknown }) => void) | null = null
+    onerror: (() => void) | null = null
+    postMessage() {
+      this.onerror?.()
+    }
+    terminate() {
+      // nothing to release
+    }
+  }
+  vi.stubGlobal('Worker', FailingWorker)
+}
+
+test('a worker that fails to start rejects the pool rather than hanging', async () => {
+  installFailingWorker()
+  await expect(createSliceWorkerPool(2, 'stub://worker')).rejects.toThrow(
+    /worker failed/,
+  )
+})
+
+test('a worker that never answers times the pool out rather than hanging', async () => {
+  class SilentWorker {
+    onmessage: ((e: { data: unknown }) => void) | null = null
+    onerror: (() => void) | null = null
+    postMessage() {
+      // deliberately no reply, and no error either
+    }
+    terminate() {
+      // nothing to release
+    }
+  }
+  vi.stubGlobal('Worker', SilentWorker)
+  vi.useFakeTimers()
+  try {
+    const pending = createSliceWorkerPool(1, 'stub://worker')
+    const assertion = expect(pending).rejects.toThrow(/did not start/)
+    await vi.advanceTimersByTimeAsync(30_000)
+    await assertion
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
+test('a file whose workers cannot start still reads, in-process', async () => {
+  installFailingWorker()
+  destroySharedSliceWorkerPool()
+  // the warning is the assertion below rather than test output
+  const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+
+  const records = await indexedFile({}).getRecordsForRange(0, 0, 100_000)
+
+  expect(records.length).toBeGreaterThan(0)
+  expect(warn).toHaveBeenCalledWith(
+    expect.stringContaining('could not start the slice worker pool'),
+  )
+  warn.mockRestore()
+  destroySharedSliceWorkerPool()
+})
+
+test('a worker that dies mid-decode falls back to decoding in-process', async () => {
+  // dies on the first slice it is given, having answered the handshake
+  class DyingWorker {
+    onmessage: ((e: { data: unknown }) => void) | null = null
+    onerror: (() => void) | null = null
+    postMessage(msg: HostMessage) {
+      if (msg.type === 'init') {
+        this.onmessage?.({ data: { type: 'ready' } })
+      } else {
+        this.onerror?.()
+      }
+    }
+    terminate() {
+      // nothing to release
+    }
+  }
+  vi.stubGlobal('Worker', DyingWorker)
+  destroySharedSliceWorkerPool()
+
+  // the worker takes the slice and dies with it; the records still arrive
+  const records = await indexedFile({}).getRecordsForRange(0, 0, 100_000)
+  expect(records.length).toBeGreaterThan(0)
+
+  destroySharedSliceWorkerPool()
+})
+
+test('a dead worker stops being scheduled onto', async () => {
+  // one worker dies on its first slice, the other decodes; least-loaded must not
+  // keep picking the dead one, whose inFlight resets to 0 when it fails
+  const dispatches: number[] = []
+  class HalfDeadWorker {
+    onmessage: ((e: { data: unknown }) => void) | null = null
+    onerror: (() => void) | null = null
+    private id = dispatches.push(0) - 1
+    postMessage(msg: HostMessage) {
+      void this.handle(msg)
+    }
+    private async handle(msg: HostMessage) {
+      if (msg.type === 'init') {
+        this.onmessage?.({ data: { type: 'ready' } })
+        return
+      }
+      dispatches[this.id]!++
+      if (this.id === 0) {
+        this.onerror?.()
+        return
+      }
+      const { payload } = await decodeSliceFromBytes(msg.request)
+      this.onmessage?.({
+        data: { type: 'sliceResult', requestId: msg.requestId, payload },
+      })
+    }
+    terminate() {
+      // the dispatch counts are what this stub is for
+    }
+  }
+  vi.stubGlobal('Worker', HalfDeadWorker)
+
+  const pool = await createSliceWorkerPool(2, 'stub://worker')
+  const req = await firstRequest()
+  await expect(pool.decodeSlice(req)).rejects.toThrow(/worker failed/)
+  for (let i = 0; i < 3; i++) {
+    await pool.decodeSlice(req)
+  }
+
+  // the dead worker took exactly the one slice that killed it
+  expect(dispatches[0]).toBe(1)
+  expect(dispatches[1]).toBe(3)
+  pool.destroy()
+})
+
 test('destroy rejects work still in flight', async () => {
   installStubWorker('decode', [])
   const pool = await createSliceWorkerPool(1, 'stub://worker')

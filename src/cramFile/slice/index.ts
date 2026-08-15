@@ -1,4 +1,5 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
+import { CramSliceWorkerUnavailableError } from '../../sliceWorkerPool.ts'
 import Constants from '../constants.ts'
 import { buildSliceDecodeContext, trimSliceColumns } from './decodeContext.ts'
 import decodeRecord from './decodeRecord.ts'
@@ -675,7 +676,11 @@ export default class CramSlice {
    * a file because its worker could not launch.
    *
    * A decode error from inside the worker *does* propagate: a malformed CRAM must
-   * fail rather than quietly re-decode on the main thread and fail there.
+   * fail rather than quietly re-decode on the main thread and fail there. The one
+   * failure that does not is the pool going away underneath the slice — a worker
+   * that died mid-decode, or a pool destroyed while it was in flight. That says
+   * nothing about the file, so it joins the list above rather than failing a
+   * query the main thread can still answer.
    */
   private async _fetchRecordsInWorker(
     decodeOptions: Required<DecodeOptions>,
@@ -689,7 +694,14 @@ export default class CramSlice {
     if (!request) {
       return undefined
     }
-    return pool.decodeSlice(request)
+    try {
+      return await pool.decodeSlice(request)
+    } catch (e) {
+      if (e instanceof CramSliceWorkerUnavailableError) {
+        return undefined
+      }
+      throw e
+    }
   }
 
   async _fetchRecords(decodeOptions: Required<DecodeOptions>, opts?: ReadOpts) {
