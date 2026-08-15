@@ -158,26 +158,18 @@ everyone. Thread the signal through consistently.
 
 ## Docs
 
-- [docs/API.md](docs/API.md) — the full API: every option, property and method
+- [docs/API.md](docs/API.md) — every option, property and method
 - [MIGRATION.md](MIGRATION.md) — breaking changes, newest first
-- [docs/MEMORY.md](docs/MEMORY.md) — what a decoded slice retains, and how to
-  read records in bulk without allocating
-- [docs/READ_FEATURES.md](docs/READ_FEATURES.md) — the raw CRAM alignment
-  encoding behind `record.readFeatures`. You don't need it for mismatches
+- [docs/MEMORY.md](docs/MEMORY.md) — what a decoded slice retains
+- [docs/READ_FEATURES.md](docs/READ_FEATURES.md) — the raw alignment encoding
 - [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md) — which codecs are supported
-- [docs/dataflow.dot](docs/dataflow.dot) ([rendered](docs/dataflow.svg)) — a
-  query end to end on one page: index, container, slice cache, decode,
-  reference, and where the wasm sits
-- [docs/optimizations.md](docs/optimizations.md) — why each step of that path
-  looks the way it does, what measured it, and what a consumer adds
-- [docs/WASM.md](docs/WASM.md) — the inlined wasm build: 55 KB gzipped, ~5 ms
-  one-time startup, 16 MB heap
-- [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool: what it is worth,
-  what crosses the boundary, and how the inlined worker is built
-- [docs/adr/](docs/adr/) — why the decoder is put together the way it is, with
-  the measurements that settled each decision, and [TODO.md](TODO.md) for what
-  is still open
-- [CONTRIBUTING.md](CONTRIBUTING.md) — development, release and publishing
+- [docs/dataflow.svg](docs/dataflow.svg) — a query end to end
+- [docs/optimizations.md](docs/optimizations.md) — why the path looks that way
+- [docs/WASM.md](docs/WASM.md) — the inlined wasm build
+- [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool
+- [docs/adr/](docs/adr/) — the decisions, with their measurements
+- [TODO.md](TODO.md) — measured, still open, wanted
+- [CONTRIBUTING.md](CONTRIBUTING.md) — development, release, publishing
 
 ## Academic Use
 
