@@ -168,6 +168,9 @@ everyone. Thread the signal through consistently.
 - [docs/READ_FEATURES.md](docs/READ_FEATURES.md) — the raw CRAM alignment
   encoding behind `record.readFeatures`. You don't need it for mismatches
 - [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md) — which codecs are supported
+- [docs/dataflow.dot](docs/dataflow.dot) ([rendered](docs/dataflow.svg)) — a
+  query end to end on one page: index, container, slice cache, decode,
+  reference, and where the wasm sits
 - [docs/WASM.md](docs/WASM.md) — the inlined wasm build: 55 KB gzipped, ~5 ms
   one-time startup, 16 MB heap
 - [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool: what it is worth,
