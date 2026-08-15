@@ -105,6 +105,32 @@ test('trimming leaves an external column alone', () => {
   expect(column.bytes).toBe(block)
 })
 
+test('an external column does not pin the buffer its block is a view into', () => {
+  // what a `raw` QS block looks like: a view into the slice's whole payload
+  // read, which the records would otherwise keep reachable for as long as they
+  // are cached — the compressed bytes of every other block along with it
+  const sliceBytes = new Uint8Array(4096)
+  sliceBytes.set([1, 2, 3, 4], 1000)
+  const block = sliceBytes.subarray(1000, 1004)
+  const cursor = { bitPosition: 7 as const, bytePosition: 0 }
+
+  const column = externalQualityColumn(block, cursor)
+
+  expect([...column.bytes]).toEqual([1, 2, 3, 4])
+  expect(column.bytes.buffer.byteLength).toBe(4)
+})
+
+test('an external column over a block that owns its buffer copies nothing', () => {
+  // the usual case: a decompressed block owns its buffer exactly
+  const block = new Uint8Array([1, 2, 3, 4])
+  const column = externalQualityColumn(block, {
+    bitPosition: 7,
+    bytePosition: 0,
+  })
+
+  expect(column.bytes).toBe(block)
+})
+
 test('a record reads only its own stretch of the shared column', () => {
   // three records of 2 scores each in one column
   const column = new Uint8Array([1, 2, 3, 4, 5, 6])
