@@ -17,14 +17,15 @@ record:
 - **It was 2.9x the size of the data it indexed**: 834 KB of offsets over 291 KB
   of `payloadBytes`.
 
-It was also pure redundancy. Payloads are appended in slot order, and a slot's
-length is already on the record — `num` for I/S/b/i/q, one byte for B, zero
-otherwise — so the offsets are a running prefix sum. Checked over every slot of
-all three performance fixtures: **0 deviations**.
+It was also pure redundancy. Payloads land in slot order, and the record already
+carries a slot's length — `num` for I/S/b/i/q, one byte for B, zero otherwise —
+so the offsets are a running prefix sum. Checked over every slot of all three
+performance fixtures: **0 deviations**.
 
 So the column bought exactly one thing, O(1) random access, and
 [TODO.md](../../TODO.md) was wrong to call replacing it "free": the accessors
-that read it take an index and nothing else, and `ReadFeatureArena` is exported.
+that read it take an index and nothing else, and the package exports
+`ReadFeatureArena`.
 
 ## Decision
 
@@ -35,12 +36,12 @@ the arena changes.
 
 Three details make it hold:
 
-- **The checkpoints are built in `trim()`**, in one pass, rather than maintained
-  as payloads are appended. A slice decodes once and its columns are final only
-  when it finishes, which is the only point where every slot's code and `num`
-  can be read. `indexedLength` records what they were built for, so an arena
-  read while still being filled rebuilds rather than answering stale — a
-  hand-built arena behaves like a decoded one.
+- **`trim()` builds the checkpoints**, in one pass, rather than maintaining them
+  as payloads arrive. A slice decodes once and its columns settle only when it
+  finishes, which is the only point where every slot's code and `num` are
+  readable. `indexedLength` records the length they cover, so an arena read
+  mid-fill rebuilds rather than answering stale — a hand-built arena behaves
+  like a decoded one.
 - **A sequential walk carries the offset itself** instead of calling
   `payloadOffsetAt` per feature. `decodeReadSequenceBytes` and `forEachMismatch`
   both do; on a long read the insertions the latter emits are most of the
@@ -69,8 +70,8 @@ Three details make it hold:
   `payloadChunks` in its place.
 - **The same argument now applies to `refPos`**, which is another 834 KB
   derivable from `pos` plus a running per-record delta. It is not done, and it
-  is a harder case: `refPos` is read directly by consumers, where
-  `payloadOffsets` never was.
+  is a harder case: consumers read `refPos` directly, where they never read
+  `payloadOffsets` at all.
 
 ## Evidence
 
@@ -80,18 +81,18 @@ reproduce to ±0.2% — the figures above.
 Correctness, which is what this change actually risks: sha256 over `toJSON()`,
 `getCigarString()`, `getPairOrientation()`, `getReadBases()`, `readFeatures` and
 `getMismatches()` for **all 91,413 records across all 51 indexed fixtures**
-matches `origin/main` exactly, both after the arena change and again after the
-mismatch walk was rewritten to carry its own offset. The full suite passes
+matches `origin/main` exactly, both after the arena change and again after
+rewriting the mismatch walk to carry its own offset. The full suite passes
 unchanged, including the 189 snapshots.
 
-**Wall-clock is deliberately not quoted here.** The machine was loaded while
-this was written, and [TODO.md](../../TODO.md)'s method note is explicit that
-timings taken on one are not trustworthy — an in-process branch-vs-branch run
-put the long-read mismatch walk at 2.66x _faster_, which is not a real effect
-and is the trap `docs/memory.md` describes under "do not A/B two source trees in
-one process". `benchmarks/reads.bench.ts` was added to settle it on a quiet
-machine; it covers the walks that happen after a decode, which
-`benchmarks/cram.bench.ts` never reached.
+**This deliberately quotes no wall-clock.** The machine was loaded at the time,
+and [TODO.md](../../TODO.md)'s method note is explicit that timings taken on a
+loaded machine are not trustworthy — an in-process branch-vs-branch run put the
+long-read mismatch walk at 2.66x _faster_, which is not a real effect and is the
+trap `docs/memory.md` describes under "do not A/B two source trees in one
+process". `benchmarks/reads.bench.ts` exists to settle it on a quiet machine; it
+covers the walks that happen after a decode, which `benchmarks/cram.bench.ts`
+never reached.
 
 What can be said without a timer: the decode does strictly less work than before
 (an offset write per payload became one indexing pass per slice), and both
