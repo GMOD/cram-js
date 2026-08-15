@@ -122,10 +122,13 @@ export function buildSliceDecodeContext({
 
   const tagColumn = new TagColumn()
 
+  // sized from the slice's own blocks where they say how; see readFeatureCapacity
+  const capacity = readFeatureCapacity(compressionScheme, blocksByContentId)
+
   return {
     bd,
     rfSchema: buildRFSchema(bd, majorVersion),
-    arena: new ReadFeatureArena(),
+    arena: new ReadFeatureArena(capacity.slots, capacity.payload),
     qualityColumn,
     tagColumn,
     tagDescriptorsByTL: bindTagReaders(
@@ -144,6 +147,99 @@ export function buildSliceDecodeContext({
     isMultiRef: majorVersion > 1 && refSeqId === -2,
     refSeqId,
   }
+}
+
+/**
+ * How many read features this slice holds, and how many payload bytes they
+ * carry, read off the blocks before a record is decoded.
+ *
+ * **FC gives the feature count exactly.** It is a `byte` data series with one
+ * value per read feature, so an external FC block is one byte per feature and
+ * its decompressed length *is* the count — checked against every indexed fixture
+ * here, long-read and short: 213,602 features against a 213,602-byte block on
+ * the ONT slice, 19,849 against 19,849 on SRR396637, and so on down to 12.
+ *
+ * The payload figure is a bound rather than a count: the byte-array series a
+ * feature's bytes come from (I/S/b/q, and B one byte at a time) hold their
+ * values in blocks of their own, so the sum of those blocks covers whatever the
+ * features take out of them, plus the stop bytes and lengths that separate them.
+ *
+ * Both are wanted because growing the arena means copying seven columns, and on
+ * a long-read slice that is where the reallocation time goes — 4.4% of a decode
+ * of the ONT fixture in `growInt32`/`growUint8`, plus 2.9% in the `trim` that
+ * hands the overshoot back, which an exact count also makes a no-op. htslib does
+ * the same thing for its sequence, quality and name buffers, from the same
+ * blocks, and measured "around 8-9%" for it (`cram_decode_estimate_sizes`) — it
+ * has no equivalent of the arena, since it expands features into bases as it
+ * goes rather than keeping them.
+ *
+ * Undefined for anything this cannot read exactly: FC encoded some other way, a
+ * block shared with another data series (the count would be an over-estimate,
+ * which is safe but no longer a fact), or a file with no FC at all. The arena
+ * falls back to doubling from its default, which is what every slice did before.
+ */
+function readFeatureCapacity(
+  compressionScheme: CramContainerCompressionScheme,
+  blocksByContentId: Record<number, CramFileBlock>,
+) {
+  const referenceCounts = countBlockReferences(compressionScheme)
+  const sizeOfSoleBlock = (enc: CramEncoding | undefined) => {
+    // codecId 1 is EXTERNAL, 5 is BYTE_ARRAY_STOP; both name their block
+    // directly, and 4 (BYTE_ARRAY_LENGTH) holds its values in a sub-encoding
+    if (enc?.codecId === 4) {
+      return sizeOfSoleBlock(enc.parameters.valuesEncoding)
+    }
+    if (enc?.codecId !== 1 && enc?.codecId !== 5) {
+      return undefined
+    }
+    const id = enc.parameters.blockContentId
+    if (referenceCounts.get(id) !== 1) {
+      return undefined
+    }
+    return blocksByContentId[id]?.content.length
+  }
+
+  const slots = sizeOfSoleBlock(compressionScheme.dataSeriesEncoding.FC)
+
+  let payload = 0
+  for (const ds of ['IN', 'SC', 'BB', 'QQ'] as const) {
+    payload += sizeOfSoleBlock(compressionScheme.dataSeriesEncoding[ds]) ?? 0
+  }
+
+  return {
+    slots: slots === undefined || slots === 0 ? undefined : slots,
+    payload: payload === 0 ? undefined : payload,
+  }
+}
+
+/**
+ * How many encodings name each external block, so a caller can tell whether a
+ * block's size describes one data series or several. htslib's `cram_ds_unique`,
+ * for the same purpose.
+ */
+function countBlockReferences(
+  compressionScheme: CramContainerCompressionScheme,
+) {
+  const counts = new Map<number, number>()
+  const walk = (enc: CramEncoding | undefined) => {
+    if (!enc) {
+      return
+    }
+    if (enc.codecId === 1 || enc.codecId === 5) {
+      const id = enc.parameters.blockContentId
+      counts.set(id, (counts.get(id) ?? 0) + 1)
+    } else if (enc.codecId === 4) {
+      walk(enc.parameters.lengthsEncoding)
+      walk(enc.parameters.valuesEncoding)
+    }
+  }
+  for (const enc of Object.values(compressionScheme.dataSeriesEncoding)) {
+    walk(enc)
+  }
+  for (const enc of Object.values(compressionScheme.tagEncoding)) {
+    walk(enc)
+  }
+  return counts
 }
 
 /**

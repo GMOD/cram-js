@@ -1,3 +1,4 @@
+import { grow, nextCapacity } from './growableColumn.ts'
 import { decodeUtf8 } from './util.ts'
 
 import type { ReadFeature } from './record.ts'
@@ -52,26 +53,6 @@ for (const code of [
 const INITIAL_SLOTS = 1024
 const INITIAL_PAYLOAD_BYTES = 1024
 
-function growUint8(a: Uint8Array, capacity: number) {
-  const out = new Uint8Array(capacity)
-  out.set(a)
-  return out
-}
-
-function growInt32(a: Int32Array, capacity: number) {
-  const out = new Int32Array(capacity)
-  out.set(a)
-  return out
-}
-
-function nextCapacity(current: number, needed: number) {
-  let capacity = current * 2
-  while (capacity < needed) {
-    capacity *= 2
-  }
-  return capacity
-}
-
 /**
  * Struct-of-arrays storage for the read features of every record in one slice.
  *
@@ -89,6 +70,12 @@ function nextCapacity(current: number, needed: number) {
  *
  * A record occupies the half-open slot range
  * `[record.readFeatureStart, record.readFeatureStart + record.readFeatureCount)`.
+ *
+ * **Size it up front where the slice says how.** The constructor's arguments are
+ * capacities, and `slice/decodeContext.ts` reads exact ones off the slice's own
+ * blocks — see `readFeatureCapacity` there. Growing means copying seven columns,
+ * and it is the arena, not the record loop, that a long-read slice spends its
+ * reallocation time in.
  */
 export default class ReadFeatureArena {
   /** feature code as an ASCII char code — one of the `RF_*` constants */
@@ -114,7 +101,7 @@ export default class ReadFeatureArena {
    * the single base of B. Kept as bytes rather than strings so that consumers
    * needing only a length (`num`) never pay for a string.
    */
-  payloadBytes = new Uint8Array(INITIAL_PAYLOAD_BYTES)
+  payloadBytes: Uint8Array
   payloadLength = 0
   /**
    * Reference base char code for each X feature, 0 where the reference is not
@@ -130,7 +117,7 @@ export default class ReadFeatureArena {
   /** number of slots in use */
   length = 0
 
-  constructor(slots = INITIAL_SLOTS) {
+  constructor(slots = INITIAL_SLOTS, payloadBytes = INITIAL_PAYLOAD_BYTES) {
     this.codes = new Uint8Array(slots)
     this.pos = new Int32Array(slots)
     this.refPos = new Int32Array(slots)
@@ -138,6 +125,7 @@ export default class ReadFeatureArena {
     this.payloadOffsets = new Int32Array(slots)
     this.refCodes = new Uint8Array(slots)
     this.subCodes = new Uint8Array(slots)
+    this.payloadBytes = new Uint8Array(payloadBytes)
   }
 
   /**
@@ -148,20 +136,20 @@ export default class ReadFeatureArena {
     const needed = this.length + additional
     if (needed > this.codes.length) {
       const capacity = nextCapacity(this.codes.length, needed)
-      this.codes = growUint8(this.codes, capacity)
-      this.pos = growInt32(this.pos, capacity)
-      this.refPos = growInt32(this.refPos, capacity)
-      this.num = growInt32(this.num, capacity)
-      this.payloadOffsets = growInt32(this.payloadOffsets, capacity)
-      this.refCodes = growUint8(this.refCodes, capacity)
-      this.subCodes = growUint8(this.subCodes, capacity)
+      this.codes = grow(this.codes, capacity)
+      this.pos = grow(this.pos, capacity)
+      this.refPos = grow(this.refPos, capacity)
+      this.num = grow(this.num, capacity)
+      this.payloadOffsets = grow(this.payloadOffsets, capacity)
+      this.refCodes = grow(this.refCodes, capacity)
+      this.subCodes = grow(this.subCodes, capacity)
     }
   }
 
   private reservePayload(additional: number) {
     const needed = this.payloadLength + additional
     if (needed > this.payloadBytes.length) {
-      this.payloadBytes = growUint8(
+      this.payloadBytes = grow(
         this.payloadBytes,
         nextCapacity(this.payloadBytes.length, needed),
       )

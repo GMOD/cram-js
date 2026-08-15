@@ -1,4 +1,5 @@
 import { CramBufferOverrunError } from '../errors.ts'
+import { grow, nextCapacity } from './growableColumn.ts'
 
 import type { Cursor } from './codecs/_base.ts'
 
@@ -68,13 +69,7 @@ export function readQualityScores(
   const start = column.length
   const end = start + readLength
   if (end > column.bytes.length) {
-    let capacity = column.bytes.length * 2
-    while (capacity < end) {
-      capacity *= 2
-    }
-    const grown = new Uint8Array(capacity)
-    grown.set(column.bytes.subarray(0, start))
-    column.bytes = grown
+    column.bytes = grow(column.bytes, nextCapacity(column.bytes.length, end))
   }
   const { bytes } = column
   for (let i = start; i < end; i++) {

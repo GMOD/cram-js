@@ -1,3 +1,5 @@
+import { grow, nextCapacity } from './growableColumn.ts'
+
 /**
  * How to read a slot's entry in {@link TagColumn.values}.
  *
@@ -25,32 +27,6 @@ export const TAG_DOUBLE = 4
 export type TagValue = string | number | number[] | undefined
 
 const INITIAL_SLOTS = 4096
-
-function growUint8(a: Uint8Array, capacity: number) {
-  const out = new Uint8Array(capacity)
-  out.set(a)
-  return out
-}
-
-function growUint16(a: Uint16Array, capacity: number) {
-  const out = new Uint16Array(capacity)
-  out.set(a)
-  return out
-}
-
-function growInt32(a: Int32Array, capacity: number) {
-  const out = new Int32Array(capacity)
-  out.set(a)
-  return out
-}
-
-function nextCapacity(current: number, needed: number) {
-  let capacity = current * 2
-  while (capacity < needed) {
-    capacity *= 2
-  }
-  return capacity
-}
 
 /**
  * Struct-of-arrays storage for the aux tags of every record in one slice.
@@ -160,9 +136,9 @@ export default class TagColumn {
   private reserve() {
     if (this.length === this.keyIds.length) {
       const capacity = nextCapacity(this.keyIds.length, this.length + 1)
-      this.keyIds = growUint16(this.keyIds, capacity)
-      this.kinds = growUint8(this.kinds, capacity)
-      this.values = growInt32(this.values, capacity)
+      this.keyIds = grow(this.keyIds, capacity)
+      this.kinds = grow(this.kinds, capacity)
+      this.values = grow(this.values, capacity)
     }
   }
 
