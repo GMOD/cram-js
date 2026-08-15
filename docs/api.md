@@ -35,31 +35,31 @@ new IndexedCramFile({
 ### Verifying the file
 
 `validateChecksums` checks every block's and container's CRC32. It is what
-separates "damaged file" from "wrong records": corrupting a byte anywhere in a
-CRAM is caught 240 times out of 240 with it on, where with it off two of those
-flips decoded to records that simply differed, with nothing to say so.
+separates "damaged file" from "wrong records": with it on, it catches a
+corrupted byte anywhere in a CRAM 240 times out of 240, where with it off two of
+those flips decoded to records that simply differed, with nothing to say so.
 
 `checkSequenceMD5` is the other half of that, on the reference rather than the
-file: it verifies each slice's recorded reference MD5 against the sequence it is
-being decoded with. Off by default because the check needs the slice's whole
-reference span, which can be many megabases the query would not otherwise fetch.
+file: it verifies each slice's recorded reference MD5 against the sequence
+decoding it. Off by default because the check needs the slice's whole reference
+span, which can be many megabases the query would not otherwise fetch.
 
 ### The cache options
 
 `cacheSize` counts **records, not bytes**, so it does not bound memory: a
 decoded record has no cheap size, and one long-read slice can retain tens of
-megabytes. Slices are cached whole, so the bound lands on a whole slice's record
-count at a time — [memory.md](memory.md) has why, and what a query in flight is
-allowed to exceed it by.
+megabytes. The cache holds slices whole, so the bound lands on a whole slice's
+record count at a time — [memory.md](memory.md) has why, and how far a query in
+flight may exceed it.
 
 Size it to hold several queries. Below one query's working set it does not cache
-less, it caches _nothing_: every slice is evicted before the next pan can reuse
-it, so the hit rate is zero and the memory is retained anyway.
+less, it caches _nothing_: every slice falls out before the next pan can reuse
+it, so the hit rate is zero and the memory stays put anyway.
 
 `cacheIdleTimeoutMs` is the only thing that lowers the cache while nothing is
-happening — `cacheSize` is applied when a decode settles, so an idle cache stays
-wherever it got to. Timed from the last _read_ of a slice, so panning back and
-forth over one region never expires it. `0` disables it.
+happening — the cache checks `cacheSize` when a decode settles, so an idle one
+stays wherever it got to. The clock runs from the last _read_ of a slice, so
+panning back and forth over one region never expires it. `0` disables it.
 
 `cacheBudget` makes `cacheSize` apply to several `CramFile`s together instead of
 to each one, which is what a consumer opening a file per track needs. Every
@@ -73,7 +73,7 @@ and in-process where it does not. Leave it on inside your own worker too — a
 worker is still one thread, and nested in one the pool measures 2.1-3.6x from
 four slices up ([workers.md](workers.md)).
 
-`numSliceWorkers` sizes that pool. The pool is shared per JS context, so the
+`numSliceWorkers` sizes that pool. One pool serves a whole JS context, so the
 first file to need one fixes the size for the rest, and a host running several
 worker contexts gets a pool in each.
 
@@ -86,7 +86,7 @@ their `sequenceId` and their `start` are `-1`, so you ask for them like this:
 await indexedFile.getRecordsForRange(-1, -1, end) // a start of 0 finds nothing
 ```
 
-Reads that are unmapped but _placed_ at their mate's position are a different
+Unmapped reads that a writer _placed_ at their mate's position are a different
 case. They carry the mate's `sequenceId` and `start`, so an ordinary range query
 finds them.
 
@@ -109,24 +109,23 @@ filehandle coalesces adjacent reads into one request, so a small viewport over
 deep data becomes a single multi-megabyte fetch — exactly the thing you want to
 drop when the user pans away.
 
-**Aborting your query never fails anyone else's.** Two things in a `CramFile`
-are shared between concurrent queries: the parsed `.crai`, and each decoded
-slice in the record cache. A slice's decode is reference-counted, and is
-cancelled only once _every_ query waiting on it has aborted, so cancelling yours
-costs a concurrent query nothing, not even a re-read. The file definition and
-SAM header are read once for the life of the object and are deliberately not
-cancellable at all.
+**Aborting your query never fails anyone else's.** Concurrent queries share two
+things in a `CramFile`: the parsed `.crai`, and each decoded slice in the record
+cache. A slice's decode carries a reference count and aborts only once _every_
+query waiting on it has given up, so cancelling yours costs a concurrent query
+nothing, not even a re-read. The file definition and SAM header load once for
+the life of the object and deliberately take no signal at all.
 
 The corollary: a query with **no** signal can never give up, so it pins any
-slice it is waiting on. One caller omitting the signal stops that slice's decode
-being cancellable for everyone sharing it — so thread the signal through
+slice it is waiting on. One caller omitting the signal makes that slice's decode
+uncancellable for everyone sharing it — so thread the signal through
 consistently rather than through the queries you happen to care about.
 
-If `fetchReferenceSequence` is backed by something remote, it is handed the
-signal as a fifth argument (`opts.signal`) so it can cancel too. Ignoring it is
-fine; a four-argument callback keeps working unchanged.
+A `fetchReferenceSequence` backed by something remote receives the signal as a
+fifth argument (`opts.signal`) so it can cancel too. Ignoring it is fine; a
+four-argument callback keeps working unchanged.
 
-Why it is built this way: [ADR 0003](adr/0003-abortsignal-on-the-read-path.md).
+Why it works this way: [ADR 0003](adr/0003-abortsignal-on-the-read-path.md).
 
 ## `CramFile`
 
@@ -144,7 +143,7 @@ all you want is the header, or if you're walking containers yourself.
 
 ## `CraiIndex`
 
-Takes `{ path, url, filehandle }` — one of the three is required.
+Takes `{ path, url, filehandle }` — pass exactly one of the three.
 
 ## `CramRecord`
 
@@ -184,11 +183,11 @@ Takes `{ path, url, filehandle }` — one of the three is required.
   Reading these columns instead of `readFeatures` is what makes a bulk consumer
   fast: 3.7x on a long-read slice, at a fraction of the memory.
 
-Read features and quality scores are both stored as one shared typed array per
-slice rather than per record, because a per-record `Uint8Array` costs ~104 bytes
+Read features and quality scores both live in one shared typed array per slice
+rather than one per record, because a per-record `Uint8Array` costs ~104 bytes
 in V8 — more than the quality scores of a short read. [memory.md](memory.md)
 covers what a decoded slice retains, how to read these columns without
-allocating, and how the slice cache is bounded.
+allocating, and what bounds the slice cache.
 
 ### Flag methods
 
@@ -213,16 +212,15 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
 - `getReadBases()` → `string | null | undefined` — the read sequence. Needs
   `fetchReferenceSequence`; `getRecordsForRange` applies the reference for you.
 - `getCigarString()` → `string` — the read's alignment (e.g. `"50M2I48M"`),
-  reconstructed from the read features. Substitutions and mismatches are
-  reported as `M`, per the plain CIGAR convention. Unmapped reads, and mapped
-  reads with no operations, return `"*"`. Does not require
-  `fetchReferenceSequence`.
+  reconstructed from the read features. Substitutions and mismatches come out as
+  `M`, per the plain CIGAR convention. Unmapped reads, and mapped reads with no
+  operations, return `"*"`. Does not require `fetchReferenceSequence`.
 - `forEachCigarOp(callback)` — the same alignment reported to
   `callback(op, length)` one operation at a time, without building a CIGAR of
   any kind. `op` is one of the exported `CIGAR_MATCH`, `CIGAR_INS`, `CIGAR_DEL`,
   `CIGAR_REF_SKIP`, `CIGAR_SOFT_CLIP`, `CIGAR_HARD_CLIP`, `CIGAR_PAD` — the
   numbering the SAM spec gives them, so `(length << 4) | op` is BAM's packed
-  form. Adjacent runs of the same op are merged and zero-length ops dropped.
+  form. The walk merges adjacent runs of the same op and drops zero-length ones.
   Reach for this whenever the answer is a measurement rather than text — a
   reference span, an op histogram, or the packed array BAM stores natively:
 
@@ -233,8 +231,8 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
   })
   ```
 
-  CRAM stores no CIGAR. Unlike BAM, where the packed array is on disk and can be
-  read as a zero-copy view, here it is always reconstructed from the read
+  CRAM stores no CIGAR. Unlike BAM, where the packed array sits on disk and a
+  reader can view it without copying, here it always comes back out of the read
   features — so this library hands out the walk rather than an array type it
   would have picked for you. See
   [ADR 0006](adr/0006-cigar-as-a-callback-walk.md).
@@ -248,7 +246,7 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
 
   Between them these answer "how much of this read is clipped, as sequenced":
   the leading clip for a forward-strand read and the trailing one for a
-  reverse-strand read, since a reverse-strand read is stored
+  reverse-strand read, since CRAM stores a reverse-strand read
   reverse-complemented.
 
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
@@ -286,14 +284,14 @@ its `refBaseCode` as `0`.
 ### CRAM-specific flags
 
 Separate from the SAM flags above; these come from CRAM's own compression flags
-(CRAM v3 §8.4) and are mostly of interest if you are reasoning about how the
-file was written.
+(CRAM v3 §8.4) and matter mainly when you are reasoning about how a writer built
+the file.
 
 - `isDetached()` — the record stores its own mate information rather than
   pointing downstream
 - `hasMateDownStream()` — its mate is later in the same slice
 - `isPreservingQualityScores()` — the file kept per-base qualities for this read
-- `isUnknownBases()` — the read's bases were not stored (`getReadBases()`
+- `isUnknownBases()` — the file stored no bases for this read (`getReadBases()`
   returns `null`)
 
 ## `Mismatch`

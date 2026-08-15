@@ -5,16 +5,16 @@ that decode happens on a shared pool of workers where the host has them, on by
 default and with nothing to configure:
 
 ```js
-// the pool is used automatically
+// this reaches the pool on its own
 const records = await indexedFile.getRecordsForRange(0, 1000, 2000)
 ```
 
 Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`
-— see [the constructor options](api.md#indexedcramfile). Both are accepted by
-`IndexedCramFile` as well as by `CramFile`; through 13.1.0 only `CramFile` took
-them, which is to say they were unreachable.
+— see [the constructor options](api.md#indexedcramfile). `IndexedCramFile` takes
+both, as does `CramFile`; through 13.1.0 only `CramFile` did, which is to say
+nothing could reach them.
 
-The pool is shared **per JS context**, so a host that runs several — jbrowse
+One pool serves a whole **JS context**, so a host that runs several — jbrowse
 spreads tracks over up to five RPC workers — gets one in each, and should size
 them with `numSliceWorkers` accordingly. Why that rather than one pool shared
 across contexts, which `@gmod/bgzf-filehandle` already implements and which
@@ -25,8 +25,8 @@ measurements on both sides.
 ## Why the whole slice, and not just decompression
 
 `@gmod/bgzf-filehandle` parallelizes inflate, because for BAM that is
-substantially the whole cost of a read. Doing the same here was measured and
-rejected. Block decompression is only **24–35%** of a cold CRAM query:
+substantially the whole cost of a read. We measured the same approach here and
+rejected it. Block decompression is only **24–35%** of a cold CRAM query:
 
 | fixture                        | query  | decompression |
 | ------------------------------ | ------ | ------------- |
@@ -91,8 +91,8 @@ in this repo's history to produce a confident number that was not real — see
 [ADR 0008](adr/0008-emit-into-the-consumers-callback.md#evidence) for the other
 two — and it is the same lesson as the rejected threshold below.
 
-**There is no slice-count threshold, and one was measured for and rejected.** An
-early run put a 2-slice query at 0.72x, and a threshold was written to skip the
+**There is no slice-count threshold, and we measured for one and rejected it.**
+An early run put a 2-slice query at 0.72x, so we wrote a threshold to skip the
 pool below four slices; the 0.72x then failed to reproduce. Sweeping slice count
 on the same corpus with a median of 9 rather than 3 gives a clean monotonic
 curve:
@@ -103,10 +103,10 @@ curve:
 | 1000x.shortread | 1.21x | 1.34x | 1.69x | 1.58x |
 
 Parity at one slice, a win from two up. The lesson is the ordinary one — a
-median of 3 on a 40 ms workload is not a measurement — but it is recorded
-because the threshold was nearly shipped on the strength of it. Note also that a
-single-slice query does not occur in isolation: a viewport is panned, so the
-pool is warm and the marginal query is what matters.
+median of 3 on a 40 ms workload is not a measurement — and it stays written down
+because that threshold nearly shipped on the strength of it. Note also that a
+single-slice query never happens in isolation: the user pans, so the pool is
+warm and the marginal query is what matters.
 
 ## The width is there where it matters
 
@@ -155,7 +155,7 @@ why the end-to-end win measured there is around 1.1x while the decode alone is
 
 So the pool is worth much more to a consumer that decodes a large region in one
 go — a whole-contig scan, an export, an analysis script, a force-load — than to
-an interactive pileup that is deliberately kept small.
+an interactive pileup a consumer deliberately keeps small.
 
 ## What crosses the boundary
 
@@ -175,7 +175,7 @@ two files whose first containers coincide swap codecs. See `getScheme`.
 **Out of the worker**: not `CramRecord[]` — a class instance loses its prototype
 and its getters do not serialize. Cloning the records as plain objects measured
 **1011 ms against a 392 ms decode**, which would have made the whole exercise
-pointless. `cramFile/sliceTransfer.ts` is the wire form instead: the
+pointless. `cramFile/sliceTransfer.ts` carries the wire form instead: the
 read-feature arena, tag column and quality column are already typed arrays and
 transfer at zero copy, and the per-record scalars pack into one `Int32Array`.
 Strings stay strings — 15 ms for 153,677 of them, against 112 ms to encode the
@@ -189,33 +189,32 @@ undefined — see the note in `sliceTransfer.ts`.
 
 ## Falling back
 
-The pool is an optimization that can always be declined, and
-`_fetchRecordsInWorker` returns undefined rather than throwing for every reason
-short of a malformed file:
+A caller can always decline the pool, so `_fetchRecordsInWorker` returns
+undefined rather than throwing for every reason short of a malformed file:
 
 - no `Worker` or Blob URL — node, vitest, or a restricted host
 - a slice of unknown size, i.e. non-indexed access through `CramFile` directly,
-  where blocks are read one at a time and there is no single byte range to send
+  where it reads blocks one at a time and has no single byte range to send
 - a pool that failed to start, which warns once per file. That covers a worker
   reporting an error, one whose wasm will not instantiate, and one that never
   answers the init handshake at all — the last of those on a 30 s timeout, since
   it reports nothing to time out on. A CSP refusing `blob:` worker-src is the
   ordinary way a host gets here, and all three have to reject rather than wait:
-  the pool is awaited before the decode, so a hang there hangs every query
-  against the file.
+  the decode awaits the pool first, so a hang there hangs every query against
+  the file.
 - a worker that dies while carrying a slice, or a pool destroyed under one in
   flight. The slice decodes on the main thread instead; that a worker went away
   says nothing about the file.
 
 A **decode error** does propagate: a malformed CRAM must fail rather than
-quietly re-decode on the main thread and fail there. Error classes are carried
-across by name and rebuilt, so `CramMalformedError` still arrives as one, and
-the classes are exported from the package entry point so a consumer can name it.
+quietly re-decode on the main thread and fail there. Error classes cross by name
+and rebuild on the other side, so `CramMalformedError` still arrives as one, and
+the package entry point exports the classes so a consumer can name it.
 
 ## Building the bundle
 
-The worker is inlined as a string so the pool can launch it from a Blob URL with
-no consumer wiring, matching how the wasm is handled (see [wasm.md](wasm.md)):
+The worker ships inlined as a string so the pool can launch it from a Blob URL
+with no consumer wiring, the same way the wasm travels (see [wasm.md](wasm.md)):
 
 ```
 src/worker/sliceWorkerEntry.ts        the message loop, and nothing else
@@ -224,25 +223,25 @@ src/worker/sliceWorkerEntry.ts        the message loop, and nothing else
   -> inline-worker  src/wasm/cram-worker-source.js       (~405 KB, tracked)
 ```
 
-The intermediate goes to `build/`, which is gitignored, and **not** to
-`src/wasm/` where it used to. `allowJs` makes everything under `src/` a tsc
-input, so from there it was compiled into `esm/` and `dist/` too and published
-three times over with two sourcemaps — about a megabyte of a file nothing
-imports. Only the string module is real, and that one is tracked, for the reason
+The intermediate goes to the gitignored `build/`, and **not** to `src/wasm/`
+where it used to. `allowJs` makes everything under `src/` a tsc input, so from
+there tsc compiled it into `esm/` and `dist/` too and we published it three
+times over with two sourcemaps — about a megabyte of a file nothing imports.
+Only the string module is real, and git tracks that one, for the reason
 [wasm.md](wasm.md) gives for the wasm bundle.
 
-Two things follow from the intermediate not being a published file:
+Two things follow from the intermediate never reaching the package:
 
-- Terser is configured with `extractComments: false` so license banners stay
-  **inside** the bundle. Extracted, the notice would sit in `build/` while the
-  code it covers traveled on into every consumer under a banner naming a file
-  that does not exist.
+- Terser takes `extractComments: false` so license banners stay **inside** the
+  bundle. Extracted, the notice would sit in `build/` while the code it covers
+  traveled on into every consumer under a banner naming a file that does not
+  exist.
 - `inline-worker.sh` writes `/** @type {string} */` above the generated const.
   Without it tsc infers the type of a 400,000-character bundle as a string
   literal type and writes the whole thing out again as a 440 KB `.d.ts`, in both
   output dirs, for every consumer's tsc to parse. Annotated, it is 87 bytes.
 
-`pnpm build:worker` does the last two steps. It is wired into `pnpm build`, and
+`pnpm build:worker` does the last two steps. `pnpm build` calls it, and
 **`build:esm` runs on both sides of it** — once to give webpack something to
 bundle, once more so the regenerated string module reaches `esm/` and `dist/`.
 

@@ -1,33 +1,33 @@
 # Optimizations
 
-Why the query path looks the way it does. The path itself is walked in
-[dataflow.md](dataflow.md).
+Why the query path looks the way it does. [dataflow.md](dataflow.md) walks the
+path itself.
 
 CRAM spends its time somewhere different from the BGZF formats. Block
-decompression is only **24–35%** of a cold query, so a query is dominated by the
-**record decode** and by what the decoded records **retain** — a slice is
-decoded whole and then cached whole. Nearly everything below is one of two
+decompression accounts for only **24–35%** of a cold query, so what dominates is
+the **record decode** and what the decoded records **retain** — the reader
+decodes a slice whole and caches it whole. Nearly everything below is one of two
 moves: do per-slice work once per slice rather than once per record, and refuse
 to pay a fixed per-object cost on a 100 bp read.
 
 Each item names the measurement that settled it. Where a whole decision hangs on
 it there is an [ADR](adr/);
-[ADR 0007](adr/0007-optimizations-measured-and-rejected.md) is the list of
-things that looked like wins and were not.
+[ADR 0007](adr/0007-optimizations-measured-and-rejected.md) lists the things
+that looked like wins and were not.
 
 ## Reading the index
 
 ### Parsed once, shared across callers
 
-The `.crai` is a whole-file read, inflated and parsed on the first query and
-memoized for the life of the object. It is the one read in `CraiIndex` that
+The first query reads the whole `.crai`, inflates it, parses it, and memoizes
+the result for the life of the object. It is the one read in `CraiIndex` that
 several queries share, so a caller that joined someone else's parse and saw it
 fail because _that_ caller aborted starts over rather than inheriting the
 failure — once, then propagates.
 
-### The overlap scan is bounded at both ends
+### The overlap scan stops at both ends
 
-Entries are sorted by start, so `getEntriesForRange` binary-searches the lower
+Entries come sorted by start, so `getEntriesForRange` binary-searches the lower
 bound at `queryStart - maxSpan` — the longest span on that reference, computed
 at parse time — and stops the forward scan at `queryEnd` rather than running to
 the end of the chromosome.
@@ -37,7 +37,7 @@ It used to filter the whole reference's entry list on every call. A whole-genome
 per unmated read, so a query returning n reads did O(n × slices) work to find a
 handful of slices.
 
-### Digits are accumulated, not built into strings
+### Accumulate digits, don't build strings
 
 `parseIndex` walks the decompressed text byte by byte and accumulates each field
 numerically. The `parseInt` of a built-up substring dominated index load on the
@@ -45,70 +45,68 @@ whole-genome files this is really sized for.
 
 ## Choosing and fetching slices
 
-### Containers are shared across the slices of one query
+### The slices of one query share their containers
 
 A CRAM packs several slices per container, so without this every slice re-read
 its container header and re-parsed its compression header block: on `ce#1000`,
-149 slices over ~30 containers meant **456 of 1001** filehandle reads were exact
+149 slices over ~30 containers left **456 of 1001** filehandle reads exact
 duplicates of another read in the same query.
 
-The map is scoped to one query on purpose, and has to stay that way. A
-container's memos are threaded with the caller's `AbortSignal` on a
-first-caller-wins basis, which is sound only while every caller of one memo is
-the same query — a file-level container cache needs the foreign-abort handling
-the record cache and `CraiIndex` have
-([ADR 0003](adr/0003-abortsignal-on-the-read-path.md), and [TODO.md](../TODO.md)
-for the part still open).
+The map covers one query on purpose, and has to stay that way. A container's
+memos carry the caller's `AbortSignal` on a first-caller-wins basis, which is
+sound only while every caller of one memo is the same query — a file-level
+container cache needs the foreign-abort handling the record cache and
+`CraiIndex` have ([ADR 0003](adr/0003-abortsignal-on-the-read-path.md), and
+[TODO.md](../TODO.md) for the part still open).
 
-### The decoded-slice cache is sized above one query
+### Size the decoded-slice cache above one query
 
 `featureCache` holds decoded records, keyed by slice position and by the decode
-options that would change what a slice decodes to. It is bounded by **record
-count** — a decoded record has no cheap size, and slices hold anywhere from a
-handful of records to tens of thousands — and the default is 1,000,000 because
-the number has to clear one query's working set. Below that it does not cache
-less, it caches _nothing_: each slice is evicted before the next pan can reuse
-it while the memory is retained anyway. A 50 kb window on 200x short-read data
-is 90,000 records, and the old 20,000 default was 4.5x below it
+options that would change what a slice decodes to. It counts **records** — a
+decoded record has no cheap size, and slices hold anywhere from a handful of
+records to tens of thousands — and the default is 1,000,000 because the number
+has to clear one query's working set. Below that it does not cache less, it
+caches _nothing_: each slice falls out before the next pan can reuse it while
+still holding the memory. A 50 kb window on 200x short-read data is 90,000
+records, and the old 20,000 default sat 4.5x below it
 ([ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md)).
 
-Eviction is plain LRU, so the bound is honored. It used to be a `'batch'` policy
-that spared everything an in-flight query touched — measured holding 420,000
-records against a stated 20,000 — which rescues an undersized budget by
-exceeding it. Above the working set the two measure identically, so it was
-dropped ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)).
+Eviction is plain LRU, so the bound means what it says. It used to be a
+`'batch'` policy that spared everything an in-flight query touched — measured
+holding 420,000 records against a stated 20,000 — which rescues an undersized
+budget by exceeding it. Above the working set the two measure identically, so
+that policy went ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)).
 `cacheIdleTimeoutMs` is what lowers the cache while nothing is happening, and
 `cacheBudget` lets several files share one ceiling instead of each holding its
 own. [memory.md](memory.md#the-slice-cache) has both.
 
-What is cached is the whole decoded slice, already decorated with its reference
+The cache holds the whole decoded slice, already decorated with its reference
 sequence — `applyReferenceSequence` runs once per slice inside the cached decode
-rather than once per query over the filtered subset — and the filter is applied
-to the cached records afterwards. So a pan that re-asks for a different window
-of the same slice pays nothing but the filter.
+rather than once per query over the filtered subset — and the filter runs over
+those cached records afterwards. So a pan that re-asks for a different window of
+the same slice pays nothing but the filter.
 
-### Mate slices are deduplicated, and decoded under the caller's options
+### Mate slices dedupe, and decode under the caller's options
 
 `viewAsPairs` looks up a slice per unmated read, and those collapse to a
-handful. They are deduplicated on the triple that identifies a slice; keying on
+handful. They dedupe on the triple that identifies a slice; keying on
 `Slice.toString()` silently collapsed every one of them to `[object Object]`.
-They are also decoded under the whole `opts`, not just the signal — `decodeTags`
-is part of the cache key, so a mate pass with different options decodes and
-caches a second copy of a slice the first pass already had.
+They also decode under the whole `opts`, not just the signal — `decodeTags` is
+part of the cache key, so a mate pass with different options decodes and caches
+a second copy of a slice the first pass already had.
 
 ## Decoding a slice
 
 ### The unit of parallel work is the whole slice
 
 Slices are independent, so they decode on a shared worker pool — on by default,
-since the worker ships inlined. Parallelizing only _decompression_, as
-`@gmod/bgzf-filehandle` does for BAM, was measured and rejected: at 24–35% of a
-query, Amdahl caps it at ~1.33x, and the heavy blocks within one slice are too
-few to spread. The whole slice is ~95% of a query, and measures **2.0–2.8x**
-under node and **2.1–3.6x** from four slices up when nested inside a browser
-worker, which is the arrangement consumers actually ship.
-[workers.md](workers.md) has the tables, including the slice-count threshold
-that was measured for and rejected.
+since the worker ships inlined. We measured parallelizing only _decompression_,
+as `@gmod/bgzf-filehandle` does for BAM, and rejected it: at 24–35% of a query,
+Amdahl caps it at ~1.33x, and the heavy blocks within one slice are too few to
+spread. The whole slice is ~95% of a query, and measures **2.0–2.8x** under node
+and **2.1–3.6x** from four slices up when nested inside a browser worker, which
+is the arrangement consumers actually ship. [workers.md](workers.md) has the
+tables, including the slice-count threshold we measured for and rejected.
 
 ### The wasm boundary is the block
 
@@ -129,21 +127,21 @@ before the loop runs: classifying external blocks, pre-decoding the integer
 ones, binding a decoder per data series and per tag, opening the columns.
 
 The binding is the codec's own job rather than a fast path written next to the
-loop. An `instanceof` chain that recognized particular codec combinations was
-tried first, and its failure mode is the argument: a combination nobody
+loop. We tried an `instanceof` chain that recognized particular codec
+combinations first, and its failure mode is the argument: a combination nobody
 enumerated fell through to full dispatch silently, which happened twice — one of
 them putting `getBytesSubarray` at 6.1% of the SRR396637 profile, 109,580 calls
 for 54,695 records. A binder that cannot do better returns `undefined` and the
 caller has a correct slower path, so adding one never adds a way to be wrong
 ([ADR 0001](adr/0001-codec-binding-seam.md)).
 
-### Strings are decoded a block at a time
+### Decode strings a block at a time
 
 `byteArrayStop` stores its values end to end, so the block _is_ the strings: one
 `TextDecoder` call recovers all of them and each read is an `indexOf` and a
-`slice`. Decoding SRR396637's 54,695 read names one at a time is **10.4 ms**
-against **1.5 ms** for the block — 86% of it was per-call overhead — and the
-call count for the whole file went **110,048 → 240**.
+`slice`. Decoding SRR396637's 54,695 read names one at a time takes **10.4 ms**
+against **1.5 ms** for the block — 86% of that went on per-call overhead — and
+the call count for the whole file went **110,048 → 240**.
 
 The alternative was to make the name lazy, which is genuinely attractive because
 a plain pileup render never asks for one. It lost on memory: a record holding a
@@ -156,39 +154,40 @@ Read bases take the same shape where the codec allows it: `bindBytesReader`
 hands out a view straight off the BA block, and `decodeReadBases` falls back to
 a base at a time only when it cannot.
 
-### External integer blocks are decoded in one pass
+### Decode external integer blocks in one pass
 
 `batchDecodeItf8` decodes a whole external ITF8 block into an `Int32Array` up
 front instead of parsing a variable-length integer per read. The scratch array
-is sized at one element per byte, which looks like a 4x over-allocation and is
-not — measured utilization is 97.5–100%, because these values are overwhelmingly
+takes one element per byte, which looks like a 4x over-allocation and is not —
+measured utilization is 97.5–100%, because these values are overwhelmingly
 single-byte, and the copy-out path fires on 0.15 MB of 14.70 MB.
 
 ### Columns, not objects
 
-Read features, quality scores and aux tags are stored as one set of typed arrays
-per slice plus an offset per record, rather than as objects per record. A
-retained `Uint8Array` view is **104 bytes whatever it points at**, so a
-per-record view over ~100 bytes costs more than the bytes; the columns pay that
-fixed cost once per slice. Read features go from 64–81 bytes each to 15, and the
-quality column removed 104 bytes per record (−12.8% retained on SRR396637).
+Read features, quality scores and aux tags live in one set of typed arrays per
+slice plus an offset per record, rather than in objects per record. A retained
+`Uint8Array` view costs **104 bytes whatever it points at**, so a per-record
+view over ~100 bytes costs more than the bytes; the columns pay that fixed cost
+once per slice. Read features go from 64–81 bytes each to 15, and the quality
+column saved 104 bytes per record (−12.8% retained on SRR396637).
 
-The columns are per slice and not per record for the same reason in the other
-direction — giving each record its own typed arrays makes short-read files about
-twice as expensive as plain objects. [memory.md](memory.md#columns-not-objects)
-has the numbers, and [read-features.md](read-features.md) how to read them.
+The columns belong to the slice and not to the record for the same reason in the
+other direction — giving each record its own typed arrays makes short-read files
+about twice as expensive as plain objects.
+[memory.md](memory.md#columns-not-objects) has the numbers, and
+[read-features.md](read-features.md) how to read them.
 
-A column that is derivable is not stored per feature at all. Payload offsets
-were, at 4 bytes each, until it turned out they were the running prefix sum of
-lengths the arena already had — and that three quarters of them pointed at a
-feature carrying no bytes. One checkpoint every eighth slot replaced them, for
-−9.4% retained heap on a long-read slice with the accessors unchanged
+Anything derivable gets no column at all. Payload offsets had one, at 4 bytes
+each, until it turned out they were the running prefix sum of lengths the arena
+already had — and that three quarters of them pointed at a feature carrying no
+bytes. One checkpoint every eighth slot replaced them, for −9.4% retained heap
+on a long-read slice with the accessors unchanged
 ([ADR 0010](adr/0010-checkpoint-the-payload-offsets.md)).
 
 `TagColumn` is the exception, and worth knowing before anyone "improves" it on
 the assumption that it saved heap: it came out break-even (−0.06 MB on
-SRR396637, +0.20 MB on SRR396636) and was taken for the worker transfer below
-and for `getTag`.
+SRR396637, +0.20 MB on SRR396636), and it earns its place through the worker
+transfer below and through `getTag`.
 
 ### Out of the worker by transfer, not by clone
 
@@ -204,15 +203,15 @@ were 243 ms of structured clone and are 11 ms as columns. Strings stay strings �
 
 ### Walks, not arrays
 
-CRAM stores no CIGAR, so every CIGAR this library produces is synthesized: any
+CRAM stores no CIGAR, so this library synthesizes every one it produces: any
 array form would be an allocation the library invented and imposed on every
 consumer, not a view onto something the file contains. `forEachCigarOp` and
-`forEachMismatch` are the primitives, and `getCigarString`/`getMismatches` are
-built on them ([ADR 0006](adr/0006-cigar-as-a-callback-walk.md)).
+`forEachMismatch` are the primitives, and `getCigarString`/`getMismatches` sit
+on top of them ([ADR 0006](adr/0006-cigar-as-a-callback-walk.md)).
 
 The callback is the consumer's own, not a translating one. Putting a translation
 between this walk and jbrowse's cost **+17%** — the same indirect call, paid
-twice — so the emitted vocabulary is the one the consumer wants
+twice — so the walk emits the vocabulary the consumer wants
 ([ADR 0008](adr/0008-emit-into-the-consumers-callback.md)).
 
 ### One tag, one score, one clip length
@@ -222,43 +221,43 @@ answer all of them:
 
 - `getTag(name)` reads one tag out of the column, **3.8–7.8x** faster than
   building the `tags` object — and minimap2 output carries 11 tags on every
-  read, so a filter on one tag was decoding all eleven.
+  read, so a filter on one tag used to decode all eleven.
 - `qualityScoreAt(i)` allocates nothing, where `record.qualityScores[i]` builds
   a view per call. For a loop over every base, hoist `qualityColumn` and
   `qualityStart`.
 - `getLeadingClipLength()` / `getTrailingClipLength()` answer off the features
-  at that end. Reading the same number out of a packed CIGAR meant manufacturing
+  at that end. Reading the same number out of a packed CIGAR means manufacturing
   the whole array — ~7,000 operations for a long ONT read — to look at one of
   them.
 
 ### Cancellation reaches the socket, without leaking
 
-`getRecordsForRange` takes a `signal`, and the signal is checked before each
-read is issued as well as handed to the filehandle, because honouring it down
-there is optional — `RemoteFile` aborts its `fetch`, `LocalFile` ignores it.
+`getRecordsForRange` takes a `signal`, and checks it before issuing each read as
+well as handing it to the filehandle, because honouring it down there is
+optional — `RemoteFile` aborts its `fetch`, `LocalFile` ignores it.
 
 The hazard is that the read path is a stack of memoized promises, and a memo
-cannot tell whose cancellation it is seeing. So reads that are shared between
-queries — the index parse, a decoded slice — are reference-counted, and aborting
-one query never fails another
+cannot tell whose cancellation it is seeing. So the reads several queries share
+— the index parse, a decoded slice — carry a reference count, and aborting one
+query never fails another
 ([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)). The corollary is worth
 knowing: a query with **no** signal can never give up, so it pins whatever it is
 waiting on for everyone.
 
 ## What a consumer adds
 
-jbrowse-components is the consumer these were measured against, and several of
-the wins are on its side of the API. They are worth reading as the pattern for
-any consumer doing the same volume.
+We measured all of this against jbrowse-components, and several of the wins sit
+on its side of the API. They are worth reading as the pattern for any consumer
+doing the same volume.
 
 **Budget across files, not per file.** `cacheSize` is per `CramFile`, and
-jbrowse holds one per open track for the life of the track — so the ceiling is
-multiplied by the track count and nothing bounds the sum. Its `CramAdapter`
-passes a per-JS-context `SharedBudget` instead, so a track the reader is not
-looking at yields its space to the one being panned. Dividing the ceiling by the
-track count is the obvious fix and is measurably worse than doing nothing.
+jbrowse holds one per open track for the life of the track — so the track count
+multiplies the ceiling and nothing bounds the sum. Its `CramAdapter` passes a
+per-JS-context `SharedBudget` instead, so a track the reader is not looking at
+yields its space to the one they are panning. Dividing the ceiling by the track
+count is the obvious fix and measures worse than doing nothing.
 
-**Size the pool for the host, not for the query.** The pool is shared per JS
+**Size the pool for the host, not for the query.** One pool serves a whole JS
 context, and jbrowse round-robins tracks over up to five RPC workers, so five
 CRAM tracks start five pools — 20 slice workers at the library default of 4. It
 passes `numSliceWorkers: max(2, min(4, cores/2))`, which costs a single track a
@@ -273,10 +272,10 @@ request. Over a local file they are real syscalls; see [TODO.md](../TODO.md).
 
 **Ask for one thing at a time.** Its record filter calls `getTag` rather than
 reading `record.tags`, its render path reads `clipLengthAtStartOfRead` rather
-than a packed CIGAR, and the packed CIGAR it does build is built only when a
-consumer asks for the packed form, as a `Uint32Array` above 64 operations and a
-plain array below — where ~96 bytes of typed-array overhead on a one-element
-payload is 2.4x the memory and ~2x slower.
+than a packed CIGAR, and it builds a packed CIGAR only where a consumer asks for
+the packed form, as a `Uint32Array` above 64 operations and a plain array below
+— where ~96 bytes of typed-array overhead on a one-element payload is 2.4x the
+memory and ~2x slower.
 
 **Reuse the options object.** `forEachMismatch` takes its window as an object,
 and a fresh literal per read per render pass measured 16.5 → 20.7 ms on 80,177
@@ -285,16 +284,16 @@ retains none of them, so one shared literal is safe.
 
 **Gate the query on the index.** `bytesForRegions` sums `sliceBytes` from the
 `.crai` to decide whether a region is too big to fetch, deduplicating slices
-across regions first — adjacent regions routinely overlap one slice, and it is
-downloaded once. Note what that gate does to everything above it: a pileup
-capped at 5 MB lives permanently in the 19–40 kb band, which is the shallow end
-of the pool's curve, and is most of why the end-to-end win there is ~1.1x while
-the decode alone is 2.2x. The pool is worth much more to a whole-contig scan, an
+across regions first — adjacent regions routinely overlap one slice, which then
+downloads once. Note what that gate does to everything above it: a pileup capped
+at 5 MB lives permanently in the 19–40 kb band, which is the shallow end of the
+pool's curve, and is most of why the end-to-end win there is ~1.1x while the
+decode alone is 2.2x. The pool is worth much more to a whole-contig scan, an
 export or a force-load.
 
-## What was measured and rejected
+## What we measured and rejected
 
-[ADR 0007](adr/0007-optimizations-measured-and-rejected.md) is the list, with
+[ADR 0007](adr/0007-optimizations-measured-and-rejected.md) keeps the list, with
 the numbers: interning the decoded strings (real duplication, −6.5% retained,
 and 10–20% of the decode to hash it), a positional `CramRecord` constructor,
 coalescing single-base insertions at decode time, a short-buffer fast path in

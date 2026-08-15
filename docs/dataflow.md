@@ -74,7 +74,7 @@ Two things stay on the main thread whatever happens:
 - **Describing the slice to the worker as bytes and numbers only.** A `CramFile`
   holds a filehandle and your `fetchReferenceSequence` callback, neither of
   which can travel; coming back, the columns transfer at zero copy rather than
-  being cloned.
+  cloning.
 - **`applyReferenceSequence`**, because resolving substitutions means calling
   that callback.
 
