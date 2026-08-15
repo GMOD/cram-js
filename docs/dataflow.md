@@ -1,6 +1,6 @@
 # How a query flows
 
-<img src="img/dataflow.svg" alt="cram-js data flow" width="700">
+<img src="img/dataflow.svg" alt="cram-js data flow" width="820">
 
 [dataflow.dot](img/dataflow.dot) is the source; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to re-render it.
@@ -49,8 +49,9 @@ bzip2, and every CRAM codec from rANS to fqzcomp and tok3, plus a second 16 KB
 `xz-embedded.wasm` for lzma, which htscodecs has no codec for at all. Both are
 inlined in the bundle and instantiated lazily, once per JS context.
 
-The `.crai` goes through it too — the index is gzipped, so the first wasm call
-of a session is usually gunzipping it rather than decompressing a block.
+The `.crai` goes through it too, though the diagram does not draw that edge —
+the index is gzipped, so the first wasm call of a session is usually gunzipping
+it rather than decompressing a block.
 
 The boundary is crossed **once per block**, never per record: each crossing
 copies its input into the wasm heap and its output back out, and a block's two
