@@ -3,18 +3,18 @@
 Decisions that shape how the decoder is put together, with the evidence that
 settled them and the consequences that came with them.
 
-The distinction from the other documents here:
+How this differs from the other documents here:
 
 - **`docs/adr/`** — a decision that was taken, why, and what it costs. Written
   once, then amended only to supersede it.
 - **[`TODO.md`](../../TODO.md)** — work that is measured, still open, and that
   we want to do. Facts and measurements, not decisions; an item leaves the file
-  when it lands. Things measured and deliberately rejected are a decision, so
-  they are here, in [0007](0007-optimizations-measured-and-rejected.md).
-- **[`docs/API.md`](../API.md)**, **[`docs/MEMORY.md`](../MEMORY.md)**,
-  **[`docs/READ_FEATURES.md`](../READ_FEATURES.md)**,
-  **[`docs/WASM.md`](../WASM.md)**,
-  **[`docs/CODEC_SUPPORT.md`](../CODEC_SUPPORT.md)** — how a part of the library
+  when it lands. Something measured and deliberately rejected _is_ a decision,
+  so it lives here, in [0007](0007-optimizations-measured-and-rejected.md).
+- **[`API.md`](../API.md)**, **[`MEMORY.md`](../MEMORY.md)**,
+  **[`READ_FEATURES.md`](../READ_FEATURES.md)**, **[`WASM.md`](../WASM.md)**,
+  **[`WORKERS.md`](../WORKERS.md)**,
+  **[`CODEC_SUPPORT.md`](../CODEC_SUPPORT.md)** — how a part of the library
   works today, for someone using or changing it.
 
 | #                                                       | decision                                                       | status   |
@@ -32,8 +32,10 @@ The distinction from the other documents here:
 ## Writing one
 
 Number sequentially, and keep the four headings: **Context**, **Decision**,
-**Consequences**, **Evidence**. The evidence section is not optional — a
-decision recorded without the measurement that settled it is an opinion, and
-this codebase has already had one 3% "win" survive six rounds of benchmarking
-before disappearing under fourteen (see the note at the end of `TODO.md` on how
-to A/B this repo without fooling yourself).
+**Consequences**, **Evidence**.
+
+The evidence section is not optional. A decision recorded without the
+measurement that settled it is an opinion — and this codebase has already had
+one 3% "win" survive six rounds of benchmarking before disappearing under
+fourteen. See the method note at the end of `TODO.md` for how to A/B this repo
+without fooling yourself.

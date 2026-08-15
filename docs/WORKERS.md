@@ -1,8 +1,8 @@
 # Decoding slices on a worker pool
 
 A CRAM query decodes one or more slices, and slices are independent. Since 12.1
-that decode happens on a shared pool of workers where the host has them, which
-is on by default and needs no configuration:
+that decode happens on a shared pool of workers where the host has them, on by
+default and with nothing to configure:
 
 ```js
 // the pool is used automatically
@@ -10,9 +10,9 @@ const records = await indexedFile.getRecordsForRange(0, 1000, 2000)
 ```
 
 Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`
-— see [the constructor options](API.md#indexedcramfile). Both go to
-`IndexedCramFile` as well as to `CramFile`; through 13.1.0 they reached only the
-latter, which is to say they were unreachable.
+— see [the constructor options](API.md#indexedcramfile). Both are accepted by
+`IndexedCramFile` as well as by `CramFile`; through 13.1.0 only `CramFile` took
+them, which is to say they were unreachable.
 
 The pool is shared **per JS context**, so a host that runs several — jbrowse
 spreads tracks over up to five RPC workers — gets one in each, and should size
@@ -24,7 +24,7 @@ measurements on both sides.
 
 ## Why the whole slice, and not just decompression
 
-`@gmod/bgzf-filehandle` parallelises inflate, because for BAM that is
+`@gmod/bgzf-filehandle` parallelizes inflate, because for BAM that is
 substantially the whole cost of a read. Doing the same here was measured and
 rejected. Block decompression is only **24–35%** of a cold CRAM query:
 
@@ -37,7 +37,7 @@ rejected. Block decompression is only **24–35%** of a cold CRAM query:
 Amdahl caps a decompression-only pool at ~1.33x, and the real figure is lower
 still because the heavy blocks within one slice are few — on the ONT slice a
 single 19.1 ms block is 74% of that slice's decompression, so there is barely
-anything to spread. Modelled end to end it came out at **1.05–1.46x**, against
+anything to spread. Modeled end to end it came out at **1.05–1.46x**, against
 the 2.0–2.8x measured below for the whole slice.
 
 So the unit of work is the whole slice: decompression, the record decode, and
@@ -56,7 +56,7 @@ decode and the transfer but not a real browser `Worker`:
 | 1000x.shortread | 16     | 323 ms     | 158 ms | **2.04x** |
 | 200x.shortread  | 4      | 69 ms      | 51 ms  | 1.35x     |
 
-Short of 4x because deserialising the payload happens on the host and is serial,
+Short of 4x because deserializing the payload happens on the host and is serial,
 and because slices are uneven — a query waits for its largest.
 
 ### In a browser, nested inside another worker
@@ -83,17 +83,16 @@ sweep below found under node.
 
 **Measure this interleaved, not as two blocks.** Running all the in-process
 rounds and then all the pooled ones put 200x.longread at 0.74x, and a repeat of
-that same arrangement at 2.26x. Nothing about the code changed between them; the
-machine drifted between the two blocks and the drift landed in the ratio.
+that same arrangement at 2.26x. Nothing about the code changed between them: the
+machine drifted between the two blocks, and the drift landed in the ratio.
 Alternating the variants puts it in both instead. This is the third harness trap
 in this repo's history to produce a confident number that was not real — see
 [ADR 0006](adr/0006-cigar-as-a-callback-walk.md) and
 [ADR 0008](adr/0008-emit-into-the-consumers-callback.md#evidence) for the other
-two — and it is the same lesson as the rejected threshold below, which was very
-nearly shipped on the strength of a 0.72x that came from the same kind of run.
+two — and it is the same lesson as the rejected threshold below.
 
 **There is no slice-count threshold, and one was measured for and rejected.** An
-early run put a 2-slice query at 0.72x and a threshold was written to skip the
+early run put a 2-slice query at 0.72x, and a threshold was written to skip the
 pool below four slices; the 0.72x then failed to reproduce. Sweeping slice count
 on the same corpus with a median of 9 rather than 3 gives a clean monotonic
 curve:
@@ -140,7 +139,7 @@ fixture, same run conditions, browser, warm bytes, interleaved:
 | 1000x.shortread | 250 kb     | 2,000,000 | 4322 ms    | 2317 ms | 1.87x     |
 | 1000x.longread  | **100 kb** | 3,642     | 4094 ms    | 1204 ms | **3.40x** |
 
-It peaks rather than climbing: 250 kb falls back to 1.87x. Deserialising the
+It peaks rather than climbing: 250 kb falls back to 1.87x. Deserializing the
 payload happens on the host and is serial, so past some width that serial share
 grows faster than the parallel one — the same Amdahl ceiling noted above, now
 visible as a turning point rather than only as a cap.
@@ -169,12 +168,12 @@ decodes it with nothing else in reach. The compression scheme travels as the
 container's decompressed compression-header bytes rather than as a parsed
 scheme, because the parsed form holds codec instances; the worker parses it once
 per container and caches it, since a container holds several slices. The cache
-key is a container's file position, which one pool serving every CRAM in the
-context is not enough to identify it by — a hit has to match the header bytes
-too, or two files whose first containers coincide swap codecs. See `getScheme`.
+key is a container's file position, which is not enough on its own — one pool
+serves every CRAM in the context, so a hit has to match the header bytes too, or
+two files whose first containers coincide swap codecs. See `getScheme`.
 
 **Out of the worker**: not `CramRecord[]` — a class instance loses its prototype
-and its getters do not serialise. Cloning the records as plain objects measured
+and its getters do not serialize. Cloning the records as plain objects measured
 **1011 ms against a 392 ms decode**, which would have made the whole exercise
 pointless. `cramFile/sliceTransfer.ts` is the wire form instead: the
 read-feature arena, tag column and quality column are already typed arrays and
@@ -183,14 +182,14 @@ Strings stay strings — 15 ms for 153,677 of them, against 112 ms to encode the
 same set into bytes.
 
 **The reference stays behind.** `fetchReferenceSequence` is caller-supplied, so
-`_fetchRecords` applies it on the main thread after deserialising, by the same
+`_fetchRecords` applies it on the main thread after deserializing, by the same
 code that decorates an in-process decode. Records arrive from the worker with no
 `_refRegion`, which is why `getReadBases()` on a raw transfer payload returns
 undefined — see the note in `sliceTransfer.ts`.
 
 ## Falling back
 
-The pool is an optimisation that can always be declined, and
+The pool is an optimization that can always be declined, and
 `_fetchRecordsInWorker` returns undefined rather than throwing for every reason
 short of a malformed file:
 
@@ -236,7 +235,7 @@ Two things follow from the intermediate not being a published file:
 
 - Terser is configured with `extractComments: false` so license banners stay
   **inside** the bundle. Extracted, the notice would sit in `build/` while the
-  code it covers travelled on into every consumer under a banner naming a file
+  code it covers traveled on into every consumer under a banner naming a file
   that does not exist.
 - `inline-worker.sh` writes `/** @type {string} */` above the generated const.
   Without it tsc infers the type of a 400,000-character bundle as a string

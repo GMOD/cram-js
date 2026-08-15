@@ -82,7 +82,7 @@ against **1.5 ms** for the block — 86% of the cost was per-call overhead.
 End to end, against the tree before this work, 14 paired rounds, min of 8
 decodes per round, with a second extraction of the baseline as an A-vs-A control
 and the running order rotated each round so a machine drifting quieter cannot
-favour whichever tree runs last:
+favor whichever tree runs last:
 
 | dataset                | effect (mean / median) | faster in | control "faster" in |
 | ---------------------- | ---------------------- | --------- | ------------------- |

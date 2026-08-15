@@ -20,7 +20,7 @@ a query.
 
 CRAM 3.1 was effectively unreadable in JS for years, and the reason was fqzcomp,
 tok3 and the adaptive arithmetic coder. Between them that's thousands of lines
-of context-modelling C, and porting it by hand means signing up to keep a second
+of context-modeling C, and porting it by hand means signing up to keep a second
 copy correct forever. Compiling the real thing got all of it in one step,
 including the rANS 4x16 and tok3 sub-variants that tools do actually emit.
 
@@ -44,7 +44,7 @@ pays is _where_ the JS/wasm boundary sits, because every crossing copies its
 input into the wasm heap and its output back out. Four choices, each with the
 alternative it was picked over:
 
-- **The unit is one block, not one record.** A block's two copies amortise over
+- **The unit is one block, not one record.** A block's two copies amortize over
   the thousands of records encoded in it. Crossing per record would multiply the
   copy count by roughly the record count — tens of thousands per slice — and put
   the boundary inside the hot loop, which is the one place it must not be.

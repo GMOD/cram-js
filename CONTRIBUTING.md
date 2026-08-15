@@ -15,6 +15,10 @@ inlined worker bundle. Both are checked into git, so if you are not touching
 [docs/WORKERS.md](docs/WORKERS.md) cover how each is built; both rebuild
 byte-for-byte, so `git status` after a build should be clean.
 
+`dist/cram-bundle.js` is the standalone browser build the README points
+`<script>`-tag consumers at. Nothing in this repo imports it, so it only looks
+unused.
+
 `docs/dataflow.svg` is generated from `docs/dataflow.dot` and committed, since
 GitHub does not render DOT. If you edit the `.dot`, re-render it in the same
 commit:

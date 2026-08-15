@@ -31,7 +31,7 @@ that contradicts the numbers under **Evidence**:
 - Shrinking `batchDecodeItf8`'s scratch buffer.
 - A short-buffer fast path in `decodeUtf8`.
 - "Fixing" `CramRecord`'s conditional constructor assignments for hidden-class
-  stability — there is nothing to fix, and the fix would be a pessimisation to
+  stability — there is nothing to fix, and the fix would be a pessimization to
   guard against.
 - Reshaping read features to make consumer call sites monomorphic.
 - Building a `Uint32Array` CIGAR for every read regardless of length.
@@ -135,7 +135,7 @@ not merge the features either — its `case 'i'` accumulates into the _CIGAR_ vi
 ### `batchDecodeItf8` scratch sizing
 
 The `new Int32Array(buffer.length)` looks like a 4x over-allocation. Measured
-utilisation is **97.5–100%** — ITF8 values in these blocks are overwhelmingly
+utilization is **97.5–100%** — ITF8 values in these blocks are overwhelmingly
 single-byte — and the `.slice()` copy path fires on 0.15 MB of 14.70 MB.
 
 ### A short-buffer fast path in `decodeUtf8`

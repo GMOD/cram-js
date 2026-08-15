@@ -3,10 +3,10 @@
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
-Read CRAM files in node or the browser. CRAM 2.x and 3.x, `.crai` indexes, and
-every v3 and v3.1 codec — including fqzcomp and tok3 — decoded in WebAssembly
-built from the same htscodecs C that samtools uses, inlined in the bundle so
-there is nothing extra to serve or configure.
+Read CRAM files in node or the browser. Handles CRAM 2.x and 3.x, `.crai`
+indexes, and every v3 and v3.1 codec, fqzcomp and tok3 included. The codecs are
+the same htscodecs C that samtools uses, compiled to WebAssembly and inlined in
+the bundle, so there is nothing extra to serve or configure.
 
 ```bash
 npm install @gmod/cram
@@ -38,13 +38,13 @@ for (const record of records) {
 }
 ```
 
-`cramPath` can also be `cramUrl` or `cramFilehandle` (and `CraiIndex` takes
-`url` or `filehandle`), so the same code runs in a browser.
+`cramPath` can also be `cramUrl` or `cramFilehandle`, and `CraiIndex` takes
+`url` or `filehandle` in place of `path`, so the same code runs in a browser.
 
 ### Without a bundler
 
-The package also ships a standalone browser build for `<script>`-tag consumers,
-igv.js among them, putting the same exports on `window.gmodCRAM`:
+For `<script>`-tag consumers, igv.js among them, the package ships a standalone
+browser build that puts the same exports on `window.gmodCRAM`:
 
 ```html
 <script src="https://unpkg.com/@gmod/cram/dist/cram-bundle.js"></script>
@@ -53,8 +53,7 @@ igv.js among them, putting the same exports on `window.gmodCRAM`:
 </script>
 ```
 
-See the [example directory](./example) for a working page. Nothing else in this
-repo imports `dist/cram-bundle.js`, so it only looks unused.
+The [example directory](./example) has a working page.
 
 ## Three things to know
 
@@ -76,11 +75,11 @@ await indexedFile.cram.getReferenceInfo() // [{ name, length, md5 }, ...]
 The one id that is not an `@SQ` position is `-1`, an unplaced read.
 
 **You supply the reference sequence.** CRAM stores reads as differences from a
-reference, so the library cannot give you bases without one:
-`fetchReferenceSequence` is how it asks. It is handed both the seq id and the
-name, so a name-keyed source like `IndexedFasta` needs no lookup. Without it you
-still get positions, CIGARs and the _shape_ of every difference — just not the
-bases involved.
+reference, so the library cannot give you bases without one —
+`fetchReferenceSequence` is how it asks for them. It is handed both the seq id
+and the name, so a name-keyed source like `IndexedFasta` needs no lookup of its
+own. Without it you still get positions, CIGARs and the _shape_ of every
+difference, just not the bases involved.
 
 ## What to ask a record
 
@@ -94,7 +93,7 @@ record.isReverseComplemented() // the usual SAM flags
 ```
 
 `getMismatches()` is the intended way to see how a read differs from the
-reference — you should not need to know anything about how CRAM encodes it:
+reference. You should not need to know anything about how CRAM encodes it:
 
 ```js
 for (const m of record.getMismatches()) {
@@ -108,32 +107,32 @@ for (const m of record.getMismatches()) {
 }
 ```
 
-If you are processing enough records that per-difference objects start to
-matter, `record.forEachMismatch(callback, opts?)` reports exactly the same
-differences without allocating, and takes an optional `{ start, end }` window.
-The same pattern exists for the CIGAR (`forEachCigarOp`) and for tags and
-quality scores, which are stored as one array per slice rather than per record.
+If you process enough records that per-difference objects start to matter,
+`record.forEachMismatch(callback, opts?)` reports the same differences without
+allocating, and takes an optional `{ start, end }` window. The same pattern
+exists for the CIGAR (`forEachCigarOp`) and for tags and quality scores, which
+are stored as one array per slice rather than per record.
 [docs/API.md](docs/API.md) has all of it; [docs/MEMORY.md](docs/MEMORY.md)
 explains why it is shaped that way.
 
 ## Slices decode on a worker pool
 
-A query decodes one or more slices, slices are independent, and since 12.1 they
-decode on a shared pool of workers wherever the host has them. This is on by
-default and needs no configuration — the worker ships inlined, like the wasm, so
-there is nothing to serve or wire up:
+A query decodes one or more slices, and slices are independent. Since 12.1 they
+decode on a shared pool of workers wherever the host has them — on by default,
+with nothing to configure, since the worker ships inlined like the wasm:
 
 ```js
 // already parallel
 const records = await indexedFile.getRecordsForRange(refId, 10000, 20000)
 ```
 
-In a browser it is worth 2.1-3.6x once a query touches four or more slices, and
-parity on the one-slice queries that shallow files give. **Leave it on even if
-you already run this library inside your own worker** — a worker is one thread,
-and the pool nested inside one is where those numbers were measured.
+In a browser that is worth 2.1-3.6x once a query touches four or more slices,
+and roughly break-even on the single-slice queries shallow files produce.
+**Leave it on even if you already run this library inside your own worker** — a
+worker is one thread, and the pool nested inside one is where those numbers were
+measured.
 
-`useSliceWorkerPool: false` turns it off and `numSliceWorkers` sizes it; the
+`useSliceWorkerPool: false` turns it off and `numSliceWorkers` sizes it. The
 reason to reach for either is a host that runs several worker contexts, since
 the pool is shared per context rather than per machine.
 [docs/WORKERS.md](docs/WORKERS.md) has the measurements.
@@ -151,9 +150,9 @@ const records = indexedFile.getRecordsForRange(0, 1000, 2000, {
 controller.abort() // `records` rejects with an AbortError
 ```
 
-Aborting your query never fails a concurrent one — decodes shared between
-queries are reference-counted. The one thing to know is the corollary: a query
-with **no** signal can never give up, so it pins any slice it is waiting on for
+Aborting your query never fails a concurrent one, because decodes shared between
+queries are reference-counted. The corollary is the thing to know: a query with
+**no** signal can never give up, so it pins any slice it is waiting on for
 everyone. Thread the signal through consistently.
 [docs/API.md](docs/API.md#cancelling-a-query) has the details.
 

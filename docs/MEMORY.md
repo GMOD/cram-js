@@ -2,8 +2,8 @@
 
 A decoded CRAM slice is kept whole, in a cache, for as long as the file object
 lives. What that costs depends almost entirely on read length, and the two ends
-of that range fail in completely different ways — so this library uses the same
-trick twice, on two different terms.
+of that range fail in different ways — so this library plays the same trick
+twice, on two different terms.
 
 ## Where the memory goes
 
@@ -23,17 +23,17 @@ are now columns — see [the migration note](../MIGRATION.md) for both:
 
 - its **mate**, a `MateRecord` per paired record, now two numbers on the record.
 - its **tags**, a `Record` per record, now
-  [`TagColumn`](../src/cramFile/tagColumn.ts). Note this one is **not** a memory
-  technique, unlike everything else in this document: it came out break-even
-  (−0.06 MB on SRR396637, +0.20 MB on SRR396636) and was taken so that tags can
-  cross a worker boundary by transfer (243 ms of structured clone → 11 ms) and
-  so that `getTag(name)` can answer for one tag without building the object. Its
-  header comment has the full numbers.
+  [`TagColumn`](../src/cramFile/tagColumn.ts). Unlike everything else here, this
+  one is **not** a memory technique: it came out break-even (−0.06 MB on
+  SRR396637, +0.20 MB on SRR396636). It was taken so that tags can cross a
+  worker boundary by transfer (243 ms of structured clone → 11 ms), and so that
+  `getTag(name)` can answer for one tag without building the object. Its header
+  comment has the full numbers.
 
 ## The costs that drive the design
 
 Measured on this V8 (Node 24), 200,000 instances each, so they are worth knowing
-before optimising anything here:
+before optimizing anything here:
 
 |                            |                                  |
 | -------------------------- | -------------------------------- |
@@ -46,7 +46,7 @@ before optimising anything here:
 The first line is the important one. A `Uint8Array` is an object with a backing
 store, a byte offset and a length, and none of that gets cheaper because the
 view is small. **A per-record view over ~100 bytes costs more than the bytes.**
-The second line means a field you add to `CramRecord` is 437 KB across a
+The second line means a field added to `CramRecord` is 437 KB across a
 54,000-record view.
 
 ## Columns, not objects
@@ -74,8 +74,8 @@ read carries. See [READ_FEATURES.md](READ_FEATURES.md) for how to read them.
 Same trade, aimed at the other end. Every score in a slice lies end to end in
 one array and a record keeps a `qualityStart` offset into it, which removes 104
 bytes per record: SRR396637 went from 37.4 MB retained to 32.6 (−12.8%) and
-SRR396636 from 16.9 to 14.9 (−11.9%), while ONT did not move at all — 37 records
-is 37 views, and there was nothing there to save.
+SRR396636 from 16.9 to 14.9 (−11.9%). ONT did not move at all — 37 records is 37
+views, and there was nothing there to save.
 
 When QS is a plain external block, that column **is** the block: the scores are
 already laid out end to end in record order, so nothing is copied and reading a
@@ -100,20 +100,20 @@ for (let i = 0; i < record.readLength; i++) {
 }
 ```
 
-## Laziness that holds a view is a pessimisation
+## Laziness that holds a view is a pessimization
 
 Read names used to be deferred: the record kept the raw `Uint8Array` off the RN
-block and decoded on first access. Patching the getter never to materialise, so
+block and decoded on first access. Patching the getter never to materialize, so
 that every record kept its view, took SRR396637 from 37.7 MB to **40.9** — the
 104-byte view is nearly twice the ~56 bytes of the name it was avoiding
 decoding. Deferring only pays if you hold something _smaller_ than the result,
 and a typed-array view over a short run of bytes is not that.
 
-So names are decoded during the slice decode, which also collapsed
+So names are decoded during the slice decode. That also collapsed
 `_readName`/`_readNameRaw`/`_syntheticReadName` into one field and removed a
-duplicate string per detached record (the mate's name was decoded eagerly, then
-the record's own name decoded the same bytes again later). Worth ~2 MB on both
-short-read fixtures. The general form of the same lesson:
+duplicate string per detached record, since the mate's name was decoded eagerly
+and then the record's own name decoded the same bytes again later. Worth ~2 MB
+on both short-read fixtures. The general form of the same lesson:
 
 - **Defer a computation, not a view.** A lazily-decoded `record.qualityScores`
   is fine because the offsets it defers behind are two numbers on an object that
@@ -139,7 +139,7 @@ short-read data is 90,000 records; the old 20,000 default was 4.5x below it.
 [ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has the working
 sets.
 
-Eviction is plain LRU, so `cacheSize` is a bound that is honoured. It used to be
+Eviction is plain LRU, so `cacheSize` is a bound that is honored. It used to be
 a `'batch'` policy that spared everything an in-flight query touched, which
 rescued a too-small budget by exceeding it — 420,000 records held against a
 stated 20,000. At a budget above the working set the two measure identically, so
@@ -147,15 +147,14 @@ the policy was dropped rather than kept for the case where it lies about the
 limit: [ADR 0005](adr/0005-drop-the-batch-eviction-policy.md).
 
 Two other knobs: `cacheIdleTimeoutMs` (default 3 minutes) drops slices nothing
-has read for that long, which is the only thing that lowers the cache while
-nothing is happening, and `cacheBudget` lets several `CramFile`s share one
-ceiling.
+has read for that long, and is the only thing that lowers the cache while
+nothing is happening; `cacheBudget` lets several `CramFile`s share one ceiling.
 
 ## What the worker pool adds
 
 Everything above is the JS heap, and it is where a query's memory goes. The pool
 adds two things that sit outside it, both per worker rather than per file, and
-neither scales with the query:
+neither scaling with the query:
 
 - **A wasm heap per JS context.** The htscodecs module has a 16 MB floor (see
   [WASM.md](WASM.md#memory)), and every context that decodes gets its own
@@ -170,8 +169,8 @@ neither scales with the query:
   (294 B–11.7 KB across the fixtures here). Bounded, and small next to one
   decoded slice, but retained between queries rather than with them.
 
-Both are floors, not per-query costs: they are paid once per worker and do not
-grow with the region.
+Both are floors, not per-query costs: paid once per worker, and they do not grow
+with the region.
 
 ## Measuring it
 

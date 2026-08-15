@@ -12,27 +12,15 @@ new IndexedCramFile({
   cramPath, // local path
   cramUrl, // remote URL
   cramFilehandle, // generic-filehandle2 compatible handle
-  index, // CraiIndex instance (or any object with getEntriesForRange)
+  index, // CraiIndex, or anything with getEntriesForRange
   fetchReferenceSequence, // async (seqId, start, end, refName, opts) => string
-  checkSequenceMD5, // default false; set true to verify each slice's reference MD5
-  validateChecksums, // default false; set true to check every block's CRC32.
-  // this is what separates "damaged file" from "wrong records": corrupting a
-  // byte anywhere in a CRAM here is caught 240 times out of 240 with it on,
-  // where with it off two of those flips decoded to records that simply
-  // differed, with nothing to say so
-  cacheSize, // max cached records, default 1000000. records not bytes, so
-  // it does not bound memory; size it to hold several queries, since below one
-  // query's working set it caches nothing at all
-  useSliceWorkerPool, // default true; decode slices on a shared worker pool
-  // where the host has workers, and in-process where it does not. leave it on
-  // inside your own worker too — a worker is still one thread, and nested in
-  // one the pool measures 2.1-3.6x from four slices up (docs/WORKERS.md)
-  numSliceWorkers, // pool size, default min(hardwareConcurrency, 4). the pool
-  // is shared per JS context, so the first file to need one fixes the size —
-  // and a host running several worker contexts gets one pool in each
-  cacheIdleTimeoutMs, // drop a slice nothing has read for this long,
-  // default 3 minutes, 0 disables. the only thing that lowers the cache while
-  // nothing is happening
+  checkSequenceMD5, // verify each slice's reference MD5. default false
+  validateChecksums, // check block and container CRC32s. default false
+  cacheSize, // decoded records to keep. default 1,000,000
+  cacheIdleTimeoutMs, // drop slices unread for this long. default 3 minutes
+  cacheBudget, // a SharedBudget, to pool cacheSize across files
+  useSliceWorkerPool, // decode slices on a worker pool. default true
+  numSliceWorkers, // pool size. default min(hardwareConcurrency, 4)
 })
 ```
 
@@ -40,11 +28,54 @@ new IndexedCramFile({
   `opts`:
   `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress, signal }`
 - `hasDataForReferenceSequence(seqId, opts?)` → `Promise<boolean>`
+- `clearFeatureCache()` — drop every decoded slice now, rather than waiting out
+  `cacheIdleTimeoutMs`. For a consumer that knows it is done with the file
 - `cram` — the underlying `CramFile`
 
-Slices are cached whole, so `cacheSize` bounds the cache by record count rather
-than by slices — see [MEMORY.md](MEMORY.md) for why, and for what a query in
-flight is allowed to exceed it by.
+### Verifying the file
+
+`validateChecksums` checks every block's and container's CRC32. It is what
+separates "damaged file" from "wrong records": corrupting a byte anywhere in a
+CRAM is caught 240 times out of 240 with it on, where with it off two of those
+flips decoded to records that simply differed, with nothing to say so.
+
+`checkSequenceMD5` is the other half of that, on the reference rather than the
+file: it verifies each slice's recorded reference MD5 against the sequence it is
+being decoded with. Off by default because the check needs the slice's whole
+reference span, which can be many megabases the query would not otherwise fetch.
+
+### The cache options
+
+`cacheSize` counts **records, not bytes**, so it does not bound memory: a
+decoded record has no cheap size, and one long-read slice can retain tens of
+megabytes. Slices are cached whole, so the bound lands on a whole slice's record
+count at a time — [MEMORY.md](MEMORY.md) has why, and what a query in flight is
+allowed to exceed it by.
+
+Size it to hold several queries. Below one query's working set it does not cache
+less, it caches _nothing_: every slice is evicted before the next pan can reuse
+it, so the hit rate is zero and the memory is retained anyway.
+
+`cacheIdleTimeoutMs` is the only thing that lowers the cache while nothing is
+happening — `cacheSize` is applied when a decode settles, so an idle cache stays
+wherever it got to. Timed from the last _read_ of a slice, so panning back and
+forth over one region never expires it. `0` disables it.
+
+`cacheBudget` makes `cacheSize` apply to several `CramFile`s together instead of
+to each one, which is what a consumer opening a file per track needs. Every
+member of a budget has to weigh in the same unit, and this cache weighs records,
+so share one only with other `CramFile`s.
+
+### The worker options
+
+`useSliceWorkerPool` decodes slices on a shared pool where the host has workers,
+and in-process where it does not. Leave it on inside your own worker too — a
+worker is still one thread, and nested in one the pool measures 2.1-3.6x from
+four slices up ([WORKERS.md](WORKERS.md)).
+
+`numSliceWorkers` sizes that pool. The pool is shared per JS context, so the
+first file to need one fixes the size for the rest, and a host running several
+worker contexts gets a pool in each.
 
 ### Unplaced reads
 
@@ -62,7 +93,7 @@ finds them.
 ## Cancelling a query
 
 Pass an `AbortSignal` as `opts.signal` and the query rejects, stops decoding,
-and — on a filehandle that honours the signal, which `RemoteFile` does and
+and — on a filehandle that honors the signal, which `RemoteFile` does and
 `LocalFile` does not — abandons the range request it has in flight:
 
 ```js
@@ -80,16 +111,16 @@ drop when the user pans away.
 
 **Aborting your query never fails anyone else's.** Two things in a `CramFile`
 are shared between concurrent queries: the parsed `.crai`, and each decoded
-slice in the record cache. A slice's decode is reference-counted — it is
+slice in the record cache. A slice's decode is reference-counted, and is
 cancelled only once _every_ query waiting on it has aborted, so cancelling yours
 costs a concurrent query nothing, not even a re-read. The file definition and
 SAM header are read once for the life of the object and are deliberately not
 cancellable at all.
 
 The corollary: a query with **no** signal can never give up, so it pins any
-slice it is waiting on. If one caller omits the signal, that slice's decode
-stops being cancellable for everyone sharing it — so thread the signal through
-consistently rather than on the queries you happen to care about.
+slice it is waiting on. One caller omitting the signal stops that slice's decode
+being cancellable for everyone sharing it — so thread the signal through
+consistently rather than through the queries you happen to care about.
 
 If `fetchReferenceSequence` is backed by something remote, it is handed the
 signal as a fifth argument (`opts.signal`) so it can cancel too. Ignoring it is
@@ -202,10 +233,10 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
   })
   ```
 
-  CRAM stores no CIGAR — unlike BAM, where the packed array is on disk and can
-  be read as a zero-copy view, here it is always reconstructed from the read
-  features. So this library hands out the walk rather than an array type it
-  would have picked for you; see
+  CRAM stores no CIGAR. Unlike BAM, where the packed array is on disk and can be
+  read as a zero-copy view, here it is always reconstructed from the read
+  features — so this library hands out the walk rather than an array type it
+  would have picked for you. See
   [ADR 0006](adr/0006-cigar-as-a-callback-walk.md).
 
 - `getLeadingClipLength()` → `number` and `getTrailingClipLength()` → `number` —

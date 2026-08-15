@@ -74,7 +74,7 @@ replaced**:
 
 Identical answers on every record of every dataset, control within ±3%. So the
 callback's ~15% is now paid only by consumers that genuinely want the packed
-form (per-base colouring, the details panel), and jbrowse's `NUMERIC_CIGAR` is
+form (per-base coloring, the details panel), and jbrowse's `NUMERIC_CIGAR` is
 lazy for CRAM rather than built once per read on the render path.
 
 `getTrailingClipLength()` looked impossible at first — whether a trailing clip

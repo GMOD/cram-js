@@ -70,9 +70,9 @@ This is the model `@gmod/abortable-promise-cache` gives `@gmod/tabix` and
 `@gmod/bbi`. It is implemented here rather than taken as a dependency because
 that package wants to own the cache, and `SliceRecordCache` is not a plain LRU:
 the record-count bound has to weigh each entry when its promise resolves, which
-means owning the entries. Two smaller reasons not to adopt it — its aggregator
+means owning the entries. Two smaller reasons not to adopt it: its aggregator
 never clears `signals` or removes its listeners once an entry settles, so a
-cached slice would retain every consumer signal that ever touched it, and
+cached slice would retain every consumer signal that ever touched it; and
 cram-js deliberately dropped the dependency in `61791ba`.
 
 **`CraiIndex` keeps a bounded retry instead**, because the trade is different
@@ -106,12 +106,12 @@ The retry also had a wart the ref-count does not: bounded at one attempt, a
 third query could inherit an abort it never asked for, if the caller it retried
 into also gave up.
 
-**An explicit check at each boundary**, not just at the filehandle. Honouring
-the signal is optional down there: `RemoteFile` hands it to `fetch`, but
-`LocalFile` ignores it and every read runs to completion. So `CramFile.read`
-checks before issuing, and `_fetchRecords` checks again before the decode loop —
-which is synchronous across the whole slice, tens of thousands of records on
-short-read data, with no `await` inside for an abort to interleave with.
+**An explicit check at each boundary**, not just at the filehandle. Honoring the
+signal is optional down there: `RemoteFile` hands it to `fetch`, but `LocalFile`
+ignores it and every read runs to completion. So `CramFile.read` checks before
+issuing, and `_fetchRecords` checks again before the decode loop — which is
+synchronous across the whole slice, tens of thousands of records on short-read
+data, with no `await` inside for an abort to interleave with.
 
 ### The invariant this rests on, and what it cost to keep
 
@@ -163,8 +163,8 @@ bystander sharing the index parse, and a bystander with no signal at all. Those
 three tests were written against the retry and **pass unchanged against the
 ref-count**, which is the check that the two designs agree on the property and
 differ only in cost. The same revert still fails the index one, which is still a
-retry. `test/lib/gatedFile.ts` is what makes any of it deterministic — it
-honours the signal (`LocalFile` does not, so nothing would otherwise observe an
+retry. `test/lib/gatedFile.ts` is what makes any of it deterministic — it honors
+the signal (`LocalFile` does not, so nothing would otherwise observe an
 interrupted read) and parks reads on demand, so the tests are not racing the
 filesystem.
 
@@ -209,7 +209,7 @@ decode still running has anything to cancel, so a settled entry is not joined at
 all. `a hit on a settled slice does not retain the caller` counts 50 hits and
 expects zero retained; before the fix it counted 50.
 
-That count is invisible from behaviour — a settled entry with a thousand stale
+That count is invisible from behavior — a settled entry with a thousand stale
 signals answers every query exactly like one with none — which is why
 `SliceRecordCache.consumerCount` exists purely as a test seam. Reading the code
 was the only thing standing between this and shipping, and reading the code is
