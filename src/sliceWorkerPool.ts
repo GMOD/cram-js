@@ -43,6 +43,7 @@ export interface CramSliceWorkerPool {
 
 type WorkerMessage =
   | { type: 'ready' }
+  | { type: 'initError'; message: string }
   | { type: 'sliceResult'; requestId: number; payload: SliceTransfer }
   | { type: 'error'; requestId: number; name: string; message: string }
 
@@ -158,6 +159,10 @@ class ManagedWorker {
       this.readyResolve?.()
       this.readyResolve = undefined
       this.readyReject = undefined
+      return
+    }
+    if (msg.type === 'initError') {
+      this.fail(new Error(`cram slice worker could not start: ${msg.message}`))
       return
     }
     const cb = this.pending.get(msg.requestId)

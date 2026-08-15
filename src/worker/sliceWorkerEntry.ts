@@ -25,9 +25,19 @@ declare const self: {
 
 async function handle(msg: HostMessage) {
   if (msg.type === 'init') {
-    // instantiate the wasm before any slice arrives, so the first dispatch is
-    // not the slow one — see warmupWasm
-    await warmupWasm()
+    try {
+      // instantiate the wasm before any slice arrives, so the first dispatch is
+      // not the slow one — see warmupWasm
+      await warmupWasm()
+    } catch (e) {
+      // Reported rather than left to reject unhandled. A worker whose wasm will
+      // not instantiate can only fail every slice it is given, and the host
+      // turns an init failure into the in-process fallback — where the same
+      // module has its own chance to load. Silence here instead costs the
+      // host's whole startup timeout before it concludes the same thing.
+      self.postMessage({ type: 'initError', message: String(e) })
+      return
+    }
     self.postMessage({ type: 'ready' })
     return
   }

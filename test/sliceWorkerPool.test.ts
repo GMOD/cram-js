@@ -206,6 +206,30 @@ test('a worker that fails to start rejects the pool rather than hanging', async 
   )
 })
 
+// The handshake instantiates the wasm, and that is the one part of startup that
+// can fail for a reason of its own — no memory for the heap, a host that refuses
+// `WebAssembly.compile`. Reported, it fails the pool at once; left to reject
+// inside the worker it fires `unhandledrejection` there, which the host never
+// sees, so every file waited out the whole startup timeout first.
+test('a worker whose wasm will not load fails the pool at once', async () => {
+  class NoWasmWorker {
+    onmessage: ((e: { data: unknown }) => void) | null = null
+    onerror: (() => void) | null = null
+    postMessage() {
+      this.onmessage?.({
+        data: { type: 'initError', message: 'out of memory' },
+      })
+    }
+    terminate() {
+      // nothing to release
+    }
+  }
+  vi.stubGlobal('Worker', NoWasmWorker)
+  await expect(createSliceWorkerPool(2, 'stub://worker')).rejects.toThrow(
+    /could not start: out of memory/,
+  )
+})
+
 test('a worker that never answers times the pool out rather than hanging', async () => {
   class SilentWorker {
     onmessage: ((e: { data: unknown }) => void) | null = null
