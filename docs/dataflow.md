@@ -50,7 +50,7 @@ Everything in the blue box runs on a **worker pool** when the host has one — a
 configure. The pool is shared per JS context, as in
 [bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md), but the
 unit is the **whole slice** rather than just decompression, which is why it is a
-box around several steps there and a single node in bam's diagram: block
+box around several steps here and a single node in bam's diagram: block
 decompression is only 24–35% of a cold query, so a decompression-only pool caps
 out around 1.33x where this measures 2.0–3.6x. Anything that cannot start a pool
 decodes in-process instead, which is the same code on the same thread that
