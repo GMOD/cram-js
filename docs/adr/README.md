@@ -11,6 +11,9 @@ How this differs from the other documents here:
   we want to do. Facts and measurements, not decisions; an item leaves the file
   when it lands. Something measured and deliberately rejected _is_ a decision,
   so it lives here, in [0007](0007-optimizations-measured-and-rejected.md).
+- **[`optimizations.md`](../optimizations.md)** — the query path in one pass,
+  with a line and a number for each decision and a link to the ADR that settled
+  it. Start here; the ADRs are the long form.
 - **[`API.md`](../API.md)**, **[`MEMORY.md`](../MEMORY.md)**,
   **[`READ_FEATURES.md`](../READ_FEATURES.md)**, **[`WASM.md`](../WASM.md)**,
   **[`WORKERS.md`](../WORKERS.md)**,

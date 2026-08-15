@@ -168,6 +168,8 @@ everyone. Thread the signal through consistently.
 - [docs/dataflow.dot](docs/dataflow.dot) ([rendered](docs/dataflow.svg)) — a
   query end to end on one page: index, container, slice cache, decode,
   reference, and where the wasm sits
+- [docs/optimizations.md](docs/optimizations.md) — why each step of that path
+  looks the way it does, what measured it, and what a consumer adds
 - [docs/WASM.md](docs/WASM.md) — the inlined wasm build: 55 KB gzipped, ~5 ms
   one-time startup, 16 MB heap
 - [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool: what it is worth,
