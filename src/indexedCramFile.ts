@@ -243,21 +243,24 @@ export default class IndexedCramFile {
       }
 
       const mateFeatPromises = [...uniqueMateSlices.values()].map(c =>
-        this.getRecordsInSlice(c, () => true, { signal }, containers).then(
-          feats => {
-            const mateRecs = []
-            for (const feature of feats) {
-              const name = requireReadName(feature)
-              if (
-                unmatedReadNames.has(name) &&
-                !seenUniqueIds.has(feature.uniqueId)
-              ) {
-                mateRecs.push(feature)
-              }
+        // `opts`, not just the signal: a mate slice has to decode under the same
+        // options as the rest of the query. Passing `{ signal }` gave the mates
+        // tags a caller had asked not to decode — and since `decodeTags` is part
+        // of the slice cache key, a slice already decoded in the pass above was
+        // decoded and cached a second time under the other key
+        this.getRecordsInSlice(c, () => true, opts, containers).then(feats => {
+          const mateRecs = []
+          for (const feature of feats) {
+            const name = requireReadName(feature)
+            if (
+              unmatedReadNames.has(name) &&
+              !seenUniqueIds.has(feature.uniqueId)
+            ) {
+              mateRecs.push(feature)
             }
-            return mateRecs
-          },
-        ),
+          }
+          return mateRecs
+        }),
       )
       const newMateFeats = await Promise.all(mateFeatPromises)
       ret = ret.concat(newMateFeats.flat())

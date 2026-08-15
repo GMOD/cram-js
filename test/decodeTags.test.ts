@@ -44,6 +44,31 @@ test('decodeTags: false leaves tags undecoded', async () => {
   expect(tagged(records)).toHaveLength(0)
 })
 
+// viewAsPairs fetches the slices a query's unmated reads point into, and those
+// records were decoded with `{ signal }` alone rather than the query's options.
+// So the mates came back carrying tags a caller had asked not to decode — and
+// since decodeTags is part of the slice cache key, a slice already decoded above
+// was decoded and cached a second time under the other key.
+test('decodeTags: false reaches the mates viewAsPairs pulls in', async () => {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile('paired.cram'),
+    index: new CraiIndex({
+      filehandle: testDataFile('paired.cram.crai'),
+    }),
+  })
+  const plain = await cram.getRecordsForRange(19, 62500, 64500, {
+    decodeTags: false,
+  })
+  const withMates = await cram.getRecordsForRange(19, 62500, 64500, {
+    viewAsPairs: true,
+    decodeTags: false,
+  })
+
+  // the mates are really being fetched, or this asserts nothing
+  expect(withMates.length).toBeGreaterThan(plain.length)
+  expect(tagged(withMates)).toHaveLength(0)
+})
+
 // the slice record cache keys on the decode options, so the two configurations
 // must not bleed into each other within one file
 test('decodeTags variants do not share a cache entry', async () => {
