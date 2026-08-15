@@ -45,7 +45,12 @@ export interface SliceDecodeRequest {
    */
   compressionHeaderContent: Uint8Array
   compressionHeaderContentPosition: number
-  /** identifies the container whose scheme this is, for the worker-side cache */
+  /**
+   * Where the container starts, which is what the worker-side cache is keyed on.
+   *
+   * Not on its own an identity: it is a position in *some* file, and the pool is
+   * shared by every CRAM in the context. See {@link getScheme}.
+   */
   containerKey: number
 
   /** the slice's block region: every block laid end to end, still compressed */
@@ -84,20 +89,56 @@ export interface SliceDecodeRequest {
 const SCHEME_CACHE_SIZE = 16
 
 /**
- * Parsed compression schemes, by container, most-recently-used last.
+ * Parsed compression schemes, by container, most-recently-used last. The header
+ * bytes are kept beside each one — see {@link getScheme}.
  *
  * A `Map` iterates in insertion order, so re-inserting on a hit is the whole of
  * the LRU bookkeeping and the oldest key is always the first one.
  */
-const schemeCache = new Map<number, CramContainerCompressionScheme>()
+const schemeCache = new Map<
+  number,
+  { content: Uint8Array; scheme: CramContainerCompressionScheme }
+>()
 
+function sameBytes(a: Uint8Array, b: Uint8Array) {
+  if (a.length !== b.length) {
+    return false
+  }
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return false
+    }
+  }
+  return true
+}
+
+/**
+ * The parsed compression scheme for this request's container.
+ *
+ * **A hit has to match the header bytes, not just the key.** `containerKey` is a
+ * file position, and the pool is one per JS context serving every CRAM open in
+ * it, so two files with a container at the same offset share a key — which is
+ * not a corner case, since files from one pipeline share a SAM header length and
+ * therefore the offset of their first container. `SRR396636` and `SRR396637` in
+ * `test/data` both start one at 418. Serving the first file's scheme to the
+ * second decodes its blocks with the wrong codecs: in that pair it raises
+ * `no block found with content ID`, so a perfectly good CRAM is reported
+ * malformed, and where the two schemes happen to be structurally compatible it
+ * would return wrong records instead.
+ *
+ * The bytes are already in the request, so the compare costs a pass over
+ * 294 B–11.7 KB (the fixtures here) per slice, against slice payloads of
+ * 27 KB–1.5 MB that are about to be decompressed and decoded. Comparing them
+ * beats minting a file identity because it needs nothing of the caller and stays
+ * right when one file is replaced at the same URL.
+ */
 function getScheme(req: SliceDecodeRequest) {
   const cached = schemeCache.get(req.containerKey)
-  if (cached) {
+  if (cached && sameBytes(cached.content, req.compressionHeaderContent)) {
     // re-insert so this key becomes the newest
     schemeCache.delete(req.containerKey)
     schemeCache.set(req.containerKey, cached)
-    return cached
+    return cached.scheme
   }
 
   const sectionParsers = getSectionParsers(req.majorVersion)
@@ -109,7 +150,11 @@ function getScheme(req: SliceDecodeRequest) {
   )
   const scheme = new CramContainerCompressionScheme(parsed)
 
-  schemeCache.set(req.containerKey, scheme)
+  schemeCache.delete(req.containerKey)
+  schemeCache.set(req.containerKey, {
+    content: req.compressionHeaderContent,
+    scheme,
+  })
   if (schemeCache.size > SCHEME_CACHE_SIZE) {
     schemeCache.delete(schemeCache.keys().next().value!)
   }

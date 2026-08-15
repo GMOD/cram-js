@@ -166,6 +166,44 @@ for (const path of cases) {
   })
 }
 
+// One pool serves every CRAM in the context, and the scheme cache is keyed on a
+// container's file position — which two files share whenever their SAM headers
+// are the same length, as two samples from one pipeline usually are. These two
+// fixtures both have a container at 418, and before 13.3.1 the second file
+// decoded with the first one's codecs and was reported malformed.
+test('the scheme cache does not confuse two files whose containers coincide', async () => {
+  clearSchemeCache()
+  const paths = [
+    'test/data/SRR396637.sorted.clip.cram',
+    'test/data/SRR396636.sorted.clip.cram',
+  ]
+  const entries = await Promise.all(
+    paths.map(async p => {
+      const slice = (await findSlices(p)).find(s => s.containerStart === 418)
+      expect(slice).toBeDefined()
+      return { path: p, slice: slice! }
+    }),
+  )
+
+  for (const { path, slice: entry } of entries) {
+    const file = new CramFile({
+      filehandle: new LocalFile(path),
+      fetchReferenceSequence: seqFetch,
+      checkSequenceMD5: false,
+    })
+    const slice = file
+      .getContainerAtPosition(entry.containerStart)
+      .getSlice(entry.sliceStart, entry.sliceBytes)
+    const req = await slice.buildDecodeRequest({ decodeTags: true })
+    const { payload } = await decodeSliceFromBytes(req!)
+    const fromBytes = deserializeSliceRecords(payload)
+    const inProcess = await slice.getRecords(() => true, { decodeTags: true })
+
+    expect(fromBytes.length).toBe(inProcess.length)
+    expect(fromBytes.map(observe)).toEqual(inProcess.map(observe))
+  }
+})
+
 test('the scheme cache serves several slices of one container', async () => {
   clearSchemeCache()
   const path = 'test/data/ce#1000.tmp.cram'
