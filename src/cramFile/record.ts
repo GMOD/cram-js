@@ -99,12 +99,10 @@ export const defaultDecodeOptions: Required<DecodeOptions> = {
 /**
  * Everything {@link CramRecord}'s constructor takes.
  *
- * The decode fills this in — `decodeRecord`'s return type is checked against it
- * — but it is written out here rather than being `ReturnType<typeof
- * decodeRecord>`, which is what it used to be. That made every field required
- * whether or not the record has one, so building a record by hand meant spelling
- * out seven explicit `undefined`s (see `test/pairOrientation.test.ts`) to satisfy
- * a type whose only real content was "whatever the decoder happens to return".
+ * Written out rather than inferred as `ReturnType<typeof decodeRecord>`, which
+ * makes every field required whether or not a record has one — building one by
+ * hand then means seven explicit `undefined`s to satisfy a type whose only
+ * content is "whatever the decoder happens to return".
  *
  * Deliberately still an options object rather than a positional constructor:
  * positional was measured and rejected, see

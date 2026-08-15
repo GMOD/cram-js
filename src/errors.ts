@@ -3,20 +3,15 @@
  * this separates "the file, or how it was asked for, is the problem" from a
  * network or filehandle failure, which arrives as whatever the filehandle threw.
  *
- * All of these are exported from the package entry point. They were not until
- * 13.3.0 — and since `package.json`'s `exports` map has no subpaths, a deep
- * import could not reach them either, so `instanceof CramMalformedError` was
- * simply not available to a consumer however the docs described it.
+ * All of these are re-exported from the package entry point, which is the only
+ * way a consumer can reach them: `package.json`'s `exports` map has no subpaths,
+ * so a deep import into `esm/errors.js` is blocked.
  */
 export class CramError extends Error {}
 
 /**
  * Error caused by encountering a part of the CRAM spec that has not yet been
  * implemented.
- *
- * Extends {@link CramError} like the rest. It extended `Error` directly until
- * 13.3.0, which made it the one error in this file that a `catch (e) { if (e
- * instanceof CramError) }` silently missed.
  */
 export class CramUnimplementedError extends CramError {}
 

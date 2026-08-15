@@ -43,10 +43,10 @@ function decodeSubexpInline(
 ): number {
   let { bytePosition, bitPosition } = cursor
 
-  // Count leading ones (inline single-bit reads). A truncated core block reads
-  // as `undefined >> n`, i.e. as a zero bit, so past the end this loop would
-  // stop and the value below would decode out of bytes that are not there —
-  // silently wrong rather than reported truncated. Same guard `gamma` carries.
+  // Count leading ones (inline single-bit reads). Past the end a core block
+  // reads as `undefined >> n`, i.e. as a zero bit, so this loop would stop and
+  // the value below decode out of bytes that are not there — silently wrong
+  // rather than reported truncated. Same guard `gamma` carries.
   let numLeadingOnes = 0
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {

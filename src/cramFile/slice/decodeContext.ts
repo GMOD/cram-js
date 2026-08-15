@@ -168,19 +168,16 @@ export function buildSliceDecodeContext({
  * B or i appear: the ONT slice wanted 297,927 bytes against 282,445 of I/S/b/q
  * blocks, and paid a doubling to 564,890 plus the copy for the difference.
  *
- * Both are wanted because growing the arena means copying seven columns, and on
- * a long-read slice that is where the reallocation time goes — 4.4% of a decode
- * of the ONT fixture in `growInt32`/`growUint8`, plus 2.9% in the `trim` that
- * hands the overshoot back, which an exact count also makes a no-op. htslib does
- * the same thing for its sequence, quality and name buffers, from the same
- * blocks, and measured "around 8-9%" for it (`cram_decode_estimate_sizes`) — it
- * has no equivalent of the arena, since it expands features into bases as it
- * goes rather than keeping them.
+ * Both are wanted because growing the arena copies seven columns, which on a
+ * long-read slice is where the reallocation time goes — 4.4% of an ONT decode in
+ * `growInt32`/`growUint8`, plus 2.9% in the `trim` that an exact count makes a
+ * no-op. htslib sizes its sequence, quality and name buffers from the same
+ * blocks and measured "around 8-9%" (`cram_decode_estimate_sizes`); it has no
+ * arena of its own, expanding features into bases as it goes.
  *
  * Undefined for anything this cannot read exactly: FC encoded some other way, a
- * block shared with another data series (the count would be an over-estimate,
- * which is safe but no longer a fact), or a file with no FC at all. The arena
- * falls back to doubling from its default, which is what every slice did before.
+ * block shared with another data series (an over-estimate — safe, but no longer
+ * a fact), or a file with no FC at all. The arena then doubles from its default.
  */
 function readFeatureCapacity(
   compressionScheme: CramContainerCompressionScheme,

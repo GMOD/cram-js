@@ -28,7 +28,7 @@ is the across-queries half, and it is **constrained, not merely unimplemented**:
 a container's memos are threaded with the caller's `AbortSignal` on a
 first-caller-wins basis, which is sound only while every caller of one memo
 belongs to the same query. A file-level cache breaks that and needs the
-foreign-abort handling `SliceRecordCache` and `CraiIndex` have — read
+foreign-abort handling `CramFile.featureCache` and `CraiIndex` have — read
 [ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md) before starting.
 
 ## `readBlock` reads the same offset twice

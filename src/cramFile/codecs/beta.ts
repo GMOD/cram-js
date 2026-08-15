@@ -43,10 +43,10 @@ function decodeBetaInline(
 ): number {
   let { bytePosition, bitPosition } = cursor
 
-  // A truncated core block reads as `undefined >> n`, i.e. as zero bits, so
+  // Past the end a core block reads as `undefined >> n`, i.e. as zero bits, so
   // without this the decode returns a plausible number for bytes that are not
-  // there and the file looks merely wrong rather than truncated. One comparison
-  // per value against a loop of `numBits`, and `gamma` has always had its own.
+  // there and the file looks wrong rather than truncated. One comparison per
+  // value against a loop of `numBits`; `gamma` carries the same guard.
   if ((data.length - bytePosition) * 8 - (7 - bitPosition) < numBits) {
     throw new CramBufferOverrunError(
       'read beyond end of core block; file seems truncated',

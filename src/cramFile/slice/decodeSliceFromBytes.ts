@@ -78,13 +78,10 @@ export interface SliceDecodeRequest {
  * containers a session visits. Sixteen is far above the first and far below the
  * second.
  *
- * It used to be unbounded, on the reasoning that a worker is asked about "tens,
- * not thousands" of containers. That holds for a pileup and not at all for the
- * queries this pool is worth the most to — docs/WORKERS.md names a whole-contig
- * scan, an export and a force-load, and those walk thousands of containers
- * through a worker that lives as long as the page. Each entry retains a codec
- * per data series and per tag seen, huffman tables included, so the growth was
- * real rather than nominal.
+ * Bounded because a worker lives as long as the page, and the queries this pool
+ * is worth the most to — docs/WORKERS.md names a whole-contig scan, an export, a
+ * force-load — walk thousands of containers through it. Each entry retains a
+ * codec per data series and per tag seen, huffman tables included.
  */
 const SCHEME_CACHE_SIZE = 16
 
@@ -116,21 +113,18 @@ function sameBytes(a: Uint8Array, b: Uint8Array) {
  * The parsed compression scheme for this request's container.
  *
  * **A hit has to match the header bytes, not just the key.** `containerKey` is a
- * file position, and the pool is one per JS context serving every CRAM open in
- * it, so two files with a container at the same offset share a key — which is
- * not a corner case, since files from one pipeline share a SAM header length and
- * therefore the offset of their first container. `SRR396636` and `SRR396637` in
- * `test/data` both start one at 418. Serving the first file's scheme to the
- * second decodes its blocks with the wrong codecs: in that pair it raises
- * `no block found with content ID`, so a perfectly good CRAM is reported
- * malformed, and where the two schemes happen to be structurally compatible it
- * would return wrong records instead.
+ * file position, and one pool per JS context serves every CRAM open in it, so
+ * two files with a container at the same offset share a key. Not a corner case:
+ * files from one pipeline share a SAM header length and so the offset of their
+ * first container — `SRR396636` and `SRR396637` in `test/data` both start one at
+ * 418. Handing the second file the first's codecs raises `no block found with
+ * content ID` there, reporting a good CRAM malformed, and would return wrong
+ * records wherever the two schemes happened to be compatible.
  *
- * The bytes are already in the request, so the compare costs a pass over
- * 294 B–11.7 KB (the fixtures here) per slice, against slice payloads of
- * 27 KB–1.5 MB that are about to be decompressed and decoded. Comparing them
- * beats minting a file identity because it needs nothing of the caller and stays
- * right when one file is replaced at the same URL.
+ * The bytes are already in the request, so the compare is a pass over 294 B–11.7
+ * KB (the fixtures here) against a slice payload of 27 KB–1.5 MB about to be
+ * decompressed. It beats minting a file identity: it needs nothing of the caller
+ * and stays right when a file is replaced at the same URL.
  */
 function getScheme(req: SliceDecodeRequest) {
   const cached = schemeCache.get(req.containerKey)

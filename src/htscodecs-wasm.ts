@@ -4,10 +4,8 @@ import createHtsCodecsModule from './wasm/htscodecs.js'
 
 type HtsCodecsModule = Awaited<ReturnType<typeof createHtsCodecsModule>>
 
-// Through memoizeAsync, which forgets a rejection: the hand-rolled cache this
-// replaced kept one, so a single failed instantiation — an out-of-memory at a
-// bad moment, say — would have failed every compressed block for the life of the
-// process with the same error and never tried again.
+// memoizeAsync forgets a rejection. A cache that kept one would fail every
+// compressed block for the life of the process over a single bad moment.
 const getModule = memoizeAsync(() => createHtsCodecsModule())
 
 /**

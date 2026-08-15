@@ -243,11 +243,10 @@ export default class IndexedCramFile {
       }
 
       const mateFeatPromises = [...uniqueMateSlices.values()].map(c =>
-        // `opts`, not just the signal: a mate slice has to decode under the same
-        // options as the rest of the query. Passing `{ signal }` gave the mates
-        // tags a caller had asked not to decode — and since `decodeTags` is part
-        // of the slice cache key, a slice already decoded in the pass above was
-        // decoded and cached a second time under the other key
+        // `opts`, not just the signal: a mate slice decodes under the same
+        // options as the rest of the query. `{ signal }` gave the mates tags a
+        // caller had declined, and since `decodeTags` is part of the slice cache
+        // key, decoded and cached a slice the pass above already had
         this.getRecordsInSlice(c, () => true, opts, containers).then(feats => {
           const mateRecs = []
           for (const feature of feats) {

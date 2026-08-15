@@ -2,14 +2,11 @@
  * Geometric growth for the columnar stores a slice decodes into.
  *
  * {@link ReadFeatureArena}, {@link TagColumn} and the quality column all fill
- * typed arrays whose final size is unknown until the slice is decoded, and all
- * three had written this out themselves — two of them as a `growUint8` /
- * `growInt32` / `nextCapacity` trio, the third as the same arithmetic inline.
+ * typed arrays whose final size is unknown until the slice is decoded.
  *
- * Doubling, and trimming afterwards, is the shape all three want: a slice
- * decodes once and is then held in the record cache, so the copies happen
- * during the decode and the slack is handed back at the end of it. See each
- * column's `trim`.
+ * Doubling, then trimming, is the shape all three want: a slice decodes once and
+ * is then held in the record cache, so the copies happen during the decode and
+ * the slack is handed back at the end of it. See each column's `trim`.
  */
 
 /** the typed arrays the columns are made of */

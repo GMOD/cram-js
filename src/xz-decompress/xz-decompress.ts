@@ -80,10 +80,8 @@ class XzContext {
 
 const _emptyInput = new Uint8Array(0)
 
-// Through memoizeAsync rather than a hand-rolled promise cache, for the reason
-// that helper documents: a cached *rejection* poisons lzma decoding for the life
-// of the process, so one transient failure to instantiate would fail every later
-// lzma block with the same error and never try again.
+// memoizeAsync forgets a rejection. A cache that kept one would fail every later
+// lzma block for the life of the process over one transient failure.
 const getModuleInstance = memoizeAsync(async () => {
   const base64Wasm = wasmBase64.replace('data:application/wasm;base64,', '')
   const binaryString = atob(base64Wasm)

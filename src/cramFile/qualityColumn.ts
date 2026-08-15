@@ -33,17 +33,14 @@ export interface QualityColumn {
 
 /**
  * A column over the QS block's own bytes. Nothing is copied — unless the block
- * is a *view into a larger buffer*, which is the one case where sharing it costs
- * more than the copy.
+ * is a *view into a larger buffer*, where sharing costs more than the copy.
  *
  * A decompressed block owns its buffer exactly, so the usual path copies
- * nothing. But a block stored `raw` is handed out as a subarray of the slice's
- * whole payload read (`parseBlockFromBuffer`), and this column outlives the
- * decode inside every cached record — so a megabyte-scale slice would stay
- * reachable for the sake of its quality scores, and the compressed bytes of
- * every other block with it. Copying the scores out is the smaller number by
- * definition: they are one block of the slice, and the alternative retains all
- * of it.
+ * nothing. But a `raw` block is a subarray of the slice's whole payload read
+ * (`parseBlockFromBuffer`), and this column outlives the decode inside every
+ * cached record — so a megabyte-scale slice would stay reachable for the sake of
+ * its quality scores. Copying them out is the smaller number by definition: they
+ * are one block, and the alternative retains all of them.
  */
 export function externalQualityColumn(
   bytes: Uint8Array,

@@ -32,10 +32,10 @@ export interface CramSliceWorkerPool {
    * Resolves **undefined** when the pool could not take the slice, or lost it:
    * a worker that died carrying it, a pool destroyed under it, or one whose
    * workers have all failed. None of those say anything about the file, so the
-   * caller decodes in-process — the same `undefined`-means-decode-it-yourself
-   * contract `_fetchRecordsInWorker` already had for "no pool available". An
-   * error the worker *reported* rejects instead, with its class intact, so a
-   * malformed CRAM fails the same way with or without a pool.
+   * caller decodes in-process — the `undefined`-means-decode-it-yourself
+   * contract `_fetchRecordsInWorker` also uses for "no pool available". An error
+   * the worker *reported* rejects instead, with its class intact, so a malformed
+   * CRAM fails the same way with or without a pool.
    */
   decodeSlice(request: SliceDecodeRequest): Promise<CramRecord[] | undefined>
   destroy(): void
@@ -52,10 +52,8 @@ type WorkerMessage =
  *
  * A malformed CRAM has to fail the same way whether or not a pool is in use, so
  * the name is carried across and mapped back rather than everything arriving as
- * a bare `Error`. This used to say consumers "do" catch these by class, naming
- * jbrowse; they could not, because the classes were exported nowhere until
- * 13.3.0 — and jbrowse in fact references neither. They are reachable now, which
- * is what makes this worth doing rather than what justified it.
+ * a bare `Error`. Worth doing because the classes are exported: a consumer can
+ * catch by class either side of the boundary.
  */
 function reviveError(name: string, message: string) {
   if (name === 'CramMalformedError') {
@@ -97,13 +95,11 @@ interface Pending {
  * How long a worker gets to answer the init handshake before the pool gives up
  * on it and the caller decodes in-process.
  *
- * The handshake is a `postMessage` round trip plus `warmupWasm`, so single-digit
- * milliseconds on an idle machine and well under a second on a loaded one — but
- * this is not a performance budget, it is the backstop for a worker that will
- * never answer at all and reports no error either. That happens: a host that
- * blocks the Blob URL, an extension that intercepts the script. Without it those
- * hang every read of the file forever, since the pool is awaited before the
- * decode and there is nothing to time it out further up.
+ * Not a performance budget — the handshake is a `postMessage` round trip plus
+ * `warmupWasm`, milliseconds — but the backstop for a worker that never answers
+ * and reports no error either, as when a host blocks the Blob URL or an
+ * extension intercepts the script. The pool is awaited before the decode and
+ * nothing further up times it out, so without this those hang every read.
  */
 const WORKER_STARTUP_TIMEOUT_MS = 30_000
 
@@ -143,11 +139,10 @@ class ManagedWorker {
       this.handleMessage(e.data as WorkerMessage)
     }
     // A worker that dies outright reports no requestId, so every slice waiting
-    // on it has to fail rather than hang. Two cases reach here and both must:
-    // a death mid-decode (an OOM on a huge slice, say), and a worker whose
-    // script never loaded at all — a CSP that refuses `blob:` worker-src is the
-    // common one, and before this rejected `readyPromise` it hung the pool's
-    // init, and with it every query against the file.
+    // on it has to be released rather than left hanging. Two cases reach here:
+    // a death mid-decode (an OOM on a huge slice, say), and a script that never
+    // loaded — commonly a CSP refusing `blob:` worker-src, which has to reject
+    // `readyPromise` or the pool's init hangs every query against the file.
     this.worker.onerror = () => {
       this.fail(new Error('cram slice worker failed'))
     }
@@ -191,8 +186,8 @@ class ManagedWorker {
    *
    * Rejecting those slices instead would fail a query the main thread can still
    * answer, over something that is not the file's fault. Startup is the one that
-   * rejects, because `createSliceWorkerPool` has a caller — `CramFile` — whose
-   * whole job with that rejection is to warn once and carry on without a pool.
+   * rejects, because `CramFile` turns that rejection into one warning and a
+   * decode without a pool.
    */
   private fail(err: Error) {
     this.failed = true
@@ -203,9 +198,8 @@ class ManagedWorker {
     this.readyReject = undefined
     reject?.(err)
     if (started) {
-      // A pool that dies after startup has no other way to say so: nothing
-      // rejects, the slices simply decode in-process from here on, and the only
-      // symptom is that queries got slower.
+      // after startup nothing rejects — the slices just decode in-process from
+      // here on, and the only other symptom is that queries got slower
       console.warn(
         `cram: a slice worker failed, decoding in-process instead: ${err.message}`,
       )
@@ -251,9 +245,8 @@ class ManagedWorker {
       )
     } catch (e) {
       // A post that throws — a request that will not clone, a worker already
-      // gone — leaves nothing to answer this requestId, so settle it here or the
-      // slice waits forever. Undecoded rather than failed, like every other way
-      // the pool can lose a slice.
+      // gone — leaves nothing to answer this requestId, so settle it here.
+      // Undecoded rather than failed, like every other way the pool loses one.
       console.warn(
         `cram: could not send a slice to a worker, decoding in-process instead: ${String(e)}`,
       )
@@ -296,14 +289,12 @@ let cachedBlobUrl: string | undefined
  * dynamic   268 KB total, worker string deferred to a split chunk
  * ```
  *
- * So half the library's bundled weight came off every consumer, including one
- * that never enables the pool, and including one running under node where the
- * pool cannot start at all. It costs nothing to defer, because this function is
- * already only called from `createSliceWorkerPool`, which is async.
+ * Half the library's bundled weight, off every consumer — including one that
+ * never enables the pool, and one under node where it cannot start at all.
+ * Deferring is free: the only caller, `createSliceWorkerPool`, is async.
  *
- * This is the same trick, for the same reason, that jbrowse applies to
- * `@gmod/bgzf-filehandle`'s equivalent blob in `util/bgzfWorkerPool.ts` —
- * there it took an entry point from 54.7 KB to 114 B.
+ * jbrowse applies the same trick to `@gmod/bgzf-filehandle`'s equivalent blob in
+ * `util/bgzfWorkerPool.ts`, where it took an entry point from 54.7 KB to 114 B.
  */
 async function getWorkerBlobUrl() {
   if (cachedBlobUrl === undefined) {
