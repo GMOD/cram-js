@@ -166,8 +166,9 @@ neither scales with the query:
   runs several worker contexts multiplies this again, as it does the pool
   itself.
 - **Up to 16 parsed compression schemes per worker**, each holding a codec per
-  data series and per tag it has seen. Bounded, and small next to one decoded
-  slice, but it is retained between queries rather than with them.
+  data series and per tag it has seen, plus the header bytes it was parsed from
+  (294 B–11.7 KB across the fixtures here). Bounded, and small next to one
+  decoded slice, but retained between queries rather than with them.
 
 Both are floors, not per-query costs: they are paid once per worker and do not
 grow with the region.

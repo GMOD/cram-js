@@ -168,7 +168,10 @@ slice as bytes and numbers (`SliceDecodeRequest`), and `decodeSliceFromBytes`
 decodes it with nothing else in reach. The compression scheme travels as the
 container's decompressed compression-header bytes rather than as a parsed
 scheme, because the parsed form holds codec instances; the worker parses it once
-per container and caches it, since a container holds several slices.
+per container and caches it, since a container holds several slices. The cache
+key is a container's file position, which one pool serving every CRAM in the
+context is not enough to identify it by — a hit has to match the header bytes
+too, or two files whose first containers coincide swap codecs. See `getScheme`.
 
 **Out of the worker**: not `CramRecord[]` — a class instance loses its prototype
 and its getters do not serialise. Cloning the records as plain objects measured
@@ -194,13 +197,13 @@ short of a malformed file:
 - no `Worker` or Blob URL — node, vitest, or a restricted host
 - a slice of unknown size, i.e. non-indexed access through `CramFile` directly,
   where blocks are read one at a time and there is no single byte range to send
-- a pool that failed to start, which warns once per file — including a worker
-  that reports an error, and one that never answers the init handshake at all.
-  Until 13.3.0 the second and third of those hung instead: `readyPromise` had no
-  rejection path, so `createSliceWorkerPool` awaited a worker that would never
-  be ready, and since the pool is awaited before the decode, every query against
-  the file waited with it. A CSP that refuses `blob:` worker-src is the ordinary
-  way a host gets there.
+- a pool that failed to start, which warns once per file. That covers a worker
+  reporting an error, one whose wasm will not instantiate, and one that never
+  answers the init handshake at all — the last of those on a 30 s timeout, since
+  it reports nothing to time out on. A CSP refusing `blob:` worker-src is the
+  ordinary way a host gets here, and all three have to reject rather than wait:
+  the pool is awaited before the decode, so a hang there hangs every query
+  against the file.
 - a worker that dies while carrying a slice, or a pool destroyed under one in
   flight. The slice decodes on the main thread instead; that a worker went away
   says nothing about the file.
@@ -208,9 +211,7 @@ short of a malformed file:
 A **decode error** does propagate: a malformed CRAM must fail rather than
 quietly re-decode on the main thread and fail there. Error classes are carried
 across by name and rebuilt, so `CramMalformedError` still arrives as one, and
-since 13.3.0 the classes are exported from the package so a consumer can name it
-— before that they were reachable from nowhere, and this paragraph described
-something nobody could do.
+the classes are exported from the package entry point so a consumer can name it.
 
 ## Building the bundle
 
@@ -260,11 +261,11 @@ The size is the cost of the inline approach: the worker carries the decoder
 _and_ the wasm, so the string module is 395 KB (96 KB gzipped). That was a
 deliberate trade for zero consumer wiring.
 
-It is **not** 395 KB every consumer downloads, which this said until 13.3.0 and
-which the code-split fixed: `sliceWorkerPool.ts` reaches the bundle through a
-dynamic `import()` inside `getWorkerBlobUrl`, which is only called when a pool
-is actually started, so a bundler puts it in a chunk of its own. Bundling
-`IndexedCramFile` + `CraiIndex` with esbuild, that is 268 KB against 534 KB — a
-consumer who never enables the pool, or who runs under node where it cannot
-start at all, loads none of it. (The bytes are in the npm tarball either way, as
-`src/`, `esm/` and `dist/` copies; what moved is what reaches a browser.)
+It is **not** 395 KB every consumer downloads. `sliceWorkerPool.ts` reaches the
+bundle through a dynamic `import()` inside `getWorkerBlobUrl`, which only runs
+when a pool actually starts, so a bundler puts it in a chunk of its own.
+Bundling `IndexedCramFile` + `CraiIndex` with esbuild, that is 268 KB against
+534 KB — a consumer who never enables the pool, or who runs under node where it
+cannot start at all, loads none of it. (The bytes are in the npm tarball either
+way, as `src/`, `esm/` and `dist/` copies; what moved is what reaches a
+browser.)
