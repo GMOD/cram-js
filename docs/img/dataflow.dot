@@ -16,8 +16,8 @@ digraph cram {
   ranksep=0.36
   fontname="Helvetica"
   node [shape=box style="filled,rounded" fillcolor="#f6f8fa" color="#57606a"
-        fontname="Helvetica" fontsize=10 margin="0.14,0.08"]
-  edge [fontname="Helvetica" fontsize=9 color="#57606a"]
+        fontname="Helvetica" fontsize=13 margin="0.16,0.1"]
+  edge [fontname="Helvetica" fontsize=11 color="#57606a"]
 
   query [label="IndexedCramFile.getRecordsForRange(seqId, start, end)" fillcolor="#ddf4ff" color="#0969da"]
   crai  [label="CraiIndex — read .crai, gunzip, parse\n→ slice entries covering the range" fillcolor="#dafbe1" color="#1a7f37"]
@@ -47,10 +47,11 @@ digraph cram {
   subgraph cluster_wasm {
     label="WebAssembly — inlined in the bundle, lazy singleton per JS context"
     labelloc=b
-    color="#bc4c00" fontcolor="#bc4c00" fontsize=10
+    color="#bc4c00" fontcolor="#bc4c00" fontsize=12
 
-    hts [label="htscodecs.wasm\ngzip (libdeflate), bzip2, rans,\nrans4x16, arith, fqzcomp, tok3" style="filled,rounded" fillcolor="#ffd8b5" color="#bc4c00"]
+    hts [label="htscodecs.wasm\ngzip, bzip2, rans, rans4x16,\narith, fqzcomp, tok3" style="filled,rounded" fillcolor="#ffd8b5" color="#bc4c00"]
     xz  [label="xz-embedded.wasm\nlzma" style="filled,rounded" fillcolor="#ffd8b5" color="#bc4c00"]
+    hts -> xz [style=invis]
   }
 
   query -> crai
@@ -69,21 +70,22 @@ digraph cram {
   uncmp -> hts   [style=dashed color="#bc4c00" constraint=false]
   uncmp -> xz    [style=dashed color="#bc4c00" constraint=false]
 
-  { rank=same; recs; hts; xz }
-
   subgraph cluster_legend {
     label="Legend"
     labelloc="t"
     fontname="Helvetica"
-    fontsize=10
+    fontsize=12
     fontcolor="#57606a"
     color="#d0d7de"
     style="rounded"
     margin=10
-    node [shape=box style="filled,rounded" fontsize=9 margin="0.1,0.04"]
+    rank=same
+    node [shape=box style="filled,rounded" fontsize=11 margin="0.1,0.05"]
     l1 [label="I/O" fillcolor="#dafbe1" color="#1a7f37"]
     l2 [label="wasm" fillcolor="#ffd8b5" color="#bc4c00"]
     l3 [label="cached / shared" fillcolor="#fff8c5" color="#9a6700"]
     l1 -> l2 -> l3 [style=invis]
   }
+
+  { rank=same; out; hts; xz }
 }
