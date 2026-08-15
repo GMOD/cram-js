@@ -13,7 +13,7 @@ returns them already decoded and already decorated with their reference, so all
 a repeat query pays is the filter. A miss reads the slice's whole block region
 in one go and decodes it: walk the blocks, decompress each by its method byte,
 build the per-slice decode context, then one pass over the records into the
-read-feature, tag and quality columns.
+read-feature arena and the tag and quality columns.
 
 Why each of those steps looks the way it does, and what measured it, is
 [optimizations.md](optimizations.md).
@@ -24,6 +24,24 @@ resolved; non-indexed access through `CramFile` directly, which walks containers
 and reads blocks one at a time; the mate pass re-entering the index and the
 cache for slices it did not already have; and cache eviction, which is LRU plus
 an idle sweep.
+
+## What the decode writes into
+
+The record pass does not build `{code, pos, refPos, data}` objects. Read
+features go into a **per-slice arena** — struct-of-arrays typed columns, with
+each record holding a start and a count into them — and tags and quality scores
+into columns of their own. Read features dominate decoded-record memory on long
+reads (a 37-record ONT slice decodes 213k of them), and 15 bytes of columns per
+feature against 64 per object is the difference between a slice you can cache
+and one you cannot.
+
+That shape is load-bearing for the two steps after it. The arena is sized up
+front from the slice's own blocks rather than grown, since reallocating seven
+columns is where a long-read slice spends its decode time; and being typed
+arrays is what lets a worker transfer the result at zero copy instead of
+structured-cloning an object graph. [memory.md](memory.md#columns-not-objects)
+has the per-column costs, [read-features.md](read-features.md) how to read them
+without materializing anything.
 
 ## Where the slice decode happens
 
