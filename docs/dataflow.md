@@ -1,8 +1,8 @@
 # How a query flows
 
-<img src="dataflow.svg" alt="cram-js data flow" width="700">
+<img src="img/dataflow.svg" alt="cram-js data flow" width="700">
 
-[dataflow.dot](dataflow.dot) is the source; see
+[dataflow.dot](img/dataflow.dot) is the source; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to re-render it.
 
 A query turns its range into a list of `.crai` slice entries, and from there

@@ -19,12 +19,12 @@ byte-for-byte, so `git status` after a build should be clean.
 `<script>`-tag consumers at. Nothing in this repo imports it, so it only looks
 unused.
 
-`docs/dataflow.svg` is generated from `docs/dataflow.dot` and committed, since
-GitHub does not render DOT. If you edit the `.dot`, re-render it in the same
-commit:
+`docs/img/dataflow.svg` is generated from `docs/img/dataflow.dot` and
+committed, since GitHub does not render DOT. If you edit the `.dot`,
+re-render it in the same commit:
 
 ```sh
-dot -Tsvg docs/dataflow.dot -o docs/dataflow.svg
+dot -Tsvg docs/img/dataflow.dot -o docs/img/dataflow.svg
 ```
 
 ## Publishing
