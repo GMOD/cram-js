@@ -1,5 +1,12 @@
 {
   "include": ["src"],
+  // A parked wasm-bindgen experiment (branch noodles_impl) leaves its build
+  // output here, self-ignored by a nested .gitignore. Nothing imports it, but
+  // `allowJs` makes everything under src/ a tsc input, so a local build
+  // compiled its glue into esm/ and dist/ and a local `npm pack` picked up 12
+  // files of it. CI publishes from a clean checkout where the directory does
+  // not exist, so nothing shipped — this keeps a local build honest.
+  "exclude": ["src/wasm/noodles-cram"],
   "compilerOptions": {
     "target": "es2022",
     "module": "nodenext",
