@@ -10,16 +10,32 @@ twice, on two different terms.
 Retained heap after decoding a whole file into a held variable, fresh process,
 forced GC, `heapUsed + arrayBuffers`:
 
-| file                    | records | retained | JS heap | typed arrays |
-| ----------------------- | ------- | -------- | ------- | ------------ |
-| HG002 ONT (long reads)  | 37      | 7.10 MB  | 0.62    | 6.49         |
-| SRR396637 (short reads) | 54,695  | 30.7 MB  | 22.0    | 8.7          |
+<!-- BEGIN GENERATED: retained-heap -->
+
+Measured at **v13.3.0** — regenerate with `pnpm docs:numbers`.
+
+| file                    | records | features | retained    | JS heap | typed arrays |
+| ----------------------- | ------- | -------- | ----------- | ------- | ------------ |
+| HG002 ONT (long reads)  | 37      | 213,602  | **6.8 MB**  | 1.0 MB  | 5.8 MB       |
+| SRR396636 (short reads) | 23,051  | 40,212   | **12.1 MB** | 8.6 MB  | 3.5 MB       |
+| SRR396637 (short reads) | 54,695  | 108,148  | **27.1 MB** | 18.8 MB | 8.3 MB       |
+
+<!-- END GENERATED: retained-heap -->
+
+**These are current figures, not historical ones**, and the difference matters
+when reading the rest of this file. A number like the −12.8% below is what a
+change was worth when it landed and stays true; a number like the retained total
+above describes the code as it stands and goes stale the moment a record holds
+something different. The generated blocks are the second kind —
+`pnpm docs:numbers` recomputes them, and everything outside the markers is
+written by hand. All of them had drifted by up to 12% before that script
+existed.
 
 Long reads put nearly everything in **read features** — that 37-record ONT slice
-decodes 213,602 of them, 118 KB of features per record. Short reads have about
-two features each and put nearly everything in **per-record objects** instead:
-the record, its quality scores, its name. Two things used to be on that list and
-are now columns — see [the migration note](../MIGRATION.md) for both:
+decodes 213,602 of them, ~95 KB of arena per record. Short reads have about two
+features each and put nearly everything in **per-record objects** instead: the
+record, its quality scores, its name. Two things used to be on that list and are
+now columns — see [the migration note](../MIGRATION.md) for both:
 
 - its **mate**, a `MateRecord` per paired record, now two numbers on the record.
 - its **tags**, a `Record` per record, now
@@ -76,15 +92,44 @@ were a running prefix sum, and three quarters of them indexed a feature carrying
 no bytes at all. `payloadChunks` keeps one every eighth slot and derives the
 rest, which is the 4 bytes that took a feature from 19 to 15:
 [ADR 0010](adr/0010-checkpoint-the-payload-offsets.md).
-`scripts/arena-columns.ts` is how to see what each column currently costs.
+
+What the columns cost today, which is the table to look at before proposing to
+shrink one — `scripts/arena-columns.ts` prints it per fixture, with the feature
+histogram the percentages come from:
+
+<!-- BEGIN GENERATED: arena-columns -->
+
+Measured at **v13.3.0** — regenerate with `pnpm docs:numbers`.
+
+| column          | ONT              | SRR396636        | SRR396637        |
+| --------------- | ---------------- | ---------------- | ---------------- |
+| `codes`         | 208.6 KB (5.9%)  | 39.3 KB (4.8%)   | 105.6 KB (5.5%)  |
+| `pos`           | 834.4 KB (23.7%) | 157.1 KB (19.2%) | 422.5 KB (22.0%) |
+| `refPos`        | 834.4 KB (23.7%) | 157.1 KB (19.2%) | 422.5 KB (22.0%) |
+| `num`           | 834.4 KB (23.7%) | 157.1 KB (19.2%) | 422.5 KB (22.0%) |
+| `payloadChunks` | 104.3 KB (3.0%)  | 19.6 KB (2.4%)   | 52.8 KB (2.7%)   |
+| `refCodes`      | 208.6 KB (5.9%)  | 39.3 KB (4.8%)   | 105.6 KB (5.5%)  |
+| `subCodes`      | 208.6 KB (5.9%)  | 39.3 KB (4.8%)   | 105.6 KB (5.5%)  |
+| `payloadBytes`  | 290.9 KB (8.3%)  | 208.8 KB (25.5%) | 286.0 KB (14.9%) |
+| **total**       | **3524.2 KB**    | **817.4 KB**     | **1923.0 KB**    |
+
+|                 | ONT            | SRR396636     | SRR396637      |
+| --------------- | -------------- | ------------- | -------------- |
+| features        | 213,602        | 40,212        | 108,148        |
+| carrying bytes  | 53,292 (24.9%) | 8,744 (21.7%) | 15,020 (13.9%) |
+| payload indexed | 290.9 KB       | 208.8 KB      | 286.0 KB       |
+
+<!-- END GENERATED: arena-columns -->
 
 ### Quality scores — `qualityColumn`
 
 Same trade, aimed at the other end. Every score in a slice lies end to end in
 one array and a record keeps a `qualityStart` offset into it, which removes 104
-bytes per record: SRR396637 went from 37.4 MB retained to 32.6 (−12.8%) and
-SRR396636 from 16.9 to 14.9 (−11.9%). ONT did not move at all — 37 records is 37
-views, and there was nothing there to save.
+bytes per record: measured when it landed, SRR396637 went from 37.4 MB retained
+to 32.6 (−12.8%) and SRR396636 from 16.9 to 14.9 (−11.9%). ONT did not move at
+all — 37 records is 37 views, and there was nothing there to save. (Those totals
+are lower now, for reasons further down this file; the deltas are what the
+change was worth.)
 
 When QS is a plain external block, that column **is** the block: the scores are
 already laid out end to end in record order, so nothing is copied and reading a
@@ -194,6 +239,17 @@ node --expose-gc --experimental-strip-types scripts/measure-heap.ts ONT
 per column, the feature histogram, and how much of each column is doing
 anything. Reach for it when the question is _which_ column to attack rather than
 how much a slice weighs.
+
+`pnpm docs:numbers` runs both over every fixture and writes the two tables above
+back into this file. Run it after anything that changes what a decoded record
+holds, and commit the result with the change — the tables are the denominators
+the ADRs quote percentages against, so a stale one quietly makes every one of
+those percentages wrong.
+
+It is deliberately **not** a CI check. Retained heap reproduces to ±0.2% on one
+machine but not across V8 versions or machines, so a `--check` gate would fail
+for reasons that say nothing about the commit under test. The version stamp in
+each table is what tells a reader how far back the numbers are from instead.
 
 Two traps, both found the hard way:
 

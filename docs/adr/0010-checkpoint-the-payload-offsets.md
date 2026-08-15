@@ -9,8 +9,8 @@ feature, pointing at that feature's bytes in `payloadBytes`. Measured with
 `scripts/arena-columns.ts`, three things were true of it and none were on
 record:
 
-- **834 KB on the ONT slice**, 19.6% of the arena and 11.5% of the 7.10 MB the
-  records retain.
+- **834 KB on the ONT slice**, 19.6% of the arena and 10.8% of the 7.53 MB the
+  records retained before this change.
 - **Three quarters of it indexed nothing.** Only 53,292 of that slice's 213,602
   features carry bytes at all — 13.9% on SRR396637, where features are nearly
   all `X` — so the rest held a zero no accessor may read.

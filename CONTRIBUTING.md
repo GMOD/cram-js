@@ -19,13 +19,25 @@ byte-for-byte, so `git status` after a build should be clean.
 `<script>`-tag consumers at. Nothing in this repo imports it, so it only looks
 unused.
 
-`docs/img/dataflow.svg` is generated from `docs/img/dataflow.dot` and
-committed, since GitHub does not render DOT. If you edit the `.dot`,
-re-render it in the same commit:
+`docs/img/dataflow.svg` is generated from `docs/img/dataflow.dot` and committed,
+since GitHub does not render DOT. If you edit the `.dot`, re-render it in the
+same commit:
 
 ```sh
 dot -Tsvg docs/img/dataflow.dot -o docs/img/dataflow.svg
 ```
+
+The measured tables in [docs/memory.md](docs/memory.md) are generated the same
+way — they sit between `<!-- BEGIN GENERATED -->` markers, and anything outside
+those is written by hand. Regenerate them in the same commit as any change to
+what a decoded record holds:
+
+```sh
+pnpm docs:numbers
+```
+
+It is not a CI check, for the reason that section gives, so a stale table is
+caught by nothing but this note.
 
 ## Publishing
 

@@ -2,10 +2,12 @@
 // anything. The companion to measure-heap.ts: that one weighs a decoded slice
 // from outside, this one takes the arena apart.
 //
-//   node --experimental-strip-types scripts/arena-columns.ts [case]
+//   node --experimental-strip-types scripts/arena-columns.ts [case] [--json]
 //
 // `case` is a substring of one of the names below; omit it for all of them.
-// See the payloadOffsets item in TODO.md for what the numbers settled.
+// `--json` emits one object per fixture, which is what update-doc-numbers.ts
+// regenerates the tables in docs/memory.md from.
+// See ADR 0010 for what these numbers settled.
 import { LocalFile } from 'generic-filehandle2'
 
 import CraiIndex from '../src/craiIndex.ts'
@@ -33,7 +35,8 @@ const COLUMNS = [
 /** the codes whose payload is bytes in `payloadBytes` rather than a number */
 const PAYLOAD_CODES = new Set(['I', 'S', 'b', 'i', 'q', 'B'])
 
-const which = process.argv[2]
+const json = process.argv.includes('--json')
+const which = process.argv.slice(2).find(a => !a.startsWith('--'))
 const selected = which ? cases.filter(c => c.name.includes(which)) : cases
 if (selected.length === 0) {
   throw new Error(`unknown case ${which}`)
@@ -92,6 +95,23 @@ for (const c of selected) {
   }
 
   const total = Object.values(bytes).reduce((a, b) => a + b, 0)
+  if (json) {
+    console.log(
+      JSON.stringify({
+        name: c.name,
+        records: records.length,
+        arenas: arenas.size,
+        features,
+        bytes,
+        total,
+        byCode,
+        withPayload,
+        payloadUsed,
+        notPrefixSum,
+      }),
+    )
+    continue
+  }
   console.log(
     `\n${c.name}: ${records.length} records, ${arenas.size} arena(s), ${features} features`,
   )

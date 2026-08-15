@@ -36,6 +36,7 @@
     "format:check": "prettier --check .",
     "lint": "eslint --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc --noEmit -p tsconfig.lint.json",
+    "docs:numbers": "node --experimental-strip-types scripts/update-doc-numbers.ts && prettier --write docs/memory.md",
     "prebuild": "pnpm clean",
     "build:esm": "tsc --outDir esm",
     "build:worker": "webpack --config webpack.worker.config.js && ./scripts/inline-worker.sh",
