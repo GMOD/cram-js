@@ -1,5 +1,5 @@
 import CramCodec from './_base.ts'
-import { CramUnimplementedError } from '../../errors.ts'
+import { CramBufferOverrunError, CramUnimplementedError } from '../../errors.ts'
 
 import type { Cursor, Cursors } from './_base.ts'
 import type { BetaEncoding } from '../encoding.ts'
@@ -42,6 +42,16 @@ function decodeBetaInline(
   offset: number,
 ): number {
   let { bytePosition, bitPosition } = cursor
+
+  // A truncated core block reads as `undefined >> n`, i.e. as zero bits, so
+  // without this the decode returns a plausible number for bytes that are not
+  // there and the file looks merely wrong rather than truncated. One comparison
+  // per value against a loop of `numBits`, and `gamma` has always had its own.
+  if ((data.length - bytePosition) * 8 - (7 - bitPosition) < numBits) {
+    throw new CramBufferOverrunError(
+      'read beyond end of core block; file seems truncated',
+    )
+  }
 
   // Fast path: reading exactly 8 bits when byte-aligned
   if (numBits === 8 && bitPosition === 7) {

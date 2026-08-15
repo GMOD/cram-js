@@ -134,9 +134,11 @@ test('a slice decoded through the pool matches one decoded in-process', async ()
     await import('../src/cramFile/sliceTransfer.ts')
   const direct = deserializeSliceRecords(payload)
 
-  expect(viaPool.length).toBe(direct.length)
-  expect(viaPool.map(r => r.toJSON())).toEqual(direct.map(r => r.toJSON()))
-  expect(viaPool[0]!.tags).toEqual(direct[0]!.tags)
+  // undefined would mean the pool declined the slice, which is a failure here
+  expect(viaPool).toBeDefined()
+  expect(viaPool!.length).toBe(direct.length)
+  expect(viaPool!.map(r => r.toJSON())).toEqual(direct.map(r => r.toJSON()))
+  expect(viaPool![0]!.tags).toEqual(direct[0]!.tags)
   pool.destroy()
 })
 
@@ -166,12 +168,12 @@ test('a decode error keeps its class across the boundary', async () => {
   pool.destroy()
 })
 
-test('a worker that dies rejects its slice rather than hanging', async () => {
+test('a worker that dies hands its slice back undecoded rather than hanging', async () => {
   installStubWorker('die', [])
   const pool = await createSliceWorkerPool(1, 'stub://worker')
-  await expect(pool.decodeSlice(await firstRequest())).rejects.toThrow(
-    /worker failed/,
-  )
+  // undefined is the pool saying "decode this yourself" — a dead worker is not
+  // a statement about the file, so the query must not fail over it
+  await expect(pool.decodeSlice(await firstRequest())).resolves.toBeUndefined()
   pool.destroy()
 })
 
@@ -303,9 +305,9 @@ test('a dead worker stops being scheduled onto', async () => {
 
   const pool = await createSliceWorkerPool(2, 'stub://worker')
   const req = await firstRequest()
-  await expect(pool.decodeSlice(req)).rejects.toThrow(/worker failed/)
+  await expect(pool.decodeSlice(req)).resolves.toBeUndefined()
   for (let i = 0; i < 3; i++) {
-    await pool.decodeSlice(req)
+    expect(await pool.decodeSlice(req)).toBeDefined()
   }
 
   // the dead worker took exactly the one slice that killed it
@@ -314,14 +316,14 @@ test('a dead worker stops being scheduled onto', async () => {
   pool.destroy()
 })
 
-test('destroy rejects work still in flight', async () => {
+test('destroy releases work still in flight', async () => {
   installStubWorker('decode', [])
   const pool = await createSliceWorkerPool(1, 'stub://worker')
   const req = await firstRequest()
   const inFlight = pool.decodeSlice(req)
   pool.destroy()
-  await expect(inFlight).rejects.toThrow(/destroyed/)
-  await expect(pool.decodeSlice(req)).rejects.toThrow(/destroyed/)
+  await expect(inFlight).resolves.toBeUndefined()
+  await expect(pool.decodeSlice(req)).resolves.toBeUndefined()
 })
 
 test('slices spread across workers rather than piling on one', async () => {

@@ -1,5 +1,5 @@
 import CramCodec from './_base.ts'
-import { CramUnimplementedError } from '../../errors.ts'
+import { CramBufferOverrunError, CramUnimplementedError } from '../../errors.ts'
 
 import type { Cursor, Cursors } from './_base.ts'
 import type { SubexpEncoding } from '../encoding.ts'
@@ -43,10 +43,18 @@ function decodeSubexpInline(
 ): number {
   let { bytePosition, bitPosition } = cursor
 
-  // Count leading ones (inline single-bit reads)
+  // Count leading ones (inline single-bit reads). A truncated core block reads
+  // as `undefined >> n`, i.e. as a zero bit, so past the end this loop would
+  // stop and the value below would decode out of bytes that are not there —
+  // silently wrong rather than reported truncated. Same guard `gamma` carries.
   let numLeadingOnes = 0
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   while (true) {
+    if (bytePosition >= data.length) {
+      throw new CramBufferOverrunError(
+        'read beyond end of core block; file seems truncated',
+      )
+    }
     const bit = (data[bytePosition]! >> bitPosition) & 1
     bitPosition -= 1
     if (bitPosition < 0) {
@@ -63,6 +71,11 @@ function decodeSubexpInline(
   const b = numLeadingOnes === 0 ? K : numLeadingOnes + K - 1
 
   // Read b bits
+  if ((data.length - bytePosition) * 8 - (7 - bitPosition) < b) {
+    throw new CramBufferOverrunError(
+      'read beyond end of core block; file seems truncated',
+    )
+  }
   let bits = 0
   for (let i = 0; i < b; i++) {
     bits <<= 1

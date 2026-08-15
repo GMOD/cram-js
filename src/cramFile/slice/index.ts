@@ -1,5 +1,4 @@
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
-import { CramSliceWorkerUnavailableError } from '../../sliceWorkerPool.ts'
 import Constants from '../constants.ts'
 import { buildSliceDecodeContext, trimSliceColumns } from './decodeContext.ts'
 import decodeRecord from './decodeRecord.ts'
@@ -694,14 +693,10 @@ export default class CramSlice {
     if (!request) {
       return undefined
     }
-    try {
-      return await pool.decodeSlice(request)
-    } catch (e) {
-      if (e instanceof CramSliceWorkerUnavailableError) {
-        return undefined
-      }
-      throw e
-    }
+    // resolves undefined if the pool could not take the slice or lost it, which
+    // is the same "decode it yourself" this method already reports for the cases
+    // above — see CramSliceWorkerPool.decodeSlice
+    return pool.decodeSlice(request)
   }
 
   async _fetchRecords(decodeOptions: Required<DecodeOptions>, opts?: ReadOpts) {
