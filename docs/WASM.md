@@ -158,4 +158,3 @@ transferred rather than shared.
 
 [CODEC_SUPPORT.md](CODEC_SUPPORT.md) has the update and rebuild scripts, and
 `htscodecs-wasm/build.sh` has the emcc flags the numbers above come from.
-</content> </invoke>
