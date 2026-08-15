@@ -55,10 +55,8 @@ alternative it was picked over:
   already decompressed and already in the JS heap, so moving them into wasm buys
   no algorithmic win and costs a crossing per series per slice. Going further
   still, decoding whole slices in wasm, would drag the `fetchReferenceSequence`
-  callback and the columnar output across too. So the split is drawn exactly
-  where the C is worth having: the block codecs are thousands of lines of
-  context modelling (fqzcomp, tok3, the adaptive arithmetic coder), and the
-  things above them are not.
+  callback and the columnar output across too. The split lands where the C is
+  worth having.
 
 - **Decoders only.** No compressor, none of the SIMD-specialized htscodecs
   variants — this library only ever reads. That is most of why the binary is 113

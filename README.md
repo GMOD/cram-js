@@ -43,9 +43,8 @@ for (const record of records) {
 
 ### Without a bundler
 
-The package also ships a standalone browser build for consumers that load it
-from a `<script>` tag rather than through npm — igv.js among them. It puts the
-same exports on `window.gmodCRAM`:
+The package also ships a standalone browser build for `<script>`-tag consumers,
+igv.js among them, putting the same exports on `window.gmodCRAM`:
 
 ```html
 <script src="https://unpkg.com/@gmod/cram/dist/cram-bundle.js"></script>
@@ -55,8 +54,7 @@ same exports on `window.gmodCRAM`:
 ```
 
 See the [example directory](./example) for a working page. Nothing else in this
-repo imports `dist/cram-bundle.js` — it exists for those consumers, which is
-worth knowing before deciding it looks unused.
+repo imports `dist/cram-bundle.js`, so it only looks unused.
 
 ## Three things to know
 
