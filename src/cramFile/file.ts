@@ -394,7 +394,12 @@ export default class CramFile {
     const headbytes = await this.file.read(maxLength, 0)
     const definition = parser(headbytes).value
     if (definition.magic !== 'CRAM') {
-      throw new Error('Not a CRAM file, does not match magic string')
+      // a CramMalformedError rather than a bare Error: "this is not the file you
+      // think it is" is the single most likely thing a consumer wants to tell
+      // apart from a network failure, and it is the first check every read hits
+      throw new CramMalformedError(
+        'Not a CRAM file, does not match magic string',
+      )
     } else if (definition.majorVersion !== 2 && definition.majorVersion !== 3) {
       throw new CramUnimplementedError(
         `CRAM version ${definition.majorVersion} not supported`,
