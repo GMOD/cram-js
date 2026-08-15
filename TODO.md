@@ -9,8 +9,9 @@ done, live in [docs/adr/](docs/adr/) — see
 [ADR 0007](docs/adr/0007-optimizations-measured-and-rejected.md) before
 proposing an optimization, in case it has already been tried.
 
-Numbers below were measured on this repo around v8.7.0. Read the method note at
-the bottom before trusting or re-running them.
+Numbers below were measured on this repo around v8.7.0, except the
+`payloadOffsets` item, re-measured at v13.3.0 with `scripts/arena-columns.ts`.
+Read the method note at the bottom before trusting or re-running them.
 
 ## Cache containers and compression schemes across queries
 
@@ -70,28 +71,49 @@ that qualifies is a ~9 MB binary. The abort machinery under test is shared with
 the BAM case, so the fixture was judged not worth the repository weight. Revisit
 if CRAM ever diverges from that path.
 
-## Pack or privatise `payloadOffsets`
+## Drop `payloadOffsets`, and decide the arena's random access with it
 
-On the ONT slice `payloadOffsets` is 854 KB, **11.5%** of the 7.42 MB the
-records retain, and the offsets are monotonic — a per-record base offset would
-collapse them. Auditing what the render path actually reads: the mismatch walk
-(now this repo's own `forEachMismatch`, since jbrowse deleted its copy) and
-jbrowse's `readFeaturesToNumericCIGAR` destructure `codes`, `pos`, `refPos`,
-`num`, `refCodes`, `subCodes` and call `payloadStringAt(i)`. **Neither ever
-touches `payloadOffsets` or `payloadBytes`**, so this is free to change: the
-only cost is that `payloadBytesAt` / `payloadStringAt` have to unpack, which is
-where the reads already go.
+`scripts/arena-columns.ts` takes an arena apart; run it before touching this. On
+the ONT slice `payloadOffsets` is **834 KB, 19.6% of the arena** and 11.5% of
+the 7.10 MB the records retain. Three facts about it, all from that script:
+
+- **75% of the column indexes nothing.** Only 53,292 of ONT's 213,602 slots
+  carry bytes at all (13.9% on SRR396637, since a short read's features are
+  nearly all X). The other 160,310 hold a zero that no accessor may read.
+- **It is 2.9x the data it indexes** — 834 KB of offsets over 291 KB of
+  `payloadBytes`.
+- **It is exactly the running prefix sum** of the lengths already in `code` and
+  `num` (B is one byte, the rest take `num`), verified at **0 deviations** over
+  every slot of ONT, SRR396636 and SRR396637.
+
+So the column is fully redundant and the question is not how to pack it but
+**whether the arena keeps O(1) random access on every column**. That is a
+decision for the arena, not for this one column: `refPos` is the same 834 KB and
+the same shape — derivable from `pos` plus a running per-record delta — and
+`pos`, `refPos` and `num` are 59% of the arena between them. Decide it once.
+
+What each option costs, since the obvious two are not equivalent:
+
+- **A per-record base offset** — what this item used to propose — is 8 bytes per
+  record: 296 B against 834 KB saved on ONT, but 437 KB against 422 KB saved on
+  SRR396637. A long-read win and a **wash on short reads**.
+- **Checkpoints every K slots** scale with features instead, so they win on both
+  (K=8 leaves 104 KB on ONT), at up to K−1 steps per lookup.
+
+Either way the three readers are already sequential over one record's features —
+`decodeReadSequenceBytes`, the string form beside it, and `forEachMismatch` — so
+they can carry a running offset and pay nothing per feature. What blocks it is
+that `payloadBytesAt(i)` / `payloadStringAt(i)` / `payloadByteAt(i)` take an
+index and nothing else, and `ReadFeatureArena` is exported. Changing them is a
+breaking change for a win that is ~11% on long reads and ~0 on short ones, which
+is the trade to weigh before starting — the earlier note here called this "free
+to change" on the strength of consumers not reading the column, which is true
+and is not the same thing.
 
 The neighbouring idea is **not** free and is not proposed: `refCodes`/`subCodes`
-together are 427 KB (5.7%) and would fit in the spare bits of an X feature's
-`num` (a 0–3 substitution-matrix index), but they are genuinely public. Packing
-them is a breaking change for 5.7%.
-
-The obstacle that used to be listed here — that privatising the layout would
-mean cram-js owning the mismatch walk — is gone: it owns it now, since jbrowse
-deleted its copy and drives `forEachMismatch`
-([ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md)). What is left is
-the plain compatibility argument, `readFeatures` being reachable by anyone.
+together are 417 KB (9.8% of the arena) and would fit in the spare bits of an X
+feature's `num` (a 0–3 substitution-matrix index), but they are genuinely
+public. Packing them is a breaking change for less than the above.
 
 ## Decide whether the worker pool should ever shut down
 

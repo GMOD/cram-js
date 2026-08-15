@@ -181,6 +181,11 @@ fresh process, with `--walk` to include a jbrowse-style consumer walk:
 node --expose-gc --experimental-strip-types scripts/measure-heap.ts ONT
 ```
 
+`scripts/arena-columns.ts` is the companion that takes the arena apart — bytes
+per column, the feature histogram, and how much of each column is doing
+anything. Reach for it when the question is _which_ column to attack rather than
+how much a slice weighs.
+
 Two traps, both found the hard way:
 
 - **`heapUsed` does not see typed arrays.** V8 allocates ArrayBuffer backing
