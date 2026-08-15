@@ -114,7 +114,7 @@ it means no CRAM anywhere in the context has queried recently, which one file
 cannot know. A `CramFile` that knows it is finished can call
 `destroySharedSliceWorkerPool()` today, but only if it is the last one.
 
-Nothing here is measured yet; the 80 MB is arithmetic (`docs/MEMORY.md`), not an
+Nothing here is measured yet; the 80 MB is arithmetic (`docs/memory.md`), not an
 observation of a real page.
 
 ## Method note
@@ -134,7 +134,7 @@ this file can be taken at face value.
 
 The two traps that produce confidently wrong numbers here — `heapUsed` not
 seeing typed arrays, and A/B-ing two source trees in one process — are written
-up in [docs/MEMORY.md](docs/MEMORY.md#measuring-it), along with the per-object
+up in [docs/memory.md](docs/memory.md#measuring-it), along with the per-object
 costs (a retained `Uint8Array` view is 104 B, a declared class field is 8 B)
 that most of the items above are reasoning from.
 

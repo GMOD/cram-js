@@ -28,7 +28,7 @@ The exception is lzma, which htscodecs does not implement. That one is
 `src/xz-decompress/` as a second, much smaller wasm module.
 
 For what the wasm costs in bundle size, startup and memory — and why only the
-lzma module is base64 — see [WASM.md](WASM.md).
+lzma module is base64 — see [wasm.md](wasm.md).
 
 ## Data-series codecs
 

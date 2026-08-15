@@ -82,7 +82,7 @@ to know about is worth more than the bytes.
   single block ever decompressed.
 - **The worker bundle carries its own copy** of the decoder and the wasm, so
   `src/wasm/cram-worker-source.js` is 395 KB (96 KB gzipped) in the published
-  package — see [WORKERS.md](WORKERS.md#building-the-bundle). Those bytes are
+  package — see [workers.md](workers.md#building-the-bundle). Those bytes are
   code-split, at least: `sliceWorkerPool.ts` imports the bundle dynamically,
   from a function only called when a pool actually starts, so a bundler leaves
   it in a chunk nobody who never enables the pool loads. Measured with esbuild
@@ -127,18 +127,18 @@ On a large query, the decoded records on the JS heap outweigh the wasm heap
 anyway. `IndexedCramFile`'s `cacheSize` (default 1,000,000 records) is the knob
 for that one, and bulk consumers can read the columnar `readFeatureArena` to
 skip materializing per-feature objects — see
-[MEMORY.md](MEMORY.md#columns-not-objects).
+[memory.md](memory.md#columns-not-objects).
 
 ## Threading
 
 Decoding is single-threaded scalar code, with no wasm threads and no SIMD, so
 one block decode uses one core. Overlapping happens a level up instead: slices
-are independent, and [WORKERS.md](WORKERS.md) is the pool that decodes them
+are independent, and [workers.md](workers.md) is the pool that decodes them
 concurrently, one wasm instance per worker. That also keeps `SharedArrayBuffer`
 — and so cross-origin isolation — out of the requirements, since slices are
 transferred rather than shared.
 
 ## Building
 
-[CODEC_SUPPORT.md](CODEC_SUPPORT.md) has the update and rebuild scripts, and
+[codec-support.md](codec-support.md) has the update and rebuild scripts, and
 `htscodecs-wasm/build.sh` has the emcc flags the numbers above come from.

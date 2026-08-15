@@ -4,7 +4,7 @@
 
 ## Context
 
-The slice pool ([WORKERS.md](../WORKERS.md)) is memoized in module state, so it
+The slice pool ([workers.md](../workers.md)) is memoized in module state, so it
 is shared **per JS context** — one per worker, one on the main thread. That is
 the scope `@gmod/bgzf-filehandle` chose for its inflate pool and the scope
 jbrowse's `util/bgzfWorkerPool.ts` documents for the same reason: a track's
@@ -87,7 +87,7 @@ else, and everywhere else is where the readers are.
 
 - **`numSliceWorkers` had to become reachable first.** It was documented from
   13.1.0 and dropped by `IndexedCramFile`, so this decision was unimplementable
-  until 13.2.0 — see the note in [WORKERS.md](../WORKERS.md).
+  until 13.2.0 — see the note in [workers.md](../workers.md).
 - **The sizing rule lives in the consumer, not here.** This library cannot know
   how many contexts a host runs; jbrowse can, and does. The default stays
   `min(hardwareConcurrency, 4)`, which is right for a consumer with one context.
@@ -114,4 +114,4 @@ rather than from jbrowse itself, so the ratios are more trustworthy than the
 absolute numbers. Core counts of 4 and 16 were tested; 8 is interpolated, and
 the sizing rule is bounded by the two measured points at either end. The relay
 figures are a synthetic payload, not a real `SliceTransfer`, sized from the
-record counts in [WORKERS.md](../WORKERS.md).
+record counts in [workers.md](../workers.md).

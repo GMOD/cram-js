@@ -67,7 +67,7 @@ bytes per feature.
 The columns are deliberately **per slice, not per record**. Giving each record
 its own typed arrays makes short-read files about twice as expensive as plain
 objects, because ~100 bytes of fixed overhead lands on the ~2 features a short
-read carries. See [READ_FEATURES.md](READ_FEATURES.md) for how to read them.
+read carries. See [read-features.md](read-features.md) for how to read them.
 
 ### Quality scores — `qualityColumn`
 
@@ -157,7 +157,7 @@ adds two things that sit outside it, both per worker rather than per file, and
 neither scaling with the query:
 
 - **A wasm heap per JS context.** The htscodecs module has a 16 MB floor (see
-  [WASM.md](WASM.md#memory)), and every context that decodes gets its own
+  [wasm.md](wasm.md#memory)), and every context that decodes gets its own
   instance. With the default `min(hardwareConcurrency, 4)` workers that is up to
   **80 MB before a record is decoded** — four workers plus the main thread,
   which needs an instance of its own whatever the pool does, because gunzipping

@@ -10,7 +10,7 @@ const records = await indexedFile.getRecordsForRange(0, 1000, 2000)
 ```
 
 Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`
-— see [the constructor options](API.md#indexedcramfile). Both are accepted by
+— see [the constructor options](api.md#indexedcramfile). Both are accepted by
 `IndexedCramFile` as well as by `CramFile`; through 13.1.0 only `CramFile` took
 them, which is to say they were unreachable.
 
@@ -215,7 +215,7 @@ the classes are exported from the package entry point so a consumer can name it.
 ## Building the bundle
 
 The worker is inlined as a string so the pool can launch it from a Blob URL with
-no consumer wiring, matching how the wasm is handled (see [WASM.md](WASM.md)):
+no consumer wiring, matching how the wasm is handled (see [wasm.md](wasm.md)):
 
 ```
 src/worker/sliceWorkerEntry.ts        the message loop, and nothing else
@@ -229,7 +229,7 @@ The intermediate goes to `build/`, which is gitignored, and **not** to
 input, so from there it was compiled into `esm/` and `dist/` too and published
 three times over with two sourcemaps — about a megabyte of a file nothing
 imports. Only the string module is real, and that one is tracked, for the reason
-[WASM.md](WASM.md) gives for the wasm bundle.
+[wasm.md](wasm.md) gives for the wasm bundle.
 
 Two things follow from the intermediate not being a published file:
 

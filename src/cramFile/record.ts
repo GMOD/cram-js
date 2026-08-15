@@ -185,7 +185,7 @@ function decodeReadSequence(cramRecord: CramRecord, refRegion: RefRegion) {
  * fixed cost swamps the work: **+141%** on SRR396637 and **+253%** on
  * SRR396636, where a substring plus a native `toUpperCase` is simply cheaper.
  * Same trade as the read-feature arena and the typed CIGAR — a fixed per-record
- * cost that only a long read amortizes; see `docs/MEMORY.md`.
+ * cost that only a long read amortizes; see `docs/memory.md`.
  *
  * Both forms produce byte-identical output on every record of all three
  * datasets. The exact crossover is unmeasured: what is measured is 100bp

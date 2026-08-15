@@ -49,7 +49,7 @@ reference span, which can be many megabases the query would not otherwise fetch.
 `cacheSize` counts **records, not bytes**, so it does not bound memory: a
 decoded record has no cheap size, and one long-read slice can retain tens of
 megabytes. Slices are cached whole, so the bound lands on a whole slice's record
-count at a time — [MEMORY.md](MEMORY.md) has why, and what a query in flight is
+count at a time — [memory.md](memory.md) has why, and what a query in flight is
 allowed to exceed it by.
 
 Size it to hold several queries. Below one query's working set it does not cache
@@ -71,7 +71,7 @@ so share one only with other `CramFile`s.
 `useSliceWorkerPool` decodes slices on a shared pool where the host has workers,
 and in-process where it does not. Leave it on inside your own worker too — a
 worker is still one thread, and nested in one the pool measures 2.1-3.6x from
-four slices up ([WORKERS.md](WORKERS.md)).
+four slices up ([workers.md](workers.md)).
 
 `numSliceWorkers` sizes that pool. The pool is shared per JS context, so the
 first file to need one fixes the size for the rest, and a host running several
@@ -176,7 +176,7 @@ Takes `{ path, url, filehandle }` — one of the three is required.
   into, shared across every record in a slice, in the same shape as
   `readFeatureArena` below.
 - `readFeatures` — the raw read features, as an array. Prefer `getMismatches()`;
-  see [READ_FEATURES.md](READ_FEATURES.md) if you really do need this level. The
+  see [read-features.md](read-features.md) if you really do need this level. The
   array is rebuilt on every access, so pull it into a local rather than reading
   it in a loop condition.
 - `readFeatureArena`, `readFeatureStart`, `readFeatureCount` — the columnar
@@ -186,7 +186,7 @@ Takes `{ path, url, filehandle }` — one of the three is required.
 
 Read features and quality scores are both stored as one shared typed array per
 slice rather than per record, because a per-record `Uint8Array` costs ~104 bytes
-in V8 — more than the quality scores of a short read. [MEMORY.md](MEMORY.md)
+in V8 — more than the quality scores of a short read. [memory.md](memory.md)
 covers what a decoded slice retains, how to read these columns without
 allocating, and how the slice cache is bounded.
 
@@ -317,7 +317,7 @@ Insertions arrive as `I` whether the file encoded them as `I` or as a run of
 ## Read features
 
 The raw CRAM encoding behind `record.readFeatures`, documented in
-[READ_FEATURES.md](READ_FEATURES.md). You don't need it for mismatches.
+[read-features.md](read-features.md). You don't need it for mismatches.
 
 ## Error classes
 

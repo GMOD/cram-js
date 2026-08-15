@@ -79,7 +79,7 @@ export interface SliceDecodeRequest {
  * second.
  *
  * Bounded because a worker lives as long as the page, and the queries this pool
- * is worth the most to — docs/WORKERS.md names a whole-contig scan, an export, a
+ * is worth the most to — docs/workers.md names a whole-contig scan, an export, a
  * force-load — walk thousands of containers through it. Each entry retains a
  * codec per data series and per tag seen, huffman tables included.
  */

@@ -7,7 +7,7 @@
  *
  * Bundled by `webpack.worker.config.js` into `src/wasm/cram-worker-inlined.js`
  * and then wrapped as a string module by `scripts/inline-worker.sh`, so the pool
- * can launch it from a Blob URL with no consumer wiring. See `docs/WORKERS.md`.
+ * can launch it from a Blob URL with no consumer wiring. See `docs/workers.md`.
  */
 import { decodeSliceFromBytes } from '../cramFile/slice/decodeSliceFromBytes.ts'
 import { warmupWasm } from '../htscodecs-wasm.ts'

@@ -103,7 +103,7 @@ parser — which is what ADR 0006 declined and still declines.
 
 The +17% and the `origin` cost were measured one variant per process,
 alternating, fastest of 9, with identity checked before timing — the method
-`docs/MEMORY.md` describes and the traps ADR 0006 documents. The +17% was
+`docs/memory.md` describes and the traps ADR 0006 documents. The +17% was
 measured in jbrowse against its real call site; the `origin` cost here, against
 12.0.1 from its published tarball rather than a second copy of this tree.
 

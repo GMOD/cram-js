@@ -234,7 +234,7 @@ export interface CramFileOptions {
    * which was a guess and is measured wrong: nested in a browser worker — the
    * arrangement jbrowse ships — the pool is worth 2.1-3.6x from four slices up,
    * and parity at one. A worker is still one thread, so the decode is serial in
-   * there without this. See docs/WORKERS.md.
+   * there without this. See docs/workers.md.
    *
    * Set false to keep everything in-process. The reason to is host-wide worker
    * budget rather than per-query speed: the pool is process-wide *per JS

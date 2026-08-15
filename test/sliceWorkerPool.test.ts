@@ -392,7 +392,7 @@ test('slices spread across workers rather than piling on one', async () => {
   pool.destroy()
 })
 
-// The options below are documented in docs/WORKERS.md and were unreachable in
+// The options below are documented in docs/workers.md and were unreachable in
 // 13.1.0: `IndexedCramFile` forwarded CramFile's arguments field by field and
 // these two were not in the list, so `useSliceWorkerPool: false` was a tsc error
 // on the way in and a no-op if you cast past it. Everything else in this file

@@ -112,7 +112,7 @@ If you process enough records that per-difference objects start to matter,
 allocating, and takes an optional `{ start, end }` window. The same pattern
 exists for the CIGAR (`forEachCigarOp`) and for tags and quality scores, which
 are stored as one array per slice rather than per record.
-[docs/API.md](docs/API.md) has all of it; [docs/MEMORY.md](docs/MEMORY.md)
+[docs/api.md](docs/api.md) has all of it; [docs/memory.md](docs/memory.md)
 explains why it is shaped that way.
 
 ## Slices decode on a worker pool
@@ -135,7 +135,7 @@ measured.
 `useSliceWorkerPool: false` turns it off and `numSliceWorkers` sizes it. The
 reason to reach for either is a host that runs several worker contexts, since
 the pool is shared per context rather than per machine.
-[docs/WORKERS.md](docs/WORKERS.md) has the measurements.
+[docs/workers.md](docs/workers.md) has the measurements.
 
 ## Cancelling a query
 
@@ -154,19 +154,19 @@ Aborting your query never fails a concurrent one, because decodes shared between
 queries are reference-counted. The corollary is the thing to know: a query with
 **no** signal can never give up, so it pins any slice it is waiting on for
 everyone. Thread the signal through consistently.
-[docs/API.md](docs/API.md#cancelling-a-query) has the details.
+[docs/api.md](docs/api.md#cancelling-a-query) has the details.
 
 ## Docs
 
-- [docs/API.md](docs/API.md) — every option, property and method
+- [docs/api.md](docs/api.md) — every option, property and method
 - [MIGRATION.md](MIGRATION.md) — breaking changes, newest first
-- [docs/MEMORY.md](docs/MEMORY.md) — what a decoded slice retains
-- [docs/READ_FEATURES.md](docs/READ_FEATURES.md) — the raw alignment encoding
-- [docs/CODEC_SUPPORT.md](docs/CODEC_SUPPORT.md) — which codecs are supported
+- [docs/memory.md](docs/memory.md) — what a decoded slice retains
+- [docs/read-features.md](docs/read-features.md) — the raw alignment encoding
+- [docs/codec-support.md](docs/codec-support.md) — which codecs are supported
 - [docs/dataflow.md](docs/dataflow.md) — a query end to end, diagrammed
 - [docs/optimizations.md](docs/optimizations.md) — why the path looks that way
-- [docs/WASM.md](docs/WASM.md) — the inlined wasm build
-- [docs/WORKERS.md](docs/WORKERS.md) — the slice worker pool
+- [docs/wasm.md](docs/wasm.md) — the inlined wasm build
+- [docs/workers.md](docs/workers.md) — the slice worker pool
 - [docs/adr/](docs/adr/) — the decisions, with their measurements
 - [TODO.md](TODO.md) — measured, still open, wanted
 - [CONTRIBUTING.md](CONTRIBUTING.md) — development, release, publishing

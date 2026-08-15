@@ -57,7 +57,7 @@ naming so they are not mistaken for oversights:
 Method throughout: one source tree per process, alternating, comparing fastest
 runs rather than medians, with an A-vs-A control to establish the noise floor.
 The traps that make this necessary are in
-[docs/MEMORY.md](../MEMORY.md#measuring-it).
+[docs/memory.md](../memory.md#measuring-it).
 
 ### Interning the decoded strings
 

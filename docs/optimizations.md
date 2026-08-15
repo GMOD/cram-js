@@ -79,7 +79,7 @@ exceeding it. Above the working set the two measure identically, so it was
 dropped ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)).
 `cacheIdleTimeoutMs` is what lowers the cache while nothing is happening, and
 `cacheBudget` lets several files share one ceiling instead of each holding its
-own. [MEMORY.md](MEMORY.md#the-slice-cache) has both.
+own. [memory.md](memory.md#the-slice-cache) has both.
 
 What is cached is the whole decoded slice, already decorated with its reference
 sequence — `applyReferenceSequence` runs once per slice inside the cached decode
@@ -107,7 +107,7 @@ query, Amdahl caps it at ~1.33x, and the heavy blocks within one slice are too
 few to spread. The whole slice is ~95% of a query, and measures **2.0–2.8x**
 under node and **2.1–3.6x** from four slices up when nested inside a browser
 worker, which is the arrangement consumers actually ship.
-[WORKERS.md](WORKERS.md) has the tables, including the slice-count threshold
+[workers.md](workers.md) has the tables, including the slice-count threshold
 that was measured for and rejected.
 
 ### The wasm boundary is the block
@@ -119,7 +119,7 @@ its output back: a block's two copies amortize over the thousands of records in
 it, where crossing per record would put the copies inside the hot loop.
 Everything above the block — the per-data-series codecs and the record decode —
 stays in JS, where it is reading bytes that are already in the JS heap.
-[WASM.md](WASM.md#where-the-boundary-is-drawn) has the other two axes of that
+[wasm.md](wasm.md#where-the-boundary-is-drawn) has the other two axes of that
 decision.
 
 ### Per-slice work happens once per slice
@@ -175,8 +175,8 @@ quality column removed 104 bytes per record (−12.8% retained on SRR396637).
 
 The columns are per slice and not per record for the same reason in the other
 direction — giving each record its own typed arrays makes short-read files about
-twice as expensive as plain objects. [MEMORY.md](MEMORY.md#columns-not-objects)
-has the numbers, and [READ_FEATURES.md](READ_FEATURES.md) how to read them.
+twice as expensive as plain objects. [memory.md](memory.md#columns-not-objects)
+has the numbers, and [read-features.md](read-features.md) how to read them.
 
 `TagColumn` is the exception, and worth knowing before anyone "improves" it on
 the assumption that it saved heap: it came out break-even (−0.06 MB on

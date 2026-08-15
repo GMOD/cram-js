@@ -39,7 +39,7 @@ described to the worker as **bytes and numbers only** — a `CramFile` holds a
 filehandle and your `fetchReferenceSequence` callback, neither of which can
 travel — and coming back, the columns transfer at zero copy rather than being
 cloned. Then `applyReferenceSequence` runs here, because resolving substitutions
-means calling that callback. [WORKERS.md](WORKERS.md) has the measurements and
+means calling that callback. [workers.md](workers.md) has the measurements and
 the fallbacks.
 
 ## Where wasm sits
@@ -56,5 +56,5 @@ The boundary is crossed **once per block**, never per record: each crossing
 copies its input into the wasm heap and its output back out, and a block's two
 copies amortize over the thousands of records in it. Everything above the block
 — the data-series codecs, the record decode, the columns — is JS reading bytes
-that are already in the JS heap. [WASM.md](WASM.md) has the rest of that
-argument, and [CODEC_SUPPORT.md](CODEC_SUPPORT.md) the codec list.
+that are already in the JS heap. [wasm.md](wasm.md) has the rest of that
+argument, and [codec-support.md](codec-support.md) the codec list.

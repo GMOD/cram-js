@@ -1,6 +1,6 @@
 export { CramRecord, NEXT_UNKNOWN } from './cramFile/record.ts'
 // The only place a consumer can reach the error classes — `exports` has no
-// subpath, so a deep import into `esm/errors.js` is blocked. docs/WORKERS.md
+// subpath, so a deep import into `esm/errors.js` is blocked. docs/workers.md
 // tells consumers to catch by class, and `reviveError` goes to real trouble to
 // keep the class across a worker boundary.
 export {

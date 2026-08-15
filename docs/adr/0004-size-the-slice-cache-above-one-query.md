@@ -33,7 +33,7 @@ actually constructs — an option that stopped at `CramFile` would be unreachabl
 
 - **A record count cannot bound memory, and this does not pretend to.** There is
   no cheap way to size a decoded record, which is why the unit is what it is
-  (see [MEMORY.md](../MEMORY.md#the-slice-cache)). One useful consequence: the
+  (see [memory.md](../memory.md#the-slice-cache)). One useful consequence: the
   budget only ever binds on short-read data, where records are small and
   numerous. Long-read slices are few and huge — 2,991 records for a 50kb window
   at 1000x — so they never approach it.
