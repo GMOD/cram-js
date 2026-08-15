@@ -151,6 +151,27 @@ has read for that long, which is the only thing that lowers the cache while
 nothing is happening, and `cacheBudget` lets several `CramFile`s share one
 ceiling.
 
+## What the worker pool adds
+
+Everything above is the JS heap, and it is where a query's memory goes. The pool
+adds two things that sit outside it, both per worker rather than per file, and
+neither scales with the query:
+
+- **A wasm heap per JS context.** The htscodecs module has a 16 MB floor (see
+  [WASM.md](WASM.md#memory)), and every context that decodes gets its own
+  instance. With the default `min(hardwareConcurrency, 4)` workers that is up to
+  **80 MB before a record is decoded** — four workers plus the main thread,
+  which needs an instance of its own whatever the pool does, because gunzipping
+  the `.crai` is itself a wasm call. `numSliceWorkers` is the knob; a host that
+  runs several worker contexts multiplies this again, as it does the pool
+  itself.
+- **Up to 16 parsed compression schemes per worker**, each holding a codec per
+  data series and per tag it has seen. Bounded, and small next to one decoded
+  slice, but it is retained between queries rather than with them.
+
+Both are floors, not per-query costs: they are paid once per worker and do not
+grow with the region.
+
 ## Measuring it
 
 `scripts/measure-heap.ts` reports retained heap for one of the fixtures in a
