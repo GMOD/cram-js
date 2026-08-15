@@ -113,7 +113,7 @@ that was measured for and rejected.
 ### The wasm boundary is the block
 
 Every block codec is compiled C rather than JS — samtools' own htscodecs for the
-CRAM-specific ones, libdeflate for gzip, and a second 16 KB module for lzma. The
+CRAM-specific ones, libdeflate for gzip, and a second module for lzma. The
 boundary sits at **one block**, because each crossing copies its input in and
 its output back: a block's two copies amortize over the thousands of records in
 it, where crossing per record would put the copies inside the hot loop.

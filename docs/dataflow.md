@@ -60,7 +60,7 @@ anything.
 
 Everything in the purple box runs on a **worker pool** when the host has one — a
 `Worker` from a Blob URL, both of them inlined, so there is nothing to
-configure. The pool is shared per JS context, as in
+configure. One pool serves the whole JS context, as in
 [bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md), but the
 unit is the **whole slice** rather than just decompression: block decompression
 accounts for only 24–35% of a cold query, so a decompression-only pool caps out
@@ -86,10 +86,10 @@ Everything orange is wasm:
 
 - **`htscodecs.wasm`** handles gzip (through libdeflate), bzip2, and every CRAM
   codec from rANS to fqzcomp and tok3.
-- **A second 16 KB `xz-embedded.wasm`** handles lzma, which htscodecs has no
-  codec for at all.
+- **A second `xz-embedded.wasm`** handles lzma, which htscodecs has no codec for
+  at all.
 
-Both are inlined in the bundle and instantiate lazily, once per JS context. The
+The build inlines both, and each instantiates lazily, once per JS context. The
 `.crai` goes through wasm too, though the diagram does not draw that edge — the
 index is gzipped, so the first wasm call of a session is usually gunzipping it
 rather than decompressing a block.
