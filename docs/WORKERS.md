@@ -194,12 +194,23 @@ short of a malformed file:
 - no `Worker` or Blob URL — node, vitest, or a restricted host
 - a slice of unknown size, i.e. non-indexed access through `CramFile` directly,
   where blocks are read one at a time and there is no single byte range to send
-- a pool that failed to start, which warns once per file
+- a pool that failed to start, which warns once per file — including a worker
+  that reports an error, and one that never answers the init handshake at all.
+  Until 13.3.0 the second and third of those hung instead: `readyPromise` had no
+  rejection path, so `createSliceWorkerPool` awaited a worker that would never
+  be ready, and since the pool is awaited before the decode, every query against
+  the file waited with it. A CSP that refuses `blob:` worker-src is the ordinary
+  way a host gets there.
+- a worker that dies while carrying a slice, or a pool destroyed under one in
+  flight. The slice decodes on the main thread instead; that a worker went away
+  says nothing about the file.
 
 A **decode error** does propagate: a malformed CRAM must fail rather than
 quietly re-decode on the main thread and fail there. Error classes are carried
-across by name and rebuilt, so `CramMalformedError` still arrives as one —
-consumers catch by class.
+across by name and rebuilt, so `CramMalformedError` still arrives as one, and
+since 13.3.0 the classes are exported from the package so a consumer can name it
+— before that they were reachable from nowhere, and this paragraph described
+something nobody could do.
 
 ## Building the bundle
 

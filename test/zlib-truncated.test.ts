@@ -3,7 +3,7 @@ import { deflateSync } from 'zlib'
 import { expect, test } from 'vitest'
 
 import { zlib_uncompress } from '../src/htscodecs-wasm.ts'
-import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import { CraiIndex, CramMalformedError, IndexedCramFile } from '../src/index.ts'
 
 // Regression tests for the infinite loop in htscodecs-wasm/zlib_wrapper.c.
 //
@@ -22,6 +22,11 @@ test('a truncated deflate stream fails instead of spinning', async () => {
   const truncated = new Uint8Array(full.subarray(0, -5))
   await expect(zlib_uncompress(truncated)).rejects.toThrow(
     'zlib_uncompress failed',
+  )
+  // and by class: a block that will not decode is a statement about the file,
+  // the same one parseBlock makes when a decode comes out the wrong length
+  await expect(zlib_uncompress(truncated)).rejects.toBeInstanceOf(
+    CramMalformedError,
   )
 }, 20000)
 

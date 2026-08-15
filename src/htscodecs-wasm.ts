@@ -1,4 +1,5 @@
 import { memoizeAsync } from './cramFile/memoize.ts'
+import { CramMalformedError } from './errors.ts'
 import createHtsCodecsModule from './wasm/htscodecs.js'
 
 type HtsCodecsModule = Awaited<ReturnType<typeof createHtsCodecsModule>>
@@ -50,18 +51,26 @@ async function decompress(
   const module = await getModule()
   const inPtr = copyToWasm(module, input)
   const outSizePtr = module._malloc(4)
+  let outPtr = 0
   try {
-    const outPtr = call(module, inPtr, outSizePtr)
+    outPtr = call(module, inPtr, outSizePtr)
     if (outPtr === 0) {
-      throw new Error(`${fnName} failed`)
+      // A codec that returns NULL is a block that will not decode, which is a
+      // statement about the file — the same one `parseBlock` makes fifteen lines
+      // later when a decode produces the wrong number of bytes, and it raises a
+      // CramMalformedError for it. A bare Error here also arrived from a worker
+      // as a nameless Error, indistinguishable from the worker having crashed.
+      throw new CramMalformedError(`${fnName} failed`)
     }
-    const outSize = module.getValue(outSizePtr, 'i32')
-    const result = copyFromWasm(module, outPtr, outSize)
-    module._free(outPtr)
-    return result
+    return copyFromWasm(module, outPtr, module.getValue(outSizePtr, 'i32'))
   } finally {
+    // outPtr in the finally too: the copy out allocates, so it can throw, and
+    // this heap only ever grows — anything not freed is held for the process
     module._free(inPtr)
     module._free(outSizePtr)
+    if (outPtr !== 0) {
+      module._free(outPtr)
+    }
   }
 }
 

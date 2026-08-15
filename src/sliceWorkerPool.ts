@@ -41,10 +41,12 @@ type WorkerMessage =
 /**
  * Rebuild the error the worker threw.
  *
- * A malformed CRAM has to fail the same way whether or not a pool is in use,
- * and consumers do catch these by class — jbrowse distinguishes a malformed file
- * from a network fault — so the name is carried across and mapped back rather
- * than everything arriving as a bare `Error`.
+ * A malformed CRAM has to fail the same way whether or not a pool is in use, so
+ * the name is carried across and mapped back rather than everything arriving as
+ * a bare `Error`. This used to say consumers "do" catch these by class, naming
+ * jbrowse; they could not, because the classes were exported nowhere until
+ * 13.3.0 — and jbrowse in fact references neither. They are reachable now, which
+ * is what makes this worth doing rather than what justified it.
  */
 function reviveError(name: string, message: string) {
   if (name === 'CramMalformedError') {
