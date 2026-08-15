@@ -76,7 +76,7 @@ The one id that is not an `@SQ` position is `-1`, an unplaced read.
 
 **You supply the reference sequence.** CRAM stores reads as differences from a
 reference, so the library cannot give you bases without one —
-`fetchReferenceSequence` is how it asks for them. It is handed both the seq id
+`fetchReferenceSequence` is how it asks for them. It receives both the seq id
 and the name, so a name-keyed source like `IndexedFasta` needs no lookup of its
 own. Without it you still get positions, CIGARs and the _shape_ of every
 difference, just not the bases involved.
@@ -111,9 +111,9 @@ If you process enough records that per-difference objects start to matter,
 `record.forEachMismatch(callback, opts?)` reports the same differences without
 allocating, and takes an optional `{ start, end }` window. The same pattern
 exists for the CIGAR (`forEachCigarOp`) and for tags and quality scores, which
-are stored as one array per slice rather than per record.
+live in one array per slice rather than one per record.
 [docs/api.md](docs/api.md) has all of it; [docs/memory.md](docs/memory.md)
-explains why it is shaped that way.
+explains why they take that shape.
 
 ## Slices decode on a worker pool
 
@@ -134,7 +134,7 @@ measured.
 
 `useSliceWorkerPool: false` turns it off and `numSliceWorkers` sizes it. The
 reason to reach for either is a host that runs several worker contexts, since
-the pool is shared per context rather than per machine.
+one pool serves a context rather than a machine.
 [docs/workers.md](docs/workers.md) has the measurements.
 
 ## Cancelling a query
@@ -162,7 +162,8 @@ everyone. Thread the signal through consistently.
 - [MIGRATION.md](MIGRATION.md) — breaking changes, newest first
 - [docs/memory.md](docs/memory.md) — what a decoded slice retains
 - [docs/read-features.md](docs/read-features.md) — the raw alignment encoding
-- [docs/codec-support.md](docs/codec-support.md) — which codecs are supported
+- [docs/codec-support.md](docs/codec-support.md) — which codecs this decoder
+  handles
 - [docs/dataflow.md](docs/dataflow.md) — a query end to end, diagrammed
 - [docs/optimizations.md](docs/optimizations.md) — why the path looks that way
 - [docs/wasm.md](docs/wasm.md) — the inlined wasm build

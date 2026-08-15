@@ -1,14 +1,14 @@
 # Architecture decision records
 
-Decisions that shape how the decoder is put together, with the evidence that
+Decisions that shape how the decoder fits together, with the evidence that
 settled them and the consequences that came with them.
 
 How this differs from the other documents here:
 
-- **`docs/adr/`** — a decision that was taken, why, and what it costs. Written
-  once, then amended only to supersede it.
-- **[`TODO.md`](../../TODO.md)** — work that is measured, still open, and that
-  we want to do. Facts and measurements, not decisions; an item leaves the file
+- **`docs/adr/`** — a decision we took, why, and what it costs. Written once,
+  then amended only to supersede it.
+- **[`TODO.md`](../../TODO.md)** — work we measured, still open, and that we
+  want to do. Facts and measurements, not decisions; an item leaves the file
   when it lands. Something measured and deliberately rejected _is_ a decision,
   so it lives here, in [0007](0007-optimizations-measured-and-rejected.md).
 - **[`optimizations.md`](../optimizations.md)** — the query path in one pass,
