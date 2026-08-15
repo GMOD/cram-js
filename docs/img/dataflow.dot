@@ -10,7 +10,9 @@
 // spine. The two clusters are the one thing cram adds: what moves to a worker,
 // and what is wasm. bam draws its pool as a single node off a dashed "optional"
 // edge because only decompression moves; here the unit is the whole slice, so
-// the pool has to be a box around several steps. Same term, different mark.
+// the pool has to be a box around several steps. Same term, different mark —
+// and purple means the same thing in all three, which is why the pool is not
+// drawn in the wasm orange it used to be.
 digraph cramjs {
   rankdir=TB
   compound=true
@@ -31,7 +33,7 @@ digraph cramjs {
 
   subgraph cluster_decode {
     label="worker pool — whole slice, if available"
-    fontname="Helvetica" fontsize=9 fontcolor="#0969da" color="#0969da"
+    fontname="Helvetica" fontsize=9 fontcolor="#8250df" color="#8250df"
     margin=10
 
     walk  [label="parse block headers"]
@@ -77,6 +79,7 @@ digraph cramjs {
     l1 [label="I/O" fillcolor="#dafbe1" color="#1a7f37"]
     l2 [label="wasm" fillcolor="#ffd8b5" color="#bc4c00"]
     l3 [label="cached / shared" fillcolor="#fff8c5" color="#9a6700"]
-    l1 -> l2 -> l3 [style=invis]
+    l4 [label="off the main thread" fillcolor="#fbefff" color="#8250df"]
+    l1 -> l2 -> l3 -> l4 [style=invis]
   }
 }

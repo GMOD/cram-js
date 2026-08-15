@@ -45,7 +45,7 @@ without materializing anything.
 
 ## Where the slice decode happens
 
-Everything in the blue box runs on a **worker pool** when the host has one — a
+Everything in the purple box runs on a **worker pool** when the host has one — a
 `Worker` from a Blob URL, both of them inlined, so there is nothing to
 configure. The pool is shared per JS context, as in
 [bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md), but the
