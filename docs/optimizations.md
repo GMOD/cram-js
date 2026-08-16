@@ -228,9 +228,18 @@ whether the reads are 100bp or 20kb. So what drives the bill is how much
 alignment is in view, not how long the reads are.
 
 A file with no `b` features is unaffected, and nothing else about the walk
-changes. If you get to pick the encoding, speed isn't the main reason to avoid
-no_ref anyway: the same reads take 51 KB written that way against 7.7 KB written
-against a reference.
+changes. Worth knowing that this cost is ours and not samtools': it reads a
+no_ref file just as fast as any other, because all it does is hand back the
+bases the file already stores. Nobody pays for the missing substitutions until
+somebody asks what they are, which is why these files can be in wide use without
+anyone noticing this.
+
+The other thing a no_ref file costs is space, about **1.7x** on real reads —
+200,000 of them took 493 KB against 293 KB written against a reference. Don't
+read more than that into the fixtures in this repo: their quality strings are
+synthetic and compress to nearly nothing, which leaves the sequence looking like
+the whole file. In a real CRAM the quality scores dominate, and they are
+identical either way.
 
 ### One tag, one score, one clip length
 
