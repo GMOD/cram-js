@@ -1287,6 +1287,14 @@ export default class CramRecord {
 
     // if this region completely covers this read,
     // keep a reference to it
+    //
+    // Two things read it, and they want different amounts of it. getReadBases()
+    // rebuilds the whole read, so it needs the whole read covered, which is what
+    // the test below gives it. forEachMismatch() only diffs the 'b' runs, so a
+    // partly covered read would still be worth something to it — a read hanging
+    // off the end of a contig reports no 'b' substitutions today, where its X
+    // features still resolve. Narrow enough to leave alone: relaxing the test
+    // would hand getReadBases() a region it cannot finish the read from.
     if (
       !this.readBases &&
       refRegion.start <= this.start &&

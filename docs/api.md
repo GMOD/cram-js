@@ -276,6 +276,13 @@ tell you the actual bases involved in a substitution. Without it you still get
 the substitution, at the right position, but its `bases` come back as `'N'` and
 its `refBaseCode` as `0`.
 
+One kind of file is worse off than that. A CRAM written with `no_ref` stores its
+bases verbatim instead of working out which of them are substitutions, so
+finding them means comparing against a reference — without one, those reads come
+back with no substitutions at all rather than with vague ones. See
+[optimizations.md](optimizations.md#no_ref-files-make-the-mismatch-walk-much-slower)
+for what that comparison costs when you do have a reference.
+
 - `getPairOrientation()` → `'F1R2'`-style string, or `undefined` for an unpaired
   read. Both halves of a pair always agree on it, including when the file does
   not locate the next segment.
