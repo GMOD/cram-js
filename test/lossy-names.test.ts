@@ -1,3 +1,5 @@
+import { readdirSync } from 'fs'
+
 import { describe, expect, it } from 'vitest'
 
 import { CraiIndex, CramFile, IndexedCramFile } from '../src/index.ts'
@@ -47,10 +49,9 @@ describe('1kg mate test', () => {
 })
 
 // ce#lossy3seg.cram is three segments of one template, names dropped, chained
-// 0 -> 1 -> 2 by a single NF walk — see scripts/make-lossy-chain-fixture.ts for
-// what it takes to get htslib to write one. It is the only fixture here that
-// reaches the second link of that walk, and before ADR 0011 the record on the
-// far end of it came back with no name at all.
+// 0 -> 1 -> 2 — the only fixture reaching the second link of the mate walk, and
+// before ADR 0011 the record on the far end came back unnamed. See
+// scripts/make-lossy-chain-fixture.ts for what it takes to get htslib to write.
 describe('three-segment lossy mate chain', () => {
   it('gives every record in the chain the same name', async () => {
     const cram = new CramFile({
@@ -70,5 +71,56 @@ describe('three-segment lossy mate chain', () => {
     expect(last!.readName).toEqual(first!.readName)
     // named after the head of the chain, as htslib names a group
     expect(first!.readName).toEqual(String(first!.uniqueId))
+  })
+})
+
+// htslib stores a name for exactly the detached records, and a record leaves
+// the detached state only by becoming one end of an NF link. So every nameless
+// record sits on a chain the mate walk reaches, and the walk must name all of
+// it — the guard that catches the three-segment hole without knowing to look
+// for it. Pre-fix this reports ce#lossy3seg.cram; post-fix, nothing.
+describe('read names across the corpus', () => {
+  const cramFiles = readdirSync('test/data').filter(f => f.endsWith('.cram'))
+
+  // a header and no records, on purpose. Named rather than tolerated, so a
+  // fixture that quietly stops decoding anything fails here instead of passing
+  // this sweep by having nothing to check.
+  const empty = new Set([
+    'hg19mini#cramQueryTestEmpty.cram',
+    'xx#blank.2.1.cram',
+    'xx#blank.3.0.cram',
+    'xx#blank.tmp.cram',
+  ])
+
+  it.each(cramFiles)('%s decodes every record with a name', async filename => {
+    const cram = new CramFile({
+      filehandle: testDataFile(filename),
+      checkSequenceMD5: false,
+    })
+    const unnamed: number[] = []
+    let records = 0
+    const containerCount = await cram.containerCount()
+    for (let i = 1; i < containerCount; i++) {
+      const container = await cram.getContainerById(i)
+      const header = await container?.getHeader()
+      if (!header) {
+        continue
+      }
+      const { numLandmarks, landmarks, length } = header
+      for (let j = 0; j < numLandmarks; j++) {
+        const start = landmarks[j]!
+        const end = j + 1 < numLandmarks ? landmarks[j + 1]! : length
+        const slice = container!.getSlice(start, end - start)
+        for (const record of await slice.getRecords(() => true)) {
+          records++
+          if (record.readName === undefined) {
+            unnamed.push(record.uniqueId)
+          }
+        }
+      }
+    }
+    expect(records > 0).toBe(!empty.has(filename))
+    // the ids rather than a count, so a failure says which records to look at
+    expect(unnamed).toEqual([])
   })
 })
