@@ -1,3 +1,86 @@
+## [13.4.0](https://github.com/GMOD/cram-js/compare/v13.3.0...v13.4.0) (2026-08-16)
+
+### Bug Fixes
+
+- Keep a parked wasm experiment under src/ out of the build ([bcbb19d](https://github.com/GMOD/cram-js/commit/bcbb19d598c0d80ad9c1c55510c6eb0c58153594))
+- Bound the worker's parsed-scheme cache ([508b74e](https://github.com/GMOD/cram-js/commit/508b74e32eefd39f4520f9b297952be65b7c2010))
+- A worker that cannot start hung every read of the file ([5606b02](https://github.com/GMOD/cram-js/commit/5606b02d2133c0c3c5a96e1e2b0a0a67cd69abce))
+- Export the error classes, which no consumer could reach ([e0f2e78](https://github.com/GMOD/cram-js/commit/e0f2e7813f1ab6ed28cce062953530f036923601))
+- Forward the query's decode options to the mate slices ([99b25cc](https://github.com/GMOD/cram-js/commit/99b25ccc66ea6ed233d5271ee7f053ed27776e27))
+- Don't cache a rejected wasm instantiation ([7060dbf](https://github.com/GMOD/cram-js/commit/7060dbf33d05b61ad6a2e2b58184447afeda74e8))
+- A block that will not decode is a CramMalformedError ([c8888aa](https://github.com/GMOD/cram-js/commit/c8888aa4a07a7cf795cf3f3ecc4b9393f8c47928))
+- A raw QS block kept the whole slice reachable ([c9de577](https://github.com/GMOD/cram-js/commit/c9de57741038ce3fe3ea78531930ef734f7f5d98))
+- The worker's scheme cache confused two files whose containers coincide ([4937971](https://github.com/GMOD/cram-js/commit/49379716ce69a3aa0efe3df29bbced74d0b16ec9))
+- A worker whose wasm will not load hung the pool's startup timeout ([b6acc72](https://github.com/GMOD/cram-js/commit/b6acc72f31bfab92a150e7f1d3a99c438d4f11cd))
+- Gamma and huffman read past the end of the core block ([f958414](https://github.com/GMOD/cram-js/commit/f958414d17da249194e0e8a8b3648412f0947b7a))
+
+### Chores
+
+- Keep agent worktrees out of the toolchain's way ([bf191c3](https://github.com/GMOD/cram-js/commit/bf191c39f3f437b40d8aeeff594be040fb113aa0))
+- Drop three dependencies nothing imports ([c6735ac](https://github.com/GMOD/cram-js/commit/c6735ac1cdc14d07aef69ab2833496f791674f55))
+- Build each ref in a worktree ([72501fc](https://github.com/GMOD/cram-js/commit/72501fc04cda7535fc5476263f8a3e64806a3bb2))
+
+### Documentation
+
+- A dataflow diagram, and where the wasm boundary sits and why ([5b97827](https://github.com/GMOD/cram-js/commit/5b978272e8a1cb9aa0bef6ceabda108fcea8992f))
+- What the worker pool costs in memory, which MEMORY.md never counted ([adf8b92](https://github.com/GMOD/cram-js/commit/adf8b928025286cbbde88759c183a08a8340c458))
+- The worker bundle is code-split, and only the lzma module is base64 ([1a26e35](https://github.com/GMOD/cram-js/commit/1a26e350ca85a2562221dbe42ae58acabf08cde1))
+- Drop a stray tool-call artifact from the end of WASM.md ([074eadf](https://github.com/GMOD/cram-js/commit/074eadfbc4e3b595473088e072e9e1ee6eb305ea))
+- WASM.md said four things twice, and stop narrating past edits ([511de6c](https://github.com/GMOD/cram-js/commit/511de6c9c2a520182628a52738c44024f85e68e1))
+- Trim a few sentences that restated their own paragraph ([59eae65](https://github.com/GMOD/cram-js/commit/59eae65a88d63967d9ab3aab3f1124cc68bbe728))
+- Trim the change history out of the comments this work added ([ec44f9a](https://github.com/GMOD/cram-js/commit/ec44f9a41f6eefe87498c740cd680f01ae7c7bd5))
+- The scheme cache is keyed on a position, not an identity ([b1735da](https://github.com/GMOD/cram-js/commit/b1735da2d79b370b420ea077b0bf1f3528e4e4cf))
+- Drop a version number from a test comment ([88dcad6](https://github.com/GMOD/cram-js/commit/88dcad683621e7d785149b276b2caad78bcdffdc))
+- A CONTRIBUTING.md, with the release steps out of the README ([048c171](https://github.com/GMOD/cram-js/commit/048c171071aedaaf079f1f3ba81f6cf49869fda0))
+- What validateChecksums buys, which nothing said ([99d9520](https://github.com/GMOD/cram-js/commit/99d952099553737e2063217ec0b1b6fe168ab927))
+- An editing pass over the README and docs/ ([88ab6db](https://github.com/GMOD/cram-js/commit/88ab6dbb74aace378e6fd457f07a6bc891bcc194))
+- An optimizations.md, the query path in one pass ([dae5a44](https://github.com/GMOD/cram-js/commit/dae5a4448ff08ddaca0876216dfc31a8b9ec0cc5))
+- One line per entry in the README docs list ([dc28b70](https://github.com/GMOD/cram-js/commit/dc28b708439e8c543a3e0168949a63a2bf19469a))
+- A dataflow.md, so the diagram has prose around it ([a0147db](https://github.com/GMOD/cram-js/commit/a0147db89a3ef6965ecc726f64bc382b85b95a25))
+- Lowercase the docs/ filenames ([06d8c19](https://github.com/GMOD/cram-js/commit/06d8c197485eda3249411515c6e144bd85416956))
+- Re-measure payloadOffsets, which is a trade and not a free win ([5a55200](https://github.com/GMOD/cram-js/commit/5a55200540536358ea159c3805e433b6a2f8ab7f))
+- ADR 0010 for the payload checkpoints, and refPos takes its place in TODO ([e703647](https://github.com/GMOD/cram-js/commit/e703647451c94c2b0ead31f741b0b416cbcaa7af))
+- Generate the measured tables in memory.md, and fix the stale ones ([aad5a72](https://github.com/GMOD/cram-js/commit/aad5a725926b77b0beab129c8b89017bc67ef7b6))
+- Simplify the dataflow diagram ([da518b3](https://github.com/GMOD/cram-js/commit/da518b3ab251a7e1858c76f1e0378ddd3a9bd6e9))
+- Name the read-feature arena in the dataflow doc ([9dfebb1](https://github.com/GMOD/cram-js/commit/9dfebb14be6ab0dd64ab6d5b990579eafbf0095a))
+- Show the columnar output in the dataflow figure ([8d5afd5](https://github.com/GMOD/cram-js/commit/8d5afd5a4c055c005da0d5c7fc3b4006c3f4e387))
+- Call the cram decode cluster a worker pool, as bam-js does ([c6c16ce](https://github.com/GMOD/cram-js/commit/c6c16ce01e470e75a9ab60a6f4d532093cc57d1c))
+- Fix a stray 'there' in the worker pool paragraph ([514f807](https://github.com/GMOD/cram-js/commit/514f8078729dbff88503e9db09f6ad0ad073b2f4))
+- Give the worker pool its own legend color ([f34c7d9](https://github.com/GMOD/cram-js/commit/f34c7d99a5f5d6eb1784ffc30f646585c592a2f9))
+- Recast the dataflow walkthrough as active-voice bullets ([218f670](https://github.com/GMOD/cram-js/commit/218f670b7931e16b0079800ccdae6a5bf3adc4f5))
+- Drop the lone wasm module size from the dataflow and optimization docs ([f492968](https://github.com/GMOD/cram-js/commit/f492968f99eac9b10aabb02f1461d908a1006487))
+- Put the prose in the active voice ([96584d5](https://github.com/GMOD/cram-js/commit/96584d513819b87e95f01f23f743d49a5c35b316))
+- Put the README in the active voice ([b84eb7e](https://github.com/GMOD/cram-js/commit/b84eb7ee7c230ede5c53536a714795b48251b06a))
+- Active voice in ADR 0010, and correct the release command in CONTRIBUTING ([27029e9](https://github.com/GMOD/cram-js/commit/27029e99a8b45ba38c13f179f16019b2f4ff66d1))
+- Say what a no_ref file does to getMismatches without a reference ([b686c5c](https://github.com/GMOD/cram-js/commit/b686c5ca7d066a8bccce3c1ccca98497000d02b3))
+- Correct the no_ref size penalty, and say who actually pays for it ([35ffa3e](https://github.com/GMOD/cram-js/commit/35ffa3ef9cfc033977df3179fc098b27b7568ed5))
+
+### Features
+
+- Report the substitutions hidden inside a no_ref file's 'b' runs ([56013f5](https://github.com/GMOD/cram-js/commit/56013f56c71a438303099f082bfe9152b2311eea))
+
+### Other Changes
+
+- Move graphviz dataflow diagram into docs/img/ ([5982e36](https://github.com/GMOD/cram-js/commit/5982e36e95bb897865762937016924f4e296c6d1))
+- Restyle cram dataflow diagram to match bam-js/tabix-js palette and legend ([d283397](https://github.com/GMOD/cram-js/commit/d283397306b50d3fb9ceb9b6ec56f67819a41341))
+- Narrow cram dataflow layout and bump font size for legibility at README width ([e699e30](https://github.com/GMOD/cram-js/commit/e699e30f0677075516966ce0762004add436ceb1))
+
+### Performance Improvements
+
+- Size the read-feature arena from the slice's blocks instead of growing it ([573bd9d](https://github.com/GMOD/cram-js/commit/573bd9d1fdd273edf949c28e17a75ba0521b9475))
+- The payload arena fell short wherever B or i features appear ([7db5bfe](https://github.com/GMOD/cram-js/commit/7db5bfecaeefbb87d7c73c80be51de2f06e9b95f))
+- Checkpoint the payload offsets instead of storing one per slot ([fe94cad](https://github.com/GMOD/cram-js/commit/fe94cadbb852ae1e884d8c84c2689ba17de1b090))
+- Carry the payload offset through the walk ([1c2b2f4](https://github.com/GMOD/cram-js/commit/1c2b2f48d379bc3a0a76da4f05050857ca117408))
+
+### Refactoring
+
+- A pool that loses a slice returns undefined, not an error class ([11c97e0](https://github.com/GMOD/cram-js/commit/11c97e0ce2ef20e4c27fd30108acc2d9025e74f1))
+- One list of data series, and a named type for a record's arguments ([d966e59](https://github.com/GMOD/cram-js/commit/d966e59270274209a72139b2f4830f9212cc44b2))
+
+### Tests
+
+- Cover no_ref 'b' runs at long-read scale, and record what they cost ([afe5e65](https://github.com/GMOD/cram-js/commit/afe5e6542f01a6596d8618f97dd94ea0daaab83b))
+
 ## [13.3.0](https://github.com/GMOD/cram-js/compare/v13.2.0...v13.3.0) (2026-08-14)
 
 ### Documentation
