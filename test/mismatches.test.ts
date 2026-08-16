@@ -3,6 +3,7 @@ import { expect, test } from 'vitest'
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord from '../src/cramFile/record.ts'
 import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import { FetchableSmallFasta } from './lib/fasta/index.ts'
 import { testDataFile } from './lib/util.ts'
 
 import type { Mismatch } from '../src/cramFile/mismatches.ts'
@@ -88,9 +89,10 @@ test('insertions, deletions, skips and clips', () => {
   ])
 })
 
-// 'b' is a stretch of verbatim bases, which align as matches, and 'P' consumes
-// nothing — neither is a difference from the reference
-test('verbatim bases and padding are not differences', () => {
+// 'b' is a stretch of verbatim bases and 'P' consumes nothing. Padding is never
+// a difference; a 'b' run needs a reference of its own to diff against, so with
+// none applied it reports nothing either — see the no_ref tests at the bottom
+test('verbatim bases and padding are not differences without a reference', () => {
   expect(
     mismatchesOf([
       { code: 'b', data: 'ACGT', pos: 0, refPos: 100 },
@@ -266,4 +268,82 @@ test('a B feature matching the reference is not a difference', () => {
   ])
   record.readFeatureArena!.refCodes[0] = 'A'.charCodeAt(0)
   expect(record.getMismatches()).toEqual([])
+})
+
+// A 'b' run is what htslib writes in no_ref mode — `samtools view
+// --output-fmt-option no_ref`, and every CRAM `samtools depad` writes. The
+// encoder had no reference, so it stored the bases verbatim and computed no
+// substitutions at all; a consumer with a reference of its own recovers them by
+// diffing the run. Galaxy has produced such files since 2018, and until now
+// they rendered as a read with no SNPs anywhere.
+// https://github.com/galaxyproject/tools-iuc/issues/6523
+function noRefRecord(bases: string, qualityScores?: Uint8Array) {
+  const record = makeRecord(
+    [{ code: 'b', data: bases, pos: 0, refPos: 100 }],
+    100,
+    qualityScores,
+  )
+  record._refRegion = { start: 100, end: 100 + bases.length, seq: 'ACGTACGT' }
+  return record
+}
+
+test('a b run reports each base that differs from the reference', () => {
+  expect(noRefRecord('AGGTACTT').getMismatches().map(show)).toEqual([
+    'X@101/1ref/"G"/refC',
+    'X@106/1ref/"T"/refG',
+  ])
+})
+
+test('a b run matching the reference reports nothing', () => {
+  expect(noRefRecord('ACGTACGT').getMismatches()).toEqual([])
+})
+
+test('a b run upper-cases a soft-masked reference before comparing', () => {
+  const record = noRefRecord('ACGTACGT')
+  record._refRegion = { start: 100, end: 108, seq: 'acgtacgt' }
+  expect(record.getMismatches()).toEqual([])
+})
+
+test('a b run carries the quality score of each differing base', () => {
+  const qual = new Uint8Array([10, 11, 12, 13, 14, 15, 16, 17])
+  expect(noRefRecord('AGGTACGT', qual).getMismatches().map(show)).toEqual([
+    'X@101/1ref/"G"/refC/q11',
+  ])
+})
+
+test('a b run reports only the differences inside the window', () => {
+  expect(
+    noRefRecord('AGGTACTT').getMismatches({ start: 104, end: 108 }).map(show),
+  ).toEqual(['X@106/1ref/"T"/refG'])
+})
+
+// the run can outrun a reference region that stops short, and charCodeAt past
+// the end is NaN rather than a base — those positions are unknown, not mismatches
+test('a b run reports nothing past the end of the reference region', () => {
+  const record = noRefRecord('ACGTACGTTTTT')
+  expect(record.getMismatches()).toEqual([])
+})
+
+// The end-to-end version of the same thing, over a fixture written by
+// `samtools view -C --output-fmt-option no_ref`: every substitution the
+// reference-based encoding of the same 1000 reads spells as an X feature has to
+// come back out of the verbatim 'b' runs the no_ref one stores instead.
+test('a no_ref file reports the same differences as a reference-based one', async () => {
+  const fasta = new FetchableSmallFasta(testDataFile('ce.fa'))
+  const open = (name: string) =>
+    new IndexedCramFile({
+      cramFilehandle: testDataFile(name),
+      index: new CraiIndex({ filehandle: testDataFile(`${name}.crai`) }),
+      fetchReferenceSequence: fasta.fetch.bind(fasta),
+      checkSequenceMD5: false,
+    })
+  const mismatches = async (name: string) =>
+    (await open(name).getRecordsForRange(0, 0, 100000)).map(r =>
+      r.getMismatches().map(show).join(' '),
+    )
+
+  const withRef = await mismatches('ce#1000.tmp.cram')
+  // guard against the comparison passing on two empty lists
+  expect(withRef.filter(m => m.includes('X@')).length).toBeGreaterThan(100)
+  expect(await mismatches('ce#1000.noref.cram')).toEqual(withRef)
 })

@@ -1,5 +1,6 @@
 import {
   PAYLOAD_NUM,
+  RF_BASES,
   RF_BASE_QUAL,
   RF_DELETION,
   RF_HARD_CLIP,
@@ -14,6 +15,7 @@ import {
 import { decodeUtf8 } from './util.ts'
 
 import type ReadFeatureArena from './readFeatureArena.ts'
+import type { RefRegion } from './record.ts'
 
 /**
  * One difference between a read and the reference, as
@@ -22,8 +24,8 @@ import type ReadFeatureArena from './readFeatureArena.ts'
  * This is the level most consumers want. Walking `readFeatures` yourself means
  * knowing that `i` and `I` are both insertions but carry their payload
  * differently, that a run of `i` features is one insertion, that `q`/`Q` are
- * quality-only and their `refPos` is not an alignment position, that `b` is a
- * stretch of verbatim bases that align as matches, and that an `X` feature's
+ * quality-only and their `refPos` is not an alignment position, that a `b` run
+ * hides substitutions rather than being free of them, and that an `X` feature's
  * `data` is an index into the container's substitution matrix rather than a
  * base. Every one of those has been a bug in a downstream consumer.
  */
@@ -34,7 +36,9 @@ export interface Mismatch {
    * `RF_SOFT_CLIP` (S) or `RF_HARD_CLIP` (H). Insertions arrive as `RF_INSERTION`
    * whether the file encoded them as `I` or as a run of `i`, and a `B` feature
    * — a read base stored verbatim with its own quality — arrives as
-   * `RF_SUBST` when the base it carries differs from the reference.
+   * `RF_SUBST` when the base it carries differs from the reference. So does
+   * each differing base of a `b` run, the verbatim stretch a no-reference
+   * encoder writes in place of substitutions.
    */
   code: number
   /** 1-based reference position the difference starts at */
@@ -122,6 +126,11 @@ export interface MismatchOptions {
  * The window is tested in reference coordinates and the position is *emitted*
  * relative to `origin`, so a consumer working in read-relative coordinates
  * still clips to a genomic viewport without converting either one itself.
+ *
+ * `refRegion` is the reference the record was decoded against, and is what lets
+ * a `b` run report substitutions — see the `RF_BASES` branch. Everything else
+ * takes its reference base from the arena's `refCodes`, so leaving it undefined
+ * costs only those.
  */
 export function forEachMismatch(
   arena: ReadFeatureArena | undefined,
@@ -133,6 +142,7 @@ export function forEachMismatch(
   windowStart: number,
   windowEnd: number,
   origin: number,
+  refRegion: RefRegion | undefined,
   callback: MismatchCallback,
 ) {
   if (arena !== undefined) {
@@ -253,9 +263,54 @@ export function forEachMismatch(
               0,
             )
           }
+        } else if (code === RF_BASES) {
+          // b is a run of read bases stored verbatim, and htslib writes it only
+          // in no_ref mode — `samtools view --output-fmt-option no_ref`, and
+          // `samtools depad` unconditionally (cram/cram_encode.c: "Non
+          // reference based encoding means storing the bases verbatim as
+          // features"). The writer had no reference to diff against, so it
+          // computed no X features at all and the run covers what would
+          // otherwise be matches *and* substitutions alike.
+          //
+          // A consumer that has a reference of its own can still recover those
+          // substitutions, which is what this does: diff the run base by base.
+          // Nothing else here needs `refRegion`, since `addReferenceSequence`
+          // resolves one reference base per feature into `refCodes`, and a run
+          // needs `num` of them.
+          if (
+            refRegion !== undefined &&
+            rPos < windowEnd &&
+            rPos + n > windowStart
+          ) {
+            const { seq } = refRegion
+            const seqOffset = rPos - refRegion.start
+            const readPos = pos[i]!
+            for (let j = 0; j < n; j++) {
+              const basePos = rPos + j
+              if (basePos < windowStart || basePos >= windowEnd) {
+                continue
+              }
+              // past the end of the region reads as NaN, and `|| 0` turns that
+              // into the same "reference unknown" 0 refCodes uses
+              const refCode = upperCase(seq.charCodeAt(seqOffset + j) || 0)
+              const base = upperCase(payloadBytes[payloadAt + j]!)
+              if (refCode !== 0 && base !== refCode) {
+                callback(
+                  RF_SUBST,
+                  basePos - origin,
+                  1,
+                  String.fromCharCode(base),
+                  qualColumn === undefined
+                    ? -1
+                    : qualColumn[qualStart + readPos + j]!,
+                  refCode,
+                  0,
+                )
+              }
+            }
+          }
         }
-        // b (verbatim bases) aligns as matches and P (padding) consumes
-        // nothing, so neither is a difference to report
+        // P (padding) consumes nothing, so it is not a difference to report
       }
     }
 

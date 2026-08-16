@@ -16,17 +16,20 @@ deletions, reference skips, and soft and hard clips. So if differences are what
 you're after, that function is the whole story — see
 [What to ask a record](../README.md#what-to-ask-a-record).
 
-What it deliberately leaves out, because none of these are differences:
+`B` and `b` both store bases verbatim rather than as substitutions, and both are
+still reported — as substitutions — for whichever of their bases disagree with
+the reference. That needs a reference, so with no `fetchReferenceSequence` they
+report nothing at all.
+
+What it deliberately leaves out, because neither is a difference:
 
 | Code     | What it carries                                       |
 | -------- | ----------------------------------------------------- |
 | `q`, `Q` | quality scores, which say nothing about the alignment |
-| `B`      | an explicit base together with its quality            |
 | `P`      | padding, which consumes neither read nor reference    |
-| `b`      | a stretch of verbatim bases, which align as matches   |
 
-Wanting one of those four is the honest reason to walk the raw list. If that's
-you, read the next section carefully.
+Wanting one of those is the honest reason to walk the raw list. If that's you,
+read the next section carefully.
 
 ## Traps
 
@@ -34,7 +37,11 @@ Every one of these has been a real bug in code that walked the features itself:
 
 - `i` and `I` are both insertions, and they store their payload differently.
 - A run of `i` features is _one_ insertion, not several.
-- `b` carries bases, but they align as matches, so it isn't a difference.
+- `b` carries a run of bases that align as CIGAR matches, but they are not all
+  matches: htslib writes `b` only when encoding with no reference
+  (`samtools view --output-fmt-option no_ref`, and every CRAM `samtools depad`
+  writes), so the writer computed no substitutions and the run covers real ones.
+  Diff it against a reference of your own — `getMismatches()` does.
 - `q` and `Q` carry only quality. Their `refPos` isn't an alignment position at
   all, so a positional walk has to skip them. `RF_POSITIONAL[code]` is 0 for
   exactly those two, which is the cheapest way to test for them.

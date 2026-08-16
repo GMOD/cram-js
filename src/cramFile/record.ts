@@ -1165,7 +1165,10 @@ export default class CramRecord {
    *
    * `ref`/`sub` bases and quality scores are only as populated as the file and
    * `fetchReferenceSequence` allowed: without a reference, a substitution
-   * reports as 'N' with a `refBaseCode` of 0.
+   * reports as 'N' with a `refBaseCode` of 0, and the substitutions inside a
+   * `b` run — the verbatim bases a no-reference encoder writes instead of
+   * substitutions — do not surface at all, since recovering those means
+   * diffing the run against a reference here.
    *
    * @param callback called as
    *   `(code, refPos, length, bases, qual, refBaseCode, clipLength)`
@@ -1183,6 +1186,7 @@ export default class CramRecord {
       opts?.start ?? Number.NEGATIVE_INFINITY,
       opts?.end ?? Number.POSITIVE_INFINITY,
       opts?.origin ?? 0,
+      this._refRegion,
       callback,
     )
   }
