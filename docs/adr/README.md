@@ -32,6 +32,7 @@ How this differs from the other documents here:
 | [0008](0008-emit-into-the-consumers-callback.md)        | Emit into the consumer's callback, not into a translator       | accepted |
 | [0009](0009-one-pool-per-context-sized-for-the-host.md) | One slice pool per JS context, sized by the host               | accepted |
 | [0010](0010-checkpoint-the-payload-offsets.md)          | Checkpoint the payload offsets, one per eight slots            | accepted |
+| [0011](0011-uniqueid-from-offset-plus-counter.md)       | Derive `uniqueId` from the slice offset and the record counter | accepted |
 
 ## Writing one
 

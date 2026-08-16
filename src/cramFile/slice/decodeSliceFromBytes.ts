@@ -63,7 +63,10 @@ export interface SliceDecodeRequest {
   refSeqId: number
   refSeqStart: number
   numRecords: number
-  /** `sliceHeader.contentPosition + recordCounter + 1` is the first uniqueId */
+  /**
+   * `sliceHeader.contentPosition + recordCounter + 1` is the first uniqueId.
+   * ADR 0011 has why both terms are in there.
+   */
   uniqueIdBase: number
 
   decodeTags: boolean
