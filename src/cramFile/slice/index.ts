@@ -133,13 +133,11 @@ function associateIntraSliceMate(
       mateRecord.mateRecordNumber !== currentRecordNumber)
 
   // Lossy read names: the encoder drops the name of a mate group that fits in
-  // one slice, so give the group one back, named after the record holding the
-  // pointer — the ascending walk reaches it first, and htslib names the group
-  // from the same record's index (`record_counter + rec + 1`, cram_decode.c).
-  //
-  // Read the name off `thisRecord` rather than testing it: that is what carries
-  // the name past the second segment. A `!thisRecord.readName` guard skipped
-  // the second link of a three-segment chain, leaving its last record unnamed.
+  // one slice, so give the group one back, named after the record the ascending
+  // walk reaches first — as htslib names it (cram_decode.c). Read that name off
+  // `thisRecord` rather than testing it, which is what carries it past the
+  // second segment; a `!thisRecord.readName` guard left the far end of a
+  // three-segment chain unnamed. ADR 0011.
   const groupName = thisRecord.readName ?? String(thisRecord.uniqueId)
   thisRecord.setSyntheticReadName(groupName)
   mateRecord.setSyntheticReadName(groupName)

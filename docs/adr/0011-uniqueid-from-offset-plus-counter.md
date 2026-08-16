@@ -4,129 +4,107 @@
 
 ## Context
 
-Every decoded record carries a `uniqueId`, which JBrowse uses as its feature id
-and which `IndexedCramFile` uses to recognise a record it has already collected
-when it goes back for mates. It is
-
-```
-sliceHeader.contentPosition + recordCounter + 1 + i
-```
-
-— the file offset of the slice header, plus the record counter that header
-stores, plus the record's index within the slice.
+Every record carries a `uniqueId` — JBrowse's feature id, and how
+`IndexedCramFile` recognises a record it already collected when it goes back for
+mates. It is `sliceHeader.contentPosition + recordCounter + 1 + i`.
 
 [Issue #161](https://github.com/GMOD/cram-js/issues/161) asks whether the record
-counter is the right field to hang that on. `CRAMv3.tex` defines it as
+counter is the right field for that. `CRAMv3.tex` calls it a "0-based sequential
+index of records in the file/stream", which says what a writer should write, not
+what a reader may verify. Nothing makes the value unique, and checking it means
+reading the whole file. CRAM v1 has no such field at all, so `readRecordCounter`
+returns 0 for every slice in one.
 
-> `ltf8` record counter — 0-based sequential index of records in the file/stream
+That the definition itself moved argues for the same caution: `CRAMv2.1.tex`
+calls the field 1-based, `CRAMv3.tex` 0-based, and every file in `test/data`
+starts at 0 either way. The issue quotes the 1-based wording.
 
-which says what a writer should write, not what a reader may verify; James
-Bonfield's point in the issue is that nothing makes the value unique, and a
-reader cannot check it without reading the whole file. Two cases put that beyond
-hypothetical: CRAM v1 has no such field at all, so `readRecordCounter` returns 0
-for every slice in one, and a writer that never fills the field in produces the
-same thing in v2 or v3.
-
-That the field's own definition has moved is a small argument for the same
-caution. `CRAMv2.1.tex` still calls it **1-based** and `CRAMv3.tex` calls it
-**0-based**, and every file in `test/data` — v2.1 ones included — starts at 0.
-The issue quotes the 1-based wording.
-
-htslib takes the counter at its word. `cram_decode.c` builds the synthetic read
-names for a lossy-names file out of `record_counter + rec + 1` and nothing else,
-so a file with a constant counter collides there outright. The spec asks for
-much the same thing:
-
-> When read names are not preserved the CRAM decoder should generate names,
-> typically based on the file name and a numeric ID of the read using the record
-> counter field of the slice header block.
-
-The same question therefore reaches read names here, because those synthetic
-names are built out of `uniqueId` — see the second half of the decision.
+htslib takes the counter at its word — `cram_decode.c` builds synthetic read
+names from `record_counter + rec + 1` alone, so a constant counter collides
+there outright. The spec suggests as much: a decoder "should generate names,
+typically based on the file name and a numeric ID of the read using the record
+counter field". That reaches read names here too, since ours come from
+`uniqueId`.
 
 ## Decision
 
-**Keep the formula, for the file offset rather than for the counter.** The two
-terms fail in opposite directions, and summing them means a file has to break
-both to produce a collision:
+**Keep the formula, for the offset rather than the counter.** The terms fail in
+opposite directions, so a file has to break both to collide:
 
-- Slice header offsets **strictly increase** through the file, and the record
-  counter is **non-decreasing**. With a counter the writer filled in correctly,
-  slice _k+1_'s first id is `cp[k+1] + rc[k] + nr[k] + 1`, which is greater than
-  the last id slice _k_ handed out. The ranges are disjoint and no argument
-  about the counter is needed.
-- With a counter that is constant — v1, or a writer that skipped it — the id
-  degenerates to `contentPosition + 1 + i`, and slices collide only where one
-  occupies fewer bytes on disk than it holds records.
+- Offsets strictly increase and the counter is non-decreasing, so with a correct
+  counter slice _k+1_ starts above everything slice _k_ handed out. The ranges
+  are disjoint without any argument about the counter.
+- With a constant counter the id degenerates to `contentPosition + 1 + i`, which
+  collides only where a slice occupies fewer bytes than it holds records.
 
-Dropping the offset to match htslib exactly would buy read names that agree with
-`samtools view`, and would cost the only fallback either case has. That is the
-wrong trade for a reader, which does not get to choose its input files.
+Matching htslib exactly would buy read names that agree with `samtools view` and
+cost the only fallback either case has — the wrong trade for a reader, which
+does not choose its input files.
 
-**Name a lossy mate group after the record holding the mate pointer.** A file
-written with lossy read names stores no name for a mate group that fits inside
-one slice, so `associateIntraSliceMate` invents one the group shares, from the
-`uniqueId` of the record the walk reaches first. That is the same record htslib
-names the group after, so the two disagree only by the offset term.
+**Name a lossy mate group after the record holding the mate pointer**, the one
+the walk reaches first. htslib names the group after the same record, so the two
+differ only by the offset term.
+
+**Every record decodes with a name**, and htslib's encoder makes that a property
+rather than a hope: `add_read_names` stores a name for exactly the detached
+records, and a record leaves the detached state only by becoming one end of an
+NF link. So a nameless record is always on a chain the mate walk reaches, and
+the walk must name all of it.
 
 ## Consequences
 
-- A record's id is stable for a given file and derivable from the slice header
-  alone, so a slice decoded in a worker needs nothing extra to produce it.
-  Nothing about it is stable **across** files — two CRAMs will hand out the same
-  ids, and a consumer holding both has to namespace them itself.
-- The id is a `number` and travels in a `Float64Array` between the worker and
-  the main thread, so it is exact only below 2^53. `contentPosition` is a byte
-  offset and `recordCounter` a record index, so the sum stays six orders of
-  magnitude under that on any real file; `test/uniqueId.test.ts` asserts it.
-- Synthetic read names do not match `samtools view` on the same lossy-names
-  file. htslib writes `<prefix>:<record_counter + rec + 1>`, this writes the
-  decimal `uniqueId`, and the grouping is identical either way. The spec says
-  "typically", so a name of our own is within it.
-- A synthetic name could in principle collide with a stored one, since it
-  carries no prefix to keep it out of the way. htslib's prefix exists for that;
-  the collision needs a file that both drops some names and stores a decimal
-  integer as another read's name, so it is not defended against here.
+- The id is derivable from the slice header alone, so a worker needs nothing
+  extra to produce it. It is not stable **across** files — two CRAMs hand out
+  the same ids, and a consumer holding both must namespace them.
+- It travels in a `Float64Array`, so it is exact only below 2^53. A byte offset
+  plus a record index stays six orders of magnitude under that;
+  `test/uniqueId.test.ts` asserts it.
+- Synthetic names do not match `samtools view`: htslib writes
+  `<prefix>:<record_counter + rec + 1>`, we write the decimal `uniqueId`. The
+  grouping is identical, and the spec's "typically" leaves room for our own.
+- A synthetic name could collide with a stored one, having no prefix to keep it
+  clear. That needs a file which both drops names and stores a decimal integer
+  as another read's name, so it is undefended.
+- The walk now spreads a **stored** name to a mate the file left unnamed. htslib
+  cannot write that pair — in lossy-name mode it detaches rather than link a
+  named record to an unnamed one — so it covers only what another encoder might
+  produce. It costs one `??`, the same one that carries a synthetic name down a
+  chain.
 
 ## Evidence
 
-Measured across the CRAMs in `test/data` — samtools, htsjdk and scramble output,
-v2.1 and v3.0, 348 slices and 126,260 records:
+Across `test/data` — samtools, htsjdk and scramble output, v2.1 and v3.0, 348
+slices, 126,263 records:
 
-- **The record counter is sequential in every one.** Exactly one slice per file
-  reports 0, the first, and every later slice reports the previous one's counter
-  plus its record count — including the v2.1 files, whose spec calls the field
-  1-based. Not one file in the corpus exercises the case the issue is about.
+- **The counter is sequential in every file**, v2.1 included. One slice per file
+  reports 0, the first; every later one reports the previous counter plus its
+  record count. No fixture exercises the case the issue is about.
 - **No id is handed out twice**, decoding every record of every file.
-- **The narrowest slice spans 11.4 bytes per record** — 109,587 bytes over 9,596
-  records, in `test-samtools-123.cram`. So even the degenerate fallback, with
-  the counter contributing nothing, has an order of magnitude of headroom.
+- **The narrowest slice spans 11.4 bytes per record** — 109,587 over 9,596, in
+  `test-samtools-123.cram`. Even the degenerate fallback has an order of
+  magnitude of headroom.
+- **Every record decodes with a name.** Reverting the mate-walk fix breaks
+  exactly one, so the sweep discriminates rather than passing on everything.
 
-On the read names, `samtools view -C --output-fmt-option lossy_names=1` over a
-mixed input — a pair, two single-end reads, and a read with a supplementary
-alignment — drops the name of the pair alone and keeps the rest, and this
-decoder reproduces that grouping exactly.
+`samtools view -C --output-fmt-option lossy_names=1` over a mixed input — a
+pair, two single-end reads, a read with a supplementary alignment — drops the
+pair's name and keeps the rest, which this decoder reproduces exactly.
 
-The walk had one hole, and it took a purpose-built file to reach it. Guarding
-the naming on `if (!thisRecord.readName)` skipped the second link of an NF chain
-longer than two, because the record holding that link had been named on the
-previous iteration — so the far end of the chain came back with `readName`
-undefined, which `IndexedCramFile` turns into a thrown `readName undefined`
-under `viewAsPairs`. Reading the name off `thisRecord` instead of testing it
-carries it the whole way down.
+The walk had one hole, and reaching it took a purpose-built file. Guarding the
+naming on `if (!thisRecord.readName)` skipped the second link of an NF chain
+longer than two, because that record had been named on the previous iteration —
+so the far end came back `undefined`, which `IndexedCramFile` turns into a
+thrown `readName undefined` under `viewAsPairs`. Reading the name off
+`thisRecord` rather than testing it carries it the whole way down.
 
-`ce#lossy3seg.cram` is that file, and htslib writes it: three segments of one
-template, names dropped, chained `0 -> 1 -> 2`. Decoded against it, the third
-record's name is `undefined` before the change and the head's uniqueId after.
-`scripts/make-lossy-chain-fixture.ts` has the five constraints htslib imposes
-before it will leave all three attached — the ordinary way to write a
-three-segment template detaches the middle record instead, which is why none of
-the other 131 fixtures produces such a chain and why all 126,260 of their
-records decoded with a name either way.
+`ce#lossy3seg.cram` is that file, and htslib writes it: three segments, names
+dropped, chained `0 -> 1 -> 2`. The third record's name is `undefined` before
+the change, the head's uniqueId after. `scripts/make-lossy-chain-fixture.ts`
+documents the constraints htslib imposes before leaving all three attached —
+writing such a template the obvious way detaches the middle record instead,
+which is why no other fixture produces one.
 
-Worth knowing when comparing against `samtools view`: htslib's own decode of
-that file does **not** give the group one name. It reads back as `<file>:1`,
-`<file>:2`, `<file>:1`, because htslib names a record after its mate line only
-where that line points backwards, and the middle record's points forwards. One
-name for one template is what the mate-pairing code here needs, so this decoder
-differs on purpose.
+Worth knowing when diffing against `samtools view`: htslib's own decode of that
+file reads back `:1`, `:2`, `:1`, because it names a record after its mate line
+only where that line points backwards. One name per template is what the pairing
+code here needs, so we differ deliberately.

@@ -8,12 +8,10 @@ import { testDataFile } from './lib/util.ts'
 import type CramSlice from '../src/cramFile/slice/index.ts'
 
 // A record's uniqueId is `sliceHeader.contentPosition + recordCounter + 1 + i`
-// (ADR 0011). Issue #161 is that the CRAM spec defines the record counter as a
-// sequential index but gives a reader no way to check it, so htslib's own
-// `record_counter + rec + 1` would collide outright on a file that left the
-// counter constant. The slice's file offset is what covers that; the sweeps
-// below pin both the ids the decoder actually hands out and the two header
-// properties the no-collision argument rests on.
+// (ADR 0011). Issue #161: nothing lets a reader check the counter, so htslib's
+// own `record_counter + rec + 1` collides outright on a file that left it
+// constant, and the file offset is what covers that. These sweeps pin the ids
+// the decoder hands out and the header properties the argument rests on.
 
 function openCram(filename: string) {
   // no reference: ids come off the slice header, and every file in the corpus
