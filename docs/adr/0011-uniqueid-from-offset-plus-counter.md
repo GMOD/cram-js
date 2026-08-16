@@ -90,8 +90,8 @@ names the group after, so the two disagree only by the offset term.
 
 ## Evidence
 
-Measured across the 131 CRAMs in `test/data` — samtools, htsjdk and scramble
-output, v2.1 and v3.0, 348 slices and 126,260 records:
+Measured across the CRAMs in `test/data` — samtools, htsjdk and scramble output,
+v2.1 and v3.0, 348 slices and 126,260 records:
 
 - **The record counter is sequential in every one.** Exactly one slice per file
   reports 0, the first, and every later slice reports the previous one's counter
@@ -105,16 +105,28 @@ output, v2.1 and v3.0, 348 slices and 126,260 records:
 On the read names, `samtools view -C --output-fmt-option lossy_names=1` over a
 mixed input — a pair, two single-end reads, and a read with a supplementary
 alignment — drops the name of the pair alone and keeps the rest, and this
-decoder reproduces that grouping exactly. A three-segment template tagged
-`TC:i:3` is the same story: htslib detaches the middle record and keeps its
-name, leaving a two-link chain, and the decoder agrees record for record.
+decoder reproduces that grouping exactly.
 
-That last case is also what the walk used to get wrong. Guarding the naming on
-`if (!thisRecord.readName)` skipped the second link of a chain longer than two,
-because the record holding that link had been named on the previous iteration —
-so the last record of a three-segment group came back with `readName` undefined,
-which `IndexedCramFile` turns into a thrown `readName undefined` under
-`viewAsPairs`. Reading the name off `thisRecord` instead of testing it carries
-it the whole way down. No file in the corpus produces such a chain — all 126,260
-records decode with a name, before the change and after — so this closes a hole
-rather than fixing a reported failure.
+The walk had one hole, and it took a purpose-built file to reach it. Guarding
+the naming on `if (!thisRecord.readName)` skipped the second link of an NF chain
+longer than two, because the record holding that link had been named on the
+previous iteration — so the far end of the chain came back with `readName`
+undefined, which `IndexedCramFile` turns into a thrown `readName undefined`
+under `viewAsPairs`. Reading the name off `thisRecord` instead of testing it
+carries it the whole way down.
+
+`ce#lossy3seg.cram` is that file, and htslib writes it: three segments of one
+template, names dropped, chained `0 -> 1 -> 2`. Decoded against it, the third
+record's name is `undefined` before the change and the head's uniqueId after.
+`scripts/make-lossy-chain-fixture.ts` has the five constraints htslib imposes
+before it will leave all three attached — the ordinary way to write a
+three-segment template detaches the middle record instead, which is why none of
+the other 131 fixtures produces such a chain and why all 126,260 of their
+records decoded with a name either way.
+
+Worth knowing when comparing against `samtools view`: htslib's own decode of
+that file does **not** give the group one name. It reads back as `<file>:1`,
+`<file>:2`, `<file>:1`, because htslib names a record after its mate line only
+where that line points backwards, and the middle record's points forwards. One
+name for one template is what the mate-pairing code here needs, so this decoder
+differs on purpose.
