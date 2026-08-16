@@ -132,13 +132,17 @@ function associateIntraSliceMate(
     (mateRecord.mateRecordNumber !== undefined &&
       mateRecord.mateRecordNumber !== currentRecordNumber)
 
-  // Deal with lossy read names — assign a synthetic name from uniqueId
-  // so that paired records share the same name
-  if (!thisRecord.readName) {
-    const syntheticName = String(thisRecord.uniqueId)
-    thisRecord.setSyntheticReadName(syntheticName)
-    mateRecord.setSyntheticReadName(syntheticName)
-  }
+  // Lossy read names: the encoder drops the name of a mate group that fits in
+  // one slice, so give the group one back, named after the record holding the
+  // pointer — the ascending walk reaches it first, and htslib names the group
+  // from the same record's index (`record_counter + rec + 1`, cram_decode.c).
+  //
+  // Read the name off `thisRecord` rather than testing it: that is what carries
+  // the name past the second segment. A `!thisRecord.readName` guard skipped
+  // the second link of a three-segment chain, leaving its last record unnamed.
+  const groupName = thisRecord.readName ?? String(thisRecord.uniqueId)
+  thisRecord.setSyntheticReadName(groupName)
+  mateRecord.setSyntheticReadName(groupName)
 
   thisRecord.nextSequenceId = mateRecord.sequenceId
   thisRecord.nextStart = mateRecord.start
@@ -750,6 +754,7 @@ export default class CramSlice {
     opts?.signal?.throwIfAborted()
 
     const records: CramRecord[] = new Array(header.numRecords)
+    // See ADR 0011 for why the file offset is in here alongside the counter.
     const uniqueIdBase = sliceHeader.contentPosition + header.recordCounter + 1
     for (let i = 0; i < records.length; i += 1) {
       try {

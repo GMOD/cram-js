@@ -7,7 +7,13 @@ import TagColumn from '../src/cramFile/tagColumn.ts'
 // A minimal mapped, paired record. `mateRecordNumber` is what the decode leaves
 // behind for an intra-slice mate — `NF + recordNumber + 1`, so a well-formed one
 // always points *forward*.
-function makeRecord(start: number, mateRecordNumber: number | undefined) {
+// `readName: null` is a file that stored no name for this record — `undefined`
+// cannot say that, since it is what a defaulted argument looks like.
+function makeRecord(
+  start: number,
+  mateRecordNumber: number | undefined,
+  readName: string | null = `read${start}`,
+) {
   return new CramRecord({
     flags: 1 /* BAM_FPAIRED */,
     cramFlags: 0,
@@ -24,7 +30,7 @@ function makeRecord(start: number, mateRecordNumber: number | undefined) {
     nextSequenceId: NEXT_UNKNOWN,
     nextStart: -1,
     readGroupId: 0,
-    readName: `read${start}`,
+    readName: readName ?? undefined,
     sequenceId: 0,
     uniqueId: start,
     templateSize: undefined,
@@ -69,4 +75,36 @@ test('still rejects a mate pointer past the end of the slice', () => {
   // out of range, so nothing is associated at all rather than throwing
   associateIntraSliceMates(records)
   expect(records[0]!.hasNextPosition()).toBe(false)
+})
+
+// A file written with lossy read names stores no name for a mate group that
+// fits inside one slice, and the decode has to invent one they share. The
+// uniqueId of the record holding the pointer is what it uses — see ADR 0011.
+function makeLossyRecord(start: number, mateRecordNumber: number | undefined) {
+  return makeRecord(start, mateRecordNumber, null)
+}
+
+test('gives a lossy-named pair one name, from the head of the chain', () => {
+  const records = [makeLossyRecord(10, 1), makeLossyRecord(30, undefined)]
+  associateIntraSliceMates(records)
+  expect(records[0]!.readName).toBe('10')
+  expect(records[1]!.readName).toBe('10')
+})
+
+test('carries a lossy name past the second segment of a chain', () => {
+  const records = [
+    makeLossyRecord(10, 1),
+    makeLossyRecord(30, 2),
+    makeLossyRecord(50, undefined),
+  ]
+  associateIntraSliceMates(records)
+  // the last record used to come back with no name at all, because the walk
+  // reached it from a record that had by then been named itself
+  expect(records.map(r => r.readName)).toEqual(['10', '10', '10'])
+})
+
+test('spreads a stored name to a mate the file left unnamed', () => {
+  const records = [makeRecord(10, 1), makeLossyRecord(30, undefined)]
+  associateIntraSliceMates(records)
+  expect(records[1]!.readName).toBe('read10')
 })
