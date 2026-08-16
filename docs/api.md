@@ -105,9 +105,11 @@ controller.abort() // `records` rejects with an AbortError
 ```
 
 This is worth more than "index reads are short" suggests. A byte-range-caching
-filehandle coalesces adjacent reads into one request, so a small viewport over
-deep data becomes a single multi-megabyte fetch — exactly the thing you want to
-drop when the user pans away.
+filehandle such as
+[@gmod/range-cache-filehandle](https://github.com/GMOD/range-cache-filehandle)
+coalesces adjacent reads into one request, so a small viewport over deep data
+becomes a single multi-megabyte fetch — exactly the thing you want to drop when
+the user pans away.
 
 **Aborting your query never fails anyone else's.** Concurrent queries share two
 things in a `CramFile`: the parsed `.crai`, and each decoded slice in the record

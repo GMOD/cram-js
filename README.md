@@ -137,6 +137,28 @@ reason to reach for either is a host that runs several worker contexts, since
 one pool serves a context rather than a machine.
 [docs/workers.md](docs/workers.md) has the measurements.
 
+## Reading over HTTP
+
+An indexed query reads a file as many small byte ranges — a whole-reference
+query on a 141 KB test file issues 545 of them. A bare `RemoteFile` turns each
+one into its own range request, so put a byte-range cache underneath:
+
+```js
+import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
+
+const cram = new IndexedCramFile({
+  cramFilehandle: new RemoteFileWithRangeCache(url),
+  index: new CraiIndex({
+    filehandle: new RemoteFileWithRangeCache(`${url}.crai`),
+  }),
+})
+```
+
+It serves reads from a 256 KiB chunk grid and coalesces the chunks a read is
+missing into one request per contiguous run, so those 545 reads become a handful
+of requests. It also threads the `AbortSignal` below, which is what makes the
+next section worth anything over a network.
+
 ## Cancelling a query
 
 Pass an `AbortSignal` and the query stops decoding and drops the fetch it has in
