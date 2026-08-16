@@ -324,26 +324,66 @@ test('a b run reports nothing past the end of the reference region', () => {
   expect(record.getMismatches()).toEqual([])
 })
 
-// The end-to-end version of the same thing, over a fixture written by
+// The end-to-end version of the same thing, over fixtures written by
 // `samtools view -C --output-fmt-option no_ref`: every substitution the
-// reference-based encoding of the same 1000 reads spells as an X feature has to
-// come back out of the verbatim 'b' runs the no_ref one stores instead.
-test('a no_ref file reports the same differences as a reference-based one', async () => {
-  const fasta = new FetchableSmallFasta(testDataFile('ce.fa'))
-  const open = (name: string) =>
-    new IndexedCramFile({
-      cramFilehandle: testDataFile(name),
-      index: new CraiIndex({ filehandle: testDataFile(`${name}.crai`) }),
-      fetchReferenceSequence: fasta.fetch.bind(fasta),
-      checkSequenceMD5: false,
-    })
-  const mismatches = async (name: string) =>
-    (await open(name).getRecordsForRange(0, 0, 100000)).map(r =>
-      r.getMismatches().map(show).join(' '),
-    )
+// reference-based encoding of the same reads spells as an X feature has to come
+// back out of the verbatim 'b' runs the no_ref one stores instead.
+const ceFasta = new FetchableSmallFasta(testDataFile('ce.fa'))
 
-  const withRef = await mismatches('ce#1000.tmp.cram')
+async function ceRecords(name: string, end: number) {
+  const cram = new IndexedCramFile({
+    cramFilehandle: testDataFile(name),
+    index: new CraiIndex({ filehandle: testDataFile(`${name}.crai`) }),
+    fetchReferenceSequence: ceFasta.fetch.bind(ceFasta),
+    checkSequenceMD5: false,
+  })
+  return cram.getRecordsForRange(0, 0, end)
+}
+
+const mismatchesPerRecord = async (name: string, end: number) =>
+  (await ceRecords(name, end)).map(r => r.getMismatches().map(show).join(' '))
+
+test('a no_ref file reports the same differences as a reference-based one', async () => {
+  const withRef = await mismatchesPerRecord('ce#1000.tmp.cram', 100000)
   // guard against the comparison passing on two empty lists
   expect(withRef.filter(m => m.includes('X@')).length).toBeGreaterThan(100)
-  expect(await mismatches('ce#1000.noref.cram')).toEqual(withRef)
+  expect(await mismatchesPerRecord('ce#1000.noref.cram', 100000)).toEqual(
+    withRef,
+  )
+})
+
+// Same assertion at long-read scale, which is where a 'b' run stops being a
+// detail: these reads are ~20kb at a 4% substitution rate with indels
+// throughout, so the walk has to stay in step with the reference across
+// thousands of insertions and deletions rather than over a plain 100M read.
+// scripts/make-longread-noref-fixture.ts regenerates the pair.
+test('a long-read no_ref file agrees through indels', async () => {
+  const withRef = await mismatchesPerRecord('ce#longread.cram', 1_100_000)
+  const counts = { X: 0, I: 0, D: 0 }
+  for (const record of await ceRecords('ce#longread.cram', 1_100_000)) {
+    for (const m of record.getMismatches()) {
+      const code = String.fromCharCode(m.code) as keyof typeof counts
+      if (code in counts) {
+        counts[code] += 1
+      }
+    }
+  }
+  // the comparison is only worth as much as what it walks over
+  expect(counts.X).toBeGreaterThan(5000)
+  expect(counts.I).toBeGreaterThan(100)
+  expect(counts.D).toBeGreaterThan(100)
+
+  expect(
+    await mismatchesPerRecord('ce#longread.noref.cram', 1_100_000),
+  ).toEqual(withRef)
+})
+
+// the bases have to survive the same round trip, since a 'b' run is where the
+// no_ref encoding keeps the read sequence itself
+test('a long-read no_ref file reconstructs the same bases', async () => {
+  const withRef = await ceRecords('ce#longread.cram', 1_100_000)
+  const noRef = await ceRecords('ce#longread.noref.cram', 1_100_000)
+  expect(noRef.map(r => r.getReadBases())).toEqual(
+    withRef.map(r => r.getReadBases()),
+  )
 })

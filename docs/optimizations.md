@@ -214,6 +214,24 @@ between this walk and jbrowse's cost **+17%** — the same indirect call, paid
 twice — so the walk emits the vocabulary the consumer wants
 ([ADR 0008](adr/0008-emit-into-the-consumers-callback.md)).
 
+### no_ref files make the mismatch walk much slower
+
+Normally `forEachMismatch` skips along a handful of read features per read.
+Files written with `samtools view --output-fmt-option no_ref` are different.
+That encoder has no reference to compare against, so it never works out which
+bases are substitutions — it dumps every base into a `b` feature and moves on.
+Reading one back, the walk has to do that comparison itself, base by base,
+across the whole read.
+
+Comparing base by base runs about 7 ns per aligned base, and it stays about 7 ns
+whether the reads are 100bp or 20kb. So what drives the bill is how much
+alignment is in view, not how long the reads are.
+
+A file with no `b` features is unaffected, and nothing else about the walk
+changes. If you get to pick the encoding, speed isn't the main reason to avoid
+no_ref anyway: the same reads take 51 KB written that way against 7.7 KB written
+against a reference.
+
 ### One tag, one score, one clip length
 
 Each of these answers a question without materializing the structure that would
