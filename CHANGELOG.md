@@ -1,3 +1,25 @@
+## [13.4.1](https://github.com/GMOD/cram-js/compare/v13.4.0...v13.4.1) (2026-08-16)
+
+### Bug Fixes
+
+- Carry a lossy read name past the second segment of a mate chain ([3bfc737](https://github.com/GMOD/cram-js/commit/3bfc73740f6b7b3a83ffcf92ebe7f8194c520341))
+
+### Chores
+
+- Regenerate the stale worker bundle ([436904d](https://github.com/GMOD/cram-js/commit/436904d235ae0ece26cf4829645573c7ad3fac66))
+
+### Documentation
+
+- Record why uniqueId carries the slice offset as well as the counter ([7c12f98](https://github.com/GMOD/cram-js/commit/7c12f98eae0cd2f9ac8b1b65908ded9b77593808))
+- ADR 0011 was wrong that no file reaches the mate-walk hole ([cebce95](https://github.com/GMOD/cram-js/commit/cebce95a2499ada4c9d6454a95709ad692e9d85f))
+- Trim ADR 0011 and the comments around it ([387811b](https://github.com/GMOD/cram-js/commit/387811b538af92d83d6e83efd7bfd192e2a68939))
+
+### Tests
+
+- Assert no CRAM in the corpus hands out a uniqueId twice ([8f7128f](https://github.com/GMOD/cram-js/commit/8f7128fdf9134fe19ad16c863e9d562f4f211fb5))
+- A real CRAM that reaches the second link of the mate walk ([461b358](https://github.com/GMOD/cram-js/commit/461b3580daf46847f686a25229dbe17f8a4d10b7))
+- Sweep the corpus for records that decode without a name ([3ef3bc7](https://github.com/GMOD/cram-js/commit/3ef3bc72d3a3371863379891ab1a1cef37d72908))
+
 ## [13.4.0](https://github.com/GMOD/cram-js/compare/v13.3.0...v13.4.0) (2026-08-16)
 
 ### Bug Fixes
