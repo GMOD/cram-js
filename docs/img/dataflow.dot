@@ -13,6 +13,10 @@
 // the pool has to be a box around several steps. Same term, different mark —
 // and purple means the same thing in all three, which is why the pool is not
 // drawn in the wasm orange it used to be.
+// ~/src/gmod/hic/docs/img/dataflow.dot is the fourth, and clusters for a third
+// reason again: the two chains a region pair runs concurrently. It has neither
+// a wasm step nor a pool — its inflate is pako in JS — so its legend is the
+// two entries that remain rather than four with two of them unused.
 digraph cramjs {
   rankdir=TB
   compound=true
