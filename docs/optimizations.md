@@ -108,6 +108,37 @@ and **2.1–3.6x** from four slices up when nested inside a browser worker, whic
 is the arrangement consumers actually ship. [workers.md](workers.md) has the
 tables, including the slice-count threshold we measured for and rejected.
 
+### GPU compute shaders not currently pursued
+
+Compute shaders are the obvious next question once a consumer already has a GPU
+in the picture — [JBrowse 2](https://jbrowse.org/jb2/) runs one, and asked it.
+The answer is no, and the reason is shape rather than effort.
+
+A GPU wants thousands of lanes doing the same thing to adjacent data. The
+parallelism CRAM decompression offers is either much narrower than that or much
+coarser:
+
+- **Within a codec, the width is a handful of lanes.** rANS interleaves 4
+  streams, or 32 in the `r32x16` and striped sub-variants — a width picked to
+  fill CPU vector registers, not a GPU. `arith` and `fqzcomp` are adaptive: each
+  symbol updates the model the next one is decoded against, so within one stream
+  they are sequential by construction.
+- **Above the codecs, the independent unit is the slice** — and that is already
+  taken. The worker pool decodes whole slices in parallel (above), which is the
+  same parallelism a GPU would be reaching for, spent already and on a device
+  that can also run the record decode.
+
+Amdahl finishes it. Block decompression is **24–35%** of a cold query, so even a
+decompressor that cost nothing caps the whole query between ~1.3x and ~1.5x —
+the same ceiling the worker-pool item above runs into — and the record decode it
+would leave behind is branchy pointer-chasing work that does not belong on a GPU
+at all. Add a host-to-device round trip per block and the ceiling drops further.
+
+This one is reasoned from the structure rather than measured — unlike everything
+else on this page — because the structure decides it before a benchmark would.
+What would reopen it is a CRAM profile whose decompression share is far above
+35%, or a codec sub-variant with thousands of independent streams.
+
 ### The wasm boundary is the block
 
 Every block codec is compiled C rather than JS — samtools' own htscodecs for the
