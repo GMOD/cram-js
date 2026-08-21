@@ -122,7 +122,14 @@ emcc "${COMMON_FLAGS[@]}" -s EXPORT_ES6=1 -s ENVIRONMENT='web,worker' "${SOURCES
 # is dead code (its only consumer is `new URL(".", l)` inside an empty
 # try/catch). Replacing with "" keeps the source valid in CJS-emitted
 # output too, so tsc with allowJs can re-emit both esm/ and dist/ cleanly.
-sed -i 's/import\.meta\.url/""/g' htscodecs.esm.js
+#
+# Written through a temp file rather than `sed -i`, which is not portable: GNU
+# sed takes no argument after -i, BSD sed (macOS) requires one, and no spelling
+# satisfies both. Unfixed it failed only off CI, with `sed: 1: "htscodecs.esm.js":
+# extra characters at the end of h command` -- so `pnpm build` was broken for
+# every macOS contributor while CI stayed green.
+sed 's/import\.meta\.url/""/g' htscodecs.esm.js > htscodecs.esm.js.tmp
+mv htscodecs.esm.js.tmp htscodecs.esm.js
 
 mkdir -p ../src/wasm
 cp htscodecs.esm.js ../src/wasm/htscodecs.js
