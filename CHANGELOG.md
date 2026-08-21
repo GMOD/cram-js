@@ -1,3 +1,16 @@
+## [13.4.2](https://github.com/GMOD/cram-js/compare/v13.4.1...v13.4.2) (2026-08-21)
+
+### Bug Fixes
+
+- Take the shared-read-cache release that fixes abort, eviction and weighing ([4e972c9](https://github.com/GMOD/cram-js/commit/4e972c96922f77731ec6e908bece06e9cd383727))
+
+### Documentation
+
+- Point at @gmod/range-cache-filehandle for HTTP reads ([dc1ca93](https://github.com/GMOD/cram-js/commit/dc1ca9354bb34c01fc2b19b35d0ffa6d15956a4f))
+- Name hic in the dataflow diagram's SYNC header ([bd54007](https://github.com/GMOD/cram-js/commit/bd54007cb34603b8dafc6ebc427c2bba8e87e467))
+- Record why block decompression does not go on the GPU ([a8980c1](https://github.com/GMOD/cram-js/commit/a8980c141db1030d4ae059b5d59da22c535177d2))
+- Point remote readers at @gmod/range-cache-filehandle ([298d174](https://github.com/GMOD/cram-js/commit/298d174d1caf2400d9045a7248abcc62b59c4cbb))
+
 ## [13.4.1](https://github.com/GMOD/cram-js/compare/v13.4.0...v13.4.1) (2026-08-16)
 
 ### Bug Fixes
