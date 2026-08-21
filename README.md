@@ -141,7 +141,9 @@ one pool serves a context rather than a machine.
 
 An indexed query reads a file as many small byte ranges — a whole-reference
 query on a 141 KB test file issues 545 of them. A bare `RemoteFile` turns each
-one into its own range request, so put a byte-range cache underneath:
+one into its own range request, so put
+[`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
+underneath:
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
