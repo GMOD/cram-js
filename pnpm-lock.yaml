@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@gmod/shared-read-cache':
-        specifier: ^1.5.1
-        version: 1.5.1
+        specifier: ^1.7.2
+        version: 1.7.2
       crc:
         specifier: ^4.3.2
         version: 4.3.2(buffer@6.0.3)
@@ -153,8 +153,8 @@ packages:
   '@gmod/indexedfasta@5.0.9':
     resolution: {integrity: sha512-VQfHmZQ/K2nJKKQPLzAQFYV/BaXpXVlMhayi4UMlVRMdtsuQdlbMsz0sXZiWy+kE0Liqu7i44L/SvhI+gDZBdw==}
 
-  '@gmod/shared-read-cache@1.5.1':
-    resolution: {integrity: sha512-2Me6eOJhBrZzYruG1t73trs29ovAMSNnn6JzzzYcL4t1/bxK3EToyDBPslcoebTrg5zDeocA+yzgwsQ2mHe0eA==}
+  '@gmod/shared-read-cache@1.7.2':
+    resolution: {integrity: sha512-N71dzJHYYSEAZYQCl38QGZ8cx468lFZE9VdS29N2DhRbKMf/X7Qb+cJsuIt1MeVDmpvKui5wDiNILgkQREpwlw==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -1814,7 +1814,7 @@ snapshots:
       '@jbrowse/quick-lru': 7.3.5
       generic-filehandle2: 2.2.1
 
-  '@gmod/shared-read-cache@1.5.1': {}
+  '@gmod/shared-read-cache@1.7.2': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
