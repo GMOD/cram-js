@@ -109,6 +109,22 @@ That is why 113 KB of wasm fits in a 128 KB file, where base64 would have needed
 151 KB of it — worth knowing before anyone tries to "fix" the encoding or
 measures the wrong thing.
 
+That encoding is a property of emscripten's output, not a better encoding the
+lzma module is missing out on, and it stays base64 on purpose. Converting it has
+been measured: the source drops from 16,810 to 13,730 bytes, but terser
+re-escapes the control bytes when it bundles, so the saving in `dist/` is 634
+bytes, or 1.7 KB gzipped. The ratio is not the problem — one character per byte
+costs 1.09x here against base64's 1.33x, the same as htscodecs. The problem is
+that the two files are different kinds of artifact. `htscodecs.js` is build
+output: `pnpm build:wasm` regenerates it, `.prettierignore` skips it, and nobody
+opens it. `wasm.ts` was vendored once in e8e140c, has no generator, and sits in
+the lint, format and typecheck path. Emscripten's scheme writes control bytes
+into the source unescaped — 6,600 of them at this size — which would make git
+treat the file as binary and leave any line-ending normalization free to corrupt
+it silently, surfacing as an `instantiate` failure with nothing to re-derive the
+file from. Base64 is inert ASCII, which is the right trade for a hand-maintained
+blob.
+
 Because that first instantiation is async, every decoder entry point in
 `src/htscodecs-wasm.ts` is async too; once it has happened, calls resolve
 against an instance that already exists.
