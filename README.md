@@ -140,7 +140,7 @@ one pool serves a context rather than a machine.
 ## Reading over HTTP
 
 An indexed query reads a file as many small byte ranges — a whole-reference
-query on a 141 KB test file issues 545 of them, half of those under 80 bytes. A
+query on a 141 KB test file issues 546 of them, half of those under 80 bytes. A
 bare `RemoteFile` turns each one into its own range request, so put
 [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
 underneath:
@@ -157,7 +157,7 @@ const cram = new IndexedCramFile({
 ```
 
 The cache serves those reads out of 256 KiB chunks, so neighboring reads share a
-request and the 545 become a handful. It also threads the `AbortSignal` below,
+request and the 546 become a handful. It also threads the `AbortSignal` below,
 which is what makes the next section worth anything over a network.
 
 ## Cancelling a query
