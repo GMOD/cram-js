@@ -705,6 +705,17 @@ export default class CramRecord {
   }
 
   /**
+   * The end htslib's bam_endpos() reports: start + lengthOnRef, floored at one
+   * base — a record consuming no reference (fully soft-clipped, or an unmapped
+   * mate placed at its mate's coordinate) still covers the base it sits at, so
+   * a consumer's interval search can find it. The range filter in
+   * indexedCramFile applies the same floor to its own span test.
+   */
+  get end() {
+    return this.start + Math.max(this.lengthOnRef ?? 0, 1)
+  }
+
+  /**
    * This record's value for the aux tag `name`, or undefined if it has none.
    *
    * Prefer this over {@link tags} whenever you want one tag: it scans this
