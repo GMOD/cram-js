@@ -1,3 +1,22 @@
+## [13.4.3](https://github.com/GMOD/cram-js/compare/v13.4.2...v13.4.3) (2026-08-31)
+
+### Chores
+
+- Make the wasm build's sed work off Linux ([c625dd3](https://github.com/GMOD/cram-js/commit/c625dd31b894329115df852d6f3cb1e7fd1bb818))
+
+### Documentation
+
+- Record why the lzma module stays base64 ([13788b5](https://github.com/GMOD/cram-js/commit/13788b58f9bac71ad6b4a5cec53fe359726f9a8b))
+- Say what the read pattern actually is before recommending the range cache ([d367ffe](https://github.com/GMOD/cram-js/commit/d367ffe93856ab4849ab3a0951cdf31efb570003))
+
+### Features
+
+- CramRecord.end reports bam_endpos semantics ([0a53bef](https://github.com/GMOD/cram-js/commit/0a53bef8a41f1ca4b18281de18c83b8511b0a245))
+
+### Tests
+
+- Assert the read pattern the README describes ([f3d50d2](https://github.com/GMOD/cram-js/commit/f3d50d26dae658006b3d44e27ebf170d56956184))
+
 ## [13.4.2](https://github.com/GMOD/cram-js/compare/v13.4.1...v13.4.2) (2026-08-21)
 
 ### Bug Fixes
