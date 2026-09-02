@@ -9,6 +9,7 @@ import {
 import { open } from '../io.ts'
 import { getSharedSliceWorkerPool } from '../sliceWorkerPool.ts'
 import CramContainer from './container/index.ts'
+import { baseRecordClass } from './decodedSlice.ts'
 import { memoizeAsync } from './memoize.ts'
 import { parseBlockFromBuffer, uncompressBlockContent } from './parseBlock.ts'
 import { parseHeaderText } from '../sam.ts'
@@ -22,6 +23,7 @@ import { decodeUtf8, parseItem } from './util.ts'
 
 import type DecodedSlice from './decodedSlice.ts'
 import type { CramRecordClass } from './decodedSlice.ts'
+import type CramRecord from './record.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { SharedBudget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
@@ -140,7 +142,7 @@ function parseReferenceInfo(
  * no consumer could reach: the only public entry point silently dropped them.
  * Add options here and both constructors take them.
  */
-export interface CramFileOptions {
+export interface CramFileOptions<T extends CramRecord = CramRecord> {
   /**
    * Verify each slice's recorded reference MD5 against the sequence it is being
    * decoded with. Default false — the check needs the slice's whole reference
@@ -252,10 +254,11 @@ export interface CramFileOptions {
    * `new RecordClass(slice, index)`; anything else it needs it takes off the
    * record it is. The same hook `@gmod/bam` offers under the same name.
    */
-  recordClass?: CramRecordClass
+  recordClass?: CramRecordClass<T>
 }
 
-export type CramFileArgs = CramFileSource & CramFileOptions
+export type CramFileArgs<T extends CramRecord = CramRecord> = CramFileSource &
+  CramFileOptions<T>
 
 export type CramFileBlock = BlockHeader & {
   _endPosition: number
@@ -265,13 +268,13 @@ export type CramFileBlock = BlockHeader & {
   crc32?: number
 }
 
-export default class CramFile {
+export default class CramFile<T extends CramRecord = CramRecord> {
   private file: GenericFilehandle
   public validateChecksums: boolean
   private useSliceWorkerPool: boolean
   private numSliceWorkers: number | undefined
   public fetchReferenceSequenceCallback?: SeqFetch
-  public recordClass: CramRecordClass | undefined
+  public recordClass: CramRecordClass<T>
   public options: {
     checkSequenceMD5: boolean
     maxCacheBytes: number
@@ -322,13 +325,15 @@ export default class CramFile {
     }
   }
 
-  constructor(args: CramFileArgs) {
+  constructor(args: CramFileArgs<T>) {
     this.file = open(args.url, args.path, args.filehandle)
     this.validateChecksums = args.validateChecksums ?? false
     this.useSliceWorkerPool = args.useSliceWorkerPool ?? true
     this.numSliceWorkers = args.numSliceWorkers
     this.fetchReferenceSequenceCallback = args.fetchReferenceSequence
-    this.recordClass = args.recordClass
+    // the base class is the default for the default T, which the type of
+    // `recordClass` cannot say on its own — the same cast @gmod/bam makes
+    this.recordClass = args.recordClass ?? baseRecordClass<T>()
     this.options = {
       // off unless asked for: the check needs the whole span a slice was
       // written against, which for a big slice is many megabases the query

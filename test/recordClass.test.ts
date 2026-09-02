@@ -21,7 +21,7 @@ test('recordClass hands out the consumer subclass from every query', async () =>
     fetchReferenceSequence: async (_id, start, end) => 'A'.repeat(end - start),
     recordClass: Feature,
   })
-  const records = (await cram.getRecordsForRange(0, 0, 1000)) as Feature[]
+  const records = await cram.getRecordsForRange(0, 0, 1000)
   expect(records.length).toBeGreaterThan(0)
   for (const r of records) {
     expect(r).toBeInstanceOf(Feature)

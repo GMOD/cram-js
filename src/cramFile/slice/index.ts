@@ -50,9 +50,9 @@ export interface ReferenceSpan {
 /** reference bases already fetched for one sequence, and which one */
 type KnownRegion = RefRegion & { seqId: number }
 
-export default class CramSlice {
-  private file: CramFile
-  container: CramContainer
+export default class CramSlice<T extends CramRecord = CramRecord> {
+  private file: CramFile<T>
+  container: CramContainer<T>
   containerPosition: number
   private sliceSize: number | undefined
   private indexSpan: ReferenceSpan | undefined
@@ -69,7 +69,7 @@ export default class CramSlice {
   )
 
   constructor(
-    container: CramContainer,
+    container: CramContainer<T>,
     containerPosition: number,
     sliceSize?: number,
     indexSpan?: ReferenceSpan,
@@ -584,7 +584,7 @@ export default class CramSlice {
   }
 
   async getRecords(
-    filterFunction: (r: CramRecord) => boolean,
+    filterFunction: (r: T) => boolean,
     decodeOptions?: DecodeOptions & BaseOpts,
   ) {
     // Resolve defaults per-key rather than by spreading: callers routinely

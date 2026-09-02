@@ -7,6 +7,7 @@ import { getSectionParsers } from '../sectionParsers.ts'
 
 import type { ReadOpts } from '../../opts.ts'
 import type CramFile from '../file.ts'
+import type CramRecord from '../record.ts'
 import type { ReferenceSpan } from '../slice/index.ts'
 
 /** how many landmarks the speculative header read leaves room for */
@@ -24,8 +25,8 @@ function concat(a: Uint8Array, b: Uint8Array) {
 // one query and a signal can be threaded straight through them. See
 // `memoizeAsync` for why that matters, and `CramFile.featureCache` for the one read
 // that *is* shared between queries.
-export default class CramContainer {
-  file: CramFile
+export default class CramContainer<T extends CramRecord = CramRecord> {
+  file: CramFile<T>
   filePosition: number
   private _headerMemo = memoizeAsync((opts?: ReadOpts) =>
     this._fetchHeader(opts),
@@ -37,7 +38,7 @@ export default class CramContainer {
     this._fetchCompressionScheme(opts),
   )
 
-  constructor(file: CramFile, filePosition: number) {
+  constructor(file: CramFile<T>, filePosition: number) {
     this.file = file
     this.filePosition = filePosition
   }

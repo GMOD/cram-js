@@ -35,14 +35,15 @@ export interface CramIndexLike {
   ) => Promise<boolean>
 }
 
-export type IndexedCramFileArgs = {
+export type IndexedCramFileArgs<T extends CramRecord = CramRecord> = {
   index: CramIndexLike
 } & (
-  { cram: CramFile } | ({ cram?: undefined } & CramFileSource & CramFileOptions)
+  | { cram: CramFile<T> }
+  | ({ cram?: undefined } & CramFileSource & CramFileOptions<T>)
 )
 
-export default class IndexedCramFile {
-  public cram: CramFile
+export default class IndexedCramFile<T extends CramRecord = CramRecord> {
+  public cram: CramFile<T>
   public index: CramIndexLike
 
   /**
@@ -57,7 +58,7 @@ export default class IndexedCramFile {
    * itself; they used to be re-documented here, next to a constructor that
    * re-listed them, and both copies drifted from the real set.
    */
-  constructor(args: IndexedCramFileArgs) {
+  constructor(args: IndexedCramFileArgs<T>) {
     if (args.cram) {
       this.cram = args.cram
     } else {
@@ -147,7 +148,7 @@ export default class IndexedCramFile {
     // would put the first query's signal in charge of a header every later query
     // depends on — the leak `CramFile.featureCache` and `CraiIndex` handle explicitly,
     // reappearing at a third site with nothing to handle it.
-    const containers = new Map<number, CramContainer>()
+    const containers = new Map<number, CramContainer<T>>()
 
     // fetch all the slices and parse the feature data
     const sliceResults = await Promise.all(
@@ -197,7 +198,7 @@ export default class IndexedCramFile {
       ),
     )
 
-    let ret: CramRecord[] = sliceResults.flat()
+    let ret: T[] = sliceResults.flat()
     if (viewAsPairs) {
       const readNameCounts: Record<string, number> = {}
       const seenUniqueIds = new Set<number>()
@@ -284,7 +285,7 @@ export default class IndexedCramFile {
       start?: number
       span?: number
     },
-    filterFunction: (r: CramRecord) => boolean,
+    filterFunction: (r: T) => boolean,
     decodeOptions?: DecodeOptions & BaseOpts,
     /**
      * Containers already built for the query this call belongs to, so that
@@ -292,7 +293,7 @@ export default class IndexedCramFile {
      * query — see where `getRecordsForRange` creates it. Omitting it is
      * correct, just one container's worth of re-reading per slice.
      */
-    containers?: Map<number, CramContainer>,
+    containers?: Map<number, CramContainer<T>>,
   ) {
     let container = containers?.get(containerStart)
     if (!container) {

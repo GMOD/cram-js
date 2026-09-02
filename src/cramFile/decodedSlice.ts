@@ -36,10 +36,20 @@ import type { CramRecordArgs, RefRegion } from './record.ts'
  * `CramFileOptions.recordClass`. Constructed the way the base class is, with
  * the slice and an index.
  */
-export type CramRecordClass = new (
+export type CramRecordClass<T extends CramRecord = CramRecord> = new (
   slice: DecodedSlice,
   index: number,
-) => CramRecord
+) => T
+
+/**
+ * The base class under the constructor shape `recordClass` is typed by. A
+ * function rather than a constant: this module and `record.ts` import each
+ * other, so the class is not initialised until both have loaded.
+ */
+export function baseRecordClass<T extends CramRecord>() {
+  const base: CramRecordClass = CramRecord
+  return base as CramRecordClass<T>
+}
 
 /** Number of `Int32Array` slots each record occupies in {@link DecodedSlice.scalars}. */
 export const SCALAR_STRIDE = 18
@@ -167,11 +177,11 @@ export default class DecodedSlice {
    * fresh each call — nothing here retains one, which is what keeps a cached
    * slice at the size of its columns.
    */
-  records(
-    filter?: (record: CramRecord) => boolean,
-    RecordClass: CramRecordClass = CramRecord,
+  records<T extends CramRecord = CramRecord>(
+    filter?: (record: T) => boolean,
+    RecordClass = baseRecordClass<T>(),
   ) {
-    const out: CramRecord[] = []
+    const out: T[] = []
     for (let i = 0; i < this.recordCount; i++) {
       const record = new RecordClass(this, i)
       if (filter === undefined || filter(record)) {
