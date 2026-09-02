@@ -421,8 +421,7 @@ export default class CramSlice {
         // check; it covers every mapped read, so it is the fetch in all but
         // the odd file whose records reach outside it
         if (
-          known &&
-          known.seqId === seqId &&
+          known?.seqId === seqId &&
           known.start <= span.start &&
           known.end >= span.end
         ) {
@@ -618,6 +617,6 @@ export default class CramSlice {
       decodeOptions?.signal,
       signal => this._decodeSlice(opts, { signal }),
     )
-    return slice.records(filterFunction)
+    return slice.records(filterFunction, this.file.recordClass)
   }
 }

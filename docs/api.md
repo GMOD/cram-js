@@ -77,6 +77,25 @@ four slices up ([workers.md](workers.md)).
 first file to need one fixes the size for the rest, and a host running several
 worker contexts gets a pool in each.
 
+### `recordClass`
+
+A subclass of `CramRecord` to hand out from every query in place of the base
+class. A consumer that keeps its own object per read — a feature — can make that
+object the record itself rather than wrap one, which `@gmod/bam` offers under
+the same name:
+
+```js
+class MyFeature extends CramRecord {
+  get name() {
+    return this.readName
+  }
+}
+new IndexedCramFile({ ..., recordClass: MyFeature })
+```
+
+It is constructed as `new MyFeature(slice, index)`, the same way the base class
+is; anything else it needs it reads off itself.
+
 ### Unplaced reads
 
 Unplaced reads have no position at all and sort to the end of the file. Both

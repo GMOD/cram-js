@@ -21,6 +21,7 @@ import {
 import { decodeUtf8, parseItem } from './util.ts'
 
 import type DecodedSlice from './decodedSlice.ts'
+import type { CramRecordClass } from './decodedSlice.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { SharedBudget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
@@ -257,6 +258,14 @@ export interface CramFileOptions {
    * spreads CRAM across contexts like that.
    */
   numSliceWorkers?: number
+  /**
+   * A subclass of `CramRecord` to hand out from every query in place of the
+   * base class, so that a consumer with its own per-read object — a feature,
+   * say — can be that object rather than wrap one. Constructed as
+   * `new RecordClass(slice, index)`; anything else it needs it takes off the
+   * record it is. The same hook `@gmod/bam` offers under the same name.
+   */
+  recordClass?: CramRecordClass
 }
 
 export type CramFileArgs = CramFileSource & CramFileOptions
@@ -275,6 +284,7 @@ export default class CramFile {
   private useSliceWorkerPool: boolean
   private numSliceWorkers: number | undefined
   public fetchReferenceSequenceCallback?: SeqFetch
+  public recordClass: CramRecordClass | undefined
   public options: {
     checkSequenceMD5: boolean
     cacheSize: number
@@ -331,6 +341,7 @@ export default class CramFile {
     this.useSliceWorkerPool = args.useSliceWorkerPool ?? true
     this.numSliceWorkers = args.numSliceWorkers
     this.fetchReferenceSequenceCallback = args.fetchReferenceSequence
+    this.recordClass = args.recordClass
     this.options = {
       // off unless asked for: the check needs the whole span a slice was
       // written against, which for a big slice is many megabases the query

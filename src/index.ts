@@ -56,6 +56,7 @@ export {
 export type { TagValue } from './cramFile/tagColumn.ts'
 export { default as CramFile } from './cramFile/index.ts'
 export { default as DecodedSlice } from './cramFile/decodedSlice.ts'
+export type { CramRecordClass } from './cramFile/decodedSlice.ts'
 export {
   DEFAULT_CACHE_IDLE_TIMEOUT_MS,
   DEFAULT_CACHE_SIZE,
