@@ -57,6 +57,18 @@ whole-reference query on `ce#1000` went from 546 reads, half under 80 bytes, to
 231 — one per slice and three per container. Over a byte-range cache those were
 already hits; locally they were syscalls and copies.
 
+### The reference is fetched alongside the decode, not after it
+
+`applyReferenceSequence` asks for the extent of a slice's reads, which it only
+knows once the slice is decoded — so every slice used to pay slice read, decode,
+reference read, resolve in series, and a consumer's sequence source is usually
+remote. The slice's declared span is the same extent, and the `.crai` carries
+it, so the fetch now starts before the slice's own bytes are read and the decode
+joins it. Measured over every indexed fixture, the declared span equals the
+reads' extent on every slice but one, where an unmapped read placed past it
+costs the exact fetch it always cost. jbrowse's integration notes had carried
+this as their open "seam 1"; bam-js measured the equivalent at 1.5x on a pan.
+
 ### The slices of one query share their containers
 
 A CRAM packs several slices per container, so without this every slice re-read

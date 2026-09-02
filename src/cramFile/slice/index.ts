@@ -40,11 +40,22 @@ interface SliceBytes {
   filePosition: number
 }
 
+/** a 0-based half-open stretch of one reference */
+export interface ReferenceSpan {
+  seqId: number
+  start: number
+  end: number
+}
+
+/** reference bases already fetched for one sequence, and which one */
+type KnownRegion = RefRegion & { seqId: number }
+
 export default class CramSlice {
   private file: CramFile
   container: CramContainer
   containerPosition: number
   private sliceSize: number | undefined
+  private indexSpan: ReferenceSpan | undefined
   // Like `CramContainer`, a slice is constructed per query rather than looked
   // up, so these memos are private to one query and take its signal directly.
   // The decoded slice *is* shared between queries, through
@@ -61,11 +72,13 @@ export default class CramSlice {
     container: CramContainer,
     containerPosition: number,
     sliceSize?: number,
+    indexSpan?: ReferenceSpan,
   ) {
     this.file = container.file
     this.container = container
     this.containerPosition = containerPosition
     this.sliceSize = sliceSize
+    this.indexSpan = indexSpan
   }
 
   /**
@@ -259,7 +272,7 @@ export default class CramSlice {
     sliceHeader: SliceHeader,
     majorVersion: number,
     opts?: ReadOpts,
-  ): Promise<RefRegion | undefined> {
+  ): Promise<KnownRegion | undefined> {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
@@ -281,11 +294,57 @@ export default class CramSlice {
               `MD5 checksum reference mismatch for ref ${sliceHeader.parsedContent.refSeqId} pos ${start}..${end}. recorded MD5: ${storedMd5}, calculated MD5: ${seqMd5}`,
             )
           }
-          return { start, end, seq }
+          return { seqId: sliceHeader.parsedContent.refSeqId, start, end, seq }
         }
       }
     }
     return undefined
+  }
+
+  /**
+   * Start fetching the reference for `span` now, ahead of the decode that will
+   * need it.
+   *
+   * The reference read used to be strictly downstream of the decode: the span
+   * to ask for was computed from the decoded records, so every slice paid
+   * slice read, decode, reference read, resolve in series — and a consumer's
+   * sequence source is usually remote. The slice's declared span is known up
+   * front, from the `.crai` before the slice is even read, or from its header
+   * once it is. Fetching that span overlaps the reference with everything else;
+   * `applyReferenceSequence` uses it if it covers what the records turn out to
+   * need and falls back to the exact fetch otherwise.
+   *
+   * Clamped to the reference's length so a span declared past the end of a
+   * contig does not fail the fetch, and never rejects: the fetch this replaces
+   * is the one whose failure counts, and it still happens if this one fails.
+   */
+  private async startReferenceFetch(
+    span: ReferenceSpan,
+    opts?: ReadOpts,
+  ): Promise<KnownRegion | undefined> {
+    const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
+    if (!fetchReferenceSequence || span.seqId < 0) {
+      return undefined
+    }
+    try {
+      const info = (await this.file.getReferenceInfo())[span.seqId]
+      const start = Math.max(span.start, 0)
+      const end =
+        info === undefined ? span.end : Math.min(span.end, info.length)
+      if (start >= end) {
+        return undefined
+      }
+      const seq = await fetchReferenceSequence(
+        span.seqId,
+        start,
+        end,
+        info?.name,
+        opts,
+      )
+      return seq ? { seqId: span.seqId, start, end, seq } : undefined
+    } catch {
+      return undefined
+    }
   }
 
   /**
@@ -312,7 +371,7 @@ export default class CramSlice {
   private async applyReferenceSequence(
     slice: DecodedSlice,
     header: MappedSliceHeader,
-    md5Region: RefRegion | undefined,
+    known: KnownRegion | undefined,
     opts?: ReadOpts,
   ) {
     const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
@@ -323,7 +382,7 @@ export default class CramSlice {
     ) {
       return
     }
-    if (!fetchReferenceSequence && !md5Region) {
+    if (!fetchReferenceSequence && !known) {
       return
     }
     const singleRefId = header.refSeqId >= 0 ? header.refSeqId : undefined
@@ -358,14 +417,16 @@ export default class CramSlice {
         if (seqId === -1 || span.start >= span.end) {
           return
         }
-        // the md5 check already fetched the slice's declared reference, which
-        // covers every mapped read in it, so reuse rather than fetch again
+        // the declared span was fetched ahead of the decode, or by the md5
+        // check; it covers every mapped read, so it is the fetch in all but
+        // the odd file whose records reach outside it
         if (
-          md5Region &&
-          md5Region.start <= span.start &&
-          md5Region.end >= span.end
+          known &&
+          known.seqId === seqId &&
+          known.start <= span.start &&
+          known.end >= span.end
         ) {
-          resolved.set(seqId, md5Region)
+          resolved.set(seqId, known)
           return
         }
         if (!fetchReferenceSequence) {
@@ -474,18 +535,34 @@ export default class CramSlice {
     opts?: ReadOpts,
   ): Promise<DecodedSlice> {
     const { majorVersion } = await this.file.getDefinition()
+    const checkMd5 = this.file.options.checkSequenceMD5
+    // from the index, this starts before the slice's own bytes are read
+    const early =
+      this.indexSpan && !checkMd5
+        ? this.startReferenceFetch(this.indexSpan, opts)
+        : undefined
     const sliceHeader = await this.getHeader(opts)
-
-    const md5Region = await this.checkReferenceMd5(
-      sliceHeader,
-      majorVersion,
-      opts,
-    )
-
     const header = sliceHeader.parsedContent
     if (!isMappedSliceHeader(header)) {
       throw new CramMalformedError('slice header not mapped')
     }
+
+    // The reference, in flight alongside the decode. The md5 check fetches the
+    // same declared span, so with it on that is the fetch; its rejection is
+    // observed below, after the decode, and the interim handler only keeps the
+    // runtime from reporting it as unhandled in the meantime.
+    const reference = checkMd5
+      ? this.checkReferenceMd5(sliceHeader, majorVersion, opts)
+      : (early ??
+        this.startReferenceFetch(
+          {
+            seqId: header.refSeqId,
+            start: header.refSeqStart,
+            end: header.refSeqStart + header.refSeqSpan,
+          },
+          opts,
+        ))
+    reference.catch(() => undefined)
 
     const request = await this.buildDecodeRequest(decodeOptions, opts)
     const pool = await this.file.getSliceWorkerPool()
@@ -503,7 +580,7 @@ export default class CramSlice {
         await this.getCompressionScheme(opts),
       )
     }
-    await this.applyReferenceSequence(slice, header, md5Region, opts)
+    await this.applyReferenceSequence(slice, header, await reference, opts)
     return slice
   }
 

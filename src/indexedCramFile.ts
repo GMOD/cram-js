@@ -272,7 +272,18 @@ export default class IndexedCramFile {
       containerStart,
       sliceStart,
       sliceBytes,
-    }: { containerStart: number; sliceStart: number; sliceBytes: number },
+      seqId,
+      start,
+      span,
+    }: {
+      containerStart: number
+      sliceStart: number
+      sliceBytes: number
+      /** where the index says the slice's reads lie; see `CramContainer.getSlice` */
+      seqId?: number
+      start?: number
+      span?: number
+    },
     filterFunction: (r: CramRecord) => boolean,
     decodeOptions?: DecodeOptions & BaseOpts,
     /**
@@ -288,7 +299,13 @@ export default class IndexedCramFile {
       container = this.cram.getContainerAtPosition(containerStart)
       containers?.set(containerStart, container)
     }
-    const slice = container.getSlice(sliceStart, sliceBytes)
+    const slice = container.getSlice(
+      sliceStart,
+      sliceBytes,
+      seqId === undefined || start === undefined || span === undefined
+        ? undefined
+        : { seqId, start, end: start + span },
+    )
     return slice.getRecords(filterFunction, decodeOptions)
   }
 

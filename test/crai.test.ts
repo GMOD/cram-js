@@ -13,23 +13,24 @@ function indexFromText(text: string) {
   })
 }
 
-const entry = {
+const entry = (seqId: number) => ({
+  seqId,
   start: 0,
   span: 20,
   containerStart: 562,
   sliceStart: 143,
   sliceBytes: 200,
-}
+})
 
 test('parses a record with no trailing newline', async () => {
   expect(await indexFromText('0\t1\t20\t562\t143\t200').getIndex()).toEqual({
-    0: [entry],
+    0: [entry(0)],
   })
 })
 
 test('parses negative sequence ids', async () => {
   expect(await indexFromText('-1\t1\t20\t562\t143\t200\n').getIndex()).toEqual({
-    '-1': [entry],
+    '-1': [entry(-1)],
   })
 })
 
@@ -39,6 +40,7 @@ test('parses multi-digit values exactly', async () => {
   ).getIndex()
   expect(data[0]).toEqual([
     {
+      seqId: 0,
       start: 100008,
       span: 102,
       containerStart: 1953,
@@ -52,7 +54,7 @@ test('tolerates blank lines and trailing whitespace', async () => {
   const data = await indexFromText(
     '0\t1\t20\t562\t143\t200\n\n0\t1\t20\t562\t143\t200\r\n',
   ).getIndex()
-  expect(data[0]).toEqual([entry, entry])
+  expect(data[0]).toEqual([entry(0), entry(0)])
 })
 
 test('throws on a record with too few fields', async () => {
@@ -86,6 +88,7 @@ test('can read xx#unsorted.tmp.cram.crai', async () => {
   expect(data).toEqual({
     0: [
       {
+        seqId: 0,
         start: 0,
         span: 20,
         containerStart: 562,
@@ -93,6 +96,7 @@ test('can read xx#unsorted.tmp.cram.crai', async () => {
         sliceBytes: 200,
       },
       {
+        seqId: 0,
         start: 0,
         span: 20,
         containerStart: 923,
@@ -102,6 +106,7 @@ test('can read xx#unsorted.tmp.cram.crai', async () => {
     ],
     1: [
       {
+        seqId: 1,
         start: 0,
         span: 10,
         containerStart: 923,
@@ -109,6 +114,7 @@ test('can read xx#unsorted.tmp.cram.crai', async () => {
         sliceBytes: 243,
       },
       {
+        seqId: 1,
         start: 10,
         span: 10,
         containerStart: 252,
@@ -153,6 +159,7 @@ test('can read cramQueryWithCRAI.cram.crai', async () => {
   expect(data).toEqual({
     0: [
       {
+        seqId: 0,
         start: 100008,
         span: 102,
         containerStart: 1953,
@@ -162,6 +169,7 @@ test('can read cramQueryWithCRAI.cram.crai', async () => {
     ],
     '-1': [
       {
+        seqId: -1,
         start: -1,
         span: 1,
         containerStart: 3590,
@@ -179,6 +187,7 @@ test('can read small crai file', async () => {
   expect(data).toEqual({
     0: [
       {
+        seqId: 0,
         start: 0,
         span: 12495,
         containerStart: 418,
@@ -186,6 +195,7 @@ test('can read small crai file', async () => {
         sliceBytes: 537131,
       },
       {
+        seqId: 0,
         start: 12404,
         span: 13371,
         containerStart: 537849,
@@ -193,6 +203,7 @@ test('can read small crai file', async () => {
         sliceBytes: 538434,
       },
       {
+        seqId: 0,
         start: 25678,
         span: 4414,
         containerStart: 1076585,
@@ -207,6 +218,7 @@ test('can read small crai file', async () => {
       sliceBytes: 167795,
       sliceStart: 281,
       span: 4414,
+      seqId: 0,
       start: 25678,
     },
   ])

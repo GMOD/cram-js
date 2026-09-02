@@ -7,6 +7,7 @@ import { getSectionParsers } from '../sectionParsers.ts'
 
 import type { ReadOpts } from '../../opts.ts'
 import type CramFile from '../file.ts'
+import type { ReferenceSpan } from '../slice/index.ts'
 
 // A container is built fresh for every query — `CramFile.getContainerAtPosition`
 // constructs one rather than looking one up — so the memos below are private to
@@ -112,9 +113,11 @@ export default class CramContainer {
    * The slice at `slicePosition`, a byte offset from the end of the container
    * header — a `.crai` `sliceStart`, or one of the header's landmarks. The size
    * comes from the index; leave it out and it is worked out from the landmarks.
+   * `span` is the index's word on where the slice's reads lie, which lets the
+   * slice start fetching its reference before its own bytes arrive.
    */
-  getSlice(slicePosition: number, sliceSize?: number) {
-    return new CramSlice(this, slicePosition, sliceSize)
+  getSlice(slicePosition: number, sliceSize?: number, span?: ReferenceSpan) {
+    return new CramSlice(this, slicePosition, sliceSize, span)
   }
 
   /**

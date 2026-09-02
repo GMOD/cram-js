@@ -18,6 +18,8 @@ const BAI_MAGIC = 21_578_050 // BAI\1
 export type IndexOpts = BaseOpts
 
 export interface Slice {
+  /** the reference the slice is on, -1 for unplaced reads */
+  seqId: number
   /** 0-based start of the slice on the reference (the .crai stores 1-based) */
   start: number
   span: number
@@ -61,6 +63,7 @@ function addRecordToIndex(index: ParsedIndex, fields: number[]) {
   }
 
   index[seqId].push({
+    seqId,
     // the .crai column is 1-based; everything past this parse is 0-based
     start: fields[1]! - 1,
     span: fields[2]!,
