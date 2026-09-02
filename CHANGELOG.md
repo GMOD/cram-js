@@ -1,3 +1,25 @@
+## [14.0.0](https://github.com/GMOD/cram-js/compare/v13.4.3...v14.0.0) (2026-09-02)
+
+### Chores
+
+- Pin the wasm build to emscripten 6.0.6 on both sides ([dddcad5](https://github.com/GMOD/cram-js/commit/dddcad50a474f3fd2ecc40f5e7366417d99f3b03))
+
+### Documentation
+
+- HEAPU8.slice in copyFromWasm, measured and not taken ([4b05155](https://github.com/GMOD/cram-js/commit/4b05155cf67ae994d672a47183264ff59f931d5a))
+
+### Features
+
+- **BREAKING** A record is a view onto its slice's columns, and a slice is one read ([04c05a6](https://github.com/GMOD/cram-js/commit/04c05a6b68f0c64631aee859338460f3d2f367ca))
+- RecordClass, so a consumer's per-read object can be the record ([91b4926](https://github.com/GMOD/cram-js/commit/91b4926c3ac0e8a41f3c9919f264deb44ee3b9fd))
+- **BREAKING** Weigh the decoded-slice cache in bytes ([5e344e6](https://github.com/GMOD/cram-js/commit/5e344e64225970133e05afabc72397655398be0e))
+- Type the record class through CramFile and IndexedCramFile ([424c58d](https://github.com/GMOD/cram-js/commit/424c58d8c16168418419e191204d3f99173b3f6c))
+
+### Performance Improvements
+
+- Fetch a slice's reference alongside its decode, not after it ([674bef2](https://github.com/GMOD/cram-js/commit/674bef22d620cee4bf1a8e136a8a489ce9d259ea))
+- Read a container header in one speculative read ([39e4b0b](https://github.com/GMOD/cram-js/commit/39e4b0b56149b77b6104a7fa70700f33e8154ff3))
+
 ## [13.4.3](https://github.com/GMOD/cram-js/compare/v13.4.2...v13.4.3) (2026-08-31)
 
 ### Chores
