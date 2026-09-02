@@ -166,3 +166,15 @@ per-record arena. That walk switches per read at 64 ops, matching the ~50–100
 crossover bam-js measured in its own `src/record.ts`. See
 [ADR 0006](0006-cigar-as-a-callback-walk.md) for why the array is built in the
 consumer at all.
+
+### `HEAPU8.slice` in `copyFromWasm`
+
+`copyFromWasm` allocates a zero-filled `Uint8Array` and `set`s the wasm heap
+into it; `module.HEAPU8.slice(ptr, ptr + size)` is one allocation-and-copy, and
+the function showed at 2.4–3.7% of a cold-decode CPU profile. Measured in
+isolation, min of 25 rounds per size, the two are the same from 64 KB up
+(slice/set 0.94–1.01) and slice is 0.1 µs faster at 1 KB — a few microseconds a
+slice. End to end, four interleaved rounds of the per-codec timing script on
+SRR396637 and the ONT fixture put block decompression at 34.4 ms → 35.0 ms and
+13.6 ms → 14.8 ms (minimums, set → slice) against a within-variant spread of
+34–88 ms, so nothing above the noise floor in either direction. Not taken.
