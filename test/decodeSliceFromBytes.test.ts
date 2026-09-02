@@ -1,7 +1,7 @@
-// The worker decodes from bytes alone, by a path that deliberately does not
-// share code with `_fetchRecords`. That freedom is only safe if the two produce
-// the same records, so this drives the bytes-only path in-process — no worker
-// involved — and compares it against the ordinary decode of the same slices.
+// The worker decodes from bytes alone, parsing the compression scheme through
+// its own cache, where the ordinary path hands the container's parsed scheme in.
+// This drives the bytes-only form in-process — no worker involved — and compares
+// it against the ordinary decode of the same slices.
 import { LocalFile } from 'generic-filehandle2'
 import { expect, test } from 'vitest'
 
@@ -12,7 +12,6 @@ import {
   decodeSliceFromBytes,
   schemeCacheSize,
 } from '../src/cramFile/slice/decodeSliceFromBytes.ts'
-import { deserializeSliceRecords } from '../src/cramFile/sliceTransfer.ts'
 import { IndexedCramFile } from '../src/index.ts'
 
 import type CramRecord from '../src/cramFile/record.ts'
@@ -140,10 +139,7 @@ for (const path of cases) {
       const slice = container.getSlice(entry.sliceStart, entry.sliceBytes)
 
       const req = await slice.buildDecodeRequest({ decodeTags: true })
-      expect(req).toBeDefined()
-
-      const { payload } = await decodeSliceFromBytes(req!)
-      const fromBytes = deserializeSliceRecords(payload)
+      const fromBytes = (await decodeSliceFromBytes(req)).records()
 
       // the ordinary path, on a separate CramFile so nothing is shared
       const plainFile = new CramFile({
@@ -195,8 +191,7 @@ test('the scheme cache does not confuse two files whose containers coincide', as
       .getContainerAtPosition(entry.containerStart)
       .getSlice(entry.sliceStart, entry.sliceBytes)
     const req = await slice.buildDecodeRequest({ decodeTags: true })
-    const { payload } = await decodeSliceFromBytes(req!)
-    const fromBytes = deserializeSliceRecords(payload)
+    const fromBytes = (await decodeSliceFromBytes(req)).records()
     const inProcess = await slice.getRecords(() => true, { decodeTags: true })
 
     expect(fromBytes.length).toBe(inProcess.length)
@@ -223,8 +218,7 @@ test('the scheme cache serves several slices of one container', async () => {
       .getContainerAtPosition(entry.containerStart)
       .getSlice(entry.sliceStart, entry.sliceBytes)
     const req = await slice.buildDecodeRequest({ decodeTags: true })
-    const { payload } = await decodeSliceFromBytes(req!)
-    total += deserializeSliceRecords(payload).length
+    total += (await decodeSliceFromBytes(req)).recordCount
   }
   expect(total).toBeGreaterThan(0)
 })
@@ -254,8 +248,7 @@ test('the scheme cache is bounded by a walk over many containers', async () => {
       .getContainerAtPosition(entry.containerStart)
       .getSlice(entry.sliceStart, entry.sliceBytes)
       .buildDecodeRequest({ decodeTags: true })
-    const { payload } = await decodeSliceFromBytes(req!)
-    return deserializeSliceRecords(payload)
+    return (await decodeSliceFromBytes(req)).records()
   }
 
   const before = (await decode(first)).map(observe)

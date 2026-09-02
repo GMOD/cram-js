@@ -38,10 +38,15 @@ async function firstSliceOf(name: string) {
   const compressionScheme = (await container.getCompressionScheme())!
   const { majorVersion } = await file.getDefinition()
 
+  const blocks = await slice.getBlocks()
   const ctx = buildSliceDecodeContext({
     compressionScheme,
-    blocksByContentId: await slice._getBlocksContentIdIndex(),
-    coreDataBlock: await slice.getCoreDataBlock(),
+    blocksByContentId: Object.fromEntries(
+      blocks
+        .filter(b => b.contentType === 'EXTERNAL_DATA')
+        .map(b => [b.contentId, b]),
+    ),
+    coreDataBlock: blocks[0],
     majorVersion,
     refSeqId: header.refSeqId,
     refSeqStart: header.refSeqStart,

@@ -20,7 +20,7 @@ import {
 } from './sectionParsers.ts'
 import { decodeUtf8, parseItem } from './util.ts'
 
-import type CramRecord from './record.ts'
+import type DecodedSlice from './decodedSlice.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { SharedBudget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
@@ -279,7 +279,7 @@ export default class CramFile {
     checkSequenceMD5: boolean
     cacheSize: number
   }
-  public featureCache: SharedReadCache<string, CramRecord[]>
+  public featureCache: SharedReadCache<string, DecodedSlice>
   private header: string | undefined
   // Deliberately signal-free, unlike every other memo in the read path. These
   // two are shared file-wide and fetched once for the life of the object — 26
@@ -342,11 +342,11 @@ export default class CramFile {
     // cache of features in a slice, keyed by the slice offset. caches all of
     // the features in a slice, or none. the cache is actually used by the
     // slice object, it's just kept here at the level of the file
-    this.featureCache = new SharedReadCache<string, CramRecord[]>({
+    this.featureCache = new SharedReadCache<string, DecodedSlice>({
       maxSize: this.options.cacheSize,
       // records, not bytes: there is no cheap way to size a decoded record, and
       // a record count at least makes the documented contract true
-      sizeOf: records => records.length,
+      sizeOf: slice => slice.recordCount,
       // 'lru', the default, rather than the 'batch' policy this used until
       // 11.3.0. 'batch' was adopted when cacheSize was 20,000 against queries
       // needing 420,000 -- it rescues an undersized budget by SPARING whatever

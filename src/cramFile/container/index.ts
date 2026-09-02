@@ -54,7 +54,22 @@ export default class CramContainer {
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
 
-    const block = await this.getFirstBlock(opts)
+    // The first landmark is where the first slice starts, and the compression
+    // header block is everything before it — so its exact length is known and
+    // it is one read, where `readBlock` probes the header and reads again.
+    const firstLandmark = containerHeader.landmarks[0]
+    const block =
+      firstLandmark === undefined
+        ? await this.getFirstBlock(opts)
+        : await this.file.readBlockFromBuffer(
+            await this.file.read(
+              firstLandmark,
+              containerHeader._endPosition,
+              opts,
+            ),
+            0,
+            containerHeader._endPosition,
+          )
     if (block.contentType !== 'COMPRESSION_HEADER') {
       throw new CramMalformedError(
         `invalid content type ${block.contentType} in compression header block`,
@@ -93,10 +108,29 @@ export default class CramContainer {
     return new CramContainerCompressionScheme(header.parsedContent)
   }
 
-  getSlice(slicePosition: number, sliceSize: number) {
-    // note: slicePosition is relative to the end of the container header
-    // TODO: perhaps we should cache slices?
+  /**
+   * The slice at `slicePosition`, a byte offset from the end of the container
+   * header — a `.crai` `sliceStart`, or one of the header's landmarks. The size
+   * comes from the index; leave it out and it is worked out from the landmarks.
+   */
+  getSlice(slicePosition: number, sliceSize?: number) {
     return new CramSlice(this, slicePosition, sliceSize)
+  }
+
+  /**
+   * How many bytes the slice at `slicePosition` occupies, from the container
+   * header: each landmark is where a slice starts, so a slice runs to the next
+   * landmark, and the last one to the end of the container's data.
+   */
+  async getSliceSize(slicePosition: number, opts?: ReadOpts) {
+    const { landmarks, length } = await this.getHeader(opts)
+    const i = landmarks.indexOf(slicePosition)
+    if (i === -1) {
+      throw new CramMalformedError(
+        `no slice starts at offset ${slicePosition} of the container at ${this.filePosition}`,
+      )
+    }
+    return (landmarks[i + 1] ?? length) - slicePosition
   }
 
   async _readContainerHeader(position: number, opts?: ReadOpts) {

@@ -56,8 +56,10 @@ decode and the transfer but not a real browser `Worker`:
 | 1000x.shortread | 16     | 323 ms     | 158 ms | **2.04x** |
 | 200x.shortread  | 4      | 69 ms      | 51 ms  | 1.35x     |
 
-Short of 4x because deserializing the payload happens on the host and is serial,
-and because slices are uneven — a query waits for its largest.
+Short of 4x because slices are uneven — a query waits for its largest — and,
+when these were taken, because the host rebuilt a record object per record out
+of the payload, serially. That step is gone: a slice arrives as the columns a
+record is a view onto, and is usable as it lands (ADR 0012).
 
 ### In a browser, nested inside another worker
 
@@ -172,29 +174,30 @@ key is a container's file position, which is not enough on its own — one pool
 serves every CRAM in the context, so a hit has to match the header bytes too, or
 two files whose first containers coincide swap codecs. See `getScheme`.
 
-**Out of the worker**: not `CramRecord[]` — a class instance loses its prototype
-and its getters do not serialize. Cloning the records as plain objects measured
-**1011 ms against a 392 ms decode**, which would have made the whole exercise
-pointless. `cramFile/sliceTransfer.ts` carries the wire form instead: the
-read-feature arena, tag column and quality column are already typed arrays and
-transfer at zero copy, and the per-record scalars pack into one `Int32Array`.
-Strings stay strings — 15 ms for 153,677 of them, against 112 ms to encode the
-same set into bytes.
+**Out of the worker**: the decoded slice itself, `cramFile/decodedSlice.ts`. The
+decode writes columns and nothing else — the read-feature arena, tag column and
+quality column, plus one `Int32Array` of per-record scalars — so the slice
+transfers at zero copy and a `CramRecord` on the host is a view onto it. This is
+also why records are views rather than objects: cloning per-record objects was
+measured at **1011 ms against a 392 ms decode**, and rebuilding one object per
+record on the host, which the wire form used to do, was a serial 0.5 µs per
+record — a quarter of an in-process decode on a 54,695-record file, and the term
+that capped the pool's speedup (ADR 0012). Strings stay strings — 15 ms for
+153,677 of them, against 112 ms to encode the same set into bytes.
 
 **The reference stays behind.** `fetchReferenceSequence` is caller-supplied, so
-`_fetchRecords` applies it on the main thread after deserializing, by the same
-code that decorates an in-process decode. Records arrive from the worker with no
-`_refRegion`, which is why `getReadBases()` on a raw transfer payload returns
-undefined — see the note in `sliceTransfer.ts`.
+`CramSlice` applies it on the main thread after the slice arrives, by the same
+code that decorates an in-process decode. A slice arrives from the worker with
+no `refRegions`, which is why `getReadBases()` on a raw transfer returns
+undefined.
 
 ## Falling back
 
-A caller can always decline the pool, so `_fetchRecordsInWorker` returns
-undefined rather than throwing for every reason short of a malformed file:
+A caller can always decline the pool, so it resolves undefined rather than
+throwing for every reason short of a malformed file, and `CramSlice` then runs
+the same `decodeSliceFromBytes` in-process:
 
 - no `Worker` or Blob URL — node, vitest, or a restricted host
-- a slice of unknown size, i.e. non-indexed access through `CramFile` directly,
-  where it reads blocks one at a time and has no single byte range to send
 - a pool that failed to start, which warns once per file. That covers a worker
   reporting an error, one whose wasm will not instantiate, and one that never
   answers the init handshake at all — the last of those on a 30 s timeout, since

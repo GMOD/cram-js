@@ -1,242 +1,66 @@
+import { decodeSliceFromBytes } from './decodeSliceFromBytes.ts'
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
-import Constants from '../constants.ts'
-import { buildSliceDecodeContext, trimSliceColumns } from './decodeContext.ts'
-import decodeRecord from './decodeRecord.ts'
+import {
+  P_LENGTH_ON_REF,
+  SCALAR_STRIDE,
+  S_LENGTH_ON_REF,
+  S_READ_FEATURE_COUNT,
+  S_READ_FEATURE_START,
+  S_READ_LENGTH,
+  S_SEQUENCE_ID,
+  S_START,
+} from '../decodedSlice.ts'
 import { type CramFileBlock } from '../file.ts'
 import { memoizeAsync } from '../memoize.ts'
-import CramRecord, { defaultDecodeOptions } from '../record.ts'
+import { defaultDecodeOptions, resolveSubstitutions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
 
 import type { BaseOpts, ReadOpts } from '../../opts.ts'
 import type CramContainer from '../container/index.ts'
+import type DecodedSlice from '../decodedSlice.ts'
 import type CramFile from '../file.ts'
-import type { DecodeOptions } from '../record.ts'
+import type CramRecord from '../record.ts'
+import type { DecodeOptions, RefRegion } from '../record.ts'
 import type { SliceDecodeRequest } from './decodeSliceFromBytes.ts'
 import type {
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers.ts'
 
+export { associateIntraSliceMates } from './mateAssociation.ts'
+
 export type SliceHeader = CramFileBlock & {
   parsedContent: MappedSliceHeader | UnmappedSliceHeader
 }
 
-/** a reference region whose sequence has been fetched, as addReferenceSequence takes it */
-interface RefRegionWithSeq {
-  start: number
-  end: number
-  seq: string
-}
-
-/**
- * Try to estimate the template length from a bunch of interrelated
- * multi-segment reads.
- */
-function calculateMultiSegmentMatedTemplateLength(
-  allRecords: CramRecord[],
-  thisRecord: CramRecord,
-) {
-  const matedRecords: CramRecord[] = [thisRecord]
-  let cur = thisRecord
-  while (cur.mateRecordNumber !== undefined && cur.mateRecordNumber >= 0) {
-    const mateRecord = allRecords[cur.mateRecordNumber]
-    if (!mateRecord) {
-      throw new CramMalformedError(
-        'intra-slice mate record not found, this file seems malformed',
-      )
-    }
-    // A well-formed NF is a forward offset (`NF + recordNumber + 1`), so the
-    // chain strictly increases and cannot revisit a record. A malformed one
-    // points backwards and the walk never terminates: it re-pushes the same
-    // records until the process dies — 14 million entries in two seconds, and
-    // synchronously, so the tab cannot even be interrupted. Every record is
-    // visited at most once, so overrunning the slice means a cycle.
-    if (matedRecords.length > allRecords.length) {
-      throw new CramMalformedError(
-        'cyclic intra-slice mate chain, this file seems malformed',
-      )
-    }
-    matedRecords.push(mateRecord)
-    cur = mateRecord
-  }
-
-  let minStart = matedRecords[0]!.start
-  let maxEnd = minStart + matedRecords[0]!.readLength
-  for (let i = 1; i < matedRecords.length; i++) {
-    const r = matedRecords[i]!
-    if (r.start < minStart) {
-      minStart = r.start
-    }
-    const end = r.start + r.readLength
-    if (end > maxEnd) {
-      maxEnd = end
-    }
-  }
-  const estimatedTemplateLength = maxEnd - minStart
-  if (estimatedTemplateLength >= 0) {
-    matedRecords.forEach(r => {
-      if (r.templateLength !== undefined) {
-        throw new CramMalformedError(
-          'mate pair group has some members that have template lengths already, this file seems malformed',
-        )
-      }
-      // sign per SAM spec: positive for leftmost, negative for rightmost
-      r.templateLength =
-        r.start === minStart
-          ? estimatedTemplateLength
-          : -estimatedTemplateLength
-    })
-  }
-}
-
-/**
- * Attempt to calculate the `templateLength` for a pair of intra-slice paired
- * reads. Ported from htslib. Algorithm is imperfect.
- */
-function calculateIntraSliceMatePairTemplateLength(
-  thisRecord: CramRecord,
-  mateRecord: CramRecord,
-) {
-  // this just estimates the template length by using the simple (non-gapped)
-  // end coordinate of each read, because gapping in the alignment doesn't mean
-  // the template is longer or shorter
-  const start = Math.min(thisRecord.start, mateRecord.start)
-  const end = Math.max(
-    thisRecord.start + thisRecord.readLength,
-    mateRecord.start + mateRecord.readLength,
-  )
-  const lengthEstimate = end - start
-  // sign per SAM spec: positive for leftmost, negative for rightmost
-  thisRecord.templateLength =
-    thisRecord.start <= mateRecord.start ? lengthEstimate : -lengthEstimate
-  mateRecord.templateLength =
-    mateRecord.start <= thisRecord.start ? lengthEstimate : -lengthEstimate
-}
-
-/**
- * establishes a mate-pair relationship between two records in the same slice.
- * CRAM compresses mate-pair relationships between records in the same slice
- * down into just one record having the index in the slice of its mate
- */
-function associateIntraSliceMate(
-  allRecords: CramRecord[],
-  currentRecordNumber: number,
-  thisRecord: CramRecord,
-  mateRecord: CramRecord,
-) {
-  // `hasNextPosition()` is already a boolean, where the `mate` object this
-  // replaced needed coercing, so the surrounding `!!` is gone
-  const complicatedMultiSegment =
-    mateRecord.hasNextPosition() ||
-    (mateRecord.mateRecordNumber !== undefined &&
-      mateRecord.mateRecordNumber !== currentRecordNumber)
-
-  // Lossy read names: the encoder drops the name of a mate group that fits in
-  // one slice, so give the group one back, named after the record the ascending
-  // walk reaches first — as htslib names it (cram_decode.c). Read that name off
-  // `thisRecord` rather than testing it, which is what carries it past the
-  // second segment; a `!thisRecord.readName` guard left the far end of a
-  // three-segment chain unnamed. ADR 0011.
-  const groupName = thisRecord.readName ?? String(thisRecord.uniqueId)
-  thisRecord.setSyntheticReadName(groupName)
-  mateRecord.setSyntheticReadName(groupName)
-
-  thisRecord.nextSequenceId = mateRecord.sequenceId
-  thisRecord.nextStart = mateRecord.start
-
-  // the mate record might have its own mate pointer, if this is some kind of
-  // multi-segment (more than paired) scheme, so only relate that one back to this one
-  // if it does not have any other relationship
-  if (
-    !mateRecord.hasNextPosition() &&
-    mateRecord.mateRecordNumber === undefined
-  ) {
-    mateRecord.nextSequenceId = thisRecord.sequenceId
-    mateRecord.nextStart = thisRecord.start
-  }
-
-  // make sure the proper flags and cramFlags are set on both records
-  // paired
-  thisRecord.flags |= Constants.BAM_FPAIRED
-
-  // set mate unmapped if needed
-  if (mateRecord.flags & Constants.BAM_FUNMAP) {
-    thisRecord.flags |= Constants.BAM_FMUNMAP
-  }
-  if (thisRecord.flags & Constants.BAM_FUNMAP) {
-    mateRecord.flags |= Constants.BAM_FMUNMAP
-  }
-
-  // set mate reversed if needed
-  if (mateRecord.flags & Constants.BAM_FREVERSE) {
-    thisRecord.flags |= Constants.BAM_FMREVERSE
-  }
-  if (thisRecord.flags & Constants.BAM_FREVERSE) {
-    mateRecord.flags |= Constants.BAM_FMREVERSE
-  }
-
-  if (thisRecord.templateLength === undefined) {
-    if (complicatedMultiSegment) {
-      calculateMultiSegmentMatedTemplateLength(allRecords, thisRecord)
-    } else {
-      calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord)
-    }
-  }
-
-  // delete this last because it's used by the
-  // complicated template length estimation
-  thisRecord.mateRecordNumber = undefined
-}
-
-/**
- * Interpret the `recordsToNextFragment` attributes the decode left behind,
- * filling in each record's `nextSequenceId`/`nextStart` from its in-slice mate.
- *
- * The decode loop fills every slot or throws, so `records[i]` is always
- * defined here; the `records[mateRecordNumber]` guard is against a malformed
- * pointer past the end of the slice.
- *
- * Exported for the tests that pin its behaviour on malformed mate pointers;
- * nothing outside the decode calls it.
- */
-export function associateIntraSliceMates(records: CramRecord[]) {
-  for (let i = 0; i < records.length; i += 1) {
-    const r = records[i]!
-    const { mateRecordNumber } = r
-    if (
-      mateRecordNumber !== undefined &&
-      mateRecordNumber >= 0 &&
-      records[mateRecordNumber]
-    ) {
-      associateIntraSliceMate(records, i, r, records[mateRecordNumber])
-    }
-  }
+/** the slice's bytes, header block first, and where in the file they start */
+interface SliceBytes {
+  bytes: Uint8Array
+  filePosition: number
 }
 
 export default class CramSlice {
   private file: CramFile
   container: CramContainer
   containerPosition: number
-  sliceSize: number
+  private sliceSize: number | undefined
   // Like `CramContainer`, a slice is constructed per query rather than looked
   // up, so these memos are private to one query and take its signal directly.
-  // Records decoded out of the slice *are* shared between queries, through
+  // The decoded slice *is* shared between queries, through
   // `CramFile.featureCache` — `getRecords` below is where that is handled.
+  private _bytesMemo = memoizeAsync((opts?: ReadOpts) => this._fetchBytes(opts))
   private _headerMemo = memoizeAsync((opts?: ReadOpts) =>
     this._fetchHeader(opts),
   )
   private _blocksMemo = memoizeAsync((opts?: ReadOpts) =>
     this._fetchBlocks(opts),
   )
-  private _blocksContentIdIndexMemo = memoizeAsync((opts?: ReadOpts) =>
-    this._fetchBlocksContentIdIndex(opts),
-  )
 
   constructor(
     container: CramContainer,
     containerPosition: number,
-    sliceSize: number,
+    sliceSize?: number,
   ) {
     this.file = container.file
     this.container = container
@@ -244,20 +68,43 @@ export default class CramSlice {
     this.sliceSize = sliceSize
   }
 
+  /**
+   * The whole slice — header block and every data block — in one read.
+   *
+   * One read rather than three: the header used to be probed and re-read by
+   * `readBlock` and the blocks fetched separately afterwards. The size is the
+   * index's, or the container's landmarks when the slice was reached without
+   * one. This is the read a cancellation is really aimed at: under a
+   * range-coalescing filehandle a small viewport over deep data turns into a
+   * single multi-megabyte request.
+   */
+  private async _fetchBytes(opts?: ReadOpts): Promise<SliceBytes> {
+    const size =
+      this.sliceSize ||
+      (await this.container.getSliceSize(this.containerPosition, opts))
+    const containerHeader = await this.container.getHeader(opts)
+    const filePosition = containerHeader._endPosition + this.containerPosition
+    return {
+      bytes: await this.file.read(size, filePosition, opts),
+      filePosition,
+    }
+  }
+
+  getBytes(opts?: ReadOpts) {
+    return this._bytesMemo(opts)
+  }
+
   getHeader(opts?: ReadOpts) {
     return this._headerMemo(opts)
   }
 
-  private async _fetchHeader(opts?: ReadOpts) {
-    // fetch and parse the slice header
+  private async _fetchHeader(opts?: ReadOpts): Promise<SliceHeader> {
     const { majorVersion } = await this.file.getDefinition()
     const sectionParsers = getSectionParsers(majorVersion)
     const containerHeader = await this.container.getHeader(opts)
+    const { bytes, filePosition } = await this.getBytes(opts)
 
-    const header = await this.file.readBlock(
-      containerHeader._endPosition + this.containerPosition,
-      opts,
-    )
+    const header = await this.file.readBlockFromBuffer(bytes, 0, filePosition)
     const parser =
       header.contentType === 'MAPPED_SLICE_HEADER'
         ? sectionParsers.cramMappedSliceHeader.parser
@@ -279,79 +126,31 @@ export default class CramSlice {
     }
   }
 
+  /**
+   * The slice's data blocks, parsed and decompressed. The decode does not come
+   * through here — it takes the raw bytes through `buildDecodeRequest` — so
+   * this is only for reaching a block by content id, as an embedded reference
+   * is.
+   */
   getBlocks(opts?: ReadOpts) {
     return this._blocksMemo(opts)
   }
 
   private async _fetchBlocks(opts?: ReadOpts) {
     const header = await this.getHeader(opts)
-
-    if (this.sliceSize) {
-      // if we know the slice size (from the index), do one big read for all
-      // blocks and parse from the in-memory buffer
-      const containerHeader = await this.container.getHeader(opts)
-      const sliceFilePosition =
-        containerHeader._endPosition + this.containerPosition
-      const blocksFilePosition = header._endPosition
-      const headerSize = blocksFilePosition - sliceFilePosition
-      const remainingBytes = this.sliceSize - headerSize
-
-      // The read a cancellation is really aimed at. Everything else on this
-      // path is header-sized; this is the slice's whole payload, and under a
-      // range-coalescing filehandle a small viewport over deep data turns into
-      // a single multi-megabyte request.
-      const allBlocksBuffer = await this.file.read(
-        remainingBytes,
-        blocksFilePosition,
-        opts,
-      )
-
-      const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
-      let bufferOffset = 0
-      for (let i = 0; i < blocks.length; i++) {
-        const block = await this.file.readBlockFromBuffer(
-          allBlocksBuffer,
-          bufferOffset,
-          blocksFilePosition + bufferOffset,
-        )
-        blocks[i] = block
-        bufferOffset = block._endPosition - blocksFilePosition
-      }
-      return blocks
-    }
-
-    // fallback: read blocks one at a time (non-indexed access)
-    let blockPosition = header._endPosition
+    const { bytes, filePosition } = await this.getBytes(opts)
     const blocks: CramFileBlock[] = new Array(header.parsedContent.numBlocks)
+    let bufferOffset = header._endPosition - filePosition
     for (let i = 0; i < blocks.length; i++) {
-      const block = await this.file.readBlock(blockPosition, opts)
+      const block = await this.file.readBlockFromBuffer(
+        bytes,
+        bufferOffset,
+        filePosition + bufferOffset,
+      )
       blocks[i] = block
-      blockPosition = block._endPosition
+      bufferOffset = block._endPosition - filePosition
     }
     return blocks
-  }
-
-  // no memoize
-  async getCoreDataBlock(opts?: ReadOpts) {
-    const blocks = await this.getBlocks(opts)
-    return blocks[0]
-  }
-
-  _getBlocksContentIdIndex(opts?: ReadOpts) {
-    return this._blocksContentIdIndexMemo(opts)
-  }
-
-  private async _fetchBlocksContentIdIndex(
-    opts?: ReadOpts,
-  ): Promise<Record<number, CramFileBlock>> {
-    const blocks = await this.getBlocks(opts)
-    const blocksByContentId: Record<number, CramFileBlock> = {}
-    blocks.forEach(block => {
-      if (block.contentType === 'EXTERNAL_DATA') {
-        blocksByContentId[block.contentId] = block
-      }
-    })
-    return blocksByContentId
   }
 
   // the container only lacks a compression scheme when it holds no records,
@@ -365,8 +164,9 @@ export default class CramSlice {
   }
 
   async getBlockByContentId(id: number, opts?: ReadOpts) {
-    const blocksByContentId = await this._getBlocksContentIdIndex(opts)
-    return blocksByContentId[id]
+    return (await this.getBlocks(opts)).find(
+      block => block.contentType === 'EXTERNAL_DATA' && block.contentId === id,
+    )
   }
 
   async getReferenceRegion(opts?: ReadOpts) {
@@ -459,7 +259,7 @@ export default class CramSlice {
     sliceHeader: SliceHeader,
     majorVersion: number,
     opts?: ReadOpts,
-  ): Promise<RefRegionWithSeq | undefined> {
+  ): Promise<RefRegion | undefined> {
     if (
       majorVersion > 1 &&
       this.file.options.checkSequenceMD5 &&
@@ -490,14 +290,12 @@ export default class CramSlice {
 
   /**
    * Decode each record's base substitutions against the reference, and give the
-   * records the region their bases can later be reconstructed from.
+   * slice the regions its records' bases can later be reconstructed from.
    *
-   * Runs **once per slice**, from `_fetchRecords`, rather than once per query.
-   * It used to run in `getRecords` over the filtered records, which meant a
-   * cached slice re-issued every `fetchReferenceSequence` call and re-decoded
-   * every substitution on each repeat query — for jbrowse, a trip to the
-   * sequence adapter for bases it already had on every pan back over data it
-   * had already decoded.
+   * Runs **once per slice**, inside the cached decode, rather than once per
+   * query: a cached slice re-issuing every `fetchReferenceSequence` call and
+   * re-decoding every substitution on each repeat query meant, for jbrowse, a
+   * trip to the sequence adapter on every pan back over data it already had.
    *
    * The span asked for is the extent of the slice's reads, never the slice's
    * declared `refSeqSpan` — see `test/seqfetch-bounds.test.ts` and issue #79.
@@ -506,25 +304,20 @@ export default class CramSlice {
    * any sequence of queries against the slice could have asked for in total.
    *
    * The trade, which is the right one but worth knowing: resolving the
-   * reference is part of decoding a slice now, rather than something layered on
-   * after — arguably the truer model, since a CRAM record is
-   * reference-compressed and its bases do not exist without the reference. But
-   * it means a **failed `fetchReferenceSequence` discards the decode too**:
-   * `featureCache` drops rejected promises, so a flaky sequence adapter
-   * costs a re-inflate of the slice on retry where before it only cost the
-   * decoration. Worth revisiting only if that shows up in practice, and the fix
-   * — caching the decoded records and the reference resolution as separate
-   * memos — reintroduces most of the bookkeeping this removed.
+   * reference is part of decoding a slice, so a **failed `fetchReferenceSequence`
+   * discards the decode too** — `featureCache` drops rejected promises, so a
+   * flaky sequence adapter costs a re-decode of the slice on retry where it
+   * could cost only the decoration.
    */
   private async applyReferenceSequence(
-    records: CramRecord[],
+    slice: DecodedSlice,
     header: MappedSliceHeader,
-    md5Region: RefRegionWithSeq | undefined,
+    md5Region: RefRegion | undefined,
     opts?: ReadOpts,
   ) {
     const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
     if (
-      !records.length ||
+      !slice.recordCount ||
       // -2 is a multi-reference slice, whose records each name their own
       (header.refSeqId < 0 && header.refSeqId !== -2)
     ) {
@@ -534,18 +327,23 @@ export default class CramSlice {
       return
     }
     const singleRefId = header.refSeqId >= 0 ? header.refSeqId : undefined
+    const { scalars, presence, recordCount } = slice
 
     // the reference span each sequence's reads cover
     const spans = new Map<number, { start: number; end: number }>()
-    for (const record of records) {
-      const seqId = singleRefId ?? record.sequenceId
-      const end = record.start + (record.lengthOnRef || record.readLength)
+    for (let i = 0; i < recordCount; i++) {
+      const o = i * SCALAR_STRIDE
+      const seqId = singleRefId ?? scalars[o + S_SEQUENCE_ID]!
+      const start = scalars[o + S_START]!
+      const lengthOnRef =
+        presence[i]! & P_LENGTH_ON_REF ? scalars[o + S_LENGTH_ON_REF]! : 0
+      const end = start + (lengthOnRef || scalars[o + S_READ_LENGTH]!)
       const span = spans.get(seqId)
       if (span === undefined) {
-        spans.set(seqId, { start: record.start, end })
+        spans.set(seqId, { start, end })
       } else {
-        if (record.start < span.start) {
-          span.start = record.start
+        if (start < span.start) {
+          span.start = start
         }
         if (end > span.end) {
           span.end = end
@@ -554,7 +352,7 @@ export default class CramSlice {
     }
 
     const compressionScheme = await this.getCompressionScheme(opts)
-    const resolved = new Map<number, RefRegionWithSeq>()
+    const resolved = new Map<number, RefRegion>()
     await Promise.all(
       [...spans].map(async ([seqId, span]) => {
         if (seqId === -1 || span.start >= span.end) {
@@ -594,67 +392,58 @@ export default class CramSlice {
       }),
     )
 
-    // The region object is only read, never mutated, so every record covered by
-    // one shares it — spreading a copy per record instead cost ~72 bytes of
-    // retained heap each.
-    for (const record of records) {
-      const region = resolved.get(singleRefId ?? record.sequenceId)
-      if (region) {
-        record.addReferenceSequence(region, compressionScheme)
+    const { arena } = slice
+    if (arena) {
+      for (let i = 0; i < recordCount; i++) {
+        const o = i * SCALAR_STRIDE
+        const region = resolved.get(singleRefId ?? scalars[o + S_SEQUENCE_ID]!)
+        const count = scalars[o + S_READ_FEATURE_COUNT]!
+        if (region && count > 0) {
+          resolveSubstitutions(
+            arena,
+            scalars[o + S_READ_FEATURE_START]!,
+            count,
+            region,
+            compressionScheme,
+          )
+        }
       }
     }
+    slice.refRegions = resolved
   }
 
   /**
-   * Everything a worker needs to decode this slice, or undefined when it cannot
-   * be described that way.
+   * Everything the decode needs, as bytes and numbers — what a worker can take,
+   * and what `decodeSliceFromBytes` takes in-process too.
    *
-   * The one case it cannot: a slice reached without an index has no known size,
-   * so its blocks are read one at a time and there is no single byte range to
-   * hand over. Every indexed query — which is every query through
-   * `IndexedCramFile` — takes the first branch.
-   *
-   * Reads only what `_fetchRecords` reads anyway, and all of it is either already
-   * memoized on the container or the one big payload read that dominates the
-   * slice either way, so building this costs nothing extra when it is used and a
-   * few memo hits when it is not.
+   * Reads only what the decode reads anyway: the container's header and
+   * compression header block, memoized for the query, and the slice's own bytes,
+   * already fetched whole by `getBytes`.
    */
   async buildDecodeRequest(
     decodeOptions: Required<DecodeOptions>,
     opts?: ReadOpts,
-  ): Promise<SliceDecodeRequest | undefined> {
-    if (!this.sliceSize) {
-      return undefined
-    }
+  ): Promise<SliceDecodeRequest> {
     const { majorVersion } = await this.file.getDefinition()
     const compressionHeaderBlock =
       await this.container.getCompressionHeaderBlock(opts)
     if (!compressionHeaderBlock) {
-      return undefined
+      throw new CramMalformedError('compression scheme undefined')
     }
     const sliceHeader = await this.getHeader(opts)
     const header = sliceHeader.parsedContent
     if (!isMappedSliceHeader(header)) {
       throw new CramMalformedError('slice header not mapped')
     }
-
-    const containerHeader = await this.container.getHeader(opts)
-    const sliceFilePosition =
-      containerHeader._endPosition + this.containerPosition
+    const { bytes, filePosition } = await this.getBytes(opts)
     const blocksFilePosition = sliceHeader._endPosition
-    const headerSize = blocksFilePosition - sliceFilePosition
-    const sliceBytes = await this.file.read(
-      this.sliceSize - headerSize,
-      blocksFilePosition,
-      opts,
-    )
 
     return {
       majorVersion,
       compressionHeaderContent: compressionHeaderBlock.content,
       compressionHeaderContentPosition: compressionHeaderBlock.contentPosition,
       containerKey: this.container.filePosition,
-      sliceBytes,
+      sliceBytes: bytes.subarray(blocksFilePosition - filePosition),
       blocksFilePosition,
       numBlocks: header.numBlocks,
       refSeqId: header.refSeqId,
@@ -667,41 +456,23 @@ export default class CramSlice {
   }
 
   /**
-   * Decode this slice in a worker, or undefined if it could not be.
+   * Decode this slice, on the pool where there is one and here otherwise, and
+   * decorate it with its reference.
    *
-   * Undefined rather than throwing for every reason short of a malformed file:
-   * no pool available (node, or a host without Blob URLs), a slice of unknown
-   * size, or a pool that failed to start. The caller decodes in-process instead,
-   * so the pool is an optimisation that can always be declined — which matters
-   * because it is on by default, and a consumer must not lose the ability to read
-   * a file because its worker could not launch.
+   * The pool resolves undefined rather than throwing for every reason short of
+   * a malformed file — no workers in this host, a worker that died carrying the
+   * slice, a pool destroyed under it — and each of those means decode it here:
+   * a consumer must not lose the ability to read a file because its worker
+   * could not launch. A decode error from inside the worker *does* propagate,
+   * so a malformed CRAM fails the same way with or without a pool.
    *
-   * A decode error from inside the worker *does* propagate: a malformed CRAM must
-   * fail rather than quietly re-decode on the main thread and fail there. The one
-   * failure that does not is the pool going away underneath the slice — a worker
-   * that died mid-decode, or a pool destroyed while it was in flight. That says
-   * nothing about the file, so it joins the list above rather than failing a
-   * query the main thread can still answer.
+   * The reference is applied here either way — `fetchReferenceSequence` is a
+   * caller-supplied callback and cannot cross into a worker.
    */
-  private async _fetchRecordsInWorker(
+  async _decodeSlice(
     decodeOptions: Required<DecodeOptions>,
     opts?: ReadOpts,
-  ): Promise<CramRecord[] | undefined> {
-    const pool = await this.file.getSliceWorkerPool()
-    if (!pool) {
-      return undefined
-    }
-    const request = await this.buildDecodeRequest(decodeOptions, opts)
-    if (!request) {
-      return undefined
-    }
-    // resolves undefined if the pool could not take the slice or lost it, which
-    // is the same "decode it yourself" this method already reports for the cases
-    // above — see CramSliceWorkerPool.decodeSlice
-    return pool.decodeSlice(request)
-  }
-
-  async _fetchRecords(decodeOptions: Required<DecodeOptions>, opts?: ReadOpts) {
+  ): Promise<DecodedSlice> {
     const { majorVersion } = await this.file.getDefinition()
     const sliceHeader = await this.getHeader(opts)
 
@@ -716,65 +487,24 @@ export default class CramSlice {
       throw new CramMalformedError('slice header not mapped')
     }
 
-    // Try a worker first. Everything above this point is header-sized and
-    // memoized; everything below it is the decode, which is what moves.
-    //
-    // The reference is applied here either way — `fetchReferenceSequence` is a
-    // caller-supplied callback and cannot cross into a worker — so a
-    // worker-decoded slice is decorated by exactly the same code as an
-    // in-process one, and `getRecords`' contract of handing back decorated
-    // records is unchanged.
-    const fromWorker = await this._fetchRecordsInWorker(decodeOptions, opts)
-    if (fromWorker) {
-      await this.applyReferenceSequence(fromWorker, header, md5Region, opts)
-      return fromWorker
+    const request = await this.buildDecodeRequest(decodeOptions, opts)
+    const pool = await this.file.getSliceWorkerPool()
+    let slice = pool ? await pool.decodeSlice(request) : undefined
+    if (slice === undefined) {
+      // The last chance to bail before the expensive part. The decode is
+      // synchronous across the whole slice — tens of thousands of records on
+      // short-read data — so there is no point inside it at which an abort could
+      // be noticed. Checking here also covers the filehandles that ignore the
+      // signal outright (`LocalFile`): their reads run to completion regardless,
+      // but the decode does not.
+      opts?.signal?.throwIfAborted()
+      slice = await decodeSliceFromBytes(
+        request,
+        await this.getCompressionScheme(opts),
+      )
     }
-
-    const compressionScheme = await this.getCompressionScheme(opts)
-    const blocksByContentId = await this._getBlocksContentIdIndex(opts)
-
-    const ctx = buildSliceDecodeContext({
-      compressionScheme,
-      blocksByContentId,
-      coreDataBlock: await this.getCoreDataBlock(opts),
-      majorVersion,
-      refSeqId: header.refSeqId,
-      refSeqStart: header.refSeqStart,
-      decodeTags: decodeOptions.decodeTags,
-    })
-
-    // The last chance to bail before the expensive part. The loop below is
-    // synchronous across the whole slice — tens of thousands of records on
-    // short-read data — so there is no point inside it at which an abort could
-    // be noticed, and no `await` for one to interleave with. Checking here also
-    // covers the filehandles that ignore the signal outright (`LocalFile`):
-    // their reads run to completion regardless, but the decode does not.
-    opts?.signal?.throwIfAborted()
-
-    const records: CramRecord[] = new Array(header.numRecords)
-    // See ADR 0011 for why the file offset is in here alongside the counter.
-    const uniqueIdBase = sliceHeader.contentPosition + header.recordCounter + 1
-    for (let i = 0; i < records.length; i += 1) {
-      try {
-        records[i] = new CramRecord(decodeRecord(ctx, i, uniqueIdBase + i))
-      } catch (e) {
-        const err = e as { code?: string; message?: string }
-        const error =
-          err.code === 'CRAM_BUFFER_OVERRUN'
-            ? new CramMalformedError(
-                `Failed to decode all records in slice. Decoded ${i} of ${header.numRecords} expected records. ` +
-                  `Buffer overrun suggests either: (1) file is truncated/corrupted, (2) compression scheme is incorrect, ` +
-                  `or (3) there's a bug in the decoder. Original error: ${err.message}`,
-              )
-            : e
-        throw error
-      }
-    }
-
-    trimSliceColumns(ctx, records)
-    associateIntraSliceMates(records)
-    await this.applyReferenceSequence(records, header, md5Region, opts)
-    return records
+    await this.applyReferenceSequence(slice, header, md5Region, opts)
+    return slice
   }
 
   async getRecords(
@@ -803,14 +533,14 @@ export default class CramSlice {
     // that ref-counting and reports this caller's own cancellation to this
     // caller alone.
     //
-    // The records come back already decorated with their reference — see
+    // The slice comes back already decorated with its reference — see
     // applyReferenceSequence, which runs once per slice inside the cached
     // decode rather than once per query over the filtered subset.
-    const records = await this.file.featureCache.get(
+    const slice = await this.file.featureCache.get(
       cacheKey,
       decodeOptions?.signal,
-      signal => this._fetchRecords(opts, { signal }),
+      signal => this._decodeSlice(opts, { signal }),
     )
-    return records.filter(filterFunction)
+    return slice.records(filterFunction)
   }
 }

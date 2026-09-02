@@ -3,7 +3,6 @@ import { readFileSync } from 'node:fs'
 import { expect, test } from 'vitest'
 
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
-import CramRecord from '../src/cramFile/record.ts'
 import {
   CIGAR_DEL,
   CIGAR_HARD_CLIP,
@@ -15,8 +14,10 @@ import {
   CraiIndex,
   IndexedCramFile,
 } from '../src/index.ts'
+import { bareRecord } from './lib/bareRecord.ts'
 import { testDataFile } from './lib/util.ts'
 
+import type CramRecord from '../src/cramFile/record.ts'
 import type { ReadFeature } from '../src/cramFile/record.ts'
 
 // independent CIGAR generator adapted from cram2sam.ts decodeSeqCigar (minus
@@ -181,11 +182,12 @@ function makeRecord({
   readFeatures?: ReadFeature[]
 }) {
   const arena = readFeatures ? arenaFromReadFeatures(readFeatures) : undefined
-  return Object.assign(Object.create(CramRecord.prototype), fields, {
+  return bareRecord({
+    ...fields,
     readFeatureArena: arena,
     readFeatureStart: 0,
     readFeatureCount: arena ? arena.length : 0,
-  }) as CramRecord
+  })
 }
 
 test('read with no features is all matches', () => {

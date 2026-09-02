@@ -7,11 +7,12 @@ import { expect, test } from 'vitest'
 
 import CraiIndex from '../src/craiIndex.ts'
 import {
-  deserializeSliceRecords,
-  serializeSliceRecords,
-} from '../src/cramFile/sliceTransfer.ts'
+  deserializeSlice,
+  serializeSlice,
+} from '../src/cramFile/decodedSlice.ts'
 import { IndexedCramFile } from '../src/index.ts'
 
+import type DecodedSlice from '../src/cramFile/decodedSlice.ts'
 import type CramRecord from '../src/cramFile/record.ts'
 
 const seqFetch = async (_id: number, start: number, end: number) =>
@@ -61,6 +62,35 @@ function observe(r: CramRecord) {
   }
 }
 
+/**
+ * Round-trip every slice behind `records` through the wire form, handing back
+ * the rebuilt records in the same order, plus every buffer listed for transfer.
+ *
+ * The reference region is re-attached afterwards, since the protocol
+ * deliberately does not carry it: `fetchReferenceSequence` is a caller-supplied
+ * callback and cannot cross into a worker, so the real integration decorates
+ * the slice on the main thread after deserialising. The *substitutions* those
+ * bases resolve against do travel, in the arena's refCodes/subCodes columns, so
+ * this restores exactly the one thing that does not.
+ */
+function roundTrip(records: CramRecord[]) {
+  const rebuilt = new Map<DecodedSlice, CramRecord[]>()
+  const transfer: ArrayBuffer[] = []
+  for (const r of records) {
+    if (!rebuilt.has(r.slice)) {
+      const out = serializeSlice(r.slice)
+      const back = deserializeSlice(out.payload)
+      back.refRegions = r.slice.refRegions
+      rebuilt.set(r.slice, back.records())
+      transfer.push(...out.transfer)
+    }
+  }
+  return {
+    after: records.map(r => rebuilt.get(r.slice)![r.index]!),
+    transfer,
+  }
+}
+
 // Only the indexed fixtures — the transfer is reached through a range query.
 const cases = [
   // paired short reads with MC/XA/SA string tags and mate association
@@ -73,8 +103,7 @@ const cases = [
   'test/data/auxf#values.tmp.cram',
   'test/data/xx#large_aux.tmp.cram',
   'test/data/xx#large_aux2.tmp.cram',
-  // a '*' record whose readBases is null rather than absent — the one case
-  // needing two presence bits rather than one
+  // a '*' record whose readBases is null rather than absent
   'test/data/c1#noseq.tmp.cram',
   // unmapped reads, mate association across pairs and triplets, template lengths
   'test/data/ce#unmap.tmp.cram',
@@ -105,46 +134,13 @@ const cases = [
 for (const path of cases) {
   test(`slice transfer round-trips ${path}`, async () => {
     const before = await open(path).getRecordsForRange(0, 0, 100_000_000)
-    // a second, independent decode: serialize *detaches* the buffers it
-    // transfers, so the "before" records must not be the ones serialized
+    // a second, independent decode: the serialised slice is what a worker
+    // would give up, so the "before" records must not be from the same one
     const source = await open(path).getRecordsForRange(0, 0, 100_000_000)
     expect(source.length).toBe(before.length)
 
-    // Serialise per slice, which is the function's contract and what
-    // `_fetchRecords` does. A range query returns every slice covering it, each
-    // with its own columns; `tagColumn` identity is the slice boundary, since
-    // every record has one whether or not it carries tags.
-    const bySlice = new Map<unknown, typeof source>()
-    for (const r of source) {
-      let group = bySlice.get(r.tagColumn)
-      if (!group) {
-        group = []
-        bySlice.set(r.tagColumn, group)
-      }
-      group.push(r)
-    }
-    const after: typeof source = []
-    const transfer: ArrayBuffer[] = []
-    for (const group of bySlice.values()) {
-      const out = serializeSliceRecords(group)
-      after.push(...deserializeSliceRecords(out.payload))
-      transfer.push(...out.transfer)
-    }
+    const { after, transfer } = roundTrip(source)
     expect(after.length).toBe(before.length)
-
-    // Re-attach the reference region, which the protocol deliberately does not
-    // carry: `fetchReferenceSequence` is a caller-supplied callback and cannot
-    // cross into a worker, so the real integration calls applyReferenceSequence
-    // on the main thread after deserialising. Without this, `getReadBases()`
-    // has nothing to reconstruct a mapped read's bases from and returns
-    // undefined — which is the protocol behaving as designed, not a fault.
-    //
-    // The *substitutions* those bases resolve against do travel, in the arena's
-    // refCodes/subCodes columns, so this restores exactly the one thing that
-    // does not.
-    for (const [i, r] of after.entries()) {
-      r._refRegion = before[i]!._refRegion
-    }
 
     // observed after decoration on both sides, so the comparison covers the
     // reference-derived surface (bases, CIGAR, mismatch ref/sub) too
@@ -158,25 +154,6 @@ test('unplaced reads and an empty range survive the round trip', async () => {
   const path = 'test/data/xx#unsorted.tmp.cram'
   const source = await open(path).getRecordsForRange(-1, -1, 100_000_000)
   const before = await open(path).getRecordsForRange(-1, -1, 100_000_000)
-  const { payload } = serializeSliceRecords(source)
-  const after = deserializeSliceRecords(payload)
-  for (const [i, r] of after.entries()) {
-    r._refRegion = before[i]!._refRegion
-  }
+  const { after } = roundTrip(source)
   expect(after.map(observe)).toEqual(before.map(observe))
-})
-
-test('serializing across slice boundaries is refused rather than silently wrong', async () => {
-  // ce#1000 spans many slices, so its query result mixes several column sets —
-  // exactly the array that used to serialise to plausible-looking garbage
-  const records = await open('test/data/ce#1000.tmp.cram').getRecordsForRange(
-    0,
-    0,
-    100_000_000,
-  )
-  const columns = new Set(records.map(r => r.tagColumn))
-  expect(columns.size).toBeGreaterThan(1)
-  expect(() => serializeSliceRecords(records)).toThrow(
-    /more than one slice.*serialise each slice separately/s,
-  )
 })

@@ -6,6 +6,50 @@ it does the earlier entry says so.
 
 All coordinates are 0-based half-open.
 
+## v13 → v14: a record is a view onto its slice's columns
+
+`CramRecord` no longer holds its fields. The decode writes every per-record
+scalar into one `Int32Array` beside the read-feature, tag and quality columns —
+a `DecodedSlice` — and a record is that slice plus an index, with a getter per
+field. Nothing changes for a reader: `record.start`, `record.flags`,
+`record.readName` and the rest are the same names with the same values. What
+changes:
+
+- **Records are per query.** `getRecordsForRange` hands out fresh views each
+  call, so two queries over the same cached slice return records that are equal
+  but not identical. A consumer that used a record as a `Map` key across queries
+  should key on `uniqueId` instead. Writing through a view — `record.flags |= …`
+  — writes the column, and so is visible to every later query over that slice,
+  as writing a cached record's field used to be.
+- **Assignable fields are the ones mate association writes**: `flags`,
+  `nextSequenceId`, `nextStart`, `templateLength`, `mateRecordNumber`,
+  `readName`, `readBases`. The others are read-only; assigning one throws in
+  strict mode. `_refRegion` remains assignable for callers that decorate
+  synthesised records.
+- **The constructor is `new CramRecord(slice, index)`.** The options form,
+  `new CramRecord({ flags, start, … })`, still works and builds a one-record
+  slice; the fields it takes are `CramRecordArgs`, unchanged. Objects built by
+  `Object.create(CramRecord.prototype)` and assigned into no longer work.
+- **`readBases` is never `null`.** A `*` record reports `null` from
+  `getReadBases()` and `qualityScores` as before; the stored field is now
+  `string | undefined`. (It was never `null` in practice — the old constructor
+  dropped it — so this only tightens the type.)
+- **`serializeSliceRecords`/`deserializeSliceRecords` are gone.** A slice
+  crosses a worker boundary as itself: `serializeSlice(slice)` and
+  `deserializeSlice(payload)` in `cramFile/decodedSlice.ts`, for anyone who
+  drove the protocol by hand.
+- **A slice is one read.** `CramContainer.getSlice(position, size?)` takes the
+  size from the `.crai` as before, or works it out from the container's
+  landmarks when it is left out — so non-indexed access no longer reads blocks
+  one at a time, and `CramSlice.buildDecodeRequest` always succeeds.
+  `getCoreDataBlock` and `_getBlocksContentIdIndex` are gone; `getBlocks()`
+  remains.
+
+Why: rebuilding a record object per record on the host after a worker decode was
+a serial 0.5 µs a record — a quarter of an in-process decode on a 54,695-record
+file — and the record objects were most of what a short-read slice retained. See
+[ADR 0012](docs/adr/0012-records-are-views.md).
+
 ## v12 → v13: the mismatch window is half-open, and positions take an `origin`
 
 `getMismatches(opts)` and `forEachMismatch(cb, opts)` took a window that was

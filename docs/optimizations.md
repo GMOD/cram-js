@@ -45,6 +45,18 @@ whole-genome files this is really sized for.
 
 ## Choosing and fetching slices
 
+### One read per slice
+
+A slice is read whole — header block and data blocks in one byte range, sized
+from the `.crai`, or from the container's landmarks when there is no index — and
+its header parsed out of that buffer. It used to be three reads: `readBlock`
+probed the header block's own header, read the block again, and then the data
+blocks were fetched separately. The container's compression header block is one
+read for the same reason: the first landmark says exactly how long it is. A
+whole-reference query on `ce#1000` went from 546 reads, half under 80 bytes, to
+231 — one per slice and three per container. Over a byte-range cache those were
+already hits; locally they were syscalls and copies.
+
 ### The slices of one query share their containers
 
 A CRAM packs several slices per container, so without this every slice re-read
@@ -220,15 +232,23 @@ the assumption that it saved heap: it came out break-even (−0.06 MB on
 SRR396637, +0.20 MB on SRR396636), and it earns its place through the worker
 transfer below and through `getTag`.
 
-### Out of the worker by transfer, not by clone
+### A record is a view onto its slice's columns
 
-A decoded slice cannot travel as `CramRecord[]` — a class instance loses its
-prototype — and cloning the records as plain objects measured **1011 ms against
-a 392 ms decode**, which would have made the pool pointless. `sliceTransfer.ts`
-sends the columns instead: they are already typed arrays, so they transfer at
-zero copy, and the per-record scalars pack into one `Int32Array`. Tags alone
-were 243 ms of structured clone and are 11 ms as columns. Strings stay strings —
-15 ms for 153,677 of them, against 112 ms to encode the same set into bytes.
+The decode writes no per-record object at all. The per-record scalars go into
+one `Int32Array` beside the read-feature, tag and quality columns, and that
+column set — `DecodedSlice` — is what the cache holds and what a worker sends. A
+`CramRecord` is two numbers, the slice and an index, with a getter per field.
+
+Cloning per-record objects across the worker boundary measured **1011 ms against
+a 392 ms decode**, which is why columns travel; but packing them on the worker
+and rebuilding an object per record on the host, which is what the wire form
+did, was still a serial 0.5 µs a record — a quarter of the in-process decode on
+SRR396637, and the term that capped the pool's speedup. Now the slice is usable
+as it lands. It also removes the record object from what a short-read slice
+retains, which was most of it ([ADR 0012](adr/0012-records-are-views.md)). Tags
+alone were 243 ms of structured clone and are 11 ms as columns. Strings stay
+strings — 15 ms for 153,677 of them, against 112 ms to encode the same set into
+bytes.
 
 ## Handing records back
 
@@ -323,10 +343,8 @@ little (220 → 241 ms on 4 cores) so that five tracks gain a lot (1347 → 956 
 ([ADR 0009](adr/0009-one-pool-per-context-sized-for-the-host.md)).
 
 **A byte-range cache underneath.** `RemoteFileWithRangeCache` caches per 256 KiB
-chunk and joins reads already in flight, which is what makes this library's
-remaining duplicate reads — `readBlock` probes a block header at a position and
-then reads the block at the same position — a cache hit rather than a second
-request. Over a local file they are real syscalls; see [TODO.md](../TODO.md).
+chunk and joins reads already in flight, so the one read per slice above and the
+handful per container land in a few requests rather than one each.
 
 **Ask for one thing at a time.** Its record filter calls `getTag` rather than
 reading `record.tags`, its render path reads `clipLengthAtStartOfRead` rather

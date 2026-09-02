@@ -6,8 +6,8 @@ import ReadFeatureArena, {
   RF_SUBST,
   arenaFromReadFeatures,
 } from '../src/cramFile/readFeatureArena.ts'
-import CramRecord from '../src/cramFile/record.ts'
 import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import { bareRecord } from './lib/bareRecord.ts'
 import { testDataFile } from './lib/util.ts'
 
 import type { ReadFeature } from '../src/cramFile/record.ts'
@@ -117,14 +117,14 @@ test('assigning readFeatures throws a message pointing at the arena', () => {
   const arena = arenaFromReadFeatures([
     { code: 'X', data: 0, pos: 4, refPos: 104 },
   ])
-  const record = Object.assign(Object.create(CramRecord.prototype), {
+  const record = bareRecord({
     flags: 0,
     readLength: 10,
     start: 101,
     readFeatureArena: arena,
     readFeatureStart: 0,
     readFeatureCount: arena.length,
-  }) as CramRecord
+  })
   expect(record.readFeatures).toHaveLength(1)
   expect(() => {
     // types allow this: the accessor has a setter, which is how it gets to

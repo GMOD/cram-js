@@ -1,5 +1,29 @@
 import { CramMalformedError } from '../../errors.ts'
 import Constants from '../constants.ts'
+import {
+  P_LENGTH_ON_REF,
+  P_MAPPING_QUALITY,
+  P_MATE_RECORD_NUMBER,
+  P_TEMPLATE_SIZE,
+  SCALAR_STRIDE,
+  S_CRAM_FLAGS,
+  S_FLAGS,
+  S_LENGTH_ON_REF,
+  S_MAPPING_QUALITY,
+  S_MATE_RECORD_NUMBER,
+  S_NEXT_SEQUENCE_ID,
+  S_NEXT_START,
+  S_QUALITY_START,
+  S_READ_FEATURE_COUNT,
+  S_READ_FEATURE_START,
+  S_READ_GROUP_ID,
+  S_READ_LENGTH,
+  S_SEQUENCE_ID,
+  S_START,
+  S_TAG_COUNT,
+  S_TAG_START,
+  S_TEMPLATE_SIZE,
+} from '../decodedSlice.ts'
 import { readQualityScores } from '../qualityColumn.ts'
 import { NEXT_UNKNOWN, type ReadFeature } from '../record.ts'
 import { TAG_CHAR, TAG_NUMBER } from '../tagColumn.ts'
@@ -8,6 +32,7 @@ import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
 import type { Cursors } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type { DataSeriesTypes } from '../container/compressionScheme.ts'
+import type DecodedSlice from '../decodedSlice.ts'
 import type { QualityColumn } from '../qualityColumn.ts'
 import type ReadFeatureArena from '../readFeatureArena.ts'
 import type TagColumn from '../tagColumn.ts'
@@ -328,10 +353,18 @@ export interface SliceDecodeContext {
   refSeqId: number
 }
 
+/**
+ * Decode record `recordNumber` of the slice into `out`, at that index.
+ *
+ * Writes columns rather than returning an object: there is no per-record
+ * object on this path at all, which is what lets the slice cross a worker
+ * boundary as it is and sit in the cache at the size of its columns.
+ */
 export default function decodeRecord(
   ctx: SliceDecodeContext,
   recordNumber: number,
   uniqueId: number,
+  out: DecodedSlice,
 ) {
   const {
     bd,
@@ -455,7 +488,6 @@ export default function decodeRecord(
     tagCount = tagColumn.length - tagStart
   }
 
-  let readFeatureArena: ReadFeatureArena | undefined
   let readFeatureStart = 0
   let readFeatureCount = 0
   let lengthOnRef: number | undefined
@@ -463,7 +495,7 @@ export default function decodeRecord(
   // offset of this record's scores in the slice's quality column, -1 for a
   // record that carries none
   let qualityStart = -1
-  let readBases = undefined
+  let readBases: string | undefined = undefined
   if (!(flags & Constants.BAM_FUNMAP)) {
     // reading read features
     const encodedFeatureCount = bd.FN()
@@ -476,7 +508,6 @@ export default function decodeRecord(
         rfSchema,
         arena,
       )
-      readFeatureArena = arena
       readFeatureStart = start
       readFeatureCount = encodedFeatureCount
       lengthOnRef += refDelta
@@ -494,43 +525,54 @@ export default function decodeRecord(
     if (cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES) {
       qualityStart = readQualityScores(qualityColumn, readLength, bd.QS)
     }
-  } else if (cramFlags & Constants.CRAM_FLAG_NO_SEQ) {
-    // a '*' record carries neither bases nor scores; CramRecord.qualityScores
-    // reads that back off the flags rather than storing a null
-    readBases = null
-  } else {
+  } else if (!(cramFlags & Constants.CRAM_FLAG_NO_SEQ)) {
+    // a '*' record carries neither bases nor scores, and CramRecord.qualityScores
+    // reads that back off the flags, so there is nothing to store for one
     readBases = decodeReadBases(readLength, decodeBulkBases, bd.BA)
     if (cramFlags & Constants.CRAM_FLAG_PRESERVE_QUAL_SCORES) {
       qualityStart = readQualityScores(qualityColumn, readLength, bd.QS)
     }
   }
 
-  return {
-    readLength,
-    sequenceId,
-    cramFlags,
-    flags,
-    start: alignmentStart,
-    readGroupId,
-    readName,
-    nextSequenceId,
-    nextStart,
-    templateSize,
-    mateRecordNumber,
-    readFeatureArena,
-    readFeatureStart,
-    readFeatureCount,
-    lengthOnRef,
-    mappingQuality,
-    // the column array itself rather than the QualityColumn, so that reading a
-    // record's scores is one property hop; a growable column is re-pointed
-    // after the slice finishes decoding
-    qualityColumn: qualityStart < 0 ? undefined : qualityColumn.bytes,
-    qualityStart,
-    readBases,
-    tagColumn,
-    tagStart,
-    tagCount,
-    uniqueId,
+  const o = recordNumber * SCALAR_STRIDE
+  const s = out.scalars
+  s[o + S_FLAGS] = flags
+  s[o + S_CRAM_FLAGS] = cramFlags
+  s[o + S_READ_FEATURE_START] = readFeatureStart
+  s[o + S_READ_FEATURE_COUNT] = readFeatureCount
+  s[o + S_START] = alignmentStart
+  s[o + S_READ_LENGTH] = readLength
+  s[o + S_NEXT_SEQUENCE_ID] = nextSequenceId
+  s[o + S_NEXT_START] = nextStart
+  s[o + S_SEQUENCE_ID] = sequenceId
+  s[o + S_READ_GROUP_ID] = readGroupId
+  s[o + S_QUALITY_START] = qualityStart
+  s[o + S_TAG_START] = tagStart
+  s[o + S_TAG_COUNT] = tagCount
+  let presence = 0
+  if (lengthOnRef !== undefined) {
+    s[o + S_LENGTH_ON_REF] = lengthOnRef
+    presence |= P_LENGTH_ON_REF
+  }
+  if (templateSize !== undefined) {
+    s[o + S_TEMPLATE_SIZE] = templateSize
+    presence |= P_TEMPLATE_SIZE
+  }
+  if (mappingQuality !== undefined) {
+    s[o + S_MAPPING_QUALITY] = mappingQuality
+    presence |= P_MAPPING_QUALITY
+  }
+  if (mateRecordNumber !== undefined) {
+    s[o + S_MATE_RECORD_NUMBER] = mateRecordNumber
+    presence |= P_MATE_RECORD_NUMBER
+  }
+  out.presence[recordNumber] = presence
+  out.uniqueIds[recordNumber] = uniqueId
+  if (readName !== undefined) {
+    out.readNames[recordNumber] = readName
+  }
+  // a zero-length read decodes to '', which is nothing to keep
+  if (readBases) {
+    out.readBases[recordNumber] = readBases
   }
 }

@@ -5,10 +5,11 @@
  * everything it does is testable without a worker through
  * {@link decodeSliceFromBytes}, and anything that lived here would not be.
  *
- * Bundled by `webpack.worker.config.js` into `src/wasm/cram-worker-inlined.js`
- * and then wrapped as a string module by `scripts/inline-worker.sh`, so the pool
- * can launch it from a Blob URL with no consumer wiring. See `docs/workers.md`.
+ * Bundled by `webpack.worker.config.js` and then wrapped as a string module by
+ * `scripts/inline-worker.sh`, so the pool can launch it from a Blob URL with no
+ * consumer wiring. See `docs/workers.md`.
  */
+import { serializeSlice } from '../cramFile/decodedSlice.ts'
 import { decodeSliceFromBytes } from '../cramFile/slice/decodeSliceFromBytes.ts'
 import { warmupWasm } from '../htscodecs-wasm.ts'
 
@@ -44,7 +45,9 @@ async function handle(msg: HostMessage) {
 
   const { requestId } = msg
   try {
-    const { payload, transfer } = await decodeSliceFromBytes(msg.request)
+    const { payload, transfer } = serializeSlice(
+      await decodeSliceFromBytes(msg.request),
+    )
     self.postMessage({ type: 'sliceResult', requestId, payload }, transfer)
   } catch (e) {
     // Error objects do not survive postMessage with their class intact, so the

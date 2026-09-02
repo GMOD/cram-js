@@ -9,6 +9,32 @@ import {
   CIGAR_SOFT_CLIP,
 } from './cigar.ts'
 import Constants from './constants.ts'
+import DecodedSlice, {
+  P_LENGTH_ON_REF,
+  P_MAPPING_QUALITY,
+  P_MATE_RECORD_NUMBER,
+  P_TEMPLATE_LENGTH,
+  P_TEMPLATE_SIZE,
+  SCALAR_STRIDE,
+  S_CRAM_FLAGS,
+  S_FLAGS,
+  S_LENGTH_ON_REF,
+  S_MAPPING_QUALITY,
+  S_MATE_RECORD_NUMBER,
+  S_NEXT_SEQUENCE_ID,
+  S_NEXT_START,
+  S_QUALITY_START,
+  S_READ_FEATURE_COUNT,
+  S_READ_FEATURE_START,
+  S_READ_GROUP_ID,
+  S_READ_LENGTH,
+  S_SEQUENCE_ID,
+  S_START,
+  S_TAG_COUNT,
+  S_TAG_START,
+  S_TEMPLATE_LENGTH,
+  S_TEMPLATE_SIZE,
+} from './decodedSlice.ts'
 import { CramMalformedError } from '../errors.ts'
 import { forEachMismatch } from './mismatches.ts'
 import {
@@ -97,16 +123,10 @@ export const defaultDecodeOptions: Required<DecodeOptions> = {
 }
 
 /**
- * Everything {@link CramRecord}'s constructor takes.
- *
- * Written out rather than inferred as `ReturnType<typeof decodeRecord>`, which
- * makes every field required whether or not a record has one — building one by
- * hand then means seven explicit `undefined`s to satisfy a type whose only
- * content is "whatever the decoder happens to return".
- *
- * Deliberately still an options object rather than a positional constructor:
- * positional was measured and rejected, see
- * `docs/adr/0007-optimizations-measured-and-rejected.md`.
+ * The fields of one record, for building a {@link CramRecord} by hand — tests,
+ * and callers that synthesise records rather than decode them. The decoder
+ * never builds one of these: it writes columns, and a record is a view onto
+ * them (see {@link DecodedSlice}).
  */
 export interface CramRecordArgs {
   flags: number
@@ -460,6 +480,39 @@ function decodeBaseSubstitution(
 }
 
 /**
+ * Resolve the base substitutions in arena slots `[start, start + count)` against
+ * the reference: the substituted base of each X into `subCodes`, and the
+ * reference base of each X and B into `refCodes`. Runs once per record of a
+ * slice when the slice is decorated, so it deliberately touches no strings.
+ */
+export function resolveSubstitutions(
+  arena: ReadFeatureArena,
+  start: number,
+  count: number,
+  refRegion: RefRegion,
+  compressionScheme: CramContainerCompressionScheme,
+) {
+  const { codes } = arena
+  const end = start + count
+  for (let i = start; i < end; i++) {
+    const code = codes[i]
+    if (code === RF_SUBST) {
+      decodeBaseSubstitution(arena, i, refRegion, compressionScheme)
+    } else if (code === RF_BASE_QUAL) {
+      // B carries its read base verbatim, so it needs no substitution matrix —
+      // but forEachMismatch still needs the reference base to tell whether that
+      // base differs from it
+      const refCode = refRegion.seq.charCodeAt(
+        arena.refPos[i]! - refRegion.start,
+      )
+      if (refCode === refCode) {
+        arena.refCodes[i] = refCode
+      }
+    }
+  }
+}
+
+/**
  * {@link CramRecord.nextSequenceId} when this record does not say where the next
  * segment of its template is.
  *
@@ -478,51 +531,64 @@ function decodeBaseSubstitution(
 export const NEXT_UNKNOWN = -2
 
 /**
- * Class of each CRAM record returned by this API.
+ * One record of a decoded slice.
+ *
+ * A record is a **view**: two numbers — the slice's columns and an index into
+ * them — and every field below is a getter reading the column at that index.
+ * Nothing per record is retained beyond the columns, which is what lets a slice
+ * cross a worker boundary by transfer and sit in the cache at the size of its
+ * columns. Views are handed out fresh by {@link DecodedSlice.records} and are
+ * meant to be short-lived; the few things memoised on one (`tags`) last only as
+ * long as the view.
+ *
+ * The setters exist for mate association and for callers that synthesise
+ * records; they write through to the column, so a change is visible to every
+ * view of the same index.
  */
 export default class CramRecord {
-  /**
-   * Columnar storage for this record's aux tags, shared with every other record
-   * in the same slice. Prefer {@link getTag} over {@link tags}, which has to
-   * build an object to answer one question.
-   */
-  public tagColumn: TagColumn
-  /** index of this record's first tag in {@link tagColumn} */
-  public tagStart: number
-  public tagCount: number
+  /** the columns this record reads from, shared with every record of its slice */
+  readonly slice: DecodedSlice
+  /** this record's index in {@link slice} */
+  readonly index: number
+  private readonly o: number
   private _cachedTags: Record<string, TagValue> | undefined
-  public flags: number
-  public cramFlags: number
-  public readBases?: string | null
-  public _refRegion?: RefRegion
-  /**
-   * Columnar storage for this record's read features, shared with every other
-   * record in the same slice; undefined when the record has none. Read them
-   * through the columns rather than through {@link readFeatures}, which
-   * rebuilds an array of objects on every access.
-   */
-  public readFeatureArena: ReadFeatureArena | undefined
-  /** index of this record's first read feature in {@link readFeatureArena} */
-  public readFeatureStart: number
-  public readFeatureCount: number
+
+  constructor(slice: DecodedSlice, index: number)
+  constructor(args: CramRecordArgs)
+  constructor(sliceOrArgs: DecodedSlice | CramRecordArgs, index = 0) {
+    this.slice =
+      sliceOrArgs instanceof DecodedSlice
+        ? sliceOrArgs
+        : DecodedSlice.fromRecordArgs(sliceOrArgs)
+    this.index = index
+    this.o = index * SCALAR_STRIDE
+  }
+
+  get flags() {
+    return this.slice.scalars[this.o + S_FLAGS]!
+  }
+  set flags(value: number) {
+    this.slice.scalars[this.o + S_FLAGS] = value
+  }
+  get cramFlags() {
+    return this.slice.scalars[this.o + S_CRAM_FLAGS]!
+  }
+  get readLength() {
+    return this.slice.scalars[this.o + S_READ_LENGTH]!
+  }
   /** 0-based start of the alignment on the reference */
-  public start: number
-  public lengthOnRef: number | undefined
-  public readLength: number
-  // templateLength is computed post-hoc for intra-slice mate pairs,
-  // templateSize is the raw CRAM-encoded TS data series value
-  public templateLength?: number
-  public templateSize?: number
-  /**
-   * The read's name, or undefined for a file that does not store them and a
-   * record that mate association could not give a synthetic one to.
-   *
-   * Decoded during the slice decode rather than deferred behind the raw bytes:
-   * a retained `Uint8Array` view is ~104 bytes against ~56 for the name it
-   * holds, so holding one to avoid a decode cost almost twice what it saved.
-   */
-  public readName: string | undefined
-  public mateRecordNumber?: number
+  get start() {
+    return this.slice.scalars[this.o + S_START]!
+  }
+  get sequenceId() {
+    return this.slice.scalars[this.o + S_SEQUENCE_ID]!
+  }
+  get readGroupId() {
+    return this.slice.scalars[this.o + S_READ_GROUP_ID]!
+  }
+  get uniqueId() {
+    return this.slice.uniqueIds[this.index]!
+  }
   /**
    * Reference sequence id of the next segment in this read's template — SAM's
    * `RNEXT`, from CRAM's `NS` data series — or {@link NEXT_UNKNOWN} when the file
@@ -533,26 +599,58 @@ export default class CramRecord {
    * `@gmod/bam`, which all call these fields `RNEXT`/`PNEXT` — the mate wording
    * stays on the *flag* accessors ({@link isMateUnmapped},
    * {@link isMateReverseComplemented}), exactly as SAM splits it.
-   *
-   * This and {@link nextStart} used to be a `mate` object carrying the mate's
-   * read name, flags and uniqueId as well. Those three were written and never
-   * read — the flags' only real content is folded into this record's own
-   * {@link flags} as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding — and the
-   * object cost an allocation per paired record (~150k on a 19kb query against
-   * 1000x coverage) plus a reference from every record to its mate, which pinned
-   * whole slices in the record cache and cannot cross a worker boundary. Two
-   * numbers can.
    */
-  public nextSequenceId: number
+  get nextSequenceId() {
+    return this.slice.scalars[this.o + S_NEXT_SEQUENCE_ID]!
+  }
+  set nextSequenceId(value: number) {
+    this.slice.scalars[this.o + S_NEXT_SEQUENCE_ID] = value
+  }
   /**
    * 0-based start of the next segment in this read's template — SAM's `PNEXT`,
    * from CRAM's `NP`. Meaningless unless {@link hasNextPosition}.
    */
-  public nextStart: number
-  public uniqueId: number
-  public sequenceId: number
-  public readGroupId: number
-  public mappingQuality: number | undefined
+  get nextStart() {
+    return this.slice.scalars[this.o + S_NEXT_START]!
+  }
+  set nextStart(value: number) {
+    this.slice.scalars[this.o + S_NEXT_START] = value
+  }
+  /** offset of this record's scores in {@link qualityColumn}, -1 when it has none */
+  get qualityStart() {
+    return this.slice.scalars[this.o + S_QUALITY_START]!
+  }
+  /** index of this record's first read feature in {@link readFeatureArena} */
+  get readFeatureStart() {
+    return this.slice.scalars[this.o + S_READ_FEATURE_START]!
+  }
+  get readFeatureCount() {
+    return this.slice.scalars[this.o + S_READ_FEATURE_COUNT]!
+  }
+  /** index of this record's first tag in {@link tagColumn} */
+  get tagStart() {
+    return this.slice.scalars[this.o + S_TAG_START]!
+  }
+  get tagCount() {
+    return this.slice.scalars[this.o + S_TAG_COUNT]!
+  }
+  /**
+   * Columnar storage for this record's aux tags, shared with every other record
+   * in the same slice. Prefer {@link getTag} over {@link tags}, which has to
+   * build an object to answer one question.
+   */
+  get tagColumn(): TagColumn {
+    return this.slice.tagColumn
+  }
+  /**
+   * Columnar storage for this record's read features, shared with every other
+   * record in the same slice; undefined when the record has none. Read them
+   * through the columns rather than through {@link readFeatures}, which
+   * rebuilds an array of objects on every access.
+   */
+  get readFeatureArena(): ReadFeatureArena | undefined {
+    return this.readFeatureCount > 0 ? this.slice.arena : undefined
+  }
   /**
    * Every quality score in this record's slice, laid end to end and shared with
    * every other record in it; undefined when this record carries none. Read
@@ -560,9 +658,96 @@ export default class CramRecord {
    * `i < readLength` — {@link qualityScores} wraps that in a view, which costs
    * more than the scores themselves.
    */
-  public qualityColumn: Uint8Array | undefined
-  /** offset of this record's scores in {@link qualityColumn} */
-  public qualityStart: number
+  get qualityColumn(): Uint8Array | undefined {
+    return this.qualityStart < 0 ? undefined : this.slice.qualityBytes
+  }
+
+  private optional(bit: number, slot: number) {
+    return this.slice.presence[this.index]! & bit
+      ? this.slice.scalars[this.o + slot]!
+      : undefined
+  }
+  private setOptional(bit: number, slot: number, value: number | undefined) {
+    const { presence, scalars } = this.slice
+    if (value === undefined) {
+      presence[this.index] = presence[this.index]! & ~bit
+    } else {
+      presence[this.index] = presence[this.index]! | bit
+      scalars[this.o + slot] = value
+    }
+  }
+  get lengthOnRef() {
+    return this.optional(P_LENGTH_ON_REF, S_LENGTH_ON_REF)
+  }
+  get mappingQuality() {
+    return this.optional(P_MAPPING_QUALITY, S_MAPPING_QUALITY)
+  }
+  /** the raw CRAM-encoded TS data series value */
+  get templateSize() {
+    return this.optional(P_TEMPLATE_SIZE, S_TEMPLATE_SIZE)
+  }
+  /** computed post-hoc for intra-slice mate pairs; see {@link templateSize} for the stored value */
+  get templateLength() {
+    return this.optional(P_TEMPLATE_LENGTH, S_TEMPLATE_LENGTH)
+  }
+  set templateLength(value: number | undefined) {
+    this.setOptional(P_TEMPLATE_LENGTH, S_TEMPLATE_LENGTH, value)
+  }
+  get mateRecordNumber() {
+    return this.optional(P_MATE_RECORD_NUMBER, S_MATE_RECORD_NUMBER)
+  }
+  set mateRecordNumber(value: number | undefined) {
+    this.setOptional(P_MATE_RECORD_NUMBER, S_MATE_RECORD_NUMBER, value)
+  }
+  /**
+   * The read's name, or undefined for a file that does not store them and a
+   * record that mate association could not give a synthetic one to.
+   */
+  get readName() {
+    return this.slice.readNames[this.index]
+  }
+  set readName(value: string | undefined) {
+    this.slice.readNames[this.index] = value
+  }
+  /**
+   * The bases as stored for a record decoded without a reference, and where
+   * {@link getReadBases} memoises what it reconstructs.
+   */
+  get readBases() {
+    return this.slice.readBases[this.index]
+  }
+  set readBases(value: string | undefined) {
+    this.slice.readBases[this.index] = value
+  }
+  /**
+   * The reference region this record's bases can be reconstructed from, if the
+   * region the slice was decorated with covers the whole read.
+   *
+   * Two things read it, and they want different amounts of it. getReadBases()
+   * rebuilds the whole read, so it needs the whole read covered, which is what
+   * the test here gives it. forEachMismatch() only diffs the 'b' runs, so a
+   * partly covered read would still be worth something to it — a read hanging
+   * off the end of a contig reports no 'b' substitutions today, where its X
+   * features still resolve. Narrow enough to leave alone: relaxing the test
+   * would hand getReadBases() a region it cannot finish the read from.
+   */
+  get _refRegion(): RefRegion | undefined {
+    const region = this.slice.refRegions?.get(this.sequenceId)
+    if (region === undefined) {
+      return undefined
+    }
+    const start = this.start
+    return region.start <= start &&
+      region.end >= start + (this.lengthOnRef || this.readLength)
+      ? region
+      : undefined
+  }
+  set _refRegion(region: RefRegion | undefined) {
+    if (region !== undefined) {
+      this.slice.refRegions ??= new Map()
+      this.slice.refRegions.set(this.sequenceId, region)
+    }
+  }
 
   /**
    * This record's read features as the array of `{code, pos, refPos, data}`
@@ -647,60 +832,6 @@ export default class CramRecord {
   setSyntheticReadName(name: string) {
     if (!this.readName) {
       this.readName = name
-    }
-  }
-
-  constructor({
-    flags,
-    cramFlags,
-    readLength,
-    mappingQuality,
-    lengthOnRef,
-    qualityColumn,
-    qualityStart,
-    mateRecordNumber,
-    readBases,
-    readFeatureArena,
-    readFeatureStart,
-    readFeatureCount,
-    nextSequenceId,
-    nextStart,
-    readGroupId,
-    readName,
-    sequenceId,
-    uniqueId,
-    templateSize,
-    start,
-    tagColumn,
-    tagStart,
-    tagCount,
-  }: CramRecordArgs) {
-    this.flags = flags
-    this.cramFlags = cramFlags
-    this.readLength = readLength
-    this.mappingQuality = mappingQuality
-    this.lengthOnRef = lengthOnRef
-    this.qualityColumn = qualityColumn
-    this.qualityStart = qualityStart
-    this.readGroupId = readGroupId
-    this.sequenceId = sequenceId
-    this.uniqueId = uniqueId
-    this.start = start
-    this.tagColumn = tagColumn
-    this.tagStart = tagStart
-    this.tagCount = tagCount
-    this.readName = readName
-    if (readBases) {
-      this.readBases = readBases
-    }
-    this.templateSize = templateSize
-    this.readFeatureArena = readFeatureArena
-    this.readFeatureStart = readFeatureStart
-    this.readFeatureCount = readFeatureCount
-    this.nextSequenceId = nextSequenceId
-    this.nextStart = nextStart
-    if (mateRecordNumber !== undefined) {
-      this.mateRecordNumber = mateRecordNumber
     }
   }
 
@@ -1256,17 +1387,13 @@ export default class CramRecord {
   }
 
   /**
-   * Annotates this feature with the given reference sequence basepair
-   * information. This will add a `sub` and a `ref` item to base
-   * substitution read features given the actual substituted and reference
-   * base pairs, and will make the `getReadBases()` method work.
+   * Annotates this record with the given reference sequence: resolves the
+   * substituted and reference base of each base substitution into the arena's
+   * byte columns, and gives the record the region {@link getReadBases} can
+   * reconstruct its bases from.
    *
-   * @param {object} refRegion
-   * @param {number} refRegion.start
-   * @param {number} refRegion.end
-   * @param {string} refRegion.seq
-   * @param {CramContainerCompressionScheme} compressionScheme
-   * @returns {undefined} nothing
+   * The slice decode does this for every record of a slice at once; this is
+   * the per-record form for callers that synthesise records.
    */
   addReferenceSequence(
     refRegion: RefRegion,
@@ -1274,45 +1401,15 @@ export default class CramRecord {
   ) {
     const arena = this.readFeatureArena
     if (arena) {
-      // use the reference bases to decode the bases substituted in each base
-      // substitution
-      const { codes } = arena
-      const end = this.readFeatureStart + this.readFeatureCount
-      for (let i = this.readFeatureStart; i < end; i++) {
-        const code = codes[i]
-        if (code === RF_SUBST) {
-          decodeBaseSubstitution(arena, i, refRegion, compressionScheme)
-        } else if (code === RF_BASE_QUAL) {
-          // B carries its read base verbatim, so it needs no substitution
-          // matrix — but forEachMismatch still needs the reference base to tell
-          // whether that base differs from it
-          const refBase = refRegion.seq.charAt(
-            arena.refPos[i]! - refRegion.start,
-          )
-          if (refBase) {
-            arena.refCodes[i] = refBase.charCodeAt(0)
-          }
-        }
-      }
+      resolveSubstitutions(
+        arena,
+        this.readFeatureStart,
+        this.readFeatureCount,
+        refRegion,
+        compressionScheme,
+      )
     }
-
-    // if this region completely covers this read,
-    // keep a reference to it
-    //
-    // Two things read it, and they want different amounts of it. getReadBases()
-    // rebuilds the whole read, so it needs the whole read covered, which is what
-    // the test below gives it. forEachMismatch() only diffs the 'b' runs, so a
-    // partly covered read would still be worth something to it — a read hanging
-    // off the end of a contig reports no 'b' substitutions today, where its X
-    // features still resolve. Narrow enough to leave alone: relaxing the test
-    // would hand getReadBases() a region it cannot finish the read from.
-    if (
-      !this.readBases &&
-      refRegion.start <= this.start &&
-      refRegion.end >= this.start + (this.lengthOnRef || this.readLength)
-    ) {
-      this._refRegion = refRegion
-    }
+    this._refRegion = refRegion
   }
 
   // Serializer used by snapshot tests and consumers that JSON.stringify a

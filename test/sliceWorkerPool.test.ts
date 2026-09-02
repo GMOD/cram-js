@@ -11,6 +11,7 @@ import { LocalFile } from 'generic-filehandle2'
 import { afterEach, expect, test, vi } from 'vitest'
 
 import CraiIndex from '../src/craiIndex.ts'
+import { serializeSlice } from '../src/cramFile/decodedSlice.ts'
 import CramFile from '../src/cramFile/index.ts'
 import { decodeSliceFromBytes } from '../src/cramFile/slice/decodeSliceFromBytes.ts'
 import { CramMalformedError } from '../src/errors.ts'
@@ -67,7 +68,7 @@ function installStubWorker(mode: Mode, seen: SliceDecodeRequest[]) {
         })
         return
       }
-      const { payload } = await decodeSliceFromBytes(request)
+      const { payload } = serializeSlice(await decodeSliceFromBytes(request))
       // through structuredClone, so anything not actually clonable fails here
       this.onmessage?.({
         data: {
@@ -120,7 +121,7 @@ async function firstRequest(): Promise<SliceDecodeRequest> {
     .getSlice(entries[0]!.sliceStart, entries[0]!.sliceBytes)
   const req = await slice.buildDecodeRequest({ decodeTags: true })
   expect(req).toBeDefined()
-  return req!
+  return req
 }
 
 test('a slice decoded through the pool matches one decoded in-process', async () => {
@@ -128,17 +129,15 @@ test('a slice decoded through the pool matches one decoded in-process', async ()
   installStubWorker('decode', seen)
   const pool = await createSliceWorkerPool(2, 'stub://worker')
 
-  const viaPool = await pool.decodeSlice(await firstRequest())
-  const { payload } = await decodeSliceFromBytes(await firstRequest())
-  const { deserializeSliceRecords } =
-    await import('../src/cramFile/sliceTransfer.ts')
-  const direct = deserializeSliceRecords(payload)
+  const viaPoolSlice = await pool.decodeSlice(await firstRequest())
+  const direct = (await decodeSliceFromBytes(await firstRequest())).records()
 
   // undefined would mean the pool declined the slice, which is a failure here
-  expect(viaPool).toBeDefined()
-  expect(viaPool!.length).toBe(direct.length)
-  expect(viaPool!.map(r => r.toJSON())).toEqual(direct.map(r => r.toJSON()))
-  expect(viaPool![0]!.tags).toEqual(direct[0]!.tags)
+  expect(viaPoolSlice).toBeDefined()
+  const viaPool = viaPoolSlice!.records()
+  expect(viaPool.length).toBe(direct.length)
+  expect(viaPool.map(r => r.toJSON())).toEqual(direct.map(r => r.toJSON()))
+  expect(viaPool[0]!.tags).toEqual(direct[0]!.tags)
   pool.destroy()
 })
 
@@ -316,7 +315,9 @@ test('a dead worker stops being scheduled onto', async () => {
         this.onerror?.()
         return
       }
-      const { payload } = await decodeSliceFromBytes(msg.request)
+      const { payload } = serializeSlice(
+        await decodeSliceFromBytes(msg.request),
+      )
       this.onmessage?.({
         data: { type: 'sliceResult', requestId: msg.requestId, payload },
       })
@@ -368,7 +369,9 @@ test('slices spread across workers rather than piling on one', async () => {
       }
       perWorker[this.id]!++
       seen.push(msg.request)
-      const { payload } = await decodeSliceFromBytes(msg.request)
+      const { payload } = serializeSlice(
+        await decodeSliceFromBytes(msg.request),
+      )
       this.onmessage?.({
         data: { type: 'sliceResult', requestId: msg.requestId, payload },
       })

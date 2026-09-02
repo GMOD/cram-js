@@ -38,7 +38,11 @@ writes:
 
 - **read features into a per-slice arena** — struct-of-arrays typed columns,
   with each record holding a start and a count into them;
-- **tags and quality scores into columns of their own.**
+- **tags and quality scores into columns of their own;**
+- **the per-record scalars into one `Int32Array`**, eighteen slots a record.
+
+Together those are a `DecodedSlice`, and a `CramRecord` is a view onto one index
+of it — there is no per-record object anywhere between the file and the cache.
 
 Read features dominate decoded-record memory on long reads (a 37-record ONT
 slice decodes 213k of them), and 15 bytes of columns per feature against 64 per
@@ -50,7 +54,8 @@ That shape is load-bearing for the two steps after it:
   growing, since reallocating seven columns is where a long-read slice spends
   its decode time.
 - **Typed arrays let a worker transfer the result at zero copy** instead of
-  structured-cloning an object graph.
+  structured-cloning an object graph, and the host uses it as it lands rather
+  than rebuilding anything per record.
 
 [memory.md](memory.md#columns-not-objects) has the per-column costs,
 [read-features.md](read-features.md) how to read them without materializing

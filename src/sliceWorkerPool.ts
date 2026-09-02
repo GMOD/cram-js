@@ -8,25 +8,25 @@
  * to cap out around 1.2x, and this one moves the whole slice instead:
  * decompression, the record decode, and mate association.
  *
- * What that needs, and why it was not possible before, is a decoded slice that
- * can cross a `postMessage`. See `cramFile/sliceTransfer.ts`.
+ * What that needs is a decoded slice that can cross a `postMessage` as it is,
+ * which is what `cramFile/decodedSlice.ts` is.
  *
  * The width is there on the data that is slow. At jb2bench's own 19kb region a
  * query touches 16 slices on 1000x-coverage short reads and 22 on long reads;
  * only shallow files fall to one or two, and those are already fast. Even at one
  * slice the decode is off the main thread, which is the part a UI notices.
  */
-import { deserializeSliceRecords } from './cramFile/sliceTransfer.ts'
+import { deserializeSlice } from './cramFile/decodedSlice.ts'
 import { CramMalformedError, CramUnimplementedError } from './errors.ts'
 
-import type CramRecord from './cramFile/record.ts'
+import type DecodedSlice from './cramFile/decodedSlice.ts'
+import type { SliceTransfer } from './cramFile/decodedSlice.ts'
 import type { SliceDecodeRequest } from './cramFile/slice/decodeSliceFromBytes.ts'
-import type { SliceTransfer } from './cramFile/sliceTransfer.ts'
 
 export interface CramSliceWorkerPool {
   /**
-   * Decode one slice, returning its records **undecorated by the reference** —
-   * the caller applies that, since `fetchReferenceSequence` cannot cross into a
+   * Decode one slice, returning it **undecorated by the reference** — the
+   * caller applies that, since `fetchReferenceSequence` cannot cross into a
    * worker.
    *
    * Resolves **undefined** when the pool could not take the slice, or lost it:
@@ -37,7 +37,7 @@ export interface CramSliceWorkerPool {
    * the worker *reported* rejects instead, with its class intact, so a malformed
    * CRAM fails the same way with or without a pool.
    */
-  decodeSlice(request: SliceDecodeRequest): Promise<CramRecord[] | undefined>
+  decodeSlice(request: SliceDecodeRequest): Promise<DecodedSlice | undefined>
   destroy(): void
 }
 
@@ -87,7 +87,7 @@ function workersAvailable() {
 
 interface Pending {
   /** undefined means "not decoded here" — see {@link CramSliceWorkerPool} */
-  resolve: (records: CramRecord[] | undefined) => void
+  resolve: (slice: DecodedSlice | undefined) => void
   reject: (err: Error) => void
 }
 
@@ -167,7 +167,7 @@ class ManagedWorker {
     this.pending.delete(msg.requestId)
     this.inFlight--
     if (msg.type === 'sliceResult') {
-      cb.resolve(deserializeSliceRecords(msg.payload))
+      cb.resolve(deserializeSlice(msg.payload))
     } else {
       cb.reject(reviveError(msg.name, msg.message))
     }
@@ -218,7 +218,7 @@ class ManagedWorker {
   decodeSlice(request: SliceDecodeRequest) {
     const requestId = this.nextRequestId++
     let settle: Pending | undefined
-    const promise = new Promise<CramRecord[] | undefined>((resolve, reject) => {
+    const promise = new Promise<DecodedSlice | undefined>((resolve, reject) => {
       settle = { resolve, reject }
       this.pending.set(requestId, settle)
     })

@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
-import CramRecord from '../src/cramFile/record.ts'
 import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import { bareRecord } from './lib/bareRecord.ts'
 import { FetchableSmallFasta } from './lib/fasta/index.ts'
 import { testDataFile } from './lib/util.ts'
 
@@ -14,11 +14,12 @@ function makeRecord(
   readFeatures: ReadFeature[],
   start = 100,
   qualityScores?: Uint8Array,
+  readLength = 10,
 ) {
   const arena = arenaFromReadFeatures(readFeatures)
-  return Object.assign(Object.create(CramRecord.prototype), {
+  return bareRecord({
     flags: 0,
-    readLength: 10,
+    readLength,
     start,
     // a one-record slice, so this record's scores start at the front of the
     // slice-wide column
@@ -27,7 +28,7 @@ function makeRecord(
     readFeatureArena: arena,
     readFeatureStart: 0,
     readFeatureCount: arena.length,
-  }) as CramRecord
+  })
 }
 
 // the readable form of a Mismatch, so failures say what actually came out
@@ -203,14 +204,14 @@ test('forEachMismatch allocates nothing per difference', () => {
 })
 
 test('a record with no read features has no differences', () => {
-  const record = Object.assign(Object.create(CramRecord.prototype), {
+  const record = bareRecord({
     flags: 0,
     readLength: 10,
     start: 101,
     readFeatureArena: undefined,
     readFeatureStart: 0,
     readFeatureCount: 0,
-  }) as CramRecord
+  })
   expect(record.getMismatches()).toEqual([])
 })
 
@@ -282,6 +283,7 @@ function noRefRecord(bases: string, qualityScores?: Uint8Array) {
     [{ code: 'b', data: bases, pos: 0, refPos: 100 }],
     100,
     qualityScores,
+    bases.length,
   )
   record._refRegion = { start: 100, end: 100 + bases.length, seq: 'ACGTACGT' }
   return record

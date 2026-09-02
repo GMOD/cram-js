@@ -24,7 +24,7 @@ class CountingFile extends LocalFile {
 const CRAM = 'test/data/ce#1000.tmp.cram'
 
 describe('what a query reads', () => {
-  it('reads a 141 KB file as hundreds of small ranges', async () => {
+  it('reads a 141 KB file as one range per slice plus a few per container', async () => {
     const cramFilehandle = new CountingFile(CRAM)
     const craiFilehandle = new CountingFile(`${CRAM}.crai`)
     const readIndex = vi.spyOn(craiFilehandle, 'readFile')
@@ -38,8 +38,12 @@ describe('what a query reads', () => {
 
     const { size } = await cramFilehandle.stat()
     expect(size).toBeLessThan(150000)
-    expect(cramFilehandle.reads).toHaveLength(546)
-    expect(cramFilehandle.medianReadLength).toBeLessThan(80)
+    // 149 slices, one read each, and three per container — the two halves of
+    // its header and the compression header block. This used to be 546 reads
+    // with a median under 80 bytes, back when every block was probed for its
+    // header and then read again.
+    expect(cramFilehandle.reads).toHaveLength(231)
+    expect(cramFilehandle.medianReadLength).toBeGreaterThan(80)
 
     // the index is one fetch, so it is not part of that scatter
     expect(readIndex).toHaveBeenCalledTimes(1)

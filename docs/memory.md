@@ -12,13 +12,13 @@ forced GC, `heapUsed + arrayBuffers`:
 
 <!-- BEGIN GENERATED: retained-heap -->
 
-Measured at **v13.3.0** — regenerate with `pnpm docs:numbers`.
+Measured at **v13.4.3** — regenerate with `pnpm docs:numbers`.
 
 | file                    | records | features | retained    | JS heap | typed arrays |
 | ----------------------- | ------- | -------- | ----------- | ------- | ------------ |
-| HG002 ONT (long reads)  | 37      | 213,602  | **6.8 MB**  | 1.0 MB  | 5.8 MB       |
-| SRR396636 (short reads) | 23,051  | 40,212   | **12.1 MB** | 8.6 MB  | 3.5 MB       |
-| SRR396637 (short reads) | 54,695  | 108,148  | **27.1 MB** | 18.8 MB | 8.3 MB       |
+| HG002 ONT (long reads)  | 37      | 213,602  | **6.8 MB**  | 1.1 MB  | 5.8 MB       |
+| SRR396636 (short reads) | 23,051  | 40,212   | **10.2 MB** | 5.0 MB  | 5.3 MB       |
+| SRR396637 (short reads) | 54,695  | 108,148  | **22.6 MB** | 10.1 MB | 12.5 MB      |
 
 <!-- END GENERATED: retained-heap -->
 
@@ -33,11 +33,16 @@ existed.
 
 Long reads put nearly everything in **read features** — that 37-record ONT slice
 decodes 213,602 of them, ~95 KB of arena per record. Short reads have about two
-features each and put nearly everything in **per-record objects** instead: the
-record, its quality scores, its name. Two things used to be on that list and are
-now columns — see [the migration note](../MIGRATION.md) for both:
+features each and put nearly everything in **per-record data** instead: the
+scalars, the quality scores, the name. Three things used to be objects per
+record and are now columns — see [the migration note](../MIGRATION.md):
 
-- its **mate**, a `MateRecord` per paired record, now two numbers on the record.
+- the **record itself**, a 27-field object per record, now eighteen `Int32Array`
+  slots plus a presence byte and a double, with `CramRecord` a view onto them
+  ([ADR 0012](adr/0012-records-are-views.md)). The single largest term on a
+  short-read slice.
+- its **mate**, a `MateRecord` per paired record, now two numbers in the
+  scalars.
 - its **tags**, a `Record` per record, now
   [`TagColumn`](../src/cramFile/tagColumn.ts). Unlike everything else here, this
   one is **not** a memory technique: it came out break-even (−0.06 MB on
@@ -62,8 +67,9 @@ before optimizing anything here:
 The first line is the important one. A `Uint8Array` is an object with a backing
 store, a byte offset and a length, and none of that gets cheaper because the
 view is small. **A per-record view over ~100 bytes costs more than the bytes.**
-The second line means one more field on `CramRecord` costs 437 KB across a
-54,000-record view.
+The second line is why a record is no longer an object: 27 fields at 8 bytes,
+plus the header, on every one of 54,695 records, against 4 bytes per scalar in a
+column.
 
 ## Columns, not objects
 
@@ -100,7 +106,7 @@ histogram the percentages come from:
 
 <!-- BEGIN GENERATED: arena-columns -->
 
-Measured at **v13.3.0** — regenerate with `pnpm docs:numbers`.
+Measured at **v13.4.3** — regenerate with `pnpm docs:numbers`.
 
 | column          | ONT              | SRR396636        | SRR396637        |
 | --------------- | ---------------- | ---------------- | ---------------- |

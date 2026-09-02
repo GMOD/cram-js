@@ -1,32 +1,28 @@
 /**
  * Decode one slice from its raw bytes, with no `CramFile` in reach.
  *
- * This is the whole of what a worker does. Everything it needs arrives as bytes
- * and numbers — see {@link SliceDecodeRequest} — because the things
- * `CramSlice._fetchRecords` normally reaches for cannot cross a worker boundary:
- * the filehandle, the `fetchReferenceSequence` callback, and the parsed
- * compression scheme (which holds codec instances).
+ * This is the whole of the decode, for the worker and the in-process path
+ * alike. Everything it needs arrives as bytes and numbers — see
+ * {@link SliceDecodeRequest} — because the things a `CramFile` holds cannot
+ * cross a worker boundary: the filehandle, the `fetchReferenceSequence`
+ * callback, and the parsed compression scheme (which holds codec instances).
+ * The in-process caller hands its own parsed scheme in, since it has one; a
+ * worker parses and caches its own.
  *
- * It deliberately mirrors `_fetchRecords` step for step rather than sharing code
- * with it. Sharing would mean threading a "am I in a worker" flag through the
- * slice class, and the two halves genuinely differ: this one starts from bytes
- * and stops before the reference, that one starts from a filehandle and finishes
- * the reference off. The steps that must not drift — the block walk, the decode
- * loop's error wrapping, the trim/associate order — are called out below.
+ * It stops before the reference: the slice comes back undecorated, and
+ * `CramSlice` applies the reference on the main thread either way.
  */
 import { CramMalformedError } from '../../errors.ts'
 import CramContainerCompressionScheme from '../container/compressionScheme.ts'
+import DecodedSlice from '../decodedSlice.ts'
 import { parseBlockFromBuffer } from '../parseBlock.ts'
-import CramRecord from '../record.ts'
 import { getSectionParsers } from '../sectionParsers.ts'
-import { serializeSliceRecords } from '../sliceTransfer.ts'
 import { parseItem } from '../util.ts'
 import { buildSliceDecodeContext, trimSliceColumns } from './decodeContext.ts'
 import decodeRecord from './decodeRecord.ts'
-import { associateIntraSliceMates } from './index.ts'
+import { associateIntraSliceMates } from './mateAssociation.ts'
 
 import type { CramFileBlock } from '../file.ts'
-import type { SliceTransfer } from '../sliceTransfer.ts'
 
 /**
  * Everything a worker needs to decode one slice. All of it is structured-clonable
@@ -169,17 +165,20 @@ export function schemeCacheSize() {
 }
 
 /**
- * Decode the slice `req` describes, returning it in wire form.
+ * Decode the slice `req` describes.
  *
- * The records come back **undecorated by the reference** — no `_refRegion`, and
- * no `ref`/`sub` resolved into the arena's substitution columns. That is not an
- * omission: `fetchReferenceSequence` is a caller-supplied callback, so the main
- * thread applies it after deserialising. See `sliceTransfer.ts`.
+ * The slice comes back **undecorated by the reference** — no
+ * {@link DecodedSlice.refRegions}, and no `ref`/`sub` resolved into the arena's
+ * substitution columns. That is not an omission: `fetchReferenceSequence` is a
+ * caller-supplied callback, so the main thread applies it afterwards.
+ *
+ * `compressionScheme` is for a caller that already holds the container's parsed
+ * scheme; a worker leaves it out and parses through its own cache.
  */
-export async function decodeSliceFromBytes(req: SliceDecodeRequest): Promise<{
-  payload: SliceTransfer
-  transfer: ArrayBuffer[]
-}> {
+export async function decodeSliceFromBytes(
+  req: SliceDecodeRequest,
+  compressionScheme = getScheme(req),
+): Promise<DecodedSlice> {
   const {
     majorVersion,
     sliceBytes,
@@ -192,12 +191,10 @@ export async function decodeSliceFromBytes(req: SliceDecodeRequest): Promise<{
     decodeTags,
     validateChecksums,
   } = req
-  const compressionScheme = getScheme(req)
   const sectionParsers = getSectionParsers(majorVersion)
 
-  // SYNC: CramSlice._fetchBlocks' indexed branch. Each block's _endPosition is
-  // what locates the next one, so this cannot be parallelised or reordered — the
-  // block sizes are only known by walking them.
+  // Each block's _endPosition is what locates the next one, so this cannot be
+  // parallelised or reordered — the block sizes are only known by walking them.
   const blocks: CramFileBlock[] = new Array(numBlocks)
   let bufferOffset = 0
   for (let i = 0; i < numBlocks; i++) {
@@ -213,32 +210,27 @@ export async function decodeSliceFromBytes(req: SliceDecodeRequest): Promise<{
     bufferOffset = block._endPosition - blocksFilePosition
   }
 
-  // SYNC: CramSlice._fetchBlocksContentIdIndex and getCoreDataBlock
   const blocksByContentId: Record<number, CramFileBlock> = {}
   for (const block of blocks) {
     if (block.contentType === 'EXTERNAL_DATA') {
       blocksByContentId[block.contentId] = block
     }
   }
-  const coreDataBlock = blocks[0]
 
   const ctx = buildSliceDecodeContext({
     compressionScheme,
     blocksByContentId,
-    coreDataBlock,
+    coreDataBlock: blocks[0],
     majorVersion,
     refSeqId,
     refSeqStart,
     decodeTags,
   })
 
-  // SYNC: _fetchRecords' decode loop, including the buffer-overrun message —
-  // a worker-decoded slice must fail the same way an in-process one does, since
-  // a malformed file is the case most likely to reach a user through this path.
-  const records: CramRecord[] = new Array(numRecords)
+  const slice = new DecodedSlice(numRecords, ctx.tagColumn)
   for (let i = 0; i < numRecords; i += 1) {
     try {
-      records[i] = new CramRecord(decodeRecord(ctx, i, uniqueIdBase + i))
+      decodeRecord(ctx, i, uniqueIdBase + i, slice)
     } catch (e) {
       const err = e as { code?: string; message?: string }
       throw err.code === 'CRAM_BUFFER_OVERRUN'
@@ -251,7 +243,7 @@ export async function decodeSliceFromBytes(req: SliceDecodeRequest): Promise<{
     }
   }
 
-  trimSliceColumns(ctx, records)
-  associateIntraSliceMates(records)
-  return serializeSliceRecords(records)
+  trimSliceColumns(ctx, slice)
+  associateIntraSliceMates(slice.records())
+  return slice
 }

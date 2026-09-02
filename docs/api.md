@@ -149,6 +149,14 @@ Takes `{ path, url, filehandle }` — pass exactly one of the three.
 
 ## `CramRecord`
 
+A record is a **view**: the columns of its decoded slice (`record.slice`, a
+`DecodedSlice`) and an index into them (`record.index`). Every property below
+reads the column at that index, and the ones that can be assigned write through
+to it. Views are handed out fresh by each query and are meant to be short-lived;
+the slice's columns are what the cache holds and what a worker transfers. Build
+one by hand with `new CramRecord({ ...fields })`, which wraps the fields in a
+one-record slice.
+
 ### Properties
 
 - `readName` — read name
@@ -211,8 +219,10 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
 
 ### Methods
 
-- `getReadBases()` → `string | null | undefined` — the read sequence. Needs
-  `fetchReferenceSequence`; `getRecordsForRange` applies the reference for you.
+- `getReadBases()` → `string | null | undefined` — the read sequence, `null` for
+  a record with no bases. Needs `fetchReferenceSequence`; `getRecordsForRange`
+  applies the reference for you. Memoised on the slice, so a repeat query over
+  cached data pays once.
 - `getCigarString()` → `string` — the read's alignment (e.g. `"50M2I48M"`),
   reconstructed from the read features. Substitutions and mismatches come out as
   `M`, per the plain CIGAR convention. Unmapped reads, and mapped reads with no

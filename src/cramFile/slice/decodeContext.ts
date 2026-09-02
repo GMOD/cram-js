@@ -14,9 +14,9 @@ import { readNullTerminatedStringFromBuffer } from '../util.ts'
 import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
 import type CramContainerCompressionScheme from '../container/compressionScheme.ts'
+import type DecodedSlice from '../decodedSlice.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
-import type CramRecord from '../record.ts'
 import type {
   BoundDecoders,
   BulkBasesDecoder,
@@ -505,27 +505,18 @@ function bindTagReaders(
 }
 
 /**
- * Hand back the capacity the columns over-allocated while decoding. Both grow
- * geometrically, so either can be holding up to twice what it needs, and both
- * outlive the decode in the record cache.
+ * Hand back the capacity the columns over-allocated while decoding, and point
+ * `slice` at the finished columns. Both grow geometrically, so either can be
+ * holding up to twice what it needs, and both outlive the decode in the record
+ * cache.
  */
-export function trimSliceColumns(
-  ctx: SliceDecodeContext,
-  records: CramRecord[],
-) {
+export function trimSliceColumns(ctx: SliceDecodeContext, slice: DecodedSlice) {
   ctx.arena.trim()
-  // the tag column is reached through the records' `tagColumn` reference rather
-  // than by value, so trimming its arrays needs no re-pointing
   ctx.tagColumn.trim()
-
-  // trimming replaces the array, so the records handed the untrimmed one need
-  // re-pointing; an external column is the QS block and never moved
+  // an external column is the QS block itself and never moved
   if (ctx.qualityColumn.cursor === undefined) {
     trimQualityColumn(ctx.qualityColumn)
-    for (const record of records) {
-      if (record.qualityColumn !== undefined) {
-        record.qualityColumn = ctx.qualityColumn.bytes
-      }
-    }
   }
+  slice.arena = ctx.arena.length > 0 ? ctx.arena : undefined
+  slice.qualityBytes = ctx.qualityColumn.bytes
 }

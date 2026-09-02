@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 
+import { bareRecord } from './lib/bareRecord.ts'
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord, { NEXT_UNKNOWN } from '../src/cramFile/record.ts'
 import TagColumn from '../src/cramFile/tagColumn.ts'
@@ -8,12 +9,16 @@ import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
 
 // A 10bp mapped read at ref 101, fully covered by a 10bp reference region.
 // readFeatures/lengthOnRef are what each case varies.
-function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
+function makeRecord(
+  readFeatures: ReadFeature[],
+  lengthOnRef = 10,
+  readLength = 10,
+) {
   const arena = arenaFromReadFeatures(readFeatures)
   const record = new CramRecord({
     flags: 0,
     cramFlags: 0,
-    readLength: 10,
+    readLength,
     mappingQuality: 30,
     lengthOnRef,
     qualityColumn: undefined,
@@ -35,7 +40,7 @@ function makeRecord(readFeatures: ReadFeature[], lengthOnRef = 10) {
     tagStart: 0,
     tagCount: 0,
   })
-  const refRegion: RefRegion = { start: 101, end: 110, seq: 'ACGTACGTAC' }
+  const refRegion: RefRegion = { start: 101, end: 111, seq: 'ACGTACGTAC' }
   record._refRegion = refRegion
   return record
 }
@@ -61,9 +66,11 @@ test('throws rather than hanging on two features at one read position', () => {
 })
 
 test('throws rather than hanging when the reference region falls short', () => {
-  // a deletion claims 5 reference bases the 10bp region cannot supply on top of
-  // the read's own 10, so the trailing reference chunk comes back empty
-  const record = makeRecord([{ code: 'D', data: 5, pos: 2, refPos: 102 }], 15)
+  // a deletion claims 5 reference bases on top of the read's own 10, which a
+  // region sized from the record's lengthOnRef of 10 cannot supply — read
+  // features inconsistent with lengthOnRef — so the trailing reference chunk
+  // comes back empty
+  const record = makeRecord([{ code: 'D', data: 5, pos: 2, refPos: 102 }])
   expect(() => record.getReadBases()).toThrow(/seems malformed/)
 })
 
@@ -86,10 +93,8 @@ test('both reconstructions upper-case every source of bases', () => {
   const shortBases = short.getReadBases()
 
   // the same record over the byte path, which only runs at length >= 1000
-  const long = makeRecord(features)
+  const long = makeRecord(features, 1000, 1000)
   long._refRegion = { start: 101, end: 1101, seq: 'acgtacgtac'.repeat(100) }
-  long.readLength = 1000
-  long.lengthOnRef = 1000
   const longBases = long.getReadBases()!
 
   // 2 clipped + 2 verbatim + 1 B base + 2 inserted, then reference to fill 10
@@ -117,7 +122,7 @@ const REF_UNIT = 'acgtACGTns'
 function bothPaths(features: ReadFeature[], prefixLength: number) {
   const build = (readLength: number) => {
     const arena = arenaFromReadFeatures(features)
-    const record = Object.assign(Object.create(CramRecord.prototype), {
+    const record = bareRecord({
       flags: 0,
       cramFlags: 0,
       start: 101,
@@ -126,7 +131,7 @@ function bothPaths(features: ReadFeature[], prefixLength: number) {
       readFeatureArena: arena,
       readFeatureStart: 0,
       readFeatureCount: arena.length,
-    }) as CramRecord
+    })
     record._refRegion = {
       start: 101,
       end: 101 + REF_UNIT.length * 400,

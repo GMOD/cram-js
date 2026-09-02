@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest'
 
+import { bareRecord } from './lib/bareRecord.ts'
 import {
   externalQualityColumn,
   growableQualityColumn,
   readQualityScores,
   trimQualityColumn,
 } from '../src/cramFile/qualityColumn.ts'
-import CramRecord from '../src/cramFile/record.ts'
 
 // a record reading out of a slice-wide column shared with other records
 const recordOver = (
@@ -16,13 +16,13 @@ const recordOver = (
   flags = 0,
   cramFlags = 0,
 ) =>
-  Object.assign(Object.create(CramRecord.prototype), {
+  bareRecord({
     flags,
     cramFlags,
     readLength,
     qualityColumn,
     qualityStart,
-  }) as CramRecord
+  })
 
 // every file in test/data encodes QS as a plain external block, so the growable
 // column below is only reached by CRAMs whose QS uses some other encoding

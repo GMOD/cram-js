@@ -15,13 +15,13 @@ bottom before trusting or re-running them.
 
 ## Cache containers and compression schemes across queries
 
-`getContainerAtPosition` and `getSlice` construct fresh objects on every call —
-see the `// TODO: perhaps we should cache slices?` in `container/index.ts`. So
-even a query served entirely from `featureCache` re-reads the container header
-and the slice header and re-parses the compression header block: 36 filehandle
-reads, 6 containers and 6 compression schemes for a 6-slice warm query on
-SRR396637. Locally that is a couple of KB; over HTTP the parse happens
-regardless of what the byte-range cache does.
+`getContainerAtPosition` and `getSlice` construct fresh objects on every call.
+So even a query served entirely from `featureCache` re-reads the container
+header and re-parses the compression header block, and reads each slice's bytes
+again to get at its header — for a 6-slice warm query on SRR396637 that is 6
+containers and 6 compression schemes, plus the slices' 2.5 MB. Locally that is
+cheap; over HTTP the byte-range cache absorbs the reads but the parse happens
+regardless.
 
 The within-a-query half is done — `getRecordsForRange` shares containers across
 the slices of one query, pinned by `test/redundantReads.test.ts`. What is left
@@ -32,24 +32,15 @@ belongs to the same query. A file-level cache breaks that and needs the
 foreign-abort handling `CramFile.featureCache` and `CraiIndex` have — read
 [ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md) before starting.
 
-## `readBlock` reads the same offset twice
+## The container header is still two reads
 
-`readBlock` reads `cramBlockHeader.maxLength` at a position, then reads the full
-block at the same position — the second read is a superset of the first. Per
-cold decode: 2 of 8 filehandle reads on ONT, 6 of 22 on Illumina are redundant
-(~25%), but only ~34–102 redundant _bytes_. On `ce#1000.tmp.cram` it is the only
-remaining redundancy: a whole-reference query issues 545 reads at 373 distinct
-positions, so 172 of them are this.
-
-It is **not** 25% more range requests over HTTP, which an earlier version of
-this note guessed. jbrowse's `RemoteFileWithRangeCache` caches per 256 KiB
-chunk, and the probe and the full read are in the same chunk by construction, so
-the second one is a cache hit. What it costs there is a `Uint8Array` allocation,
-a copy and a synthesized `Response` per read. Locally it is a real
-`open`/`read`/`close`, since that is what `LocalFile.read` does per call.
-
-So: worth doing, but as an allocation/syscall win, not a network one. Measured
-at the CramFile→filehandle boundary.
+A slice and a compression header block are one read each now, so what is left of
+the header scatter is `_readContainerHeader`: it reads the fixed-size first
+half, then the landmarks, because their count is in the first half. A
+speculative single read of a few hundred bytes, re-read only when the landmark
+list overflows it, would make a container one read. On `ce#1000` that is 30 of
+the 231 reads a whole-reference query issues. Small, and only a syscall win
+under a byte-range cache.
 
 ## Measure what a cancelled CRAM navigation abandons
 
