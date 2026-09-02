@@ -59,7 +59,7 @@ export { default as DecodedSlice } from './cramFile/decodedSlice.ts'
 export type { CramRecordClass } from './cramFile/decodedSlice.ts'
 export {
   DEFAULT_CACHE_IDLE_TIMEOUT_MS,
-  DEFAULT_CACHE_SIZE,
+  DEFAULT_MAX_CACHE_BYTES,
 } from './cramFile/file.ts'
 export type { ReferenceInfo, SeqFetch } from './cramFile/file.ts'
 export { default as CraiIndex } from './craiIndex.ts'

@@ -85,14 +85,16 @@ container cache needs the foreign-abort handling the record cache and
 
 ### Size the decoded-slice cache above one query
 
-`featureCache` holds decoded records, keyed by slice position and by the decode
-options that would change what a slice decodes to. It counts **records** — a
-decoded record has no cheap size, and slices hold anywhere from a handful of
-records to tens of thousands — and the default is 1,000,000 because the number
-has to clear one query's working set. Below that it does not cache less, it
-caches _nothing_: each slice falls out before the next pan can reuse it while
-still holding the memory. A 50 kb window on 200x short-read data is 90,000
-records, and the old 20,000 default sat 4.5x below it
+`featureCache` holds decoded slices, keyed by slice position and by the decode
+options that would change what a slice decodes to. It weighs them in **bytes** —
+`DecodedSlice.byteLength`, the typed-array columns exactly and the strings by
+estimate, within 1–8% of the measured heap
+([ADR 0013](adr/0013-weigh-the-slice-cache-in-bytes.md)) — and the default is 1
+GB, the same number as `@gmod/bam`, because it has to clear one query's working
+set. Below that it does not cache less, it caches _nothing_: each slice falls
+out before the next pan can reuse it while still holding the memory. A 50 kb
+window on 1000x short-read data is 420,000 records at ~400 B each; the old
+default, 20,000 records, sat 21x below it
 ([ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md)).
 
 Eviction is plain LRU, so the bound means what it says. It used to be a
@@ -340,7 +342,7 @@ We measured all of this against jbrowse-components, and several of the wins sit
 on its side of the API. They are worth reading as the pattern for any consumer
 doing the same volume.
 
-**Budget across files, not per file.** `cacheSize` is per `CramFile`, and
+**Budget across files, not per file.** `maxCacheBytes` is per `CramFile`, and
 jbrowse holds one per open track for the life of the track — so the track count
 multiplies the ceiling and nothing bounds the sum. Its `CramAdapter` passes a
 per-JS-context `SharedBudget` instead, so a track the reader is not looking at

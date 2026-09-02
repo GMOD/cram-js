@@ -3,7 +3,7 @@ import { expect, test, vi } from 'vitest'
 import { CraiIndex, IndexedCramFile } from '../src/index.ts'
 import { testDataFile } from './lib/util.ts'
 
-// The record budget is enforced when a decode settles, so it does nothing for a
+// The byte budget is enforced when a decode settles, so it does nothing for a
 // consumer sitting still. jbrowse's CramAdapter memoizes one IndexedCramFile
 // for the life of the track, so without an idle timeout a tab parked on a
 // region holds its whole last view until the track is closed, times every open

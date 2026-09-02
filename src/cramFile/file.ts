@@ -29,7 +29,7 @@ import type { GenericFilehandle } from 'generic-filehandle2'
 /**
  * Drop a decoded slice nothing has looked at for three minutes.
  *
- * The record budget is enforced when a decode settles, so it does nothing at
+ * The byte budget is enforced when a decode settles, so it does nothing at
  * all for a consumer sitting still — and jbrowse's `CramAdapter` memoizes one
  * `IndexedCramFile` for the life of the track, so without this a tab parked on
  * a region holds its whole last view until the track is closed, times every
@@ -42,34 +42,24 @@ import type { GenericFilehandle } from 'generic-filehandle2'
 export const DEFAULT_CACHE_IDLE_TIMEOUT_MS = 3 * 60 * 1000
 
 /**
- * Records to keep in the decoded-slice cache.
+ * Bytes to keep in the decoded-slice cache: 1 GB, the same number as
+ * @gmod/bam's `DEFAULT_MAX_CACHE_BYTES`, so one `cacheBudget` can span both.
  *
  * Sized to hold several queries rather than part of one. Below a single query's
  * working set a budget does not cache less, it caches nothing — each slice
- * evicted before the next pan reuses it — and 20,000, the previous default, was
- * far below it. Measured working set for one query on the jb2bench CRAMs:
- * 40,000 records for a 20kb window at 200x, 420,000 for 50kb at 1000x.
+ * evicted before the next pan reuses it. The largest working sets measured on
+ * the jb2bench CRAMs (ADR 0004) are a 50kb window at 1000x: 420,000 short
+ * reads at ~400 B each, or 2,991 long reads at ~95 KB of read features each,
+ * ~175 MB and ~285 MB. Both clear this with room, and the six-window pan there
+ * went from 3167ms to 279ms once the budget cleared the working set.
  *
- * Six-window 50kb pan, second pass, at 20,000 against this:
- *
- *   200x.shortread    1231ms -> 32ms
- *   1000x.shortread   3167ms -> 279ms
- *
- * The old default did not even bound what it claimed to: the `'batch'` eviction
- * policy this used at the time spares everything the batch touched, so a
- * 20,000-record budget was measured holding 420,000. Raising the budget, and
- * dropping that policy in 11.3.0 (ADR 0005), makes the number honest as well as
- * useful.
- *
- * Records rather than bytes cannot bound memory, and this does not pretend to
- * (see `cacheSize`). It does mean the budget only ever binds on short-read
- * data, where records are small and numerous — long-read slices are few and
- * huge, 2,991 records for a 50kb window at 1000x, so they never approach it.
+ * Until v14 this was 1,000,000 *records*, because a record object had no cheap
+ * size; a slice of columns does (ADR 0013).
  *
  * Affordable only alongside DEFAULT_CACHE_IDLE_TIMEOUT_MS, which makes it a
  * peak under panning rather than a level a parked consumer holds.
  */
-export const DEFAULT_CACHE_SIZE = 1_000_000
+export const DEFAULT_MAX_CACHE_BYTES = 1024 * 1024 * 1024
 
 // source: https://abdulapopoola.com/2019/01/20/check-endianness-with-javascript/
 let isLittleEndian: boolean | undefined
@@ -158,26 +148,27 @@ export interface CramFileOptions {
    */
   checkSequenceMD5?: boolean
   /**
-   * Records to keep in the decoded-slice cache. Defaults to
-   * {@link DEFAULT_CACHE_SIZE}.
+   * Budget for the decoded-slice cache, in bytes. Defaults to
+   * {@link DEFAULT_MAX_CACHE_BYTES}.
    *
-   * Records, not bytes, so this does NOT bound memory — a decoded record has no
-   * cheap size and one long-read slice can retain tens of megabytes. It is a
-   * retention bound in the only unit available, and reads in flight plus the
-   * last settled entry sit outside it either way.
+   * A slice weighs what its columns retain — `DecodedSlice.byteLength`, the
+   * typed arrays exactly and the strings by estimate, within a few percent of
+   * the measured heap (ADR 0013). A **retention** bound, not a bound on peak
+   * memory: reads in flight, the last settled entry, and everything a query
+   * holds until it returns sit outside it.
    *
    * Size it to hold several queries. Below one query's working set it does not
    * cache less, it caches nothing: each slice is evicted before the next pan
    * can reuse it, so the hit rate is zero while the memory is retained anyway.
    */
-  cacheSize?: number
+  maxCacheBytes?: number
   /**
    * Drop a decoded slice once nothing has asked for it for this many
    * milliseconds. Defaults to {@link DEFAULT_CACHE_IDLE_TIMEOUT_MS}; `0` keeps
-   * slices until `cacheSize` evicts them.
+   * slices until `maxCacheBytes` evicts them.
    *
    * The only thing that lowers the cache while nothing is happening.
-   * `cacheSize` is enforced when a decode settles, so an idle cache stays
+   * `maxCacheBytes` is enforced when a decode settles, so an idle cache stays
    * wherever it got to — and jbrowse's `CramAdapter` memoizes one
    * `IndexedCramFile` for the life of the track, so a tab parked on a region
    * holds its whole last view until the track is closed, times every track
@@ -188,20 +179,16 @@ export interface CramFileOptions {
    */
   cacheIdleTimeoutMs?: number
   /**
-   * A budget shared with other `CramFile`s, so that {@link cacheSize} applies
-   * to their sum rather than to each of them.
+   * A budget shared with other `CramFile`s — and with any other
+   * `@gmod/shared-read-cache` consumer that weighs in bytes, @gmod/bam among
+   * them — so that {@link maxCacheBytes} applies to their sum rather than to
+   * each of them.
    *
    * A per-file ceiling is not a bound on a consumer that opens one file per
    * track, and jbrowse's `CramAdapter` memoizes one `IndexedCramFile` for the
    * life of the track. @gmod/bam measured what that costs: six tracks browsing
    * six windows retained 1442 MB with every cache still under its own ceiling,
    * so nothing was bounding the sum (its ADR 0018).
-   *
-   * **Every member of a budget must weigh in the same unit**, and this cache
-   * weighs *records* — see {@link cacheSize}. So this can be shared with other
-   * `CramFile`s and nothing else: handing it a budget that @gmod/bam or
-   * @gmod/tabix is also in would add records to bytes and bound neither. Give
-   * CRAM its own.
    */
   cacheBudget?: SharedBudget
   fetchReferenceSequence?: SeqFetch
@@ -287,7 +274,7 @@ export default class CramFile {
   public recordClass: CramRecordClass | undefined
   public options: {
     checkSequenceMD5: boolean
-    cacheSize: number
+    maxCacheBytes: number
   }
   public featureCache: SharedReadCache<string, DecodedSlice>
   private header: string | undefined
@@ -347,25 +334,23 @@ export default class CramFile {
       // written against, which for a big slice is many megabases the query
       // itself would never have fetched
       checkSequenceMD5: args.checkSequenceMD5 ?? false,
-      cacheSize: args.cacheSize ?? DEFAULT_CACHE_SIZE,
+      maxCacheBytes: args.maxCacheBytes ?? DEFAULT_MAX_CACHE_BYTES,
     }
 
     // cache of features in a slice, keyed by the slice offset. caches all of
     // the features in a slice, or none. the cache is actually used by the
     // slice object, it's just kept here at the level of the file
     this.featureCache = new SharedReadCache<string, DecodedSlice>({
-      maxSize: this.options.cacheSize,
-      // records, not bytes: there is no cheap way to size a decoded record, and
-      // a record count at least makes the documented contract true
-      sizeOf: slice => slice.recordCount,
+      maxSize: this.options.maxCacheBytes,
+      sizeOf: slice => slice.byteLength,
       // 'lru', the default, rather than the 'batch' policy this used until
-      // 11.3.0. 'batch' was adopted when cacheSize was 20,000 against queries
-      // needing 420,000 -- it rescues an undersized budget by SPARING whatever
-      // the batch touched, i.e. by exceeding the budget, measured holding
-      // 420,000 against a limit of 20,000. Now that DEFAULT_CACHE_SIZE is above
-      // the working set the two are measurably identical (same refill counts,
-      // times inside noise), so keeping 'batch' bought nothing and cost
-      // cacheSize its meaning: a consumer lowering it to constrain memory got
+      // 11.3.0. 'batch' was adopted when the budget was 20,000 records against
+      // queries needing 420,000 -- it rescues an undersized budget by SPARING
+      // whatever the batch touched, i.e. by exceeding the budget, measured
+      // holding 420,000 against a limit of 20,000. Now that the default is
+      // above the working set the two are measurably identical (same refill
+      // counts, times inside noise), so keeping 'batch' bought nothing and cost
+      // the budget its meaning: a consumer lowering it to constrain memory got
       // 21x what it asked for (ADR 0005).
       idleTimeoutMs: args.cacheIdleTimeoutMs ?? DEFAULT_CACHE_IDLE_TIMEOUT_MS,
       budget: args.cacheBudget,

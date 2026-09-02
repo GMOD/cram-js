@@ -34,6 +34,7 @@ How this differs from the other documents here:
 | [0010](0010-checkpoint-the-payload-offsets.md)          | Checkpoint the payload offsets, one per eight slots              | accepted |
 | [0011](0011-uniqueid-from-offset-plus-counter.md)       | Derive `uniqueId` from the slice offset and the record counter   | accepted |
 | [0012](0012-records-are-views.md)                       | A record is a view onto its slice's columns; a slice is one read | accepted |
+| [0013](0013-weigh-the-slice-cache-in-bytes.md)          | Weigh the slice cache in bytes                                   | accepted |
 
 ## Writing one
 

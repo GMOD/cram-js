@@ -266,6 +266,20 @@ export default class ReadFeatureArena {
     this.indexPayloads()
   }
 
+  /** The bytes the columns hold, capacity included; see `DecodedSlice.byteLength` */
+  get byteLength() {
+    return (
+      this.codes.byteLength +
+      this.pos.byteLength +
+      this.refPos.byteLength +
+      this.num.byteLength +
+      this.payloadChunks.byteLength +
+      this.payloadBytes.byteLength +
+      this.refCodes.byteLength +
+      this.subCodes.byteLength
+    )
+  }
+
   /** Fill {@link payloadChunks} from the columns as they stand. */
   private indexPayloads() {
     const { codes, num, length } = this

@@ -75,6 +75,13 @@ for (const r of records) {
   featureCount += r.readFeatures?.length ?? 0
 }
 
+// what the slice cache weighed these same slices at, to set against the
+// measured heap
+let weighed = 0
+for (const slice of new Set(records.map(r => r.slice))) {
+  weighed += slice.byteLength
+}
+
 const mb = (n: number) => +(n / 1024 / 1024).toFixed(2)
 
 console.log(
@@ -90,6 +97,7 @@ console.log(
     ),
     jsHeapMB: mb(after.heapUsed - before.heapUsed),
     arrayBufferMB: mb(after.arrayBuffers - before.arrayBuffers),
+    weighedMB: mb(weighed),
     decodeMs: +decodeMs.toFixed(1),
     sink,
   }),

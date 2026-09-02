@@ -1,4 +1,9 @@
 import { grow, nextCapacity } from './growableColumn.ts'
+import {
+  ARRAY_OVERHEAD_BYTES,
+  POINTER_BYTES,
+  stringArrayBytes,
+} from './retainedBytes.ts'
 
 /**
  * How to read a slot's entry in {@link TagColumn.values}.
@@ -251,5 +256,22 @@ export default class TagColumn {
       this.kinds = this.kinds.slice(0, n)
       this.values = this.values.slice(0, n)
     }
+  }
+
+  /** What the column retains, the side tables estimated; see `DecodedSlice.byteLength` */
+  get byteLength() {
+    let arrays = this.arrays.length * POINTER_BYTES
+    for (const a of this.arrays) {
+      arrays += ARRAY_OVERHEAD_BYTES + a.length * 8
+    }
+    return (
+      this.keyIds.byteLength +
+      this.kinds.byteLength +
+      this.values.byteLength +
+      stringArrayBytes(this.strings) +
+      stringArrayBytes(this.keyNames) +
+      arrays +
+      this.doubles.length * 8
+    )
   }
 }

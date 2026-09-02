@@ -38,6 +38,15 @@ changes:
   crosses a worker boundary as itself: `serializeSlice(slice)` and
   `deserializeSlice(payload)` in `cramFile/decodedSlice.ts`, for anyone who
   drove the protocol by hand.
+- **`cacheSize` is `maxCacheBytes`, and counts bytes.** The decoded-slice cache
+  weighs a slice by `DecodedSlice.byteLength` — its columns, with the strings
+  estimated — instead of by record count, and the default is 1 GB, the same name
+  and number as `@gmod/bam`'s `maxCacheBytes`, so one `cacheBudget` can now span
+  a consumer's BAM and CRAM files. `DEFAULT_CACHE_SIZE` is
+  `DEFAULT_MAX_CACHE_BYTES`. A consumer that passed `cacheSize` in records
+  should multiply by the size of its records — ~400 B for short reads, ~100 KB
+  for long ones — or take the default, which clears every working set measured
+  ([ADR 0013](docs/adr/0013-weigh-the-slice-cache-in-bytes.md)).
 - **A slice is one read.** `CramContainer.getSlice(position, size?)` takes the
   size from the `.crai` as before, or works it out from the container's
   landmarks when it is left out — so non-indexed access no longer reads blocks

@@ -3,7 +3,9 @@
 **Status:** accepted — `cacheSize` 20,000 → 1,000,000 records, plus
 `cacheIdleTimeoutMs` (default 3 minutes) and `clearFeatureCache`. The eviction
 policy this assumed was later dropped by
-[ADR 0005](0005-drop-the-batch-eviction-policy.md).
+[ADR 0005](0005-drop-the-batch-eviction-policy.md), and the unit — records — was
+replaced by bytes in [ADR 0013](0013-weigh-the-slice-cache-in-bytes.md); the
+working sets below still stand, in records.
 
 ## Context
 

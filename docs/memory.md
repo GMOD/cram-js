@@ -8,17 +8,19 @@ two different terms.
 ## Where the memory goes
 
 Retained heap after decoding a whole file into a held variable, fresh process,
-forced GC, `heapUsed + arrayBuffers`:
+forced GC, `heapUsed + arrayBuffers`. The last column is what the slice cache
+charges for the same slices, `DecodedSlice.byteLength` summed — see
+[the slice cache](#the-slice-cache) for how the two relate:
 
 <!-- BEGIN GENERATED: retained-heap -->
 
 Measured at **v13.4.3** — regenerate with `pnpm docs:numbers`.
 
-| file                    | records | features | retained    | JS heap | typed arrays |
-| ----------------------- | ------- | -------- | ----------- | ------- | ------------ |
-| HG002 ONT (long reads)  | 37      | 213,602  | **6.8 MB**  | 1.1 MB  | 5.8 MB       |
-| SRR396636 (short reads) | 23,051  | 40,212   | **10.2 MB** | 5.0 MB  | 5.3 MB       |
-| SRR396637 (short reads) | 54,695  | 108,148  | **22.6 MB** | 10.1 MB | 12.5 MB      |
+| file                    | records | features | retained    | JS heap | typed arrays | weighed |
+| ----------------------- | ------- | -------- | ----------- | ------- | ------------ | ------- |
+| HG002 ONT (long reads)  | 37      | 213,602  | **6.8 MB**  | 1.0 MB  | 5.8 MB       | 6.0 MB  |
+| SRR396636 (short reads) | 23,051  | 40,212   | **10.2 MB** | 5.0 MB  | 5.3 MB       | 7.9 MB  |
+| SRR396637 (short reads) | 54,695  | 108,148  | **22.6 MB** | 10.1 MB | 12.5 MB      | 18.5 MB |
 
 <!-- END GENERATED: retained-heap -->
 
@@ -185,21 +187,35 @@ both short-read fixtures. The general form of the same lesson:
 
 ## The slice cache
 
-`cacheSize` (default 1,000,000) bounds the decoded-slice cache by **record
-count**, not by slices: one slice holds anywhere from a handful of records to
-tens of thousands, so counting slices bounds nothing — 20,000 slices of long
-reads is hundreds of gigabytes.
+`maxCacheBytes` (default 1 GB) bounds the decoded-slice cache by **bytes**,
+weighed per slice by `DecodedSlice.byteLength`: every typed-array column's
+`byteLength`, plus an estimate for the strings — read names, unmapped read
+bases, tag strings, the reference regions — at their length plus 32 B each and 8
+B for the array slot. On the three fixtures above that weight lands within 1–8%
+of what the slices measurably retain
+([ADR 0013](adr/0013-weigh-the-slice-cache-in-bytes.md) has the table). It used
+to count records, because a record object had no cheap size; a slice of columns
+does. The `weighed` column in the generated table above is what the cache would
+charge for that fixture, against the heap it measured.
+
+Not slices: one slice holds anywhere from a handful of records to tens of
+thousands, so counting slices bounds nothing — 20,000 slices of long reads is
+hundreds of gigabytes. And not a bound on peak memory either: reads in flight,
+the last settled entry, and every slice a query holds until it returns sit
+outside it, and so do the `CramRecord` views a query hands back — 54,695 of them
+measured 3.6 MB, 69 B each, which is the query's cost and not the cache's.
 
 The number has to sit **above one query's working set**, which is why the
 default is what it is. `getRecordsForRange` starts every slice of a range at
 once and holds all of their records until it returns, so a budget below that
 does not cache less — it caches _nothing_, evicting each slice before the next
-pan can reuse it while retaining the memory anyway. A 50kb window on 200x
-short-read data is 90,000 records; the old 20,000 default was 4.5x below it.
-[ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has the working
-sets.
+pan can reuse it while retaining the memory anyway. A 50kb window on 1000x
+short-read data is 420,000 records at ~400 B, and on 1000x long reads 2,991
+records at ~95 KB of read features each — ~175 MB and ~285 MB, both well under
+the default. [ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has
+the working sets, in the records it was measured in.
 
-Eviction is plain LRU, so `cacheSize` means what it says. It used to be a
+Eviction is plain LRU, so `maxCacheBytes` means what it says. It used to be a
 `'batch'` policy that spared everything an in-flight query touched, which
 rescued a too-small budget by exceeding it — 420,000 records held against a
 stated 20,000. At a budget above the working set the two measure identically, so
@@ -208,7 +224,8 @@ limit: [ADR 0005](adr/0005-drop-the-batch-eviction-policy.md).
 
 Two other knobs: `cacheIdleTimeoutMs` (default 3 minutes) drops slices nothing
 has read for that long, and is the only thing that lowers the cache while
-nothing is happening; `cacheBudget` lets several `CramFile`s share one ceiling.
+nothing is happening; `cacheBudget` lets several `CramFile`s share one ceiling —
+and, now that both weigh in bytes, `@gmod/bam`'s files too.
 
 ## What the worker pool adds
 

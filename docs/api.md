@@ -16,9 +16,9 @@ new IndexedCramFile({
   fetchReferenceSequence, // async (seqId, start, end, refName, opts) => string
   checkSequenceMD5, // verify each slice's reference MD5. default false
   validateChecksums, // check block and container CRC32s. default false
-  cacheSize, // decoded records to keep. default 1,000,000
+  maxCacheBytes, // decoded bytes to keep. default 1 GB
   cacheIdleTimeoutMs, // drop slices unread for this long. default 3 minutes
-  cacheBudget, // a SharedBudget, to pool cacheSize across files
+  cacheBudget, // a SharedBudget, to pool maxCacheBytes across files
   useSliceWorkerPool, // decode slices on a worker pool. default true
   numSliceWorkers, // pool size. default min(hardwareConcurrency, 4)
 })
@@ -46,25 +46,29 @@ span, which can be many megabases the query would not otherwise fetch.
 
 ### The cache options
 
-`cacheSize` counts **records, not bytes**, so it does not bound memory: a
-decoded record has no cheap size, and one long-read slice can retain tens of
-megabytes. The cache holds slices whole, so the bound lands on a whole slice's
-record count at a time — [memory.md](memory.md) has why, and how far a query in
-flight may exceed it.
+`maxCacheBytes` bounds what the decoded-slice cache **retains**, in bytes. A
+slice weighs what its columns hold — `DecodedSlice.byteLength`: the typed arrays
+exactly, the strings by estimate — which comes to within 1–8% of the measured
+heap on the fixtures here
+([ADR 0013](adr/0013-weigh-the-slice-cache-in-bytes.md)). It is not a bound on
+peak memory: reads in flight, the last settled entry, and every slice a query
+holds until it returns all sit outside it, and the cache holds slices whole —
+[memory.md](memory.md#the-slice-cache) has how far a query in flight may exceed
+it.
 
 Size it to hold several queries. Below one query's working set it does not cache
 less, it caches _nothing_: every slice falls out before the next pan can reuse
 it, so the hit rate is zero and the memory stays put anyway.
 
 `cacheIdleTimeoutMs` is the only thing that lowers the cache while nothing is
-happening — the cache checks `cacheSize` when a decode settles, so an idle one
-stays wherever it got to. The clock runs from the last _read_ of a slice, so
+happening — the cache checks `maxCacheBytes` when a decode settles, so an idle
+one stays wherever it got to. The clock runs from the last _read_ of a slice, so
 panning back and forth over one region never expires it. `0` disables it.
 
-`cacheBudget` makes `cacheSize` apply to several `CramFile`s together instead of
-to each one, which is what a consumer opening a file per track needs. Every
-member of a budget has to weigh in the same unit, and this cache weighs records,
-so share one only with other `CramFile`s.
+`cacheBudget` makes `maxCacheBytes` apply to several `CramFile`s together
+instead of to each one, which is what a consumer opening a file per track needs.
+It weighs in the same unit as `@gmod/bam`'s cache, so one budget can hold a
+consumer's BAM and CRAM tracks together.
 
 ### The worker options
 

@@ -22,6 +22,11 @@
  */
 import ReadFeatureArena from './readFeatureArena.ts'
 import CramRecord from './record.ts'
+import {
+  ARRAY_OVERHEAD_BYTES,
+  STRING_OVERHEAD_BYTES,
+  stringArrayBytes,
+} from './retainedBytes.ts'
 import TagColumn from './tagColumn.ts'
 
 import type { CramRecordArgs, RefRegion } from './record.ts'
@@ -123,6 +128,36 @@ export default class DecodedSlice {
     this.qualityBytes = undefined
     this.tagColumn = tagColumn
     this.refRegions = undefined
+  }
+
+  /**
+   * What this slice retains, in bytes: every typed-array column's `byteLength`,
+   * plus an estimate for the strings — read names, unmapped read bases, tag
+   * strings, the reference regions — and the side tables. What
+   * `CramFile.featureCache` weighs a slice by; ADR 0013 has how close it comes
+   * to the measured heap.
+   */
+  get byteLength() {
+    let bytes =
+      this.scalars.byteLength +
+      this.presence.byteLength +
+      this.uniqueIds.byteLength +
+      stringArrayBytes(this.readNames) +
+      stringArrayBytes(this.readBases) +
+      this.tagColumn.byteLength
+    if (this.arena !== undefined) {
+      bytes += this.arena.byteLength
+    }
+    if (this.qualityBytes !== undefined) {
+      bytes += this.qualityBytes.byteLength
+    }
+    if (this.refRegions !== undefined) {
+      for (const region of this.refRegions.values()) {
+        bytes +=
+          ARRAY_OVERHEAD_BYTES + STRING_OVERHEAD_BYTES + region.seq.length
+      }
+    }
+    return bytes
   }
 
   /**

@@ -68,11 +68,11 @@ const stamp = `Measured at **v${version}** — regenerate with \`pnpm docs:numbe
 const retainedTable = [
   stamp,
   '',
-  '| file | records | features | retained | JS heap | typed arrays |',
-  '| ---- | ------- | -------- | -------- | ------- | ------------ |',
+  '| file | records | features | retained | JS heap | typed arrays | weighed |',
+  '| ---- | ------- | -------- | -------- | ------- | ------------ | ------- |',
   ...heap.map(
     h =>
-      `| ${LABELS[h.case]} | ${h.records.toLocaleString()} | ${h.features.toLocaleString()} | **${mb(h.retainedMB)} MB** | ${mb(h.jsHeapMB)} MB | ${mb(h.arrayBufferMB)} MB |`,
+      `| ${LABELS[h.case]} | ${h.records.toLocaleString()} | ${h.features.toLocaleString()} | **${mb(h.retainedMB)} MB** | ${mb(h.jsHeapMB)} MB | ${mb(h.arrayBufferMB)} MB | ${mb(h.weighedMB)} MB |`,
   ),
 ].join('\n')
 

@@ -1,24 +1,25 @@
 import { SharedReadCache } from '@gmod/shared-read-cache'
 import { expect, test } from 'vitest'
 
-import type CramRecord from '../src/cramFile/record.ts'
+import type DecodedSlice from '../src/cramFile/decodedSlice.ts'
 
 /**
- * The cache exactly as CramFile configures it -- records as the unit, and the
- * default 'lru' policy since 11.3.0 (ADR 0005). The cancellation behaviour
- * these tests cover lives in @gmod/shared-read-cache and is tested there too;
- * what is checked here is that cram's configuration of it still behaves the way
- * cram needs.
+ * The cache exactly as CramFile configures it -- bytes as the unit, weighed by
+ * `DecodedSlice.byteLength` (ADR 0013), and the default 'lru' policy since
+ * 11.3.0 (ADR 0005). The cancellation behaviour these tests cover lives in
+ * @gmod/shared-read-cache and is tested there too; what is checked here is that
+ * cram's configuration of it still behaves the way cram needs.
  */
-const makeCache = (maxRecords: number) =>
-  new SharedReadCache<string, CramRecord[]>({
-    maxSize: maxRecords,
-    sizeOf: records => records.length,
+type Weighed = Pick<DecodedSlice, 'byteLength'>
+
+const makeCache = (maxBytes: number) =>
+  new SharedReadCache<string, Weighed>({
+    maxSize: maxBytes,
+    sizeOf: slice => slice.byteLength,
   })
 
-// the cache only ever reads `.length` off the resolved array
-const records = (n: number) =>
-  Promise.resolve(new Array(n).fill(null) as unknown as CramRecord[])
+// the cache only ever reads `.byteLength` off the resolved slice
+const sliceOf = (byteLength: number) => Promise.resolve({ byteLength })
 
 /**
  * Put `promise` in the cache under `key` and hand it back.
@@ -29,9 +30,9 @@ const records = (n: number) =>
  * are further down.
  */
 function fill(
-  cache: SharedReadCache<string, CramRecord[]>,
+  cache: SharedReadCache<string, Weighed>,
   key: string,
-  promise: Promise<CramRecord[]>,
+  promise: Promise<Weighed>,
 ) {
   void cache.get(key, undefined, () => promise).catch(() => undefined)
   return promise
@@ -39,9 +40,9 @@ function fill(
 
 /** a promise the test settles by hand, plus the signal its fill was given */
 function deferred() {
-  let resolve!: (records: CramRecord[]) => void
+  let resolve!: (slice: Weighed) => void
   let reject!: (e: unknown) => void
-  const promise = new Promise<CramRecord[]>((res, rej) => {
+  const promise = new Promise<Weighed>((res, rej) => {
     resolve = res
     reject = rej
   })
@@ -50,18 +51,18 @@ function deferred() {
 
 test('serves a cached slice back', async () => {
   const cache = makeCache(100)
-  const p = fill(cache, 'a', records(10))
+  const p = fill(cache, 'a', sliceOf(10))
   await p
   expect(cache.getIfCached('a')).toBe(p)
   expect(cache.getIfCached('missing')).toBeUndefined()
 })
 
-test('bounds by record count, not by number of slices', async () => {
+test('bounds by bytes, not by number of slices', async () => {
   const cache = makeCache(100)
-  // three slices of 40 records: the third must push the first out, even though
+  // three slices of 40 bytes: the third must push the first out, even though
   // an entry-counting cache would happily hold all three
   for (const key of ['a', 'b', 'c']) {
-    await fill(cache, key, records(40))
+    await fill(cache, key, sliceOf(40))
   }
   expect(cache.getIfCached('a')).toBeUndefined()
   expect(cache.getIfCached('b')).toBeDefined()
@@ -71,11 +72,11 @@ test('bounds by record count, not by number of slices', async () => {
 test('evicts least recently used', async () => {
   const cache = makeCache(100)
   for (const key of ['a', 'b']) {
-    await fill(cache, key, records(40))
+    await fill(cache, key, sliceOf(40))
   }
   // touch 'a' so 'b' becomes the least recently used
   void cache.getIfCached('a')
-  await fill(cache, 'c', records(40))
+  await fill(cache, 'c', sliceOf(40))
 
   expect(cache.getIfCached('b')).toBeUndefined()
   expect(cache.getIfCached('a')).toBeDefined()
@@ -84,7 +85,7 @@ test('evicts least recently used', async () => {
 
 test('keeps a slice larger than the whole budget', async () => {
   const cache = makeCache(10)
-  const p = fill(cache, 'big', records(1000))
+  const p = fill(cache, 'big', sliceOf(1000))
   await p
   // it must not evict itself, or it would be re-decoded on every single query
   expect(cache.getIfCached('big')).toBe(p)
@@ -92,16 +93,17 @@ test('keeps a slice larger than the whole budget', async () => {
 
 // Until 11.3.0 this asserted the opposite -- that an over-budget batch keeps
 // every slice -- under the 'batch' eviction policy. That policy rescued a
-// too-small cacheSize by exceeding it: measured holding 420,000 records against
-// a limit of 20,000. With cacheSize now above the working set the two policies
-// are measurably identical, so what 'batch' actually bought was cacheSize not
-// meaning anything, and a consumer lowering it to constrain memory got 21x what
-// it asked for. Honouring the budget is the contract now (ADR 0005).
+// too-small budget by exceeding it: measured holding 420,000 records against
+// a limit of 20,000. With the default now above the working set the two
+// policies are measurably identical, so what 'batch' actually bought was the
+// budget not meaning anything, and a consumer lowering it to constrain memory
+// got 21x what it asked for. Honouring the budget is the contract now (ADR
+// 0005).
 test('an over-budget batch is evicted back down to the budget', async () => {
   const cache = makeCache(100)
   // what getRecordsForRange does: start every slice of the range at once
   const keys = ['a', 'b', 'c', 'd', 'e', 'f']
-  await Promise.all(keys.map(key => fill(cache, key, records(40))))
+  await Promise.all(keys.map(key => fill(cache, key, sliceOf(40))))
 
   expect(cache.totalSize).toBeLessThanOrEqual(100)
   // and it evicts from the least-recently-used end, so the newest survive
@@ -111,8 +113,8 @@ test('an over-budget batch is evicted back down to the budget', async () => {
 
 test('evicts the previous batch once a new one lands', async () => {
   const cache = makeCache(100)
-  await Promise.all(['a', 'b'].map(key => fill(cache, key, records(40))))
-  await fill(cache, 'c', records(40))
+  await Promise.all(['a', 'b'].map(key => fill(cache, key, sliceOf(40))))
+  await fill(cache, 'c', sliceOf(40))
 
   // 'a' and 'b' are no longer protected, so the budget applies to them again
   expect(cache.getIfCached('a')).toBeUndefined()
@@ -133,7 +135,7 @@ test('a second call for a live key joins rather than decoding again', async () =
   let decodes = 0
   const decode = () => {
     decodes++
-    return records(60)
+    return sliceOf(60)
   }
 
   const first = await cache.get('a', undefined, decode)
@@ -145,7 +147,7 @@ test('a second call for a live key joins rather than decoding again', async () =
   expect(decodes).toBe(1)
   expect(second).toBe(first)
 
-  await fill(cache, 'b', records(40))
+  await fill(cache, 'b', sliceOf(40))
   expect(cache.getIfCached('a')).toBeDefined()
   expect(cache.getIfCached('b')).toBeDefined()
 })
@@ -171,10 +173,10 @@ test('one consumer aborting does not cancel a decode another is waiting on', asy
   // the decode is still wanted by `staying`, so it must keep going
   expect(fillSignal!.aborted).toBe(false)
 
-  resolve(new Array(3).fill(null))
+  resolve({ byteLength: 3 })
   // ...and the caller that left still hears about its own cancellation
   await expect(first).rejects.toThrow(/abort/i)
-  expect(await second).toHaveLength(3)
+  expect((await second).byteLength).toBe(3)
 })
 
 test('a decode is cancelled once every consumer has aborted', async () => {
@@ -221,14 +223,14 @@ test('a consumer with no signal pins the decode', async () => {
   leaving.abort()
   expect(fillSignal!.aborted).toBe(false)
 
-  resolve(new Array(2).fill(null))
+  resolve({ byteLength: 2 })
   await expect(first).rejects.toThrow(/abort/i)
-  expect(await second).toHaveLength(2)
+  expect((await second).byteLength).toBe(2)
 })
 
 test('a hit on a settled slice does not retain the caller', async () => {
   const cache = makeCache(100)
-  await cache.get('a', undefined, () => records(5))
+  await cache.get('a', undefined, () => sliceOf(5))
 
   // A settled entry has taken its abort listeners back off its consumers'
   // signals, so a consumer registered after that point could never be
@@ -237,7 +239,7 @@ test('a hit on a settled slice does not retain the caller', async () => {
   // slices constantly, so this grew without bound on exactly the hot path the
   // cache exists to make cheap.
   for (let i = 0; i < 50; i++) {
-    await cache.get('a', new AbortController().signal, () => records(5))
+    await cache.get('a', new AbortController().signal, () => sliceOf(5))
   }
   expect(cache.waiterCount('a')).toBe(0)
 })
@@ -280,7 +282,7 @@ test('an already-aborted consumer never joins', async () => {
   await expect(
     cache.get('a', controller.signal, () => {
       filled = true
-      return records(1)
+      return sliceOf(1)
     }),
   ).rejects.toThrow(/abort/i)
   expect(filled).toBe(false)
@@ -307,10 +309,10 @@ test('a decode every consumer has abandoned is not joined', async () => {
   let refilled = false
   const second = await cache.get('a', undefined, () => {
     refilled = true
-    return records(3)
+    return sliceOf(3)
   })
   expect(refilled).toBe(true)
-  expect(second).toHaveLength(3)
+  expect(second.byteLength).toBe(3)
 })
 
 test('the same signal joining twice counts once', async () => {
