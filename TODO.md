@@ -32,16 +32,6 @@ belongs to the same query. A file-level cache breaks that and needs the
 foreign-abort handling `CramFile.featureCache` and `CraiIndex` have — read
 [ADR 0003](docs/adr/0003-abortsignal-on-the-read-path.md) before starting.
 
-## The container header is still two reads
-
-A slice and a compression header block are one read each now, so what is left of
-the header scatter is `_readContainerHeader`: it reads the fixed-size first
-half, then the landmarks, because their count is in the first half. A
-speculative single read of a few hundred bytes, re-read only when the landmark
-list overflows it, would make a container one read. On `ce#1000` that is 30 of
-the 231 reads a whole-reference query issues. Small, and only a syscall win
-under a byte-range cache.
-
 ## Measure what a cancelled CRAM navigation abandons
 
 The threading itself is **done on both sides**. This library has taken a

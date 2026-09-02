@@ -9,6 +9,16 @@ import type { ReadOpts } from '../../opts.ts'
 import type CramFile from '../file.ts'
 import type { ReferenceSpan } from '../slice/index.ts'
 
+/** how many landmarks the speculative header read leaves room for */
+const SPECULATIVE_LANDMARKS = 32
+
+function concat(a: Uint8Array, b: Uint8Array) {
+  const out = new Uint8Array(a.length + b.length)
+  out.set(a)
+  out.set(b, a.length)
+  return out
+}
+
 // A container is built fresh for every query — `CramFile.getContainerAtPosition`
 // constructs one rather than looking one up — so the memos below are private to
 // one query and a signal can be threaded straight through them. See
@@ -141,38 +151,46 @@ export default class CramContainer {
     const sectionParsers = getSectionParsers(majorVersion)
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
 
-    // parse the container header. do it in 2 pieces because you cannot tell
-    // how much to buffer until you read numLandmarks
-    const bytes1 = await this.file.read(
-      cramContainerHeader1.maxLength,
-      position,
-      opts,
-    )
-    const header1 = parseItem(bytes1, cramContainerHeader1.parser)
+    // The landmark count sits in the first half of the header, so the second
+    // half cannot be sized until the first is parsed. One read large enough for
+    // both, at any ordinary landmark count, makes the header one read; only a
+    // longer landmark list costs a second. A read that comes back short hit
+    // the end of the file, so whatever it holds is the whole header.
+    const speculativeLength =
+      cramContainerHeader1.maxLength +
+      cramContainerHeader2.maxLength(SPECULATIVE_LANDMARKS)
+    const bytes = await this.file.read(speculativeLength, position, opts)
+    const header1 = parseItem(bytes, cramContainerHeader1.parser)
     const numLandmarksSize = itf8Size(header1.numLandmarks)
-
-    const bytes2 = await this.file.read(
-      cramContainerHeader2.maxLength(header1.numLandmarks),
-      position + header1._size - numLandmarksSize,
-      opts,
-    )
+    const header2Offset = header1._size - numLandmarksSize
+    const header2Length = cramContainerHeader2.maxLength(header1.numLandmarks)
+    const inBuffer =
+      header2Offset + header2Length <= bytes.length ||
+      bytes.length < speculativeLength
+    const bytes2 = inBuffer
+      ? bytes.subarray(header2Offset)
+      : await this.file.read(header2Length, position + header2Offset, opts)
     const header2 = parseItem(bytes2, cramContainerHeader2.parser)
+    const size = header2Offset + header2._size
 
     if (this.file.validateChecksums && header2.crc32 !== undefined) {
-      await this.file.checkCrc32(
-        position,
-        header1._size + header2._size - numLandmarksSize - 4,
+      this.file.checkCrc32Bytes(
+        inBuffer
+          ? bytes.subarray(0, size - 4)
+          : concat(
+              bytes.subarray(0, header2Offset),
+              bytes2.subarray(0, header2._size - 4),
+            ),
         header2.crc32,
         `container header beginning at position ${position}`,
-        opts,
       )
     }
 
     return {
       ...header1,
       ...header2,
-      _size: header1._size + header2._size - numLandmarksSize,
-      _endPosition: header1._size + header2._size - numLandmarksSize + position,
+      _size: size,
+      _endPosition: size + position,
     }
   }
 }

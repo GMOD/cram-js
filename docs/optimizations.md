@@ -52,10 +52,13 @@ from the `.crai`, or from the container's landmarks when there is no index — a
 its header parsed out of that buffer. It used to be three reads: `readBlock`
 probed the header block's own header, read the block again, and then the data
 blocks were fetched separately. The container's compression header block is one
-read for the same reason: the first landmark says exactly how long it is. A
-whole-reference query on `ce#1000` went from 546 reads, half under 80 bytes, to
-231 — one per slice and three per container. Over a byte-range cache those were
-already hits; locally they were syscalls and copies.
+read for the same reason: the first landmark says exactly how long it is. The
+container header is one read too: its landmark count sits in the fixed-size
+first half, so it used to be read in two pieces, and is now one speculative read
+with room for 32 landmarks, re-read only when a container has more (no fixture
+here has over five). A whole-reference query on `ce#1000` went from 546 reads,
+half under 80 bytes, to 202 — one per slice and two per container. Over a
+byte-range cache those were already hits; locally they were syscalls and copies.
 
 ### The reference is fetched alongside the decode, not after it
 

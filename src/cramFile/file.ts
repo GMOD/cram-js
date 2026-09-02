@@ -532,11 +532,22 @@ export default class CramFile {
     description: string,
     opts?: ReadOpts,
   ) {
-    const b = await this.read(length, position, opts)
+    this.checkCrc32Bytes(
+      await this.read(length, position, opts),
+      recordedCrc32,
+      description,
+    )
+  }
+
+  checkCrc32Bytes(
+    bytes: Uint8Array,
+    recordedCrc32: number,
+    description: string,
+  ) {
     // this shift >>> 0 is equivalent to crc32(b).unsigned but uses the
     // internal calculator of crc32 to avoid accidentally importing buffer
     // https://github.com/alexgorbatchev/crc/blob/31fc3853e417b5fb5ec83335428805842575f699/src/define_crc.ts#L5
-    const calculatedCrc32 = crc32(b) >>> 0
+    const calculatedCrc32 = crc32(bytes) >>> 0
     if (calculatedCrc32 !== recordedCrc32) {
       throw new CramMalformedError(
         `crc mismatch in ${description}: recorded CRC32 = ${recordedCrc32}, but calculated CRC32 = ${calculatedCrc32}`,

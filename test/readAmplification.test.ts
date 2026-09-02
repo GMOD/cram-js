@@ -38,11 +38,12 @@ describe('what a query reads', () => {
 
     const { size } = await cramFilehandle.stat()
     expect(size).toBeLessThan(150000)
-    // 149 slices, one read each, and three per container — the two halves of
-    // its header and the compression header block. This used to be 546 reads
-    // with a median under 80 bytes, back when every block was probed for its
-    // header and then read again.
-    expect(cramFilehandle.reads).toHaveLength(231)
+    // 149 slices, one read each, and two per container — its header, read
+    // speculatively in one go, and the compression header block. This used to
+    // be 546 reads with a median under 80 bytes, back when every block was
+    // probed for its header and then read again, and 231 while the header was
+    // still two reads.
+    expect(cramFilehandle.reads).toHaveLength(202)
     expect(cramFilehandle.medianReadLength).toBeGreaterThan(80)
 
     // the index is one fetch, so it is not part of that scatter

@@ -53,7 +53,7 @@ test('a range query reads little more than the bytes it needs', async () => {
 
   // The fixture is 141,134 bytes and the query covers all of it. Before
   // containers were shared this read 200,851 — 1.42x the file. The remaining
-  // overhead is `readBlock` probing a block header and then re-reading it as
-  // part of the full block; see TODO.md.
+  // overhead is the speculative container header read: 221 bytes requested
+  // against a header of about 30, once per container.
   expect(bytes).toBeLessThan(141_134 * 1.1)
 })
