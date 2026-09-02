@@ -17,6 +17,17 @@ if ! command -v emcc &> /dev/null; then
     exit 1
 fi
 
+# The tracked bundle is built by the version .github/workflows/publish.yml
+# pins, and a different emscripten emits different (equivalent) JS, so a local
+# build under another version rewrites src/wasm/htscodecs.js for nothing.
+EXPECTED_EMCC_VERSION=6.0.6
+EMCC_VERSION="$(emcc --version 2>/dev/null | head -1 | sed -E 's/.* ([0-9]+\.[0-9]+\.[0-9]+) .*/\1/')"
+if [ "$EMCC_VERSION" != "$EXPECTED_EMCC_VERSION" ]; then
+    echo "Error: emcc $EMCC_VERSION found, but this build is pinned to $EXPECTED_EMCC_VERSION (see .github/workflows/publish.yml)."
+    echo "Install it with: ~/emsdk/emsdk install $EXPECTED_EMCC_VERSION && ~/emsdk/emsdk activate $EXPECTED_EMCC_VERSION"
+    exit 1
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 

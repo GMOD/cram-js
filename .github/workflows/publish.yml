@@ -31,6 +31,10 @@ jobs:
       # exactly what test/samtoolsAgreement.test.ts did with `seqFetch`.
       - run: pnpm typecheck
       - run: pnpm build
+      # The wasm bundle and the inlined worker are tracked, and `pnpm build` has
+      # just regenerated both under the pinned emscripten. Any difference means
+      # the tracked copy was built by something else and is stale.
+      - run: git diff --exit-code -- src/wasm htscodecs-wasm/htscodecs.esm.js
       - run: pnpm test --run
       - run: pnpm test:pack
 
