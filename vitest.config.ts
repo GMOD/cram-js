@@ -20,6 +20,9 @@ export default defineConfig({
     // suite is not flaky under load
     testTimeout: 60000,
     hookTimeout: 60000,
+    // several tests log verbose progress via console.log; only surface it
+    // when a test actually fails
+    silent: 'passed-only',
     snapshotFormat: {
       maxOutputLength: Infinity,
     },

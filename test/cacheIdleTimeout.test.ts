@@ -85,13 +85,18 @@ test('clearFeatureCache drops everything, and stops the sweep', async () => {
     const cram = open(60_000)
     await cram.getRecordsForRange(0, 10000, 20000)
     expect(cram.cram.featureCache.size).toBeGreaterThan(0)
-    expect(vi.getTimerCount()).toBeGreaterThan(0)
+    // the underlying filehandle keeps its own idle timer running for the fd,
+    // unrelated to the feature cache, so the baseline is whatever is already
+    // ticking rather than zero
+    const timersBeforeClear = vi.getTimerCount()
+    expect(timersBeforeClear).toBeGreaterThan(0)
 
     cram.clearFeatureCache()
     expect(cram.cram.featureCache.size).toBe(0)
     expect(cram.cram.featureCache.totalSize).toBe(0)
-    // an emptied cache must not leave a timer ticking over nothing
-    expect(vi.getTimerCount()).toBe(0)
+    // an emptied cache must not leave a timer ticking over nothing: only the
+    // sweep interval should be gone, so the count drops by exactly one
+    expect(vi.getTimerCount()).toBe(timersBeforeClear - 1)
   } finally {
     vi.useRealTimers()
   }
