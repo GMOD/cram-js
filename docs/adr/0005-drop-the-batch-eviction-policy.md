@@ -13,12 +13,12 @@ set.
 
 ADR 0004 raised `cacheSize` to 1,000,000, above the working set of every query
 measured. That removes the premise `'batch'` was adopted under, so the policy
-was re-measured rather than assumed to still be earning its keep.
+was re-measured rather than assumed to still be needed.
 
-What `'batch'` does is defer eviction until no reads are in flight and then
-**spare everything the batch touched**. When a batch touches more than the whole
-budget, the cache is left over the budget — that is the documented trade, and it
-is how `'batch'` rescues a too-small budget: by not honoring it.
+`'batch'` defers eviction until no reads are in flight and then **spares
+everything the batch touched**. When a batch touches more than the whole budget,
+the cache is left over the budget — that is the documented trade, and it is how
+`'batch'` rescues a too-small budget: by not honoring it.
 
 ## Decision
 
@@ -31,7 +31,7 @@ honored.
   `cacheSize`, so it takes the default, where the two are measurably the same.
   The only code affected is a consumer that explicitly sets a small budget.
 
-- **And for that consumer, this is the fix rather than the regression.** Setting
+- **For that consumer, this is the fix rather than the regression.** Setting
   `cacheSize: 20000` is a request to constrain memory. Under `'batch'` that
   request was answered with 420,000 records held. Being slower than you asked
   for is a worse-but-honest outcome than being given 21x the memory you asked
@@ -78,6 +78,6 @@ and holds **21x its stated limit** to do it.
 
 `'batch'` was this package's only consumer of that policy. It stays in the
 package as a documented option, but its doc comment should no longer read as a
-recommendation on cram's authority: what cram learned is that it rescues an
-undersized budget by exceeding it, and that a budget above the working set is
-the better fix.
+recommendation on cram's authority: this ADR shows that it rescues an undersized
+budget by exceeding it, and that a budget above the working set is the better
+fix.

@@ -18,13 +18,12 @@ The obstacle is that the read path is a stack of **self-clearing memoized
 promises** — `getDefinition`, `getCompressionScheme`, `getHeader`,
 `_getBlocksContentIdIndex`, then `SliceRecordCache`. Every one of them already
 drops a rejection, so a cancellation cannot _poison_ a cache; `SliceRecordCache`
-documents that hazard. That was never the problem.
-
-The problem is that a memo has no way to tell **whose** cancellation it is
-seeing. Thread a signal in naively and a query that happens to join a read
-started by a cancelled query inherits that cancellation as its own failure. It
-would succeed on a retry — the entry was dropped — but nothing retries, so it
-fails for a reason that has nothing to do with it.
+documents that hazard, and a naive signal poses a different problem: a memo has
+no way to tell **whose** cancellation it is seeing. Thread a signal in naively
+and a query that happens to join a read started by a cancelled query inherits
+that cancellation as its own failure. It would succeed on a retry — the entry
+was dropped — but nothing retries, so it fails for a reason that has nothing to
+do with it.
 
 ## Decision
 
@@ -34,10 +33,10 @@ Split the read path by **who owns the read**, and handle each half differently.
 constructed fresh for every query — `getContainerAtPosition` and `getSlice`
 build one rather than looking one up — so their memos are private to a single
 query and every caller of one is the same query carrying the same signal. Those
-memos take the signal directly, which is what `memoizeAsync` was generalized to
-allow (first caller's arguments win, documented there as safe only for arguments
-that cannot change the result). This is where the bytes are: `_fetchBlocks`
-issues the slice's whole payload in one read.
+memos take the signal directly, now that `memoizeAsync` has been generalized to
+allow it (first caller's arguments win, documented there as safe only for
+arguments that cannot change the result). This is where the bytes are:
+`_fetchBlocks` issues the slice's whole payload in one read.
 
 This deliberately includes `getHeader` and `_getBlocksContentIdIndex`, which an
 earlier sketch of this work proposed excluding as "shared file-wide". They are
@@ -55,36 +54,36 @@ handled, and there is nothing to save.
 **The decoded slice is reference-counted.** `SliceRecordCache` is shared between
 concurrent queries, so its decode does not run under any one caller's signal. It
 runs under a per-entry `AbortController` that aborts only once **every**
-consumer that joined has given up; a caller's own abort is reported to that
-caller alone, by re-checking it after the shared promise settles. A cancellation
-therefore cannot leak between queries because nothing is cancelled until nobody
-wants it.
+consumer that joined has itself aborted; a caller's own abort is reported to
+that caller alone, by re-checking it after the shared promise settles. A
+cancellation therefore cannot leak between queries because nothing is cancelled
+until nobody wants it.
 
-A consumer with **no signal cannot give up**, so it pins the entry: there is no
-longer any set of aborts that should stop the decode. That is the honest reading
-of a caller that never asked to be cancellable, and it is why the signal is
+A consumer with **no signal can never abort**, so it pins the entry: there is no
+longer any set of aborts that should stop the decode. A caller that never asks
+to be cancellable should expect exactly that, which is why the signal is
 threaded all the way down rather than dropped anywhere convenient — one
 signal-free join makes that slice uncancellable for everyone on it.
 
 This is the model `@gmod/abortable-promise-cache` gives `@gmod/tabix` and
 `@gmod/bbi`. It is implemented here rather than taken as a dependency because
-that package wants to own the cache, and `SliceRecordCache` is not a plain LRU:
-the record-count bound has to weigh each entry when its promise resolves, which
-means owning the entries. Two smaller reasons not to adopt it: its aggregator
-never clears `signals` or removes its listeners once an entry settles, so a
-cached slice would retain every consumer signal that ever touched it; and
-cram-js deliberately dropped the dependency in `61791ba`.
+that package requires owning the cache itself, and `SliceRecordCache` is not a
+plain LRU: the record-count bound has to weigh each entry when its promise
+resolves, which means owning the entries. Two smaller reasons not to adopt it:
+its aggregator never clears `signals` or removes its listeners once an entry
+settles, so a cached slice would retain every consumer signal that ever touched
+it; and cram-js deliberately dropped the dependency in `61791ba`.
 
 **`CraiIndex` keeps a bounded retry instead**, because the trade is different
 there. A caller that joined the index parse and saw it fail because the caller
-who started it aborted goes round once more, then propagates. The `.crai` is
-parsed once for the life of the object, so there is no repeated waste to
-recover, and the retry is a dozen lines against restructuring the memo. Bounding
-it at one attempt is what jbrowse's `RemoteFileWithRangeCache.joinChunk` does
-with the same retry one layer down, on 256 KiB chunks, and for the reason it
-gives: the pathological case becomes one duplicate parse rather than a recursion
-whose depth depends on how the aborts interleave. `@gmod/bam` recurses
-unbounded, which is the part of that pattern not worth copying.
+who started it aborted retries once, and any failure after that propagates. The
+`.crai` is parsed once for the life of the object, so there is no repeated waste
+to recover, and the retry is a dozen lines against restructuring the memo.
+jbrowse's `RemoteFileWithRangeCache.joinChunk` bounds the same retry the same
+way, one layer down, on 256 KiB chunks, and for the reason it gives: the
+pathological case becomes one duplicate parse rather than a recursion whose
+depth depends on how the aborts interleave. `@gmod/bam` recurses unbounded,
+which is the part of that pattern not worth copying.
 
 ### What this replaced, and why
 
@@ -108,14 +107,14 @@ into also gave up.
 
 **An explicit check at each boundary**, not just at the filehandle. Honoring the
 signal is optional down there: `RemoteFile` hands it to `fetch`, but `LocalFile`
-ignores it and every read runs to completion. So `CramFile.read` checks before
-issuing, and `_fetchRecords` checks again before the decode loop — which is
-synchronous across the whole slice, tens of thousands of records on short-read
+ignores it and every read runs to completion, so `CramFile.read` checks before
+issuing, and `_fetchRecords` checks again before the decode loop, which is
+synchronous across the whole slice — tens of thousands of records on short-read
 data, with no `await` inside for an abort to interleave with.
 
 ### The invariant this rests on, and what it cost to keep
 
-"Container and slice objects are per-query" is load-bearing for the whole
+"Container and slice objects are per-query" is required for the whole
 first-caller-wins arrangement, and it was also, before this work, the source of
 a lot of duplicate reading: every slice of a query built its own
 `CramContainer`, so each container's header and compression header block were
@@ -138,12 +137,13 @@ containers cached file-wide, that is the thing to solve first.
   unchanged, and ignoring the signal only means the query rejects at the next
   point the decode checks rather than at the fetch.
 - `memoizeAsync` now forwards arguments, with a first-caller-wins rule that is
-  only sound for arguments that cannot change the result. That is a footgun, and
-  the reason the doc comment on it is longer than the function.
+  only sound for arguments that cannot change the result. A later call passing
+  different arguments silently gets the first caller's cached ones instead,
+  which is why the doc comment on it is longer than the function.
 - `SliceRecordCache.set` became `getOrFill`, which takes a fill callback rather
   than a promise — the cache has to create the signal the decode runs under, so
   it has to be the thing that starts it. A second `getOrFill` for a live key now
-  joins rather than replacing, which is what the cache always meant.
+  joins rather than replacing, matching what the cache always meant.
 - **A single signal-free query makes a slice's decode uncancellable for everyone
   joined to it.** Inherent to ref-counting, not a defect, but it means
   cancellation degrades quietly in a mixed codebase rather than failing loudly.
@@ -156,19 +156,18 @@ containers cached file-wide, that is the thing to solve first.
 
 ## Evidence
 
-**Cross-query isolation is load-bearing, not defensive.** It was first built as
-a retry, and reverting just the owner-aborted guards to a bare `throw e` failed
+**Cross-query isolation is required, not defensive.** It was first built as a
+retry, and reverting just the owner-aborted guards to a bare `throw e` failed
 three of the eight tests in `test/abort.test.ts`: a bystander sharing a slice, a
 bystander sharing the index parse, and a bystander with no signal at all. Those
 three tests were written against the retry and **pass unchanged against the
-ref-count**, which is the check that the two designs agree on the property and
-differ only in cost. The same revert still fails the index one, which is still a
-retry. `test/lib/gatedFile.ts` is what makes any of it deterministic — it honors
-the signal (`LocalFile` does not, so nothing would otherwise observe an
-interrupted read) and parks reads on demand, so the tests are not racing the
-filesystem.
+ref-count**, confirming that the two designs agree on the property and differ
+only in cost. The same revert still fails the index one, which is still a retry.
+`test/lib/gatedFile.ts` makes any of it deterministic — it honors the signal
+(`LocalFile` does not, so nothing would otherwise observe an interrupted read)
+and parks reads on demand, so the tests are not racing the filesystem.
 
-**The ref-count is what stops the re-decode.**
+**The ref-count stops the re-decode.**
 `a cancelled query does not make a bystander re-read the slice` runs two
 concurrent queries over the same 149 slices, cancels one mid-decode, and asserts
 the survivor issues exactly the number of reads a solo query does — and that no
@@ -197,14 +196,14 @@ What remains is 545 reads at 373 distinct positions: 172 are `readBlock` probing
 a block header and then re-reading it as part of the full block, which is the
 open TODO item, not this one.
 
-**The ref-count came with a retention bug of its own, which is worth recording
-because it is the one this ADR criticises `@gmod/abortable-promise-cache` for.**
+**The ref-count came with a retention bug of its own.** It is recorded here
+because it is the one this ADR criticises `@gmod/abortable-promise-cache` for.
 `getOrFill` joined every consumer to the entry, including consumers arriving
 after it had settled. A settled entry has already taken its abort listeners back
 off its consumers' signals, so a signal registered after that point could never
 be unregistered: it sat in the entry's set for as long as the LRU held the
 slice, holding that query's `AbortController` with it. Every cache _hit_ leaked
-one, on exactly the path the cache exists to make cheap. The fix is that only a
+one, on exactly the path that is supposed to be cheap. The fix is that only a
 decode still running has anything to cancel, so a settled entry is not joined at
 all. `a hit on a settled slice does not retain the caller` counts 50 hits and
 expects zero retained; before the fix it counted 50.

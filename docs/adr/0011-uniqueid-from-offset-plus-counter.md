@@ -15,9 +15,9 @@ what a reader may verify. Nothing makes the value unique, and checking it means
 reading the whole file. CRAM v1 has no such field at all, so `readRecordCounter`
 returns 0 for every slice in one.
 
-That the definition itself moved argues for the same caution: `CRAMv2.1.tex`
-calls the field 1-based, `CRAMv3.tex` 0-based, and every file in `test/data`
-starts at 0 either way. The issue quotes the 1-based wording.
+That the definition itself moved is a reason for the same caution:
+`CRAMv2.1.tex` calls the field 1-based, `CRAMv3.tex` 0-based, and every file in
+`test/data` starts at 0 either way. The issue quotes the 1-based wording.
 
 htslib takes the counter at its word — `cram_decode.c` builds synthetic read
 names from `record_counter + rec + 1` alone, so a constant counter collides
@@ -37,8 +37,8 @@ opposite directions, so a file has to break both to collide:
 - With a constant counter the id degenerates to `contentPosition + 1 + i`, which
   collides only where a slice occupies fewer bytes than it holds records.
 
-Matching htslib exactly would buy read names that agree with `samtools view` and
-cost the only fallback either case has — the wrong trade for a reader, which
+Matching htslib exactly would give read names that agree with `samtools view`
+and cost the only fallback either case has — the wrong trade for a reader, which
 does not choose its input files.
 
 **Name a lossy mate group after the record holding the mate pointer**, the one
@@ -48,8 +48,8 @@ differ only by the offset term.
 **Every record decodes with a name**, and htslib's encoder makes that a property
 rather than a hope: `add_read_names` stores a name for exactly the detached
 records, and a record leaves the detached state only by becoming one end of an
-NF link. So a nameless record is always on a chain the mate walk reaches, and
-the walk must name all of it.
+NF link. A nameless record is therefore always on a chain the mate walk reaches,
+and the walk must name all of it.
 
 ## Consequences
 
@@ -104,7 +104,7 @@ documents the constraints htslib imposes before leaving all three attached —
 writing such a template the obvious way detaches the middle record instead,
 which is why no other fixture produces one.
 
-Worth knowing when diffing against `samtools view`: htslib's own decode of that
-file reads back `:1`, `:2`, `:1`, because it names a record after its mate line
-only where that line points backwards. One name per template is what the pairing
-code here needs, so we differ deliberately.
+When diffing against `samtools view`: htslib's own decode of that file reads
+back `:1`, `:2`, `:1`, because it names a record after its mate line only where
+that line points backwards. The pairing code here needs one name per template,
+so we differ deliberately.

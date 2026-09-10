@@ -69,8 +69,8 @@ add ~43 ms to a 256 ms pooled query — about **17%**, not the disqualifying
 figure that was asserted. Long reads pay less: their per-record data is in the
 typed arrays, which transfer, and there are few names to clone.
 
-So the decision does not rest on the relay being unaffordable. It rests on
-**where each design puts its cost**:
+The decision does not rest on the relay being unaffordable — it rests on **where
+each design puts its cost**:
 
 - A hosted pool charges ~17% on _every_ query, including the one- and two-track
   case that is most of the use, to fix contention that only appears at three or
@@ -88,28 +88,29 @@ else, and everywhere else is where the readers are.
 - **`numSliceWorkers` had to become reachable first.** It was documented from
   13.1.0 and dropped by `IndexedCramFile`, so this decision was unimplementable
   until 13.2.0 — see the note in [workers.md](../workers.md).
-- **The sizing rule lives in the consumer, not here.** This library cannot know
-  how many contexts a host runs; jbrowse can, and does. The default stays
+- **The sizing rule belongs in the consumer, not here.** This library cannot
+  know how many contexts a host runs; jbrowse can, and does. The default stays
   `min(hardwareConcurrency, 4)`, which is right for a consumer with one context.
 - **Nothing bounds the total across libraries.** A context with a CRAM track and
-  a bgzip-backed track runs two independent pools that never negotiate. Sizing
-  each one down is a local fix for what is really a shared-accounting problem —
-  the same shape jbrowse solved for memory in `util/cacheBudgets.ts`, where
-  per-file ceilings times track count bounded nothing. A per-context worker
-  budget is the natural next step and is not taken here.
+  a bgzip-backed track runs two independent pools with no coordination between
+  them. Sizing each one down is a local fix for what is really a
+  shared-accounting problem — the same kind of problem jbrowse solved for memory
+  in `util/cacheBudgets.ts`, where per-file ceilings times track count bounded
+  nothing. A per-context worker budget is the natural next step and is not taken
+  here.
 - **Do not delete `BgzfWorkerPoolHost`/`Client` as dead code.** It is tested, it
   works, and this ADR is the reason it has no consumer rather than evidence that
   it should not. It was nearly removed on the mistaken grounds that nothing
   exercised it.
-- **Reopen this if the shape changes.** The two numbers that decide it are the
+- **Reopen this if the tradeoff shifts.** The two numbers that decide it are the
   relay tax and the contention, and the crossover is not far away. More RPC
   contexts, deeper default track counts, or a payload with fewer strings would
   all move it toward the hosted pool. Re-measure both rather than re-arguing.
 
-## What was not measured
+## Measurement caveats
 
 The contention figures come from a harness that reproduces jbrowse's context
-shape — N workers, each with its own pool, decoding the same region at once —
+layout — N workers, each with its own pool, decoding the same region at once —
 rather than from jbrowse itself, so the ratios are more trustworthy than the
 absolute numbers. Core counts of 4 and 16 were tested; 8 is interpolated, and
 the sizing rule is bounded by the two measured points at either end. The relay

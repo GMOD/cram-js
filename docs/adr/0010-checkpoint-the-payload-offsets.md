@@ -22,7 +22,7 @@ carries a slot's length — `num` for I/S/b/i/q, one byte for B, zero otherwise 
 so the offsets are a running prefix sum. Checked over every slot of all three
 performance fixtures: **0 deviations**.
 
-So the column bought exactly one thing, O(1) random access, and
+The column therefore gave exactly one thing, O(1) random access, and
 [TODO.md](../../TODO.md) was wrong to call replacing it "free": the accessors
 that read it take an index and nothing else, and the package exports
 `ReadFeatureArena`.
@@ -50,8 +50,8 @@ Three details make it hold:
   test, because a `q` feature carries bytes while emitting nothing and skipping
   it desynchronises every payload after it.
 - **`RF_PAYLOAD` is the one table** both the arena and the walks read, with its
-  values chosen so `kind === PAYLOAD_NUM ? num[i] : kind` is the length. One
-  place to be wrong about what a code carries, rather than four.
+  values chosen so `kind === PAYLOAD_NUM ? num[i] : kind` is the length. That
+  leaves one place to be wrong about what a code carries, rather than four.
 
 ## Consequences
 
@@ -78,7 +78,7 @@ Three details make it hold:
 Memory, from `scripts/arena-columns.ts` and `scripts/measure-heap.ts`, which
 reproduce to ±0.2% — the figures above.
 
-Correctness, which is what this change actually risks: sha256 over `toJSON()`,
+The real risk in this change is correctness: sha256 over `toJSON()`,
 `getCigarString()`, `getPairOrientation()`, `getReadBases()`, `readFeatures` and
 `getMismatches()` for **all 91,413 records across all 51 indexed fixtures**
 matches `origin/main` exactly, both after the arena change and again after
@@ -90,7 +90,7 @@ and [TODO.md](../../TODO.md)'s method note is explicit that timings taken on a
 loaded machine are not trustworthy — an in-process branch-vs-branch run put the
 long-read mismatch walk at 2.66x _faster_, which is not a real effect and is the
 trap `docs/memory.md` describes under "do not A/B two source trees in one
-process". `benchmarks/reads.bench.ts` exists to settle it on a quiet machine; it
+process". `benchmarks/reads.bench.ts` settles it on a quiet machine instead; it
 covers the walks that happen after a decode, which `benchmarks/cram.bench.ts`
 never reached.
 

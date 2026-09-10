@@ -46,8 +46,9 @@ what a decoded record holds:
 pnpm docs:numbers
 ```
 
-It is not a CI check, for the reason that section gives, so a stale table is
-caught by nothing but this note.
+It is not a CI check, for the reason
+[docs/memory.md#measuring-it](docs/memory.md#measuring-it) gives, so only this
+note would catch a stale table.
 
 ## Publishing
 

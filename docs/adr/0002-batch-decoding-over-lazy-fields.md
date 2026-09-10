@@ -9,12 +9,12 @@ one per Z tag value — 110,048 calls for the 54,695 records of SRR396637.
 `TextDecoder`'s per-call overhead is most of what a 20-character read name
 costs, so this was ~10% of the decode spent on call setup rather than on bytes.
 
-The obvious fix is to make the field lazy. It is genuinely attractive here:
-jbrowse reaches `record.readName` only through `CramSlightlyLazyFeature`'s
-`name` getter, and the only callers of `get('name')` on the CRAM path are
+The obvious fix is to make the field lazy. It is attractive here: jbrowse
+reaches `record.readName` only through `CramSlightlyLazyFeature`'s `name`
+getter, and the only callers of `get('name')` on the CRAM path are
 chained/paired mode (`chainGroupingKey`), the details panel
 (`buildBaseFeatureData`), the context menu, the read-vs-ref dialog and SAM
-export. **A plain pileup render never asks for a read name at all.** So a
+export. **A plain pileup render never asks for a read name at all**, so a
 deferred name would be free for the commonest render there is.
 
 The alternative is to notice that the data is already laid out for bulk
@@ -61,18 +61,18 @@ never has a NUL before its delimiter and takes the same expression unchanged.
   whole block alive as long as any record from it lives** — invisible until
   someone holds one record out of a query. Interning recovers it and more (29.49
   MB, below where the file sat before any of this) but costs 10–20% of the
-  decode, so it was tried and reverted; see
+  decode, so we tried it and reverted it; see
   [ADR 0007](0007-optimizations-measured-and-rejected.md) for the numbers and
   for why hashing a string cannot be cheaper than slicing one.
-  - Tag values mostly escape this: V8 copies a slice shorter than 13 characters
-    instead of pointing into the parent, so short values do not pin the block
-    and it is collected after the decode. Adding Z tags cost only a further
-    +0.18 MB.
-- Laziness is now competing for what is left, which is ~1.4% of the decode, and
-  would have to buy that with a public field's field-ness. That is what settles
-  it against deferring the read name, rather than leaving the idea open; see
-  also [ADR 0007](0007-optimizations-measured-and-rejected.md), which lists the
-  other optimizations that were measured and not taken.
+  - Tag values mostly avoid this cost: V8 copies a slice shorter than 13
+    characters instead of pointing into the parent, so short values do not pin
+    the block and it is collected after the decode. Adding Z tags cost only a
+    further +0.18 MB.
+- Only ~1.4% of the decode is left to defer, and the trade for it would be
+  turning a plain field into a getter. That settles the decision against
+  deferring the read name, rather than leaving the idea open; see also
+  [ADR 0007](0007-optimizations-measured-and-rejected.md), which lists the other
+  optimizations that were measured and not taken.
 
 ## Evidence
 
@@ -93,9 +93,9 @@ favor whichever tree runs last:
 
 Those figures include ADR 0001's `bindUintReader` work, which landed in the same
 sequence. ONT is the null case by construction — 37 records means 37 names — and
-reads as one, which is the check that the harness is not simply rewarding
-whichever tree ran second. An earlier harness that ran the baseline first every
-round reported +7% on ONT; rotating the order removed it.
+it reads as one, checking that the harness is not simply rewarding whichever
+tree ran second. An earlier harness that ran the baseline first every round
+reported +7% on ONT; rotating the order removed it.
 
 The **win rates are the load-independent part** of this table and the
 percentages are not: the machine carried a load average between 4 and 17 across

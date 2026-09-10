@@ -7,11 +7,11 @@ CRAM spends its time somewhere different from the BGZF formats. Block
 decompression accounts for only **24–35%** of a cold query, so what dominates is
 the **record decode** and what the decoded records **retain** — the reader
 decodes a slice whole and caches it whole. Nearly everything below is one of two
-moves: do per-slice work once per slice rather than once per record, and refuse
-to pay a fixed per-object cost on a 100 bp read.
+moves: do per-slice work once per slice rather than once per record, and avoid a
+fixed per-object cost on a 100 bp read.
 
-Each item names the measurement that settled it. Where a whole decision hangs on
-it there is an [ADR](adr/);
+Each item names the measurement that settled it. Where a whole decision depends
+on it there is an [ADR](adr/);
 [ADR 0007](adr/0007-optimizations-measured-and-rejected.md) lists the things
 that looked like wins and were not.
 
@@ -22,8 +22,8 @@ that looked like wins and were not.
 The first query reads the whole `.crai`, inflates it, parses it, and memoizes
 the result for the life of the object. It is the one read in `CraiIndex` that
 several queries share, so a caller that joined someone else's parse and saw it
-fail because _that_ caller aborted starts over rather than inheriting the
-failure — once, then propagates.
+fail because _that_ caller aborted retries once rather than inheriting the
+failure, and any failure after that retry propagates.
 
 ### The overlap scan stops at both ends
 
@@ -100,12 +100,12 @@ window on 1000x short-read data is 420,000 records at ~400 B each; the old
 default, 20,000 records, sat 21x below it
 ([ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md)).
 
-Eviction is plain LRU, so the bound means what it says. It used to be a
-`'batch'` policy that spared everything an in-flight query touched — measured
-holding 420,000 records against a stated 20,000 — which rescues an undersized
-budget by exceeding it. Above the working set the two measure identically, so
-that policy went ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)).
-`cacheIdleTimeoutMs` is what lowers the cache while nothing is happening, and
+Eviction is plain LRU, so the bound is an exact one. It used to be a `'batch'`
+policy that spared everything an in-flight query touched — measured holding
+420,000 records against a stated 20,000 — which rescues an undersized budget by
+exceeding it. Above the working set the two measure identically, so that policy
+went ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)).
+`cacheIdleTimeoutMs` lowers the cache while nothing is happening, and
 `cacheBudget` lets several files share one ceiling instead of each holding its
 own. [memory.md](memory.md#the-slice-cache) has both.
 
@@ -141,7 +141,7 @@ tables, including the slice-count threshold we measured for and rejected.
 
 Compute shaders are the obvious next question once a consumer already has a GPU
 in the picture — [JBrowse 2](https://jbrowse.org/jb2/) runs one, and asked it.
-The answer is no, and the reason is shape rather than effort.
+The answer is no, and the reason is structure rather than effort.
 
 A GPU wants thousands of lanes doing the same thing to adjacent data. The
 parallelism CRAM decompression offers is either much narrower than that or much
@@ -164,9 +164,9 @@ would leave behind is branchy pointer-chasing work that does not belong on a GPU
 at all. Add a host-to-device round trip per block and the ceiling drops further.
 
 This one is reasoned from the structure rather than measured — unlike everything
-else on this page — because the structure decides it before a benchmark would.
-What would reopen it is a CRAM profile whose decompression share is far above
-35%, or a codec sub-variant with thousands of independent streams.
+else on this page — because the structure determines it before a benchmark
+would. What would reopen it is a CRAM profile whose decompression share is far
+above 35%, or a codec sub-variant with thousands of independent streams.
 
 ### The wasm boundary is the block
 
@@ -203,8 +203,8 @@ caller has a correct slower path, so adding one never adds a way to be wrong
 against **1.5 ms** for the block — 86% of that went on per-call overhead — and
 the call count for the whole file went **110,048 → 240**.
 
-The alternative was to make the name lazy, which is genuinely attractive because
-a plain pileup render never asks for one. It lost on memory: a record holding a
+The alternative was to make the name lazy, which is attractive because a plain
+pileup render never asks for one. It lost on memory: a record holding a
 `Uint8Array` view over its name costs 104 bytes to defer ~56 bytes of string,
 and patching the getter never to materialize took SRR396637 from 37.7 MB to
 40.9. **Defer a computation, not a view**
@@ -244,10 +244,10 @@ bytes. One checkpoint every eighth slot replaced them, for −9.4% retained heap
 on a long-read slice with the accessors unchanged
 ([ADR 0010](adr/0010-checkpoint-the-payload-offsets.md)).
 
-`TagColumn` is the exception, and worth knowing before anyone "improves" it on
-the assumption that it saved heap: it came out break-even (−0.06 MB on
-SRR396637, +0.20 MB on SRR396636), and it earns its place through the worker
-transfer below and through `getTag`.
+`TagColumn` is the exception. Know this before anyone "improves" it on the
+assumption that it saved heap: it came out break-even (−0.06 MB on SRR396637,
++0.20 MB on SRR396636), and it is kept instead for the worker transfer below and
+for `getTag`.
 
 ### A record is a view onto its slice's columns
 
@@ -360,8 +360,10 @@ little (220 → 241 ms on 4 cores) so that five tracks gain a lot (1347 → 956 
 ([ADR 0009](adr/0009-one-pool-per-context-sized-for-the-host.md)).
 
 **A byte-range cache underneath.** `RemoteFileWithRangeCache` caches per 256 KiB
-chunk and joins reads already in flight, so the one read per slice above and the
-handful per container land in a few requests rather than one each.
+chunk and joins reads already in flight, so this library's remaining duplicate
+reads — `readBlock` probes a block header at a position and then reads the block
+at the same position — turn into a cache hit rather than a second request. Over
+a local file they are real syscalls; see [TODO.md](../TODO.md).
 
 **Ask for one thing at a time.** Its record filter calls `getTag` rather than
 reading `record.tags`, its render path reads `clipLengthAtStartOfRead` rather

@@ -19,29 +19,29 @@ around it is JS.
 
 CRAM 3.1 was effectively unreadable in JS for years, and the reason was fqzcomp,
 tok3 and the adaptive arithmetic coder. Between them that's thousands of lines
-of context-modeling C, and porting it by hand means signing up to keep a second
-copy correct forever. Compiling the real thing got all of it in one step,
+of context-modeling C, and porting it by hand means committing to keep a second
+copy correct indefinitely. Compiling the real thing got all of it in one step,
 including the rANS 4x16 and tok3 sub-variants that tools do actually emit.
 
 Running the same C samtools runs also settles the question of whether a block
 decoded correctly: it decodes to the same bytes `samtools view` gets. When
 htscodecs fixes something upstream, picking it up is a script rerun.
 
-Speed comes along with that. Quality scores and read names are where a CRAM read
-spends most of its decoding time, and those are now compiled code rather than an
-interpreted inner loop. gzip gets libdeflate, which is quick even by native
-standards.
+Speed follows from compiling the real C too. Quality scores and read names are
+where a CRAM read spends most of its decoding time, and those are now compiled
+code rather than an interpreted inner loop. gzip gets libdeflate, which is quick
+even by native standards.
 
-And because the wasm is inlined, it behaves like any other JS dependency. No
-second request, no static asset to copy into your build, no MIME type or CSP
-rules, same story in node, browsers and workers.
+Because the wasm is inlined, it behaves like any other JS dependency: no second
+request, no static asset to copy into your build, no MIME type or CSP rules,
+same story in node, browsers and workers.
 
 ## Where the boundary is drawn
 
-Compiling C is the easy half of the decision. The half that decides whether it
-pays is _where_ the JS/wasm boundary sits, because every crossing copies its
-input into the wasm heap and its output back out. Four choices, each with the
-alternative it was picked over:
+Compiling C is the easy half of the decision. The hard half is choosing where
+the JS/wasm boundary sits, because every crossing copies its input into the wasm
+heap and its output back out. Four choices, each with the alternative it was
+picked over:
 
 - **The unit is one block, not one record.** A block's two copies amortize over
   the thousands of records encoded in it. Crossing per record would multiply the
@@ -51,11 +51,11 @@ alternative it was picked over:
 - **It stops at the block.** Everything above — the per-data-series codecs
   (external, huffman, beta, gamma, subexp, byteArray\*) and the record decode
   itself — stays in JS. Those codecs are small bit readers over bytes that are
-  already decompressed and already in the JS heap, so moving them into wasm buys
-  no algorithmic win and costs a crossing per series per slice. Going further
-  still, decoding whole slices in wasm, would drag the `fetchReferenceSequence`
-  callback and the columnar output across too. The split lands where the C is
-  worth having.
+  already decompressed and already in the JS heap, so moving them into wasm
+  gives no algorithmic win and costs a crossing per series per slice. Going
+  further still, decoding whole slices in wasm, would drag the
+  `fetchReferenceSequence` callback and the columnar output across too. The
+  split lands where the C is worth having.
 
 - **Decoders only.** No compressor, none of the SIMD-specialized htscodecs
   variants — this library only ever reads. That is most of why the binary is 113
@@ -69,13 +69,14 @@ alternative it was picked over:
   not also the one compiling the module.
 
 The wasm being inlined is a separate axis, and the trade there is explicit: a
-128 KB bundle every consumer downloads, in exchange for the frictionlessness
-above. For a decoder that is useless without its codecs, a build step nobody has
-to know about is worth more than the bytes.
+128 KB bundle every consumer downloads, in exchange for not needing a second
+request, a static asset, or CSP configuration. For a decoder that is useless
+without its codecs, a build step nobody has to know about is worth more than the
+bytes.
 
 ### Where it is not optimal
 
-- **Two copies per block.** Unavoidable at this boundary — the codecs want a
+- **Two copies per block.** Unavoidable at this boundary — the codecs need a
   contiguous heap buffer — and the reason the block, not the record, is the
   unit.
 - **The heap only grows** (see [Memory](#memory)), so peak tracks the largest
@@ -113,17 +114,17 @@ That encoding is a property of emscripten's output, not a better encoding the
 lzma module is missing out on, and it stays base64 on purpose. Converting it has
 been measured: the source drops from 16,810 to 13,730 bytes, but terser
 re-escapes the control bytes when it bundles, so the saving in `dist/` is 634
-bytes, or 1.7 KB gzipped. The ratio is not the problem — one character per byte
-costs 1.09x here against base64's 1.33x, the same as htscodecs. The problem is
-that the two files are different kinds of artifact. `htscodecs.js` is build
-output: `pnpm build:wasm` regenerates it, `.prettierignore` skips it, and nobody
-opens it. `wasm.ts` was vendored once in e8e140c, has no generator, and sits in
-the lint, format and typecheck path. Emscripten's scheme writes control bytes
-into the source unescaped — 6,600 of them at this size — which would make git
-treat the file as binary and leave any line-ending normalization free to corrupt
-it silently, surfacing as an `instantiate` failure with nothing to re-derive the
-file from. Base64 is inert ASCII, which is the right trade for a hand-maintained
-blob.
+bytes, or 1.7 KB gzipped. The ratio isn't why the two files are encoded
+differently: one character per byte costs 1.09x here against base64's 1.33x, the
+same as htscodecs. What differs is that the two files are different kinds of
+artifact. `htscodecs.js` is build output: `pnpm build:wasm` regenerates it,
+`.prettierignore` skips it, and nobody opens it. `wasm.ts` was vendored once in
+e8e140c, has no generator, and sits in the lint, format and typecheck path.
+Emscripten's scheme writes control bytes into the source unescaped — 6,600 of
+them at this size — which would make git treat the file as binary and leave any
+line-ending normalization free to corrupt it silently, surfacing as an
+`instantiate` failure with nothing to re-derive the file from. Base64 is inert
+ASCII, which is the right trade for a hand-maintained blob.
 
 Because that first instantiation is async, every decoder entry point in
 `src/htscodecs-wasm.ts` is async too; once it has happened, calls resolve

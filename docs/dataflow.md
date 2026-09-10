@@ -8,12 +8,12 @@
 A query turns its range into a list of `.crai` slice entries, and from there
 every slice runs in parallel. Each slice:
 
-- **Resolves its container** — the header and compression header block, memoized
-  for the query, since a container holds several slices.
-- **Asks `featureCache` for the decoded records.** A hit returns them already
+- Resolves its container — the header and compression header block, memoized for
+  the query, since a container holds several slices.
+- Asks `featureCache` for the decoded records. A hit returns them already
   decoded and already decorated with their reference, so a repeat query pays
   only the filter.
-- **On a miss, reads the whole block region in one go and decodes it:** walk the
+- On a miss, reads the whole block region in one go and decodes it: walk the
   blocks, decompress each by its method byte, build the per-slice decode
   context, then make one pass over the records into the read-feature arena and
   the tag and quality columns.
@@ -36,26 +36,21 @@ The diagram draws the main path only. It leaves out:
 The record pass does not build `{code, pos, refPos, data}` objects. Instead it
 writes:
 
-- **read features into a per-slice arena** — struct-of-arrays typed columns,
-  with each record holding a start and a count into them;
-- **tags and quality scores into columns of their own;**
-- **the per-record scalars into one `Int32Array`**, eighteen slots a record.
-
-Together those are a `DecodedSlice`, and a `CramRecord` is a view onto one index
-of it — there is no per-record object anywhere between the file and the cache.
+- read features into a per-slice arena — struct-of-arrays typed columns, with
+  each record holding a start and a count into them;
+- tags and quality scores into columns of their own.
 
 Read features dominate decoded-record memory on long reads (a 37-record ONT
 slice decodes 213k of them), and 15 bytes of columns per feature against 64 per
-object decides whether a slice fits in the cache at all.
+object determines whether a slice fits in the cache at all.
 
-That shape is load-bearing for the two steps after it:
+That layout is required for the two steps after it:
 
-- **The arena sizes itself up front** from the slice's own blocks rather than
-  growing, since reallocating seven columns is where a long-read slice spends
-  its decode time.
-- **Typed arrays let a worker transfer the result at zero copy** instead of
-  structured-cloning an object graph, and the host uses it as it lands rather
-  than rebuilding anything per record.
+- The arena is sized up front from the slice's own blocks rather than grown,
+  since reallocating seven columns is where a long-read slice spends its decode
+  time.
+- Typed arrays let a worker transfer the result at zero copy instead of
+  structured-cloning an object graph.
 
 [memory.md](memory.md#columns-not-objects) has the per-column costs,
 [read-features.md](read-features.md) how to read them without materializing
@@ -72,16 +67,16 @@ accounts for only 24–35% of a cold query, so a decompression-only pool caps ou
 around 1.33x where this measures 2.0–3.6x. That is why the diagram draws a box
 around several steps here and bam's draws a single node. Anything that cannot
 start a pool decodes in-process instead — the same code, on the thread that
-asked.
+called it.
 
 Two things stay on the main thread whatever happens:
 
-- **Describing the slice to the worker as bytes and numbers only.** A `CramFile`
+- Describing the slice to the worker as bytes and numbers only. A `CramFile`
   holds a filehandle and your `fetchReferenceSequence` callback, neither of
   which can travel; coming back, the columns transfer at zero copy rather than
   cloning.
-- **`applyReferenceSequence`**, because resolving substitutions means calling
-  that callback.
+- `applyReferenceSequence`, because resolving substitutions means calling that
+  callback.
 
 [workers.md](workers.md) has the measurements and the fallbacks.
 
@@ -89,10 +84,10 @@ Two things stay on the main thread whatever happens:
 
 Everything orange is wasm:
 
-- **`htscodecs.wasm`** handles gzip (through libdeflate), bzip2, and every CRAM
+- `htscodecs.wasm` handles gzip (through libdeflate), bzip2, and every CRAM
   codec from rANS to fqzcomp and tok3.
-- **A second `xz-embedded.wasm`** handles lzma, which htscodecs has no codec for
-  at all.
+- A second `xz-embedded.wasm` handles lzma, which htscodecs has no codec for at
+  all.
 
 The build inlines both, and each instantiates lazily, once per JS context. The
 `.crai` goes through wasm too, though the diagram does not draw that edge — the

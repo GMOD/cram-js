@@ -7,7 +7,7 @@
 One record for a family of decisions rather than one each, because they were all
 settled the same way — someone looked at the decode, saw an obvious waste,
 measured it, and found the waste was not where it looked. Kept together because
-what makes them worth reading is the pattern, and because each on its own is a
+the pattern makes them worth reading, and because each on its own is only a
 paragraph.
 
 Two lessons recur, and both are the reason these are recorded rather than
@@ -36,19 +36,19 @@ that contradicts the numbers under **Evidence**:
 - Reshaping read features to make consumer call sites monomorphic.
 - Building a `Uint32Array` CIGAR for every read regardless of length.
 
-Deferring the read name behind a getter was rejected too; it has its own record
-in [ADR 0002](0002-batch-decoding-over-lazy-fields.md), because the reason it
-lost — it was competing for ~1.4% of the decode after batching had already taken
-names from ~10.4 ms to ~1.5 ms — is that ADR's point.
+Deferring the read name behind a getter was rejected too, for the same reason:
+after batching had already taken names from ~10.4 ms to ~1.5 ms, only ~1.4% of
+the decode was left to defer. See
+[ADR 0002](0002-batch-decoding-over-lazy-fields.md) for the detail.
 
 ## Consequences
 
-The costs these would have removed are still being paid, and two are worth
-naming so they are not mistaken for oversights:
+The costs these would have removed are still being paid, and two of them are
+listed here so they are not mistaken for oversights:
 
 - **A slice keeps its whole decoded name block alive as long as any record from
-  it lives.** Interning is what would recover that; see ADR 0002's consequences
-  for the trade as it stands.
+  it lives.** Interning would recover that; see ADR 0002's consequences for the
+  trade as it stands.
 - **Consumers coalesce runs of single-base insertions themselves**, in their own
   walks, as htslib does.
 
@@ -74,15 +74,14 @@ expected:
 | SRR396636 | 13.27 MB          | **12.48 MB** (-6.0%) |
 | ONT       | 7.47 MB           | 7.47 MB (37 records) |
 
-That is not only better than the un-interned reader, it is 1.19 MB _below_ where
-the file sat before any of the batching work.
+It is 1.19 MB _below_ where the file sat before any of the batching work, and
+below the un-interned reader too.
 
-**It costs 10-20% of the decode**, far more than the memory is worth on a path
-whose whole point was speed. Against 7023d88, 12 paired rounds with an A-vs-A
-control: SRR396637 -15.5% mean, faster in **0/12** (control -2.9%, 5/12);
-jb2bench 200x -10.9%, 2/12 (control +2.1%); jb2bench 1000x -20.6%, 1/12 (control
--4.6%). ONT reads +15.8% but its control reads +13.3%, so that is drift, not an
-effect.
+**It costs 10-20% of the decode**, far more than the memory is worth on a decode
+path built for speed. Against 7023d88, 12 paired rounds with an A-vs-A control:
+SRR396637 -15.5% mean, faster in **0/12** (control -2.9%, 5/12); jb2bench 200x
+-10.9%, 2/12 (control +2.1%); jb2bench 1000x -20.6%, 1/12 (control -4.6%). ONT
+reads +15.8% but its control reads +13.3%, so that is drift, not an effect.
 
 The reason is that a `Map` keyed by string has to **hash the string**, which
 means reading every character of it — ~220,000 times per decode of SRR396637, on
@@ -104,7 +103,7 @@ positional constructor, does remove the allocation, and the output is
 byte-identical (sha256 over `toJSON()` + `getCigarString()` +
 `getPairOrientation()` for all 92,582 records in `test/data`).
 
-It buys nothing worth having: five alternating processes per tree,
+It gives nothing worth having: five alternating processes per tree,
 median-of-medians, gave 129.6 → 128.5 ms on SRR396637 and 56.2 → 56.0 ms on
 SRR396636, both inside the ±1% cold-decode noise floor. GC time does drop
 consistently (107 → 94 ms on SRR396637, ~12%), confirming the allocation really
@@ -126,7 +125,7 @@ adjacent `i` features share a reference position if and only if their read
 positions are adjacent — gives **0 runs on ONT, 0 on SRR396636, 0 on
 SRR396637**.
 
-So coalescing at decode time bought nothing on all three, in exchange for a
+Coalescing at decode time therefore gave nothing on all three, in exchange for a
 per-feature branch in the decode loop and a change to a public output shape (it
 altered exactly one of the 189 snapshots, the grc37-1 Illumina one). htslib does
 not merge the features either — its `case 'i'` accumulates into the _CIGAR_ via
@@ -147,8 +146,8 @@ length tested (73–114 ns/call against 62–147), and is 2x faster at length 12
 
 The conditional constructor assignments look like they would split the hidden
 class. Measured **1 shape** across all records, because `target: es2022` implies
-`useDefineForClassFields`. Note that lowering the compile target would silently
-undo this.
+`useDefineForClassFields`. Note that lowering the compile target would undo this
+with nothing to catch it.
 
 ### Read-feature polymorphism as a consumer cost
 
@@ -161,7 +160,7 @@ its _memory_, not for call-site shape.
 In jbrowse's `readFeaturesToNumericCIGAR` the typed array is 8.7% faster and
 half the retained bytes on ONT (median 4391 ops/read), but **147% slower and
 2.4x the memory** on short reads (median 1 op/read), where ~96 bytes of fixed
-typed-array overhead lands on a one-element payload. Same shape of trap as the
+typed-array overhead lands on a one-element payload. Same kind of trap as the
 per-record arena. That walk switches per read at 64 ops, matching the ~50–100
 crossover bam-js measured in its own `src/record.ts`. See
 [ADR 0006](0006-cigar-as-a-callback-walk.md) for why the array is built in the

@@ -25,8 +25,8 @@ inlined a faster read for each. It had two problems, and both bit:
   therefore free. That one put `getBytesSubarray` at 6.1% of the SRR396637
   profile: 109,580 calls for 54,695 records, two per record, both from tags.
 
-The failure mode is the point. A fast path that is conditional on a combination
-someone remembered to name will keep missing the combinations they did not.
+A fast path that is conditional on a combination someone remembered to name will
+keep missing the combinations they did not.
 
 ## Decision
 
@@ -68,7 +68,7 @@ the codec, so there is nothing per-slice to hoist.
   `bindUintReader` — were exactly that shape.
 - The cost is indirection: reading a value is a call through a closure the
   binder chose, so what actually runs is not visible at the call site. The
-  binders are small and each is used from one place, which is what keeps that
+  binders are small and each is used from one place, so the indirection stays
   tolerable.
 - A binder holding per-slice state in its closure **must be called once per
   slice**, not cached on the codec. The compression scheme is memoized per
@@ -78,13 +78,13 @@ the codec, so there is nothing per-slice to hoist.
 
 ## Evidence
 
-The refactor that introduced the seam claimed no performance change, and that
-was checked rather than assumed: 14 paired rounds put it at +1.0% on SRR396637
-(sd 4.5, faster in 9/14) and −1.1% on ONT (sd 1.6, faster in 5/14) — a wash in
-both directions, which is the right outcome for a refactor. Notably the first 6
-rounds had suggested 3–4% in its favor; it did not survive 8 more.
+The refactor that introduced the seam was expected to leave performance
+unchanged, and that was checked rather than assumed: 14 paired rounds put it at
++1.0% on SRR396637 (sd 4.5, faster in 9/14) and −1.1% on ONT (sd 1.6, faster in
+5/14) — a wash in both directions, which is the right outcome for a refactor.
+The first 6 rounds had suggested 3–4% in its favor; it did not survive 8 more.
 
-What the seam was worth showed up in what it then made easy. Verified during a
-decode of SRR396637: zero generic `decode()` calls reach External,
+The seam's payoff showed up later, in what it made possible: verified during a
+decode of SRR396637, zero generic `decode()` calls reach External,
 ByteArrayLength or ByteArrayStop — every read goes through a bound closure,
 which is more than was true when the `instanceof` chain was doing the work.

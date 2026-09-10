@@ -11,7 +11,7 @@ const records = await indexedFile.getRecordsForRange(0, 1000, 2000)
 
 Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`
 — see [the constructor options](api.md#indexedcramfile). `IndexedCramFile` takes
-both, as does `CramFile`; through 13.1.0 only `CramFile` did, which is to say
+both, as does `CramFile`; through 13.1.0 only `CramFile` did — in practice
 nothing could reach them.
 
 One pool serves a whole **JS context**, so a host that runs several — jbrowse
@@ -40,8 +40,8 @@ single 19.1 ms block is 74% of that slice's decompression, so there is barely
 anything to spread. Modeled end to end it came out at **1.05–1.46x**, against
 the 2.0–2.8x measured below for the whole slice.
 
-So the unit of work is the whole slice: decompression, the record decode, and
-mate association. That is ~95% of a query rather than a quarter of it.
+The unit of work is therefore the whole slice: decompression, the record decode,
+and mate association — about 95% of a query rather than a quarter of it.
 
 ## Measured
 
@@ -79,7 +79,7 @@ fastest of 5 reps x 5 rounds:
 | 20x.shortread   | 2      | 131 ms     | 67 ms  | **1.95x** |
 | 20x.longread    | 1      | 82 ms      | 87 ms  | 0.93x     |
 
-So the nested case works and pays — nested workers and Blob URLs are both fine —
+The nested case works and pays — nested workers and Blob URLs are both fine —
 and the single-slice row is parity, agreeing with the 0.96x the slice-count
 sweep below found under node.
 
@@ -104,13 +104,13 @@ curve:
 | 20x.shortread   | 0.96x | 1.16x | 1.49x | 1.72x |
 | 1000x.shortread | 1.21x | 1.34x | 1.69x | 1.58x |
 
-Parity at one slice, a win from two up. The lesson is the ordinary one — a
-median of 3 on a 40 ms workload is not a measurement — and it stays written down
-because that threshold nearly shipped on the strength of it. Note also that a
-single-slice query never happens in isolation: the user pans, so the pool is
-warm and the marginal query is what matters.
+Parity at one slice, a win from two up. A median of 3 on a 40 ms workload is not
+a measurement, and it stays written down because that threshold nearly shipped
+on the strength of it. A single-slice query never happens in isolation, though:
+the user pans, so the pool stays warm and the marginal query matters more than a
+cold one.
 
-## The width is there where it matters
+## Slice count sets the payoff
 
 Slice-level parallelism only helps if a query touches several slices. At
 jb2bench's own 19 kb region:
@@ -129,7 +129,7 @@ where the measurements above put the pool at parity to 1.16x. Note that even at
 one slice the decode is off the main thread, which is the part a UI notices;
 throughput is the secondary benefit.
 
-### And it grows with the region, up to a point
+### The speedup grows with the region, up to a point
 
 19 kb is jb2bench's window, not a limit. Sweeping the region on the same
 fixture, same run conditions, browser, warm bytes, interleaved:
@@ -268,5 +268,4 @@ when a pool actually starts, so a bundler puts it in a chunk of its own.
 Bundling `IndexedCramFile` + `CraiIndex` with esbuild, that is 268 KB against
 534 KB — a consumer who never enables the pool, or who runs under node where it
 cannot start at all, loads none of it. (The bytes are in the npm tarball either
-way, as `src/`, `esm/` and `dist/` copies; what moved is what reaches a
-browser.)
+way, as `src/`, `esm/` and `dist/` copies; only what reaches a browser changed.)

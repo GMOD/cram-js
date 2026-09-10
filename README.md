@@ -76,10 +76,10 @@ The one id that is not an `@SQ` position is `-1`, an unplaced read.
 
 **You supply the reference sequence.** CRAM stores reads as differences from a
 reference, so the library cannot give you bases without one —
-`fetchReferenceSequence` is how it asks for them. It receives both the seq id
-and the name, so a name-keyed source like `IndexedFasta` needs no lookup of its
-own. Without it you still get positions, CIGARs and the _shape_ of every
-difference, just not the bases involved.
+`fetchReferenceSequence` is the callback that supplies them. It receives both
+the seq id and the name, so a name-keyed source like `IndexedFasta` needs no
+lookup of its own. Without it you still get positions, CIGARs and the kind and
+length of every difference, just not the bases involved.
 
 ## What to ask a record
 
@@ -110,10 +110,10 @@ for (const m of record.getMismatches()) {
 If you process enough records that per-difference objects start to matter,
 `record.forEachMismatch(callback, opts?)` reports the same differences without
 allocating, and takes an optional `{ start, end }` window. The same pattern
-exists for the CIGAR (`forEachCigarOp`) and for tags and quality scores, which
-live in one array per slice rather than one per record.
-[docs/api.md](docs/api.md) has all of it; [docs/memory.md](docs/memory.md)
-explains why they take that shape.
+exists for the CIGAR (`forEachCigarOp`) and for tags and quality scores, stored
+in one array per slice rather than one per record. [docs/api.md](docs/api.md)
+has all of it; [docs/memory.md](docs/memory.md) explains why they are structured
+that way.
 
 ## Slices decode on a worker pool
 
@@ -157,8 +157,8 @@ const cram = new IndexedCramFile({
 ```
 
 The cache serves those reads out of 256 KiB chunks, so neighboring reads share a
-request and the 202 become a handful. It also threads the `AbortSignal` below,
-which is what makes the next section worth anything over a network.
+request and the 546 become a handful. It also threads the `AbortSignal` below,
+so a canceled query stops the network fetch, not just the decode.
 
 ## Cancelling a query
 
@@ -174,10 +174,9 @@ controller.abort() // `records` rejects with an AbortError
 ```
 
 Aborting your query never fails a concurrent one, because decodes shared between
-queries are reference-counted. The corollary is the thing to know: a query with
-**no** signal can never give up, so it pins any slice it is waiting on for
-everyone. Thread the signal through consistently.
-[docs/api.md](docs/api.md#cancelling-a-query) has the details.
+queries are reference-counted. A query with **no** signal never stops, so it
+pins any slice it is waiting on for everyone. Thread the signal through
+consistently. [docs/api.md](docs/api.md#cancelling-a-query) has the details.
 
 ## Docs
 
@@ -195,7 +194,7 @@ everyone. Thread the signal through consistently.
 - [TODO.md](TODO.md) — measured, still open, wanted
 - [CONTRIBUTING.md](CONTRIBUTING.md) — development, release, publishing
 
-## Academic Use
+## Academic use
 
 Written with [NHGRI](http://genome.gov) funding as part of
 [JBrowse](http://jbrowse.org). If you use this in a publication, please cite the

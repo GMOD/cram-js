@@ -28,25 +28,25 @@ it honest as well as useful.
 - `cacheIdleTimeoutMs`, default 3 minutes, `0` opts out.
 - `clearFeatureCache()`, on both `CramFile` and `IndexedCramFile`.
 
-Both options are threaded through `IndexedCramFile`, which is what a consumer
+Both options are threaded through `IndexedCramFile`, the class a consumer
 actually constructs — an option that stopped at `CramFile` would be unreachable.
 
 ## Consequences
 
-- **A record count cannot bound memory, and this does not pretend to.** There is
-  no cheap way to size a decoded record, which is why the unit is what it is
-  (see [memory.md](../memory.md#the-slice-cache)). One useful consequence: the
-  budget only ever binds on short-read data, where records are small and
-  numerous. Long-read slices are few and huge — 2,991 records for a 50kb window
-  at 1000x — so they never approach it.
+- **A record count cannot bound memory, and nothing here claims otherwise.**
+  There is no cheap way to size a decoded record, which is why the cache counts
+  records rather than bytes (see [memory.md](../memory.md#the-slice-cache)). One
+  useful consequence: the budget only ever binds on short-read data, where
+  records are small and numerous. Long-read slices are few and huge — 2,991
+  records for a 50kb window at 1000x — so they never approach it.
 
-- **The idle timeout is what makes the number affordable.** `cacheSize` is
-  applied when a decode settles, so it does nothing for a consumer sitting
-  still, and jbrowse's `CramAdapter` memoizes one `IndexedCramFile` for the life
-  of the track. Without the timeout, a parked tab holds its whole last view
-  until the track closes, times every open track. It is timed from the last
-  _read_ of a slice, not the decode, so panning back and forth over one region
-  never expires it.
+- **The idle timeout makes the number affordable.** `cacheSize` is applied when
+  a decode settles, so it does nothing for a consumer sitting still, and
+  jbrowse's `CramAdapter` memoizes one `IndexedCramFile` for the life of the
+  track. Without the timeout, a parked tab holds its whole last view until the
+  track closes, times every open track. It is timed from the last _read_ of a
+  slice, not the decode, so panning back and forth over one region never expires
+  it.
 
 - **`'batch'` still stands, but for its own reason and not as a substitute for a
   big enough budget.** @gmod/bam measured it failing to rescue an undersized

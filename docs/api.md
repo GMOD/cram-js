@@ -29,15 +29,15 @@ new IndexedCramFile({
   `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress, signal }`
 - `hasDataForReferenceSequence(seqId, opts?)` → `Promise<boolean>`
 - `clearFeatureCache()` — drop every decoded slice now, rather than waiting out
-  `cacheIdleTimeoutMs`. For a consumer that knows it is done with the file
+  `cacheIdleTimeoutMs`, for a consumer that knows it is done with the file
 - `cram` — the underlying `CramFile`
 
 ### Verifying the file
 
-`validateChecksums` checks every block's and container's CRC32. It is what
-separates "damaged file" from "wrong records": with it on, it catches a
-corrupted byte anywhere in a CRAM 240 times out of 240, where with it off two of
-those flips decoded to records that simply differed, with nothing to say so.
+`validateChecksums` checks every block's and container's CRC32, and separates
+"damaged file" from "wrong records": with it on, it catches a corrupted byte
+anywhere in a CRAM 240 times out of 240, where with it off two of those flips
+decoded to records that simply differed, with nothing to say so.
 
 `checkSequenceMD5` is the other half of that, on the reference rather than the
 file: it verifies each slice's recorded reference MD5 against the sequence
@@ -65,10 +65,10 @@ happening — the cache checks `maxCacheBytes` when a decode settles, so an idle
 one stays wherever it got to. The clock runs from the last _read_ of a slice, so
 panning back and forth over one region never expires it. `0` disables it.
 
-`cacheBudget` makes `maxCacheBytes` apply to several `CramFile`s together
-instead of to each one, which is what a consumer opening a file per track needs.
-It weighs in the same unit as `@gmod/bam`'s cache, so one budget can hold a
-consumer's BAM and CRAM tracks together.
+`cacheBudget` makes `cacheSize` apply to several `CramFile`s together instead of
+to each one, for a consumer opening a file per track. Every member of a budget
+has to weigh in the same unit, and this cache weighs records, so share one only
+with other `CramFile`s.
 
 ### The worker options
 
@@ -137,14 +137,14 @@ the user pans away.
 **Aborting your query never fails anyone else's.** Concurrent queries share two
 things in a `CramFile`: the parsed `.crai`, and each decoded slice in the record
 cache. A slice's decode carries a reference count and aborts only once _every_
-query waiting on it has given up, so cancelling yours costs a concurrent query
+query waiting on it has aborted, so cancelling yours costs a concurrent query
 nothing, not even a re-read. The file definition and SAM header load once for
 the life of the object and deliberately take no signal at all.
 
-The corollary: a query with **no** signal can never give up, so it pins any
-slice it is waiting on. One caller omitting the signal makes that slice's decode
-uncancellable for everyone sharing it — so thread the signal through
-consistently rather than through the queries you happen to care about.
+A query with **no** signal never stops, so it pins any slice it is waiting on.
+One caller omitting the signal makes that slice's decode uncancellable for
+everyone sharing it — so thread the signal through consistently rather than
+through the queries you happen to care about.
 
 A `fetchReferenceSequence` backed by something remote receives the signal as a
 fifth argument (`opts.signal`) so it can cancel too. Ignoring it is fine; a
@@ -213,10 +213,10 @@ one-record slice.
   it in a loop condition.
 - `readFeatureArena`, `readFeatureStart`, `readFeatureCount` — the columnar
   storage the features decode into, shared across every record in a slice.
-  Reading these columns instead of `readFeatures` is what makes a bulk consumer
-  fast: 3.7x on a long-read slice, at a fraction of the memory.
+  Reading these columns instead of `readFeatures` makes a bulk consumer 3.7x
+  faster on a long-read slice, at a fraction of the memory.
 
-Read features and quality scores both live in one shared typed array per slice
+Read features and quality scores both sit in one shared typed array per slice
 rather than one per record, because a per-record `Uint8Array` costs ~104 bytes
 in V8 — more than the quality scores of a short read. [memory.md](memory.md)
 covers what a decoded slice retains, how to read these columns without
@@ -279,10 +279,10 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
   O(operations), and a long read has thousands. Each reports that one operation
   and no more, so a `5H4S…10M…4S5H` read clips 5 at each end, not 9.
 
-  Between them these answer "how much of this read is clipped, as sequenced":
-  the leading clip for a forward-strand read and the trailing one for a
-  reverse-strand read, since CRAM stores a reverse-strand read
-  reverse-complemented.
+  `getLeadingClipLength()` and `getTrailingClipLength()` together answer "how
+  much of this read is clipped, as sequenced": the leading clip for a
+  forward-strand read and the trailing one for a reverse-strand read, since CRAM
+  stores a reverse-strand read reverse-complemented.
 
 - `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
 - `forEachMismatch(callback, opts?)` — the same differences, reported to
@@ -291,7 +291,7 @@ The usual SAM flags (spec §1.4), all returning `boolean`.
 
   `opts` is `{ start, end, origin }`, all optional. `start`/`end` are a 0-based
   half-open **reference** range to restrict to; a spanning deletion or skip
-  counts as inside it if any of its bases are. `origin` is what the reported
+  counts as inside it if any of its bases are. `origin` sets what the reported
   positions are relative to — `origin: record.start` gives read-relative
   positions, and the default of 0 gives reference ones. The window stays
   absolute either way, so a read-relative consumer can still clip to a genomic

@@ -1,19 +1,19 @@
 # Raw read features
 
-A CRAM record doesn't store an aligned sequence. What it stores is a list of
-_read features_: the handful of places where the read departs from the
-reference, plus a few housekeeping entries. `getReadBases()`, `getCigarString()`
-and `getMismatches()` are all reconstructed from that list.
+A CRAM record stores a list of _read features_ instead of an aligned sequence:
+the handful of places where the read departs from the reference, plus a few
+housekeeping entries. `getReadBases()`, `getCigarString()` and `getMismatches()`
+are all reconstructed from that list.
 
-You can get at the list directly, as `record.readFeatures`. Everything you have
-to know before you do is below.
+You can read the list directly, as `record.readFeatures`. The rest of this page
+covers what to know before you do.
 
 ## You probably don't need this
 
 `getMismatches()` already reports every feature that represents a difference
 from the reference: substitutions, insertions (under either encoding),
-deletions, reference skips, and soft and hard clips. So if differences are what
-you're after, that function is the whole story — see
+deletions, reference skips, and soft and hard clips. So `getMismatches()` covers
+differences on its own — see
 [What to ask a record](../README.md#what-to-ask-a-record).
 
 `B` and `b` both store bases verbatim rather than as substitutions, and both are
@@ -21,15 +21,16 @@ still reported — as substitutions — for whichever of their bases disagree wi
 the reference. That needs a reference, so with no `fetchReferenceSequence` they
 report nothing at all.
 
-What it deliberately leaves out, because neither is a difference:
+Two codes carry information the mismatch functions deliberately leave out,
+because neither is a difference:
 
-| Code     | What it carries                                       |
-| -------- | ----------------------------------------------------- |
-| `q`, `Q` | quality scores, which say nothing about the alignment |
-| `P`      | padding, which consumes neither read nor reference    |
+| Code     | What it carries                                      |
+| -------- | ---------------------------------------------------- |
+| `q`, `Q` | quality scores, which carry no alignment information |
+| `P`      | padding, which consumes neither read nor reference   |
 
-Wanting one of those is the honest reason to walk the raw list. If that's you,
-read the next section carefully.
+If you want quality scores or padding directly, read the next section before you
+walk the raw list.
 
 ## Traps
 

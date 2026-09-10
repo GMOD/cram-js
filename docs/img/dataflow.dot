@@ -17,6 +17,10 @@
 // reason again: the two chains a region pair runs concurrently. It has neither
 // a wasm step nor a pool — its inflate is pako in JS — so its legend is the
 // two entries that remain rather than four with two of them unused.
+// ~/src/gmod/gbz-base-js/docs/img/dataflow.dot is the fifth, and drops two
+// legend entries rather than restyling them: nothing there is wasm and nothing
+// leaves the main thread. Its cluster is the storage layer every I/O step reads
+// through, drawn connected to nothing — the edges to it buried the spine.
 digraph cramjs {
   rankdir=TB
   compound=true

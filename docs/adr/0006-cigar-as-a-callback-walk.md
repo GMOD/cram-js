@@ -45,8 +45,8 @@ Note it is ~15% at _both_ ends of the read-length range rather than concentrated
 at one — long reads pay it per operation, short reads per call, and the two land
 in the same place. In absolute terms it is ~10 ms on a ~70 ms pass over 628 long
 reads (~16 µs per read, which jbrowse then memoizes per feature in its
-ultra-long LRU), and ~0.5 ms on a 3.5 ms pass over 54,695 short ones. Bought
-with the deletion of a second implementation of that walk.
+ultra-long LRU), and ~0.5 ms on a 3.5 ms pass over 54,695 short ones. The trade
+was the deletion of a second implementation of that walk.
 
 **The cost of the callback is not local**, which is a real constraint on the API
 and not just on the benchmark. A second call site in the same process with a
@@ -72,36 +72,35 @@ replaced**:
 | SRR396637     | 54,695  | **-45%**               |
 | SRR396636     | 23,051  | **-46%**               |
 
-Identical answers on every record of every dataset, control within ±3%. So the
-callback's ~15% is now paid only by consumers that genuinely want the packed
-form (per-base coloring, the details panel), and jbrowse's `NUMERIC_CIGAR` is
-lazy for CRAM rather than built once per read on the render path.
+Identical answers on every record of every dataset, control within ±3%. The
+callback's ~15% is now paid only by consumers that want the packed form
+(per-base coloring, the details panel), and jbrowse's `NUMERIC_CIGAR` is lazy
+for CRAM rather than built once per read on the render path.
 
-`getTrailingClipLength()` looked impossible at first — whether a trailing clip
-is really the last _operation_ turns on whether read bases follow it, which is
-the read bases every earlier operation consumed, which looks like the whole
-walk. It is not: the walk reaches each feature having emitted exactly `pos[i]`
-read bases, so the total is `pos[last]` plus whatever the last feature consumes.
-That identity was checked against the walk over ~82,000 records across every
-fixture plus 628 long reads, 13,586 of them trailing-clipped, and
-`hard_clipping.cram` — the fixture originally cited as the counterexample — is
-among them. With both ends direct, the step all but disappears: **-99.9%** on
-the long-read set (148 ms to ~0.15 ms for 628 reads) and **-64%** on the
-short-read files.
+`getTrailingClipLength()` looked impossible at first: telling whether a trailing
+clip is really the last _operation_ means knowing how many read bases come
+before it, which seems to require replaying the whole walk. It does not — the
+walk reaches each feature having emitted exactly `pos[i]` read bases, so the
+total is `pos[last]` plus whatever the last feature consumes. That identity was
+checked against the walk over ~82,000 records across every fixture plus 628 long
+reads, 13,586 of them trailing-clipped, and `hard_clipping.cram` — the fixture
+originally cited as the counterexample — is among them. With both ends direct,
+the step all but disappears: **-99.9%** on the long-read set (148 ms to ~0.15 ms
+for 628 reads) and **-64%** on the short-read files.
 
 **It changed the CIGAR of unmapped reads.** `forEachCigarOp` emits nothing for
 one, so jbrowse's `NUMERIC_CIGAR` is now empty where the walk it replaced
 synthesized a full-length match run (190 of the ONT fixture's records, 114 of
-SRR396637's). Empty is right: `getCigarString()` gives `'*'`, which is what
+SRR396637's). Empty is right: `getCigarString()` gives `'*'`, the same value
 samtools prints, and `@gmod/bam`'s `_computeNumericCigar` likewise returns an
 empty `Uint32Array` for `BAM_FUNMAP` — so this makes jbrowse's CRAM path agree
 with its BAM path rather than diverge from it.
 
-**The equivalent move for mismatches has not been made**, and the reason is
-worth recording here because it looks arbitrary next to this one: the CIGAR has
-a single spec-defined vocabulary (the SAM op codes), so the walk could move in
-here without dragging any consumer's render types along. The mismatch walk emits
-jbrowse's own vocabulary. See `TODO.md`.
+**The equivalent move for mismatches has not been made.** It looks arbitrary
+next to this one, but the reason is that the CIGAR has a single spec-defined
+vocabulary (the SAM op codes), so the walk could move in here without dragging
+any consumer's render types along. The mismatch walk emits jbrowse's own
+vocabulary. See `TODO.md`.
 
 ## Evidence
 
@@ -130,7 +129,7 @@ Two traps in measuring it, both of which produced confidently wrong numbers:
   polymorphism was fixed. `~/src/jb2bench` has `200x.longread.cram` (36 MB,
   `hg19mod.fa` alongside it); the region `0..120000` gives 628 records, 3.1M
   read features, 4.45M CIGAR ops and a median read length of 49 kb, and its
-  control holds to ±1.4%. Too big to check in, but that is the shape of data any
+  control holds to ±1.4%. Too big to check in, but that is the kind of data any
   claim about long-read CIGAR cost needs.
 
   It is worth as much for correctness as for timing: the benchmark compares the

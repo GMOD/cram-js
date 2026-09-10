@@ -2,8 +2,8 @@
 
 A decoded CRAM slice sits whole in a cache for as long as the file object lives.
 What that costs depends almost entirely on read length, and the two ends of that
-range fail in different ways — so this library plays the same trick twice, on
-two different terms.
+range fail in different ways — so this library applies the same technique twice,
+on two different terms.
 
 ## Where the memory goes
 
@@ -25,10 +25,10 @@ Measured at **v13.4.3** — regenerate with `pnpm docs:numbers`.
 <!-- END GENERATED: retained-heap -->
 
 **These are current figures, not historical ones**, and the difference matters
-when reading the rest of this file. A number like the −12.8% below is what a
-change was worth when it landed and stays true; a number like the retained total
-above describes the code as it stands and goes stale the moment a record holds
-something different. The generated blocks are the second kind —
+when reading the rest of this file. A number like the −12.8% below records what
+a change was worth when it landed, and stays true afterward; a number like the
+retained total above describes the code as it stands and goes stale the moment a
+record holds something different. The generated blocks are the second kind —
 `pnpm docs:numbers` recomputes them, and everything outside the markers is
 written by hand. All of them had drifted by up to 12% before that script
 existed.
@@ -48,10 +48,10 @@ record and are now columns — see [the migration note](../MIGRATION.md):
 - its **tags**, a `Record` per record, now
   [`TagColumn`](../src/cramFile/tagColumn.ts). Unlike everything else here, this
   one is **not** a memory technique: it came out break-even (−0.06 MB on
-  SRR396637, +0.20 MB on SRR396636). It earns its place by letting tags cross a
-  worker boundary as a transfer (243 ms of structured clone → 11 ms), and by
-  letting `getTag(name)` answer for one tag without building the object. Its
-  header comment has the full numbers.
+  SRR396637, +0.20 MB on SRR396636). It is kept for two other reasons: it lets
+  tags cross a worker boundary as a transfer (243 ms of structured clone → 11
+  ms), and it lets `getTag(name)` answer for one tag without building the
+  object. Its header comment has the full numbers.
 
 ## The costs that drive the design
 
@@ -102,9 +102,9 @@ all. `payloadChunks` keeps one every eighth slot and derives the rest, which is
 the 4 bytes that took a feature from 19 to 15:
 [ADR 0010](adr/0010-checkpoint-the-payload-offsets.md).
 
-What the columns cost today, which is the table to look at before proposing to
-shrink one — `scripts/arena-columns.ts` prints it per fixture, with the feature
-histogram the percentages come from:
+`scripts/arena-columns.ts` prints what the columns cost today per fixture, with
+the feature histogram the percentages come from — look here before proposing to
+shrink one:
 
 <!-- BEGIN GENERATED: arena-columns -->
 
@@ -132,13 +132,13 @@ Measured at **v13.4.3** — regenerate with `pnpm docs:numbers`.
 
 ### Quality scores — `qualityColumn`
 
-Same trade, aimed at the other end. Every score in a slice lies end to end in
-one array and a record keeps a `qualityStart` offset into it, which removes 104
-bytes per record: measured when it landed, SRR396637 went from 37.4 MB retained
-to 32.6 (−12.8%) and SRR396636 from 16.9 to 14.9 (−11.9%). ONT did not move at
-all — 37 records is 37 views, and there was nothing there to save. (Those totals
-are lower now, for reasons further down this file; the deltas are what the
-change was worth.)
+Quality scores get the same trade, aimed at the other end. Every score in a
+slice lies end to end in one array and a record keeps a `qualityStart` offset
+into it, which removes 104 bytes per record: measured when it landed, SRR396637
+went from 37.4 MB retained to 32.6 (−12.8%) and SRR396636 from 16.9 to 14.9
+(−11.9%). ONT did not move at all — 37 records is 37 views, and there was
+nothing there to save. (Those totals are lower now, for reasons further down
+this file; the deltas record what the change was worth.)
 
 When QS is a plain external block, that column **is** the block: the scores
 already lie end to end in record order, so nothing copies and reading a record's
@@ -169,8 +169,8 @@ Read names used to arrive lazily: the record kept the raw `Uint8Array` off the
 RN block and decoded on first access. Patching the getter never to materialize,
 so that every record kept its view, took SRR396637 from 37.7 MB to **40.9** —
 the 104-byte view is nearly twice the ~56 bytes of the name it was avoiding
-decoding. Deferring only pays if you hold something _smaller_ than the result,
-and a typed-array view over a short run of bytes is not that.
+decoding. Deferring is only worth it if you hold something _smaller_ than the
+result, and a typed-array view over a short run of bytes is not that.
 
 So the slice decode resolves names as it goes. That also collapsed
 `_readName`/`_readNameRaw`/`_syntheticReadName` into one field and removed a
@@ -205,22 +205,21 @@ the last settled entry, and every slice a query holds until it returns sit
 outside it, and so do the `CramRecord` views a query hands back — 54,695 of them
 measured 3.6 MB, 69 B each, which is the query's cost and not the cache's.
 
-The number has to sit **above one query's working set**, which is why the
-default is what it is. `getRecordsForRange` starts every slice of a range at
-once and holds all of their records until it returns, so a budget below that
-does not cache less — it caches _nothing_, evicting each slice before the next
-pan can reuse it while retaining the memory anyway. A 50kb window on 1000x
-short-read data is 420,000 records at ~400 B, and on 1000x long reads 2,991
-records at ~95 KB of read features each — ~175 MB and ~285 MB, both well under
-the default. [ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has
-the working sets, in the records it was measured in.
+The number has to sit **above one query's working set**, which sets the default
+at 1,000,000. `getRecordsForRange` starts every slice of a range at once and
+holds all of their records until it returns, so a budget below that does not
+cache less — it caches _nothing_, evicting each slice before the next pan can
+reuse it while retaining the memory anyway. A 50kb window on 200x short-read
+data is 90,000 records; the old 20,000 default was 4.5x below it.
+[ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has the working
+sets.
 
-Eviction is plain LRU, so `maxCacheBytes` means what it says. It used to be a
+Eviction is plain LRU, so `cacheSize` is an exact bound. It used to be a
 `'batch'` policy that spared everything an in-flight query touched, which
 rescued a too-small budget by exceeding it — 420,000 records held against a
 stated 20,000. At a budget above the working set the two measure identically, so
-that policy went rather than staying on for the case where it lies about the
-limit: [ADR 0005](adr/0005-drop-the-batch-eviction-policy.md).
+that policy went rather than staying on for the case where it silently exceeds
+the stated limit: [ADR 0005](adr/0005-drop-the-batch-eviction-policy.md).
 
 Two other knobs: `cacheIdleTimeoutMs` (default 3 minutes) drops slices nothing
 has read for that long, and is the only thing that lowers the cache while
@@ -233,7 +232,7 @@ Everything above is the JS heap, and it is where a query's memory goes. The pool
 adds two things that sit outside it, both per worker rather than per file, and
 neither scaling with the query:
 
-- **A wasm heap per JS context.** The htscodecs module has a 16 MB floor (see
+- A wasm heap per JS context. The htscodecs module has a 16 MB floor (see
   [wasm.md](wasm.md#memory)), and every context that decodes gets its own
   instance. With the default `min(hardwareConcurrency, 4)` workers that is up to
   **80 MB before the first record decodes** — four workers plus the main thread,
@@ -241,10 +240,10 @@ neither scaling with the query:
   the `.crai` is itself a wasm call. `numSliceWorkers` is the knob; a host that
   runs several worker contexts multiplies this again, as it does the pool
   itself.
-- **Up to 16 parsed compression schemes per worker**, each holding a codec per
-  data series and per tag it has seen, plus the header bytes it came from (294
-  B–11.7 KB across the fixtures here). Bounded, and small next to one decoded
-  slice, but it outlives the query rather than going with it.
+- Up to 16 parsed compression schemes per worker, each holding a codec per data
+  series and per tag it has seen, plus the header bytes it came from (294 B–11.7
+  KB across the fixtures here). Bounded, and small next to one decoded slice,
+  but it outlives the query rather than going with it.
 
 Both are floors, not per-query costs: each worker pays once, and neither grows
 with the region.
@@ -259,27 +258,27 @@ node --expose-gc --experimental-strip-types scripts/measure-heap.ts ONT
 ```
 
 `scripts/arena-columns.ts` is the companion that takes the arena apart — bytes
-per column, the feature histogram, and how much of each column is doing
-anything. Reach for it when the question is _which_ column to attack rather than
-how much a slice weighs.
+per column, the feature histogram, and how much of each column is in use. Reach
+for it when the question is _which_ column to attack rather than how much a
+slice weighs.
 
 `pnpm docs:numbers` runs both over every fixture and writes the two tables above
 back into this file. Run it after anything that changes what a decoded record
 holds, and commit the result with the change — the tables are the denominators
-the ADRs quote percentages against, so a stale one quietly makes every one of
-those percentages wrong.
+the ADRs quote percentages against, so a stale one makes every one of those
+percentages wrong, with nothing to catch it.
 
 It is deliberately **not** a CI check. Retained heap reproduces to ±0.2% on one
 machine but not across V8 versions or machines, so a `--check` gate would fail
 for reasons that say nothing about the commit under test. The version stamp in
-each table is what tells a reader how far back the numbers are from instead.
+each table tells a reader how far back the numbers are from, instead.
 
 Two traps, both found the hard way:
 
-- **`heapUsed` does not see typed arrays.** V8 allocates ArrayBuffer backing
-  stores outside the JS heap, so a struct-of-arrays layout looks nearly free if
-  that is all you read — the first columnar measurement came out at 0.93 MB
-  against an 18.07 MB baseline. Add `arrayBuffers`.
+- **`heapUsed` excludes typed arrays.** V8 allocates ArrayBuffer backing stores
+  outside the JS heap, so a struct-of-arrays layout looks nearly free if that is
+  all you read — the first columnar measurement came out at 0.93 MB against an
+  18.07 MB baseline. Add `arrayBuffers`.
 - **Do not A/B two source trees in one process.** Importing a baseline and a
   candidate side by side made the columnar decode look 7–11% _slower_,
   consistently enough to look real. It was the two variants sharing a heap and a
