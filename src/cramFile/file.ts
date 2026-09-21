@@ -80,9 +80,11 @@ export interface CramFileSource {
 
 /**
  * Fetch reference bases for `[start, end)` — 0-based half-open, so the returned
- * string must be exactly `end - start` characters. Both call sites check that
- * length, which is what turns a callback still written against the pre-v10
- * 1-based closed contract into an error rather than bases shifted by one.
+ * string should be `end - start` characters. The decode never asks past the
+ * `@SQ` length. A longer answer throws, which is what turns a callback still
+ * written against the pre-v10 1-based closed contract into an error rather than
+ * bases shifted by one; a shorter one is padded with N, as the spec treats
+ * bases past the reference. The md5 check needs the exact length.
  *
  * `refName` is the `@SQ` `SN` for `seqId`, so a callback can hand coordinates
  * straight to a name-keyed sequence source instead of the caller maintaining
