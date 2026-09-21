@@ -79,9 +79,8 @@ export default class CramContainerCompressionScheme {
   public dataSeriesEncoding: DataSeriesEncodingMap
 
   constructor(content: CramCompressionHeader) {
-    // interpret some of the preservation map tags for convenient use
-    // preservation-map defaults when a key is absent, per the CRAM spec
-    // (matches htslib cram_decode.c): RN=false, AP=true, RR=true.
+    // CRAMv3.tex defaults every absent boolean to true; RN follows htslib's
+    // cram_decode.c instead, which starts read_names_included at 0
     this.readNamesIncluded = content.preservation.RN ?? false
     this.APdelta = content.preservation.AP ?? true
     this.referenceRequired = content.preservation.RR ?? true

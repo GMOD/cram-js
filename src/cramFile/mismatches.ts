@@ -41,7 +41,10 @@ export interface Mismatch {
    * encoder writes in place of substitutions.
    */
   code: number
-  /** 1-based reference position the difference starts at */
+  /**
+   * 0-based reference position the difference starts at, minus
+   * {@link MismatchOptions.origin}, which defaults to 0
+   */
   refPos: number
   /**
    * How many reference bases it covers: 1 for a substitution, the deleted or

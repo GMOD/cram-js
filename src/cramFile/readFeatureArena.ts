@@ -127,10 +127,10 @@ function chunksFor(slots: number) {
 export default class ReadFeatureArena {
   /** feature code as an ASCII char code — one of the `RF_*` constants */
   codes: Uint8Array
-  /** 1-based position of the feature in the read */
+  /** 0-based position of the feature in the read */
   pos: Int32Array
   /**
-   * 1-based position of the feature on the reference — but only meaningful for
+   * 0-based position of the feature on the reference — but only meaningful for
    * the codes {@link RF_POSITIONAL} marks; see there before walking this column.
    */
   refPos: Int32Array
@@ -171,15 +171,19 @@ export default class ReadFeatureArena {
   payloadBytes: Uint8Array
   payloadLength = 0
   /**
-   * Reference base char code for each X feature, 0 where the reference is not
-   * known. Filled by `CramRecord.addReferenceSequence`; that this is a byte
-   * column rather than a `ref` string property added to a feature object after
-   * construction is worth 11.7% of retained heap on its own, since assigning a
-   * property the object was not constructed with moves V8's properties to an
-   * out-of-object backing store.
+   * Reference base char code for each X and B feature, 0 where the reference
+   * is not known. `resolveSubstitutions` fills it when a slice is decorated
+   * with its reference, as `CramRecord.addReferenceSequence` does for a
+   * synthesised record. That this is a byte column rather than a `ref` string
+   * property added to a feature object after construction is worth 11.7% of
+   * retained heap on its own, since assigning a property the object was not
+   * constructed with moves V8's properties to an out-of-object backing store.
    */
   refCodes: Uint8Array
-  /** substituted base char code for each X feature, 0 where not known */
+  /**
+   * Substituted base char code for each X feature, 0 where not known; filled
+   * alongside {@link refCodes}
+   */
   subCodes: Uint8Array
   /** number of slots in use */
   length = 0
