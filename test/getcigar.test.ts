@@ -151,7 +151,7 @@ test('getCigarString matches htslib (samtools) output', async () => {
   const cram = new IndexedCramFile({
     cramFilehandle: testDataFile('volvox-long-reads-sv.cram'),
     // CIGAR reconstruction never reads the reference, so a stub suffices
-    fetchReferenceSequence: async () => 'N'.repeat(100_000),
+    fetchReferenceSequence: async (_id, start, end) => 'N'.repeat(end - start),
     index: new CraiIndex({
       filehandle: testDataFile('volvox-long-reads-sv.cram.crai'),
     }),

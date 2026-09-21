@@ -5,7 +5,8 @@ import { IndexedCramFile } from '../src/index.ts'
 import { testDataFile } from './lib/util.ts'
 
 // seqFetch stub — both xx and yy refs are this same 20bp sequence
-const seqFetch = async () => 'AAAAAAAAAATTTTTTTTTT'
+const seqFetch = async (_id: number, start: number, end: number) =>
+  'AAAAAAAAAATTTTTTTTTT'.slice(start, end)
 
 function openTlen(file: string) {
   return new IndexedCramFile({

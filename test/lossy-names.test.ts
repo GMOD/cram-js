@@ -14,7 +14,7 @@ describe('1kg mate test', () => {
       }),
       fetchReferenceSequence: async (seqId, start, end) => {
         let fakeSeq = ''
-        for (let i = start; i <= end; i += 1) {
+        for (let i = start; i < end; i += 1) {
           fakeSeq += 'A'
         }
         return fakeSeq

@@ -34,11 +34,13 @@ test('seqFetch is bounded to the reads covered extent (#79)', async () => {
   const records = await cram.getRecordsForRange(0, 0, Number.POSITIVE_INFINITY)
   expect(calls.length).toBeGreaterThan(0)
 
-  // the reads covered extent, using lengthOnRef when present and falling back to
-  // readLength (matches how the reference fetch computes its span)
-  const readStart = Math.min(...records.map(r => r.start))
+  // The mapped reads' extent, as the reference fetch computes its span. Unmapped
+  // reads store their bases verbatim and need no reference, so the fetch leaves
+  // them out: this file places some past the last mapped read's end.
+  const mapped = records.filter(r => r.lengthOnRef !== undefined)
+  const readStart = Math.min(...mapped.map(r => r.start))
   const readEnd = Math.max(
-    ...records.map(r => r.start + (r.lengthOnRef ?? r.readLength)),
+    ...mapped.map(r => r.start + (r.lengthOnRef || r.readLength)),
   )
 
   const fetchStart = Math.min(...calls.map(c => c.start))

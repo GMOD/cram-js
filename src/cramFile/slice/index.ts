@@ -343,6 +343,47 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
   }
 
   /**
+   * `[start, end)` of reference `seqId` from `fetchReferenceSequence`, or
+   * undefined without a callback or when it hands back an empty string, which
+   * is how a callback says it cannot resolve the reference.
+   *
+   * The request stops at the `@SQ` length, and the answer is padded back out
+   * to `end` with N: a read may overhang the end of its contig, and CRAM reads
+   * the reference past it as N (CRAMv3 §11). A shorter answer than asked for
+   * is padded the same way, so a FASTA that disagrees with the header about a
+   * contig's length — chrM is the usual one — costs the bases it lacks rather
+   * than the slice. A longer one is a callback on the wrong contract, most
+   * likely the pre-v10 1-based closed one, which would shift every base, so it
+   * throws.
+   */
+  private async fetchReference(
+    seqId: number,
+    start: number,
+    end: number,
+    opts?: ReadOpts,
+  ): Promise<KnownRegion | undefined> {
+    const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
+    if (!fetchReferenceSequence) {
+      return undefined
+    }
+    const info = (await this.file.getReferenceInfo())[seqId]
+    const from = Math.max(start, 0)
+    const to = info === undefined ? end : Math.min(end, info.length)
+    if (from >= to) {
+      return undefined
+    }
+    const seq = await fetchReferenceSequence(seqId, from, to, info?.name, opts)
+    if (seq.length > to - from) {
+      throw new CramArgumentError(
+        `fetchReferenceSequence returned ${seq.length} bases for ${from}-${to} of reference ${seqId}, which is ${to - from} bases`,
+      )
+    }
+    return seq
+      ? { seqId, start: from, end, seq: seq.padEnd(end - from, 'N') }
+      : undefined
+  }
+
+  /**
    * Start fetching the reference for `span` now, ahead of the decode that will
    * need it.
    *
@@ -355,34 +396,18 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
    * `applyReferenceSequence` uses it if it covers what the records turn out to
    * need and falls back to the exact fetch otherwise.
    *
-   * Clamped to the reference's length so a span declared past the end of a
-   * contig does not fail the fetch, and never rejects: the fetch this replaces
-   * is the one whose failure counts, and it still happens if this one fails.
+   * Never rejects: the fetch this replaces is the one whose failure counts, and
+   * it still happens if this one fails.
    */
   private async startReferenceFetch(
     span: ReferenceSpan,
     opts?: ReadOpts,
   ): Promise<KnownRegion | undefined> {
-    const fetchReferenceSequence = this.file.fetchReferenceSequenceCallback
-    if (!fetchReferenceSequence || span.seqId < 0) {
+    if (span.seqId < 0) {
       return undefined
     }
     try {
-      const info = (await this.file.getReferenceInfo())[span.seqId]
-      const start = Math.max(span.start, 0)
-      const end =
-        info === undefined ? span.end : Math.min(span.end, info.length)
-      if (start >= end) {
-        return undefined
-      }
-      const seq = await fetchReferenceSequence(
-        span.seqId,
-        start,
-        end,
-        info?.name,
-        opts,
-      )
-      return seq ? { seqId: span.seqId, start, end, seq } : undefined
+      return await this.fetchReference(span.seqId, span.start, span.end, opts)
     } catch {
       return undefined
     }
@@ -397,11 +422,12 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
    * re-decoding every substitution on each repeat query meant, for jbrowse, a
    * trip to the sequence adapter on every pan back over data it already had.
    *
-   * The span asked for is the extent of the slice's reads, never the slice's
-   * declared `refSeqSpan` — see `test/seqfetch-bounds.test.ts` and issue #79.
-   * Computing it from every record rather than from one query's matches is what
-   * makes it a property of the slice, and so cacheable; it is also the widest
-   * any sequence of queries against the slice could have asked for in total.
+   * The span asked for is the extent of the slice's mapped reads, never the
+   * slice's declared `refSeqSpan` — see `test/seqfetch-bounds.test.ts` and issue
+   * #79. Computing it from every record rather than from one query's matches is
+   * what makes it a property of the slice, and so cacheable; it is also the
+   * widest any sequence of queries against the slice could have asked for in
+   * total.
    *
    * The trade, which is the right one but worth knowing: resolving the
    * reference is part of decoding a slice, so a **failed `fetchReferenceSequence`
@@ -429,15 +455,18 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
     const singleRefId = header.refSeqId >= 0 ? header.refSeqId : undefined
     const { scalars, presence, recordCount } = slice
 
-    // the reference span each sequence's reads cover
+    // the reference span each sequence's mapped reads cover; an unmapped read
+    // stores its bases verbatim and needs none
     const spans = new Map<number, { start: number; end: number }>()
     for (let i = 0; i < recordCount; i++) {
+      if (!(presence[i]! & P_LENGTH_ON_REF)) {
+        continue
+      }
       const o = i * SCALAR_STRIDE
       const seqId = singleRefId ?? scalars[o + S_SEQUENCE_ID]!
       const start = scalars[o + S_START]!
-      const lengthOnRef =
-        presence[i]! & P_LENGTH_ON_REF ? scalars[o + S_LENGTH_ON_REF]! : 0
-      const end = start + (lengthOnRef || scalars[o + S_READ_LENGTH]!)
+      const end =
+        start + (scalars[o + S_LENGTH_ON_REF]! || scalars[o + S_READ_LENGTH]!)
       const span = spans.get(seqId)
       if (span === undefined) {
         spans.set(seqId, { start, end })
@@ -469,26 +498,14 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
           resolved.set(seqId, known)
           return
         }
-        if (!fetchReferenceSequence) {
-          return
-        }
-        // deliberately NOT length-checked the way getReferenceRegion() is:
-        // this span is built from `lengthOnRef || readLength`, so unmapped
-        // reads inflate it past the end of the contig and a correct callback
-        // legitimately returns fewer bases. Add the check once that span is
-        // computed from mapped reads only.
-        const seq = await fetchReferenceSequence(
+        const region = await this.fetchReference(
           seqId,
           span.start,
           span.end,
-          await this.file.getReferenceName(seqId),
           opts,
         )
-        // truthy, not `!== ''`: a callback that cannot resolve the reference
-        // may hand back an empty string, and decoding a read against an empty
-        // reference throws rather than yielding no bases
-        if (seq) {
-          resolved.set(seqId, { start: span.start, end: span.end, seq })
+        if (region) {
+          resolved.set(seqId, region)
         }
       }),
     )
