@@ -1,5 +1,6 @@
 import CramFile from './cramFile/index.ts'
 import { type DecodeOptions } from './cramFile/record.ts'
+import { CramMalformedError } from './errors.ts'
 
 import type { IndexOpts, Slice } from './craiIndex.ts'
 import type CramContainer from './cramFile/container/index.ts'
@@ -17,7 +18,7 @@ export interface CramFileSource {
 function requireReadName(record: CramRecord): string {
   const name = record.readName
   if (name === undefined) {
-    throw new Error('readName undefined')
+    throw new CramMalformedError('readName undefined')
   }
   return name
 }
