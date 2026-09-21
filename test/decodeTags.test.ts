@@ -4,6 +4,8 @@ import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
 import { testDataFile } from './lib/util.ts'
 
+import type { CramRecord } from '../src/index.ts'
+
 // ce#tag_padded.tmp.cram carries PT aux tags on some of its records
 function openCram() {
   return new IndexedCramFile({
@@ -81,4 +83,44 @@ test('decodeTags variants do not share a cache entry', async () => {
   expect(withoutTags.length).toBe(withTags.length)
   expect(tagged(withoutTags)).toHaveLength(0)
   expect(tagged(withTags).length).toBeGreaterThan(0)
+})
+
+// htsjdk wrote this file with the lengths of its OC and XA tags in the core
+// bit-stream, so skipping those reads left every later record decoding from the
+// wrong bit: the first slice ran off its core block after 1,718 of its 10,000
+// records. The file is a partial download, so the query stays inside that slice.
+test('decodeTags: false decodes a file whose tags read the core block', async () => {
+  const name =
+    'grc37-1#HG03297.mapped.ILLUMINA.bwa.ESN.low_coverage.20130415.bam.cram'
+  const query = (decodeTags: boolean) =>
+    new IndexedCramFile({
+      cramFilehandle: testDataFile(name),
+      index: new CraiIndex({ filehandle: testDataFile(`${name}.crai`) }),
+      fetchReferenceSequence: async (_seqId, start, end) =>
+        'A'.repeat(end - start),
+    }).getRecordsForRange(0, 9993, 79674, { decodeTags })
+  const withTags = await query(true)
+  const withoutTags = await query(false)
+
+  const fields = (r: CramRecord) =>
+    [
+      r.readName,
+      r.flags,
+      r.cramFlags,
+      r.sequenceId,
+      r.start,
+      r.readLength,
+      r.getCigarString(),
+      r.mappingQuality,
+      r.templateLength ?? r.templateSize,
+      r.nextSequenceId,
+      r.nextStart,
+      r.getReadBases(),
+      r.qualityScores?.join(','),
+    ].join('|')
+
+  expect(withTags).toHaveLength(10_000)
+  expect(withTags.some(r => r.getTag('XA') !== undefined)).toBe(true)
+  expect(withoutTags.map(fields)).toEqual(withTags.map(fields))
+  expect(tagged(withoutTags)).toHaveLength(0)
 })

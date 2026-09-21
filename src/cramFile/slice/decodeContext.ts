@@ -142,6 +142,7 @@ export function buildSliceDecodeContext({
     decodeBulkBases,
     decodeReadName,
     decodeTags,
+    discardTags: !decodeTags && !canSkipTags(compressionScheme),
     APdelta: compressionScheme.APdelta,
     readNamesIncluded: compressionScheme.readNamesIncluded,
     isMultiRef: majorVersion > 1 && refSeqId === -2,
@@ -501,6 +502,52 @@ function bindTagReaders(
           }),
       }
     }),
+  )
+}
+
+function readsCoreBlock(enc: CramEncoding): boolean {
+  switch (enc.codecId) {
+    case 0:
+    case 1:
+    case 5:
+      return false
+    case 3:
+      return enc.parameters.bitLengths.some(length => length > 0)
+    case 4:
+      return (
+        readsCoreBlock(enc.parameters.lengthsEncoding) ||
+        readsCoreBlock(enc.parameters.valuesEncoding)
+      )
+    default:
+      return true
+  }
+}
+
+function externalBlockIds(enc: CramEncoding | undefined, ids: number[] = []) {
+  if (enc?.codecId === 1 || enc?.codecId === 5) {
+    ids.push(enc.parameters.blockContentId)
+  } else if (enc?.codecId === 4) {
+    externalBlockIds(enc.parameters.lengthsEncoding, ids)
+    externalBlockIds(enc.parameters.valuesEncoding, ids)
+  }
+  return ids
+}
+
+/**
+ * Whether a record's tags can go unread without moving any data series'
+ * cursor. Not when a tag codec reads the core bit-stream, as htsjdk's tag
+ * length encodings do, or an external block a data series also reads.
+ */
+function canSkipTags(compressionScheme: CramContainerCompressionScheme) {
+  const dataSeriesBlocks = new Set(
+    Object.values(compressionScheme.dataSeriesEncoding).flatMap(enc =>
+      externalBlockIds(enc),
+    ),
+  )
+  return Object.values(compressionScheme.tagEncoding).every(
+    enc =>
+      !readsCoreBlock(enc) &&
+      externalBlockIds(enc).every(id => !dataSeriesBlocks.has(id)),
   )
 }
 

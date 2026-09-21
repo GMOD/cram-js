@@ -324,6 +324,16 @@ export interface TagDescriptor {
   read: () => TagValue
 }
 
+function tagLine(tagDescriptorsByTL: TagDescriptor[][], TLindex: number) {
+  const descriptors = tagDescriptorsByTL[TLindex]
+  if (!descriptors) {
+    throw new CramMalformedError(
+      `TL index ${TLindex} not present in the tag dictionary`,
+    )
+  }
+  return descriptors
+}
+
 /**
  * Everything decodeRecord needs that is fixed for the whole slice. Built once
  * in slice/index.ts, which keeps decodeRecord's signature short and hoists the
@@ -345,6 +355,12 @@ export interface SliceDecodeContext {
   /** reads the next read name, batched over the whole block where it can be */
   decodeReadName: () => string
   decodeTags: boolean
+  /**
+   * With `decodeTags` off, read each record's tags anyway and drop them, because
+   * a tag codec shares a cursor with a data series and skipping it would desync
+   * every record after.
+   */
+  discardTags: boolean
   APdelta: boolean
   readNamesIncluded: boolean
   /** multi-reference slice: each record carries its own RI sequence id */
@@ -377,6 +393,7 @@ export default function decodeRecord(
     decodeBulkBases,
     decodeReadName,
     decodeTags,
+    discardTags,
     APdelta,
     readNamesIncluded,
     isMultiRef,
@@ -459,13 +476,7 @@ export default function decodeRecord(
   const tagStart = tagColumn.length
   let tagCount = 0
   if (decodeTags) {
-    const descriptors = tagDescriptorsByTL[TLindex]
-    if (!descriptors) {
-      throw new CramMalformedError(
-        `TL index ${TLindex} not present in the tag dictionary`,
-      )
-    }
-    for (const descriptor of descriptors) {
+    for (const descriptor of tagLine(tagDescriptorsByTL, TLindex)) {
       const { keyId, kind } = descriptor
       const value = descriptor.read()
       // Dispatched on the value, not on `kind` alone: the generic tag reader
@@ -486,6 +497,10 @@ export default function decodeRecord(
       }
     }
     tagCount = tagColumn.length - tagStart
+  } else if (discardTags) {
+    for (const { read } of tagLine(tagDescriptorsByTL, TLindex)) {
+      read()
+    }
   }
 
   let readFeatureStart = 0
