@@ -500,7 +500,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1007_seq.cram without erro
             "sequenceId": 0,
             "start": 1009,
             "tags": {},
-            "templateLength": 300,
+            "templateLength": 280,
             "uniqueId": 479,
           },
           {
@@ -633,7 +633,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1007_seq.cram without erro
             "sequenceId": 0,
             "start": 1209,
             "tags": {},
-            "templateLength": -300,
+            "templateLength": -280,
             "uniqueId": 480,
           },
         ],

@@ -526,7 +526,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1101_BETA.cram without err
             "sequenceId": 0,
             "start": 999,
             "tags": {},
-            "templateLength": 300,
+            "templateLength": 290,
             "uniqueId": 543,
           },
           {
@@ -683,7 +683,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/1101_BETA.cram without err
             "sequenceId": 0,
             "start": 1199,
             "tags": {},
-            "templateLength": -300,
+            "templateLength": -290,
             "uniqueId": 544,
           },
         ],

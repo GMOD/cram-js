@@ -1676151,7 +1676151,7 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "sequenceId": 0,
     "start": 0,
     "tags": {},
-    "templateLength": 20,
+    "templateLength": -20,
     "uniqueId": 400,
   },
   {
@@ -1676209,7 +1676209,7 @@ exports[`can read the first chrom of xx#repeated.tmp.cram without error 1`] = `
     "sequenceId": 0,
     "start": 0,
     "tags": {},
-    "templateLength": 20,
+    "templateLength": -20,
     "uniqueId": 402,
   },
   {

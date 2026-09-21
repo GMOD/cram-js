@@ -184,41 +184,25 @@ describe.skipIf(!available)(
           // The same records again, this time on what each one decoded to.
           // MAPQ is spelled back as the 0 htslib prints for a record that
           // stores none, which CRAM does for every unmapped read.
-          //
-          // xx#repeated gives its three pairs one read name between them, and
-          // stores no TS for any of them, so both implementations have to
-          // work the template length out from the mate chain. Neither is
-          // reading the file wrong; they resolve an ambiguous chain
-          // differently, and htslib's own answer is not consistent across the
-          // three — it reports +20 for the first S/67 at position 1 and -20
-          // for the other two, which are the same record. Compare everything
-          // else about them.
-          const dropTlen = name.startsWith('xx#repeated')
           const where = `${name}:${ref.name}`
           const decoded = all
             .map(r =>
-              samFields(
-                [
-                  r.readName,
-                  r.flags,
-                  r.start + 1,
-                  r.getCigarString(),
-                  r.mappingQuality ?? 0,
-                  r.templateLength ?? r.templateSize ?? 0,
-                  r.getReadBases(),
-                  qualString(r.qualityScores),
-                ],
-                dropTlen,
-              ),
+              samFields([
+                r.readName,
+                r.flags,
+                r.start + 1,
+                r.getCigarString(),
+                r.mappingQuality ?? 0,
+                r.templateLength ?? r.templateSize ?? 0,
+                r.getReadBases(),
+                qualString(r.qualityScores),
+              ]),
             )
             .sort()
           decodeComparisons += decoded.length
           expect({ where, alignments: decoded }).toStrictEqual({
             where,
-            alignments: alignments(path, ref.name, extra, {
-              scan: unsorted,
-              dropTlen,
-            }),
+            alignments: alignments(path, ref.name, extra, { scan: unsorted }),
           })
         }
       },

@@ -533,7 +533,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0504_mapped.cram without e
             "sequenceId": 0,
             "start": 1000,
             "tags": {},
-            "templateLength": 299,
+            "templateLength": 290,
             "uniqueId": 492,
           },
           {
@@ -696,7 +696,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0504_mapped.cram without e
             "sequenceId": 0,
             "start": 1199,
             "tags": {},
-            "templateLength": -299,
+            "templateLength": -290,
             "uniqueId": 493,
           },
         ],

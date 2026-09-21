@@ -138,7 +138,7 @@ export function alignments(
   file: string,
   ref: string,
   extra: string[] = [],
-  opts: { scan?: boolean; dropTlen?: boolean } = {},
+  opts: { scan?: boolean } = {},
 ) {
   // `scan` reads the whole file and picks the reference out here rather than
   // asking samtools for a region. It is what makes an unsorted file
@@ -156,10 +156,7 @@ export function alignments(
     .map(f =>
       // SAM column order is QNAME FLAG RNAME POS MAPQ CIGAR RNEXT PNEXT TLEN
       // SEQ QUAL; samFields wants the eight it compares, in its own order
-      samFields(
-        [f[0], f[1], f[3], f[5], f[4], f[8], f[9], f[10]],
-        opts.dropTlen,
-      ),
+      samFields([f[0], f[1], f[3], f[5], f[4], f[8], f[9], f[10]]),
     )
     .sort()
 }
@@ -169,21 +166,15 @@ export function alignments(
  *
  * Only the empty ones need normalising: SAM writes an absent CIGAR or SEQ as
  * `*`, where the readers hand back an empty string.
- *
- * `dropTlen` blanks the template length, for the one fixture where the two
- * implementations legitimately disagree — see its caller.
  */
-export function samFields(
-  f: (string | number | null | undefined)[],
-  dropTlen = false,
-) {
+export function samFields(f: (string | number | null | undefined)[]) {
   return [
     f[0],
     Number(f[1]),
     f[2],
     f[3] || '*',
     f[4],
-    dropTlen ? '-' : f[5],
+    f[5],
     f[6] || '*',
     f[7],
   ].join('\t')

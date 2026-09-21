@@ -4,184 +4,142 @@ import Constants from '../constants.ts'
 import type CramRecord from '../record.ts'
 
 /**
- * Try to estimate the template length from a bunch of interrelated
- * multi-segment reads.
- */
-function calculateMultiSegmentMatedTemplateLength(
-  allRecords: CramRecord[],
-  thisRecord: CramRecord,
-) {
-  const matedRecords: CramRecord[] = [thisRecord]
-  let cur = thisRecord
-  while (cur.mateRecordNumber !== undefined && cur.mateRecordNumber >= 0) {
-    const mateRecord = allRecords[cur.mateRecordNumber]
-    if (!mateRecord) {
-      throw new CramMalformedError(
-        'intra-slice mate record not found, this file seems malformed',
-      )
-    }
-    // A well-formed NF is a forward offset (`NF + recordNumber + 1`), so the
-    // chain strictly increases and cannot revisit a record. A malformed one
-    // points backwards and the walk never terminates: it re-pushes the same
-    // records until the process dies — 14 million entries in two seconds, and
-    // synchronously, so the tab cannot even be interrupted. Every record is
-    // visited at most once, so overrunning the slice means a cycle.
-    if (matedRecords.length > allRecords.length) {
-      throw new CramMalformedError(
-        'cyclic intra-slice mate chain, this file seems malformed',
-      )
-    }
-    matedRecords.push(mateRecord)
-    cur = mateRecord
-  }
-
-  let minStart = matedRecords[0]!.start
-  let maxEnd = minStart + matedRecords[0]!.readLength
-  for (let i = 1; i < matedRecords.length; i++) {
-    const r = matedRecords[i]!
-    if (r.start < minStart) {
-      minStart = r.start
-    }
-    const end = r.start + r.readLength
-    if (end > maxEnd) {
-      maxEnd = end
-    }
-  }
-  const estimatedTemplateLength = maxEnd - minStart
-  if (estimatedTemplateLength >= 0) {
-    matedRecords.forEach(r => {
-      if (r.templateLength !== undefined) {
-        throw new CramMalformedError(
-          'mate pair group has some members that have template lengths already, this file seems malformed',
-        )
-      }
-      // sign per SAM spec: positive for leftmost, negative for rightmost
-      r.templateLength =
-        r.start === minStart
-          ? estimatedTemplateLength
-          : -estimatedTemplateLength
-    })
-  }
-}
-
-/**
- * Attempt to calculate the `templateLength` for a pair of intra-slice paired
- * reads. Ported from htslib. Algorithm is imperfect.
- */
-function calculateIntraSliceMatePairTemplateLength(
-  thisRecord: CramRecord,
-  mateRecord: CramRecord,
-) {
-  // this just estimates the template length by using the simple (non-gapped)
-  // end coordinate of each read, because gapping in the alignment doesn't mean
-  // the template is longer or shorter
-  const start = Math.min(thisRecord.start, mateRecord.start)
-  const end = Math.max(
-    thisRecord.start + thisRecord.readLength,
-    mateRecord.start + mateRecord.readLength,
-  )
-  const lengthEstimate = end - start
-  // sign per SAM spec: positive for leftmost, negative for rightmost
-  thisRecord.templateLength =
-    thisRecord.start <= mateRecord.start ? lengthEstimate : -lengthEstimate
-  mateRecord.templateLength =
-    mateRecord.start <= thisRecord.start ? lengthEstimate : -lengthEstimate
-}
-
-/**
- * establishes a mate-pair relationship between two records in the same slice.
- * CRAM compresses mate-pair relationships between records in the same slice
- * down into just one record having the index in the slice of its mate
- */
-function associateIntraSliceMate(
-  allRecords: CramRecord[],
-  currentRecordNumber: number,
-  thisRecord: CramRecord,
-  mateRecord: CramRecord,
-) {
-  const complicatedMultiSegment =
-    mateRecord.hasNextPosition() ||
-    (mateRecord.mateRecordNumber !== undefined &&
-      mateRecord.mateRecordNumber !== currentRecordNumber)
-
-  // Lossy read names: the encoder drops the name of a mate group that fits in
-  // one slice, so give the group one back, named after the record the ascending
-  // walk reaches first — as htslib names it (cram_decode.c). Read that name off
-  // `thisRecord` rather than testing it, which is what carries it past the
-  // second segment; a `!thisRecord.readName` guard left the far end of a
-  // three-segment chain unnamed. ADR 0011.
-  const groupName = thisRecord.readName ?? String(thisRecord.uniqueId)
-  thisRecord.setSyntheticReadName(groupName)
-  mateRecord.setSyntheticReadName(groupName)
-
-  thisRecord.nextSequenceId = mateRecord.sequenceId
-  thisRecord.nextStart = mateRecord.start
-
-  // the mate record might have its own mate pointer, if this is some kind of
-  // multi-segment (more than paired) scheme, so only relate that one back to this one
-  // if it does not have any other relationship
-  if (
-    !mateRecord.hasNextPosition() &&
-    mateRecord.mateRecordNumber === undefined
-  ) {
-    mateRecord.nextSequenceId = thisRecord.sequenceId
-    mateRecord.nextStart = thisRecord.start
-  }
-
-  // make sure the proper flags and cramFlags are set on both records
-  // paired
-  thisRecord.flags |= Constants.BAM_FPAIRED
-
-  // set mate unmapped if needed
-  if (mateRecord.flags & Constants.BAM_FUNMAP) {
-    thisRecord.flags |= Constants.BAM_FMUNMAP
-  }
-  if (thisRecord.flags & Constants.BAM_FUNMAP) {
-    mateRecord.flags |= Constants.BAM_FMUNMAP
-  }
-
-  // set mate reversed if needed
-  if (mateRecord.flags & Constants.BAM_FREVERSE) {
-    thisRecord.flags |= Constants.BAM_FMREVERSE
-  }
-  if (thisRecord.flags & Constants.BAM_FREVERSE) {
-    mateRecord.flags |= Constants.BAM_FMREVERSE
-  }
-
-  if (thisRecord.templateLength === undefined) {
-    if (complicatedMultiSegment) {
-      calculateMultiSegmentMatedTemplateLength(allRecords, thisRecord)
-    } else {
-      calculateIntraSliceMatePairTemplateLength(thisRecord, mateRecord)
-    }
-  }
-
-  // delete this last because it's used by the
-  // complicated template length estimation
-  thisRecord.mateRecordNumber = undefined
-}
-
-/**
- * Interpret the `recordsToNextFragment` attributes the decode left behind,
- * filling in each record's `nextSequenceId`/`nextStart` from its in-slice mate.
+ * Set `templateLength` on every record of the mate chain starting at `head`,
+ * and close the chain into a circle by pointing its last record back at
+ * `head`, as htslib's `cram_decode_slice_xref` does.
  *
- * The decode loop fills every slot or throws, so `records[i]` is always
- * defined here; the `records[mateRecordNumber]` guard is against a malformed
- * pointer past the end of the slice.
+ * The span runs from the leftmost start to the rightmost end on the reference,
+ * `record.end` being htslib's `aend`. The head takes the sign: positive when it
+ * is leftmost and not also rightmost, with READ1 breaking a tie between mates
+ * at identical coordinates; every other record takes the opposite sign. A chain
+ * crossing references gets 0.
+ */
+function resolveTemplateLength(
+  records: CramRecord[],
+  mateLine: Int32Array,
+  head: number,
+) {
+  const first = records[head]!
+  let left = first.start
+  let right = first.end
+  let leftCount = 0
+  let rightCount = 0
+  let sameReference = true
+  let id = head
+  for (;;) {
+    const r = records[id]!
+    if (r.start < left) {
+      left = r.start
+      leftCount = 1
+    } else if (r.start === left) {
+      leftCount++
+    }
+    if (r.end > right) {
+      right = r.end
+      rightCount = 1
+    } else if (r.end === right) {
+      rightCount++
+    }
+    const next = mateLine[id]!
+    if (next === -1) {
+      mateLine[id] = head
+      break
+    }
+    // NF is a forward offset, so a pointer that goes back or stays put is a
+    // cycle, and one past the end leads nowhere
+    if (next <= id || next >= records.length) {
+      throw new CramMalformedError(
+        'cyclic or out-of-range intra-slice mate chain, this file seems malformed',
+      )
+    }
+    id = next
+    if (records[id]!.sequenceId !== first.sequenceId) {
+      sameReference = false
+    }
+  }
+
+  let headLength = 0
+  let restLength = 0
+  if (sameReference) {
+    const span = right - left
+    const headIsLeft = first.start === left
+    if (headIsLeft && (first.end < right || leftCount <= 1)) {
+      headLength = span
+      restLength = -span
+    } else if (
+      headIsLeft &&
+      first.end === right &&
+      leftCount > 1 &&
+      rightCount > 1
+    ) {
+      const isRead1 = !!(first.flags & Constants.BAM_FREAD1)
+      headLength = isRead1 ? span : -span
+      restLength = isRead1 ? -span : span
+    } else {
+      headLength = -span
+      restLength = span
+    }
+  }
+  first.templateLength = headLength
+  for (let i = mateLine[head]!; i !== head; i = mateLine[i]!) {
+    records[i]!.templateLength = restLength
+  }
+}
+
+/**
+ * Resolve the intra-slice mate links the decode left behind as
+ * `mateRecordNumber`, porting htslib's `cram_decode_slice_xref`: each record in
+ * a chain takes its next segment's position and strand, the last one's being
+ * the first, and gets a computed `templateLength` — 0 where the record or its
+ * mate is unmapped.
+ *
+ * A lossy-named file stores no name for such a chain, so each link also hands
+ * the name of the record holding the pointer to its mate, falling back to that
+ * record's uniqueId — how htslib names the group too (ADR 0011).
  *
  * Exported for the tests that pin its behaviour on malformed mate pointers;
  * nothing outside the decode calls it.
  */
 export function associateIntraSliceMates(records: CramRecord[]) {
-  for (let i = 0; i < records.length; i += 1) {
-    const r = records[i]!
-    const { mateRecordNumber } = r
-    if (
-      mateRecordNumber !== undefined &&
-      mateRecordNumber >= 0 &&
-      records[mateRecordNumber]
-    ) {
-      associateIntraSliceMate(records, i, r, records[mateRecordNumber])
+  const n = records.length
+  const mateLine = new Int32Array(n).fill(-1)
+  for (let i = 0; i < n; i++) {
+    const mate = records[i]!.mateRecordNumber
+    if (mate !== undefined && mate >= 0) {
+      mateLine[i] = mate
     }
+  }
+
+  for (let i = 0; i < n; i++) {
+    const mateIndex = mateLine[i]!
+    if (mateIndex < 0 || mateIndex >= n) {
+      continue
+    }
+    const r = records[i]!
+    if (mateIndex > i) {
+      const groupName = r.readName ?? String(r.uniqueId)
+      r.setSyntheticReadName(groupName)
+      records[mateIndex]!.setSyntheticReadName(groupName)
+    }
+    if (r.templateLength === undefined) {
+      resolveTemplateLength(records, mateLine, i)
+    }
+
+    const mate = records[mateLine[i]!]!
+    r.nextSequenceId = mate.sequenceId
+    r.nextStart = mate.start
+    let flags = r.flags | Constants.BAM_FPAIRED
+    if (mate.flags & Constants.BAM_FUNMAP) {
+      flags |= Constants.BAM_FMUNMAP
+      r.templateLength = 0
+    }
+    if (r.flags & Constants.BAM_FUNMAP) {
+      r.templateLength = 0
+    }
+    if (mate.flags & Constants.BAM_FREVERSE) {
+      flags |= Constants.BAM_FMREVERSE
+    }
+    r.flags = flags
+    r.mateRecordNumber = undefined
   }
 }
