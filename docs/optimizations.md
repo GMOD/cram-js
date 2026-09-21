@@ -115,6 +115,20 @@ rather than once per query over the filtered subset — and the filter runs over
 those cached records afterwards. So a pan that re-asks for a different window of
 the same slice pays nothing but the filter.
 
+### The range filter reads the columns
+
+A warm query costs only its range filter, and the filter used to build a record
+view — the consumer's `recordClass` — for every record in each slice just to
+read three numbers off it. It now reads the sequence id, start and span straight
+from the slice's columns and builds a view only for a record that overlaps.
+
+On 1 kb windows over cached slices that took a warm query from 0.21–0.43 ms to
+0.13–0.20 ms on SRR396637 (−38% and −53% in two runs) and cut SRR396636 by 54%
+and 56%, against A-vs-A controls within 10%. A 20 kb window gains less (−9% to
+−17%), since more of each slice survives the filter and still gets its view, and
+on one run that was inside the control. A cold query is dominated by the decode
+and did not move measurably.
+
 ### Mate slices dedupe, and decode under the caller's options
 
 `viewAsPairs` looks up a slice per unmated read, and those collapse to a

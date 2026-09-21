@@ -22,6 +22,17 @@ function requireReadName(record: CramRecord): string {
   return name
 }
 
+/** where a slice is, as a `.crai` entry records it */
+interface SliceLocation {
+  containerStart: number
+  sliceStart: number
+  sliceBytes: number
+  /** where the index says the slice's reads lie; see `CramContainer.getSlice` */
+  seqId?: number
+  start?: number
+  span?: number
+}
+
 export interface CramIndexLike {
   getEntriesForRange: (
     seqId: number,
@@ -150,51 +161,17 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
     // reappearing at a third site with nothing to handle it.
     const containers = new Map<number, CramContainer<T>>()
 
-    // fetch all the slices and parse the feature data
     const sliceResults = await Promise.all(
-      slices.map(slice =>
-        this.getRecordsInSlice(
-          slice,
-          feature => {
-            // Check if feature belongs to this sequence
-            if (feature.sequenceId !== seq) {
-              return false
-            }
-
-            // For unmapped reads (lengthOnRef is undefined), they are placed at their
-            // mate's position. Include them if that position is within the range.
-            if (feature.lengthOnRef === undefined) {
-              return feature.start >= start && feature.start < end
-            }
-
-            // For mapped reads, the plain half-open overlap. A read covers its
-            // last base, so it overlaps [start, end) as soon as
-            // start + lengthOnRef reaches the query start.
-            //
-            // This used to subtract one more, on the belief that samtools
-            // excludes a read whose last base sits exactly on the query start.
-            // It does not: a 150M read at 1-based POS 123852 spans
-            // 123852-124001, and `samtools view f.cram chr:124001-124300`
-            // returns it. The extra `- 1` silently dropped every read
-            // overlapping the query by exactly one base.
-            //
-            // A mapped read can still consume no reference at all — a
-            // hard-clip-only CIGAR such as `10H`, or an empty one. htslib's
-            // bam_endpos() reports one base rather than zero for those, so they
-            // stay findable at the base they sit on instead of being
-            // unreachable from every query.
-            const span = feature.lengthOnRef > 0 ? feature.lengthOnRef : 1
-            return feature.start < end && feature.start + span > start
-          },
-          // opts is a superset of DecodeOptions; getRecords resolves the
+      slices.map(entry =>
+        this.sliceFor(entry, containers)
+          // opts is a superset of DecodeOptions; the slice resolves the
           // defaults per key so passing it straight through is safe
-          opts,
-          containers,
-        ).then(records => {
-          downloadedBytes += slice.sliceBytes
-          onProgress?.(downloadedBytes, totalBytes)
-          return records
-        }),
+          .getRecordsOverlapping(seq, start, end, opts)
+          .then(records => {
+            downloadedBytes += entry.sliceBytes
+            onProgress?.(downloadedBytes, totalBytes)
+            return records
+          }),
       ),
     )
 
@@ -269,22 +246,7 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
   }
 
   getRecordsInSlice(
-    {
-      containerStart,
-      sliceStart,
-      sliceBytes,
-      seqId,
-      start,
-      span,
-    }: {
-      containerStart: number
-      sliceStart: number
-      sliceBytes: number
-      /** where the index says the slice's reads lie; see `CramContainer.getSlice` */
-      seqId?: number
-      start?: number
-      span?: number
-    },
+    entry: SliceLocation,
     filterFunction: (r: T) => boolean,
     decodeOptions?: DecodeOptions & BaseOpts,
     /**
@@ -295,19 +257,35 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
      */
     containers?: Map<number, CramContainer<T>>,
   ) {
+    return this.sliceFor(entry, containers).getRecords(
+      filterFunction,
+      decodeOptions,
+    )
+  }
+
+  private sliceFor(
+    {
+      containerStart,
+      sliceStart,
+      sliceBytes,
+      seqId,
+      start,
+      span,
+    }: SliceLocation,
+    containers?: Map<number, CramContainer<T>>,
+  ) {
     let container = containers?.get(containerStart)
     if (!container) {
       container = this.cram.getContainerAtPosition(containerStart)
       containers?.set(containerStart, container)
     }
-    const slice = container.getSlice(
+    return container.getSlice(
       sliceStart,
       sliceBytes,
       seqId === undefined || start === undefined || span === undefined
         ? undefined
         : { seqId, start, end: start + span },
     )
-    return slice.getRecords(filterFunction, decodeOptions)
   }
 
   /**

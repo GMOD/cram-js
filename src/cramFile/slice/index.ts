@@ -587,6 +587,26 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
     filterFunction: (r: T) => boolean,
     decodeOptions?: DecodeOptions & BaseOpts,
   ) {
+    const slice = await this.getDecodedSlice(decodeOptions)
+    return slice.records(filterFunction, this.file.recordClass)
+  }
+
+  /**
+   * The records on `seqId` overlapping the 0-based half-open `[start, end)` —
+   * see `DecodedSlice.recordsOverlapping` — without building a view for the
+   * records outside it.
+   */
+  async getRecordsOverlapping(
+    seqId: number,
+    start: number,
+    end: number,
+    decodeOptions?: DecodeOptions & BaseOpts,
+  ) {
+    const slice = await this.getDecodedSlice(decodeOptions)
+    return slice.recordsOverlapping(seqId, start, end, this.file.recordClass)
+  }
+
+  private getDecodedSlice(decodeOptions?: DecodeOptions & BaseOpts) {
     // Resolve defaults per-key rather than by spreading: callers routinely
     // build a DecodeOptions with explicitly-undefined values (see
     // IndexedCramFile.getRecordsForRange), and a spread would let those
@@ -612,11 +632,8 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
     // The slice comes back already decorated with its reference — see
     // applyReferenceSequence, which runs once per slice inside the cached
     // decode rather than once per query over the filtered subset.
-    const slice = await this.file.featureCache.get(
-      cacheKey,
-      decodeOptions?.signal,
-      signal => this._decodeSlice(opts, { signal }),
+    return this.file.featureCache.get(cacheKey, decodeOptions?.signal, signal =>
+      this._decodeSlice(opts, { signal }),
     )
-    return slice.records(filterFunction, this.file.recordClass)
   }
 }

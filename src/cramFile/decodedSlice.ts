@@ -192,6 +192,43 @@ export default class DecodedSlice {
   }
 
   /**
+   * The records on `seqId` that overlap the 0-based half-open `[start, end)`,
+   * as {@link records} with the range test `IndexedCramFile` applies. The test
+   * reads the columns, so a view is built only for a record that passes.
+   *
+   * A mapped record overlaps by its span on the reference, floored at one base
+   * the way `CramRecord.end` is. An unmapped one has no span, so it counts
+   * where it is placed.
+   */
+  recordsOverlapping<T extends CramRecord = CramRecord>(
+    seqId: number,
+    start: number,
+    end: number,
+    RecordClass = baseRecordClass<T>(),
+  ) {
+    const { scalars, presence, recordCount } = this
+    const out: T[] = []
+    for (let i = 0; i < recordCount; i++) {
+      const o = i * SCALAR_STRIDE
+      if (scalars[o + S_SEQUENCE_ID] !== seqId) {
+        continue
+      }
+      const recordStart = scalars[o + S_START]!
+      if (presence[i]! & P_LENGTH_ON_REF) {
+        const lengthOnRef = scalars[o + S_LENGTH_ON_REF]!
+        const span = lengthOnRef > 0 ? lengthOnRef : 1
+        if (recordStart >= end || recordStart + span <= start) {
+          continue
+        }
+      } else if (recordStart < start || recordStart >= end) {
+        continue
+      }
+      out.push(new RecordClass(this, i))
+    }
+    return out
+  }
+
+  /**
    * A one-record slice built from the fields {@link CramRecord}'s constructor
    * has always taken, for callers that synthesise a record rather than decode
    * one.
