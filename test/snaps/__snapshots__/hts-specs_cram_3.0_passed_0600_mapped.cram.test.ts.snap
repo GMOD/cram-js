@@ -491,7 +491,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0600_mapped.cram without e
               34,
               34,
             ],
-            "readBases": undefined,
+            "readBases": "ATTTTTCGGGTTTTTTGAAAATGTAGCTACAGAAAGTTTGTTTAAATATCTTGTTTTCTTGCACTTTGTGCAGAATT",
             "readFeatures": [
               {
                 "code": "D",
@@ -654,7 +654,7 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0600_mapped.cram without e
               34,
               34,
             ],
-            "readBases": undefined,
+            "readBases": "CCCTTTCAGAAAAATTATTTTTAAGAATTTTTCATRYTAGGAATATTGTTATTTCAGAAAATAGCTAAATGTGATTTCTGTAATTTTGCCTGCTAAAGGG",
             "readFeatures": [
               {
                 "code": "b",
@@ -666,7 +666,9 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0600_mapped.cram without e
                 "code": "X",
                 "data": 1,
                 "pos": 6,
+                "ref": "T",
                 "refPos": 1205,
+                "sub": "C",
               },
               {
                 "code": "b",
@@ -678,7 +680,9 @@ exports[`can dump the whole hts-specs/cram/3.0/passed/0600_mapped.cram without e
                 "code": "X",
                 "data": 2,
                 "pos": 93,
+                "ref": "C",
                 "refPos": 1292,
+                "sub": "T",
               },
               {
                 "code": "b",
