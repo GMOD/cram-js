@@ -54,6 +54,11 @@ export function batchDecodeItf8(buffer: Uint8Array) {
       pos += 5
     }
   }
+  // a value cut off by the end of the block is not a value: dropping it makes
+  // the read that reaches it report the overrun
+  if (pos > len) {
+    count--
+  }
 
   // Every ITF8 value occupies at least one byte, so buffer.length is a safe
   // upper bound on the count — but a block of mostly multi-byte values leaves
@@ -68,21 +73,33 @@ export function batchDecodeItf8(buffer: Uint8Array) {
 // The reads themselves, written once and shared by the per-call `decode` and
 // the per-slice `bindDecoder` — the difference between the two is only how much
 // of the lookup each has already done, never what the bytes mean.
+function overrun(): never {
+  throw new CramBufferOverrunError(
+    'attempted to read beyond end of block. this file seems truncated.',
+  )
+}
+
 function nextInt(preDecoded: PreDecodedIntBlock) {
   const value = preDecoded.values[preDecoded.index++]
   if (value === undefined) {
-    throw new CramBufferOverrunError(
-      'attempted to read beyond end of block. this file seems truncated.',
-    )
+    overrun()
+  }
+  return value
+}
+
+// parseItf8 reads past the end as zero bits, so the overrun only shows in
+// where the cursor lands
+function nextItf8(content: Uint8Array, cursor: Cursor) {
+  const value = parseItf8(content, cursor)
+  if (cursor.bytePosition > content.length) {
+    overrun()
   }
   return value
 }
 
 function nextByte(content: Uint8Array, cursor: Cursor) {
   if (cursor.bytePosition >= content.length) {
-    throw new CramBufferOverrunError(
-      'attempted to read beyond end of block. this file seems truncated.',
-    )
+    overrun()
   }
   return content[cursor.bytePosition++]!
 }
@@ -91,9 +108,7 @@ function takeBytes(content: Uint8Array, cursor: Cursor, length: number) {
   const start = cursor.bytePosition
   const end = start + length
   if (end > content.length) {
-    throw new CramBufferOverrunError(
-      'attempted to read beyond end of block. this file seems truncated.',
-    )
+    overrun()
   }
   cursor.bytePosition = end
   return content.subarray(start, end)
@@ -129,7 +144,7 @@ export default class ExternalCodec extends CramCodec<
         return nextInt(preDecoded)
       }
       const cursor = cursors.externalBlocks.getCursor(this.blockContentId)
-      return parseItf8(this.contentOf(blocksByContentId), cursor)
+      return nextItf8(this.contentOf(blocksByContentId), cursor)
     }
     const cursor = cursors.externalBlocks.getCursor(this.blockContentId)
     return nextByte(this.contentOf(blocksByContentId), cursor)
@@ -170,7 +185,7 @@ export default class ExternalCodec extends CramCodec<
     const content = contentBlock.content
     const cursor = cursors.externalBlocks.getCursor(id)
     return this.dataType === 'int'
-      ? () => parseItf8(content, cursor)
+      ? () => nextItf8(content, cursor)
       : () => nextByte(content, cursor)
   }
 

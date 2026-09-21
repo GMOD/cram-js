@@ -90,3 +90,49 @@ test('batchDecodeItf8 decodes multi-byte ITF8 values without retaining slack', (
   // the returned view must not expose the scratch array's slack
   expect(values.length).toBe(3)
 })
+
+// An int block is parsed one ITF8 at a time when it is not pre-decoded — it is
+// empty, or a byte series shares it — and parseItf8 reads past the end as zero
+// bits. So without a check that path returned 0 forever rather than reporting
+// the truncation.
+test('ExternalCodec int path throws CramBufferOverrunError past EOF when not pre-decoded', () => {
+  // 5, then a two-byte value the block cuts off
+  const block = {
+    content: new Uint8Array([0x05, 0x80]),
+    contentId: 1,
+  } as unknown as CramFileBlock
+  const blocksByContentId = { 1: block }
+  const cursorsFor = (): Cursors => {
+    const cursor = { bitPosition: 7 as const, bytePosition: 0 }
+    return {
+      lastAlignmentStart: 0,
+      coreBlock: { bitPosition: 7, bytePosition: 0 },
+      externalBlocks: { getCursor: () => cursor },
+    }
+  }
+  const codec = new ExternalCodec({ blockContentId: 1 }, 'int')
+
+  const cursors = cursorsFor()
+  expect(codec.decode(null as never, blocksByContentId, cursors)).toBe(5)
+  expect(() => codec.decode(null as never, blocksByContentId, cursors)).toThrow(
+    CramBufferOverrunError,
+  )
+
+  const read = codec.bindDecoder(undefined, blocksByContentId, cursorsFor())
+  expect(read()).toBe(5)
+  expect(read).toThrow(CramBufferOverrunError)
+
+  const empty = { 1: { content: new Uint8Array(0), contentId: 1 } }
+  const readEmpty = codec.bindDecoder(
+    undefined,
+    empty as unknown as Record<number, CramFileBlock>,
+    cursorsFor(),
+  )
+  expect(readEmpty).toThrow(CramBufferOverrunError)
+})
+
+test('batchDecodeItf8 drops a value the end of the block cuts off', () => {
+  // 5, then a three-byte value missing its last byte
+  const values = batchDecodeItf8(new Uint8Array([0x05, 0xc1, 0x00]))
+  expect([...values]).toEqual([5])
+})
