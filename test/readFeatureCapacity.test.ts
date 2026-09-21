@@ -36,7 +36,6 @@ async function firstSliceOf(name: string) {
     throw new Error('expected a mapped slice')
   }
   const compressionScheme = (await container.getCompressionScheme())!
-  const { majorVersion } = await file.getDefinition()
 
   const blocks = await slice.getBlocks()
   const ctx = buildSliceDecodeContext({
@@ -47,7 +46,6 @@ async function firstSliceOf(name: string) {
         .map(b => [b.contentId, b]),
     ),
     coreDataBlock: blocks[0],
-    majorVersion,
     refSeqId: header.refSeqId,
     refSeqStart: header.refSeqStart,
     decodeTags: true,

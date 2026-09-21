@@ -177,11 +177,7 @@ export function parseTagData(tagType: string, buffer: Uint8Array) {
 // per-feature branch on the feature's kind.
 export type RFDecoder = (arena: ReadFeatureArena, index: number) => number
 
-export function buildRFSchema(
-  bd: BoundDecoders,
-  majorVersion: number,
-): (RFDecoder | undefined)[] {
-  const SC = majorVersion > 1 ? bd.SC : bd.IN
+export function buildRFSchema(bd: BoundDecoders): (RFDecoder | undefined)[] {
   // filled rather than left sparse: a holey array degrades every lookup in the
   // decode loop below
   const arr: (RFDecoder | undefined)[] = new Array(128).fill(undefined)
@@ -214,7 +210,7 @@ export function buildRFSchema(
     return skipped
   })
   set('I', (a, i) => -setBytes(a, i, bd.IN()))
-  set('S', (a, i) => -setBytes(a, i, SC()))
+  set('S', (a, i) => -setBytes(a, i, bd.SC()))
   set('b', (a, i) => {
     setBytes(a, i, bd.BB())
     return 0
@@ -400,9 +396,6 @@ export default function decodeRecord(
     refSeqId,
   } = ctx
   let flags = bd.BF()
-
-  // note: the C data type of compressionFlags is byte in cram v1 and int32 in
-  // cram v2+, but that does not matter for us here in javascript land.
   const cramFlags = bd.CF()
 
   const sequenceId = isMultiRef ? bd.RI() : refSeqId
@@ -431,8 +424,6 @@ export default function decodeRecord(
   let mateRecordNumber: number | undefined
   // mate record
   if (cramFlags & Constants.CRAM_FLAG_DETACHED) {
-    // note: the MF is a byte in 1.0, int32 in 2+, but once again this doesn't
-    // matter for javascript
     const mateFlags = bd.MF()
     if (!readNamesIncluded) {
       // the two mates of a pair share a name, so this is the record's own name
@@ -463,8 +454,6 @@ export default function decodeRecord(
     mateRecordNumber = bd.NF() + recordNumber + 1
   }
 
-  // TODO: the aux tag parsing will have to be refactored if we want to support
-  // cram v1
   const TLindex = bd.TL()
   if (TLindex < 0) {
     /* TODO: check nTL: TLindex >= compressionHeader.tagEncoding.size */

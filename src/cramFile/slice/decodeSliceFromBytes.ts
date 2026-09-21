@@ -221,7 +221,6 @@ export async function decodeSliceFromBytes(
     compressionScheme,
     blocksByContentId,
     coreDataBlock: blocks[0],
-    majorVersion,
     refSeqId,
     refSeqStart,
     decodeTags,

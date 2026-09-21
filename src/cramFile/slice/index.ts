@@ -118,25 +118,18 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
     const { bytes, filePosition } = await this.getBytes(opts)
 
     const header = await this.file.readBlockFromBuffer(bytes, 0, filePosition)
-    const parser =
-      header.contentType === 'MAPPED_SLICE_HEADER'
-        ? sectionParsers.cramMappedSliceHeader.parser
-        : header.contentType === 'UNMAPPED_SLICE_HEADER'
-          ? sectionParsers.cramUnmappedSliceHeader.parser
-          : undefined
-    if (parser) {
-      const content = parseItem(
-        header.content,
-        parser,
-        0,
-        containerHeader._endPosition,
-      )
-      return { ...header, parsedContent: content }
-    } else {
+    if (header.contentType !== 'MAPPED_SLICE_HEADER') {
       throw new CramMalformedError(
         `error reading slice header block, invalid content type ${header.contentType}`,
       )
     }
+    const content = parseItem(
+      header.content,
+      sectionParsers.cramMappedSliceHeader.parser,
+      0,
+      containerHeader._endPosition,
+    )
+    return { ...header, parsedContent: content }
   }
 
   /**

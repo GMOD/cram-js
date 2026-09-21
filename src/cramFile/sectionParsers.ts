@@ -21,22 +21,15 @@ const CONTENT_TYPES = [
   'FILE_HEADER',
   'COMPRESSION_HEADER',
   'MAPPED_SLICE_HEADER',
-  'UNMAPPED_SLICE_HEADER', // < only used in cram v1
+  'UNMAPPED_SLICE_HEADER', // CRAM v1 only, so malformed in any file read here
   'EXTERNAL_DATA',
   'CORE_DATA',
 ] as const
 
-// Per-version dispatch for the optional `recordCounter` field shared by slice
-// headers and container header 1. CRAM v3 uses LTF8, v2 uses ITF8, v1 omits it.
+// The record counter in slice headers and container header 1 is LTF8 from
+// CRAM v3 on, ITF8 in v2.
 function readRecordCounter(r: BufferReader, majorVersion: number) {
-  if (majorVersion >= 3) {
-    return r.ltf8()
-  } else if (majorVersion === 2) {
-    return r.itf8()
-  } else {
-    console.warn('recordCounter=0')
-    return 0
-  }
+  return majorVersion >= 3 ? r.ltf8() : r.itf8()
 }
 
 export function cramFileDefinition() {
@@ -254,49 +247,6 @@ function readContentIds(r: BufferReader, numContentIds: number) {
   return contentIds
 }
 
-/** the md5 of the slice's reference, absent in cram v1 */
-function readMd5(r: BufferReader, majorVersion: number) {
-  return majorVersion >= 2
-    ? ([...r.bytes(16)] as TupleOf<number, 16>)
-    : undefined
-}
-
-// assemble a section parser for the unmapped slice header, with slight
-// variations depending on the major version of the cram file
-function cramUnmappedSliceHeader(majorVersion: number) {
-  let maxLength = 0
-  maxLength += 5
-  maxLength += 9
-  maxLength += 5 * 2
-  maxLength += 16
-
-  const parser = (buffer: Uint8Array, offset: number) => {
-    const r = new BufferReader(buffer, offset)
-    const numRecords = r.itf8()
-    const recordCounter = readRecordCounter(r, majorVersion)
-    const numBlocks = r.itf8()
-    const numContentIds = r.itf8()
-    const contentIds = readContentIds(r, numContentIds)
-    const md5 = readMd5(r, majorVersion)
-
-    return {
-      value: {
-        recordCounter,
-        md5,
-        contentIds,
-        numContentIds,
-        numBlocks,
-        numRecords,
-      },
-      offset: r.bytePosition,
-    }
-  }
-  return {
-    parser,
-    maxLength: (numContentIds: number) => maxLength + numContentIds * 5,
-  }
-}
-
 // assembles a section parser for the mapped slice header, with slight
 // variations depending on the major version of the cram file
 function cramMappedSliceHeader(majorVersion: number) {
@@ -318,7 +268,7 @@ function cramMappedSliceHeader(majorVersion: number) {
       const numContentIds = r.itf8()
       const contentIds = readContentIds(r, numContentIds)
       const refBaseBlockId = r.itf8()
-      const md5 = readMd5(r, majorVersion)
+      const md5 = [...r.bytes(16)] as TupleOf<number, 16>
 
       return {
         value: {
@@ -467,9 +417,6 @@ function cramTagEncodingMap() {
 function cramCompressionHeader() {
   return {
     parser: (buffer: Uint8Array, offset: number) => {
-      // TODO: if we want to support CRAM v1, we will need to refactor
-      // compression header into 2 parts to parse the landmarks, like the
-      // container header
       const { value: preservation, offset: newOffset1 } =
         cramPreservationMap().parser(buffer, offset)
 
@@ -517,7 +464,7 @@ function cramContainerHeader1(majorVersion: number) {
       const alignmentSpan = r.itf8()
       const numRecords = r.itf8()
       const recordCounter = readRecordCounter(r, majorVersion)
-      const numBases = majorVersion > 1 ? r.ltf8() : undefined
+      const numBases = r.ltf8()
       const numBlocks = r.itf8()
       const numLandmarks = r.itf8()
       return {
@@ -580,7 +527,7 @@ export interface BlockHeader {
     | 'FILE_HEADER'
     | 'COMPRESSION_HEADER'
     | 'MAPPED_SLICE_HEADER'
-    | 'UNMAPPED_SLICE_HEADER' // < only used in cram v1
+    | 'UNMAPPED_SLICE_HEADER' // CRAM v1 only
     | 'EXTERNAL_DATA'
     | 'CORE_DATA'
   contentId: number
@@ -621,7 +568,6 @@ function buildSectionParsers(majorVersion: number) {
     cramDataSeriesEncodingMap: cramDataSeriesEncodingMap(),
     cramTagEncodingMap: cramTagEncodingMap(),
     cramCompressionHeader: cramCompressionHeader(),
-    cramUnmappedSliceHeader: cramUnmappedSliceHeader(majorVersion),
     cramMappedSliceHeader: cramMappedSliceHeader(majorVersion),
     cramContainerHeader1: cramContainerHeader1(majorVersion),
     cramContainerHeader2: cramContainerHeader2(majorVersion),

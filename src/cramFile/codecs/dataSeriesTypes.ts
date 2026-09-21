@@ -7,7 +7,7 @@ export type DataType = 'int' | 'byte' | 'long' | 'byteArray'
  *
  * One table: the list of data series and the type of each, with
  * `DataSeriesEncodingKey` derived as `keyof typeof`. Kept as two — a
- * hand-written union of the same thirty names beside a name-to-type map — a
+ * hand-written union of the same names beside a name-to-type map — a
  * series added to one and not the other is a silent gap.
  */
 export const dataSeriesTypes = {
@@ -22,8 +22,6 @@ export const dataSeriesTypes = {
   NP: 'int',
   TS: 'int',
   NF: 'int',
-  TC: 'byte',
-  TN: 'int',
   FN: 'int',
   FC: 'byte',
   FP: 'int',

@@ -30,7 +30,6 @@ export interface SliceDecodeContextArgs {
   compressionScheme: CramContainerCompressionScheme
   blocksByContentId: Record<number, CramFileBlock>
   coreDataBlock: CramFileBlock | undefined
-  majorVersion: number
   /** the slice's reference id: >= 0 single-reference, -2 multi-reference */
   refSeqId: number
   /** 0-based reference start from the slice header, the seed for AP deltas */
@@ -52,7 +51,6 @@ export function buildSliceDecodeContext({
   compressionScheme,
   blocksByContentId,
   coreDataBlock,
-  majorVersion,
   refSeqId,
   refSeqStart,
   decodeTags,
@@ -127,7 +125,7 @@ export function buildSliceDecodeContext({
 
   return {
     bd,
-    rfSchema: buildRFSchema(bd, majorVersion),
+    rfSchema: buildRFSchema(bd),
     arena: new ReadFeatureArena(capacity.slots, capacity.payload),
     qualityColumn,
     tagColumn,
@@ -145,7 +143,7 @@ export function buildSliceDecodeContext({
     discardTags: !decodeTags && !canSkipTags(compressionScheme),
     APdelta: compressionScheme.APdelta,
     readNamesIncluded: compressionScheme.readNamesIncluded,
-    isMultiRef: majorVersion > 1 && refSeqId === -2,
+    isMultiRef: refSeqId === -2,
     refSeqId,
   }
 }
@@ -377,8 +375,6 @@ function bindDataSeriesDecoders(
     MQ: bind('MQ'),
     BA: bind('BA'),
     QS: bind('QS'),
-    TC: bind('TC'),
-    TN: bind('TN'),
   }
 }
 

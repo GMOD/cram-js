@@ -12,8 +12,8 @@ mates. It is `sliceHeader.contentPosition + recordCounter + 1 + i`.
 counter is the right field for that. `CRAMv3.tex` calls it a "0-based sequential
 index of records in the file/stream", which says what a writer should write, not
 what a reader may verify. Nothing makes the value unique, and checking it means
-reading the whole file. CRAM v1 has no such field at all, so `readRecordCounter`
-returns 0 for every slice in one.
+reading the whole file. CRAM v1 has no such field at all, which is moot here
+only because this library refuses v1 files outright.
 
 That the definition itself moved is a reason for the same caution:
 `CRAMv2.1.tex` calls the field 1-based, `CRAMv3.tex` 0-based, and every file in
