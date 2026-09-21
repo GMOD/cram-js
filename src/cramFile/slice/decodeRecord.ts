@@ -122,7 +122,7 @@ function parseTagValueArray(buffer: Uint8Array) {
       array[i] = readFloat32LE(buffer, dataOffset + i * 4)
     }
   } else {
-    throw new Error(`unknown type: ${arrayType}`)
+    throw new CramMalformedError(`unknown B-array element type ${arrayType}`)
   }
 
   return array

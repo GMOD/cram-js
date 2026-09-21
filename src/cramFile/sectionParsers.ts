@@ -1,4 +1,5 @@
 import BufferReader from './bufferReader.ts'
+import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type { TupleOf } from '../typescript.ts'
@@ -62,13 +63,15 @@ export function cramBlockHeader() {
     const d = r.u8()
     const compressionMethod = COMPRESSION_METHODS[d]
     if (!compressionMethod) {
-      throw new Error(`compression method number ${d} not implemented`)
+      throw new CramUnimplementedError(
+        `compression method number ${d} not implemented`,
+      )
     }
 
     const c = r.u8()
     const contentType = CONTENT_TYPES[c]
     if (!contentType) {
-      throw new Error(`invalid block content type id ${c}`)
+      throw new CramMalformedError(`invalid block content type id ${c}`)
     }
 
     const contentId = r.itf8()
@@ -178,7 +181,7 @@ function cramPreservationMap() {
         } else if (key === 'TD') {
           ents.push({ key, value: readTagDictionary(r).ents })
         } else {
-          throw new Error(`unknown key ${key}`)
+          throw new CramMalformedError(`unknown preservation map key ${key}`)
         }
       }
       return {
@@ -352,7 +355,7 @@ function cramEncodingSub(r: BufferReader): Value {
     // GAMMA
     parameters.offset = r.itf8()
   } else {
-    throw new Error(`unknown codecId ${codecId}`)
+    throw new CramUnimplementedError(`unknown codec id ${codecId}`)
   }
 
   return {

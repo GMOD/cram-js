@@ -1,3 +1,4 @@
+import { CramMalformedError } from '../../errors.ts'
 import { dataSeriesTypes } from '../codecs/dataSeriesTypes.ts'
 import { instantiateCodec } from '../codecs/index.ts'
 
@@ -99,7 +100,7 @@ export default class CramContainerCompressionScheme {
     if (!this.tagCodecCache[tagName]) {
       const encodingData = this.tagEncoding[tagName]
       if (!encodingData) {
-        throw new Error('Error, no tag encoding')
+        throw new CramMalformedError(`no encoding for tag ${tagName}`)
       }
       // all tags are byte array data
       this.tagCodecCache[tagName] = instantiateCodec(encodingData, 'byteArray')
