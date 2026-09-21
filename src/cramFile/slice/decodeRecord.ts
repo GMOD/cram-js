@@ -240,8 +240,8 @@ export function buildRFSchema(bd: BoundDecoders): (RFDecoder | undefined)[] {
 }
 
 /**
- * Decode this record's read features into `arena`, returning the slot range
- * they occupy and their total effect on the record's length on the reference.
+ * Append this record's read features to `arena`, returning their total effect
+ * on the record's length on the reference.
  */
 function decodeReadFeatures(
   recordStart: number,
@@ -249,7 +249,7 @@ function decodeReadFeatures(
   bd: BoundDecoders,
   schema: (RFDecoder | undefined)[],
   arena: ReadFeatureArena,
-): [number, number] {
+) {
   let readPos = 0
   let refDelta = 0
   // FP decodes to a 1-based read position, so `readPos - 1` is the 0-based one
@@ -280,7 +280,7 @@ function decodeReadFeatures(
     refDelta += decodeInto(arena, i)
   }
   arena.length = start + readFeatureCount
-  return [start, refDelta]
+  return refDelta
 }
 
 /** Reads `length` read bases at once, when the BA codec can hand out a view. */
@@ -505,16 +505,15 @@ export default function decodeRecord(
     const encodedFeatureCount = bd.FN()
     lengthOnRef = readLength
     if (encodedFeatureCount) {
-      const [start, refDelta] = decodeReadFeatures(
+      readFeatureStart = arena.length
+      readFeatureCount = encodedFeatureCount
+      lengthOnRef += decodeReadFeatures(
         alignmentStart,
         encodedFeatureCount,
         bd,
         rfSchema,
         arena,
       )
-      readFeatureStart = start
-      readFeatureCount = encodedFeatureCount
-      lengthOnRef += refDelta
     }
 
     // mapping quality
