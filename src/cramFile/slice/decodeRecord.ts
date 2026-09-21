@@ -516,12 +516,6 @@ export default function decodeRecord(
       readFeatureCount = encodedFeatureCount
       lengthOnRef += refDelta
     }
-    if (Number.isNaN(lengthOnRef)) {
-      console.warn(
-        `${sequenceId}:${alignmentStart} record has invalid read features`,
-      )
-      lengthOnRef = readLength
-    }
 
     // mapping quality
     mappingQuality = bd.MQ()

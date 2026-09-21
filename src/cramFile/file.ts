@@ -11,11 +11,10 @@ import { getSharedSliceWorkerPool } from '../sliceWorkerPool.ts'
 import CramContainer from './container/index.ts'
 import { baseRecordClass } from './decodedSlice.ts'
 import { memoizeAsync } from './memoize.ts'
-import { parseBlockFromBuffer, uncompressBlockContent } from './parseBlock.ts'
+import { parseBlockFromBuffer } from './parseBlock.ts'
 import { parseHeaderText } from '../sam.ts'
 import {
   type BlockHeader,
-  type CompressionMethod,
   cramFileDefinition,
   getSectionParsers,
 } from './sectionParsers.ts'
@@ -591,22 +590,6 @@ export default class CramFile<T extends CramRecord = CramRecord> {
 
   getContainerAtPosition(position: number) {
     return new CramContainer(this, position)
-  }
-
-  /**
-   * Kept as a method for its call sites; the work is in `parseBlock.ts`, which a
-   * worker can reach without a `CramFile`.
-   */
-  _uncompress(
-    compressionMethod: CompressionMethod,
-    inputBuffer: Uint8Array,
-    uncompressedSize: number,
-  ): Promise<Uint8Array> {
-    return uncompressBlockContent(
-      compressionMethod,
-      inputBuffer,
-      uncompressedSize,
-    )
   }
 
   async readBlock(position: number, opts?: ReadOpts) {

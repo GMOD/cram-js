@@ -10,8 +10,7 @@
  * a cold query, and leaving it behind would cap a slice-decode pool at the
  * remaining two thirds.
  *
- * `CramFile` keeps thin methods that delegate here, so its own call sites and
- * anything reaching for them are unchanged.
+ * `CramFile.readBlockFromBuffer` delegates here.
  */
 import crc32 from 'crc/calculators/crc32'
 

@@ -130,13 +130,4 @@ export default abstract class CramCodec<
   ): (() => number) | undefined {
     return undefined
   }
-
-  /** {@link bindBytesReader} for a caller that has not bound anything. */
-  getBytesSubarray(
-    blocksByContentId: Record<number, CramFileBlock>,
-    cursors: Cursors,
-    length: number,
-  ): Uint8Array | undefined {
-    return this.bindBytesReader(blocksByContentId, cursors)?.(length)
-  }
 }

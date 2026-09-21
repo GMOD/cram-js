@@ -30,37 +30,14 @@ export default class ByteArrayLengthCodec extends CramCodec<
     this.instantiateCodec = instantiateCodec
   }
 
+  // binding per call is sound because the bound readers share the slice's
+  // cursors, and cheap enough because nothing on the decode path calls this
   decode(
     coreDataBlock: CramFileBlock,
     blocksByContentId: Record<number, CramFileBlock>,
     cursors: Cursors,
   ) {
-    const lengthCodec = this._getLengthCodec()
-    const arrayLength = lengthCodec.decode(
-      coreDataBlock,
-      blocksByContentId,
-      cursors,
-    )
-
-    if (arrayLength > 0) {
-      const dataCodec = this._getDataCodec()
-      const subarray = dataCodec.getBytesSubarray(
-        blocksByContentId,
-        cursors,
-        arrayLength,
-      )
-      if (subarray) {
-        return subarray
-      } else {
-        const data = new Uint8Array(arrayLength)
-        for (let i = 0; i < arrayLength; i += 1) {
-          data[i] = dataCodec.decode(coreDataBlock, blocksByContentId, cursors)
-        }
-        return data
-      }
-    } else {
-      return new Uint8Array(0)
-    }
+    return this.bindDecoder(coreDataBlock, blocksByContentId, cursors)()
   }
 
   /**
