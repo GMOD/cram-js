@@ -154,11 +154,29 @@ export interface CramPreservationMap {
   TD: CramTagDictionary
 }
 
+// A map's size counts every byte after its own ITF8, the count included. htslib
+// rejects a header whose maps disagree with their sizes (cram_decode.c), which
+// catches a corrupted header before its codecs misread every slice.
+function checkMapSize(
+  name: string,
+  mapSize: number,
+  mapStart: number,
+  r: BufferReader,
+) {
+  const consumed = r.bytePosition - mapStart
+  if (consumed !== mapSize) {
+    throw new CramMalformedError(
+      `${name} map declares ${mapSize} bytes but holds ${consumed}`,
+    )
+  }
+}
+
 function cramPreservationMap() {
   return {
     parser: (buffer: Uint8Array, offset: number) => {
       const r = new BufferReader(buffer, offset)
       const mapSize = r.itf8()
+      const mapStart = r.bytePosition
       const mapCount = r.itf8()
       const ents = []
       for (let i = 0; i < mapCount; i++) {
@@ -184,6 +202,7 @@ function cramPreservationMap() {
           throw new CramMalformedError(`unknown preservation map key ${key}`)
         }
       }
+      checkMapSize('preservation', mapSize, mapStart, r)
       return {
         value: {
           mapSize,
@@ -370,12 +389,14 @@ function cramDataSeriesEncodingMap() {
     parser: (buffer: Uint8Array, offset: number) => {
       const r = new BufferReader(buffer, offset)
       const mapSize = r.itf8()
+      const mapStart = r.bytePosition
       const mapCount = r.itf8()
       const ents = []
       for (let i = 0; i < mapCount; i++) {
         const key = r.ascii(2)
         ents.push({ key, value: cramEncodingSub(r) })
       }
+      checkMapSize('data series encoding', mapSize, mapStart, r)
       return {
         value: {
           mapSize,
@@ -393,6 +414,7 @@ function cramTagEncodingMap() {
     parser: (buffer: Uint8Array, offset: number) => {
       const r = new BufferReader(buffer, offset)
       const mapSize = r.itf8()
+      const mapStart = r.bytePosition
       const mapCount = r.itf8()
       const ents = []
       for (let i = 0; i < mapCount; i++) {
@@ -405,6 +427,7 @@ function cramTagEncodingMap() {
 
         ents.push({ key, value: cramEncodingSub(r) })
       }
+      checkMapSize('tag encoding', mapSize, mapStart, r)
       return {
         value: {
           mapSize,
