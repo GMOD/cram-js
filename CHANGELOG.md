@@ -1,3 +1,9 @@
+## [14.1.1](https://github.com/GMOD/cram-js/compare/v14.1.0...v14.1.1) (2026-09-22)
+
+### Chores
+
+- Build samtools from source instead of apt ([495667b](https://github.com/GMOD/cram-js/commit/495667b3c851eda8622073d214f62b612531f24b))
+
 ## [14.1.0](https://github.com/GMOD/cram-js/compare/v14.0.0...v14.1.0) (2026-09-22)
 
 ### Bug Fixes
