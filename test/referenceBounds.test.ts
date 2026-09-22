@@ -44,14 +44,14 @@ describe.skipIf(!samtoolsAvailable())('reads overhanging a contig', () => {
       }),
     )
 
-  test('decode as samtools does, asking only for bases that exist', async () => {
+  test('decode as samtools does, asking once and only for bases that exist', async () => {
     const requests: [number, number][] = []
     const result = await bases(async (id, start, end) => {
       requests.push([start, end])
       return fasta.fetch(id, start, end)
     })
     expect(result).toEqual(expected())
-    expect(Math.max(...requests.map(([, end]) => end))).toBe(1000)
+    expect(requests).toEqual([[899, 1000]])
   })
 })
 

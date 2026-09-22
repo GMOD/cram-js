@@ -384,6 +384,25 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
   }
 
   /**
+   * `known`, if it covers `[start, end)` of its reference, stretched to `end`.
+   * A slice's declared span stops at the `@SQ` length while its reads may
+   * overhang it, and CRAM reads the reference past the end as N (CRAMv3 §11),
+   * so a region reaching the end of the contig covers everything after it.
+   */
+  private async coverWith(known: KnownRegion, start: number, end: number) {
+    if (known.start > start) {
+      return undefined
+    }
+    if (known.end >= end) {
+      return known
+    }
+    const length = (await this.file.getReferenceInfo())[known.seqId]?.length
+    return length !== undefined && known.end >= length
+      ? { ...known, end, seq: known.seq.padEnd(end - known.start, 'N') }
+      : undefined
+  }
+
+  /**
    * Start fetching the reference for `span` now, ahead of the decode that will
    * need it.
    *
@@ -490,20 +509,11 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
         // the declared span came embedded, from the md5 check, or from the
         // fetch ahead of the decode; it covers every mapped read, so it is the
         // reference in all but the odd file whose records reach outside it
-        if (
-          known?.seqId === seqId &&
-          known.start <= span.start &&
-          known.end >= span.end
-        ) {
-          resolved.set(seqId, known)
-          return
-        }
-        const region = await this.fetchReference(
-          seqId,
-          span.start,
-          span.end,
-          opts,
-        )
+        const region =
+          (known?.seqId === seqId
+            ? await this.coverWith(known, span.start, span.end)
+            : undefined) ??
+          (await this.fetchReference(seqId, span.start, span.end, opts))
         if (region) {
           resolved.set(seqId, region)
         }

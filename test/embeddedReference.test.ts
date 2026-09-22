@@ -11,19 +11,27 @@ import { testDataFile } from './lib/util.ts'
 
 import type { CramRecord, SeqFetch } from '../src/index.ts'
 
-// Written from its .sam_ by `samtools view -C --output-fmt-option embed_ref=1`,
-// so every slice carries the reference it was encoded against and samtools
-// decodes it with none supplied. The .sam_ header names embedref.fa for anyone
-// regenerating it; nothing here reads that FASTA.
+// Each written from its .sam_ by `samtools view -C --output-fmt-option
+// embed_ref=1`, so every slice carries the reference it was encoded against and
+// samtools decodes it with none supplied. The .sam_ header names the FASTA for
+// anyone regenerating it; nothing here reads it.
 const NAME = 'embedref#embedded.tmp.cram'
 
-function open(opts: {
-  fetchReferenceSequence?: SeqFetch
-  checkSequenceMD5?: boolean
-}) {
+// overhang#end with the reference embedded: three 100M reads on a 1000 bp
+// contig, the last two overhanging its end. htslib stops the slice's declared
+// span, and so the embedded block, at the end of the contig.
+const OVERHANG = 'overhang#embedded.tmp.cram'
+
+function open(
+  opts: {
+    fetchReferenceSequence?: SeqFetch
+    checkSequenceMD5?: boolean
+  },
+  name = NAME,
+) {
   return new IndexedCramFile({
-    cramFilehandle: testDataFile(NAME),
-    index: new CraiIndex({ filehandle: testDataFile(`${NAME}.crai`) }),
+    cramFilehandle: testDataFile(name),
+    index: new CraiIndex({ filehandle: testDataFile(`${name}.crai`) }),
     useSliceWorkerPool: false,
     ...opts,
   })
@@ -87,4 +95,25 @@ describe.skipIf(!samtoolsAvailable())('an embedded reference', () => {
     await cram.getRecordsForRange(0, 0, 3000)
     expect(calls).toEqual([])
   })
+
+  // with a callback, every matched base would read A had its answer been used
+  test.each([
+    ['no callback', undefined],
+    [
+      'a callback',
+      async (_id: number, start: number, end: number) =>
+        'A'.repeat(end - start),
+    ],
+  ])(
+    'covers reads overhanging the end of the contig, given %s',
+    async (_, fetchReferenceSequence) => {
+      const records = await open(
+        { fetchReferenceSequence },
+        OVERHANG,
+      ).getRecordsForRange(0, 0, 1000)
+      expect(decoded(records)).toEqual(
+        alignments(`test/data/${OVERHANG}`, 'ohchr'),
+      )
+    },
+  )
 })
