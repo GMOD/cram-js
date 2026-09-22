@@ -1,3 +1,49 @@
+## [14.1.0](https://github.com/GMOD/cram-js/compare/v14.0.0...v14.1.0) (2026-09-22)
+
+### Bug Fixes
+
+- Read and discard tags that share a cursor when decodeTags is false ([46076a0](https://github.com/GMOD/cram-js/commit/46076a004d7876a88254a7188902c84310d622f6))
+- Report reads past the end of an external int block ([50985ac](https://github.com/GMOD/cram-js/commit/50985acd10cce1af1fbc70fcbbf9c9858c19ca32))
+- Raise a nameless record in viewAsPairs as a CramMalformedError ([9e5d3c1](https://github.com/GMOD/cram-js/commit/9e5d3c13f2161d5d9180e4f35e9c847bc7b74f0f))
+- Raise CramError subclasses for malformed and unsupported content ([62b9c5d](https://github.com/GMOD/cram-js/commit/62b9c5d83705cec0319b53d2d05a24527520bc5e))
+- Reject compression-header maps whose size disagrees with their contents ([5d6fdae](https://github.com/GMOD/cram-js/commit/5d6fdae76f7ce29941eec9bf931875864c02fe58))
+- Compute intra-slice TLEN the way htslib does ([d8d1266](https://github.com/GMOD/cram-js/commit/d8d1266826cb1d27b40d670a4b9a3fe7d8947a42))
+- Decode against an embedded reference without a callback ([7afcdff](https://github.com/GMOD/cram-js/commit/7afcdff8de615217d096f3bb92d23f722c234366))
+- Fetch the reference for mapped reads only, clamped to the contig ([5410ac0](https://github.com/GMOD/cram-js/commit/5410ac023711e25e9700d16ecd01ecb794125c2d))
+- Cover reads overhanging the contig with the slice's own reference ([2cabc42](https://github.com/GMOD/cram-js/commit/2cabc42374c59284eb6b7e7f78ff0e6736dd287c))
+
+### Chores
+
+- Regenerate the worker bundle ([85e8c1d](https://github.com/GMOD/cram-js/commit/85e8c1d793d13856876878eabd3100a256c490d8))
+- Regenerate the worker bundle ([3fdb41a](https://github.com/GMOD/cram-js/commit/3fdb41aaea49df427a0fe2e691589ceae8b72ede))
+
+### Documentation
+
+- Correct stale coordinate and default comments ([a78a952](https://github.com/GMOD/cram-js/commit/a78a9521d34c69ad3a8336f2b88d151d19c35b12))
+- Describe the SeqFetch length contract as it now stands ([5472a71](https://github.com/GMOD/cram-js/commit/5472a7145fb1b285d5e28a638c92aec6c0ebeb3e))
+- Say an embedded reference needs no callback ([c441c9f](https://github.com/GMOD/cram-js/commit/c441c9ff55f052366e8dffcdd22d818eb3913882))
+- Note the md5 check as the one request past the @SQ length ([79ddfdd](https://github.com/GMOD/cram-js/commit/79ddfdd80c58129b9a9367f0acc869a24e8d9ec1))
+
+### Other Changes
+
+- Bump deps ([c41cac7](https://github.com/GMOD/cram-js/commit/c41cac7f32fef123d34088dabd8a769315df8c25))
+- Reduce tropes ([49760a9](https://github.com/GMOD/cram-js/commit/49760a993a7b932247e19287461228fc3c09c632))
+- Bump deps ([d988e9c](https://github.com/GMOD/cram-js/commit/d988e9ca59ce92ec043924ca29e6113a1610de4f))
+
+### Performance Improvements
+
+- Test the range on the slice's columns before building record views ([6ded934](https://github.com/GMOD/cram-js/commit/6ded934df4b878f823722adbdfa6ca4c5e82d3a7))
+
+### Refactoring
+
+- Remove the CRAM v1 decode paths ([2bbb56e](https://github.com/GMOD/cram-js/commit/2bbb56e0c12c8f1db27fbebfbc7e3c9e9a3f47e5))
+- Drop dead codec and file helpers ([95fe2a2](https://github.com/GMOD/cram-js/commit/95fe2a2aa0fc4798652e2622b5f238cf888e1745))
+- Return only the reference delta from decodeReadFeatures ([60b6a65](https://github.com/GMOD/cram-js/commit/60b6a65531029423bc24ce32befdc090695497e9))
+
+### Tests
+
+- Hold the hts-specs embedded-reference fixtures to samtools ([9102f7c](https://github.com/GMOD/cram-js/commit/9102f7c72285f63690f88060f1cee4bcada02c48))
+
 ## [14.0.0](https://github.com/GMOD/cram-js/compare/v13.4.3...v14.0.0) (2026-09-02)
 
 ### Chores
