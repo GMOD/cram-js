@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 
-import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import { CraiIndex, CramFile, IndexedCramFile } from '../src/index.ts'
+import { allRecords, dumpWholeFile } from './lib/dumpFile.ts'
 import {
   alignments,
   qualString,
@@ -21,6 +22,21 @@ const NAME = 'embedref#embedded.tmp.cram'
 // contig, the last two overhanging its end. htslib stops the slice's declared
 // span, and so the embedded block, at the end of the contig.
 const OVERHANG = 'overhang#embedded.tmp.cram'
+
+// The hts-specs fixtures that embed their reference. Their snapshots once
+// recorded no bases for any of their 131,758 mapped reads, so they are held to
+// samtools here rather than only to themselves.
+const HTS_SPECS = [
+  'cram/3.0/passed/0600_mapped.cram',
+  'cram/3.0/passed/0601_mapped.cram',
+  'cram/3.0/passed/level-1.cram',
+  'cram/3.0/passed/level-2.cram',
+  'cram/3.0/passed/level-4.cram',
+  'cram/3.1/passed/level-1.cram',
+  'cram/3.1/passed/level-2.cram',
+  'cram/3.1/passed/level-3.cram',
+  'cram/3.1/passed/level-4.cram',
+].map(f => `hts-specs/${f}`)
 
 function open(
   opts: {
@@ -113,6 +129,18 @@ describe.skipIf(!samtoolsAvailable())('an embedded reference', () => {
       ).getRecordsForRange(0, 0, 1000)
       expect(decoded(records)).toEqual(
         alignments(`test/data/${OVERHANG}`, 'ohchr'),
+      )
+    },
+  )
+
+  test.each(HTS_SPECS)(
+    '%s decodes whole as samtools does, neither given a reference',
+    async name => {
+      const dump = await dumpWholeFile(
+        new CramFile({ filehandle: testDataFile(name) }),
+      )
+      expect(decoded(allRecords(dump))).toEqual(
+        alignments(`test/data/${name}`, undefined),
       )
     },
   )

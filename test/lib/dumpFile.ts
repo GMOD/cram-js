@@ -84,4 +84,10 @@ function sliceRecords(dump: unknown[], container: number, slice: number) {
   return data[slice]!.features
 }
 
-export { dumpWholeFile, sliceRecords }
+/** Every record in a dump, in file order. */
+function allRecords(dump: unknown[]) {
+  const containers = dump.slice(1) as { data: { features?: CramRecord[] }[] }[]
+  return containers.flatMap(c => c.data.flatMap(d => d.features ?? []))
+}
+
+export { allRecords, dumpWholeFile, sliceRecords }

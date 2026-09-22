@@ -136,7 +136,7 @@ export function records(
  */
 export function alignments(
   file: string,
-  ref: string,
+  ref: string | undefined,
   extra: string[] = [],
   opts: { scan?: boolean } = {},
 ) {
@@ -144,15 +144,16 @@ export function alignments(
   // asking samtools for a region. It is what makes an unsorted file
   // comparable: only htslib's *region iterator* assumes coordinate order, and
   // a linear read of the same file is still the right answer. See
-  // sortedness().
-  const args = opts.scan
-    ? ['view', ...extra, file]
-    : ['view', ...extra, file, ref]
+  // sortedness(). An undefined `ref` keeps every record, unplaced ones too.
+  const args =
+    opts.scan || ref === undefined
+      ? ['view', ...extra, file]
+      : ['view', ...extra, file, ref]
   return run(args)
     .split('\n')
     .filter(Boolean)
     .map(line => line.split('\t'))
-    .filter(f => !opts.scan || f[2] === ref)
+    .filter(f => !opts.scan || ref === undefined || f[2] === ref)
     .map(f =>
       // SAM column order is QNAME FLAG RNAME POS MAPQ CIGAR RNEXT PNEXT TLEN
       // SEQ QUAL; samFields wants the eight it compares, in its own order
