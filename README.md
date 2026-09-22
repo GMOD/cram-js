@@ -79,7 +79,9 @@ reference, so the library cannot give you bases without one —
 `fetchReferenceSequence` is the callback that supplies them. It receives both
 the seq id and the name, so a name-keyed source like `IndexedFasta` needs no
 lookup of its own. Without it you still get positions, CIGARs and the kind and
-length of every difference, just not the bases involved.
+length of every difference, just not the bases involved. The exception is a file
+that embeds its reference (`samtools view --output-fmt-option embed_ref=1`): it
+decodes fully with no callback, and its embedded bases win over the callback's.
 
 ## What to ask a record
 
