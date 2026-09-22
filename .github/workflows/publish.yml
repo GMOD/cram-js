@@ -19,7 +19,10 @@ jobs:
           node-version: 24.x
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: sudo apt-get update && sudo apt-get install -y samtools
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y libbz2-dev liblzma-dev libcurl4-openssl-dev libssl-dev libncurses-dev
+      - run: ./scripts/install-samtools.sh
       - run: pnpm lint
       # eslint doesn't enforce formatting, so without this the tree drifts out
       # of prettier's shape silently and the next person to touch a file gets
