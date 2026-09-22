@@ -80,11 +80,16 @@ export interface CramFileSource {
 
 /**
  * Fetch reference bases for `[start, end)` — 0-based half-open, so the returned
- * string should be `end - start` characters. The decode never asks past the
- * `@SQ` length. A longer answer throws, which is what turns a callback still
- * written against the pre-v10 1-based closed contract into an error rather than
- * bases shifted by one; a shorter one is padded with N, as the spec treats
- * bases past the reference. The md5 check needs the exact length.
+ * string should be `end - start` characters. A longer answer throws, which is
+ * what turns a callback still written against the pre-v10 1-based closed
+ * contract into an error rather than bases shifted by one; a shorter one is
+ * padded with N, as the spec treats bases past the reference.
+ *
+ * The decode stops its requests at the `@SQ` length. The md5 check
+ * (`checkSequenceMD5`) is the exception: it asks for the slice's declared span
+ * as the header gives it and needs exactly that many bases back. htslib stops
+ * that span at the end of the contig whenever it records an md5, so this only
+ * matters for files from other writers.
  *
  * `refName` is the `@SQ` `SN` for `seqId`, so a callback can hand coordinates
  * straight to a name-keyed sequence source instead of the caller maintaining
