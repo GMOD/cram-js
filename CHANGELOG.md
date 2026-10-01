@@ -1,3 +1,9 @@
+## [14.2.0](https://github.com/GMOD/cram-js/compare/v14.1.1...v14.2.0) (2026-10-01)
+
+### Features
+
+- Let getSamHeader and the other header reads take a signal ([3508657](https://github.com/GMOD/cram-js/commit/350865749e052e6927bfc4c3edc36f7fe62878ad))
+
 ## [14.1.1](https://github.com/GMOD/cram-js/compare/v14.1.0...v14.1.1) (2026-09-22)
 
 ### Chores
