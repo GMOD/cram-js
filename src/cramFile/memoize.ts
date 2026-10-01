@@ -1,8 +1,11 @@
+import { SharedReadCache } from '@gmod/shared-read-cache'
+
+import type { ReadOpts } from '../opts.ts'
+
 /**
  * Memoize an async fetch, forgetting the result if it rejects.
  *
- * The read path is a stack of these — the file definition and SAM header, each
- * container's header and compression scheme, each slice's header, blocks and
+ * The per-query read path is a stack of these — each container's header and compression scheme, each slice's header, blocks and
  * content-id index — and every one of them has to drop a rejection rather than
  * keep it. Caching the rejected promise would let one transient read error
  * poison that header for the lifetime of the file, with every later query
@@ -40,4 +43,19 @@ export function memoizeAsync<A extends unknown[], T>(
     }
     return result
   }
+}
+
+/**
+ * Memoize a read that every query against the file shares, such as the file
+ * definition and the SAM header.
+ *
+ * Unlike {@link memoizeAsync}, no caller owns the read: it runs under a signal
+ * that aborts only once every caller waiting on it has aborted, and each caller
+ * is released on its own abort. That is `CramFile.featureCache`'s rule, from
+ * the same package. A caller with no signal pins the read.
+ */
+export function memoizeShared<T>(fetch: (opts: ReadOpts) => Promise<T>) {
+  const cache = new SharedReadCache<string, T>()
+  return (opts?: ReadOpts) =>
+    cache.get('', opts?.signal, signal => fetch({ signal }))
 }

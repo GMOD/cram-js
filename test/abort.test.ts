@@ -21,9 +21,9 @@ function openCram(
 }
 
 /**
- * Warm the reads that are shared file-wide and deliberately not cancellable —
- * the file definition, the SAM header, and the parsed `.crai` — so that what a
- * test gates afterwards is only the per-query slice data.
+ * Warm the reads shared file-wide — the file definition, the SAM header, and
+ * the parsed `.crai` — so that what a test gates afterwards is only the
+ * per-query slice data.
  */
 async function warmUp(cram: IndexedCramFile, file?: GatedFile) {
   await cram.cram.getSamHeader()
@@ -309,4 +309,41 @@ test('a signal-free query is unaffected by a cancelled one', async () => {
   expect((await second).map(r => r.uniqueId)).toEqual(
     expected.map(r => r.uniqueId),
   )
+})
+
+test('aborting the SAM header read rejects, and a later call reads it afresh', async () => {
+  const file = new GatedFile(testDataFile(CRAM))
+  const { cram } = openCram(file)
+  const expected = await openCram().cram.getSamHeader()
+
+  const controller = new AbortController()
+  file.hold()
+  const header = cram.getSamHeader({ signal: controller.signal })
+  await file.waitForReads(1)
+  controller.abort()
+
+  await expect(header).rejects.toMatchObject({ name: 'AbortError' })
+  expect(file.abortedReads).toBe(1)
+
+  file.open()
+  expect(await cram.getSamHeader()).toEqual(expected)
+})
+
+test('a cancelled header read does not fail a caller sharing it', async () => {
+  const file = new GatedFile(testDataFile(CRAM))
+  const { cram } = openCram(file)
+  const expected = await openCram().cram.getHeaderText()
+
+  const cancelled = new AbortController()
+  const bystander = new AbortController()
+  file.hold()
+  const first = cram.getSamHeader({ signal: cancelled.signal })
+  const second = cram.getHeaderText({ signal: bystander.signal })
+  await file.waitForReads(1)
+  cancelled.abort()
+
+  await expect(first).rejects.toMatchObject({ name: 'AbortError' })
+  file.open()
+  expect(await second).toBe(expected)
+  expect(file.abortedReads).toBe(0)
 })

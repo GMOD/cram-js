@@ -10,7 +10,7 @@ import { open } from '../io.ts'
 import { getSharedSliceWorkerPool } from '../sliceWorkerPool.ts'
 import CramContainer from './container/index.ts'
 import { baseRecordClass } from './decodedSlice.ts'
-import { memoizeAsync } from './memoize.ts'
+import { memoizeAsync, memoizeShared } from './memoize.ts'
 import { parseBlockFromBuffer } from './parseBlock.ts'
 import { parseHeaderText } from '../sam.ts'
 import {
@@ -287,15 +287,8 @@ export default class CramFile<T extends CramRecord = CramRecord> {
   }
   public featureCache: SharedReadCache<string, DecodedSlice>
   private header: string | undefined
-  // Deliberately signal-free, unlike every other memo in the read path. These
-  // two are shared file-wide and fetched once for the life of the object — 26
-  // bytes of definition, and the first container for the SAM header — so every
-  // query after the first joins them already resolved. Threading a signal in
-  // would mean the first query to arrive owns a read the whole file depends on,
-  // and cancelling it on that one query's behalf is wrong however carefully the
-  // sharing is handled.
-  private _definitionMemo = memoizeAsync(() => this._fetchDefinition())
-  private _samHeaderMemo = memoizeAsync(() => this._fetchSamHeader())
+  private _definitionMemo = memoizeShared(opts => this._fetchDefinition(opts))
+  private _samHeaderMemo = memoizeShared(opts => this._fetchSamHeader(opts))
   private _referenceInfo?: ReferenceInfo[]
 
   /**
@@ -401,18 +394,18 @@ export default class CramFile<T extends CramRecord = CramRecord> {
   // getSectionParsers is itself cached per major version — the parsers are pure
   // functions of (buffer, offset), so one set is shared by every file — which
   // is why there is no memo of its result here
-  private async _getSectionParsers() {
-    const { majorVersion } = await this.getDefinition()
+  private async _getSectionParsers(opts?: ReadOpts) {
+    const { majorVersion } = await this.getDefinition(opts)
     return getSectionParsers(majorVersion)
   }
 
-  getDefinition() {
-    return this._definitionMemo()
+  getDefinition(opts?: ReadOpts) {
+    return this._definitionMemo(opts)
   }
 
-  private async _fetchDefinition() {
+  private async _fetchDefinition(opts: ReadOpts) {
     const { maxLength, parser } = cramFileDefinition()
-    const headbytes = await this.file.read(maxLength, 0)
+    const headbytes = await this.read(maxLength, 0, opts)
     const definition = parser(headbytes).value
     if (definition.magic !== 'CRAM') {
       // a CramMalformedError rather than a bare Error: "this is not the file you
@@ -430,17 +423,17 @@ export default class CramFile<T extends CramRecord = CramRecord> {
     }
   }
 
-  getSamHeader() {
-    return this._samHeaderMemo()
+  getSamHeader(opts?: ReadOpts) {
+    return this._samHeaderMemo(opts)
   }
 
-  private async _fetchSamHeader() {
-    const firstContainer = await this.getContainerById(0)
+  private async _fetchSamHeader(opts: ReadOpts) {
+    const firstContainer = await this.getContainerById(0, opts)
     if (!firstContainer) {
       throw new CramMalformedError('file contains no containers')
     }
 
-    const firstBlock = await firstContainer.getFirstBlock()
+    const firstBlock = await firstContainer.getFirstBlock(opts)
 
     const content = firstBlock.content
     const dataView = new DataView(
@@ -457,8 +450,8 @@ export default class CramFile<T extends CramRecord = CramRecord> {
     return parseHeaderText(text)
   }
 
-  async getHeaderText() {
-    await this.getSamHeader()
+  async getHeaderText(opts?: ReadOpts) {
+    await this.getSamHeader(opts)
     return this.header
   }
 
@@ -467,8 +460,8 @@ export default class CramFile<T extends CramRecord = CramRecord> {
    * `getRecordsForRange` takes and `CramRecord.sequenceId` reports — is its
    * index here. Empty for a CRAM with no `@SQ` lines.
    */
-  async getReferenceInfo() {
-    this._referenceInfo ??= parseReferenceInfo(await this.getSamHeader())
+  async getReferenceInfo(opts?: ReadOpts) {
+    this._referenceInfo ??= parseReferenceInfo(await this.getSamHeader(opts))
     return this._referenceInfo
   }
 
@@ -478,8 +471,8 @@ export default class CramFile<T extends CramRecord = CramRecord> {
    * would collide with the ID unplaced reads use. Use `getReferenceInfo()` to
    * test for a name without throwing.
    */
-  async getReferenceId(name: string) {
-    const refId = (await this.getReferenceInfo()).findIndex(
+  async getReferenceId(name: string, opts?: ReadOpts) {
+    const refId = (await this.getReferenceInfo(opts)).findIndex(
       ref => ref.name === name,
     )
     if (refId === -1) {
@@ -495,27 +488,27 @@ export default class CramFile<T extends CramRecord = CramRecord> {
    * which is routine rather than a mistake: `-1` means unplaced, and a CRAM
    * with no `@SQ` lines at all has no names to give.
    */
-  async getReferenceName(refId: number) {
-    return (await this.getReferenceInfo())[refId]?.name
+  async getReferenceName(refId: number, opts?: ReadOpts) {
+    return (await this.getReferenceInfo(opts))[refId]?.name
   }
 
   // Walk containers from the start of the file. Yields each container along
   // with its parsed header. The first container's length is recomputed by
   // reading all of its blocks because the recorded length cannot be trusted
   // (htslib bug); subsequent containers use header._size + header.length.
-  private async *iterContainers() {
-    const sectionParsers = await this._getSectionParsers()
+  private async *iterContainers(opts?: ReadOpts) {
+    const sectionParsers = await this._getSectionParsers(opts)
     let position = sectionParsers.cramFileDefinition.maxLength
     let i = 0
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       const container = this.getContainerAtPosition(position)
-      const header = await container.getHeader()
+      const header = await container.getHeader(opts)
       yield container
       if (i === 0) {
         position = header._endPosition
         for (let j = 0; j < header.numBlocks; j++) {
-          const block = await this.readBlock(position)
+          const block = await this.readBlock(position, opts)
           position = block._endPosition
         }
       } else {
@@ -525,9 +518,9 @@ export default class CramFile<T extends CramRecord = CramRecord> {
     }
   }
 
-  async getContainerById(containerNumber: number) {
+  async getContainerById(containerNumber: number, opts?: ReadOpts) {
     let i = 0
-    for await (const container of this.iterContainers()) {
+    for await (const container of this.iterContainers(opts)) {
       if (i === containerNumber) {
         return container
       }
@@ -600,8 +593,9 @@ export default class CramFile<T extends CramRecord = CramRecord> {
   }
 
   async readBlock(position: number, opts?: ReadOpts) {
-    const { majorVersion } = await this.getDefinition()
-    const { cramBlockHeader, cramBlockCrc32 } = await this._getSectionParsers()
+    const { majorVersion } = await this.getDefinition(opts)
+    const { cramBlockHeader, cramBlockCrc32 } =
+      await this._getSectionParsers(opts)
 
     const headerBuf = await this.read(cramBlockHeader.maxLength, position, opts)
     const blockHeader = parseItem(

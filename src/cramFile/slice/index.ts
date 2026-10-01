@@ -119,7 +119,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
   }
 
   private async _fetchHeader(opts?: ReadOpts): Promise<SliceHeader> {
-    const { majorVersion } = await this.file.getDefinition()
+    const { majorVersion } = await this.file.getDefinition(opts)
     const sectionParsers = getSectionParsers(majorVersion)
     const containerHeader = await this.container.getHeader(opts)
     const { bytes, filePosition } = await this.getBytes(opts)
@@ -181,7 +181,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
    * decode has already decompressed the rest, in a worker or here.
    */
   async getBlockByContentId(id: number, opts?: ReadOpts) {
-    const { majorVersion } = await this.file.getDefinition()
+    const { majorVersion } = await this.file.getDefinition(opts)
     const { cramBlockHeader, cramBlockCrc32 } = getSectionParsers(majorVersion)
     const crcLength = majorVersion >= 3 ? cramBlockCrc32.maxLength : 0
     const header = await this.getHeader(opts)
@@ -265,7 +265,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
       refSeqId,
       region.start,
       region.end,
-      await this.file.getReferenceName(refSeqId),
+      await this.file.getReferenceName(refSeqId, opts),
       opts,
     )
     if (seq.length !== refSeqSpan) {
@@ -366,7 +366,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
     if (!fetchReferenceSequence) {
       return undefined
     }
-    const info = (await this.file.getReferenceInfo())[seqId]
+    const info = (await this.file.getReferenceInfo(opts))[seqId]
     const from = Math.max(start, 0)
     const to = info === undefined ? end : Math.min(end, info.length)
     if (from >= to) {
@@ -389,14 +389,19 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
    * overhang it, and CRAM reads the reference past the end as N (CRAMv3 §11),
    * so a region reaching the end of the contig covers everything after it.
    */
-  private async coverWith(known: KnownRegion, start: number, end: number) {
+  private async coverWith(
+    known: KnownRegion,
+    start: number,
+    end: number,
+    opts?: ReadOpts,
+  ) {
     if (known.start > start) {
       return undefined
     }
     if (known.end >= end) {
       return known
     }
-    const length = (await this.file.getReferenceInfo())[known.seqId]?.length
+    const length = (await this.file.getReferenceInfo(opts))[known.seqId]?.length
     return length !== undefined && known.end >= length
       ? { ...known, end, seq: known.seq.padEnd(end - known.start, 'N') }
       : undefined
@@ -511,7 +516,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
         // reference in all but the odd file whose records reach outside it
         const region =
           (known?.seqId === seqId
-            ? await this.coverWith(known, span.start, span.end)
+            ? await this.coverWith(known, span.start, span.end, opts)
             : undefined) ??
           (await this.fetchReference(seqId, span.start, span.end, opts))
         if (region) {
@@ -552,7 +557,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
     decodeOptions: Required<DecodeOptions>,
     opts?: ReadOpts,
   ): Promise<SliceDecodeRequest> {
-    const { majorVersion } = await this.file.getDefinition()
+    const { majorVersion } = await this.file.getDefinition(opts)
     const compressionHeaderBlock =
       await this.container.getCompressionHeaderBlock(opts)
     if (!compressionHeaderBlock) {

@@ -1,6 +1,6 @@
 # 0003 — Cancel per-query reads, reference-count the shared ones
 
-**Status:** accepted
+**Status:** accepted — the file-wide reads now carry the signal too (see below)
 
 ## Context
 
@@ -44,12 +44,20 @@ not shared file-wide in this codebase, and `_getBlocksContentIdIndex` sits
 directly on top of the bulk read — excluding it would have left the change with
 nothing to cancel.
 
-**File-wide reads do not carry the signal.** `_definitionMemo` and
+**File-wide reads are reference-counted too.** `_definitionMemo` and
 `_samHeaderMemo` are fetched once for the life of the `CramFile` — 26 bytes of
-definition, and the first container for the SAM header — so every query after
-the first joins them already resolved. Letting the first query to arrive own a
-read the whole file depends on is wrong however carefully the sharing is
-handled, and there is nothing to save.
+definition, and the first container for the SAM header.
+
+This first shipped as "file-wide reads do not carry the signal", on the grounds
+that every query after the first joins them already resolved, so there was
+nothing to save. That missed the read that comes before any query: jbrowse's
+`CramAdapter` setup calls `getSamHeader()` on its own, and a setup abandoned
+mid-read kept reading the definition, the first container header and its first
+block. The original worry was that the first query to arrive would own a read
+the whole file depends on. Both memos now go through `memoizeShared`, a one-key
+`SharedReadCache` — the mechanism behind the slice cache below — so the first
+caller owns nothing: the read aborts only once every caller waiting on it has,
+and a caller with no signal pins it.
 
 **The decoded slice is reference-counted.** `SliceRecordCache` is shared between
 concurrent queries, so its decode does not run under any one caller's signal. It

@@ -139,7 +139,9 @@ things in a `CramFile`: the parsed `.crai`, and each decoded slice in the record
 cache. A slice's decode carries a reference count and aborts only once _every_
 query waiting on it has aborted, so cancelling yours costs a concurrent query
 nothing, not even a re-read. The file definition and SAM header load once for
-the life of the object and deliberately take no signal at all.
+the life of the object under the same rule, so `getSamHeader({ signal })`
+rejects on abort without failing anyone else waiting on the header. A call with
+an already-aborted signal rejects even when the header is cached.
 
 A query with **no** signal never stops, so it pins any slice it is waiting on.
 One caller omitting the signal makes that slice's decode uncancellable for
@@ -157,6 +159,9 @@ Why it works this way: [ADR 0003](adr/0003-abortsignal-on-the-read-path.md).
 Usually reached as `indexedFile.cram`, but you can also build one directly with
 `new CramFile({ path, url, filehandle })`. No index needed, which is handy if
 all you want is the header, or if you're walking containers yourself.
+
+Each of these takes an optional `{ signal }` last, as in
+[Cancelling a query](#cancelling-a-query).
 
 - `getReferenceInfo()` → `Promise<{ name, length, md5? }[]>` — the `@SQ` lines,
   in header order

@@ -63,7 +63,7 @@ export default class CramContainer<T extends CramRecord = CramRecord> {
     if (!containerHeader.numRecords) {
       return null
     }
-    const { majorVersion } = await this.file.getDefinition()
+    const { majorVersion } = await this.file.getDefinition(opts)
     const sectionParsers = getSectionParsers(majorVersion)
 
     // The first landmark is where the first slice starts, and the compression
@@ -148,7 +148,7 @@ export default class CramContainer<T extends CramRecord = CramRecord> {
   }
 
   async _readContainerHeader(position: number, opts?: ReadOpts) {
-    const { majorVersion } = await this.file.getDefinition()
+    const { majorVersion } = await this.file.getDefinition(opts)
     const sectionParsers = getSectionParsers(majorVersion)
     const { cramContainerHeader1, cramContainerHeader2 } = sectionParsers
 
