@@ -1,3 +1,9 @@
+## [14.2.1](https://github.com/GMOD/cram-js/compare/v14.2.0...v14.2.1) (2026-10-09)
+
+### Chores
+
+- Bump @gmod/shared-read-cache to 2.0.0 ([158f7a4](https://github.com/GMOD/cram-js/commit/158f7a4a1e86c12f596096e368d75beba1bd3f25))
+
 ## [14.2.0](https://github.com/GMOD/cram-js/compare/v14.1.1...v14.2.0) (2026-10-01)
 
 ### Features
