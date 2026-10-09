@@ -24,7 +24,7 @@ import type DecodedSlice from './decodedSlice.ts'
 import type { CramRecordClass } from './decodedSlice.ts'
 import type CramRecord from './record.ts'
 import type { BaseOpts, ReadOpts } from '../opts.ts'
-import type { SharedBudget } from '@gmod/shared-read-cache'
+import type { Budget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 /**
@@ -198,7 +198,7 @@ export interface CramFileOptions<T extends CramRecord = CramRecord> {
    * six windows retained 1442 MB with every cache still under its own ceiling,
    * so nothing was bounding the sum (its ADR 0018).
    */
-  cacheBudget?: SharedBudget
+  cacheBudget?: Budget
   fetchReferenceSequence?: SeqFetch
   /**
    * Check every block's CRC32 as it is read. Default false.
