@@ -13,8 +13,7 @@ covers what to know before you do.
 `getMismatches()` already reports every feature that represents a difference
 from the reference: substitutions, insertions (under either encoding),
 deletions, reference skips, and soft and hard clips. So `getMismatches()` covers
-differences on its own — see
-[What to ask a record](../README.md#what-to-ask-a-record).
+differences on its own — see [Records](../README.md#records).
 
 `B` and `b` both store bases verbatim rather than as substitutions, and both are
 still reported — as substitutions — for whichever of their bases disagree with

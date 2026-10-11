@@ -4,9 +4,9 @@
 ![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
 Read CRAM files in node or the browser. Handles CRAM 2.x and 3.x, `.crai`
-indexes, and every v3 and v3.1 codec, fqzcomp and tok3 included. The codecs are
-the same htscodecs C that samtools uses, compiled to WebAssembly and inlined in
-the bundle, so there is nothing extra to serve or configure.
+indexes, and every v3 and v3.1 codec, including fqzcomp and tok3. The codecs are
+the htscodecs C library that samtools uses, compiled to WebAssembly and inlined
+in the bundle, so there is no `.wasm` file to serve.
 
 ```bash
 npm install @gmod/cram
@@ -42,7 +42,7 @@ for (const record of records) {
 
 ### Without a bundler
 
-For `<script>`-tag consumers, igv.js among them, the package ships a standalone
+For `<script>`-tag consumers such as igv.js, the package ships a standalone
 browser build that puts the same exports on `window.gmodCRAM`:
 
 ```html
@@ -54,38 +54,38 @@ browser build that puts the same exports on `window.gmodCRAM`:
 
 The [example directory](./example) has a working page.
 
-## Three things to know
+## Reference names
 
-**Coordinates are 0-based half-open**, the same as `@gmod/bam`. Add 1 when you
-convert back to a 1-based text format like SAM's `POS`. (This changed in v10 —
-see [MIGRATION.md](MIGRATION.md).)
-
-**Underneath the names, references are numbers.** CRAM identifies a reference by
-the position of its `@SQ` line in the SAM header, and `record.sequenceId` and
-the `.crai` speak in those numbers. `getRecordsForRange` and
-`hasDataForReferenceSequence` take either, resolving a name against the header.
-A name the header lacks has no records, as in `@gmod/bam`, since a reference
-present in one file and absent from another is routine. The order is whatever a
-given file says, so ask the file rather than hardcoding it:
+Query a reference by the name the file's header gives it, such as `chr1`, `1` or
+`CHROMOSOME_I`. A query for a name the file lacks returns no records, so the
+same query can run across files that cover different references:
 
 ```js
-await indexedFile.cram.getReferenceId('chr1') // 0, throws if there is no such SN
-await indexedFile.cram.getReferenceName(0) // 'chr1'
+await indexedFile.getRecordsForRange('chrY', 0, 50000) // [] if the file has no chrY
+await indexedFile.hasDataForReferenceSequence('chrY') // false, likewise
 await indexedFile.cram.getReferenceInfo() // [{ name, length, md5 }, ...]
 ```
 
-The one id that is not an `@SQ` position is `-1`, an unplaced read.
+## Coordinates
 
-**You supply the reference sequence.** CRAM stores reads as differences from a
-reference, so the library cannot give you bases without one —
-`fetchReferenceSequence` is the callback that supplies them. It receives both
-the seq id and the name, so a name-keyed source like `IndexedFasta` needs no
-lookup of its own. Without it you still get positions, CIGARs and the kind and
-length of every difference, just not the bases involved. The exception is a file
-that embeds its reference (`samtools view --output-fmt-option embed_ref=1`): it
-decodes fully with no callback, and its embedded bases win over the callback's.
+Coordinates are 0-based half-open, as in `@gmod/bam`. Add 1 to convert to a
+1-based format such as SAM's `POS`. [MIGRATION.md](MIGRATION.md) covers the
+switch from 1-based coordinates in v10.
 
-## What to ask a record
+## Reference sequence
+
+CRAM stores each read as its differences from the reference, so decoding the
+read's bases takes the reference sequence. The `fetchReferenceSequence` callback
+supplies it, and its `refName` argument lets a name-keyed source such as
+`IndexedFasta` plug in directly, as in the quick start.
+
+Without the callback, records still have positions, CIGAR strings, and the type
+and length of each difference, but not the bases. A file written with an
+embedded reference (`samtools view --output-fmt-option embed_ref=1`) decodes
+fully with no callback, and where a file has both, the library uses the embedded
+bases.
+
+## Records
 
 ```js
 record.getReadBases() // 'ACGT…', the read sequence
@@ -96,8 +96,7 @@ record.qualityScoreAt(0) // one base quality
 record.isReverseComplemented() // the usual SAM flags
 ```
 
-`getMismatches()` is the intended way to see how a read differs from the
-reference. You should not need to know anything about how CRAM encodes it:
+`getMismatches()` lists each difference between a read and the reference:
 
 ```js
 for (const m of record.getMismatches()) {
@@ -111,43 +110,38 @@ for (const m of record.getMismatches()) {
 }
 ```
 
-If you process enough records that per-difference objects start to matter,
-`record.forEachMismatch(callback, opts?)` reports the same differences without
-allocating, and takes an optional `{ start, end }` window. The same pattern
-exists for the CIGAR (`forEachCigarOp`) and for tags and quality scores, stored
-in one array per slice rather than one per record. [docs/api.md](docs/api.md)
-has all of it; [docs/memory.md](docs/memory.md) explains why they are structured
-that way.
+For bulk processing, `record.forEachMismatch(callback, opts?)` reports the same
+differences without allocating an object for each, and takes an optional
+`{ start, end }` window. `forEachCigarOp` does the same for the CIGAR, and the
+library stores tags and quality scores in one array per slice.
+[docs/api.md](docs/api.md) lists every method, and
+[docs/memory.md](docs/memory.md) explains the storage layout.
 
-## Slices decode on a worker pool
+## Worker pool
 
-A query decodes one or more slices, and slices are independent. Since 12.1 they
-decode on a shared pool of workers wherever the host has them — on by default,
-with nothing to configure, since the worker ships inlined like the wasm:
+In a browser, the library decodes the slices of a query in parallel on a shared
+pool of web workers. The pool is on by default and needs no configuration,
+because the worker is inlined in the bundle like the wasm. Under node, slices
+decode in-process.
 
-```js
-// already parallel
-const records = await indexedFile.getRecordsForRange('chr1', 10000, 20000)
-```
+The pool makes queries that touch four or more slices 2.1-3.6x faster, and
+leaves single-slice queries, which are typical of shallow files, about as fast.
+Keep it on when you run this library inside your own worker, since those numbers
+were measured with the pool nested inside one.
 
-In a browser that is worth 2.1-3.6x once a query touches four or more slices,
-and roughly break-even on the single-slice queries shallow files produce.
-**Leave it on even if you already run this library inside your own worker** — a
-worker is one thread, and the pool nested inside one is where those numbers were
-measured.
-
-`useSliceWorkerPool: false` turns it off and `numSliceWorkers` sizes it. The
-reason to reach for either is a host that runs several worker contexts, since
-one pool serves a context rather than a machine.
-[docs/workers.md](docs/workers.md) has the measurements.
+`useSliceWorkerPool: false` disables the pool and `numSliceWorkers` sets its
+size. Each worker context starts its own pool, so a host that runs several
+contexts may want a smaller one. [docs/workers.md](docs/workers.md) has the
+measurements.
 
 ## Reading over HTTP
 
-An indexed query reads a file as one byte range per slice plus two small ones
-per container — a whole-reference query on a 141 KB test file issues 202 of
-them. A bare `RemoteFile` turns each one into its own range request, so put
+An indexed query reads one byte range per slice and two small ones per
+container, so a whole-reference query on a 141 KB test file makes 202 reads. A
+bare `RemoteFile` sends a separate range request for each read.
 [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
-underneath:
+serves the reads from 256 KiB chunks, so neighboring reads share a request and
+the 202 reads become a handful of requests:
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
@@ -160,43 +154,57 @@ const cram = new IndexedCramFile({
 })
 ```
 
-The cache serves those reads out of 256 KiB chunks, so neighboring reads share a
-request and the 546 become a handful. It also threads the `AbortSignal` below,
-so a canceled query stops the network fetch, not just the decode.
+The cache also passes the query's `AbortSignal` to `fetch`, so cancelling a
+query cancels its network requests.
 
 ## Cancelling a query
 
-Pass an `AbortSignal` and the query stops decoding and drops the fetch it has in
-flight:
+Pass an `AbortSignal`, and on abort the query stops decoding and cancels the
+read it has in flight:
 
 ```js
 const controller = new AbortController()
-const records = indexedFile.getRecordsForRange(0, 1000, 2000, {
+const records = indexedFile.getRecordsForRange('chr1', 1000, 2000, {
   signal: controller.signal,
 })
 controller.abort() // `records` rejects with an AbortError
 ```
 
-Aborting your query never fails a concurrent one, because decodes shared between
-queries are reference-counted. A query with **no** signal never stops, so it
-pins any slice it is waiting on for everyone. Thread the signal through
-consistently. [docs/api.md](docs/api.md#cancelling-a-query) has the details.
+Concurrent queries share slice decodes, and the library cancels a shared decode
+when every query waiting on it has aborted. Aborting one query therefore leaves
+the others running. A query without a signal cannot abort, so a decode it waits
+on runs to completion for every query sharing it; pass the signal to every
+query. [docs/api.md](docs/api.md#cancelling-a-query) has the details.
+
+## Reference ids
+
+CRAM numbers each reference by the position of its `@SQ` line in the header, and
+`record.sequenceId` holds that number. Every method that takes a reference name
+also accepts the number. Unplaced reads have a `sequenceId` of `-1` and no name,
+so you query them by number:
+
+```js
+await indexedFile.cram.getReferenceName(record.sequenceId) // 'chr1'
+await indexedFile.getRecordsForRange(-1, -1, end) // unplaced reads
+```
 
 ## Docs
 
-- [docs/api.md](docs/api.md) — every option, property and method
-- [MIGRATION.md](MIGRATION.md) — breaking changes, newest first
-- [docs/memory.md](docs/memory.md) — what a decoded slice retains
-- [docs/read-features.md](docs/read-features.md) — the raw alignment encoding
-- [docs/codec-support.md](docs/codec-support.md) — which codecs this decoder
+- [docs/api.md](docs/api.md): every option, property and method
+- [MIGRATION.md](MIGRATION.md): breaking changes, newest first
+- [docs/memory.md](docs/memory.md): what a decoded slice keeps in memory
+- [docs/read-features.md](docs/read-features.md): the raw alignment encoding
+- [docs/codec-support.md](docs/codec-support.md): the codecs this decoder
   handles
-- [docs/dataflow.md](docs/dataflow.md) — a query end to end, diagrammed
-- [docs/optimizations.md](docs/optimizations.md) — why the path looks that way
-- [docs/wasm.md](docs/wasm.md) — the inlined wasm build
-- [docs/workers.md](docs/workers.md) — the slice worker pool
-- [docs/adr/](docs/adr/) — the decisions, with their measurements
-- [TODO.md](TODO.md) — measured, still open, wanted
-- [CONTRIBUTING.md](CONTRIBUTING.md) — development, release, publishing
+- [docs/dataflow.md](docs/dataflow.md): a diagram of a query from index to
+  records
+- [docs/optimizations.md](docs/optimizations.md): the measurements behind the
+  read path's design
+- [docs/wasm.md](docs/wasm.md): the inlined wasm build
+- [docs/workers.md](docs/workers.md): the slice worker pool
+- [docs/adr/](docs/adr/): design decisions, with their measurements
+- [TODO.md](TODO.md): open work
+- [CONTRIBUTING.md](CONTRIBUTING.md): development, release and publishing
 
 ## Academic use
 

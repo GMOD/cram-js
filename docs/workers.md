@@ -6,7 +6,7 @@ default and with nothing to configure:
 
 ```js
 // this reaches the pool on its own
-const records = await indexedFile.getRecordsForRange(0, 1000, 2000)
+const records = await indexedFile.getRecordsForRange('chr1', 1000, 2000)
 ```
 
 Turn it off with `useSliceWorkerPool: false`, and size it with `numSliceWorkers`

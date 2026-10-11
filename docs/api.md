@@ -123,7 +123,7 @@ and — on a filehandle that honors the signal, which `RemoteFile` does and
 
 ```js
 const controller = new AbortController()
-const records = indexedFile.getRecordsForRange(0, 1000, 2000, {
+const records = indexedFile.getRecordsForRange('chr1', 1000, 2000, {
   signal: controller.signal,
 })
 controller.abort() // `records` rejects with an AbortError
