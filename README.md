@@ -47,10 +47,11 @@ read bases. [docs/api.md](docs/api.md#reference-sequence) has the details.
 
 ### Range caching
 
-A query makes one read per slice and two small ones per container, and `cramUrl`
-sends each read as a separate range request.
+For each query, the library reads one byte range per slice and two small ones
+per container. With `cramUrl`, it sends a separate HTTP request for each range.
 [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
-serves the reads from 256 KiB chunks, so neighboring reads share a request:
+fetches the file in 256 KiB chunks and answers each range from them, so it
+fetches neighboring ranges in one request:
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
@@ -65,7 +66,7 @@ const indexedFile = new IndexedCramFile({
 
 ## Reference names
 
-Query a reference by the name the file's header gives it, such as `chr1`, `1` or
+Query a reference by its name in the file's header, such as `chr1`, `1` or
 `CHROMOSOME_I`. A query for a name the file lacks returns no records, so the
 same query can run across files that cover different references:
 
@@ -109,7 +110,7 @@ The package ships a standalone browser build that puts the same exports on
 - [docs/workers.md](docs/workers.md): the worker pool that decodes slices in
   parallel in a browser
 - [MIGRATION.md](MIGRATION.md): breaking changes, newest first
-- [docs/memory.md](docs/memory.md): what a decoded slice keeps in memory
+- [docs/memory.md](docs/memory.md): the memory a decoded slice uses
 - [docs/read-features.md](docs/read-features.md): the raw alignment encoding
 - [docs/codec-support.md](docs/codec-support.md): the codecs this decoder
   handles

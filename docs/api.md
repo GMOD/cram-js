@@ -73,10 +73,10 @@ of that range. A longer string throws, and the library pads a shorter one with
 `N`.
 
 Without the callback, records have positions, CIGAR strings, and the type and
-length of each difference, but no bases, and a substitution reports its base as
-`N`. A file written with `embed_ref=1` decodes fully without the callback. A
-file written with `no_ref` stores bases verbatim, so without a reference its
-reads report no substitutions at all.
+length of each difference, but no bases, and the mismatch methods give each
+substitution the base `N`. The library decodes a file written with `embed_ref=1`
+fully without the callback. A file written with `no_ref` stores bases verbatim,
+so without a reference the library finds no substitutions in its reads.
 
 ### Reference ids
 
@@ -92,7 +92,8 @@ await indexedFile.getRecordsForRange(-1, -1, end)
 ```
 
 An unmapped read placed at its mate's position has the mate's `sequenceId` and
-`start`, so an ordinary range query returns it.
+`start`, so `getRecordsForRange` returns it for a range that covers that
+position.
 
 ### Cancelling a query
 
@@ -126,7 +127,8 @@ the details.
 
 `cacheIdleTimeoutMs` empties the cache of slices that no query has read
 recently. The library checks `maxCacheBytes` only when a decode finishes, so
-while the file sits idle, only the timeout frees memory.
+while the file sits idle, the library frees memory only when the timeout
+expires.
 
 ### `recordClass`
 
