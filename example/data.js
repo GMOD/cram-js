@@ -12,12 +12,9 @@ const indexedFile = new IndexedCramFile({
   checkSequenceMD5: false,
 })
 
-// getRecordsForRange takes a numeric reference ID: the index of the @SQ line in
-// the header. Resolve one with cram.getReferenceId(name).
-
 // Wrap in an async and then run
 run = async () => {
-  const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
+  const records = await indexedFile.getRecordsForRange('ctgA', 10000, 20000)
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
     if (record.readFeatures != undefined) {

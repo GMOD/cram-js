@@ -19,7 +19,11 @@
       run = async () => {
         const status = document.getElementById('status')
         try {
-          const records = await indexedFile.getRecordsForRange(0, 10000, 20000)
+          const records = await indexedFile.getRecordsForRange(
+            'ctgA',
+            10000,
+            20000,
+          )
           if (records.length === EXPECTED_RECORDS) {
             status.textContent = `Success: ${records.length} records (matches samtools)`
             status.className = 'success'

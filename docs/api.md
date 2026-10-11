@@ -24,10 +24,12 @@ new IndexedCramFile({
 })
 ```
 
-- `getRecordsForRange(seqId, start, end, opts?)` → `Promise<CramRecord[]>`.
-  `opts`:
+- `getRecordsForRange(refNameOrId, start, end, opts?)` →
+  `Promise<CramRecord[]>`. `refNameOrId` is the `@SQ` `SN` or the numeric id; a
+  name the header lacks throws. `opts`:
   `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress, signal }`
-- `hasDataForReferenceSequence(seqId, opts?)` → `Promise<boolean>`
+- `hasDataForReferenceSequence(refNameOrId, opts?)` → `Promise<boolean>`, false
+  for a name the header lacks
 - `clearFeatureCache()` — drop every decoded slice now, rather than waiting out
   `cacheIdleTimeoutMs`, for a consumer that knows it is done with the file
 - `cram` — the underlying `CramFile`

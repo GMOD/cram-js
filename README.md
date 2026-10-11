@@ -30,8 +30,7 @@ const indexedFile = new IndexedCramFile({
     fasta.getSequence(refName, start, end),
 })
 
-const refId = await indexedFile.cram.getReferenceId('chr1')
-const records = await indexedFile.getRecordsForRange(refId, 10000, 20000)
+const records = await indexedFile.getRecordsForRange('chr1', 10000, 20000)
 
 for (const record of records) {
   console.log(record.readName, record.start, record.getCigarString())
@@ -61,10 +60,12 @@ The [example directory](./example) has a working page.
 convert back to a 1-based text format like SAM's `POS`. (This changed in v10 —
 see [MIGRATION.md](MIGRATION.md).)
 
-**References are numbers, not names.** CRAM identifies a reference by the
-position of its `@SQ` line in the SAM header, and `getRecordsForRange`,
-`record.sequenceId` and the `.crai` all speak in those numbers. The order is
-whatever a given file says, so ask the file rather than hardcoding it:
+**Underneath the names, references are numbers.** CRAM identifies a reference by
+the position of its `@SQ` line in the SAM header, and `record.sequenceId` and
+the `.crai` speak in those numbers. `getRecordsForRange` and
+`hasDataForReferenceSequence` take either, resolving a name against the header;
+`getRecordsForRange` throws on a name the header lacks. The order is whatever a
+given file says, so ask the file rather than hardcoding it:
 
 ```js
 await indexedFile.cram.getReferenceId('chr1') // 0, throws if there is no such SN
@@ -125,7 +126,7 @@ with nothing to configure, since the worker ships inlined like the wasm:
 
 ```js
 // already parallel
-const records = await indexedFile.getRecordsForRange(refId, 10000, 20000)
+const records = await indexedFile.getRecordsForRange('chr1', 10000, 20000)
 ```
 
 In a browser that is worth 2.1-3.6x once a query touches four or more slices,

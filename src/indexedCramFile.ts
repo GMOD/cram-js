@@ -103,13 +103,13 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
   }
 
   /**
-   *
-   * @param seq numeric ID of the reference sequence
+   * @param refNameOrId the reference's `@SQ` `SN`, or its numeric ID. A name
+   * that is not in the header throws, as `CramFile.getReferenceId` does.
    * @param start start of the range of interest. 0-based half-open coordinates.
    * @param end end of the range of interest. 0-based half-open coordinates.
    */
   async getRecordsForRange(
-    seq: number,
+    refNameOrId: string | number,
     start: number,
     end: number,
     opts: {
@@ -133,6 +133,10 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
     const onProgress = opts.onProgress
     const signal = opts.signal
     signal?.throwIfAborted()
+    const seq =
+      typeof refNameOrId === 'number'
+        ? refNameOrId
+        : await this.cram.getReferenceId(refNameOrId, { signal })
 
     // the .crai index downloads lazily here on first query; thread onProgress so
     // its download streams under the same bar, ahead of the slice data below
@@ -290,12 +294,19 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
   }
 
   /**
-   *
-   * @param {number} seqId
-   * @returns {Promise} true if the CRAM file contains data for the given
-   * reference sequence numerical ID
+   * Whether the index has any slice for the reference, given as its `@SQ` `SN`
+   * or numeric ID. A name that is not in the header has no data rather than
+   * throwing, since this is the call for asking.
    */
-  hasDataForReferenceSequence(seqId: number, opts?: IndexOpts) {
-    return this.index.hasDataForReferenceSequence(seqId, opts)
+  async hasDataForReferenceSequence(
+    refNameOrId: string | number,
+    opts?: IndexOpts,
+  ) {
+    if (typeof refNameOrId === 'number') {
+      return this.index.hasDataForReferenceSequence(refNameOrId, opts)
+    }
+    const refs = await this.cram.getReferenceInfo({ signal: opts?.signal })
+    const seqId = refs.findIndex(ref => ref.name === refNameOrId)
+    return seqId !== -1 && this.index.hasDataForReferenceSequence(seqId, opts)
   }
 }

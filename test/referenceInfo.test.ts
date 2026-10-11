@@ -67,17 +67,46 @@ test('a CRAM with no @SQ lines has an empty table', async () => {
   expect(await cram.getReferenceName(0)).toBeUndefined()
 })
 
-test('getReferenceId feeds getRecordsForRange', async () => {
-  const cram = new IndexedCramFile({
-    cramFilehandle: testDataFile('ce#tag_padded.tmp.cram'),
-    index: new CraiIndex({
-      filehandle: testDataFile('ce#tag_padded.tmp.cram.crai'),
-    }),
+function openIndexed(name: string) {
+  return new IndexedCramFile({
+    cramFilehandle: testDataFile(name),
+    index: new CraiIndex({ filehandle: testDataFile(`${name}.crai`) }),
   })
+}
 
-  const refId = await cram.cram.getReferenceId('CHROMOSOME_I')
-  expect(refId).toBe(0)
-  expect((await cram.getRecordsForRange(0, 1, 200)).length).toBeGreaterThan(0)
+const readNames = (records: { readName?: string }[]) =>
+  records.map(r => r.readName).sort()
+
+test('getRecordsForRange takes a reference name', async () => {
+  const cram = openIndexed('ce#5b.tmp.cram')
+  const byName = await cram.getRecordsForRange('CHROMOSOME_V', 0, 5000)
+  expect(byName.length).toBe(3)
+  expect(new Set(byName.map(r => r.sequenceId))).toEqual(new Set([4]))
+  expect(readNames(byName)).toEqual(
+    readNames(await cram.getRecordsForRange(4, 0, 5000)),
+  )
+})
+
+test('getRecordsForRange throws on a name not in the header', async () => {
+  await expect(
+    openIndexed('ce#5b.tmp.cram').getRecordsForRange('chr1', 0, 5000),
+  ).rejects.toThrow(/no @SQ line/)
+})
+
+test('viewAsPairs finds mates when queried by name', async () => {
+  const cram = openIndexed('paired.cram')
+  const name = await cram.cram.getReferenceName(19)
+  const opts = { viewAsPairs: true }
+  expect(
+    readNames(await cram.getRecordsForRange(name!, 62500, 64500, opts)),
+  ).toEqual(readNames(await cram.getRecordsForRange(19, 62500, 64500, opts)))
+})
+
+test('hasDataForReferenceSequence takes a reference name', async () => {
+  const cram = openIndexed('ce#5.tmp.cram')
+  expect(await cram.hasDataForReferenceSequence('CHROMOSOME_I')).toBe(true)
+  expect(await cram.hasDataForReferenceSequence('CHROMOSOME_II')).toBe(false)
+  expect(await cram.hasDataForReferenceSequence('chr1')).toBe(false)
 })
 
 test('fetchReferenceSequence receives the refName', async () => {

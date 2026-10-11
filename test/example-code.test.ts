@@ -26,10 +26,11 @@ test('runs without error', async () => {
     checkSequenceMD5: false,
   })
 
-  // getRecordsForRange takes a numeric reference ID: the index of the @SQ line
-  // in the header, which cram.getReferenceId(name) resolves
-  const refId = await indexedFile2.cram.getReferenceId('CHROMOSOME_I')
-  const records = await indexedFile2.getRecordsForRange(refId, 10000, 20000)
+  const records = await indexedFile2.getRecordsForRange(
+    'CHROMOSOME_I',
+    10000,
+    20000,
+  )
   records.forEach(record => {
     console.log(`got a record named ${record.readName}`)
     record.readFeatures?.forEach(feature => {
