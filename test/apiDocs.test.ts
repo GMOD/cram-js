@@ -3,8 +3,6 @@ import fs from 'node:fs'
 import ts from 'typescript'
 import { expect, test } from 'vitest'
 
-import * as exports from '../src/index.ts'
-
 const api = fs.readFileSync('docs/api.md', 'utf8')
 
 const undocumented: Record<string, Record<string, string>> = {
@@ -38,22 +36,18 @@ const undocumented: Record<string, Record<string, string>> = {
   },
 }
 
-function publicMembers(file: string, name: string) {
-  const source = ts.createSourceFile(
+function source(file: string) {
+  return ts.createSourceFile(
     file,
     fs.readFileSync(file, 'utf8'),
     ts.ScriptTarget.Latest,
+    true,
   )
-  const decl = source.statements.find(
-    (s): s is ts.ClassDeclaration | ts.InterfaceDeclaration =>
-      (ts.isClassDeclaration(s) || ts.isInterfaceDeclaration(s)) &&
-      s.name?.text === name,
-  )
-  if (!decl) {
-    throw new Error(`no ${name} in ${file}`)
-  }
-  const names = new Set<string>()
-  for (const member of decl.members) {
+}
+
+function publicNames(members: ts.NodeArray<ts.ClassElement | ts.TypeElement>) {
+  const names: string[] = []
+  for (const member of members) {
     const hidden = (
       ts.canHaveModifiers(member) ? (ts.getModifiers(member) ?? []) : []
     ).some(
@@ -61,17 +55,38 @@ function publicMembers(file: string, name: string) {
         m.kind === ts.SyntaxKind.PrivateKeyword ||
         m.kind === ts.SyntaxKind.ProtectedKeyword,
     )
-    const memberName = member.name?.getText(source)
+    const name = member.name?.getText()
     if (
-      memberName &&
+      name &&
       !hidden &&
-      !memberName.startsWith('_') &&
+      !name.startsWith('_') &&
       !ts.isConstructorDeclaration(member)
     ) {
-      names.add(memberName)
+      names.push(name)
     }
   }
-  return [...names]
+  return names
+}
+
+// a class's members, plus the keys of its constructor's inline options type
+function publicMembers(file: string, name: string) {
+  const decl = source(file).statements.find(
+    (s): s is ts.ClassDeclaration | ts.InterfaceDeclaration =>
+      (ts.isClassDeclaration(s) || ts.isInterfaceDeclaration(s)) &&
+      s.name?.text === name,
+  )
+  if (!decl) {
+    throw new Error(`no ${name} in ${file}`)
+  }
+  const names = publicNames(decl.members)
+  if (ts.isClassDeclaration(decl)) {
+    const options = decl.members.find(ts.isConstructorDeclaration)
+      ?.parameters[0]?.type
+    if (options && ts.isTypeLiteralNode(options)) {
+      names.push(...publicNames(options.members))
+    }
+  }
+  return [...new Set(names)]
 }
 
 function inDocs(name: string) {
@@ -85,6 +100,8 @@ test.each([
   ['src/indexedCramFile.ts', 'IndexedCramFile'],
   ['src/indexedCramFile.ts', 'CramFileSource'],
   ['src/craiIndex.ts', 'CraiIndex'],
+  ['src/cramFile/mismatches.ts', 'Mismatch'],
+  ['src/cramFile/mismatches.ts', 'MismatchOptions'],
 ])('docs/api.md covers every public member of %s %s', (file, name) => {
   const skip = undocumented[name] ?? {}
   const members = publicMembers(file, name)
@@ -98,10 +115,19 @@ test.each([
   ).toEqual([])
 })
 
-test('docs/api.md covers every exported error class', () => {
-  const errors = Object.keys(exports).filter(name =>
-    /^Cram\w*Error$/.test(name),
-  )
-  expect(errors.length).toBeGreaterThan(0)
-  expect(errors.filter(name => !inDocs(name))).toEqual([])
+test('docs/api.md covers every export', () => {
+  const exported: string[] = []
+  for (const statement of source('src/index.ts').statements) {
+    if (
+      ts.isExportDeclaration(statement) &&
+      statement.exportClause &&
+      ts.isNamedExports(statement.exportClause)
+    ) {
+      for (const element of statement.exportClause.elements) {
+        exported.push(element.name.text)
+      }
+    }
+  }
+  expect(exported.length).toBeGreaterThan(0)
+  expect(exported.filter(name => !inDocs(name))).toEqual([])
 })

@@ -52,9 +52,9 @@ note would catch a stale table.
 
 [docs/api.md](docs/api.md) is written by hand, and `test/apiDocs.test.ts` fails
 when a public member of `IndexedCramFile`, `CramFile`, `CraiIndex` or
-`CramRecord`, or a constructor option, is missing from it. Document the new
-member, or add it to the test's `undocumented` list with the reason it is
-internal.
+`CramRecord`, a constructor option, or an export is missing from it. Document
+the new member, or add it to the test's `undocumented` list with the reason it
+is internal.
 
 ## Publishing
 

@@ -289,6 +289,50 @@ arguments, in this order.
 The package exports `RF_SUBST`, `RF_INSERTION` and the other `RF_*` constants to
 compare against `code`.
 
+## Other exports
+
+The classes above cover reading a file. The package also exports the constants,
+storage classes and types that the lower-level APIs use.
+
+### Constants
+
+| Export                                                                                                                                                                      | Description                                                                                                      |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `CIGAR_MATCH`, `CIGAR_INS`, `CIGAR_DEL`, `CIGAR_REF_SKIP`, `CIGAR_SOFT_CLIP`, `CIGAR_HARD_CLIP`, `CIGAR_PAD`, `CIGAR_EQUAL`, `CIGAR_DIFF`                                   | the `op` values `forEachCigarOp` passes, numbered 0 to 8 as in BAM                                               |
+| `CIGAR_OP_CHARS`                                                                                                                                                            | `'MIDNSHP=X'`, so `CIGAR_OP_CHARS[op]` is the op's letter                                                        |
+| `RF_SUBST`, `RF_INSERTION`, `RF_DELETION`, `RF_REF_SKIP`, `RF_SOFT_CLIP`, `RF_HARD_CLIP`, `RF_PADDING`, `RF_INSERT_BASE`, `RF_BASES`, `RF_BASE_QUAL`, `RF_QUAL`, `RF_QUALS` | read-feature codes, as the char code of each CRAM code letter; see [read-features.md](read-features.md)          |
+| `RF_POSITIONAL`                                                                                                                                                             | a table indexed by read-feature code: 1 where the feature's `refPos` is an alignment position, 0 for `q` and `Q` |
+| `TAG_NUMBER`, `TAG_CHAR`, `TAG_STRING`, `TAG_ARRAY`                                                                                                                         | the kinds of value a `TagColumn` stores                                                                          |
+| `NEXT_UNKNOWN`                                                                                                                                                              | the `nextSequenceId` of a record whose file does not locate the next segment                                     |
+| `DEFAULT_MAX_CACHE_BYTES`, `DEFAULT_CACHE_IDLE_TIMEOUT_MS`                                                                                                                  | the defaults of `maxCacheBytes` and `cacheIdleTimeoutMs`                                                         |
+
+### Classes and functions
+
+| Export                            | Description                                                                                |
+| --------------------------------- | ------------------------------------------------------------------------------------------ |
+| `DecodedSlice`                    | the columns of one decoded slice; see [memory.md](memory.md)                               |
+| `ReadFeatureArena`                | the read-feature columns of a slice, which `readFeatureArena` returns                      |
+| `TagColumn`                       | the tag columns of a slice, which `tagColumn` returns                                      |
+| `arenaFromReadFeatures(features)` | builds a one-record `ReadFeatureArena` from `ReadFeature` objects, for synthesized records |
+| `getSharedSliceWorkerPool()`      | the shared worker pool, created on first use; `undefined` where workers are unavailable    |
+| `createSliceWorkerPool(n?, url?)` | a separate pool of `n` workers; throws where workers are unavailable                       |
+| `destroySharedSliceWorkerPool()`  | terminates the shared pool's workers                                                       |
+
+### Types
+
+| Export                                | Description                                                           |
+| ------------------------------------- | --------------------------------------------------------------------- |
+| `SeqFetch`                            | the type of `fetchReferenceSequence`                                  |
+| `ReferenceInfo`                       | one entry of `getReferenceInfo()`                                     |
+| `BaseOpts`, `ReadOpts`, `IndexOpts`   | the options objects that take `signal` and `onProgress`               |
+| `MismatchCallback`, `MismatchOptions` | the callback and options of `forEachMismatch`                         |
+| `CigarCallback`                       | the callback of `forEachCigarOp`                                      |
+| `TagValue`                            | a tag's value: a string, a number, an array of numbers or `undefined` |
+| `RefRegion`                           | a stretch of reference bases, as `{ start, end, seq }`                |
+| `Slice`                               | one `.crai` entry, as `getEntriesForRange` returns it                 |
+| `CramRecordClass`                     | the type of `recordClass`                                             |
+| `CramSliceWorkerPool`                 | the type of a worker pool                                             |
+
 ## Errors
 
 Every error the library raises extends `CramError`. A network or filehandle
