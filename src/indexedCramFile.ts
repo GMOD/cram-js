@@ -57,6 +57,7 @@ export type IndexedCramFileArgs<T extends CramRecord = CramRecord> = {
 export default class IndexedCramFile<T extends CramRecord = CramRecord> {
   public cram: CramFile<T>
   public index: CramIndexLike
+  private refIds?: Map<string, number>
 
   /**
    * @param args.index an object supporting
@@ -312,9 +313,15 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
     if (typeof refNameOrId === 'number') {
       return refNameOrId
     }
-    const refId = (await this.cram.getReferenceInfo(opts)).findIndex(
-      ref => ref.name === refNameOrId,
-    )
-    return refId === -1 ? undefined : refId
+    const refs = await this.cram.getReferenceInfo(opts)
+    if (!this.refIds) {
+      this.refIds = new Map()
+      for (const [refId, { name }] of refs.entries()) {
+        if (!this.refIds.has(name)) {
+          this.refIds.set(name, refId)
+        }
+      }
+    }
+    return this.refIds.get(refNameOrId)
   }
 }
