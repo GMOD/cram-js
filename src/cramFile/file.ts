@@ -457,8 +457,8 @@ export default class CramFile<T extends CramRecord = CramRecord> {
 
   /**
    * The `@SQ` lines in header order. A reference's numeric ID — what
-   * `getRecordsForRange` takes and `CramRecord.sequenceId` reports — is its
-   * index here. Empty for a CRAM with no `@SQ` lines.
+   * `getRecordsForRange` resolves a name to and `CramRecord.sequenceId`
+   * reports — is its index here. Empty for a CRAM with no `@SQ` lines.
    */
   async getReferenceInfo(opts?: ReadOpts) {
     this._referenceInfo ??= parseReferenceInfo(await this.getSamHeader(opts))

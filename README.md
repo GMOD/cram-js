@@ -63,8 +63,9 @@ see [MIGRATION.md](MIGRATION.md).)
 **Underneath the names, references are numbers.** CRAM identifies a reference by
 the position of its `@SQ` line in the SAM header, and `record.sequenceId` and
 the `.crai` speak in those numbers. `getRecordsForRange` and
-`hasDataForReferenceSequence` take either, resolving a name against the header;
-`getRecordsForRange` throws on a name the header lacks. The order is whatever a
+`hasDataForReferenceSequence` take either, resolving a name against the header.
+A name the header lacks has no records, as in `@gmod/bam`, since a reference
+present in one file and absent from another is routine. The order is whatever a
 given file says, so ask the file rather than hardcoding it:
 
 ```js

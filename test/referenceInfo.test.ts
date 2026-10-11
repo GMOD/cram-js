@@ -87,19 +87,22 @@ test('getRecordsForRange takes a reference name', async () => {
   )
 })
 
-test('getRecordsForRange throws on a name not in the header', async () => {
-  await expect(
-    openIndexed('ce#5b.tmp.cram').getRecordsForRange('chr1', 0, 5000),
-  ).rejects.toThrow(/no @SQ line/)
+test('a name not in the header has no records', async () => {
+  expect(
+    await openIndexed('ce#5b.tmp.cram').getRecordsForRange('chr1', 0, 5000),
+  ).toEqual([])
 })
 
 test('viewAsPairs finds mates when queried by name', async () => {
   const cram = openIndexed('paired.cram')
   const name = await cram.cram.getReferenceName(19)
   const opts = { viewAsPairs: true }
-  expect(
-    readNames(await cram.getRecordsForRange(name!, 62500, 64500, opts)),
-  ).toEqual(readNames(await cram.getRecordsForRange(19, 62500, 64500, opts)))
+  const plain = await cram.getRecordsForRange(name!, 62500, 64500)
+  const pairs = await cram.getRecordsForRange(name!, 62500, 64500, opts)
+  expect(pairs.length).toBeGreaterThan(plain.length)
+  expect(readNames(pairs)).toEqual(
+    readNames(await cram.getRecordsForRange(19, 62500, 64500, opts)),
+  )
 })
 
 test('hasDataForReferenceSequence takes a reference name', async () => {

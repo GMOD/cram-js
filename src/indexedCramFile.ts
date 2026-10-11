@@ -6,7 +6,7 @@ import type { IndexOpts, Slice } from './craiIndex.ts'
 import type CramContainer from './cramFile/container/index.ts'
 import type { CramFileOptions } from './cramFile/file.ts'
 import type CramRecord from './cramFile/record.ts'
-import type { BaseOpts } from './opts.ts'
+import type { BaseOpts, ReadOpts } from './opts.ts'
 import type { GenericFilehandle } from 'generic-filehandle2'
 
 export interface CramFileSource {
@@ -104,7 +104,8 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
 
   /**
    * @param refNameOrId the reference's `@SQ` `SN`, or its numeric ID. A name
-   * that is not in the header throws, as `CramFile.getReferenceId` does.
+   * that is not in the header has no records, as in `@gmod/bam` and
+   * `@gmod/tabix`.
    * @param start start of the range of interest. 0-based half-open coordinates.
    * @param end end of the range of interest. 0-based half-open coordinates.
    */
@@ -133,10 +134,10 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
     const onProgress = opts.onProgress
     const signal = opts.signal
     signal?.throwIfAborted()
-    const seq =
-      typeof refNameOrId === 'number'
-        ? refNameOrId
-        : await this.cram.getReferenceId(refNameOrId, { signal })
+    const seq = await this.resolveRefId(refNameOrId, { signal })
+    if (seq === undefined) {
+      return []
+    }
 
     // the .crai index downloads lazily here on first query; thread onProgress so
     // its download streams under the same bar, ahead of the slice data below
@@ -295,18 +296,25 @@ export default class IndexedCramFile<T extends CramRecord = CramRecord> {
 
   /**
    * Whether the index has any slice for the reference, given as its `@SQ` `SN`
-   * or numeric ID. A name that is not in the header has no data rather than
-   * throwing, since this is the call for asking.
+   * or numeric ID. False for a name that is not in the header.
    */
   async hasDataForReferenceSequence(
     refNameOrId: string | number,
     opts?: IndexOpts,
   ) {
+    const seqId = await this.resolveRefId(refNameOrId, { signal: opts?.signal })
+    return (
+      seqId !== undefined && this.index.hasDataForReferenceSequence(seqId, opts)
+    )
+  }
+
+  private async resolveRefId(refNameOrId: string | number, opts?: ReadOpts) {
     if (typeof refNameOrId === 'number') {
-      return this.index.hasDataForReferenceSequence(refNameOrId, opts)
+      return refNameOrId
     }
-    const refs = await this.cram.getReferenceInfo({ signal: opts?.signal })
-    const seqId = refs.findIndex(ref => ref.name === refNameOrId)
-    return seqId !== -1 && this.index.hasDataForReferenceSequence(seqId, opts)
+    const refId = (await this.cram.getReferenceInfo(opts)).findIndex(
+      ref => ref.name === refNameOrId,
+    )
+    return refId === -1 ? undefined : refId
   }
 }

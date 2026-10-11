@@ -329,6 +329,22 @@ test('aborting the SAM header read rejects, and a later call reads it afresh', a
   expect(await cram.getSamHeader()).toEqual(expected)
 })
 
+test('a query by name passes its signal to the header read that resolves it', async () => {
+  const file = new GatedFile(testDataFile(CRAM))
+  const cram = openCram(file)
+
+  const controller = new AbortController()
+  file.hold()
+  const records = cram.getRecordsForRange('CHROMOSOME_I', 0, 200, {
+    signal: controller.signal,
+  })
+  await file.waitForReads(1)
+  controller.abort()
+
+  await expect(records).rejects.toMatchObject({ name: 'AbortError' })
+  expect(file.abortedReads).toBe(1)
+})
+
 test('a cancelled header read does not fail a caller sharing it', async () => {
   const file = new GatedFile(testDataFile(CRAM))
   const { cram } = openCram(file)

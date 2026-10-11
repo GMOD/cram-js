@@ -26,7 +26,7 @@ new IndexedCramFile({
 
 - `getRecordsForRange(refNameOrId, start, end, opts?)` →
   `Promise<CramRecord[]>`. `refNameOrId` is the `@SQ` `SN` or the numeric id; a
-  name the header lacks throws. `opts`:
+  name the header lacks returns `[]`. `opts`:
   `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress, signal }`
 - `hasDataForReferenceSequence(refNameOrId, opts?)` → `Promise<boolean>`, false
   for a name the header lacks
