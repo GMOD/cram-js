@@ -17,15 +17,16 @@ npm install @gmod/cram
 ```js
 import { IndexedCramFile, CraiIndex } from '@gmod/cram'
 import { IndexedFasta } from '@gmod/indexedfasta'
+import { RemoteFile } from 'generic-filehandle2'
 
 const fasta = new IndexedFasta({
-  path: '/path/to/reference.fa',
-  faiPath: '/path/to/reference.fa.fai',
+  fasta: new RemoteFile('https://example.com/reference.fa'),
+  fai: new RemoteFile('https://example.com/reference.fa.fai'),
 })
 
 const indexedFile = new IndexedCramFile({
-  cramPath: '/path/to/file.cram',
-  index: new CraiIndex({ path: '/path/to/file.cram.crai' }),
+  cramUrl: 'https://example.com/file.cram',
+  index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
   fetchReferenceSequence: (seqId, start, end, refName) =>
     fasta.getSequence(refName, start, end),
 })
@@ -37,23 +38,17 @@ for (const record of records) {
 }
 ```
 
+URLs work in node and the browser. For local files, pass `cramPath` and
+`CraiIndex({ path })`, and `IndexedFasta({ path })`.
+
 `fetchReferenceSequence` supplies the reference bases that CRAM stores reads
 against. Without it, records still have positions and CIGAR strings, but not
 read bases. [docs/api.md](docs/api.md#reference-sequence) has the details.
 
-## Reading over HTTP
+### Range caching
 
-Pass URLs in place of paths to read a remote file, in node or a browser:
-
-```js
-const indexedFile = new IndexedCramFile({
-  cramUrl: 'https://example.com/file.cram',
-  index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
-})
-```
-
-A query makes one read per slice and two small ones per container, and a plain
-URL sends each read as a separate range request.
+A query makes one read per slice and two small ones per container, and `cramUrl`
+sends each read as a separate range request.
 [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
 serves the reads from 256 KiB chunks, so neighboring reads share a request:
 
