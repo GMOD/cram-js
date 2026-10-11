@@ -37,12 +37,36 @@ for (const record of records) {
 }
 ```
 
-In a browser, use `cramUrl` in place of `cramPath` and `url` in place of `path`.
-[docs/http.md](docs/http.md) shows how to cut the number of requests.
-
 `fetchReferenceSequence` supplies the reference bases that CRAM stores reads
 against. Without it, records still have positions and CIGAR strings, but not
 read bases. [docs/api.md](docs/api.md#reference-sequence) has the details.
+
+## Reading over HTTP
+
+Pass URLs in place of paths to read a remote file, in node or a browser:
+
+```js
+const indexedFile = new IndexedCramFile({
+  cramUrl: 'https://example.com/file.cram',
+  index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
+})
+```
+
+A query makes one read per slice and two small ones per container, and a plain
+URL sends each read as a separate range request.
+[`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
+serves the reads from 256 KiB chunks, so neighboring reads share a request:
+
+```js
+import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
+
+const indexedFile = new IndexedCramFile({
+  cramFilehandle: new RemoteFileWithRangeCache(url),
+  index: new CraiIndex({
+    filehandle: new RemoteFileWithRangeCache(`${url}.crai`),
+  }),
+})
+```
 
 ## Reference names
 
@@ -87,7 +111,6 @@ The package ships a standalone browser build that puts the same exports on
 
 - [docs/api.md](docs/api.md): every option, property and method, including
   cancelling a query with an `AbortSignal`
-- [docs/http.md](docs/http.md): reading remote files
 - [docs/workers.md](docs/workers.md): the worker pool that decodes slices in
   parallel in a browser
 - [MIGRATION.md](MIGRATION.md): breaking changes, newest first
