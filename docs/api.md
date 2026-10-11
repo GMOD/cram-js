@@ -102,10 +102,30 @@ new IndexedCramFile({ ..., recordClass: MyFeature })
 It is constructed as `new MyFeature(slice, index)`, the same way the base class
 is; anything else it needs it reads off itself.
 
-### Unplaced reads
+### Reference sequence
+
+CRAM stores each read as its differences from the reference, so decoding the
+read's bases takes the reference sequence, which `fetchReferenceSequence`
+supplies. It receives the numeric id, the 0-based half-open `start` and `end`,
+the reference name, and `{ signal }`, and returns `end - start` bases. A longer
+string throws, and the library pads a shorter one with `N`.
+
+Without the callback, records still have positions, CIGAR strings, and the type
+and length of each difference, but not the bases. A file written with an
+embedded reference (`samtools view --output-fmt-option embed_ref=1`) decodes
+fully with no callback, and where a file has both, the library uses the embedded
+bases.
+
+### Reference ids and unplaced reads
+
+CRAM numbers each reference by the position of its `@SQ` line in the header, and
+`record.sequenceId` holds that number. Every method that takes a reference name
+also accepts the number, and `cram.getReferenceName(record.sequenceId)` turns it
+back into a name.
 
 Unplaced reads have no position at all and sort to the end of the file. Both
-their `sequenceId` and their `start` are `-1`, so you ask for them like this:
+their `sequenceId` and their `start` are `-1`, and they have no name, so you
+query them by number:
 
 ```js
 await indexedFile.getRecordsForRange(-1, -1, end) // a start of 0 finds nothing
