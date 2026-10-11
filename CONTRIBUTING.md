@@ -50,6 +50,12 @@ It is not a CI check, for the reason
 [docs/memory.md#measuring-it](docs/memory.md#measuring-it) gives, so only this
 note would catch a stale table.
 
+[docs/api.md](docs/api.md) is written by hand, and `test/apiDocs.test.ts` fails
+when a public member of `IndexedCramFile`, `CramFile`, `CraiIndex` or
+`CramRecord`, or a constructor option, is missing from it. Document the new
+member, or add it to the test's `undocumented` list with the reason it is
+internal.
+
 ## Publishing
 
 ```sh

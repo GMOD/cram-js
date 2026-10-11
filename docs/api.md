@@ -132,8 +132,8 @@ while the file sits idle, only the timeout frees memory.
 
 Queries return instances of this `CramRecord` subclass instead of `CramRecord`,
 so a consumer can add methods to the record instead of wrapping it. The library
-constructs it as `new MyFeature(slice, index)`. `@gmod/bam` takes the same
-option.
+constructs it as `new MyFeature(slice, index)`, the same arguments the record's
+`slice` and `index` properties hold. `@gmod/bam` takes the same option.
 
 ```js
 class MyFeature extends CramRecord {
@@ -174,6 +174,7 @@ header without an index. Each method takes an optional `{ signal }`.
 | `lengthOnRef`                 | `number \| undefined`             | reference bases the alignment covers; `undefined` when unmapped                     |
 | `mappingQuality`              | `number \| undefined`             | mapping quality                                                                     |
 | `flags`                       | `number`                          | SAM flags; see [Flag methods](#flag-methods)                                        |
+| `cramFlags`                   | `number`                          | CRAM compression flags; see the CRAM-specific [flag methods](#flag-methods)         |
 | `readLength`                  | `number`                          | read length in bases                                                                |
 | `readGroupId`                 | `number`                          | index of the read's `@RG` line; `-1` for none                                       |
 | `uniqueId`                    | `number`                          | an id unique to the record within the file                                          |
@@ -183,6 +184,7 @@ header without an index. Each method takes an optional `{ signal }`.
 | `qualityScores`               | `Uint8Array \| null \| undefined` | base qualities; `null` for `*`, `undefined` when the file has none                  |
 | `tags`                        | `object`                          | every auxiliary tag; `getTag(name)` is faster for one                               |
 | `readFeatures`                | `ReadFeature[] \| undefined`      | the raw CRAM encoding; see [read-features.md](read-features.md)                     |
+| `slice`, `index`              | `DecodedSlice`, `number`          | the decoded slice the record reads from, and its position in it                     |
 
 `qualityScores` and `readFeatures` build a new array on every access, so read
 them into a local variable instead of accessing them in a loop.
