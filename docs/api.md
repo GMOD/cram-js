@@ -1,145 +1,100 @@
 # API reference
 
-Everything the package exports, in detail. The [README](../README.md) is the
-short version; start there if you have not read it.
+Every coordinate in this API is 0-based half-open. The [README](../README.md)
+has a quick start.
 
-All coordinates are **0-based half-open**.
+- [`IndexedCramFile`](#indexedcramfile): open a file and query a region
+- [`CramFile`](#cramfile): the header and reference names
+- [`CraiIndex`](#craiindex)
+- [`CramRecord`](#cramrecord): one alignment
+- [`Mismatch`](#mismatch): one difference from the reference
+- [Errors](#errors)
 
 ## `IndexedCramFile`
 
 ```js
-new IndexedCramFile({
-  cramPath, // local path
-  cramUrl, // remote URL
-  cramFilehandle, // generic-filehandle2 compatible handle
-  index, // CraiIndex, or anything with getEntriesForRange
-  fetchReferenceSequence, // async (seqId, start, end, refName, opts) => string
-  checkSequenceMD5, // verify each slice's reference MD5. default false
-  validateChecksums, // check block and container CRC32s. default false
-  maxCacheBytes, // decoded bytes to keep. default 1 GB
-  cacheIdleTimeoutMs, // drop slices unread for this long. default 3 minutes
-  cacheBudget, // a SharedBudget, to pool maxCacheBytes across files
-  useSliceWorkerPool, // decode slices on a worker pool. default true
-  numSliceWorkers, // pool size. default min(hardwareConcurrency, 4)
+const indexedFile = new IndexedCramFile({
+  cramUrl: 'https://example.com/file.cram',
+  index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
+  fetchReferenceSequence: (seqId, start, end, refName) =>
+    fasta.getSequence(refName, start, end),
 })
 ```
 
-- `getRecordsForRange(refNameOrId, start, end, opts?)` →
-  `Promise<CramRecord[]>`. `refNameOrId` is the `@SQ` `SN` or the numeric id; a
-  name the header lacks returns `[]`. `opts`:
-  `{ viewAsPairs, pairAcrossChr, maxInsertSize, decodeTags, onProgress, signal }`
-- `hasDataForReferenceSequence(refNameOrId, opts?)` → `Promise<boolean>`, false
-  for a name the header lacks
-- `clearFeatureCache()` — drop every decoded slice now, rather than waiting out
-  `cacheIdleTimeoutMs`, for a consumer that knows it is done with the file
-- `cram` — the underlying `CramFile`
+### Options
 
-### Verifying the file
+| Option                   | Default                       | Description                                                                     |
+| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------- |
+| `cramUrl`                |                               | URL of the CRAM file                                                            |
+| `cramPath`               |                               | local path of the CRAM file                                                     |
+| `cramFilehandle`         |                               | a [generic-filehandle2](https://github.com/GMOD/generic-filehandle2) handle     |
+| `index`                  | required                      | a `CraiIndex`, or any object with `getEntriesForRange`                          |
+| `fetchReferenceSequence` |                               | returns reference bases; see [Reference sequence](#reference-sequence)          |
+| `checkSequenceMD5`       | `false`                       | verify each slice's reference MD5 against the bases the callback returns        |
+| `validateChecksums`      | `false`                       | check the CRC32 of every block and container                                    |
+| `maxCacheBytes`          | 1 GB                          | bytes of decoded slices to keep; see [Cache](#cache)                            |
+| `cacheIdleTimeoutMs`     | 3 minutes                     | drop a slice nothing has read for this long; `0` disables                       |
+| `cacheBudget`            |                               | a budget shared with other files, so `maxCacheBytes` bounds their total         |
+| `useSliceWorkerPool`     | `true`                        | decode slices on a worker pool in a browser; see [workers.md](workers.md)       |
+| `numSliceWorkers`        | `min(hardwareConcurrency, 4)` | size of the worker pool                                                         |
+| `recordClass`            | `CramRecord`                  | a `CramRecord` subclass to return from queries; see [recordClass](#recordclass) |
 
-`validateChecksums` checks every block's and container's CRC32, and separates
-"damaged file" from "wrong records": with it on, it catches a corrupted byte
-anywhere in a CRAM 240 times out of 240, where with it off two of those flips
-decoded to records that simply differed, with nothing to say so.
+Pass one of `cramUrl`, `cramPath` and `cramFilehandle`.
 
-`checkSequenceMD5` is the other half of that, on the reference rather than the
-file: it verifies each slice's recorded reference MD5 against the sequence
-decoding it. Off by default because the check needs the slice's whole reference
-span, which can be many megabases the query would not otherwise fetch.
+### Methods
 
-### The cache options
+| Method                                           | Returns                 | Description                                                     |
+| ------------------------------------------------ | ----------------------- | --------------------------------------------------------------- |
+| `getRecordsForRange(refName, start, end, opts?)` | `Promise<CramRecord[]>` | records overlapping the range; `[]` for a name the file lacks   |
+| `hasDataForReferenceSequence(refName, opts?)`    | `Promise<boolean>`      | whether the index has any slice for the reference               |
+| `clearFeatureCache()`                            |                         | drop every decoded slice now, for a consumer done with the file |
+| `cram`                                           | `CramFile`              | the underlying [`CramFile`](#cramfile)                          |
 
-`maxCacheBytes` bounds what the decoded-slice cache **retains**, in bytes. A
-slice weighs what its columns hold — `DecodedSlice.byteLength`: the typed arrays
-exactly, the strings by estimate — which comes to within 1–8% of the measured
-heap on the fixtures here
-([ADR 0013](adr/0013-weigh-the-slice-cache-in-bytes.md)). It is not a bound on
-peak memory: reads in flight, the last settled entry, and every slice a query
-holds until it returns all sit outside it, and the cache holds slices whole —
-[memory.md](memory.md#the-slice-cache) has how far a query in flight may exceed
-it.
+`refName` is the name in the file's header, such as `chr1`. Both methods also
+accept the numeric reference id; see [Reference ids](#reference-ids).
 
-Size it to hold several queries. Below one query's working set it does not cache
-less, it caches _nothing_: every slice falls out before the next pan can reuse
-it, so the hit rate is zero and the memory stays put anyway.
+`getRecordsForRange` options:
 
-`cacheIdleTimeoutMs` is the only thing that lowers the cache while nothing is
-happening — the cache checks `maxCacheBytes` when a decode settles, so an idle
-one stays wherever it got to. The clock runs from the last _read_ of a slice, so
-panning back and forth over one region never expires it. `0` disables it.
-
-`cacheBudget` makes `cacheSize` apply to several `CramFile`s together instead of
-to each one, for a consumer opening a file per track. Every member of a budget
-has to weigh in the same unit, and this cache weighs records, so share one only
-with other `CramFile`s.
-
-### The worker options
-
-`useSliceWorkerPool` decodes slices on a shared pool where the host has workers,
-and in-process where it does not. Leave it on inside your own worker too — a
-worker is still one thread, and nested in one the pool measures 2.1-3.6x from
-four slices up ([workers.md](workers.md)).
-
-`numSliceWorkers` sizes that pool. One pool serves a whole JS context, so the
-first file to need one fixes the size for the rest, and a host running several
-worker contexts gets a pool in each.
-
-### `recordClass`
-
-A subclass of `CramRecord` to hand out from every query in place of the base
-class. A consumer that keeps its own object per read — a feature — can make that
-object the record itself rather than wrap one, which `@gmod/bam` offers under
-the same name:
-
-```js
-class MyFeature extends CramRecord {
-  get name() {
-    return this.readName
-  }
-}
-new IndexedCramFile({ ..., recordClass: MyFeature })
-```
-
-It is constructed as `new MyFeature(slice, index)`, the same way the base class
-is; anything else it needs it reads off itself.
+| Option          | Default  | Description                                                              |
+| --------------- | -------- | ------------------------------------------------------------------------ |
+| `signal`        |          | an `AbortSignal`; see [Cancelling a query](#cancelling-a-query)          |
+| `onProgress`    |          | `(bytesDownloaded, totalBytes) => void`, called as each slice is fetched |
+| `decodeTags`    | `true`   | `false` skips decoding auxiliary tags, and `tags` is then empty          |
+| `viewAsPairs`   | `false`  | also fetch the mate of each read whose mate lies outside the range       |
+| `pairAcrossChr` | `false`  | with `viewAsPairs`, also fetch mates on other references                 |
+| `maxInsertSize` | `200000` | with `viewAsPairs`, skip mates farther away than this                    |
 
 ### Reference sequence
 
-CRAM stores each read as its differences from the reference, so decoding the
-read's bases takes the reference sequence, which `fetchReferenceSequence`
-supplies. It receives the numeric id, the 0-based half-open `start` and `end`,
-the reference name, and `{ signal }`, and returns `end - start` bases. A longer
-string throws, and the library pads a shorter one with `N`.
+CRAM stores each read as its differences from the reference, so decoding a
+read's bases takes the reference sequence. `fetchReferenceSequence` receives
+`(seqId, start, end, refName, { signal })` and returns the `end - start` bases
+of that range. A longer string throws, and the library pads a shorter one with
+`N`.
 
-Without the callback, records still have positions, CIGAR strings, and the type
-and length of each difference, but not the bases. A file written with an
-embedded reference (`samtools view --output-fmt-option embed_ref=1`) decodes
-fully with no callback, and where a file has both, the library uses the embedded
-bases.
+Without the callback, records have positions, CIGAR strings, and the type and
+length of each difference, but no bases, and a substitution reports its base as
+`N`. A file written with `embed_ref=1` decodes fully without the callback. A
+file written with `no_ref` stores bases verbatim, so without a reference its
+reads report no substitutions at all.
 
-### Reference ids and unplaced reads
+### Reference ids
 
 CRAM numbers each reference by the position of its `@SQ` line in the header, and
-`record.sequenceId` holds that number. Every method that takes a reference name
-also accepts the number, and `cram.getReferenceName(record.sequenceId)` turns it
-back into a name.
+`record.sequenceId` holds that number.
+`cram.getReferenceName(record.sequenceId)` returns the name.
 
-Unplaced reads have no position at all and sort to the end of the file. Both
-their `sequenceId` and their `start` are `-1`, and they have no name, so you
-query them by number:
+Unplaced reads have a `sequenceId` and `start` of `-1` and no name, so you query
+them by number, starting at `-1`:
 
 ```js
-await indexedFile.getRecordsForRange(-1, -1, end) // a start of 0 finds nothing
+await indexedFile.getRecordsForRange(-1, -1, end)
 ```
 
-Unmapped reads that a writer _placed_ at their mate's position are a different
-case. They carry the mate's `sequenceId` and `start`, so an ordinary range query
-finds them.
+An unmapped read placed at its mate's position has the mate's `sequenceId` and
+`start`, so an ordinary range query returns it.
 
-## Cancelling a query
-
-Pass an `AbortSignal` as `opts.signal` and the query rejects, stops decoding,
-and — on a filehandle that honors the signal, which `RemoteFile` does and
-`LocalFile` does not — abandons the range request it has in flight:
+### Cancelling a query
 
 ```js
 const controller = new AbortController()
@@ -149,245 +104,195 @@ const records = indexedFile.getRecordsForRange('chr1', 1000, 2000, {
 controller.abort() // `records` rejects with an AbortError
 ```
 
-This is worth more than "index reads are short" suggests. A byte-range-caching
-filehandle such as
-[@gmod/range-cache-filehandle](https://github.com/GMOD/range-cache-filehandle)
-coalesces adjacent reads into one request, so a small viewport over deep data
-becomes a single multi-megabyte fetch — exactly the thing you want to drop when
-the user pans away.
+On abort, the query stops decoding and rejects. A filehandle that supports
+signals, such as `RemoteFile`, also cancels its request in flight.
 
-**Aborting your query never fails anyone else's.** Concurrent queries share two
-things in a `CramFile`: the parsed `.crai`, and each decoded slice in the record
-cache. A slice's decode carries a reference count and aborts only once _every_
-query waiting on it has aborted, so cancelling yours costs a concurrent query
-nothing, not even a re-read. The file definition and SAM header load once for
-the life of the object under the same rule, so `getSamHeader({ signal })`
-rejects on abort without failing anyone else waiting on the header. A call with
-an already-aborted signal rejects even when the header is cached.
+Concurrent queries share slice decodes and the header read, and the library
+cancels a shared read only when every query waiting on it has aborted, so
+aborting one query leaves the others running. A query without a signal cannot
+abort, so a decode it shares runs to completion for everyone, which is why every
+query should pass the signal. The library also passes it to
+`fetchReferenceSequence`, and
+[ADR 0003](adr/0003-abortsignal-on-the-read-path.md) explains the design.
 
-A query with **no** signal never stops, so it pins any slice it is waiting on.
-One caller omitting the signal makes that slice's decode uncancellable for
-everyone sharing it — so thread the signal through consistently rather than
-through the queries you happen to care about.
+### Cache
 
-A `fetchReferenceSequence` backed by something remote receives the signal as a
-fifth argument (`opts.signal`) so it can cancel too. Ignoring it is fine; a
-four-argument callback keeps working unchanged.
+The library keeps decoded slices so that a later query over the same region
+skips the decode. `maxCacheBytes` bounds the bytes the cache keeps, not peak
+memory: slices a query is still using sit outside it. Size it to hold several
+queries, because a cache smaller than one query's slices evicts each slice
+before the next query can reuse it. [memory.md](memory.md#the-slice-cache) has
+the details.
 
-Why it works this way: [ADR 0003](adr/0003-abortsignal-on-the-read-path.md).
+`cacheIdleTimeoutMs` empties the cache of slices that no query has read
+recently. The library checks `maxCacheBytes` only when a decode finishes, so
+while the file sits idle, only the timeout frees memory.
+
+### `recordClass`
+
+Queries return instances of this `CramRecord` subclass instead of `CramRecord`,
+so a consumer can add methods to the record instead of wrapping it. The library
+constructs it as `new MyFeature(slice, index)`. `@gmod/bam` takes the same
+option.
+
+```js
+class MyFeature extends CramRecord {
+  get name() {
+    return this.readName
+  }
+}
+new IndexedCramFile({ ...options, recordClass: MyFeature })
+```
 
 ## `CramFile`
 
-Usually reached as `indexedFile.cram`, but you can also build one directly with
-`new CramFile({ path, url, filehandle })`. No index needed, which is handy if
-all you want is the header, or if you're walking containers yourself.
+`indexedFile.cram`, or `new CramFile({ url, path, filehandle })` to read a
+header without an index. Each method takes an optional `{ signal }`.
 
-Each of these takes an optional `{ signal }` last, as in
-[Cancelling a query](#cancelling-a-query).
-
-- `getReferenceInfo()` → `Promise<{ name, length, md5? }[]>` — the `@SQ` lines,
-  in header order
-- `getReferenceId(name)` → `Promise<number>` — throws if the header has no such
-  `SN`
-- `getReferenceName(refId)` → `Promise<string | undefined>`
-- `getSamHeader()` → the parsed header as `{ tag, data: { tag, value }[] }[]`
-- `getHeaderText()` → the raw header text
+| Method                 | Returns                                      | Description                                 |
+| ---------------------- | -------------------------------------------- | ------------------------------------------- |
+| `getReferenceInfo()`   | `Promise<{ name, length, md5? }[]>`          | the `@SQ` lines, in header order            |
+| `getReferenceName(id)` | `Promise<string \| undefined>`               | the name for a numeric reference id         |
+| `getReferenceId(name)` | `Promise<number>`                            | the numeric id for a name; throws if absent |
+| `getSamHeader()`       | `Promise<{ tag, data: { tag, value }[] }[]>` | the parsed SAM header                       |
+| `getHeaderText()`      | `Promise<string>`                            | the SAM header text                         |
 
 ## `CraiIndex`
 
-Takes `{ path, url, filehandle }` — pass exactly one of the three.
+`new CraiIndex({ url })`, or `{ path }` or `{ filehandle }`.
 
 ## `CramRecord`
 
-A record is a **view**: the columns of its decoded slice (`record.slice`, a
-`DecodedSlice`) and an index into them (`record.index`). Every property below
-reads the column at that index, and the ones that can be assigned write through
-to it. Views are handed out fresh by each query and are meant to be short-lived;
-the slice's columns are what the cache holds and what a worker transfers. Build
-one by hand with `new CramRecord({ ...fields })`, which wraps the fields in a
-one-record slice.
-
 ### Properties
 
-- `readName` — read name
-- `sequenceId` — numeric reference ID
-- `start` — 0-based start position; `-1` for an unplaced read
-- `lengthOnRef` — reference bases the alignment covers, `undefined` for an
-  unmapped read
-- `nextSequenceId`, `nextStart` — where the next segment of the template is (SAM
-  `RNEXT`/`PNEXT`). Test `hasNextPosition()` first
-- `qualityScores` — `Uint8Array` of per-base quality scores, `null` for a `*`
-  record, `undefined` when the file did not preserve them. Built on every access
-  as a view over `qualityColumn` below, so pull it into a local rather than
-  indexing it in a loop.
-- `qualityScoreAt(pos)` — the score at a 0-based read position, or `-1` when the
-  file has none. Reads straight out of the column, allocating nothing.
-- `qualityColumn`, `qualityStart` — every quality score in the record's slice
-  laid end to end, and this record's offset into it. Hoist these out of a
-  per-base loop and index `qualityColumn[qualityStart + i]`.
-- `getTag(name)` — one auxiliary tag's value, read straight out of the record's
-  slots in the slice's tag column. **Prefer this whenever you want one tag**: it
-  is 3.8–7.8x faster than going through `tags`, which has to build an object
-  holding every tag on the read to answer for one.
-- `tags` — every auxiliary tag as an object. Built from the column on first
-  access and then cached, so repeat reads are free but the first one is not.
-- `tagColumn`, `tagStart`, `tagCount` — the columnar storage the tags decode
-  into, shared across every record in a slice, in the same shape as
-  `readFeatureArena` below.
-- `readFeatures` — the raw read features, as an array. Prefer `getMismatches()`;
-  see [read-features.md](read-features.md) if you really do need this level. The
-  array is rebuilt on every access, so pull it into a local rather than reading
-  it in a loop condition.
-- `readFeatureArena`, `readFeatureStart`, `readFeatureCount` — the columnar
-  storage the features decode into, shared across every record in a slice.
-  Reading these columns instead of `readFeatures` makes a bulk consumer 3.7x
-  faster on a long-read slice, at a fraction of the memory.
+| Property                      | Type                              | Description                                                                         |
+| ----------------------------- | --------------------------------- | ----------------------------------------------------------------------------------- |
+| `readName`                    | `string`                          | read name                                                                           |
+| `sequenceId`                  | `number`                          | numeric reference id; `-1` for an unplaced read                                     |
+| `start`                       | `number`                          | 0-based start; `-1` for an unplaced read                                            |
+| `end`                         | `number`                          | 0-based exclusive end, at least `start + 1`                                         |
+| `lengthOnRef`                 | `number \| undefined`             | reference bases the alignment covers; `undefined` when unmapped                     |
+| `mappingQuality`              | `number \| undefined`             | mapping quality                                                                     |
+| `flags`                       | `number`                          | SAM flags; see [Flag methods](#flag-methods)                                        |
+| `readLength`                  | `number`                          | read length in bases                                                                |
+| `readGroupId`                 | `number`                          | index of the read's `@RG` line; `-1` for none                                       |
+| `uniqueId`                    | `number`                          | an id unique to the record within the file                                          |
+| `nextSequenceId`, `nextStart` | `number`                          | position of the next segment (SAM `RNEXT`, `PNEXT`); test `hasNextPosition()` first |
+| `templateLength`              | `number \| undefined`             | template length (SAM `TLEN`), computed when the mate is in the same slice           |
+| `templateSize`                | `number \| undefined`             | template length as the file stores it, when the mate is elsewhere                   |
+| `qualityScores`               | `Uint8Array \| null \| undefined` | base qualities; `null` for `*`, `undefined` when the file has none                  |
+| `tags`                        | `object`                          | every auxiliary tag; `getTag(name)` is faster for one                               |
+| `readFeatures`                | `ReadFeature[] \| undefined`      | the raw CRAM encoding; see [read-features.md](read-features.md)                     |
 
-Read features and quality scores both sit in one shared typed array per slice
-rather than one per record, because a per-record `Uint8Array` costs ~104 bytes
-in V8 — more than the quality scores of a short read. [memory.md](memory.md)
-covers what a decoded slice retains, how to read these columns without
-allocating, and what bounds the slice cache.
-
-### Flag methods
-
-The usual SAM flags (spec §1.4), all returning `boolean`.
-
-- `isPaired()` — the read is paired, whether or not both segments mapped
-- `isProperlyPaired()` — paired, and both segments mapped
-- `isSegmentUnmapped()` — this read did not map
-- `isMateUnmapped()` — the mate did not map
-- `isReverseComplemented()` — mapped to the reverse strand
-- `isMateReverseComplemented()` — the mate mapped to the reverse strand
-- `isRead1()` / `isRead2()` — which segment of the pair this is
-- `isSecondary()` — a secondary alignment
-- `isSupplementary()` — a supplementary (chimeric) alignment
-- `isFailedQc()` — flagged as failing quality control
-- `isDuplicate()` — flagged as a PCR or optical duplicate
-- `hasNextPosition()` — the file located the next segment of the template. Not
-  the same question as `isPaired()`
+`qualityScores` and `readFeatures` build a new array on every access, so read
+them into a local variable instead of accessing them in a loop.
 
 ### Methods
 
-- `getReadBases()` → `string | null | undefined` — the read sequence, `null` for
-  a record with no bases. Needs `fetchReferenceSequence`; `getRecordsForRange`
-  applies the reference for you. Memoised on the slice, so a repeat query over
-  cached data pays once.
-- `getCigarString()` → `string` — the read's alignment (e.g. `"50M2I48M"`),
-  reconstructed from the read features. Substitutions and mismatches come out as
-  `M`, per the plain CIGAR convention. Unmapped reads, and mapped reads with no
-  operations, return `"*"`. Does not require `fetchReferenceSequence`.
-- `forEachCigarOp(callback)` — the same alignment reported to
-  `callback(op, length)` one operation at a time, without building a CIGAR of
-  any kind. `op` is one of the exported `CIGAR_MATCH`, `CIGAR_INS`, `CIGAR_DEL`,
-  `CIGAR_REF_SKIP`, `CIGAR_SOFT_CLIP`, `CIGAR_HARD_CLIP`, `CIGAR_PAD` — the
-  numbering the SAM spec gives them, so `(length << 4) | op` is BAM's packed
-  form. The walk merges adjacent runs of the same op and drops zero-length ones.
-  Reach for this whenever the answer is a measurement rather than text — a
-  reference span, an op histogram, or the packed array BAM stores natively:
+| Method                             | Returns                       | Description                                                     |
+| ---------------------------------- | ----------------------------- | --------------------------------------------------------------- |
+| `getReadBases()`                   | `string \| null \| undefined` | the read sequence; `null` for a record with no bases            |
+| `getCigarString()`                 | `string`                      | CIGAR, such as `50M2I48M`; `*` for an unmapped read             |
+| `getMismatches(opts?)`             | `Mismatch[]`                  | each difference from the reference; see [`Mismatch`](#mismatch) |
+| `getTag(name)`                     | tag value or `undefined`      | one auxiliary tag                                               |
+| `qualityScoreAt(pos)`              | `number`                      | quality at a 0-based read position; `-1` when the file has none |
+| `getLeadingClipLength()`           | `number`                      | bases clipped by the first CIGAR operation, or 0                |
+| `getTrailingClipLength()`          | `number`                      | bases clipped by the last CIGAR operation, or 0                 |
+| `getPairOrientation()`             | `string \| undefined`         | `F1R2`-style orientation; `undefined` for an unpaired read      |
+| `forEachCigarOp(callback)`         |                               | the CIGAR, one operation at a time                              |
+| `forEachMismatch(callback, opts?)` |                               | the differences, one at a time                                  |
+| `toJSON()`                         | object                        | the record as a plain object                                    |
 
-  ```js
-  const packed = []
-  record.forEachCigarOp((op, length) => {
-    packed.push((length << 4) | op)
-  })
-  ```
+`getReadBases()` and the base fields of the mismatch methods need
+`fetchReferenceSequence`. The CIGAR methods do not.
 
-  CRAM stores no CIGAR. Unlike BAM, where the packed array sits on disk and a
-  reader can view it without copying, here it always comes back out of the read
-  features — so this library hands out the walk rather than an array type it
-  would have picked for you. See
-  [ADR 0006](adr/0006-cigar-as-a-callback-walk.md).
+`getMismatches` and `forEachMismatch` take `{ start, end, origin }`, all
+optional. `start` and `end` are a reference range that limits the result to the
+differences touching it. Positions are reported relative to `origin`, which
+defaults to 0, so `origin: record.start` gives positions relative to the read;
+`start` and `end` stay reference coordinates either way.
 
-- `getLeadingClipLength()` → `number` and `getTrailingClipLength()` → `number` —
-  how many bases the **first** and **last** CIGAR operations clip, or 0 when
-  they are not clips. Both read only the features at that end of the record, so
-  they are O(1) where walking the CIGAR to look at one of its operations is
-  O(operations), and a long read has thousands. Each reports that one operation
-  and no more, so a `5H4S…10M…4S5H` read clips 5 at each end, not 9.
+### Without allocating
 
-  `getLeadingClipLength()` and `getTrailingClipLength()` together answer "how
-  much of this read is clipped, as sequenced": the leading clip for a
-  forward-strand read and the trailing one for a reverse-strand read, since CRAM
-  stores a reverse-strand read reverse-complemented.
+`forEachCigarOp` and `forEachMismatch` call your function once per operation or
+difference instead of building an array or string, which matters when a consumer
+walks many records.
 
-- `getMismatches(opts?)` → `Mismatch[]` — every difference from the reference.
-- `forEachMismatch(callback, opts?)` — the same differences, reported to
-  `callback(code, refPos, length, bases, qual, refBaseCode, clipLength)` without
-  allocating per difference.
+```js
+record.forEachCigarOp((op, length) => {
+  // op is CIGAR_MATCH, CIGAR_INS, CIGAR_DEL, ... (SAM's numbering),
+  // so (length << 4) | op is BAM's packed form
+})
 
-  `opts` is `{ start, end, origin }`, all optional. `start`/`end` are a 0-based
-  half-open **reference** range to restrict to; a spanning deletion or skip
-  counts as inside it if any of its bases are. `origin` sets what the reported
-  positions are relative to — `origin: record.start` gives read-relative
-  positions, and the default of 0 gives reference ones. The window stays
-  absolute either way, so a read-relative consumer can still clip to a genomic
-  viewport:
+record.forEachMismatch(
+  (code, refPos, length, bases, qual, refBaseCode, clipLength) => {},
+  { start, end },
+)
+```
 
-  ```js
-  record.forEachMismatch(cb, { start, end, origin: record.start })
-  ```
+The storage behind tags, qualities and read features is one array per slice, and
+these properties read it directly:
 
-  `origin` is there so a consumer with its own coordinate convention can pass
-  its own callback straight in. Converting positions afterwards needs a second
-  callback in between, and that indirect call measured +17% of the walk — see
-  [ADR 0008](adr/0008-emit-into-the-consumers-callback.md).
+| Property                                                   | Contents                                             |
+| ---------------------------------------------------------- | ---------------------------------------------------- |
+| `qualityColumn`, `qualityStart`                            | every quality in the slice, and this record's offset |
+| `tagColumn`, `tagStart`, `tagCount`                        | every tag in the slice, and this record's slots      |
+| `readFeatureArena`, `readFeatureStart`, `readFeatureCount` | every read feature in the slice, and this record's   |
 
-Both mismatch methods need `fetchReferenceSequence` configured before they can
-tell you the actual bases involved in a substitution. Without it you still get
-the substitution, at the right position, but its `bases` come back as `'N'` and
-its `refBaseCode` as `0`.
+[memory.md](memory.md) explains the layout, and the ADRs
+[0006](adr/0006-cigar-as-a-callback-walk.md) and
+[0008](adr/0008-emit-into-the-consumers-callback.md) record the measurements
+behind the callbacks.
 
-One kind of file is worse off than that. A CRAM written with `no_ref` stores its
-bases verbatim instead of working out which of them are substitutions, so
-finding them means comparing against a reference — without one, those reads come
-back with no substitutions at all rather than with vague ones. See
-[optimizations.md](optimizations.md#no_ref-files-make-the-mismatch-walk-much-slower)
-for what that comparison costs when you do have a reference.
+### Flag methods
 
-- `getPairOrientation()` → `'F1R2'`-style string, or `undefined` for an unpaired
-  read. Both halves of a pair always agree on it, including when the file does
-  not locate the next segment.
-- `toJSON()` — a plain object of the record, for dumping or serializing.
+Each returns a `boolean`.
 
-### CRAM-specific flags
-
-Separate from the SAM flags above; these come from CRAM's own compression flags
-(CRAM v3 §8.4) and matter mainly when you are reasoning about how a writer built
-the file.
-
-- `isDetached()` — the record stores its own mate information rather than
-  pointing downstream
-- `hasMateDownStream()` — its mate is later in the same slice
-- `isPreservingQualityScores()` — the file kept per-base qualities for this read
-- `isUnknownBases()` — the file stored no bases for this read (`getReadBases()`
-  returns `null`)
+| Method                        | True when                                            |
+| ----------------------------- | ---------------------------------------------------- |
+| `isPaired()`                  | the read is paired                                   |
+| `isProperlyPaired()`          | both segments mapped as a proper pair                |
+| `isSegmentUnmapped()`         | this read did not map                                |
+| `isMateUnmapped()`            | the mate did not map                                 |
+| `isReverseComplemented()`     | the read mapped to the reverse strand                |
+| `isMateReverseComplemented()` | the mate mapped to the reverse strand                |
+| `isRead1()`, `isRead2()`      | the read is the first or second segment              |
+| `isSecondary()`               | the alignment is secondary                           |
+| `isSupplementary()`           | the alignment is supplementary                       |
+| `isFailedQc()`                | the read failed quality control                      |
+| `isDuplicate()`               | the read is a PCR or optical duplicate               |
+| `hasNextPosition()`           | the file records the next segment's position         |
+| `isDetached()`                | CRAM: the record stores its mate information itself  |
+| `hasMateDownStream()`         | CRAM: the mate is later in the same slice            |
+| `isPreservingQualityScores()` | CRAM: the file kept per-base qualities for this read |
+| `isUnknownBases()`            | CRAM: the file stored no bases for this read         |
 
 ## `Mismatch`
 
-What `getMismatches()` returns, and the argument order `forEachMismatch` passes:
+`getMismatches()` returns these, and `forEachMismatch` passes the same fields as
+arguments, in this order.
 
-| Field         | Meaning                                                                                                                  |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `code`        | char code of `X` = substitution, `I` = insertion, `D` = deletion, `N` = reference skip, `S` = soft clip, `H` = hard clip |
-| `refPos`      | 0-based reference position                                                                                               |
-| `length`      | reference bases covered: 1 for a substitution, the deleted or skipped length for `D`/`N`, 0 for insertions and clips     |
-| `bases`       | the substituted base, or the inserted bases; empty for `D`/`N`/`S`/`H`                                                   |
-| `qual`        | quality of a substituted base, `-1` when the file does not store it                                                      |
-| `refBaseCode` | char code of the reference base a substitution replaces, `0` when unknown                                                |
-| `clipLength`  | read bases consumed: the inserted or clipped length, else 0                                                              |
+| Field         | Description                                                                           |
+| ------------- | ------------------------------------------------------------------------------------- |
+| `code`        | char code of `X` substitution, `I` insertion, `D` deletion, `N` skip, `S` or `H` clip |
+| `refPos`      | 0-based reference position                                                            |
+| `length`      | reference bases covered: 1 for `X`, the length for `D` and `N`, else 0                |
+| `bases`       | the substituted or inserted bases                                                     |
+| `qual`        | quality of a substituted base, or `-1`                                                |
+| `refBaseCode` | char code of the reference base a substitution replaces, or `0` when unknown          |
+| `clipLength`  | read bases consumed by an insertion or clip, else 0                                   |
 
-Compare `code` against the exported `RF_SUBST`, `RF_INSERTION`, … constants.
-Insertions arrive as `I` whether the file encoded them as `I` or as a run of
-`i`.
+The package exports `RF_SUBST`, `RF_INSERTION` and the other `RF_*` constants to
+compare against `code`.
 
-## Read features
+## Errors
 
-The raw CRAM encoding behind `record.readFeatures`, documented in
-[read-features.md](read-features.md). You don't need it for mismatches.
+Every error the library raises extends `CramError`. A network or filehandle
+failure arrives as whatever the filehandle threw.
 
-## Error classes
-
-- `CramUnimplementedError` — unimplemented spec feature
-- `CramMalformedError` — malformed file data
-- `CramBufferOverrunError` — read past end of data
+| Class                    | Raised for                                      |
+| ------------------------ | ----------------------------------------------- |
+| `CramMalformedError`     | malformed file data                             |
+| `CramBufferOverrunError` | a read past the end of a block, from truncation |
+| `CramUnimplementedError` | a part of the spec this library does not handle |
+| `CramArgumentError`      | an invalid argument                             |
