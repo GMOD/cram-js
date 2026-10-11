@@ -1,3 +1,19 @@
+## [14.3.1](https://github.com/GMOD/cram-js/compare/v14.3.0...v14.3.1) (2026-10-11)
+
+### Documentation
+
+- Lead the README with querying by reference name ([1cf1dd5](https://github.com/GMOD/cram-js/commit/1cf1dd5ed3563cf443502eb8433191c8dace7ac0))
+- Trim the README to the basics and move the rest to docs/ ([5cdb616](https://github.com/GMOD/cram-js/commit/5cdb616190d8713f95295b2f86b9d0389524a59d))
+- Put reading over HTTP back in the README ([b8aa636](https://github.com/GMOD/cram-js/commit/b8aa636479cb6bb6236f4d8e8999dc1b7b350464))
+- Lead the README quick start with remote files ([98a2f92](https://github.com/GMOD/cram-js/commit/98a2f92c2a4080fcd3071e87103882af4f5d0a5c))
+- Restructure api.md around tables ([72ab900](https://github.com/GMOD/cram-js/commit/72ab9002eb8b62a6ce871bfe059065c81ca3f955))
+- Name the actor in the README and api.md prose ([6ce86c1](https://github.com/GMOD/cram-js/commit/6ce86c124019e446732c246da67f63e6b0157c2f))
+
+### Tests
+
+- Fail when docs/api.md misses a public member ([68a6548](https://github.com/GMOD/cram-js/commit/68a654816a3eca10daff088388841f71cc985a9e))
+- Also fail when docs/api.md misses an export ([822af88](https://github.com/GMOD/cram-js/commit/822af884af1163962cb4bd44d2926a977aeed3f2))
+
 ## [14.3.0](https://github.com/GMOD/cram-js/compare/v14.2.1...v14.3.0) (2026-10-11)
 
 ### Bug Fixes
