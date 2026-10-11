@@ -1,3 +1,21 @@
+## [14.3.0](https://github.com/GMOD/cram-js/compare/v14.2.1...v14.3.0) (2026-10-11)
+
+### Bug Fixes
+
+- Return no records for a reference name the header lacks ([30eccbf](https://github.com/GMOD/cram-js/commit/30eccbf135feb1f7521be6deb2cf9f56e9f4fe02))
+
+### Features
+
+- Query getRecordsForRange and hasDataForReferenceSequence by name ([5a014bc](https://github.com/GMOD/cram-js/commit/5a014bc646e9324107c1e503d2589e0b6eb0ce9c))
+
+### Performance Improvements
+
+- Resolve reference names through a map ([d789814](https://github.com/GMOD/cram-js/commit/d789814d8eb1f25968cc57c2b0023d65a94cf8cf))
+
+### Tests
+
+- Query by reference name instead of building name-to-id tables ([c48bb91](https://github.com/GMOD/cram-js/commit/c48bb91fc1dae7bc83dff8f720f356888f2529d3))
+
 ## [14.2.1](https://github.com/GMOD/cram-js/compare/v14.2.0...v14.2.1) (2026-10-09)
 
 ### Chores
