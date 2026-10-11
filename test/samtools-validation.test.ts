@@ -101,12 +101,11 @@ describe('CRAM record count validation against samtools', () => {
           }),
         })
 
-        const samHeader = await cram.cram.getSamHeader()
-        const sqLines = samHeader.filter(l => l.tag === 'SQ')
+        const refs = await cram.cram.getReferenceInfo()
 
         let allFeatures: Awaited<ReturnType<typeof cram.getRecordsForRange>> =
           []
-        for (let refId = 0; refId < sqLines.length; refId++) {
+        for (let refId = 0; refId < refs.length; refId++) {
           const features = await cram.getRecordsForRange(
             refId,
             -1,
@@ -141,7 +140,7 @@ describe('CRAM record count validation against samtools', () => {
         })
 
         const features = await cram.getRecordsForRange(
-          0,
+          refNames[0]!,
           -1,
           Number.POSITIVE_INFINITY,
         )
@@ -164,7 +163,7 @@ describe('CRAM record count validation against samtools', () => {
         })
 
         const features = await cram.getRecordsForRange(
-          1,
+          refNames[1]!,
           -1,
           Number.POSITIVE_INFINITY,
         )
@@ -392,20 +391,7 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
           filehandle: testDataFile('igv-js-bug/archived.cram.crai'),
         }),
       })
-      const samHeader = await cram.cram.getSamHeader()
-
-      const nameToId: Record<string, number> = {}
-      const sqLines = samHeader.filter(l => l.tag === 'SQ')
-      sqLines.forEach((sqLine, refId) => {
-        sqLine.data.forEach(item => {
-          if (item.tag === 'SN') {
-            const refName = item.value
-            nameToId[refName] = refId
-          }
-        })
-      })
-
-      const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+      const feats = await cram.getRecordsForRange('chr9', 0, 200000000)
       const samtoolsCount = getSamtoolsCount('igv-js-bug/archived.cram', 'chr9')
 
       expect(feats.length).toEqual(samtoolsCount)
@@ -418,20 +404,7 @@ TCCCCAATAAAGCTAAAACTCACCTGAGTTGTAAAAAACT`.replaceAll('\n', '')
           filehandle: testDataFile('igv-js-bug/normal.cram.crai'),
         }),
       })
-      const samHeader = await cram.cram.getSamHeader()
-
-      const nameToId: Record<string, number> = {}
-      const sqLines = samHeader.filter(l => l.tag === 'SQ')
-      sqLines.forEach((sqLine, refId) => {
-        sqLine.data.forEach(item => {
-          if (item.tag === 'SN') {
-            const refName = item.value
-            nameToId[refName] = refId
-          }
-        })
-      })
-
-      const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+      const feats = await cram.getRecordsForRange('chr9', 0, 200000000)
       const samtoolsCount = getSamtoolsCount('igv-js-bug/normal.cram', 'chr9')
 
       expect(feats.length).toEqual(samtoolsCount)

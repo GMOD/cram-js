@@ -11,20 +11,7 @@ test('archive', async () => {
       filehandle: testDataFile('igv-js-bug/archived.cram.crai'),
     }),
   })
-  const samHeader = await cram.cram.getSamHeader()
-
-  const nameToId: Record<string, number> = {}
-  const sqLines = samHeader.filter(l => l.tag === 'SQ')
-  sqLines.forEach((sqLine, refId) => {
-    sqLine.data.forEach(item => {
-      if (item.tag === 'SN') {
-        // this is the ref name
-        const refName = item.value
-        nameToId[refName] = refId
-      }
-    })
-  })
-  const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+  const feats = await cram.getRecordsForRange('chr9', 0, 200000000)
   for (const f of feats) {
     expect(quals(f.qualityScores)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
@@ -40,20 +27,7 @@ test('normal', async () => {
       filehandle: testDataFile('igv-js-bug/normal.cram.crai'),
     }),
   })
-  const samHeader = await cram.cram.getSamHeader()
-
-  const nameToId: Record<string, number> = {}
-  const sqLines = samHeader.filter(l => l.tag === 'SQ')
-  sqLines.forEach((sqLine, refId) => {
-    sqLine.data.forEach(item => {
-      if (item.tag === 'SN') {
-        // this is the ref name
-        const refName = item.value
-        nameToId[refName] = refId
-      }
-    })
-  })
-  const feats = await cram.getRecordsForRange(nameToId.chr9!, 0, 200000000)
+  const feats = await cram.getRecordsForRange('chr9', 0, 200000000)
   for (const f of feats) {
     expect(quals(f.qualityScores)).toBe(
       '99IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII99',
