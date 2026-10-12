@@ -250,8 +250,8 @@ bundle, once more so the regenerated string module reaches `esm/` and `dist/`.
 
 It matters that the build produces it, because `preversion` runs `pnpm build`: a
 generated artifact nothing regenerates is one `npm version` can commit
-unreviewed part-way through a release. It rebuilds byte-for-byte, so
-`git status` stays clean — check it the same way as the wasm bundle.
+unreviewed part-way through a release. It rebuilds byte-for-byte, and
+`pnpm check:wasm` checks it along with the wasm bundle.
 
 `bgzf-filehandle` regenerates its equivalent artifact the same way: its root
 `build:wasm` delegates to the `bgzf-wasm-build` workspace package in `crate/`,

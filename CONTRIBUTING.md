@@ -13,16 +13,20 @@ inlined worker bundle. Both are checked into git, so if you are not touching
 `htscodecs-wasm/` or the worker you can skip to
 `pnpm build:esm && pnpm build:es5`. [docs/wasm.md](docs/wasm.md) and
 [docs/workers.md](docs/workers.md) cover how each is built; both rebuild
-byte-for-byte, so `git status` after a build should be clean. That holds only
-under the emscripten version CI pins (6.0.6 in `.github/workflows/publish.yml`);
+byte-for-byte, so `pnpm check:wasm` after a build should pass. CI and
+`preversion` both run it, and it fails on any changed or untracked file under
+`src/wasm/`.
+
+A byte-for-byte rebuild needs the emscripten version in
+`htscodecs-wasm/emscripten-version`, which both CI jobs install.
 `htscodecs-wasm/build.sh` refuses any other, since a different version emits
-equivalent but differently shaped JS and rewrites the tracked bundle, and CI
-fails if the tracked bundle differs from a fresh build. On macOS that version's
-closure compiler needs a Java runtime; without one, build inside the official
-image instead:
+equivalent but differently shaped JS and rewrites the tracked bundle. On macOS
+that version's closure compiler needs a Java runtime; without one, build inside
+the official image instead:
 
 ```sh
-docker run --rm -v "$PWD":/src -w /src/htscodecs-wasm emscripten/emsdk:6.0.6 ./build.sh
+docker run --rm -v "$PWD":/src -w /src/htscodecs-wasm \
+  emscripten/emsdk:"$(cat htscodecs-wasm/emscripten-version)" ./build.sh
 ```
 
 `dist/cram-bundle.js` is the standalone browser build the README points
@@ -62,9 +66,9 @@ is internal.
 pnpm version patch  # or minor/major
 ```
 
-That runs lint, format, types, tests, build and `test:pack`, regenerates
-CHANGELOG.md with git-cliff, then pushes the tag, which triggers the publish
-workflow. Releases go out over npm
+That runs lint, format, types, tests, build, `check:wasm` and `test:pack`,
+regenerates CHANGELOG.md with git-cliff, then pushes the tag, which triggers the
+publish workflow. Releases go out over npm
 [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no stored
 token). Once publish succeeds, the `release` job creates the GitHub release from
 that version's CHANGELOG.md section, extracted by `scripts/release-notes.sh` —
