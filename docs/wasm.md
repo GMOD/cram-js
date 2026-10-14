@@ -81,7 +81,7 @@ no setup step over the bytes.
 - **The heap only grows** (see [Memory](#memory)), so peak tracks the largest
   single block ever decompressed.
 - **The worker bundle contains a second copy** of the decoder and the wasm, so
-  `src/wasm/cram-worker-source.js` is 395 KB (96 KB gzipped) in the published
+  `src/wasm/cram-worker-source.js` is 400 KB (96 KB gzipped) in the published
   package; see [workers.md](workers.md#building-the-bundle). A bundler
   code-splits those bytes, because `sliceWorkerPool.ts` imports the bundle
   dynamically, from a function called only when a pool starts. The bundle

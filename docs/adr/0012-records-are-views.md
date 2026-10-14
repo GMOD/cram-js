@@ -116,7 +116,7 @@ Every round put SRR396637's cold decode and round trip lower after than before;
 the smaller files sat inside the noise. Re-measure on a quiet machine before
 quoting a ratio.
 
-The "transfer" column is `serializeSlice` + `structuredClone` +
+The "worker round trip" column is `serializeSlice` + `structuredClone` +
 `deserializeSlice` in one process — a structured clone rather than a transfer,
 so it overstates the typed-array cost on both sides equally and is only
 comparable across the two trees. The column shows the per-record rebuild

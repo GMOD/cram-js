@@ -353,11 +353,14 @@ well as handing it to the filehandle, because a filehandle may ignore it:
 `RemoteFile` aborts its `fetch`, and `LocalFile` ignores the signal.
 
 The read path is a stack of memoized promises, and a memo cannot tell whose
-cancellation it is seeing. The reads several queries share, the index parse and
-a decoded slice, are therefore reference-counted, so aborting one query never
-fails another ([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)). A query
-with **no** signal can never give up, so it keeps whatever it is waiting on
-running for everyone.
+cancellation it is seeing. The file definition, the SAM header and a decoded
+slice, which several queries share, are therefore reference-counted, so aborting
+one query never fails another
+([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)). The index parse, also
+shared, gets the same guarantee from a bounded retry: when the caller that
+started it aborts, a caller that joined it retries once. A query with **no**
+signal can never give up, so it keeps whatever it is waiting on running for
+everyone.
 
 ## What a consumer adds
 

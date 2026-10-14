@@ -99,8 +99,9 @@ other two. The slice-count threshold below was rejected for the same reason.
 **There is no slice-count threshold, and we measured for one and rejected it.**
 An early run put a 2-slice query at 0.72x, so we wrote a threshold to skip the
 pool below four slices; the 0.72x then failed to reproduce. A sweep of slice
-count on the same corpus, with a median of 9 rather than 3, gives a clean
-monotonic curve:
+count on the same corpus, with a median of 9 rather than 3, gives a curve that
+rises with slice count except at 4 slices on 1000x.shortread, where it dips from
+1.69x to 1.58x:
 
 | slices          | 1     | 2     | 3     | 4     |
 | --------------- | ----- | ----- | ----- | ----- |
@@ -232,7 +233,7 @@ Blob URL with no consumer wiring, in the same way the package inlines the wasm
 src/worker/sliceWorkerEntry.ts        the message loop, and nothing else
   -> tsc            esm/worker/sliceWorkerEntry.js
   -> webpack        build/worker/cram-worker-inlined.js  (webpack.worker.config.js)
-  -> inline-worker  src/wasm/cram-worker-source.js       (~405 KB, tracked)
+  -> inline-worker  src/wasm/cram-worker-source.js       (~400 KB, tracked)
 ```
 
 Webpack writes the intermediate bundle to the gitignored `build/`, **not** to
@@ -270,12 +271,12 @@ whose `build` script ends in `build:worker-bundle`, which runs webpack and then
 `inline-worker.sh` (checked 2026-08-12).
 
 The worker bundle contains the decoder _and_ the wasm, so inlining it costs a
-395 KB string module (96 KB gzipped). We accepted that size so that consumers
+400 KB string module (96 KB gzipped). We accepted that size so that consumers
 need no wiring.
 
 `sliceWorkerPool.ts` loads the bundle through a dynamic `import()` inside
 `getWorkerBlobUrl`, which runs only when a pool starts, so a bundler puts the
-395 KB in a separate chunk that not every consumer downloads. In an esbuild
+400 KB in a separate chunk that not every consumer downloads. In an esbuild
 bundle of `IndexedCramFile` + `CraiIndex`, the entry point is 268 KB with the
 split and 534 KB without it. A consumer who never enables the pool, or who runs
 under node where the pool cannot start, loads none of the chunk. (The npm
