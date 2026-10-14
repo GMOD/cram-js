@@ -68,8 +68,8 @@ alternative it was picked over:
   the pool's init handshake instead (`warmupWasm`), so the first slice a user
   waits on does not also compile the module.
 
-Inlining the wasm is a separate decision. Every consumer downloads a 128 KB
-bundle, and in exchange needs no second request, static asset or CSP
+Inlining the wasm is a separate decision, which makes every consumer download a
+128 KB bundle and in exchange spares it a second request, static asset or CSP
 configuration. A decoder is useless without its codecs, so we value a build with
 no setup step over the bytes.
 
@@ -150,8 +150,8 @@ decoded slices the cache keeps there, and bulk consumers can read the columnar
 ## Threading
 
 Decoding is single-threaded scalar code, with no wasm threads and no SIMD, so
-one block decode uses one core. The parallelism comes one level up instead.
-Slices are independent, and the pool in [workers.md](workers.md) decodes them
+one block decode uses one core. Slices are independent, though, so the pool in
+[workers.md](workers.md) adds the parallelism one level up by decoding them
 concurrently, one wasm instance per worker. The pool transfers slices rather
 than sharing them, so the library needs no `SharedArrayBuffer` and therefore no
 cross-origin isolation.

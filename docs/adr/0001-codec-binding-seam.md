@@ -19,13 +19,12 @@ in practice:
 - It was a **fourth copy** of the External, ByteArrayStop and ByteArrayLength
   reads, bounds checks included, written in the chain instead of in the codec
   classes that define those encodings.
-- A combination nobody had enumerated fell through to full dispatch with no
-  warning. That happened twice. `byteArrayLength` data series always fell
-  through, and `byteArrayLength` tags did whenever their length was not
-  external. Those are exactly the fixed-width tags, whose length is a zero-bit
-  huffman code that reads no bits at all. The tag case put `getBytesSubarray` at
-  6.1% of the SRR396637 profile: 109,580 calls for 54,695 records, two per
-  record, both from tags.
+- Two combinations nobody had enumerated fell through to full dispatch with no
+  warning: `byteArrayLength` data series always, and `byteArrayLength` tags
+  whenever their length was not external. Those are exactly the fixed-width
+  tags, whose length is a zero-bit huffman code that reads no bits at all. The
+  tag case put `getBytesSubarray` at 6.1% of the SRR396637 profile: 109,580
+  calls for 54,695 records, two per record, both from tags.
 
 The chain took the fast path only for the combinations someone had listed, and
 sent every other combination to full dispatch.
@@ -67,9 +66,9 @@ the codec, so there is nothing per-slice to hoist.
   that every caller has to be re-checked against. The two later additions,
   `bindStringReader` (ADR [0002](0002-batch-decoding-over-lazy-fields.md)) and
   `bindUintReader`, were each one codec method.
-- The cost is indirection. Reading a value is a call through a closure the
-  binder chose, so the call site does not show which code runs. The binders are
-  small and each is used from one place, so the indirection stays tolerable.
+- Reading a value is now an indirect call through a closure the binder chose, so
+  the call site does not show which code runs. The binders are small and each is
+  used from one place, which keeps the indirection tolerable.
 - A binder holding per-slice state in its closure **must be called once per
   slice**, not cached on the codec. The compression scheme is memoized per
   container and hands the _same_ codec instance to every slice in it, so state
@@ -84,7 +83,7 @@ SRR396637 (sd 4.5, faster in 9/14) and −1.1% on ONT (sd 1.6, faster in 5/14),
 within noise in both directions, as a refactor should be. The first 6 rounds had
 suggested 3–4% in its favor, and the 8 rounds after them erased it.
 
-The seam made later fast paths possible. During a decode of SRR396637, zero
-generic `decode()` calls reach External, ByteArrayLength or ByteArrayStop, and
+With the fast paths the seam made possible, zero generic `decode()` calls reach
+External, ByteArrayLength or ByteArrayStop during a decode of SRR396637, and
 every read goes through a bound closure. Under the `instanceof` chain, some of
 those reads still went through `decode()`.

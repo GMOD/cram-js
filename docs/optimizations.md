@@ -53,13 +53,13 @@ landmarks. It then parses the slice header out of that buffer. A slice used to
 take three reads: `readBlock` probed the header block's own header, read the
 block again, and then the data blocks were fetched separately. The container's
 compression header block is one read for the same reason, because the first
-landmark gives its exact length. The container header is one read too. Its
-landmark count is in the fixed-size first half, so the reader used to read it in
-two pieces; it now makes one speculative read with room for 32 landmarks, and
-re-reads only when a container has more (no fixture here has over five). A
-whole-reference query on `ce#1000` went from 546 reads, half under 80 bytes, to
-202 — one per slice and two per container. Over a byte-range cache those were
-already hits; locally they were syscalls and copies.
+landmark gives its exact length. The reader used to read the container header in
+two pieces, because its landmark count is in the fixed-size first half. It now
+makes one speculative read with room for 32 landmarks, and re-reads only when a
+container has more (no fixture here has over five). A whole-reference query on
+`ce#1000` went from 546 reads, half under 80 bytes, to 202 — one per slice and
+two per container. Over a byte-range cache those were already hits; locally they
+were syscalls and copies.
 
 ### The reference is fetched alongside the decode, not after it
 
@@ -178,12 +178,12 @@ that or much coarser:
   GPU would use, and the pool runs it on CPUs, which can also run the record
   decode.
 
-Amdahl's law limits the gain further. Block decompression is **24–35%** of a
-cold query, so even a decompressor that took no time would cap the whole query's
-speedup between ~1.3x and ~1.5x, the same ceiling the worker-pool item above
-runs into. The record decode it would leave behind is branchy pointer-chasing
-work that does not belong on a GPU at all. A host-to-device round trip per block
-would lower the ceiling further.
+Block decompression is **24–35%** of a cold query, which limits the gain
+further. By Amdahl's law, even a decompressor that took no time would cap the
+whole query's speedup between ~1.3x and ~1.5x, the same ceiling the worker-pool
+item above runs into. The record decode it would leave behind is branchy
+pointer-chasing work that does not belong on a GPU at all. A host-to-device
+round trip per block would lower the ceiling further.
 
 Unlike everything else on this page, the GPU decision comes from the structure
 rather than from a measurement, because the structure settles it before a
@@ -260,10 +260,10 @@ short-read files about twice as expensive as plain objects.
 [memory.md](memory.md#columns-not-objects) has the numbers, and
 [read-features.md](read-features.md) how to read them.
 
-Anything derivable gets no column at all. Payload offsets had one, at 4 bytes
-each, until we found they were the running prefix sum of lengths the arena
-already had, and that three quarters of them pointed at a feature with no
-payload bytes. One checkpoint every eighth slot replaced them, for −9.4%
+Payload offsets had a column, at 4 bytes each, until we found they were the
+running prefix sum of lengths the arena already had, and that three quarters of
+them pointed at a feature with no payload bytes. Since anything derivable gets
+no column at all, one checkpoint every eighth slot replaced them, for −9.4%
 retained heap on a long-read slice with the accessors unchanged
 ([ADR 0010](adr/0010-checkpoint-the-payload-offsets.md)).
 

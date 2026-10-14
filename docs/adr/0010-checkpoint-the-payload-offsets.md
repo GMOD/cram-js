@@ -18,10 +18,11 @@ anywhere:
 - **The column was 2.9x the size of the data it indexed**: 834 KB of offsets
   over 291 KB of `payloadBytes`.
 
-The column was also redundant. The decoder writes payloads in slot order, and
-the record already holds a slot's length (`num` for I/S/b/i/q, one byte for B,
-zero otherwise), so the offsets are a running prefix sum. We checked that over
-every slot of all three performance fixtures and found **0 deviations**.
+The column was also redundant, since its offsets are a running prefix sum of
+lengths the record already holds. The decoder writes payloads in slot order, and
+a slot's length is `num` for I/S/b/i/q, one byte for B and zero otherwise. We
+checked the prefix sum over every slot of all three performance fixtures and
+found **0 deviations**.
 
 The column therefore provided exactly one thing, O(1) random access, and
 [TODO.md](../../TODO.md) was wrong to call replacing it "free". The accessors
@@ -65,9 +66,9 @@ Three details keep the checkpoints correct:
   audit behind the old TODO item established that jbrowse destructures `codes`,
   `pos`, `refPos`, `num`, `refCodes`, `subCodes` and otherwise goes through the
   accessors. The removal is still a breaking change on paper.
-- Random access is no longer O(1). Seven steps is the worst case and the
-  accessors hide it, but a caller walking a whole record in order should track
-  the offset rather than call per feature, and the two internal walks show how.
+- Random access is no longer O(1), though seven steps is the worst case and the
+  accessors hide it. A caller walking a whole record in order should track the
+  offset rather than call per feature, and the two internal walks show how.
 - The transfer shrinks by the same column, since `sliceTransfer` sends
   `payloadChunks` in its place.
 - **The same argument now applies to `refPos`**, which is another 834 KB
@@ -96,7 +97,7 @@ source trees in one process". `benchmarks/reads.bench.ts` answers the timing
 question on a quiet machine instead. It covers the walks that run after a
 decode, which `benchmarks/cram.bench.ts` never reached.
 
-Two things hold without a timer. The decode does strictly less work than before
-(an offset write per payload became one indexing pass per slice), and both
+Two results need no timer: the decode does strictly less work than before (an
+offset write per payload became one indexing pass per slice), and both
 sequential walks do the same number of array reads per feature as they did with
 the full column.

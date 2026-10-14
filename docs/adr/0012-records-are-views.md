@@ -63,10 +63,10 @@ is the "unknown slice size" case that kept a slice off the pool.
   reference decoration and the filter.
 - Retained heap on short reads drops by the record objects (numbers below). Long
   reads change little: 37 records were never the cost there.
-- Records are per query. Two queries over one cached slice return views that are
-  equal but not identical, and a write through one is visible to the other.
-  Writing a cached record's field behaved the same way before; this ADR now
-  states it.
+- Each query gets its own record views, so two queries over one cached slice
+  return records that are equal but not identical. A write through one is
+  visible to the other. Writing a cached record's field behaved the same way
+  before, and this ADR now states it.
 - `CramRecord`'s public fields are getters. A consumer that assigned to a
   read-only one now throws in strict mode; a consumer that built records with
   `Object.create(CramRecord.prototype)` has to use the options constructor,

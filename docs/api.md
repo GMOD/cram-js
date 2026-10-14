@@ -208,7 +208,7 @@ them into a local variable instead of accessing them in a loop.
 | `toJSON()`                         | object                        | the record as a plain object                                    |
 
 `getReadBases()` and the base fields of the mismatch methods need
-`fetchReferenceSequence`. The CIGAR methods do not.
+`fetchReferenceSequence`, and the CIGAR methods do not.
 
 `getMismatches` and `forEachMismatch` take `{ start, end, origin }`, all
 optional. `start` and `end` are a reference range that limits the result to the
@@ -291,8 +291,8 @@ compare against `code`.
 
 ## Other exports
 
-The classes above cover reading a file. The package also exports the constants,
-storage classes and types that the lower-level APIs use.
+Beyond the classes above, which cover reading a file, the package exports the
+constants, storage classes and types that the lower-level APIs use.
 
 ### Constants
 

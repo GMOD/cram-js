@@ -54,7 +54,7 @@ Use `'lru'`, the package default. The cache then evicts down to `cacheSize`.
 
 - The raised default and the idle timeout from ADR 0004 are unaffected, as are
   [ADR 0003](0003-abortsignal-on-the-read-path.md)'s abort plumbing and
-  one-decode-per-slice sharing. Only the eviction policy changes.
+  one-decode-per-slice sharing, because only the eviction policy changes.
 
 ## Evidence
 

@@ -16,9 +16,8 @@ checking it means reading the whole file. CRAM v1 has no such field at all,
 which is moot here only because this library refuses v1 files outright.
 
 The definition itself changed between versions, which is another reason for
-caution: `CRAMv2.1.tex` calls the field 1-based, `CRAMv3.tex` 0-based, and every
-file in `test/data` starts at 0 either way. The issue quotes the 1-based
-wording.
+caution: `CRAMv2.1.tex` calls the field 1-based (the wording the issue quotes),
+`CRAMv3.tex` 0-based, and every file in `test/data` starts at 0 either way.
 
 htslib trusts the counter. `cram_decode.c` builds synthetic read names from
 `record_counter + rec + 1` alone, so a constant counter makes those names

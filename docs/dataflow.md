@@ -21,7 +21,7 @@ every slice runs in parallel. Each slice:
 [optimizations.md](optimizations.md) explains why each of those steps works the
 way it does, with the measurements behind it.
 
-The diagram draws the main path only. It leaves out:
+The diagram draws only the main path, and leaves out:
 
 - the file definition and SAM header, memoized per file, so every query after
   the first finds them already resolved;

@@ -86,7 +86,7 @@ measuring what came back:
 The typed columns are exact by construction; the two arena/quality lines differ
 from their `byteLength` because the quality column can be a view into the same
 external block the arena's payload bytes point into, so releasing one does not
-free what the other still holds. The sums agree.
+free what the other still holds, but summed they agree.
 
 The views are not part of the cache, but they still take memory. A `CramRecord`
 is a `slice`, an `index`, a precomputed offset and a tags memo, and at 69 B each

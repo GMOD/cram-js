@@ -104,12 +104,11 @@ positional constructor, does remove the allocation, and the output is
 byte-identical (sha256 over `toJSON()` + `getCigarString()` +
 `getPairOrientation()` for all 92,582 records in `test/data`).
 
-The positional constructor gives nothing worth having. Five alternating
-processes per tree, median-of-medians, gave 129.6 → 128.5 ms on SRR396637 and
-56.2 → 56.0 ms on SRR396636, both inside the ±1% cold-decode noise floor. GC
-time does drop consistently (107 → 94 ms on SRR396637, ~12%), which confirms the
-allocation is gone, but GC is only ~8% of that decode, so the saving never
-reaches 1% end to end.
+Five alternating processes per tree, median-of-medians, put the positional
+constructor at 129.6 → 128.5 ms on SRR396637 and 56.2 → 56.0 ms on SRR396636,
+both inside the ±1% cold-decode noise floor. GC time does drop consistently (107
+→ 94 ms on SRR396637, ~12%), which confirms the allocation is gone, but GC is
+only ~8% of that decode, so the saving never reaches 1% end to end.
 
 Against that saving, the constructor would take nineteen unlabelled positional
 parameters, sixteen of them `number` or `number | undefined`, where any
@@ -179,5 +178,5 @@ isolation, min of 25 rounds per size, the two are the same from 64 KB up
 slice. End to end, four interleaved rounds of the per-codec timing script on
 SRR396637 and the ONT fixture put block decompression at 34.4 ms → 35.0 ms and
 13.6 ms → 14.8 ms (minimums, set → slice) against a within-variant spread of
-34–88 ms, so neither direction rose above the noise floor. We did not take the
-change.
+34–88 ms, so neither direction rose above the noise floor, and we did not take
+the change.

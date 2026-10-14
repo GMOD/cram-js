@@ -4,8 +4,8 @@
 
 ## Context
 
-CRAM stores no CIGAR. Unlike BAM, where the packed operation array is on disk
-and `@gmod/bam` can hand out a zero-copy view of it, every CIGAR this library
+Unlike BAM, where the packed operation array is on disk and `@gmod/bam` can hand
+out a zero-copy view of it, CRAM stores no CIGAR, so every CIGAR this library
 produces is synthesized from read features. **Any array form is therefore an
 allocation this library would add for every consumer**, rather than a view onto
 something the file already contains.
@@ -101,8 +101,8 @@ therefore now agrees with its BAM path.
 **The mismatch walk has not moved into this library.** Moving one walk and not
 the other looks arbitrary, but the CIGAR has a single spec-defined vocabulary
 (the SAM op codes), so its walk could move in here without dragging any
-consumer's render types along. The mismatch walk emits jbrowse's own vocabulary.
-See `TODO.md`.
+consumer's render types along, whereas the mismatch walk emits jbrowse's own
+vocabulary. See `TODO.md`.
 
 ## Evidence
 

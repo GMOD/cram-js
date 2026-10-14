@@ -78,10 +78,10 @@ and `@gmod/bbi`. cram-js implements it instead of taking the package as a
 dependency, because that package has to own the cache, and `SliceRecordCache` is
 not a plain LRU: its record-count bound weighs each entry when the entry's
 promise resolves, so the cache has to own its entries. Two smaller reasons argue
-against adopting it. Its aggregator never clears `signals` or removes its
-listeners once an entry settles, so a cached slice would retain every consumer
-signal that ever joined it. And cram-js deliberately dropped the dependency in
-`61791ba`.
+against adopting it: its aggregator never clears `signals` or removes its
+listeners once an entry settles, which would make a cached slice retain every
+consumer signal that ever joined it, and cram-js deliberately dropped the
+dependency in `61791ba`.
 
 **`CraiIndex` keeps a bounded retry instead**, because the trade is different
 there. When the caller that started the index parse aborts, a caller that joined
@@ -106,7 +106,7 @@ A pan in jbrowse cancels the query in flight while the next query wants most of
 the same slices. Slices the cancelled query had already finished are resolved in
 the cache, and the new query reads them from there with no further work. The new
 query joined the slices still decoding, so the retry decoded those twice on
-every pan. Ref-counting keeps those decodes running. The byte-range cache
+every pan, whereas ref-counting keeps them running. The byte-range cache
 underneath would have served the re-read cheaply, but the inflate and record
 decode are the expensive part, and the byte-range cache does not help with
 those.
@@ -135,10 +135,10 @@ The fix shares containers **across the slices of one query and no wider**,
 through a `Map` built in `getRecordsForRange` and threaded into
 `getRecordsInSlice`. Every caller of a shared container's memo is then still the
 same query with the same signal, so the invariant holds. A file-level container
-cache would break it. That cache would put the first query's signal in charge of
-a header every later query depends on, which is the leak this ADR handles
-explicitly at the other two sites, at a third site with no handling. Anyone who
-later wants containers cached file-wide has to solve that leak first.
+cache would break it by putting the first query's signal in charge of a header
+every later query depends on, which is the leak this ADR handles explicitly at
+the other two sites, at a third site with no handling. Anyone who later wants
+containers cached file-wide has to solve that leak first.
 
 ## Consequences
 
@@ -241,10 +241,10 @@ descriptor on every call.
 measurement.** The 6.5 MiB figure that motivates this ADR was measured in
 jbrowse on the analogous **BAM** path: one 4 kb viewport over a 2000x BAM issues
 a single 6.5 MiB range read, and over a 4-hop pan burst throttled to 50 KiB/s,
-three cancelled navigations abandoned ~6.5 MiB each. We have not measured CRAM.
-The same `RemoteFileWithRangeCache` sits under both formats, so the order of
-magnitude should be similar, but treat that as an expectation rather than a
-result until someone runs it.
+three cancelled navigations abandoned ~6.5 MiB each. The same
+`RemoteFileWithRangeCache` sits under both formats, so the order of magnitude
+should be similar, but treat that as an expectation rather than a result until
+someone runs it.
 
 **The change does not alter what is decoded.** The full suite (217 files, 663
 tests) passes unchanged, including the snapshot tests over all indexed fixtures.

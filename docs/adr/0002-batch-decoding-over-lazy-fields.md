@@ -54,8 +54,8 @@ expression handles it unchanged.
   times two blocks, plus the header. That count is exact and independent of
   machine load, so it is a more reliable measure than any timing on a shared
   machine.
-- The API is unchanged. There is no getter, no offset field beside every name,
-  and no special handling for `mate.readName` or for the assignment in
+- The API is unchanged, with no getter, no offset field beside every name, and
+  no special handling for `mate.readName` or for the assignment in
   `addReferenceSequence`.
 - **Batching costs retained heap**, which is the trade this ADR accepts. A name
   is now a slice of the decoded block: 54,695 of them are ~1.31 MB of 24-byte

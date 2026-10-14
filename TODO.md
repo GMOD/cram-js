@@ -19,9 +19,9 @@ bottom before trusting or re-running them.
 So even a query served entirely from `featureCache` re-reads the container
 header and re-parses the compression header block, and reads each slice's bytes
 again to get at its header. For a 6-slice warm query on SRR396637 that is 6
-containers and 6 compression schemes, plus the slices' 2.5 MB. Locally that is
-cheap. Over HTTP the byte-range cache answers the repeat reads, but the parse
-still runs.
+containers and 6 compression schemes, plus the slices' 2.5 MB. On a local file
+all of that is cheap; over HTTP the byte-range cache answers the repeat reads,
+but the parse still runs.
 
 `getRecordsForRange` already shares containers across the slices of one query,
 and `test/redundantReads.test.ts` checks that it does. Sharing them across

@@ -101,7 +101,7 @@ record, with the layout `readFeatureArena` uses, where `record.tagStart` and
 `tagCount` mark the record's run of slots.
 
 **`record.tags` still works and returns the same object it always did**, built
-from the column on first access and then cached. Code that reads it keeps
+from the column on first access and then cached, so code that reads it keeps
 working. Two things do change:
 
 - **Prefer `record.getTag(name)` for a single tag.** It reads the record's slots
@@ -135,8 +135,8 @@ library's:
 | `record.mate.flags`      | gone — already folded into `record.flags` as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding |
 | `record.mate.uniqueId`   | gone                                                                                      |
 
-`toJSON()` changes to match. In place of its `mate` key it has `nextSequenceId`
-and `nextStart`, present only when `hasNextPosition()`.
+`toJSON()` changes to match, with `nextSequenceId` and `nextStart` in place of
+its `mate` key, present only when `hasNextPosition()`.
 
 The `next*` naming matches SAM, BAM and `@gmod/bam`, which all call these fields
 `RNEXT`/`PNEXT`, and CRAM's own `NS`/`NP` ("**next** fragment"). SAM uses the

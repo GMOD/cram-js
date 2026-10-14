@@ -88,11 +88,11 @@ with the 0.96x that the slice-count sweep below found under node.
 
 **Measure this interleaved, not as two blocks.** Running all the in-process
 rounds and then all the pooled ones put 200x.longread at 0.74x, and a repeat of
-that same arrangement put it at 2.26x. The code was identical in both runs. The
-machine's speed changed between the two blocks, and that change moved the ratio.
-Alternating the variants exposes both to the same changes. This is the third
-benchmark harness in this repo's history to produce a confident number that was
-not real; [ADR 0006](adr/0006-cigar-as-a-callback-walk.md) and
+that same arrangement, with identical code, put it at 2.26x. The machine's speed
+changed between the two blocks, and that change moved the ratio. Alternating the
+variants exposes both to the same changes. This is the third benchmark harness
+in this repo's history to produce a confident number that was not real;
+[ADR 0006](adr/0006-cigar-as-a-callback-walk.md) and
 [ADR 0008](adr/0008-emit-into-the-consumers-callback.md#evidence) describe the
 other two. The slice-count threshold below was rejected for the same reason.
 
@@ -269,15 +269,15 @@ bundle.
 whose `build` script ends in `build:worker-bundle`, which runs webpack and then
 `inline-worker.sh` (checked 2026-08-12).
 
-The inline approach costs size. The worker bundle contains the decoder _and_ the
-wasm, so the string module is 395 KB (96 KB gzipped). We accepted that size so
-that consumers need no wiring.
+The worker bundle contains the decoder _and_ the wasm, so inlining it costs a
+395 KB string module (96 KB gzipped). We accepted that size so that consumers
+need no wiring.
 
-Not every consumer downloads the 395 KB. `sliceWorkerPool.ts` loads the bundle
-through a dynamic `import()` inside `getWorkerBlobUrl`, which runs only when a
-pool starts, so a bundler puts it in a separate chunk. In an esbuild bundle of
-`IndexedCramFile` + `CraiIndex`, the entry point is 268 KB with the split and
-534 KB without it. A consumer who never enables the pool, or who runs under node
-where the pool cannot start, loads none of the chunk. (The npm tarball contains
-the bytes either way, as `src/`, `esm/` and `dist/` copies; the split changes
-only what reaches a browser.)
+`sliceWorkerPool.ts` loads the bundle through a dynamic `import()` inside
+`getWorkerBlobUrl`, which runs only when a pool starts, so a bundler puts the
+395 KB in a separate chunk that not every consumer downloads. In an esbuild
+bundle of `IndexedCramFile` + `CraiIndex`, the entry point is 268 KB with the
+split and 534 KB without it. A consumer who never enables the pool, or who runs
+under node where the pool cannot start, loads none of the chunk. (The npm
+tarball contains the bytes either way, as `src/`, `esm/` and `dist/` copies; the
+split changes only what reaches a browser.)

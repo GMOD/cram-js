@@ -29,7 +29,7 @@ when reading the rest of this file. A number like the −12.8% below records wha
 a change was worth when it landed, and stays true afterward; a number like the
 retained total above describes the code as it stands and falls out of date as
 soon as a record holds something different. The generated blocks are the second
-kind. `pnpm docs:numbers` recomputes them, and everything outside the markers is
+kind, and `pnpm docs:numbers` recomputes them; everything outside the markers is
 written by hand. Before that script existed, all of them were out of date by up
 to 12%.
 
@@ -48,7 +48,7 @@ now columns (see [the migration note](../MIGRATION.md)):
 - its **tags**, a `Record` per record, now
   [`TagColumn`](../src/cramFile/tagColumn.ts). Unlike everything else here, the
   tag column is **not** a memory technique: it came out break-even (−0.06 MB on
-  SRR396637, +0.20 MB on SRR396636). We kept it for two other reasons. A worker
+  SRR396637, +0.20 MB on SRR396636). We kept it for two other reasons: a worker
   can send the tags as a transfer instead of a structured clone (243 ms → 11
   ms), and `getTag(name)` can read one tag without building the object. The
   header comment in `tagColumn.ts` has the full numbers.
@@ -220,10 +220,11 @@ measure identically, so we dropped `'batch'` instead of keeping it for the case
 where it exceeds the stated limit with no warning
 ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)).
 
-Two other options also limit the cache. `cacheIdleTimeoutMs` (default 3 minutes)
-drops slices no query has read for that long, and is the only option that
-shrinks the cache while the file is idle. `cacheBudget` lets several `CramFile`s
-share one ceiling, and, now that both weigh in bytes, `@gmod/bam`'s files too.
+`cacheIdleTimeoutMs` and `cacheBudget` also limit the cache. The idle timeout
+(default 3 minutes) drops slices no query has read for that long, and is the
+only option that shrinks the cache while the file is idle. `cacheBudget` lets
+several `CramFile`s share one ceiling, and, now that both weigh in bytes,
+`@gmod/bam`'s files too.
 
 ## What the worker pool adds
 
@@ -231,14 +232,14 @@ Everything above is in the JS heap, which is where a query's memory goes. The
 pool adds two costs outside it, both per worker rather than per file, and
 neither grows with the query or the region:
 
-- A wasm heap per JS context. The htscodecs module has a 16 MB floor (see
-  [wasm.md](wasm.md#memory)), and every context that decodes gets its own
-  instance. With the default `min(hardwareConcurrency, 4)` workers that is up to
-  **80 MB before the first record decodes** — four workers plus the main thread,
-  which needs an instance of its own whatever the pool does, because gunzipping
-  the `.crai` is itself a wasm call. `numSliceWorkers` sets the worker count; a
-  host that runs several worker contexts multiplies this again, as it does the
-  pool itself.
+- Every JS context that decodes gets its own instance of the htscodecs module,
+  and with it a wasm heap with a 16 MB floor (see [wasm.md](wasm.md#memory)).
+  With the default `min(hardwareConcurrency, 4)` workers that is up to **80 MB
+  before the first record decodes** — four workers plus the main thread, which
+  needs an instance of its own whatever the pool does, because gunzipping the
+  `.crai` is itself a wasm call. `numSliceWorkers` sets the worker count; a host
+  that runs several worker contexts multiplies this again, as it does the pool
+  itself.
 - Up to 16 parsed compression schemes per worker, each holding a codec per data
   series and per tag it has seen, plus the header bytes it came from (294 B–11.7
   KB across the fixtures here). The schemes are bounded and small next to one
@@ -280,9 +281,10 @@ We made both of these measurement mistakes before catching them:
 - **Do not A/B two source trees in one process.** Importing a baseline and a
   candidate side by side made the columnar decode look 7–11% _slower_,
   consistently enough to look real. It was the two variants sharing a heap and a
-  GC history. Alternate processes, not imports. Use a fresh process with no
-  warm-up decode too, because the result of a discarded top-level `await` stays
-  reachable, ends up in the baseline, and shrinks the measured delta to ~0.
+  GC history. Alternate processes rather than imports, and start each process
+  fresh with no warm-up decode, because the result of a discarded top-level
+  `await` stays reachable, ends up in the baseline, and shrinks the measured
+  delta to ~0.
 
 Retained-heap numbers reproduce to within ±0.2%. Wall-clock on this repo does
 not: the noise floor is several percent even on an idle machine and far wider on
