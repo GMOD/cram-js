@@ -1,3 +1,5 @@
+import { SharedReadCache } from '@gmod/shared-read-cache'
+
 import { CramMalformedError } from './errors.ts'
 import { open } from './io.ts'
 import { unzip } from './unzip.ts'
@@ -90,14 +92,7 @@ export default class CraiIndex {
   //
   // Each line represents a slice in the CRAM file. Please note that all slices
   // must be listed in index file.
-  private indexDataP?: Promise<IndexData>
-  /**
-   * The signal `indexDataP` was started under, while it is still in flight. The
-   * whole index is parsed once and shared by every query against the file, so
-   * without this the first query to arrive would own a read all the others
-   * depend on — see `getIndexData`.
-   */
-  private indexDataSignal?: AbortSignal
+  private indexData = new SharedReadCache<string, IndexData>()
 
   private filehandle: GenericFilehandle
 
@@ -202,63 +197,26 @@ export default class CraiIndex {
   }
 
   /**
-   * Parse the index, or join the parse already running.
-   *
-   * The index is downloaded and parsed once for the life of the object, so this
-   * is the one read in the class that is shared between queries — and the one
-   * place a cancellation could leak from the query that asked for it to a query
-   * that did not. A caller that joined someone else's parse and saw it fail
-   * because *they* aborted starts over rather than inheriting the failure —
-   * once, then propagates, for the reason `CramSlice.cachedRecords` gives for
-   * bounding the equivalent retry on decoded slices.
+   * The index is parsed once and shared by every query against the file, so,
+   * like `CramFile`'s file-wide reads, the parse runs under a signal that aborts
+   * only once every caller waiting on it has aborted. The caller that starts the
+   * parse supplies `onProgress`, until it aborts.
    */
-  private async getIndexData(
-    opts: IndexOpts = {},
-    retried = false,
-  ): Promise<IndexData> {
-    opts.signal?.throwIfAborted()
-    const pending = this.indexDataP
-    if (!pending) {
-      return this.startIndexParse(opts)
-    }
-
-    // read before awaiting: the owner is forgotten as soon as the parse settles
-    const ownerSignal = this.indexDataSignal
-    try {
-      return await pending
-    } catch (e) {
-      if (retried || !ownerSignal?.aborted || opts.signal?.aborted) {
-        throw e
-      }
-      return this.getIndexData(opts, true)
-    }
-  }
-
-  private startIndexParse(opts: IndexOpts) {
-    const pending = this.parseIndex(opts).then(bySeqId => ({
-      bySeqId,
-      maxSpan: maxSpanBySeqId(bySeqId),
-    }))
-    this.indexDataP = pending
-    this.indexDataSignal = opts.signal
-    // Drop a rejection rather than keeping it, so one transient failure does not
-    // poison the index for the lifetime of the file. Both branches are
-    // identity-checked so a retry started after this settles is not cleared by
-    // the attempt it already replaced.
-    pending.then(
-      () => {
-        if (this.indexDataP === pending) {
-          this.indexDataSignal = undefined
-        }
-      },
-      () => {
-        if (this.indexDataP === pending) {
-          this.indexDataP = undefined
-          this.indexDataSignal = undefined
-        }
-      },
-    )
-    return pending
+  private getIndexData(opts: IndexOpts = {}) {
+    const { signal: callerSignal, onProgress } = opts
+    return this.indexData.get('', callerSignal, async signal => {
+      const bySeqId = await this.parseIndex({
+        signal,
+        onProgress:
+          onProgress &&
+          ((bytes, total) => {
+            if (!callerSignal?.aborted) {
+              onProgress(bytes, total)
+            }
+          }),
+      })
+      return { bySeqId, maxSpan: maxSpanBySeqId(bySeqId) }
+    })
   }
 
   async getIndex(opts: IndexOpts = {}) {

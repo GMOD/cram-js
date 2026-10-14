@@ -21,9 +21,9 @@ that looked like wins and were not.
 
 The first query reads the whole `.crai`, inflates it, parses it, and memoizes
 the result for the life of the object. The parse is the one read in `CraiIndex`
-that several queries share. When the caller that started it aborts, a caller
-that joined it retries once rather than inheriting the failure, and any failure
-after that retry propagates.
+that several queries share, so it is reference-counted: the parse aborts only
+once every caller waiting on it has aborted, and each caller rejects on its own
+abort alone.
 
 ### The overlap scan stops at both ends
 
@@ -353,12 +353,10 @@ well as handing it to the filehandle, because a filehandle may ignore it:
 `RemoteFile` aborts its `fetch`, and `LocalFile` ignores the signal.
 
 The hazard is that the read path is a stack of memoized promises, and a memo
-cannot tell whose cancellation it is seeing. The file definition, the SAM header
-and a decoded slice, which several queries share, are therefore
-reference-counted, so aborting one query never fails another
-([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)). The index parse, also
-shared, gets the same guarantee from a bounded retry: when the caller that
-started it aborts, a caller that joined it retries once. A query with **no**
+cannot tell whose cancellation it is seeing. The file definition, the SAM
+header, the index parse and a decoded slice, which several queries share, are
+therefore reference-counted, so aborting one query never fails another
+([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)). A query with **no**
 signal can never give up, so it keeps whatever it is waiting on running for
 everyone.
 

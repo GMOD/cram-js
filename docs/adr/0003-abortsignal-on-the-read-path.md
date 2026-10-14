@@ -1,6 +1,7 @@
 # 0003 — Cancel per-query reads, reference-count the shared ones
 
-**Status:** accepted — the file-wide reads now take the signal too (see below)
+**Status:** accepted — the file-wide reads now take the signal too, and the
+index parse is reference-counted since 2026-10-14 (see below)
 
 ## Context
 
@@ -94,6 +95,17 @@ pathological case becomes one duplicate parse rather than a recursion whose
 depth depends on how the aborts interleave. `@gmod/bam` recurses unbounded,
 which is the part of that pattern not worth copying.
 
+**Update, 2026-10-14: the index parse is reference-counted too.** The bounded
+retry let one query fail with another's abort. Queries A, B and C join a pending
+parse; A aborts, so B retries and starts a new parse; C joins it having already
+used its retry; then B aborts, and C, which never aborted, rejects with B's
+abort. `CraiIndex.getIndexData` now runs the parse through a one-key
+`SharedReadCache`, as `memoizeShared` does for the definition and SAM header, so
+the parse aborts only once every caller waiting on it has aborted. It takes a
+cache rather than `memoizeShared` itself so the caller that starts the parse can
+pass `onProgress`. `test/abort.test.ts` covers the three-caller sequence and the
+case where every caller aborts.
+
 ### What this replaced, and why
 
 The first version of this work ref-counted nothing. The decode ran under
@@ -176,10 +188,11 @@ three of the eight tests in `test/abort.test.ts`: a bystander sharing a slice, a
 bystander sharing the index parse, and a bystander with no signal at all. Those
 three tests were written against the retry and **pass unchanged against the
 ref-count**, so the two designs agree on the property and differ only in cost.
-The same revert still fails the index-parse test, because `CraiIndex` still uses
-a retry. `test/lib/gatedFile.ts` makes these tests deterministic. It honors the
-signal, which `LocalFile` ignores, so the tests can observe an interrupted read,
-and it parks reads on demand, so the tests do not race the filesystem.
+Until 2026-10-14 the same revert still failed the index-parse test, because
+`CraiIndex` used a retry. `test/lib/gatedFile.ts` makes these tests
+deterministic. It honors the signal, which `LocalFile` ignores, so the tests can
+observe an interrupted read, and it parks reads on demand, so the tests do not
+race the filesystem.
 
 **The ref-count stops the re-decode.**
 `a cancelled query does not make a bystander re-read the slice` runs two

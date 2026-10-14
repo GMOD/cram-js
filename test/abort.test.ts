@@ -247,6 +247,61 @@ test('a cancelled query does not fail a concurrent one sharing the index parse',
   )
 })
 
+test('the index parse survives every caller but one aborting, in any order', async () => {
+  const crai = new GatedFile(testDataFile(`${CRAM}.crai`))
+  const index = new CraiIndex({ filehandle: crai })
+  const expected = await new CraiIndex({
+    filehandle: testDataFile(`${CRAM}.crai`),
+  }).getIndex()
+
+  const owner = new AbortController()
+  const nextOwner = new AbortController()
+  const bystander = new AbortController()
+  crai.hold()
+  const first = index.getIndex({ signal: owner.signal })
+  const second = index.getIndex({ signal: nextOwner.signal })
+  const third = index.getIndex({ signal: bystander.signal })
+  await drainMicrotasks()
+
+  owner.abort()
+  await expect(first).rejects.toThrow(/abort/i)
+  await drainMicrotasks()
+  nextOwner.abort()
+  await expect(second).rejects.toThrow(/abort/i)
+  crai.open()
+
+  expect(await third).toEqual(expected)
+  expect(crai.readFiles).toBe(1)
+  expect(crai.abortedReads).toBe(0)
+})
+
+test('an index parse every caller abandons is cancelled, and the next caller parses afresh', async () => {
+  const crai = new GatedFile(testDataFile(`${CRAM}.crai`))
+  const index = new CraiIndex({ filehandle: crai })
+  const expected = await new CraiIndex({
+    filehandle: testDataFile(`${CRAM}.crai`),
+  }).getIndex()
+
+  const controllers = [0, 1, 2].map(() => new AbortController())
+  crai.hold()
+  const pending = controllers.map(c => index.getIndex({ signal: c.signal }))
+  await drainMicrotasks()
+
+  const reasons = controllers.map((c, i) => {
+    const reason = new Error(`caller ${i} gave up`)
+    c.abort(reason)
+    return reason
+  })
+  for (const [i, p] of pending.entries()) {
+    await expect(p).rejects.toBe(reasons[i])
+  }
+  expect(crai.abortedReads).toBe(1)
+
+  crai.open()
+  expect(await index.getIndex()).toEqual(expected)
+  expect(crai.readFiles).toBe(2)
+})
+
 test('the reference sequence callback is handed a signal that follows the query', async () => {
   let seen: AbortSignal | undefined
   let releaseFetch!: () => void
