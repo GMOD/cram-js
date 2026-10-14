@@ -24,14 +24,10 @@ Measured at **v13.4.3** — regenerate with `pnpm docs:numbers`.
 
 <!-- END GENERATED: retained-heap -->
 
-**These are current figures, not historical ones**, and the difference matters
-when reading the rest of this file. A number like the −12.8% below records what
-a change was worth when it landed, and stays true afterward; a number like the
-retained total above describes the code as it stands and falls out of date as
-soon as a record holds something different. The generated blocks are the second
-kind, and `pnpm docs:numbers` recomputes them; everything outside the markers is
-written by hand. Before that script existed, all of them were out of date by up
-to 12%.
+**The generated blocks are current figures**, which `pnpm docs:numbers`
+recomputes. Numbers outside the markers, like the −12.8% below, record what a
+change was worth when it landed. Before that script existed, the current figures
+were out of date by up to 12%.
 
 On long reads nearly all the memory is in **read features**: the 37-record ONT
 slice decodes 213,602 of them, ~95 KB of arena per record. Short reads have
@@ -203,16 +199,15 @@ settled entry, and every slice a query holds until it returns are outside it,
 and so are the `CramRecord` views a query returns: 54,695 of them measured 3.6
 MB, 69 B each, which is the query's cost and not the cache's.
 
-The number has to be **above one query's working set**, which sets the default
-at 1,000,000. `getRecordsForRange` starts every slice of a range at once and
-holds all of their records until it returns, so a budget below that caches
-_nothing_ the next pan can use. The cache evicts each slice before the next pan
-can reuse it, and retains the memory anyway. A 50kb window on 200x short-read
-data is 90,000 records; the old 20,000 default was 4.5x below it.
+The budget has to be **above one query's working set**. `getRecordsForRange`
+starts every slice of a range at once and holds all of their records until it
+returns, so a smaller budget evicts each slice before the next pan can reuse it,
+and retains the memory anyway. A 50kb window on 200x short-read data is 90,000
+records; the old 20,000 default was 4.5x below it.
 [ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md) has the working
 sets.
 
-Eviction is plain LRU, so `cacheSize` is an exact bound. It used to be a
+Eviction is plain LRU, so `maxCacheBytes` is an exact bound. It used to be a
 `'batch'` policy that spared everything an in-flight query touched, which
 rescued a too-small budget by exceeding it: we measured 420,000 records held
 against a stated 20,000. At a budget above the working set the two policies
@@ -269,8 +264,8 @@ wrong, and no check reports it.
 
 `pnpm docs:numbers` is deliberately **not** a CI check. Retained heap reproduces
 to ±0.2% on one machine but not across V8 versions or machines, so a `--check`
-gate would fail for reasons unrelated to the commit under test. Instead, the
-version stamp in each table shows which release the numbers were measured at.
+gate would fail for reasons unrelated to the commit. The version stamp in each
+table shows which release the numbers came from.
 
 We made both of these measurement mistakes before catching them:
 
@@ -286,9 +281,8 @@ We made both of these measurement mistakes before catching them:
   `await` stays reachable, ends up in the baseline, and shrinks the measured
   delta to ~0.
 
-Retained-heap numbers reproduce to within ±0.2%. Wall-clock on this repo does
-not: the noise floor is several percent even on an idle machine and far wider on
-a loaded one, so re-measure before quoting any timing here.
+Wall-clock timing has a noise floor of several percent even on an idle machine,
+so re-measure before quoting any timing here.
 
 ## What is deliberately not done
 

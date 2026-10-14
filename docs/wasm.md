@@ -68,26 +68,14 @@ alternative it was picked over:
   the pool's init handshake instead (`warmupWasm`), so the first slice a user
   waits on does not also compile the module.
 
-Inlining the wasm is a separate decision, which makes every consumer download a
-128 KB bundle and in exchange spares it a second request, static asset or CSP
-configuration. A decoder is useless without its codecs, so we value a build with
-no setup step over the bytes.
-
 ### Limitations
 
-- **Two copies per block.** The codecs need a contiguous heap buffer, so every
-  crossing at this boundary copies the block in and out. That copy cost is why
-  the unit is the block and not the record.
 - **The heap only grows** (see [Memory](#memory)), so peak tracks the largest
   single block ever decompressed.
 - **The worker bundle contains a second copy** of the decoder and the wasm, so
   `src/wasm/cram-worker-source.js` is 400 KB (96 KB gzipped) in the published
-  package; see [workers.md](workers.md#building-the-bundle). A bundler
-  code-splits those bytes, because `sliceWorkerPool.ts` imports the bundle
-  dynamically, from a function called only when a pool starts. The bundle
-  therefore goes in a separate chunk that a consumer who never enables the pool
-  never loads. In an esbuild bundle of `IndexedCramFile` + `CraiIndex`, the
-  split cut an entry point from 534 KB to 268 KB.
+  package. A bundler splits it into a chunk that loads only when a pool starts;
+  see [workers.md](workers.md#building-the-bundle).
 - **No SIMD, no wasm threads**, which caps single-block throughput; the pool
   gets its parallelism from slices instead (see [Threading](#threading)).
 
@@ -143,10 +131,7 @@ Every allocation is freed before the decode returns, so the heap holds no
 allocations between calls.
 
 On a large query, the decoded records on the JS heap outweigh the wasm heap
-anyway. `IndexedCramFile`'s `maxCacheBytes` option (default 1 GB) limits the
-decoded slices the cache keeps there, and bulk consumers can read the columnar
-`readFeatureArena` to skip materializing per-feature objects; see
-[memory.md](memory.md#columns-not-objects).
+anyway; see [memory.md](memory.md).
 
 ## Threading
 

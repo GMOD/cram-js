@@ -160,10 +160,8 @@ the _shallow_ end of this table. That is structural rather than incidental, and
 it is most of why the end-to-end win there is around 1.1x while the decode alone
 is 2.2x.
 
-The pool is therefore worth much more to a consumer that decodes a large region
-in one go, such as a whole-contig scan, an export, an analysis script or a
-force-load, than to an interactive pileup that a consumer deliberately keeps
-small.
+The pool is worth more to a whole-contig scan, an export or a force-load than to
+an interactive pileup.
 
 ## What crosses the boundary
 
@@ -265,15 +263,8 @@ bundle, once more so the regenerated string module reaches `esm/` and `dist/`.
 rebuilds byte-for-byte, and `pnpm check:wasm` checks it along with the wasm
 bundle.
 
-`bgzf-filehandle` regenerates its equivalent artifact the same way. Its root
-`build:wasm` delegates to the `bgzf-wasm-build` workspace package in `crate/`,
-whose `build` script ends in `build:worker-bundle`, which runs webpack and then
-`inline-worker.sh` (checked 2026-08-12).
-
 The worker bundle contains the decoder _and_ the wasm, so inlining it costs a
-400 KB string module (96 KB gzipped). We accepted that size so that consumers
-need no wiring.
-
+400 KB string module (96 KB gzipped), the price of needing no wiring.
 `sliceWorkerPool.ts` loads the bundle through a dynamic `import()` inside
 `getWorkerBlobUrl`, which runs only when a pool starts, so a bundler puts the
 400 KB in a separate chunk that not every consumer downloads. In an esbuild

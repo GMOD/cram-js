@@ -91,26 +91,13 @@ for the part still open).
 ### Size the decoded-slice cache above one query
 
 `featureCache` holds decoded slices, keyed by slice position and by the decode
-options that would change what a slice decodes to. The cache weighs slices in
-**bytes** with `DecodedSlice.byteLength`, which counts the typed-array columns
-exactly and the strings by estimate, and comes within 1–8% of the measured heap
-([ADR 0013](adr/0013-weigh-the-slice-cache-in-bytes.md)). The default is 1 GB,
-the same number as `@gmod/bam`, because the budget has to clear one query's
-working set. A smaller budget caches _nothing_ the next pan can use, because the
-cache evicts each slice before the next pan can reuse it and still holds the
-memory. A 50 kb window on 1000x short-read data is 420,000 records at ~400 B
-each; the old default, 20,000 records, was 21x below it
-([ADR 0004](adr/0004-size-the-slice-cache-above-one-query.md)).
-
-Eviction is plain LRU, so the bound is an exact one. It used to be a `'batch'`
-policy that spared everything an in-flight query touched, which rescues an
-undersized budget by exceeding it: we measured it holding 420,000 records
-against a stated 20,000. Above the working set the two policies measure
-identically, so we dropped `'batch'`
-([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)). `cacheIdleTimeoutMs`
-shrinks the cache while the file is idle, and `cacheBudget` lets several files
-share one ceiling instead of each holding its own.
-[memory.md](memory.md#the-slice-cache) has both.
+options that would change what a slice decodes to, and weighs them in bytes. The
+default of 1 GB, the same as `@gmod/bam`, clears one query's working set; a
+smaller budget evicts each slice before the next pan can reuse it. Eviction is
+plain LRU, and [memory.md](memory.md#the-slice-cache) has the numbers, and ADRs
+[0004](adr/0004-size-the-slice-cache-above-one-query.md),
+[0005](adr/0005-drop-the-batch-eviction-policy.md) and
+[0013](adr/0013-weigh-the-slice-cache-in-bytes.md) the decisions.
 
 The cache holds the whole decoded slice with its reference sequence already
 applied, because `applyReferenceSequence` runs once per slice inside the cached
@@ -158,14 +145,10 @@ measured for and rejected.
 
 ### GPU compute shaders not currently pursued
 
-Once a consumer already uses a GPU, compute shaders are the obvious next
-question; [JBrowse 2](https://jbrowse.org/jb2/) runs one, and asked it. We
-decided against them because of how the parallelism in CRAM is structured, not
-because of the effort.
-
-A GPU is efficient with thousands of lanes doing the same thing to adjacent
-data. The parallelism CRAM decompression offers is either much narrower than
-that or much coarser:
+[JBrowse 2](https://jbrowse.org/jb2/) already uses a GPU and asked about compute
+shaders. A GPU wants thousands of lanes doing the same thing to adjacent data,
+and the parallelism in CRAM decompression is either much narrower or much
+coarser:
 
 - **Within a codec, the width is a handful of lanes.** rANS interleaves 4
   streams, or 32 in the `r32x16` and striped sub-variants — a width picked to
@@ -177,16 +160,11 @@ that or much coarser:
   GPU would use, and the pool runs it on CPUs, which can also run the record
   decode.
 
-Block decompression is **24–35%** of a cold query, which limits the gain
-further. By Amdahl's law, even a decompressor that took no time would cap the
-whole query's speedup between ~1.3x and ~1.5x, the same ceiling the worker-pool
-item above runs into. The record decode it would leave behind is branchy
-pointer-chasing work that does not belong on a GPU at all. Add a host-to-device
-round trip per block and the ceiling drops further.
-
-Unlike everything else on this page, the GPU decision comes from the structure
-rather than from a measurement, because the structure settles it before a
-benchmark could. A CRAM profile whose decompression share is far above 35%, or a
+At 24–35% of a cold query, even a decompressor that took no time would cap the
+speedup at ~1.3–1.5x, before a host-to-device round trip per block, and the
+record decode left behind is branchy work that does not belong on a GPU. Unlike
+everything else on this page, this decision comes from structure, not
+measurement. A CRAM profile whose decompression share is far above 35%, or a
 codec sub-variant with thousands of independent streams, would reopen it.
 
 ### The wasm boundary is the block
@@ -224,12 +202,9 @@ order. One `TextDecoder` call recovers all of them, and each read is an
 takes **10.4 ms** against **1.5 ms** for the block (86% of that was per-call
 overhead), and the call count for the whole file went **110,048 → 240**.
 
-The alternative was to make the name lazy, which is attractive because a plain
-pileup render never asks for one. It lost on memory: a record holding a
-`Uint8Array` view over its name costs 104 bytes to defer ~56 bytes of string,
-and patching the getter never to materialize took SRR396637 from 37.7 MB to
-40.9. **Defer a computation, not a view**
-([ADR 0002](adr/0002-batch-decoding-over-lazy-fields.md)).
+A lazy read name lost on memory, because the view it held cost more than the
+string; see [memory.md](memory.md#laziness-that-holds-a-view-is-a-pessimization)
+and [ADR 0002](adr/0002-batch-decoding-over-lazy-fields.md).
 
 Read bases get the same treatment where the codec allows it: `bindBytesReader`
 returns a view directly onto the BA block, and `decodeReadBases` falls back to a
@@ -246,30 +221,17 @@ and the copy-out path runs on 0.15 MB of 14.70 MB.
 ### Columns, not objects
 
 Read features, quality scores and aux tags are stored in one set of typed arrays
-per slice plus an offset per record, rather than in objects per record. A
-retained `Uint8Array` view costs **104 bytes whatever it points at**, so a
-per-record view over ~100 bytes costs more than the bytes; with columns, the
-slice pays that fixed cost once. Read features go from 64–81 bytes each to 15,
-and the quality column saved 104 bytes per record (−12.8% retained on
-SRR396637).
+per slice plus an offset per record. A retained `Uint8Array` view costs **104
+bytes whatever it points at**, so columns let the slice pay that fixed cost
+once: read features go from 64–81 bytes each to 15, and the quality column cut
+retained heap 12.8% on SRR396637. Payload offsets, derivable from the arena,
+became one checkpoint every eighth slot (−9.4% on a long-read slice,
+[ADR 0010](adr/0010-checkpoint-the-payload-offsets.md)).
+[memory.md](memory.md#columns-not-objects) has the numbers.
 
-The columns belong to the slice and not to the record for the same reason in the
-other direction — giving each record its own typed arrays makes short-read files
-about twice as expensive as plain objects.
-[memory.md](memory.md#columns-not-objects) has the numbers, and
-[read-features.md](read-features.md) how to read them.
-
-Payload offsets had a column, at 4 bytes each, until we found they were the
-running prefix sum of lengths the arena already had, and that three quarters of
-them pointed at a feature with no payload bytes. Since anything derivable gets
-no column at all, one checkpoint every eighth slot replaced them, for −9.4%
-retained heap on a long-read slice with the accessors unchanged
-([ADR 0010](adr/0010-checkpoint-the-payload-offsets.md)).
-
-`TagColumn` is the exception, because it saved no heap: it came out break-even
-(−0.06 MB on SRR396637, +0.20 MB on SRR396636). We kept it for the worker
-transfer below and for `getTag`, so don't "improve" it on the assumption that it
-was a memory change.
+`TagColumn` saved no heap (break-even on both short-read fixtures). We kept it
+for the worker transfer below and for `getTag`, so don't "improve" it on the
+assumption that it was a memory change.
 
 ### A record is a view onto its slice's columns
 
@@ -279,15 +241,10 @@ column set — `DecodedSlice` — is what the cache holds and what a worker send
 `CramRecord` is two numbers, the slice and an index, with a getter per field.
 
 Cloning per-record objects across the worker boundary measured **1011 ms against
-a 392 ms decode**, which is why workers send columns. The earlier wire form
-packed columns on the worker and rebuilt an object per record on the host, which
-still cost a serial 0.5 µs a record: a quarter of the in-process decode on
-SRR396637, and the term that capped the pool's speedup. The host now uses the
-slice as it arrives. Views also remove the record object from what a short-read
-slice retains, and that object was most of it
-([ADR 0012](adr/0012-records-are-views.md)). Tags alone took 243 ms of
-structured clone and take 11 ms as columns. Strings are sent as strings: 15 ms
-for 153,677 of them, against 112 ms to encode the same set into bytes.
+a 392 ms decode**, so workers send columns and the host uses the slice as it
+arrives ([workers.md](workers.md#what-crosses-the-boundary)). Views also remove
+the record object from what a short-read slice retains, and that object was most
+of it ([ADR 0012](adr/0012-records-are-views.md)).
 
 ## Handing records back
 
@@ -363,8 +320,7 @@ everyone.
 ## What a consumer adds
 
 We measured all of this against jbrowse-components, and several of the wins are
-on its side of the API. Any consumer handling the same volume of data can follow
-the same pattern.
+on its side of the API, where any consumer can copy them.
 
 **Budget across files, not per file.** `maxCacheBytes` is per `CramFile`, and
 jbrowse holds one per open track for the life of the track — so the track count
