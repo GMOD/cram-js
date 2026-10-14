@@ -38,12 +38,12 @@ Amdahl's law caps a decompression-only pool at ~1.33x. The real figure is lower
 still, because the heavy blocks within one slice are few. On the ONT slice a
 single 19.1 ms block is 74% of that slice's decompression, so there is barely
 anything to spread. Our end-to-end model of a decompression-only pool gave
-**1.05–1.46x**, against the 2.0–2.8x measured below for the whole slice.
+**1.05–1.46x**, against the 1.35–2.78x measured below for the whole slice.
 
 The unit of work is therefore the whole slice: decompression, the record decode,
 and mate association — about 95% of a query rather than a quarter of it.
 
-## Measured
+## Under node, four workers decode 1.35–2.78x faster
 
 The table compares four worker threads against in-process decoding, timing the
 decode only, over jb2bench's 19 kb region. We ran it with `node:worker_threads`
