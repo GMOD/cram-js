@@ -1,3 +1,23 @@
+## [14.3.2](https://github.com/GMOD/cram-js/compare/v14.3.1...v14.3.2) (2026-10-14)
+
+### Chores
+
+- Run the wasm freshness check in preversion; pin emscripten in one file ([e33b938](https://github.com/GMOD/cram-js/commit/e33b938e3b7b697682671d819f16ea8b58b9c57d))
+
+### Other Changes
+
+- Rewrite AI-writing tropes in README and docs ([d99e9b9](https://github.com/GMOD/cram-js/commit/d99e9b95f3f5254d4c40c2a7d44d281c873124a6))
+- Restore claims changed by the tropes rewrite ([dea7e2b](https://github.com/GMOD/cram-js/commit/dea7e2ba6627a6a08caea4e6773cf70f1a11fcfd))
+- Fold short verdict sentences into their neighbours ([bc3b8d9](https://github.com/GMOD/cram-js/commit/bc3b8d9c521eeb7cfac6aff997a73958084a57df))
+- Fix doc errors found in the tropes audit ([13434f2](https://github.com/GMOD/cram-js/commit/13434f27bcccfed60aa2b95cc09d9129529ea9e0))
+- Restore wording the tropes rewrite changed without a trope ([f6945ea](https://github.com/GMOD/cram-js/commit/f6945ea91bdb2cea7e3ee30d1ed1f57b11bff013))
+- Keep active-voice rewrites the restore undid ([6e0d24d](https://github.com/GMOD/cram-js/commit/6e0d24d52def3872cc08ae26278db44a097a3d35))
+- Name the node measurements in the workers heading, and quote their full range ([d07dd51](https://github.com/GMOD/cram-js/commit/d07dd51f6aca63f9c8a161e21bfd0d4be8abc06b))
+- Quote the one-slice pool range instead of parity, and drop an unmeasured ONT claim ([56d547b](https://github.com/GMOD/cram-js/commit/56d547ba711b03a0c7005565381da9c245ed42ba))
+- Reference-count the .crai parse so one query's abort cannot fail another ([728822c](https://github.com/GMOD/cram-js/commit/728822cfed25b807c2fda8a8e96b03b7df37f539))
+- Trim docs: cut repeats of memory.md and workers.md, fix stale cache option names ([ff8cc08](https://github.com/GMOD/cram-js/commit/ff8cc0879d694387a58e923069a40dddc610a0ac))
+- Update the signal doc: shared reads are reference-counted, not retried ([08e5cf8](https://github.com/GMOD/cram-js/commit/08e5cf8e8084624f4e0befb665d4efb25bc8e667))
+
 ## [14.3.1](https://github.com/GMOD/cram-js/compare/v14.3.0...v14.3.1) (2026-10-11)
 
 ### Documentation
