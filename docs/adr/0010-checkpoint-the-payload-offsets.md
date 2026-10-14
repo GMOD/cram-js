@@ -13,8 +13,7 @@ anywhere:
   records retained before this change.
 - **Three quarters of its entries pointed at no bytes.** Only 53,292 of that
   slice's 213,602 features have bytes at all (13.9% on SRR396637, where features
-  are nearly all `X`), so the other entries held a zero that no accessor may
-  read.
+  are nearly all `X`), so the rest held a zero no accessor may read.
 - **The column was 2.9x the size of the data it indexed**: 834 KB of offsets
   over 291 KB of `payloadBytes`.
 
@@ -24,8 +23,8 @@ a slot's length is `num` for I/S/b/i/q, one byte for B and zero otherwise. We
 checked the prefix sum over every slot of all three performance fixtures and
 found **0 deviations**.
 
-The column therefore provided exactly one thing, O(1) random access, and
-[TODO.md](../../TODO.md) was wrong to call replacing it "free". The accessors
+The column therefore gave exactly one thing, O(1) random access, and
+[TODO.md](../../TODO.md) was wrong to call replacing it "free": the accessors
 that read it take an index and nothing else, and the package exports
 `ReadFeatureArena`.
 
@@ -94,7 +93,7 @@ taken on a loaded machine are not trustworthy. An in-process branch-vs-branch
 run put the long-read mismatch walk at 2.66x _faster_, which is not a real
 effect; `docs/memory.md` describes that measurement error under "do not A/B two
 source trees in one process". `benchmarks/reads.bench.ts` answers the timing
-question on a quiet machine instead. It covers the walks that run after a
+question on a quiet machine instead. It covers the walks that happen after a
 decode, which `benchmarks/cram.bench.ts` never reached.
 
 Two results need no timer: the decode does strictly less work than before (an

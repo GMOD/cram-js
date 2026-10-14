@@ -14,16 +14,16 @@ The slice reads are larger than "index reads are short" suggests, because the
 caller's byte-range layer coalesces contiguous chunks into one range request, so
 a small viewport over deep data becomes a single large read.
 
-The read path is a stack of **self-clearing memoized promises**:
-`getDefinition`, `getCompressionScheme`, `getHeader`,
-`_getBlocksContentIdIndex`, then `SliceRecordCache`. Each of them already drops
-a rejected promise, so a cancellation cannot _poison_ a cache, and
-`SliceRecordCache` documents that hazard. A naive signal causes a different
-problem, because a memo cannot tell **whose** cancellation it is seeing. With a
-signal threaded in naively, a query that joins a read started by a cancelled
-query fails with that query's cancellation. A retry would succeed, since the
-memo dropped the entry, but no code retries, so the query fails because of an
-abort that was not its own.
+The obstacle is that the read path is a stack of **self-clearing memoized
+promises**: `getDefinition`, `getCompressionScheme`, `getHeader`,
+`_getBlocksContentIdIndex`, then `SliceRecordCache`. Every one of them already
+drops a rejection, so a cancellation cannot _poison_ a cache, and
+`SliceRecordCache` documents that hazard. A naive signal poses a different
+problem, because a memo has no way to tell **whose** cancellation it is seeing.
+Thread a signal in naively and a query that happens to join a read started by a
+cancelled query inherits that cancellation as its own failure. A retry would
+succeed, since the memo dropped the entry, but no code retries, so the query
+fails because of an abort that was not its own.
 
 ## Decision
 
@@ -84,23 +84,23 @@ consumer signal that ever joined it, and cram-js deliberately dropped the
 dependency in `61791ba`.
 
 **`CraiIndex` keeps a bounded retry instead**, because the trade is different
-there. When the caller that started the index parse aborts, a caller that joined
-the parse retries once, and any failure after that propagates. `CraiIndex`
-parses the `.crai` once for the life of the object, so there is no repeated
-waste to recover, and the retry is a dozen lines against restructuring the memo.
+there. A caller that joined the index parse and saw it fail because the caller
+who started it aborted retries once, and any failure after that propagates. The
+`.crai` is parsed once for the life of the object, so there is no repeated waste
+to recover, and the retry is a dozen lines against restructuring the memo.
 jbrowse's `RemoteFileWithRangeCache.joinChunk` bounds the same retry the same
 way, one layer down, on 256 KiB chunks, and for the reason it gives: the
 pathological case becomes one duplicate parse rather than a recursion whose
-depth depends on how the aborts interleave. `@gmod/bam` recurses without a
-bound, and cram-js does not copy that part of the pattern.
+depth depends on how the aborts interleave. `@gmod/bam` recurses unbounded,
+which is the part of that pattern not worth copying.
 
 ### What this replaced, and why
 
 The first version of this work ref-counted nothing. The decode ran under
-whichever caller started it. When that caller aborted, a caller that had joined
-saw the decode fail and retried under its own signal. That version was correct,
-and the tests below check exactly the same cross-query properties, but it threw
-away work in the case that matters most, a pan in jbrowse.
+whichever caller started it, and a caller that joined and saw it fail because
+that caller aborted retried under its own signal. That version was correct, and
+the tests below check exactly the same cross-query properties, but it threw away
+work in the case that matters most, a pan in jbrowse.
 
 A pan in jbrowse cancels the query in flight while the next query wants most of
 the same slices. Slices the cancelled query had already finished are resolved in
@@ -125,28 +125,28 @@ inside for an abort to interleave with.
 
 ### The invariant this rests on, and what it cost to keep
 
-The whole first-caller-wins arrangement requires that "container and slice
-objects are per-query". Before this work, the same invariant also caused a lot
-of duplicate reading, because every slice of a query built its own
-`CramContainer`. Each container's header and compression header block were
-therefore re-read once per slice in the container.
+"Container and slice objects are per-query" is required for the whole
+first-caller-wins arrangement, and it was also, before this work, the source of
+a lot of duplicate reading: every slice of a query built its own
+`CramContainer`, so each container's header and compression header block were
+re-read once per slice it held.
 
-The fix shares containers **across the slices of one query and no wider**,
-through a `Map` built in `getRecordsForRange` and threaded into
-`getRecordsInSlice`. Every caller of a shared container's memo is then still the
-same query with the same signal, so the invariant holds. A file-level container
-cache would break it by putting the first query's signal in charge of a header
-every later query depends on, which is the leak this ADR handles explicitly at
-the other two sites, at a third site with no handling. Anyone who later wants
-containers cached file-wide has to solve that leak first.
+The fix is to share containers **across the slices of one query and no wider** —
+a `Map` built in `getRecordsForRange` and threaded into `getRecordsInSlice`.
+Every caller of a shared container's memo is then still the same query with the
+same signal, so the invariant holds. A file-level container cache would break it
+by putting the first query's signal in charge of a header every later query
+depends on, which is the leak this ADR handles explicitly at the other two
+sites, at a third site with no handling. Anyone who later wants containers
+cached file-wide has to solve that leak first.
 
 ## Consequences
 
 - `getRecordsForRange` and `hasDataForReferenceSequence` accept `opts.signal`.
 - `SeqFetch` takes a fifth argument, `opts`, so a callback backed by a remote
   sequence source can cancel too. The change is additive: a four-argument
-  callback is unchanged, and a callback that ignores the signal only makes the
-  query reject at the next point the decode checks, instead of at the fetch.
+  callback is unchanged, and ignoring the signal only means the query rejects at
+  the next point the decode checks rather than at the fetch.
 - `memoizeAsync` now forwards arguments, with a first-caller-wins rule that is
   only sound for arguments that cannot change the result. A later call passing
   different arguments gets the result cached for the first caller's arguments,

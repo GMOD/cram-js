@@ -1,7 +1,7 @@
 # TODO
 
 Work that is measured, still open, and that we want to do. When an item is done
-we remove it from this file, and if the decision behind it should be kept, it
+we remove it from this file, and if the decision behind it is worth keeping it
 goes to [docs/adr/](docs/adr/) instead.
 
 Decisions already taken, including things measured and deliberately **not**
@@ -21,7 +21,7 @@ header and re-parses the compression header block, and reads each slice's bytes
 again to get at its header. For a 6-slice warm query on SRR396637 that is 6
 containers and 6 compression schemes, plus the slices' 2.5 MB. On a local file
 all of that is cheap; over HTTP the byte-range cache answers the repeat reads,
-but the parse still runs.
+but the parse happens regardless.
 
 `getRecordsForRange` already shares containers across the slices of one query,
 and `test/redundantReads.test.ts` checks that it does. Sharing them across
@@ -48,9 +48,9 @@ signal does to a socket. For BAM,
 `products/jbrowse-web/browser-tests/suites/fetch-cancellation.ts` covers that
 end and explains at length why jest cannot. A CRAM case there needs a pileup
 deep enough to still be downloading after 2.5 s at 50 KB/s, and the only fixture
-that qualifies is a ~9 MB binary. The CRAM case would exercise the same abort
-machinery as the BAM case, so we judged the fixture not worth the repository
-weight. Revisit if CRAM ever diverges from that path.
+that qualifies is a ~9 MB binary. The abort machinery under test is shared with
+the BAM case, so we judged the fixture not worth the repository weight. Revisit
+if CRAM ever diverges from that path.
 
 ## Derive `refPos` rather than storing it
 

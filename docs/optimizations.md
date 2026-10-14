@@ -20,10 +20,10 @@ that looked like wins and were not.
 ### Parsed once, shared across callers
 
 The first query reads the whole `.crai`, inflates it, parses it, and memoizes
-the result for the life of the object. The parse is the one read in `CraiIndex`
-that several queries share. When the caller that started it aborts, a caller
-that joined it retries once rather than inheriting the failure, and any failure
-after that retry propagates.
+the result for the life of the object. It is the one read in `CraiIndex` that
+several queries share, so a caller that joined someone else's parse and saw it
+fail because _that_ caller aborted retries once rather than inheriting the
+failure, and any failure after that retry propagates.
 
 ### The overlap scan stops at both ends
 
@@ -66,13 +66,12 @@ were syscalls and copies.
 `applyReferenceSequence` asks for the extent of a slice's reads, which is known
 only once the slice is decoded. Every slice therefore used to run slice read,
 decode, reference read and resolve in series, and a consumer's sequence source
-is usually remote. The slice's declared span gives the same extent, and the
-`.crai` records it, so the fetch now starts before the slice's bytes are read
-and the decode joins it. Over every indexed fixture, the declared span equals
-the reads' extent on every slice but one. On that slice an unmapped read is
-placed past the span, and the slice makes the same exact fetch it always made.
-jbrowse's integration notes had listed this as their open "seam 1"; bam-js
-measured the equivalent at 1.5x on a pan.
+is usually remote. The slice's declared span is the same extent, and the `.crai`
+records it, so the fetch now starts before the slice's own bytes are read and
+the decode joins it. Over every indexed fixture, the declared span equals the
+reads' extent on every slice but one, where an unmapped read placed past it
+costs the exact fetch it always cost. jbrowse's integration notes had listed
+this as their open "seam 1"; bam-js measured the equivalent at 1.5x on a pan.
 
 ### The slices of one query share their containers
 
@@ -110,7 +109,7 @@ against a stated 20,000. Above the working set the two policies measure
 identically, so we dropped `'batch'`
 ([ADR 0005](adr/0005-drop-the-batch-eviction-policy.md)). `cacheIdleTimeoutMs`
 shrinks the cache while the file is idle, and `cacheBudget` lets several files
-share one ceiling instead of each holding a separate one.
+share one ceiling instead of each holding its own.
 [memory.md](memory.md#the-slice-cache) has both.
 
 The cache holds the whole decoded slice with its reference sequence already
@@ -182,8 +181,8 @@ Block decompression is **24–35%** of a cold query, which limits the gain
 further. By Amdahl's law, even a decompressor that took no time would cap the
 whole query's speedup between ~1.3x and ~1.5x, the same ceiling the worker-pool
 item above runs into. The record decode it would leave behind is branchy
-pointer-chasing work that does not belong on a GPU at all. A host-to-device
-round trip per block would lower the ceiling further.
+pointer-chasing work that does not belong on a GPU at all. Add a host-to-device
+round trip per block and the ceiling drops further.
 
 Unlike everything else on this page, the GPU decision comes from the structure
 rather than from a measurement, because the structure settles it before a
@@ -220,10 +219,10 @@ wrong ([ADR 0001](adr/0001-codec-binding-seam.md)).
 ### Decode strings a block at a time
 
 `byteArrayStop` stores its values end to end, so the block holds the strings in
-order. One `TextDecoder` call decodes all of them, and each read is an `indexOf`
-and a `slice`. Decoding SRR396637's 54,695 read names one at a time takes **10.4
-ms** against **1.5 ms** for the block (86% of that was per-call overhead), and
-the call count for the whole file went **110,048 → 240**.
+order. One `TextDecoder` call recovers all of them, and each read is an
+`indexOf` and a `slice`. Decoding SRR396637's 54,695 read names one at a time
+takes **10.4 ms** against **1.5 ms** for the block (86% of that was per-call
+overhead), and the call count for the whole file went **110,048 → 240**.
 
 The alternative was to make the name lazy, which is attractive because a plain
 pileup render never asks for one. It lost on memory: a record holding a
@@ -254,9 +253,9 @@ slice pays that fixed cost once. Read features go from 64–81 bytes each to 15,
 and the quality column saved 104 bytes per record (−12.8% retained on
 SRR396637).
 
-The columns belong to the slice and not to the record for the same reason,
-applied to typed arrays: giving each record its own typed arrays makes
-short-read files about twice as expensive as plain objects.
+The columns belong to the slice and not to the record for the same reason in the
+other direction — giving each record its own typed arrays makes short-read files
+about twice as expensive as plain objects.
 [memory.md](memory.md#columns-not-objects) has the numbers, and
 [read-features.md](read-features.md) how to read them.
 
@@ -300,9 +299,9 @@ rather than a view onto something the file contains. `forEachCigarOp` and
 `forEachMismatch` are the primitives, and `getCigarString`/`getMismatches` are
 built on them ([ADR 0006](adr/0006-cigar-as-a-callback-walk.md)).
 
-The walk calls the consumer's callback directly, not a translating one. Putting
-a translation between this walk and jbrowse's cost **+17%** (the same indirect
-call, made twice), so the walk emits the vocabulary the consumer wants
+The callback is the consumer's own, not a translating one. Putting a translation
+between this walk and jbrowse's cost **+17%** (the same indirect call, made
+twice), so the walk emits the vocabulary the consumer wants
 ([ADR 0008](adr/0008-emit-into-the-consumers-callback.md)).
 
 ### no_ref files make the mismatch walk much slower
@@ -327,13 +326,14 @@ is why these files can be in wide use without anyone noticing the cost.
 A no_ref file also costs space, about **1.7x** on real reads: 200,000 of them
 took 493 KB, against 293 KB written against a reference. Don't read more than
 that into the fixtures in this repo. Their quality strings are synthetic and
-compress to nearly nothing, so the sequence makes up nearly the whole file. In a
-real CRAM the quality scores dominate, and they are identical either way.
+compress to nearly nothing, which leaves the sequence looking like the whole
+file. In a real CRAM the quality scores dominate, and they are identical either
+way.
 
 ### One tag, one score, one clip length
 
-Each of these methods answers one question without building the structure that
-would answer all of them:
+Each of these answers a question without materializing the structure that would
+answer all of them:
 
 - `getTag(name)` reads one tag out of the column, **3.8–7.8x** faster than
   building the `tags` object. minimap2 output has 11 tags on every read, so a
@@ -352,10 +352,10 @@ would answer all of them:
 well as handing it to the filehandle, because a filehandle may ignore it:
 `RemoteFile` aborts its `fetch`, and `LocalFile` ignores the signal.
 
-The read path is a stack of memoized promises, and a memo cannot tell whose
-cancellation it is seeing. The file definition, the SAM header and a decoded
-slice, which several queries share, are therefore reference-counted, so aborting
-one query never fails another
+The hazard is that the read path is a stack of memoized promises, and a memo
+cannot tell whose cancellation it is seeing. The file definition, the SAM header
+and a decoded slice, which several queries share, are therefore
+reference-counted, so aborting one query never fails another
 ([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)). The index parse, also
 shared, gets the same guarantee from a bounded retry: when the caller that
 started it aborts, a caller that joined it retries once. A query with **no**

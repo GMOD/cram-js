@@ -13,10 +13,10 @@ working sets below still stand, in records.
 The number predated any measurement of what one query needs.
 
 A budget below one query's working set caches _nothing_ the next pan can use.
-The cache evicts each slice before the next pan can reuse it, so the hit rate is
-zero, every pan pays for the decode again, and the cache retains the memory
-anyway. Every short-read window we measured had a working set above the 20,000
-default, one of them by 21x.
+Each slice is evicted before the next pan can reuse it, so the hit rate is zero,
+the decode is paid again every time, and the memory is retained anyway. Every
+short-read window we measured had a working set above the 20,000 default, one of
+them by 21x.
 
 The old default also failed to enforce its own record limit. The cache shipped
 with an `evictionPolicy: 'batch'`, which spares everything the batch touched, so
@@ -47,9 +47,9 @@ constructs, because a consumer could not reach an option that stopped at
   a decode settles, so it does nothing for a consumer sitting still, and
   jbrowse's `CramAdapter` memoizes one `IndexedCramFile` for the life of the
   track. Without the timeout, a parked tab holds its whole last view until the
-  track closes, times every open track. The timeout runs from the last _read_ of
-  a slice, not the decode, so panning back and forth over one region never
-  expires it.
+  track closes, times every open track. It is timed from the last _read_ of a
+  slice, not the decode, so panning back and forth over one region never expires
+  it.
 
 - **`'batch'` still stands, but for its own reason and not as a substitute for a
   big enough budget.** @gmod/bam measured it failing to rescue an undersized

@@ -8,8 +8,8 @@
 A query turns its range into a list of `.crai` slice entries, and from there
 every slice runs in parallel. Each slice:
 
-- Resolves its container's header and compression header block, memoized for the
-  query because a container holds several slices.
+- Resolves its container — the header and compression header block, memoized for
+  the query, since a container holds several slices.
 - Asks `featureCache` for the decoded records. A hit returns them already
   decoded and decorated with their reference, so a repeat query runs only the
   filter.
@@ -89,9 +89,9 @@ Everything orange is wasm:
   all.
 
 The build inlines both, and each instantiates lazily, once per JS context. The
-`.crai` goes through wasm too, although the diagram does not draw that edge. The
-index is gzipped, so the first wasm call of a session usually gunzips it rather
-than decompressing a block.
+`.crai` goes through wasm too, though the diagram does not draw that edge — the
+index is gzipped, so the first wasm call of a session is usually gunzipping it
+rather than decompressing a block.
 
 The code crosses the boundary **once per block, never per record**. Each
 crossing copies its input into the wasm heap and its output back out, and a

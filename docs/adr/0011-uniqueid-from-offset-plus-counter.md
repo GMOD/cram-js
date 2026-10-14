@@ -79,7 +79,7 @@ v3.0, 348 slices, 126,263 records):
 - **The counter is sequential in every file**, v2.1 included. One slice per file
   reports 0, the first; every later one reports the previous counter plus its
   record count. No fixture exercises the case the issue is about.
-- **The decoder hands out no id twice**, over every record of every file.
+- **No id is handed out twice**, decoding every record of every file.
 - **The narrowest slice spans 11.4 bytes per record** — 109,587 over 9,596, in
   `test-samtools-123.cram`. Even the degenerate fallback has an order of
   magnitude of headroom.

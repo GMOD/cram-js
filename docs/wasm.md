@@ -125,11 +125,12 @@ The encodings differ because the two files are different kinds of artifact:
   source unescaped, 6,600 of them at this size. They would make git treat the
   file as binary, and a line-ending normalization could then corrupt it with no
   warning. The corruption would show up as an `instantiate` failure, with no
-  generator to rebuild the file from. Base64 is inert ASCII, so it suits a blob
-  maintained by hand.
+  generator to rebuild the file from. Base64 is inert ASCII, so it suits a
+  hand-maintained blob.
 
-Instantiation is async, so every decoder entry point in `src/htscodecs-wasm.ts`
-is async too; after the first call, calls resolve against the existing instance.
+Because the first instantiation is async, every decoder entry point in
+`src/htscodecs-wasm.ts` is async too; once it has happened, calls resolve
+against an instance that already exists.
 
 ## Memory
 

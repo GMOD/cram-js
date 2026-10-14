@@ -6,11 +6,11 @@
 
 By 13.4 nearly everything a decoded slice held was already columnar: read
 features in a struct-of-arrays arena, quality scores in one array per slice,
-tags in a column. The record itself was the one thing still built per record:
+tags in a column. The one thing still built per record was the record itself —
 `decodeRecord` returned a 19-key literal, `new CramRecord(...)` copied it into a
 27-field object, and a slice was a `CramRecord[]`.
 
-The per-record object had two costs, and the worker pool made both visible.
+The per-record object had two costs that the worker pool made visible.
 
 - **The host rebuilt every record.** A slice could not be sent through
   `postMessage` as a `CramRecord[]`, so `sliceTransfer.ts` packed the scalars
@@ -36,11 +36,11 @@ TODO.md had listed it as "`readBlock` reads the same offset twice".
 **The decode writes columns and nothing else.** The per-record scalars go into
 one `Int32Array` — eighteen slots a record — beside a presence byte and a
 `Float64Array` of unique ids, and together with the arena, tag and quality
-columns those make up a `DecodedSlice`. A `DecodedSlice` is the only
-representation: `decodeSliceFromBytes` produces it for the worker and the
-in-process path alike, `featureCache` holds it, and a worker transfers it.
-`serializeSlice` lists its buffers; `deserializeSlice` reattaches two prototypes
-and does nothing per record.
+columns that is a `DecodedSlice`. It is the one representation: what
+`decodeSliceFromBytes` produces for the worker and the in-process path alike,
+what `featureCache` holds, and what a worker transfers. `serializeSlice` lists
+its buffers; `deserializeSlice` reattaches two prototypes and does nothing per
+record.
 
 **A `CramRecord` is a view**: the slice and an index, with a getter per field
 reading the column at that index. The fields mate association writes have

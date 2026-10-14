@@ -6,16 +6,16 @@
 
 [ADR 0006](0006-cigar-as-a-callback-walk.md) established the pattern: this
 library hands out a walk rather than an array, and the consumer's callback is
-called once per item. ADR 0006 also measured the cost: **~15% of the walk, paid
-as one indirect call per emission**, which no change on the consumer side
-recovers.
+called once per item. It also established what that costs — **~15% of the walk,
+paid as one indirect call per emission**, with no consumer-side trick that
+recovers it.
 
-Nobody noticed the corollary until jbrowse tried to adopt `forEachMismatch`.
-jbrowse's copy of the same walk, the duplicate that `TODO.md` records, emits
-jbrowse's vocabulary: small integer type constants rather than CRAM feature
-codes, and read-relative positions rather than reference ones. Delegating to
-this library meant putting a _translating_ callback between this walk and
-jbrowse's, and paying ADR 0006's indirect call a second time.
+The corollary went unnoticed until jbrowse tried to adopt `forEachMismatch`. Its
+own copy of the same walk — the duplicate `TODO.md` records — emits jbrowse's
+vocabulary: small integer type constants rather than CRAM feature codes, and
+read-relative positions rather than reference ones. Delegating to this library
+meant putting a _translating_ callback between this walk and jbrowse's, and
+paying ADR 0006's indirect call a second time.
 
 We measured on the jbrowse side, one variant per process, fastest of 9: **266 ms
 → 312 ms** on 628 ONT reads (200x.longread) and **13.2 ms → 18.4 ms** on 80,177
@@ -95,10 +95,10 @@ choices inside a file parser, which ADR 0006 declined and still declines.
   options object.
 - jbrowse reconciled the other conventions on its side, as predicted. Its type
   constants are the CRAM feature codes now (it compared them symbolically
-  everywhere, and serialized none), and the one consumer that builds objects
-  sets a clip's `length`, instead of setting it on every emission. The deletion
-  and skip sentinels jbrowse used to emit, `'*'` and `'N'` where this walk
-  reports no bases, turned out to be read by no code at all.
+  everywhere, and none was serialized), and a clip's `length` is set in the one
+  consumer that builds objects rather than per emission. The deletion and skip
+  sentinels jbrowse used to emit, `'*'` and `'N'` where this walk reports no
+  bases, turned out to be read by no code at all.
 
 ## Evidence
 

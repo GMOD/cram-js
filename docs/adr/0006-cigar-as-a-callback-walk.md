@@ -10,10 +10,10 @@ produces is synthesized from read features. **Any array form is therefore an
 allocation this library would add for every consumer**, rather than a view onto
 something the file already contains.
 
-The walk that synthesizes the CIGAR is the trickiest in the format: features
-against reference coordinates, insertions and soft clips consuming read bases,
-substitutions that are matches as far as the CIGAR is concerned. The walk
-existed twice, as `getCigarString` here and as jbrowse's 240-line
+The walk that synthesizes the CIGAR is the format's trickiest: features against
+reference coordinates, insertions and soft clips consuming read bases,
+substitutions that are matches as far as the CIGAR is concerned. It existed
+twice — `getCigarString` here and jbrowse's 240-line
 `readFeaturesToNumericCIGAR`, the latter with no samtools cross-check on the
 side that shipped it.
 
@@ -136,9 +136,9 @@ Two mistakes in measuring the cost each produced confidently wrong numbers:
 
   The long-read dataset is worth as much for correctness as for timing. The
   benchmark compares the two walks op-for-op before it times anything, and over
-  those 4.45M operations they agree **exactly** (the region has no unmapped
-  reads to hit the intended difference above). That cross-check covers far more
-  of the walk than the checked-in fixtures do.
+  those 4.45M operations they agree **exactly** (no unmapped reads in the region
+  to hit the intended difference above). That cross-check covers far more of the
+  walk than the checked-in fixtures do.
 
 Revisit only with an end-to-end jbrowse render measurement showing the callback
 matters there — the micro-benchmark above deliberately isolates the walk from

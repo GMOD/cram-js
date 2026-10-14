@@ -46,8 +46,8 @@ now columns (see [the migration note](../MIGRATION.md)):
 - its **mate**, a `MateRecord` per paired record, now two numbers in the
   scalars.
 - its **tags**, a `Record` per record, now
-  [`TagColumn`](../src/cramFile/tagColumn.ts). Unlike everything else here, the
-  tag column is **not** a memory technique: it came out break-even (−0.06 MB on
+  [`TagColumn`](../src/cramFile/tagColumn.ts). Unlike everything else here, this
+  one is **not** a memory technique: it came out break-even (−0.06 MB on
   SRR396637, +0.20 MB on SRR396636). We kept it for two other reasons: a worker
   can send the tags as a transfer instead of a structured clone (243 ms → 11
   ms), and `getTag(name)` can read one tag without building the object. The
@@ -83,8 +83,8 @@ slice then pays the fixed per-object overhead once instead of once per record.
 An `{code, pos, refPos, data}` object costs 64 bytes, and 81 once
 `addReferenceSequence` adds `ref`/`sub` to a substitution. Adding a property the
 object was not constructed with makes V8 move the object's properties
-out-of-object, which is 11.7% of retained heap on its own. Stored as columns, a
-feature costs 15 bytes.
+out-of-object, which is 11.7% of retained heap on its own. As columns it is 15
+bytes per feature.
 
 The columns belong to the slice, deliberately, **not to the record**. Giving
 each record its own typed arrays makes short-read files about twice as expensive
@@ -164,24 +164,24 @@ for (let i = 0; i < record.readLength; i++) {
 ## Laziness that holds a view is a pessimization
 
 Read names used to arrive lazily: the record kept the raw `Uint8Array` off the
-RN block and decoded on first access. When we patched the getter never to
-materialize, so that every record kept its view, SRR396637 went from 37.7 MB to
-**40.9**. The 104-byte view is nearly twice the ~56 bytes of the name it avoided
+RN block and decoded on first access. Patching the getter never to materialize,
+so that every record kept its view, took SRR396637 from 37.7 MB to **40.9** —
+the 104-byte view is nearly twice the ~56 bytes of the name it was avoiding
 decoding. Deferring is only worth it if you hold something _smaller_ than the
 result, and a typed-array view over a short run of bytes is larger.
 
 The slice decode therefore resolves names as it goes. That change also merged
 `_readName`/`_readNameRaw`/`_syntheticReadName` into one field and removed a
 duplicate string per detached record, since the mate's name decoded eagerly and
-then the record's name decoded the same bytes again later. It saved ~2 MB on
+then the record's own name decoded the same bytes again later. It saved ~2 MB on
 both short-read fixtures. Two general rules follow:
 
 - **Defer a computation, not a view.** A lazily-decoded `record.qualityScores`
   is fine because it needs only two numbers on an object that already exists; a
   lazily-decoded read name was not, because it needed a whole view object.
 - **Check who forces it anyway.** Mate association already read `readName` for
-  53,472 of SRR396637's 54,695 records, so even while the deferral lasted, most
-  records decoded their name anyway.
+  53,472 of SRR396637's 54,695 records, so the deferral was mostly notional even
+  while it lasted.
 
 ## The slice cache
 

@@ -31,7 +31,7 @@ neither is a difference:
 If you want quality scores or padding directly, read the next section before you
 walk the raw list.
 
-## Common mistakes
+## Traps
 
 Every one of these has been a real bug in code that walked the features itself:
 
@@ -40,8 +40,8 @@ Every one of these has been a real bug in code that walked the features itself:
 - `b` holds a run of bases that align as CIGAR matches, but they are not all
   matches. htslib writes `b` only when encoding with no reference
   (`samtools view --output-fmt-option no_ref`, and every CRAM `samtools depad`
-  writes), so the writer computed no substitutions and the run includes real
-  ones. Diff it against a reference yourself, as `getMismatches()` does.
+  writes), so the writer computed no substitutions and the run covers real ones.
+  Diff it against a reference yourself, as `getMismatches()` does.
 - `q` and `Q` hold only quality. Their `refPos` isn't an alignment position at
   all, so a positional walk has to skip them. `RF_POSITIONAL[code]` is 0 for
   exactly those two, which is the cheapest way to test for them.

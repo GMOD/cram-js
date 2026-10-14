@@ -20,7 +20,7 @@ byte-for-byte, so `pnpm check:wasm` after a build should pass. CI and
 A byte-for-byte rebuild needs the emscripten version in
 `htscodecs-wasm/emscripten-version`, which both CI jobs install.
 `htscodecs-wasm/build.sh` refuses any other, since a different version emits
-equivalent JS with different bytes, which rewrites the tracked bundle. On macOS
+equivalent but differently shaped JS and rewrites the tracked bundle. On macOS
 that version's closure compiler needs a Java runtime; without one, build inside
 the official image instead:
 

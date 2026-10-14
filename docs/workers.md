@@ -1,8 +1,8 @@
 # Decoding slices on a worker pool
 
 A CRAM query decodes one or more slices, and slices are independent. Since 12.1
-the library decodes them on a shared pool of workers where the host has them.
-The pool is on by default and needs no configuration:
+that decode happens on a shared pool of workers where the host has them, on by
+default and with nothing to configure:
 
 ```js
 // decodes on the pool by default
@@ -35,15 +35,15 @@ rejected it. Block decompression is only **24–35%** of a cold CRAM query:
 | HG002 ONT (37 long reads)      | 76 ms  | 35%           |
 
 Amdahl's law caps a decompression-only pool at ~1.33x. The real figure is lower
-still, because each slice has few heavy blocks. On the ONT slice a single 19.1
-ms block is 74% of that slice's decompression, which leaves little work to
-spread across workers. Our end-to-end model of a decompression-only pool gave
+still, because the heavy blocks within one slice are few. On the ONT slice a
+single 19.1 ms block is 74% of that slice's decompression, so there is barely
+anything to spread. Our end-to-end model of a decompression-only pool gave
 **1.05–1.46x**, against the 2.0–2.8x measured below for the whole slice.
 
 The unit of work is therefore the whole slice: decompression, the record decode,
 and mate association — about 95% of a query rather than a quarter of it.
 
-## Measurements
+## Measured
 
 The table compares four worker threads against in-process decoding, timing the
 decode only, over jb2bench's 19 kb region. We ran it with `node:worker_threads`
@@ -98,10 +98,10 @@ other two. The slice-count threshold below was rejected for the same reason.
 
 **There is no slice-count threshold, and we measured for one and rejected it.**
 An early run put a 2-slice query at 0.72x, so we wrote a threshold to skip the
-pool below four slices; the 0.72x then failed to reproduce. A sweep of slice
-count on the same corpus, with a median of 9 rather than 3, gives a curve that
-rises with slice count except at 4 slices on 1000x.shortread, where it dips from
-1.69x to 1.58x:
+pool below four slices; the 0.72x then failed to reproduce. Sweeping slice count
+on the same corpus with a median of 9 rather than 3 gives a curve that rises
+with slice count except at 4 slices on 1000x.shortread, where it dips from 1.69x
+to 1.58x:
 
 | slices          | 1     | 2     | 3     | 4     |
 | --------------- | ----- | ----- | ----- | ----- |
@@ -114,10 +114,10 @@ records it because the threshold nearly shipped on the strength of it. A
 single-slice query never happens in isolation, though. The user pans, so the
 pool stays warm, and the queries after the first matter more than a cold one.
 
-## Slice counts
+## Slice count sets the payoff
 
-Slice-level parallelism helps only when a query touches several slices. The
-table lists the slices each fixture has in jb2bench's 19 kb region:
+Slice-level parallelism only helps if a query touches several slices. The table
+lists the slices each fixture has in jb2bench's 19 kb region:
 
 | fixture         | records | slices |
 | --------------- | ------- | ------ |
@@ -130,8 +130,8 @@ table lists the slices each fixture has in jb2bench's 19 kb region:
 
 The deep files, which are the slow ones, have many slices. The shallow files
 have one or two, where the measurements above put the pool at parity to 1.16x.
-Even at one slice the pool moves the decode off the main thread, which is the
-part a UI notices; throughput is the secondary benefit.
+Even at one slice the decode is off the main thread, which is the part a UI
+notices; throughput is the secondary benefit.
 
 ### The speedup grows with the region, up to a point
 
@@ -146,19 +146,19 @@ interleaved:
 | 1000x.shortread | 250 kb     | 2,000,000 | 4322 ms    | 2317 ms | 1.87x     |
 | 1000x.longread  | **100 kb** | 3,642     | 4094 ms    | 1204 ms | **3.40x** |
 
-The speedup peaks rather than climbing: at 250 kb it falls back to 1.87x. The
-host deserializes the payload serially, so past some width that serial share
-grows faster than the parallel one. That is the Amdahl ceiling noted above,
-visible here as a turning point rather than only as a cap.
+The speedup peaks rather than climbing: at 250 kb it falls back to 1.87x.
+Deserializing the payload happens on the host and is serial, so past some width
+that serial share grows faster than the parallel one. That is the Amdahl ceiling
+noted above, visible here as a turning point rather than only as a cap.
 
 **A consumer that gates its queries by size never reaches the peak.** jbrowse
 caps a pileup on estimated fetch bytes (5 MB for CRAM) and on screen density.
 100 kb of `1000x.shortread.cram` is about 11.9 MB, so jbrowse refuses it
-outright and shows a force-load banner instead. For that fixture the cap falls
-near 40 kb, so a jbrowse pileup always stays in the 19-40 kb band, at the
-_shallow_ end of this table. The size gate makes that permanent rather than
-incidental, and it explains most of why the end-to-end speedup measured in
-jbrowse is around 1.1x while the decode alone is 2.2x.
+outright and shows a force-load banner instead. The crossover for that fixture
+is near 40 kb, so a jbrowse pileup always stays in the 19-40 kb band, which is
+the _shallow_ end of this table. That is structural rather than incidental, and
+it is most of why the end-to-end win there is around 1.1x while the decode alone
+is 2.2x.
 
 The pool is therefore worth much more to a consumer that decodes a large region
 in one go, such as a whole-contig scan, an export, an analysis script or a
@@ -193,11 +193,11 @@ capped the pool's speedup (ADR 0012). The worker sends strings as strings, which
 takes 15 ms for 153,677 of them, against 112 ms to encode the same set into
 bytes.
 
-**The reference stays on the main thread.** The caller supplies
-`fetchReferenceSequence`, so `CramSlice` calls it on the main thread after the
-slice arrives, and applies the reference with the same code that decorates an
-in-process decode. A slice from the worker has no `refRegions`, which is why
-`getReadBases()` on a raw transfer returns undefined.
+**The reference stays behind.** `fetchReferenceSequence` is caller-supplied, so
+`CramSlice` calls it on the main thread after the slice arrives, and applies the
+reference with the same code that decorates an in-process decode. A slice
+arrives from the worker with no `refRegions`, which is why `getReadBases()` on a
+raw transfer returns undefined.
 
 ## Falling back
 
@@ -236,19 +236,19 @@ src/worker/sliceWorkerEntry.ts        the message loop, and nothing else
   -> inline-worker  src/wasm/cram-worker-source.js       (~400 KB, tracked)
 ```
 
-Webpack writes the intermediate bundle to the gitignored `build/`, **not** to
-`src/wasm/`, where it used to go. `allowJs` makes everything under `src/` a tsc
-input, so when the bundle sat in `src/wasm/`, tsc compiled it into `esm/` and
-`dist/` too, and we published it three times over with two sourcemaps: about a
-megabyte of a file that no module imports. Git tracks only the string module,
-for the reason [wasm.md](wasm.md) gives for the wasm bundle.
+The intermediate goes to the gitignored `build/`, and **not** to `src/wasm/`
+where it used to. `allowJs` makes everything under `src/` a tsc input, so from
+there tsc compiled it into `esm/` and `dist/` too, and we published it three
+times over with two sourcemaps: about a megabyte of a file that no module
+imports. Git tracks only the string module, for the reason [wasm.md](wasm.md)
+gives for the wasm bundle.
 
 Two settings follow from the intermediate never reaching the package:
 
-- Terser runs with `extractComments: false`, so license banners stay **inside**
-  the bundle. With extraction on, the notice would stay in `build/` while the
-  code it covers shipped to every consumer, under a banner naming a file that
-  does not exist.
+- Terser takes `extractComments: false`, so license banners stay **inside** the
+  bundle. With extraction on, the notice would stay in `build/` while the code
+  it covers shipped to every consumer, under a banner naming a file that does
+  not exist.
 - `inline-worker.sh` writes `/** @type {string} */` above the generated const.
   Without it tsc infers the type of a 400,000-character bundle as a string
   literal type and writes the whole thing out again as a 440 KB `.d.ts`, in both

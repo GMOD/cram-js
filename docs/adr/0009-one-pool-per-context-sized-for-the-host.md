@@ -30,22 +30,21 @@ reps:
 | 3          | 669 ms  | 498 ms  | 259 ms   | 304 ms   |
 | 5          | 1347 ms | 956 ms  | 484 ms   | 471 ms   |
 
-A pool of 4 wins everywhere on 16 cores and loses badly on 4 cores from three
-tracks up, by **1.41x at five tracks**.
+Four wins everywhere on 16 cores and loses badly on 4 from three tracks up —
+**1.41x at five tracks**.
 
 ## The alternative that exists
 
 `@gmod/bgzf-filehandle` already ships the other design: `BgzfWorkerPoolHost` and
 `BgzfWorkerPoolClient` put one pool in one context and let the others reach it
 over a `MessagePort`. The client implements the pool interface, so callers
-cannot tell it from a local pool. The pair is exported, and an automated
-puppeteer test covers it
+cannot tell it from a local pool. It is exported, and it is covered by an
+automated puppeteer test
 (`MessagePort shared pool across simulated RPC workers`). No consumer has
 adopted it; jbrowse calls `getSharedWorkerPool()` per context.
 
 The host/client design bounds the total worker count by construction, which
-conservative sizing does not. What remains to measure is the cost of the extra
-boundary.
+conservative sizing does not. The question is what the extra boundary costs.
 
 ## Decision
 
@@ -79,7 +78,7 @@ cost**:
 - A hosted pool charges ~17% on _every_ query, including the one- and two-track
   case that is most of the use, to fix contention that only appears at three or
   more tracks on a machine with few cores.
-- Sizing costs nothing when there is no contention. At 16 cores the value is
+- Sizing charges nothing when there is no contention. At 16 cores the value is
   unchanged from the default; at 4 cores one track pays 220 → 241 ms so that
   five tracks gain 1347 → 956 ms.
 

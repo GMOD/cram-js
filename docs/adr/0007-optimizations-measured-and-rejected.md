@@ -43,8 +43,8 @@ the decode was left to defer. See
 
 ## Consequences
 
-The decode still pays the costs these would have removed. We list two of them
-here so that nobody mistakes them for oversights:
+The costs these would have removed are still being paid, and two of them are
+listed here so they are not mistaken for oversights:
 
 - **A slice's whole decoded name block stays alive as long as any record from it
   lives.** Interning would recover that; see ADR 0002's consequences for the
@@ -89,10 +89,10 @@ which means reading every character of it. The decode does that ~220,000 times
 on SRR396637, for values that batching had just made very cheap to produce.
 
 An earlier note claimed two more benefits for interning, and interning has
-_neither_. It does not let the GC collect the decoded block, because interning
+_neither_. It does not let the decoded block be collected, because interning
 keeps one reference per distinct value, and one reference pins the block just as
-well as fifty thousand. And it does not remove the temporary string, which the
-reader allocates in order to hash it, whether or not the map keeps it.
+well as fifty thousand. And it does not remove the temporary string, which is
+allocated to be hashed whether or not it is kept.
 
 ### A positional `CramRecord` constructor
 
@@ -164,7 +164,7 @@ half the retained bytes on ONT (median 4391 ops/read), but **147% slower and
 2.4x the memory** on short reads (median 1 op/read), where a one-element payload
 pays ~96 bytes of fixed typed-array overhead. The per-record arena failed the
 same way. That walk switches per read at 64 ops, matching the ~50–100 crossover
-bam-js measured in its `src/record.ts`. See
+bam-js measured in its own `src/record.ts`. See
 [ADR 0006](0006-cigar-as-a-callback-walk.md) for why the array is built in the
 consumer at all.
 

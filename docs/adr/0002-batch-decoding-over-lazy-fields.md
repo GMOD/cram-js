@@ -17,10 +17,10 @@ chained/paired mode (`chainGroupingKey`), the details panel
 export. **A plain pileup render never asks for a read name at all**, so with a
 deferred name the most common render would never decode one.
 
-The alternative uses the block layout, which already suits bulk decoding.
-`byteArrayStop` stores its values end to end, each followed by its stop byte, so
-the block holds the strings in order and one `TextDecoder` call decodes all of
-them.
+The alternative is to notice that the data is already laid out for bulk
+decoding. `byteArrayStop` stores its values end to end, each followed by its
+stop byte, so the block holds the strings in order and one `TextDecoder` call
+recovers all of them.
 
 ## Decision
 
@@ -31,9 +31,9 @@ position. `readName` stays an ordinary field, assigned during the slice decode.
 
 Two details keep the batched read correct:
 
-- **Read from the cursor, not from a precomputed table.** The reader keeps no
-  index that could fall out of step, so a block shared with another codec, or a
-  caller that skips a value, stays correct with no bookkeeping.
+- **Read from the cursor, not from a precomputed table.** There is no index to
+  keep in step with anything, so a block shared with another codec, or a caller
+  that skips a value, stays correct with no bookkeeping.
 - **Check that byte offsets are character offsets, once.**
   `block.length === content.length` holds exactly when every byte decoded to one
   character, because UTF-8 never yields more UTF-16 units than bytes and
@@ -52,8 +52,7 @@ expression handles it unchanged.
 
 - `TextDecoder` calls decoding SRR396637 went **110,048 → 240** — six slices
   times two blocks, plus the header. That count is exact and independent of
-  machine load, so it is a more reliable measure than any timing on a shared
-  machine.
+  machine load, which is worth more than any timing on a shared machine.
 - The API is unchanged, with no getter, no offset field beside every name, and
   no special handling for `mate.readName` or for the assignment in
   `addReferenceSequence`.

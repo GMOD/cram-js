@@ -1,8 +1,8 @@
 # Migration
 
 Every breaking change back to v9, newest first. If you are coming from several
-majors back, read down. A later entry can supersede an earlier one, and the
-earlier entry then says so.
+majors back, read down. A later entry can supersede an earlier one, and where it
+does the earlier entry says so.
 
 All coordinates are 0-based half-open.
 
@@ -177,7 +177,7 @@ has to be updated:
 | `featureCache.get(…)`       | `featureCache.getIfCached(…)` |
 | `featureCache.maxRecords`   | `featureCache.maxSize`        |
 
-The swap itself leaves behaviour unchanged. cram was the third of the four gmod
+Behaviour is unchanged by the swap itself; cram was the third of the four gmod
 packages to replace its copy of this cache with the shared one. Code that only
 constructs a `CramFile` and reads records needs no change.
 
@@ -252,16 +252,16 @@ on each access**, so:
 
 Alongside it, `record.getMismatches(opts?)` and
 `record.forEachMismatch(cb, opts?)` report the differences from the reference
-(X/I/D/N/S/H) with an optional reference window. Prefer them, because
-`readFeatures`, though it was the documented way to parse CRAM, is too low level
-to use correctly. To interpret it, a consumer has to know that `i` and `I` are
-both insertions with different payloads, that a run of `i` is one insertion,
-that `b` aligns as matches, that an `X` feature's `data` is a
-substitution-matrix index rather than a base, and that `q`/`Q` hold only
-quality. Their `refPos` comes from a read position the reference never reaches,
-so it can point backwards into an insertion. Every one of those has been a bug
-in a downstream consumer. `RF_POSITIONAL` marks which codes describe alignment
-geometry, for a consumer walking the columns directly.
+(X/I/D/N/S/H) with an optional reference window. Prefer them: `readFeatures` was
+the documented way to parse CRAM and it is too low level to use correctly.
+Interpreting it means knowing that `i` and `I` are both insertions with
+different payloads, that a run of `i` is one insertion, that `b` aligns as
+matches, that an `X` feature's `data` is a substitution-matrix index rather than
+a base, and that `q`/`Q` hold only quality. Their `refPos` comes from a read
+position the reference never reaches, so it can point backwards into an
+insertion. Every one of those has been a bug in a downstream consumer.
+`RF_POSITIONAL` marks which codes describe alignment geometry, for a consumer
+walking the columns directly.
 
 Also in v9: `getCigarString()` returns `'*'` rather than `''` for a mapped
 record with no operations, which is what SAM and samtools spell.
