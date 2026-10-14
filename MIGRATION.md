@@ -1,19 +1,19 @@
 # Migration
 
 Every breaking change back to v9, newest first. If you are coming from several
-majors back, read down — a later entry can supersede an earlier one, and where
-it does the earlier entry says so.
+majors back, read down. A later entry can supersede an earlier one, and the
+earlier entry then says so.
 
 All coordinates are 0-based half-open.
 
 ## v13 → v14: a record is a view onto its slice's columns
 
-`CramRecord` no longer holds its fields. The decode writes every per-record
-scalar into one `Int32Array` beside the read-feature, tag and quality columns —
-a `DecodedSlice` — and a record is that slice plus an index, with a getter per
-field. Nothing changes for a reader: `record.start`, `record.flags`,
-`record.readName` and the rest are the same names with the same values. What
-changes:
+`CramRecord` no longer holds its fields. The decoder writes every per-record
+scalar into one `Int32Array` beside the read-feature, tag and quality columns,
+and together these make up a `DecodedSlice`. A record is that slice plus an
+index, with a getter per field. Code that only reads records needs no change,
+because `record.start`, `record.flags`, `record.readName` and the rest keep
+their names and values. What changes:
 
 - **Records are per query.** `getRecordsForRange` hands out fresh views each
   call, so two queries over the same cached slice return records that are equal
@@ -34,18 +34,18 @@ changes:
   `getReadBases()` and `qualityScores` as before; the stored field is now
   `string | undefined`. (It was never `null` in practice — the old constructor
   dropped it — so this only tightens the type.)
-- **`serializeSliceRecords`/`deserializeSliceRecords` are gone.** A slice
-  crosses a worker boundary as itself: `serializeSlice(slice)` and
-  `deserializeSlice(payload)` in `cramFile/decodedSlice.ts`, for anyone who
-  drove the protocol by hand.
+- **`serializeSliceRecords`/`deserializeSliceRecords` are gone.** The worker
+  protocol now sends the slice itself. Code that drove the protocol by hand uses
+  `serializeSlice(slice)` and `deserializeSlice(payload)` in
+  `cramFile/decodedSlice.ts`.
 - **`cacheSize` is `maxCacheBytes`, and counts bytes.** The decoded-slice cache
-  weighs a slice by `DecodedSlice.byteLength` — its columns, with the strings
-  estimated — instead of by record count, and the default is 1 GB, the same name
-  and number as `@gmod/bam`'s `maxCacheBytes`, so one `cacheBudget` can now span
-  a consumer's BAM and CRAM files. `DEFAULT_CACHE_SIZE` is
+  weighs a slice by `DecodedSlice.byteLength`, which sums its columns and an
+  estimate of its strings, instead of by record count. The default is 1 GB, the
+  same name and number as `@gmod/bam`'s `maxCacheBytes`, so one `cacheBudget`
+  can now span a consumer's BAM and CRAM files. `DEFAULT_CACHE_SIZE` is
   `DEFAULT_MAX_CACHE_BYTES`. A consumer that passed `cacheSize` in records
-  should multiply by the size of its records — ~400 B for short reads, ~100 KB
-  for long ones — or take the default, which clears every working set measured
+  should multiply by the size of its records (~400 B for short reads, ~100 KB
+  for long ones) or take the default, which exceeds every working set measured
   ([ADR 0013](docs/adr/0013-weigh-the-slice-cache-in-bytes.md)).
 - **A slice is one read.** `CramContainer.getSlice(position, size?)` takes the
   size from the `.crai` as before, or works it out from the container's
@@ -74,9 +74,9 @@ record.getMismatches({ start: 100, end: 121 })
 ```
 
 If you were passing a half-open viewport and subtracting 1 to compensate, drop
-the subtraction. If you were passing a closed range, add 1 to `end`. Nothing
-else about which differences are reported has changed, and a spanning deletion
-still counts as touching the window if any of its bases do.
+the subtraction. If you were passing a closed range, add 1 to `end`. The rules
+for which differences are reported are otherwise the same, and a spanning
+deletion still counts as touching the window if any of its bases do.
 
 New in the same options object: **`origin`**, which the reported positions are
 relative to. `origin: record.start` gives read-relative positions, and 0 — the
@@ -86,33 +86,34 @@ default — gives reference ones:
 record.forEachMismatch(cb, { start, end, origin: record.start })
 ```
 
-The window stays in reference coordinates while the output moves, so a consumer
-working in read-relative space can still clip to a genomic viewport without
-converting either one. It exists so such a consumer can hand its own callback
-straight to the walk: converting afterwards costs an extra indirect call per
-difference, which measured **+17%** on jbrowse's plotting path. See
+The window stays in reference coordinates while the reported positions move, so
+a consumer working in read-relative space can still clip to a genomic viewport
+without converting either one. With `origin`, such a consumer passes its
+callback directly to the walk. Converting the positions afterwards costs an
+extra indirect call per difference, which measured **+17%** on jbrowse's
+plotting path. See
 [ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md).
 
 ## v11 → v12: `record.tags` is a column, and `getTag` reads one tag
 
-Tags now live in a per-slice `TagColumn` rather than a `Record` per record, in
-the same shape `readFeatureArena` uses: `record.tagStart`/`tagCount` name a run
-of slots.
+Tags are now stored in a per-slice `TagColumn` rather than a `Record` per
+record, with the layout `readFeatureArena` uses, where `record.tagStart` and
+`tagCount` mark the record's run of slots.
 
 **`record.tags` still works and returns the same object it always did**, built
-from the column on first access and then cached. Nothing has to change to keep
-reading it. Two things do change:
+from the column on first access and then cached. Code that reads it keeps
+working. Two things do change:
 
-- **Prefer `record.getTag(name)` for a single tag.** It reads the record's own
-  slots instead of building an object holding every tag on the read, which
-  measures 3.8–7.8x faster. `@gmod/bam` has had the same method for the same
-  reason.
+- **Prefer `record.getTag(name)` for a single tag.** It reads the record's slots
+  in the column instead of building an object holding every tag on the read,
+  which measures 3.8–7.8x faster. `@gmod/bam` has had the same method for the
+  same reason.
 - **`tags` is now read-only.** It was a writable field; it is now a getter, and
   assigning to it throws a `TypeError` explaining what to do instead. If you
   were mutating it, build a `TagColumn` and pass it as `tagColumn` with
-  `tagStart`/`tagCount`. Reading, spreading and `Object.keys` are unaffected —
-  but note `tags` is no longer an _own_ enumerable property, so `{ ...record }`
-  no longer carries it (`{ ...record.tags }` does, and `toJSON()` is unchanged).
+  `tagStart`/`tagCount`. Reading, spreading and `Object.keys` are unaffected,
+  but `tags` is no longer an _own_ enumerable property, so `{ ...record }` no
+  longer includes it (`{ ...record.tags }` does, and `toJSON()` is unchanged).
 
 `TagColumn`, `TagValue` and the `TAG_*` kind constants are exported from the
 package root for consumers reading the columns directly.
@@ -121,8 +122,9 @@ package root for consumers reading the columns directly.
 
 `CramRecord.mate` is gone, along with the `MateRecord` type it was declared with
 (that type was never re-exported from the package root, so only a deep import
-could have named it). What is left of it — the position — sits directly on the
-record, under SAM's names for those fields rather than this library's:
+could have named it). The position, which is all that remains of it, is now two
+fields on the record, under SAM's names for those fields rather than this
+library's:
 
 | before (≤ 11)            | now (12)                                                                                  |
 | ------------------------ | ----------------------------------------------------------------------------------------- |
@@ -133,13 +135,13 @@ record, under SAM's names for those fields rather than this library's:
 | `record.mate.flags`      | gone — already folded into `record.flags` as `BAM_FMUNMAP`/`BAM_FMREVERSE` while decoding |
 | `record.mate.uniqueId`   | gone                                                                                      |
 
-`toJSON()` follows: its `mate` key is replaced by `nextSequenceId` and
-`nextStart`, present only when `hasNextPosition()`.
+`toJSON()` changes to match. In place of its `mate` key it has `nextSequenceId`
+and `nextStart`, present only when `hasNextPosition()`.
 
 The `next*` naming matches SAM, BAM and `@gmod/bam`, which all call these fields
-`RNEXT`/`PNEXT`, and CRAM's own `NS`/`NP` ("**next** fragment"). Note SAM splits
-the vocabulary and so does this library: the _flag_ accessors keep the mate
-wording, so `isMateUnmapped()` and `isMateReverseComplemented()` are unchanged.
+`RNEXT`/`PNEXT`, and CRAM's own `NS`/`NP` ("**next** fragment"). SAM uses the
+mate wording for its flags, and so does this library, so `isMateUnmapped()` and
+`isMateReverseComplemented()` are unchanged.
 
 Migrating:
 
@@ -153,13 +155,14 @@ Migrating:
 - `hasNextPosition()` is **not** "does this read have a mate" — that is
   `isPaired()`. A paired read whose mate this file does not locate returns
   `false`.
-- The three dropped fields were written on every paired record and read by
-  nothing, in this library or in jbrowse.
+- The decoder wrote the three dropped fields on every paired record, and no code
+  in this library or in jbrowse read them.
 
-Why: the object cost an allocation per paired record — ~150k on a 19 kb query
-against 1000x-coverage short reads — and gave every record a reference to its
-mate, which pinned whole slices in the record cache. Two numbers also cross a
-worker boundary, which an object graph cannot; that is what this unblocks.
+Why: the object cost an allocation per paired record (~150k on a 19 kb query
+against 1000x-coverage short reads) and gave every record a reference to its
+mate, which pinned whole slices in the record cache. Two numbers can also be
+passed across a worker boundary, which an object graph cannot, so the change
+removed that obstacle to moving records between threads.
 
 ## v10 → v11: `featureCache` is a `SharedReadCache`
 
@@ -174,22 +177,22 @@ has to be updated:
 | `featureCache.get(…)`       | `featureCache.getIfCached(…)` |
 | `featureCache.maxRecords`   | `featureCache.maxSize`        |
 
-Behaviour is unchanged by the swap itself; cram was the third of the four gmod
-packages to stop carrying its own copy of this cache. If all you do is construct
-a `CramFile` and read records, nothing changes.
+The swap itself leaves behaviour unchanged. cram was the third of the four gmod
+packages to replace its copy of this cache with the shared one. Code that only
+constructs a `CramFile` and reads records needs no change.
 
-Two things did change inside v11, both non-breaking but worth knowing when you
-arrive from v10:
+Two non-breaking changes inside v11 also matter when you arrive from v10:
 
 - **`cacheSize` defaults to 1,000,000 records, up from 20,000.** The old default
-  sat below the working set of a single query, so it cached nothing while
-  retaining the memory anyway — see
-  [ADR 0004](docs/adr/0004-size-the-slice-cache-above-one-query.md). If you set
-  `cacheSize` yourself, it is now a real bound and is enforced as one
+  was smaller than the working set of a single query, so the cache retained the
+  memory and still cached nothing (see
+  [ADR 0004](docs/adr/0004-size-the-slice-cache-above-one-query.md)). If you set
+  `cacheSize` yourself, the cache now enforces it as a bound
   ([ADR 0005](docs/adr/0005-drop-the-batch-eviction-policy.md)).
-- **An idle cache reclaims itself** after `cacheIdleTimeoutMs` (default 3
-  minutes), and `clearFeatureCache()` empties it on demand. Several `CramFile`s
-  can share one ceiling by passing the same `cacheBudget`.
+- **The cache evicts idle entries**, those no query has read for
+  `cacheIdleTimeoutMs` (default 3 minutes), and `clearFeatureCache()` empties it
+  on demand. Several `CramFile`s can share one ceiling by passing the same
+  `cacheBudget`.
 
 ## v9 → v10: coordinates are 0-based half-open
 
@@ -197,8 +200,7 @@ Every coordinate this library hands out or takes in is **0-based half-open**.
 Before v10 they were 1-based closed, which propagated a serialization detail of
 the CRAM spec into the in-memory API. htslib does the opposite —
 `bam1_core_t.pos` is 0-based in memory even though SAM text is 1-based — and
-`@gmod/bam` was already 0-based, so the two libraries disagreed. They no longer
-do.
+`@gmod/bam` was already 0-based, so the two libraries disagreed until v10.
 
 What changed:
 
@@ -215,16 +217,17 @@ What changed:
 Migrating:
 
 - Rename `alignmentStart` to `start` and drop any `- 1` you were applying to it.
-  The old name is gone rather than silently shifted, so this fails loudly.
+  v10 removed the old name rather than shifting its value, so code that still
+  reads `alignmentStart` breaks instead of getting a position off by one.
 - Rename the `seqFetch` constructor option to `fetchReferenceSequence` **and**
-  change it to half-open. The rename is deliberate: a callback left on the old
-  1-based contract would otherwise return bases shifted by one with nothing to
-  catch it. With the rename, an unmigrated callback is simply never installed
-  and the library throws "callback not provided".
+  change it to half-open. We renamed the option deliberately, because a callback
+  left on the old 1-based contract would otherwise return bases shifted by one,
+  and no error would report it. After the rename, the library never installs an
+  unmigrated callback, and it throws "callback not provided".
 - Half-open means the returned string must be exactly `end - start` characters —
   one fewer than before for the same region.
 - Unplaced records now report `start` of `-1` rather than `0`, matching what BAM
-  has always stored. If you fetch them, the query moves with them:
+  has always stored. To fetch them, start the query at `-1`:
   `getRecordsForRange(-1, -1, end)`, not `(-1, 0, end)`, which now returns
   nothing. See [Reference ids](docs/api.md#reference-ids).
 
@@ -238,9 +241,9 @@ at 19 bytes a feature, rather than an `{code, pos, refPos, data}` object per
 feature at 64 (81 once substitutions were widened). That took a decoded ONT
 slice from 20.41 MB to 7.42 MB.
 
-`record.readFeatures` still reads the same: same shape, same values, the 189
-dump snapshots untouched. But it is a **getter that rebuilds the array on each
-access**, so:
+`record.readFeatures` returns the same structure and values as before, and the
+189 dump snapshots are unchanged. But it is a **getter that rebuilds the array
+on each access**, so:
 
 - **Assigning to it throws.** Build records from plain features with
   `arenaFromReadFeatures()`, exported from the package root.
@@ -249,16 +252,16 @@ access**, so:
 
 Alongside it, `record.getMismatches(opts?)` and
 `record.forEachMismatch(cb, opts?)` report the differences from the reference
-(X/I/D/N/S/H) with an optional reference window. Prefer them: `readFeatures` was
-the documented way to parse CRAM and it is too low level to use correctly.
-Interpreting it means knowing that `i` and `I` are both insertions with
-different payloads, that a run of `i` is one insertion, that `b` aligns as
-matches, that an `X` feature's `data` is a substitution-matrix index rather than
-a base, and that `q`/`Q` carry only quality — their `refPos` comes from a read
-position the reference never reaches, so it can point backwards into an
-insertion. Every one of those has been a bug in a downstream consumer.
-`RF_POSITIONAL` marks which codes carry alignment geometry, for a consumer
-walking the columns directly.
+(X/I/D/N/S/H) with an optional reference window. Prefer them, because
+`readFeatures`, though it was the documented way to parse CRAM, is too low level
+to use correctly. To interpret it, a consumer has to know that `i` and `I` are
+both insertions with different payloads, that a run of `i` is one insertion,
+that `b` aligns as matches, that an `X` feature's `data` is a
+substitution-matrix index rather than a base, and that `q`/`Q` hold only
+quality. Their `refPos` comes from a read position the reference never reaches,
+so it can point backwards into an insertion. Every one of those has been a bug
+in a downstream consumer. `RF_POSITIONAL` marks which codes have alignment
+positions, for a consumer walking the columns directly.
 
 Also in v9: `getCigarString()` returns `'*'` rather than `''` for a mapped
 record with no operations, which is what SAM and samtools spell.

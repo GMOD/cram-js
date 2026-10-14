@@ -20,7 +20,7 @@ byte-for-byte, so `pnpm check:wasm` after a build should pass. CI and
 A byte-for-byte rebuild needs the emscripten version in
 `htscodecs-wasm/emscripten-version`, which both CI jobs install.
 `htscodecs-wasm/build.sh` refuses any other, since a different version emits
-equivalent but differently shaped JS and rewrites the tracked bundle. On macOS
+equivalent JS with different bytes, which rewrites the tracked bundle. On macOS
 that version's closure compiler needs a Java runtime; without one, build inside
 the official image instead:
 
@@ -30,8 +30,7 @@ docker run --rm -v "$PWD":/src -w /src/htscodecs-wasm \
 ```
 
 `dist/cram-bundle.js` is the standalone browser build the README points
-`<script>`-tag consumers at. Nothing in this repo imports it, so it only looks
-unused.
+`<script>`-tag consumers at. Keep it, although no file in this repo imports it.
 
 `docs/img/dataflow.svg` is generated from `docs/img/dataflow.dot` and committed,
 since GitHub does not render DOT. If you edit the `.dot`, re-render it in the
@@ -41,18 +40,18 @@ same commit:
 dot -Tsvg docs/img/dataflow.dot -o docs/img/dataflow.svg
 ```
 
-The measured tables in [docs/memory.md](docs/memory.md) are generated the same
-way — they sit between `<!-- BEGIN GENERATED -->` markers, and anything outside
-those is written by hand. Regenerate them in the same commit as any change to
-what a decoded record holds:
+The measured tables in [docs/memory.md](docs/memory.md) are generated too. A
+script writes them between `<!-- BEGIN GENERATED -->` markers, and the text
+outside the markers is written by hand. Regenerate them in the same commit as
+any change to what a decoded record holds:
 
 ```sh
 pnpm docs:numbers
 ```
 
-It is not a CI check, for the reason
-[docs/memory.md#measuring-it](docs/memory.md#measuring-it) gives, so only this
-note would catch a stale table.
+CI does not run `pnpm docs:numbers`, for the reason
+[docs/memory.md#measuring-it](docs/memory.md#measuring-it) gives, so a stale
+table stays until someone follows this note.
 
 [docs/api.md](docs/api.md) is written by hand, and `test/apiDocs.test.ts` fails
 when a public member of `IndexedCramFile`, `CramFile`, `CraiIndex` or
@@ -66,9 +65,9 @@ is internal.
 pnpm version patch  # or minor/major
 ```
 
-That runs lint, format, types, tests, build, `check:wasm` and `test:pack`,
-regenerates CHANGELOG.md with git-cliff, then pushes the tag, which triggers the
-publish workflow. Releases go out over npm
+`pnpm version` runs lint, format, types, tests, build, `check:wasm` and
+`test:pack`, regenerates CHANGELOG.md with git-cliff, then pushes the tag, which
+triggers the publish workflow. Releases go out over npm
 [trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC, no stored
 token). Once publish succeeds, the `release` job creates the GitHub release from
 that version's CHANGELOG.md section, extracted by `scripts/release-notes.sh` —

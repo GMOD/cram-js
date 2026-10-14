@@ -1,48 +1,48 @@
 # Raw read features
 
-A CRAM record stores a list of _read features_ instead of an aligned sequence:
-the handful of places where the read departs from the reference, plus a few
-housekeeping entries. `getReadBases()`, `getCigarString()` and `getMismatches()`
-are all reconstructed from that list.
+A CRAM record stores a list of _read features_ instead of an aligned sequence.
+The list holds the handful of places where the read departs from the reference,
+plus a few housekeeping entries. `getReadBases()`, `getCigarString()` and
+`getMismatches()` are all reconstructed from that list.
 
 You can read the list directly, as `record.readFeatures`. The rest of this page
 covers what to know before you do.
 
-## You probably don't need this
+## What `getMismatches()` covers
 
 `getMismatches()` already reports every feature that represents a difference
 from the reference: substitutions, insertions (under either encoding),
-deletions, reference skips, and soft and hard clips. So `getMismatches()` covers
-differences on its own — see [`Mismatch`](api.md#mismatch).
+deletions, reference skips, and soft and hard clips (see
+[`Mismatch`](api.md#mismatch)).
 
-`B` and `b` both store bases verbatim rather than as substitutions, and both are
-still reported — as substitutions — for whichever of their bases disagree with
-the reference. That needs a reference, so with no `fetchReferenceSequence` they
-report nothing at all.
+`B` and `b` store bases verbatim rather than as substitutions, and
+`getMismatches()` still reports each of their bases that disagrees with the
+reference as a substitution. That comparison needs a reference, so with no
+`fetchReferenceSequence` it reports nothing at all for them.
 
-Two codes carry information the mismatch functions deliberately leave out,
-because neither is a difference:
+The mismatch functions deliberately leave out two kinds of feature, because
+neither is a difference:
 
-| Code     | What it carries                                      |
-| -------- | ---------------------------------------------------- |
-| `q`, `Q` | quality scores, which carry no alignment information |
-| `P`      | padding, which consumes neither read nor reference   |
+| Code     | Contents                                           |
+| -------- | -------------------------------------------------- |
+| `q`, `Q` | quality scores, with no alignment information      |
+| `P`      | padding, which consumes neither read nor reference |
 
 If you want quality scores or padding directly, read the next section before you
 walk the raw list.
 
-## Traps
+## Common mistakes
 
 Every one of these has been a real bug in code that walked the features itself:
 
 - `i` and `I` are both insertions, and they store their payload differently.
 - A run of `i` features is _one_ insertion, not several.
-- `b` carries a run of bases that align as CIGAR matches, but they are not all
-  matches: htslib writes `b` only when encoding with no reference
+- `b` holds a run of bases that align as CIGAR matches, but they are not all
+  matches. htslib writes `b` only when encoding with no reference
   (`samtools view --output-fmt-option no_ref`, and every CRAM `samtools depad`
-  writes), so the writer computed no substitutions and the run covers real ones.
-  Diff it against a reference of your own — `getMismatches()` does.
-- `q` and `Q` carry only quality. Their `refPos` isn't an alignment position at
+  writes), so the writer computed no substitutions and the run includes real
+  ones. Diff it against a reference yourself, as `getMismatches()` does.
+- `q` and `Q` hold only quality. Their `refPos` isn't an alignment position at
   all, so a positional walk has to skip them. `RF_POSITIONAL[code]` is 0 for
   exactly those two, which is the cheapest way to test for them.
 - An `X` feature's `data` is an index into the container's substitution matrix,

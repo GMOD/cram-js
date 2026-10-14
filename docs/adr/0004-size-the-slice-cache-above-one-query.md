@@ -12,15 +12,17 @@ working sets below still stand, in records.
 `featureCache` is bounded by decoded **record count**, and defaulted to 20,000.
 The number predated any measurement of what one query needs.
 
-A budget below one query's working set does not cache less — it caches
-_nothing_. Each slice is evicted before the next pan can reuse it, so the hit
-rate is zero, the decode is paid again every time, and the memory is retained
-anyway. Every short-read width measured was over that line, one of them by 21x.
+A budget below one query's working set caches _nothing_ the next pan can use.
+The cache evicts each slice before the next pan can reuse it, so the hit rate is
+zero, every pan pays for the decode again, and the cache retains the memory
+anyway. Every short-read window we measured had a working set above the 20,000
+default, one of them by 21x.
 
-The old default also did not bound what it claimed to. The cache shipped with an
-`evictionPolicy: 'batch'`, which spares everything the batch touched, so a
-20,000-record budget was measured **holding 420,000**. Raising the number makes
-it honest as well as useful.
+The old default also failed to bound memory to its stated size. The cache
+shipped with an `evictionPolicy: 'batch'`, which spares everything the batch
+touched, so we measured a 20,000-record budget **holding 420,000**. With a
+budget above the working set, the cache both stays within the budget and serves
+the next pan from memory.
 
 ## Decision
 
@@ -29,24 +31,25 @@ it honest as well as useful.
 - `clearFeatureCache()`, on both `CramFile` and `IndexedCramFile`.
 
 Both options are threaded through `IndexedCramFile`, the class a consumer
-actually constructs — an option that stopped at `CramFile` would be unreachable.
+constructs, because a consumer could not reach an option that stopped at
+`CramFile`.
 
 ## Consequences
 
-- **A record count cannot bound memory, and nothing here claims otherwise.**
+- **A record count cannot bound memory, and this ADR does not claim it does.**
   There is no cheap way to size a decoded record, which is why the cache counts
-  records rather than bytes (see [memory.md](../memory.md#the-slice-cache)). One
-  useful consequence: the budget only ever binds on short-read data, where
-  records are small and numerous. Long-read slices are few and huge — 2,991
-  records for a 50kb window at 1000x — so they never approach it.
+  records rather than bytes (see [memory.md](../memory.md#the-slice-cache)). As
+  a consequence, the budget only ever binds on short-read data, where records
+  are small and numerous. Long-read slices are few and huge (2,991 records for a
+  50kb window at 1000x), so they never approach it.
 
 - **The idle timeout makes the number affordable.** `cacheSize` is applied when
   a decode settles, so it does nothing for a consumer sitting still, and
   jbrowse's `CramAdapter` memoizes one `IndexedCramFile` for the life of the
   track. Without the timeout, a parked tab holds its whole last view until the
-  track closes, times every open track. It is timed from the last _read_ of a
-  slice, not the decode, so panning back and forth over one region never expires
-  it.
+  track closes, times every open track. The timeout runs from the last _read_ of
+  a slice, not the decode, so panning back and forth over one region never
+  expires it.
 
 - **`'batch'` still stands, but for its own reason and not as a substitute for a
   big enough budget.** @gmod/bam measured it failing to rescue an undersized
@@ -56,9 +59,9 @@ actually constructs — an option that stopped at `CramFile` would be unreachabl
   [ADR 0005](0005-drop-the-batch-eviction-policy.md) dropped the policy
   outright.)
 
-- **Matches @gmod/bam and @gmod/tabix**, which took the same shape at the same
-  time for the same reason: @gmod/bam 100MB → 1GB (its ADR 0014/0015),
-  @gmod/tabix 100MB → 1GB.
+- **@gmod/bam and @gmod/tabix made the same change** at the same time for the
+  same reason: @gmod/bam 100MB → 1GB (its ADR 0014/0015), @gmod/tabix 100MB →
+  1GB.
 
 ## Evidence
 
@@ -83,8 +86,8 @@ Six-window 50kb pan, second pass:
 | 1,000,000   |             32ms |         **279ms** |
 
 Working sets were measured with `cacheSize: Infinity`. With a budget applied,
-`totalSize` reports what survived eviction rather than what the query needed,
-which is a mistake worth avoiding deliberately (@gmod/bam ADR 0013's correction
-note). The pan is six 50kb windows stepping 25kb and doubling back, timed on the
-second pass. `LocalFile`, so a refill costs decode only; over HTTP it also costs
-a round trip, widening every gap above.
+`totalSize` reports what survived eviction rather than what the query needed;
+@gmod/bam ADR 0013's correction note records that mistake. The pan is six 50kb
+windows stepping 25kb and doubling back, timed on the second pass. The runs read
+through `LocalFile`, so a refill costs only the decode. Over HTTP a refill also
+costs a round trip, which would widen every gap above.

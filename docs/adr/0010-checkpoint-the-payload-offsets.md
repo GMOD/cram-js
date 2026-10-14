@@ -5,25 +5,26 @@
 ## Context
 
 `ReadFeatureArena` stored a `payloadOffsets: Int32Array` with one entry per read
-feature, pointing at that feature's bytes in `payloadBytes`. Measured with
-`scripts/arena-columns.ts`, three things were true of it and none were on
-record:
+feature, pointing at that feature's bytes in `payloadBytes`. Measurements with
+`scripts/arena-columns.ts` showed three things about it, none of them recorded
+anywhere:
 
 - **834 KB on the ONT slice**, 19.6% of the arena and 10.8% of the 7.53 MB the
   records retained before this change.
-- **Three quarters of it indexed nothing.** Only 53,292 of that slice's 213,602
-  features carry bytes at all — 13.9% on SRR396637, where features are nearly
-  all `X` — so the rest held a zero no accessor may read.
-- **It was 2.9x the size of the data it indexed**: 834 KB of offsets over 291 KB
-  of `payloadBytes`.
+- **Three quarters of its entries pointed at no bytes.** Only 53,292 of that
+  slice's 213,602 features have bytes at all (13.9% on SRR396637, where features
+  are nearly all `X`), so the other entries held a zero that no accessor may
+  read.
+- **The column was 2.9x the size of the data it indexed**: 834 KB of offsets
+  over 291 KB of `payloadBytes`.
 
-It was also pure redundancy. Payloads land in slot order, and the record already
-carries a slot's length — `num` for I/S/b/i/q, one byte for B, zero otherwise —
-so the offsets are a running prefix sum. Checked over every slot of all three
-performance fixtures: **0 deviations**.
+The column was also redundant. The decoder writes payloads in slot order, and
+the record already holds a slot's length (`num` for I/S/b/i/q, one byte for B,
+zero otherwise), so the offsets are a running prefix sum. We checked that over
+every slot of all three performance fixtures and found **0 deviations**.
 
-The column therefore gave exactly one thing, O(1) random access, and
-[TODO.md](../../TODO.md) was wrong to call replacing it "free": the accessors
+The column therefore provided exactly one thing, O(1) random access, and
+[TODO.md](../../TODO.md) was wrong to call replacing it "free". The accessors
 that read it take an index and nothing else, and the package exports
 `ReadFeatureArena`.
 
@@ -31,70 +32,71 @@ that read it take an index and nothing else, and the package exports
 
 Keep an offset for every **eighth** slot — `payloadChunks` — and derive the rest
 by walking forward from the nearest one. `payloadOffsetAt` bounds that at seven
-steps, and the four payload accessors keep their signatures, so nothing outside
-the arena changes.
+steps, and the four payload accessors keep their signatures, so code outside the
+arena is unchanged.
 
-Three details make it hold:
+Three details keep the checkpoints correct:
 
 - **`trim()` builds the checkpoints**, in one pass, rather than maintaining them
-  as payloads arrive. A slice decodes once and its columns settle only when it
-  finishes, which is the only point where every slot's code and `num` are
-  readable. `indexedLength` records the length they cover, so an arena read
-  mid-fill rebuilds rather than answering stale — a hand-built arena behaves
-  like a decoded one.
-- **A sequential walk carries the offset itself** instead of calling
+  as payloads arrive. A slice decodes once, and its columns are final only when
+  the decode finishes, the only point where every slot's code and `num` are
+  readable. `indexedLength` records the length the checkpoints cover, so an
+  arena read mid-fill rebuilds them rather than answering from stale ones, and a
+  hand-built arena behaves like a decoded one.
+- **A sequential walk tracks the offset itself** instead of calling
   `payloadOffsetAt` per feature. `decodeReadSequenceBytes` and `forEachMismatch`
   both do; on a long read the insertions the latter emits are most of the
   features it visits, so it would otherwise pay the scan repeatedly over a
   single forward pass. The advance sits outside each walk's `RF_POSITIONAL`
-  test, because a `q` feature carries bytes while emitting nothing and skipping
-  it desynchronises every payload after it.
+  test, because a `q` feature has bytes but emits nothing, and skipping it
+  desynchronises every payload after it.
 - **`RF_PAYLOAD` is the one table** both the arena and the walks read, with its
-  values chosen so `kind === PAYLOAD_NUM ? num[i] : kind` is the length. That
-  leaves one place to be wrong about what a code carries, rather than four.
+  values chosen so `kind === PAYLOAD_NUM ? num[i] : kind` is the length. Only
+  that table can be wrong about a code's payload length, rather than four copies
+  of it.
 
 ## Consequences
 
-- The arena is 4254 KB → **3524 KB** on the ONT slice. Retained heap 7.53 →
+- The arena is 4254 KB → **3524 KB** on the ONT slice. Retained heap goes 7.53 →
   **6.82 MB** (−9.4%), and 27.41 → **27.05 MB** (−1.3%) on SRR396637, where
   there are few payload-bearing features to index in the first place. This is a
   long-read win; short-read files barely move.
-- **`payloadOffsets` is gone from a public class.** No consumer read it — the
+- **`payloadOffsets` is gone from a public class.** No consumer read it: the
   audit behind the old TODO item established that jbrowse destructures `codes`,
   `pos`, `refPos`, `num`, `refCodes`, `subCodes` and otherwise goes through the
-  accessors — but it is a breaking change on paper.
+  accessors. The removal is still a breaking change on paper.
 - Random access is no longer O(1). Seven steps is the worst case and the
-  accessors hide it, but a caller walking a whole record in order should carry
+  accessors hide it, but a caller walking a whole record in order should track
   the offset rather than call per feature, and the two internal walks show how.
 - The transfer shrinks by the same column, since `sliceTransfer` sends
   `payloadChunks` in its place.
 - **The same argument now applies to `refPos`**, which is another 834 KB
-  derivable from `pos` plus a running per-record delta. It is not done, and it
-  is a harder case: consumers read `refPos` directly, where they never read
-  `payloadOffsets` at all.
+  derivable from `pos` plus a running per-record delta. We have not made that
+  change, and it is a harder case: consumers read `refPos` directly, and they
+  never read `payloadOffsets` at all.
 
 ## Evidence
 
-Memory, from `scripts/arena-columns.ts` and `scripts/measure-heap.ts`, which
-reproduce to ±0.2% — the figures above.
+The memory figures above come from `scripts/arena-columns.ts` and
+`scripts/measure-heap.ts`, which reproduce to ±0.2%.
 
 The real risk in this change is correctness: sha256 over `toJSON()`,
 `getCigarString()`, `getPairOrientation()`, `getReadBases()`, `readFeatures` and
 `getMismatches()` for **all 91,413 records across all 51 indexed fixtures**
 matches `origin/main` exactly, both after the arena change and again after
-rewriting the mismatch walk to carry its own offset. The full suite passes
+rewriting the mismatch walk to track its own offset. The full suite passes
 unchanged, including the 189 snapshots.
 
-**This deliberately quotes no wall-clock.** The machine was loaded at the time,
-and [TODO.md](../../TODO.md)'s method note is explicit that timings taken on a
-loaded machine are not trustworthy — an in-process branch-vs-branch run put the
-long-read mismatch walk at 2.66x _faster_, which is not a real effect and is the
-trap `docs/memory.md` describes under "do not A/B two source trees in one
-process". `benchmarks/reads.bench.ts` settles it on a quiet machine instead; it
-covers the walks that happen after a decode, which `benchmarks/cram.bench.ts`
-never reached.
+**This ADR deliberately quotes no wall-clock times.** The machine was loaded at
+the time, and [TODO.md](../../TODO.md)'s method note is explicit that timings
+taken on a loaded machine are not trustworthy. An in-process branch-vs-branch
+run put the long-read mismatch walk at 2.66x _faster_, which is not a real
+effect; `docs/memory.md` describes that measurement error under "do not A/B two
+source trees in one process". `benchmarks/reads.bench.ts` answers the timing
+question on a quiet machine instead. It covers the walks that run after a
+decode, which `benchmarks/cram.bench.ts` never reached.
 
-What can be said without a timer: the decode does strictly less work than before
+Two things hold without a timer. The decode does strictly less work than before
 (an offset write per payload became one indexing pass per slice), and both
 sequential walks do the same number of array reads per feature as they did with
 the full column.

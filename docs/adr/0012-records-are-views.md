@@ -6,48 +6,49 @@
 
 By 13.4 nearly everything a decoded slice held was already columnar: read
 features in a struct-of-arrays arena, quality scores in one array per slice,
-tags in a column. The one thing still built per record was the record itself —
+tags in a column. The record itself was the one thing still built per record:
 `decodeRecord` returned a 19-key literal, `new CramRecord(...)` copied it into a
 27-field object, and a slice was a `CramRecord[]`.
 
-That shape had two costs that the worker pool made visible.
+The per-record object had two costs, and the worker pool made both visible.
 
-- **The host rebuilt every record.** A slice could not cross `postMessage` as
-  `CramRecord[]`, so `sliceTransfer.ts` packed the scalars into an `Int32Array`
-  on the worker and the host unpacked them — one `new CramRecord` per record,
-  serially, on the thread the pool exists to unburden. Measured at **0.52 µs a
-  record**: 28 ms for SRR396637's 54,695 records against a 107 ms in-process
-  decode of the same file. docs/workers.md records the consequence: the pool's
-  speedup peaks at 2.7x around 100 kb and falls to 1.9x at 250 kb, because that
-  serial share grows with the query.
-- **The record object was most of what a short-read slice retained.** 27 fields
-  at 8 bytes plus the header, on every record, next to ~100 bytes of quality
+- **The host rebuilt every record.** A slice could not be sent through
+  `postMessage` as a `CramRecord[]`, so `sliceTransfer.ts` packed the scalars
+  into an `Int32Array` on the worker and the host unpacked them, one
+  `new CramRecord` per record, serially, on the thread the pool is meant to
+  free. We measured the rebuild at **0.52 µs a record**: 28 ms for SRR396637's
+  54,695 records against a 107 ms in-process decode of the same file.
+  docs/workers.md records the consequence: the pool's speedup peaks at 2.7x
+  around 100 kb and falls to 1.9x at 250 kb, because that serial share grows
+  with the query.
+- **The record object was most of what a short-read slice retained.** Each
+  record had 27 fields at 8 bytes plus the header, next to ~100 bytes of quality
   scores and ~56 of name. SRR396637's 27.1 MB was 18.8 MB of JS heap.
 
-A separate, smaller cost sat on the read path: a slice was three reads (a probe
-of the header block's header, the header block, the data blocks) and a container
+The read path had a separate, smaller cost: a slice was three reads (a probe of
+the header block's header, the header block, the data blocks) and a container
 four, because `readBlock` reads a header then re-reads the block, and because
 the slice header was parsed on the host before the data blocks were fetched.
-TODO.md had carried it as "`readBlock` reads the same offset twice".
+TODO.md had listed it as "`readBlock` reads the same offset twice".
 
 ## Decision
 
 **The decode writes columns and nothing else.** The per-record scalars go into
 one `Int32Array` — eighteen slots a record — beside a presence byte and a
 `Float64Array` of unique ids, and together with the arena, tag and quality
-columns that is a `DecodedSlice`. It is the one representation: what
-`decodeSliceFromBytes` produces for the worker and the in-process path alike,
-what `featureCache` holds, and what a worker transfers. `serializeSlice` lists
-its buffers; `deserializeSlice` reattaches two prototypes and does nothing per
-record.
+columns those make up a `DecodedSlice`. A `DecodedSlice` is the only
+representation: `decodeSliceFromBytes` produces it for the worker and the
+in-process path alike, `featureCache` holds it, and a worker transfers it.
+`serializeSlice` lists its buffers; `deserializeSlice` reattaches two prototypes
+and does nothing per record.
 
 **A `CramRecord` is a view**: the slice and an index, with a getter per field
 reading the column at that index. The fields mate association writes have
-setters that write through. Views are handed out fresh by each query and are
-meant to be short-lived; nothing on the path from the file to the cache
-allocates one per record except mate association, whose views are discarded
-before the slice is cached or sent. This is the shape bam-js adopted for the
-same reasons ("a record is a view, and its fields decode on access").
+setters that write through. Each query hands out fresh views, which are meant to
+be short-lived. On the path from the file to the cache, only mate association
+allocates a view per record, and it discards those views before the slice is
+cached or sent. bam-js adopted the same design for the same reasons ("a record
+is a view, and its fields decode on access").
 
 **A slice is one read**, sized from the `.crai` or, without an index, from the
 container's landmarks, and its header block is parsed out of that buffer. The
@@ -63,8 +64,9 @@ is the "unknown slice size" case that kept a slice off the pool.
 - Retained heap on short reads drops by the record objects (numbers below). Long
   reads change little: 37 records were never the cost there.
 - Records are per query. Two queries over one cached slice return views that are
-  equal but not identical, and a write through one is visible to the other — the
-  same as writing a cached record's field used to be, now stated.
+  equal but not identical, and a write through one is visible to the other.
+  Writing a cached record's field behaved the same way before; this ADR now
+  states it.
 - `CramRecord`'s public fields are getters. A consumer that assigned to a
   read-only one now throws in strict mode; a consumer that built records with
   `Object.create(CramRecord.prototype)` has to use the options constructor,
@@ -75,21 +77,21 @@ is the "unknown slice size" case that kept a slice off the pool.
 - `_refRegion` is per slice, keyed by sequence id, and the getter checks that
   the region covers the record. That was previously enforced at the moment of
   assignment and bypassed by tests that assigned the field directly; three of
-  those fixtures described a region shorter than the record and were fixed.
-- The `.crai` `sliceBytes` field is now load-bearing for the read, not only for
-  the byte estimate; a wrong value fails the decode instead of costing an extra
+  those fixtures described a region shorter than the record, and we fixed them.
+- The read, and not only the byte estimate, now depends on the `.crai`
+  `sliceBytes` field; a wrong value fails the decode instead of costing an extra
   read.
 
 ## Evidence
 
-Fresh process per tree, the baseline extracted with `git archive`, min of 7 cold
-runs, whole-file queries. Retained heap is `heapUsed + arrayBuffers` after a
-forced GC with the result held, and reproduces to ±0.2%; the wall-clock columns
-are from an interleaved A/B on the same machine and carry the noise floor
-TODO.md's method note describes.
+Each tree ran in a fresh process, with the baseline extracted by `git archive`,
+min of 7 cold runs, whole-file queries. Retained heap is
+`heapUsed + arrayBuffers` after a forced GC with the result held, and reproduces
+to ±0.2%. The wall-clock columns are from an interleaved A/B on the same machine
+and have the noise floor TODO.md's method note describes.
 
-Retained heap, from `pnpm docs:numbers` (its method; docs/memory.md carries the
-full tables):
+Retained heap, from `pnpm docs:numbers` (its method; docs/memory.md has the full
+tables):
 
 | fixture                 | records | before  | after   |          |
 | ----------------------- | ------- | ------- | ------- | -------- |
@@ -98,7 +100,7 @@ full tables):
 | HG002 ONT (long reads)  | 37      | 6.8 MB  | 6.8 MB  | —        |
 
 On SRR396637 the JS heap fell from 18.8 MB to 10.1 MB and the typed arrays rose
-from 8.3 MB to 12.5 MB — the record objects became 81 bytes of columns each.
+from 8.3 MB to 12.5 MB, because each record object became 81 bytes of columns.
 
 Wall-clock, from the least-loaded of three interleaved rounds on a machine whose
 load average never went below 20 (other builds were running), so the ratios are
@@ -117,11 +119,11 @@ quoting a ratio.
 The "transfer" column is `serializeSlice` + `structuredClone` +
 `deserializeSlice` in one process — a structured clone rather than a transfer,
 so it overstates the typed-array cost on both sides equally and is only
-comparable across the two trees. What it shows is the per-record rebuild
+comparable across the two trees. The column shows the per-record rebuild
 disappearing on the short-read files; on ONT the clone of 3.5 MB of columns is
-the whole of it either way.
+the whole cost either way.
 
-Read counts on `ce#1000` (149 slices, ~30 containers, whole reference): 546
-reads with a median under 80 bytes, to 231 — one per slice, three per container
-— with the same 141,134-byte file read. `test/readAmplification.test.ts` pins
-both numbers.
+On `ce#1000` (149 slices, ~30 containers, whole reference), the read count went
+from 546 reads with a median under 80 bytes to 231, one per slice and three per
+container, with the same 141,134-byte file read.
+`test/readAmplification.test.ts` pins both numbers.

@@ -42,8 +42,7 @@ How this differs from the other documents here:
 Number sequentially, and keep the four headings: **Context**, **Decision**,
 **Consequences**, **Evidence**.
 
-The evidence section is not optional. A decision recorded without the
-measurement that settled it is an opinion — and this codebase has already had
-one 3% "win" survive six rounds of benchmarking before disappearing under
-fourteen. See the method note at the end of `TODO.md` for how to A/B this repo
-without fooling yourself.
+Every ADR needs an evidence section with the measurement that settled the
+decision. One 3% "win" in this codebase held for six rounds of benchmarking and
+was gone by round fourteen. The method note at the end of `TODO.md` describes
+how to A/B this repo without fooling yourself.

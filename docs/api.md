@@ -120,10 +120,10 @@ query should pass the signal. The library also passes it to
 
 The library keeps decoded slices so that a later query over the same region
 skips the decode. `maxCacheBytes` bounds the bytes the cache keeps, not peak
-memory: slices a query is still using sit outside it. Size it to hold several
-queries, because a cache smaller than one query's slices evicts each slice
-before the next query can reuse it. [memory.md](memory.md#the-slice-cache) has
-the details.
+memory, because slices that a query is still using do not count toward it. Size
+it to hold several queries, because a cache smaller than one query's slices
+evicts each slice before the next query can reuse it.
+[memory.md](memory.md#the-slice-cache) has the details.
 
 `cacheIdleTimeoutMs` empties the cache of slices that no query has read
 recently. The library checks `maxCacheBytes` only when a decode finishes, so

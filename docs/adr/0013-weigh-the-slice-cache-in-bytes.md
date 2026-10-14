@@ -11,17 +11,18 @@ idle timeout stand.
 `featureCache` bounded itself by record count because a `CramRecord` was an
 object with no cheap size — 27 fields, a mate object, a tags `Record`, read
 features as objects — and counting records was the only unit the cache could
-afford to compute. ADR 0004 said so, and said the consequence out loud: a record
-count cannot bound memory, and the budget only ever binds on short-read data,
-since long-read slices are few and huge.
+afford to compute. ADR 0004 said so, and stated the consequence: a record count
+cannot bound memory, and the budget only ever binds on short-read data, since
+long-read slices are few and huge.
 
-It also made `cacheBudget` less useful than it looks. `@gmod/shared-read-cache`
-requires every member of a budget to weigh in one unit, and `@gmod/bam` weighs
-in decompressed bytes, so a consumer with BAM and CRAM tracks side by side had
-to keep two budgets that could not see each other.
+The record unit also made `cacheBudget` less useful than it looks.
+`@gmod/shared-read-cache` requires every member of a budget to weigh in one
+unit, and `@gmod/bam` weighs in decompressed bytes, so a consumer with BAM and
+CRAM tracks side by side had to keep two independent budgets with no shared
+total.
 
-Since [ADR 0012](0012-records-are-views.md) a decoded slice is columns — typed
-arrays, plus three string arrays — and a typed array knows its `byteLength`.
+Since [ADR 0012](0012-records-are-views.md) a decoded slice is columns (typed
+arrays, plus three string arrays), and every typed array has a `byteLength`.
 
 ## Decision
 
@@ -48,23 +49,23 @@ default `DEFAULT_MAX_CACHE_BYTES = 1 GB`, the same name and number as
   37 records never came near 1,000,000.
 - **A byte budget can be shared with `@gmod/bam`.** A jbrowse worker can hand
   one `SharedBudget` to every alignments track, whichever format it reads.
-- The weight is taken when the decode settles and does not grow after: a slice
-  memoizes nothing onto itself later except reconstructed read bases
-  (`getReadBases` on a record decoded without a reference), which are strings in
-  the estimated part.
+- The cache weighs a slice when its decode settles, and the weight does not grow
+  afterwards. The only thing memoized onto a slice later is reconstructed read
+  bases (`getReadBases` on a record decoded without a reference), which are
+  strings in the estimated part.
 - `scripts/measure-heap.ts` reports the weight beside the measured heap, and
   `pnpm docs:numbers` writes both into memory.md, so the two stay comparable as
   the columns change.
 
 ## Evidence
 
-Fresh process per fixture, whole-file query, `heapUsed + arrayBuffers` after a
-forced GC (the method in docs/memory.md), reproducible to ±0.2%. "Retained" is
-what `pnpm docs:numbers` reports: the slices plus the `CramRecord` views the
-query handed back, held together. "Views" is what releasing the record array and
-keeping the slices gave back; "floor" is the same setup after a query that
-touched no slice (the index, SAM header, module glue), 0.33–0.39 MB. "Slices" is
-retained less both.
+Each fixture ran in a fresh process with a whole-file query, measuring
+`heapUsed + arrayBuffers` after a forced GC (the method in docs/memory.md),
+reproducible to ±0.2%. "Retained" is what `pnpm docs:numbers` reports: the
+slices plus the `CramRecord` views the query handed back, held together. "Views"
+is what releasing the record array and keeping the slices gave back; "floor" is
+the same setup after a query that touched no slice (the index, SAM header,
+module glue), 0.33–0.39 MB. "Slices" is retained less both.
 
 | fixture                 | records | retained | views  | slices  | weighed  | weighed / slices |
 | ----------------------- | ------- | -------- | ------ | ------- | -------- | ---------------- |
@@ -72,7 +73,7 @@ retained less both.
 | SRR396636 (short reads) | 23,051  | 10.27 MB | 1.6 MB | 8.4 MB  | 7.94 MB  | **0.95**         |
 | SRR396637 (short reads) | 54,695  | 22.57 MB | 3.6 MB | 18.6 MB | 18.46 MB | **0.99**         |
 
-The estimate was checked term by term by releasing one column at a time and
+We checked the estimate term by term, by releasing one column at a time and
 measuring what came back:
 
 | term                     | measured         | estimated |
@@ -85,10 +86,10 @@ measuring what came back:
 The typed columns are exact by construction; the two arena/quality lines differ
 from their `byteLength` because the quality column can be a view into the same
 external block the arena's payload bytes point into, so releasing one does not
-free what the other still holds. Summed they agree.
+free what the other still holds. The sums agree.
 
-The views are worth knowing about even though they are not the cache's: a
-`CramRecord` is a `slice`, an `index`, a precomputed offset and a tags memo, and
-at 69 B each a query over 54,695 records holds 3.6 MB of them until the consumer
-lets the array go. That is the per-query cost ADR 0012 traded the per-record
-object for, and it is not retained by anything once the query returns.
+The views are not part of the cache, but they still take memory. A `CramRecord`
+is a `slice`, an `index`, a precomputed offset and a tags memo, and at 69 B each
+a query over 54,695 records holds 3.6 MB of them until the consumer lets the
+array go. ADR 0012 accepted that per-query cost in place of the per-record
+object, and the library holds none of the views once the query returns.

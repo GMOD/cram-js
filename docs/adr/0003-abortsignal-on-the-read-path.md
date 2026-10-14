@@ -1,6 +1,6 @@
 # 0003 — Cancel per-query reads, reference-count the shared ones
 
-**Status:** accepted — the file-wide reads now carry the signal too (see below)
+**Status:** accepted — the file-wide reads now take the signal too (see below)
 
 ## Context
 
@@ -10,154 +10,160 @@ completion and then threw it away. jbrowse-components threads a
 stop-token-derived signal into `@gmod/bam`, `@gmod/tabix` and `@gmod/bbi`
 already; CRAM was the one indexed format left out.
 
-This is worth more than "index reads are short" suggests. The caller's
-byte-range layer coalesces contiguous chunks into one range request, so a small
-viewport over deep data becomes a single large read.
+The slice reads are larger than "index reads are short" suggests, because the
+caller's byte-range layer coalesces contiguous chunks into one range request, so
+a small viewport over deep data becomes a single large read.
 
-The obstacle is that the read path is a stack of **self-clearing memoized
-promises** — `getDefinition`, `getCompressionScheme`, `getHeader`,
-`_getBlocksContentIdIndex`, then `SliceRecordCache`. Every one of them already
-drops a rejection, so a cancellation cannot _poison_ a cache; `SliceRecordCache`
-documents that hazard, and a naive signal poses a different problem: a memo has
-no way to tell **whose** cancellation it is seeing. Thread a signal in naively
-and a query that happens to join a read started by a cancelled query inherits
-that cancellation as its own failure. It would succeed on a retry — the entry
-was dropped — but nothing retries, so it fails for a reason that has nothing to
-do with it.
+The read path is a stack of **self-clearing memoized promises**:
+`getDefinition`, `getCompressionScheme`, `getHeader`,
+`_getBlocksContentIdIndex`, then `SliceRecordCache`. Each of them already drops
+a rejected promise, so a cancellation cannot _poison_ a cache, and
+`SliceRecordCache` documents that hazard. A naive signal causes a different
+problem, because a memo cannot tell **whose** cancellation it is seeing. With a
+signal threaded in naively, a query that joins a read started by a cancelled
+query fails with that query's cancellation. A retry would succeed, since the
+memo dropped the entry, but no code retries, so the query fails because of an
+abort that was not its own.
 
 ## Decision
 
 Split the read path by **who owns the read**, and handle each half differently.
 
-**Per-query reads carry the signal.** `CramContainer` and `CramSlice` are
-constructed fresh for every query — `getContainerAtPosition` and `getSlice`
-build one rather than looking one up — so their memos are private to a single
-query and every caller of one is the same query carrying the same signal. Those
-memos take the signal directly, now that `memoizeAsync` has been generalized to
-allow it (first caller's arguments win, documented there as safe only for
-arguments that cannot change the result). This is where the bytes are:
+**Per-query reads take the signal.** `CramContainer` and `CramSlice` are
+constructed fresh for every query (`getContainerAtPosition` and `getSlice` build
+one rather than looking one up), so their memos are private to a single query
+and every caller of one is the same query with the same signal. Those memos take
+the signal directly, now that `memoizeAsync` has been generalized to allow it
+(first caller's arguments win, documented there as safe only for arguments that
+cannot change the result). Most of the bytes come from these reads, since
 `_fetchBlocks` issues the slice's whole payload in one read.
 
-This deliberately includes `getHeader` and `_getBlocksContentIdIndex`, which an
-earlier sketch of this work proposed excluding as "shared file-wide". They are
-not shared file-wide in this codebase, and `_getBlocksContentIdIndex` sits
-directly on top of the bulk read — excluding it would have left the change with
-nothing to cancel.
+The per-query set deliberately includes `getHeader` and
+`_getBlocksContentIdIndex`, which an earlier sketch of this work proposed
+excluding as "shared file-wide". They are not shared file-wide in this codebase,
+and `_getBlocksContentIdIndex` sits directly on top of the bulk read — excluding
+it would have left the change with nothing to cancel.
 
 **File-wide reads are reference-counted too.** `_definitionMemo` and
 `_samHeaderMemo` are fetched once for the life of the `CramFile` — 26 bytes of
 definition, and the first container for the SAM header.
 
-This first shipped as "file-wide reads do not carry the signal", on the grounds
-that every query after the first joins them already resolved, so there was
-nothing to save. That missed the read that comes before any query: jbrowse's
-`CramAdapter` setup calls `getSamHeader()` on its own, and a setup abandoned
-mid-read kept reading the definition, the first container header and its first
-block. The original worry was that the first query to arrive would own a read
-the whole file depends on. Both memos now go through `memoizeShared`, a one-key
-`SharedReadCache` — the mechanism behind the slice cache below — so the first
-caller owns nothing: the read aborts only once every caller waiting on it has,
-and a caller with no signal pins it.
+The file-wide reads first shipped as "file-wide reads do not carry the signal",
+on the grounds that every query after the first joins them already resolved, so
+cancelling them would save no bytes. That reasoning missed the read that comes
+before any query. jbrowse's `CramAdapter` setup calls `getSamHeader()` on its
+own, and a setup abandoned mid-read kept reading the definition, the first
+container header and its first block. The original worry was that the first
+query to arrive would own a read the whole file depends on. Both memos now go
+through `memoizeShared`, a one-key `SharedReadCache` (the mechanism behind the
+slice cache below), so no single caller owns the read. The read aborts only once
+every caller waiting on it has aborted, and a caller with no signal pins it.
 
 **The decoded slice is reference-counted.** `SliceRecordCache` is shared between
-concurrent queries, so its decode does not run under any one caller's signal. It
-runs under a per-entry `AbortController` that aborts only once **every**
-consumer that joined has itself aborted; a caller's own abort is reported to
-that caller alone, by re-checking it after the shared promise settles. A
-cancellation therefore cannot leak between queries because nothing is cancelled
-until nobody wants it.
+concurrent queries, so its decode runs under a per-entry `AbortController`
+instead of any one caller's signal. The controller aborts only once **every**
+consumer that joined has itself aborted. The cache reports a caller's own abort
+to that caller alone, by re-checking the caller's signal after the shared
+promise settles. A cancellation therefore cannot leak between queries, because
+the cache cancels a decode only when no consumer still wants it.
 
-A consumer with **no signal can never abort**, so it pins the entry: there is no
-longer any set of aborts that should stop the decode. A caller that never asks
-to be cancellable should expect exactly that, which is why the signal is
-threaded all the way down rather than dropped anywhere convenient — one
-signal-free join makes that slice uncancellable for everyone on it.
+A consumer with **no signal can never abort**, so it pins the entry, and no
+combination of other aborts stops the decode. A caller that never asks to be
+cancellable should expect that. We therefore thread the signal all the way down
+instead of dropping it anywhere convenient, because one signal-free join makes
+that slice uncancellable for everyone on it.
 
-This is the model `@gmod/abortable-promise-cache` gives `@gmod/tabix` and
-`@gmod/bbi`. It is implemented here rather than taken as a dependency because
-that package requires owning the cache itself, and `SliceRecordCache` is not a
-plain LRU: the record-count bound has to weigh each entry when its promise
-resolves, which means owning the entries. Two smaller reasons not to adopt it:
-its aggregator never clears `signals` or removes its listeners once an entry
-settles, so a cached slice would retain every consumer signal that ever touched
-it; and cram-js deliberately dropped the dependency in `61791ba`.
+Ref-counting is the model `@gmod/abortable-promise-cache` gives `@gmod/tabix`
+and `@gmod/bbi`. cram-js implements it instead of taking the package as a
+dependency, because that package has to own the cache, and `SliceRecordCache` is
+not a plain LRU: its record-count bound weighs each entry when the entry's
+promise resolves, so the cache has to own its entries. Two smaller reasons argue
+against adopting it. Its aggregator never clears `signals` or removes its
+listeners once an entry settles, so a cached slice would retain every consumer
+signal that ever joined it. And cram-js deliberately dropped the dependency in
+`61791ba`.
 
 **`CraiIndex` keeps a bounded retry instead**, because the trade is different
-there. A caller that joined the index parse and saw it fail because the caller
-who started it aborted retries once, and any failure after that propagates. The
-`.crai` is parsed once for the life of the object, so there is no repeated waste
-to recover, and the retry is a dozen lines against restructuring the memo.
+there. When the caller that started the index parse aborts, a caller that joined
+the parse retries once, and any failure after that propagates. `CraiIndex`
+parses the `.crai` once for the life of the object, so there is no repeated
+waste to recover, and the retry is a dozen lines against restructuring the memo.
 jbrowse's `RemoteFileWithRangeCache.joinChunk` bounds the same retry the same
 way, one layer down, on 256 KiB chunks, and for the reason it gives: the
 pathological case becomes one duplicate parse rather than a recursion whose
-depth depends on how the aborts interleave. `@gmod/bam` recurses unbounded,
-which is the part of that pattern not worth copying.
+depth depends on how the aborts interleave. `@gmod/bam` recurses without a
+bound, and cram-js does not copy that part of the pattern.
 
 ### What this replaced, and why
 
 The first version of this work ref-counted nothing. The decode ran under
-whichever caller started it, and a caller that joined and saw it fail because
-that caller aborted retried under its own signal. It was correct — the tests
-below pin exactly the same cross-query properties — but it threw away work in
-the case that matters most.
+whichever caller started it. When that caller aborted, a caller that had joined
+saw the decode fail and retried under its own signal. That version was correct,
+and the tests below check exactly the same cross-query properties, but it threw
+away work in the case that matters most, a pan in jbrowse.
 
 A pan in jbrowse cancels the query in flight while the next query wants most of
 the same slices. Slices the cancelled query had already finished are resolved in
-the cache and the new query gets them free; slices still decoding are the ones
-it joined, so those got decoded twice, every pan. Ref-counting keeps them. The
-byte-range cache underneath would have served the re-read cheaply, but the
-inflate and record decode are the expensive part and it does not help with
+the cache, and the new query reads them from there with no further work. The new
+query joined the slices still decoding, so the retry decoded those twice on
+every pan. Ref-counting keeps those decodes running. The byte-range cache
+underneath would have served the re-read cheaply, but the inflate and record
+decode are the expensive part, and the byte-range cache does not help with
 those.
 
-The retry also had a wart the ref-count does not: bounded at one attempt, a
-third query could inherit an abort it never asked for, if the caller it retried
-into also gave up.
+The retry also had a flaw that the ref-count avoids. Because the retry was
+bounded at one attempt, a third query could inherit an abort it never asked for,
+if the caller it retried into also gave up.
 
-**An explicit check at each boundary**, not just at the filehandle. Honoring the
-signal is optional down there: `RemoteFile` hands it to `fetch`, but `LocalFile`
-ignores it and every read runs to completion, so `CramFile.read` checks before
-issuing, and `_fetchRecords` checks again before the decode loop, which is
-synchronous across the whole slice — tens of thousands of records on short-read
-data, with no `await` inside for an abort to interleave with.
+**The code checks the signal explicitly at each boundary**, not just at the
+filehandle. A filehandle may ignore the signal: `RemoteFile` hands it to
+`fetch`, but `LocalFile` ignores it and every read runs to completion.
+`CramFile.read` therefore checks before issuing a read, and `_fetchRecords`
+checks again before the decode loop. That loop is synchronous across the whole
+slice, which is tens of thousands of records on short-read data, with no `await`
+inside for an abort to interleave with.
 
 ### The invariant this rests on, and what it cost to keep
 
-"Container and slice objects are per-query" is required for the whole
-first-caller-wins arrangement, and it was also, before this work, the source of
-a lot of duplicate reading: every slice of a query built its own
-`CramContainer`, so each container's header and compression header block were
-re-read once per slice it held.
+The whole first-caller-wins arrangement requires that "container and slice
+objects are per-query". Before this work, the same invariant also caused a lot
+of duplicate reading, because every slice of a query built its own
+`CramContainer`. Each container's header and compression header block were
+therefore re-read once per slice in the container.
 
-The fix is to share containers **across the slices of one query and no wider** —
-a `Map` built in `getRecordsForRange` and threaded into `getRecordsInSlice`.
-Every caller of a shared container's memo is then still the same query with the
-same signal, so the invariant survives. A file-level container cache would not:
-it would put the first query's signal in charge of a header every later query
-depends on, which is exactly the leak handled explicitly at the other two sites,
-reappearing at a third with nothing to handle it. If someone later wants
-containers cached file-wide, that is the thing to solve first.
+The fix shares containers **across the slices of one query and no wider**,
+through a `Map` built in `getRecordsForRange` and threaded into
+`getRecordsInSlice`. Every caller of a shared container's memo is then still the
+same query with the same signal, so the invariant holds. A file-level container
+cache would break it. That cache would put the first query's signal in charge of
+a header every later query depends on, which is the leak this ADR handles
+explicitly at the other two sites, at a third site with no handling. Anyone who
+later wants containers cached file-wide has to solve that leak first.
 
 ## Consequences
 
-- `opts.signal` on `getRecordsForRange` and `hasDataForReferenceSequence`.
+- `getRecordsForRange` and `hasDataForReferenceSequence` accept `opts.signal`.
 - `SeqFetch` takes a fifth argument, `opts`, so a callback backed by a remote
-  sequence source can cancel too. Additive: a four-argument callback is
-  unchanged, and ignoring the signal only means the query rejects at the next
-  point the decode checks rather than at the fetch.
+  sequence source can cancel too. The change is additive: a four-argument
+  callback is unchanged, and a callback that ignores the signal only makes the
+  query reject at the next point the decode checks, instead of at the fetch.
 - `memoizeAsync` now forwards arguments, with a first-caller-wins rule that is
   only sound for arguments that cannot change the result. A later call passing
-  different arguments silently gets the first caller's cached ones instead,
-  which is why the doc comment on it is longer than the function.
+  different arguments gets the result cached for the first caller's arguments,
+  with no warning, which is why the doc comment on it is longer than the
+  function.
 - `SliceRecordCache.set` became `getOrFill`, which takes a fill callback rather
-  than a promise — the cache has to create the signal the decode runs under, so
-  it has to be the thing that starts it. A second `getOrFill` for a live key now
-  joins rather than replacing, matching what the cache always meant.
+  than a promise, because the cache creates the signal the decode runs under and
+  therefore has to start the decode. A second `getOrFill` for a live key now
+  joins rather than replacing, which is how the cache was always meant to
+  behave.
 - **A single signal-free query makes a slice's decode uncancellable for everyone
-  joined to it.** Inherent to ref-counting, not a defect, but it means
-  cancellation degrades quietly in a mixed codebase rather than failing loudly.
-  `test/sliceRecordCache.test.ts` pins it so it stays deliberate.
+  joined to it.** That behavior is inherent to ref-counting and not a defect,
+  but in a codebase where some callers pass a signal and others do not,
+  cancellation stops working for the shared slices and raises no error.
+  `test/sliceRecordCache.test.ts` pins the behavior so it stays deliberate.
 - `getRecordsInSlice` takes an optional per-query container map. Omitting it is
-  correct, just one container's worth of re-reading per slice.
+  correct and costs one container's worth of re-reading per slice.
 - Cancellation is best-effort about _bytes_, exact about _outcome_: the query
   always rejects, but whether bytes already in flight stop depends on the
   filehandle.
@@ -169,11 +175,11 @@ retry, and reverting just the owner-aborted guards to a bare `throw e` failed
 three of the eight tests in `test/abort.test.ts`: a bystander sharing a slice, a
 bystander sharing the index parse, and a bystander with no signal at all. Those
 three tests were written against the retry and **pass unchanged against the
-ref-count**, confirming that the two designs agree on the property and differ
-only in cost. The same revert still fails the index one, which is still a retry.
-`test/lib/gatedFile.ts` makes any of it deterministic — it honors the signal
-(`LocalFile` does not, so nothing would otherwise observe an interrupted read)
-and parks reads on demand, so the tests are not racing the filesystem.
+ref-count**, so the two designs agree on the property and differ only in cost.
+The same revert still fails the index-parse test, because `CraiIndex` still uses
+a retry. `test/lib/gatedFile.ts` makes these tests deterministic. It honors the
+signal, which `LocalFile` ignores, so the tests can observe an interrupted read,
+and it parks reads on demand, so the tests do not race the filesystem.
 
 **The ref-count stops the re-decode.**
 `a cancelled query does not make a bystander re-read the slice` runs two
@@ -186,9 +192,9 @@ unaborted, both aborting fires it, a signal-free consumer pins it, one signal
 joining twice counts once, and an already-aborted caller never starts a fill at
 all.
 
-**Sharing containers within a query removed every duplicate read.** A cold
-`getRecordsForRange(0, 0, 200)` over ce#1000 — 1000 records, 149 slices across
-~30 containers — measured at the `CramFile`→filehandle boundary:
+**Sharing containers within a query removed every duplicate read.** We measured
+a cold `getRecordsForRange(0, 0, 200)` over ce#1000 (1000 records, 149 slices
+across ~30 containers) at the `CramFile`→filehandle boundary:
 
 |                               | before  | after       |
 | ----------------------------- | ------- | ----------- |
@@ -197,47 +203,50 @@ all.
 | bytes read                    | 200,851 | **145,161** |
 
 The file is 141,134 bytes, so the query went from reading 1.42x it to 1.03x, and
-the duplicate population went to zero — the 456 repeats were entirely container
-headers re-read once per slice. `test/redundantReads.test.ts` pins both.
+the duplicate reads went to zero. All 456 repeats had been container headers
+re-read once per slice. `test/redundantReads.test.ts` pins both results.
 
-What remains is 545 reads at 373 distinct positions: 172 are `readBlock` probing
-a block header and then re-reading it as part of the full block, which is the
-open TODO item, not this one.
+The query still makes 545 reads at 373 distinct positions. 172 of them are
+`readBlock` probing a block header and then re-reading it as part of the full
+block, which is an open TODO item outside this ADR.
 
-**The ref-count came with a retention bug of its own.** It is recorded here
-because it is the one this ADR criticises `@gmod/abortable-promise-cache` for.
+**The ref-count introduced a retention bug.** We record it here because it is
+the same bug this ADR criticises `@gmod/abortable-promise-cache` for.
 `getOrFill` joined every consumer to the entry, including consumers arriving
 after it had settled. A settled entry has already taken its abort listeners back
 off its consumers' signals, so a signal registered after that point could never
 be unregistered: it sat in the entry's set for as long as the LRU held the
 slice, holding that query's `AbortController` with it. Every cache _hit_ leaked
-one, on exactly the path that is supposed to be cheap. The fix is that only a
-decode still running has anything to cancel, so a settled entry is not joined at
-all. `a hit on a settled slice does not retain the caller` counts 50 hits and
-expects zero retained; before the fix it counted 50.
+one, on exactly the path that is supposed to be cheap. Only a decode still
+running has anything to cancel, so the fix stops `getOrFill` from joining a
+consumer to a settled entry.
+`a hit on a settled slice does not retain the caller` counts 50 hits and expects
+zero retained; before the fix it counted 50.
 
-That count is invisible from behavior — a settled entry with a thousand stale
-signals answers every query exactly like one with none — which is why
+The leaked consumers do not show in behavior: a settled entry with a thousand
+stale signals answers every query exactly like one with none. That is why
 `SliceRecordCache.consumerCount` exists purely as a test seam. Reading the code
-was the only thing standing between this and shipping, and reading the code is
-how it got written.
+was the only check between this bug and shipping, and reading the code is how
+the test got written.
 
-**Where that win actually lands.** Over HTTP it is mostly not bytes. jbrowse's
-`RemoteFileWithRangeCache` caches per 256 KiB chunk, and a container header sits
-in the same chunk as the slices that follow it, so the duplicate reads were
-already being served from that cache — what they cost was a `Uint8Array`
+**What sharing containers saves.** Over HTTP the saving is mostly not bytes.
+jbrowse's `RemoteFileWithRangeCache` caches per 256 KiB chunk, and a container
+header sits in the same chunk as the slices that follow it, so that cache was
+already serving the duplicate reads. What they cost was a `Uint8Array`
 allocation, a copy, and a synthesized `Response` **per read**, 1001 times.
-Locally it is I/O: `LocalFile.read` opens and closes the file descriptor on
-every call.
+Locally the saving is I/O, because `LocalFile.read` opens and closes the file
+descriptor on every call.
 
-**The size of the win is inherited, not measured here.** The 6.5 MiB figure that
-motivates this was measured in jbrowse on the analogous **BAM** path: one 4 kb
-viewport over a 2000x BAM issues a single 6.5 MiB range read, and over a 4-hop
-pan burst throttled to 50 KiB/s, three cancelled navigations abandoned ~6.5 MiB
-each. Nobody has measured CRAM. The same `RemoteFileWithRangeCache` sits under
-both, so the order of magnitude should carry, but treat that as an expectation
-rather than a result until someone runs it.
+**The size of the cancellation saving comes from BAM, not from a CRAM
+measurement.** The 6.5 MiB figure that motivates this ADR was measured in
+jbrowse on the analogous **BAM** path: one 4 kb viewport over a 2000x BAM issues
+a single 6.5 MiB range read, and over a 4-hop pan burst throttled to 50 KiB/s,
+three cancelled navigations abandoned ~6.5 MiB each. We have not measured CRAM.
+The same `RemoteFileWithRangeCache` sits under both formats, so the order of
+magnitude should be similar, but treat that as an expectation rather than a
+result until someone runs it.
 
-**No effect on what is decoded.** The full suite — 217 files, 663 tests — passes
-unchanged, including the snapshot tests over all indexed fixtures. Nothing about
-this changes the bytes read or the records produced when no signal is passed.
+**The change does not alter what is decoded.** The full suite (217 files, 663
+tests) passes unchanged, including the snapshot tests over all indexed fixtures.
+When no signal is passed, this work changes neither the bytes read nor the
+records produced.

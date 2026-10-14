@@ -1,4 +1,4 @@
-# CRAM Codec Support
+# CRAM codec support
 
 All CRAM v3 and v3.1 codecs are supported.
 
