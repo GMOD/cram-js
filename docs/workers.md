@@ -108,8 +108,8 @@ to 1.58x:
 | 20x.shortread   | 0.96x | 1.16x | 1.49x | 1.72x |
 | 1000x.shortread | 1.21x | 1.34x | 1.69x | 1.58x |
 
-The pool is at parity at one slice and faster from two slices up. A median of 3
-on a 40 ms workload is too noisy to count as a measurement, and this page
+The pool runs at 0.96-1.21x at one slice and faster from two slices up. A median
+of 3 on a 40 ms workload is too noisy to count as a measurement, and this page
 records it because the threshold nearly shipped on the strength of it. A
 single-slice query never happens in isolation, though. The user pans, so the
 pool stays warm, and the queries after the first matter more than a cold one.
@@ -129,9 +129,9 @@ lists the slices each fixture has in jb2bench's 19 kb region:
 | 1000x.longread  | 1,683   | **22** |
 
 The deep files, which are the slow ones, have many slices. The shallow files
-have one or two, where the measurements above put the pool at parity to 1.16x.
-Even at one slice the decode is off the main thread, which is the part a UI
-notices; throughput is the secondary benefit.
+have one or two, where the measurements above put the pool at 0.96-1.34x. Even
+at one slice the decode is off the main thread, which is the part a UI notices;
+throughput is the secondary benefit.
 
 ### The speedup grows with the region, up to a point
 

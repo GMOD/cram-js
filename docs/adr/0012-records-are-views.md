@@ -120,8 +120,7 @@ The "worker round trip" column is `serializeSlice` + `structuredClone` +
 `deserializeSlice` in one process — a structured clone rather than a transfer,
 so it overstates the typed-array cost on both sides equally and is only
 comparable across the two trees. The column shows the per-record rebuild
-disappearing on the short-read files; on ONT the clone of 3.5 MB of columns is
-the whole cost either way.
+disappearing on the short-read files.
 
 On `ce#1000` (149 slices, ~30 containers, whole reference), the read count went
 from 546 reads with a median under 80 bytes to 231, one per slice and three per
