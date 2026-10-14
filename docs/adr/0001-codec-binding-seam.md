@@ -58,9 +58,8 @@ the codec, so there is nothing per-slice to hoist.
 
 ## Consequences
 
-- `decodeContext.ts` stopped being a place where codec internals are
-  re-implemented. It went 480 → 333 lines when the chain came out, and
-  `bindTagReaders` became a loop.
+- `decodeContext.ts` no longer re-implements codec internals. It went 480 → 333
+  lines when the chain came out, and `bindTagReaders` became a loop.
 - The reads are written once each and shared by `decode()` and the bound
   closure, which now differ only in how much lookup each has already done.
 - **A new fast path is one codec method**, instead of another arm of a chain

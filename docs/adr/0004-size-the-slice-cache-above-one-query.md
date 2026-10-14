@@ -13,10 +13,10 @@ working sets below still stand, in records.
 The number predated any measurement of what one query needs.
 
 A budget below one query's working set caches _nothing_ the next pan can use.
-Each slice is evicted before the next pan can reuse it, so the hit rate is zero,
-the decode is paid again every time, and the memory is retained anyway. Every
-short-read window we measured had a working set above the 20,000 default, one of
-them by 21x.
+The cache evicts each slice before the next pan can reuse it, so the hit rate is
+zero, every pan pays for the decode again, and the cache retains the memory
+anyway. Every short-read window we measured had a working set above the 20,000
+default, one of them by 21x.
 
 The old default also failed to enforce its own record limit. The cache shipped
 with an `evictionPolicy: 'batch'`, which spares everything the batch touched, so

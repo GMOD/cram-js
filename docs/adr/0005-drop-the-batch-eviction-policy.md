@@ -31,8 +31,8 @@ Use `'lru'`, the package default. The cache then evicts down to `cacheSize`.
   The only code affected is a consumer that explicitly sets a small budget.
 
 - **For that consumer, this is the fix rather than the regression.** Setting
-  `cacheSize: 20000` is a request to constrain memory. Under `'batch'` that
-  request was answered with 420,000 records held. Being slower than you asked
+  `cacheSize: 20000` is a request to constrain memory. Under `'batch'` the cache
+  answered that request by holding 420,000 records. Being slower than you asked
   for is a worse-but-honest outcome than being given 21x the memory you asked
   for, particularly in a browser, where that much memory kills the tab.
 
@@ -46,9 +46,9 @@ Use `'lru'`, the package default. The cache then evicts down to `cacheSize`.
   ADR 0013).
 
 - **`test/sliceRecordCache.test.ts` flipped an assertion.** It pinned "keeps
-  every slice of one over-budget batch"; it now pins that an over-budget batch
-  is evicted back down. The assertion records the contract change where anyone
-  changing the eviction policy will run into it.
+  every slice of one over-budget batch"; it now pins that the cache evicts an
+  over-budget batch back down. The assertion records the contract change where
+  anyone changing the eviction policy will run into it.
 
 - The raised default and the idle timeout from ADR 0004 are unaffected, as are
   [ADR 0003](0003-abortsignal-on-the-read-path.md)'s abort plumbing and

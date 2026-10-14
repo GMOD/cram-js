@@ -95,10 +95,10 @@ choices inside a file parser, which ADR 0006 declined and still declines.
   options object.
 - jbrowse reconciled the other conventions on its side, as predicted. Its type
   constants are the CRAM feature codes now (it compared them symbolically
-  everywhere, and none was serialized), and a clip's `length` is set in the one
-  consumer that builds objects rather than per emission. The deletion and skip
-  sentinels jbrowse used to emit, `'*'` and `'N'` where this walk reports no
-  bases, turned out to be read by no code at all.
+  everywhere, and serialized none), and the one consumer that builds objects
+  sets a clip's `length`, instead of setting it on every emission. The deletion
+  and skip sentinels jbrowse used to emit, `'*'` and `'N'` where this walk
+  reports no bases, turned out to be read by no code at all.
 
 ## Evidence
 

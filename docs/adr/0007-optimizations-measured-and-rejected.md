@@ -43,8 +43,8 @@ the decode was left to defer. See
 
 ## Consequences
 
-The costs these would have removed are still being paid, and two of them are
-listed here so they are not mistaken for oversights:
+The decode still pays the costs these would have removed. We list two of them
+here so that nobody mistakes them for oversights:
 
 - **A slice's whole decoded name block stays alive as long as any record from it
   lives.** Interning would recover that; see ADR 0002's consequences for the
@@ -89,10 +89,10 @@ which means reading every character of it. The decode does that ~220,000 times
 on SRR396637, for values that batching had just made very cheap to produce.
 
 An earlier note claimed two more benefits for interning, and interning has
-_neither_. It does not let the decoded block be collected, because interning
+_neither_. It does not let the GC collect the decoded block, because interning
 keeps one reference per distinct value, and one reference pins the block just as
-well as fifty thousand. And it does not remove the temporary string, which is
-allocated to be hashed whether or not it is kept.
+well as fifty thousand. And it does not remove the temporary string, which the
+reader allocates in order to hash it, whether or not the map keeps it.
 
 ### A positional `CramRecord` constructor
 

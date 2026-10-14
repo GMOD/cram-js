@@ -84,10 +84,10 @@ consumer signal that ever joined it, and cram-js deliberately dropped the
 dependency in `61791ba`.
 
 **`CraiIndex` keeps a bounded retry instead**, because the trade is different
-there. A caller that joined the index parse and saw it fail because the caller
-who started it aborted retries once, and any failure after that propagates. The
-`.crai` is parsed once for the life of the object, so there is no repeated waste
-to recover, and the retry is a dozen lines against restructuring the memo.
+there. When the caller that started the index parse aborts, a caller that joined
+the parse retries once, and any failure after that propagates. `CraiIndex`
+parses the `.crai` once for the life of the object, so there is no repeated
+waste to recover, and the retry is a dozen lines against restructuring the memo.
 jbrowse's `RemoteFileWithRangeCache.joinChunk` bounds the same retry the same
 way, one layer down, on 256 KiB chunks, and for the reason it gives: the
 pathological case becomes one duplicate parse rather than a recursion whose
@@ -97,10 +97,10 @@ which is the part of that pattern not worth copying.
 ### What this replaced, and why
 
 The first version of this work ref-counted nothing. The decode ran under
-whichever caller started it, and a caller that joined and saw it fail because
-that caller aborted retried under its own signal. That version was correct, and
-the tests below check exactly the same cross-query properties, but it threw away
-work in the case that matters most, a pan in jbrowse.
+whichever caller started it. When that caller aborted, a caller that had joined
+saw the decode fail and retried under its own signal. That version was correct,
+and the tests below check exactly the same cross-query properties, but it threw
+away work in the case that matters most, a pan in jbrowse.
 
 A pan in jbrowse cancels the query in flight while the next query wants most of
 the same slices. Slices the cancelled query had already finished are resolved in

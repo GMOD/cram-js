@@ -20,10 +20,10 @@ that looked like wins and were not.
 ### Parsed once, shared across callers
 
 The first query reads the whole `.crai`, inflates it, parses it, and memoizes
-the result for the life of the object. It is the one read in `CraiIndex` that
-several queries share, so a caller that joined someone else's parse and saw it
-fail because _that_ caller aborted retries once rather than inheriting the
-failure, and any failure after that retry propagates.
+the result for the life of the object. The parse is the one read in `CraiIndex`
+that several queries share. When the caller that started it aborts, a caller
+that joined it retries once rather than inheriting the failure, and any failure
+after that retry propagates.
 
 ### The overlap scan stops at both ends
 
