@@ -260,8 +260,8 @@ that `b` aligns as matches, that an `X` feature's `data` is a
 substitution-matrix index rather than a base, and that `q`/`Q` hold only
 quality. Their `refPos` comes from a read position the reference never reaches,
 so it can point backwards into an insertion. Every one of those has been a bug
-in a downstream consumer. `RF_POSITIONAL` marks which codes have alignment
-positions, for a consumer walking the columns directly.
+in a downstream consumer. `RF_POSITIONAL` marks which codes describe alignment
+geometry, for a consumer walking the columns directly.
 
 Also in v9: `getCigarString()` returns `'*'` rather than `''` for a mapped
 record with no operations, which is what SAM and samtools spell.

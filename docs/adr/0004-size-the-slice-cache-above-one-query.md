@@ -18,11 +18,11 @@ zero, every pan pays for the decode again, and the cache retains the memory
 anyway. Every short-read window we measured had a working set above the 20,000
 default, one of them by 21x.
 
-The old default also failed to bound memory to its stated size. The cache
-shipped with an `evictionPolicy: 'batch'`, which spares everything the batch
-touched, so we measured a 20,000-record budget **holding 420,000**. With a
-budget above the working set, the cache both stays within the budget and serves
-the next pan from memory.
+The old default also failed to enforce its own record limit. The cache shipped
+with an `evictionPolicy: 'batch'`, which spares everything the batch touched, so
+we measured a 20,000-record budget **holding 420,000**. With a budget above the
+working set, the cache both stays within the budget and serves the next pan from
+memory.
 
 ## Decision
 

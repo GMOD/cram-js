@@ -38,7 +38,7 @@ calling only the consumer's own callback:
   defaulting to 0. `origin: record.start` gives read-relative positions.
 - **The window is now half-open**, `[start, end)`, like every other range this
   library takes. The window was closed at both ends, a flaw already recorded in
-  `TODO.md`, so a caller with a half-open viewport had to pass `end - 1`.
+  `TODO.md`, and a caller with a half-open viewport had to pass `end - 1`.
 
 The window stays in **reference** coordinates while the output moves to
 `origin`, because the window describes a region of the reference rather than a
