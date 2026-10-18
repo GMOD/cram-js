@@ -50,8 +50,8 @@ read bases. [docs/api.md](docs/api.md#reference-sequence) has the details.
 For each query, the library reads one byte range per slice and two small ones
 per container. With `cramUrl`, it sends a separate HTTP request for each range.
 [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
-fetches the file in 256 KiB chunks and answers each range from them, so it
-fetches neighboring ranges in one request:
+keeps the bytes it fetched and answers each range from them, so it fetches
+neighboring ranges in one request:
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'

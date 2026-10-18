@@ -336,8 +336,8 @@ jbrowse passes `numSliceWorkers: max(2, min(4, cores/2))`, which costs a single
 track a little (220 → 241 ms on 4 cores) so that five tracks gain a lot (1347 →
 956 ms) ([ADR 0009](adr/0009-one-pool-per-context-sized-for-the-host.md)).
 
-**Put a byte-range cache underneath.** `RemoteFileWithRangeCache` caches per 256
-KiB chunk and joins reads already in flight, so this library's remaining
+**Put a byte-range cache underneath.** `RemoteFileWithRangeCache` keeps the bytes
+it fetched and joins reads already in flight, so this library's remaining
 duplicate reads — `readBlock` probes a block header at a position and then reads
 the block at the same position — turn into a cache hit rather than a second
 request. Over a local file they are real syscalls; see [TODO.md](../TODO.md).
