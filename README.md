@@ -106,22 +106,12 @@ The package ships a standalone browser build that puts the same exports on
 ## Docs
 
 - [docs/api.md](docs/api.md): every option, property and method, including
-  cancelling a query with an `AbortSignal`
-- [docs/workers.md](docs/workers.md): the worker pool that decodes slices in
-  parallel in a browser
+  cancelling a query and walking a record's raw read features
 - [MIGRATION.md](MIGRATION.md): breaking changes, newest first
-- [docs/memory.md](docs/memory.md): the memory a decoded slice uses
-- [docs/read-features.md](docs/read-features.md): the raw alignment encoding
-- [docs/codec-support.md](docs/codec-support.md): the codecs this decoder
-  handles
-- [docs/dataflow.md](docs/dataflow.md): a diagram of a query from index to
-  records
-- [docs/optimizations.md](docs/optimizations.md): the measurements behind the
-  read path's design
-- [docs/wasm.md](docs/wasm.md): the inlined wasm build
-- [docs/adr/](docs/adr/): design decisions, with their measurements
-- [TODO.md](TODO.md): open work
-- [CONTRIBUTING.md](CONTRIBUTING.md): development, release and publishing
+- [docs/dataflow.md](docs/dataflow.md): how a query runs, and the starting point
+  for the design docs on workers, memory, wasm and codecs, and the ADRs
+- [CONTRIBUTING.md](CONTRIBUTING.md): development and release, plus
+  [TODO.md](TODO.md) for open work
 
 ## Academic use
 

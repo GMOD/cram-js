@@ -85,8 +85,8 @@ bytes per feature.
 The columns belong to the slice, deliberately, **not to the record**. Giving
 each record its own typed arrays makes short-read files about twice as expensive
 as plain objects, because each record would pay ~100 bytes of fixed overhead for
-the ~2 features a short read has. See [read-features.md](read-features.md) for
-how to read them.
+the ~2 features a short read has. See [api.md](api.md#read-features) for how to
+read them.
 
 Not every column has an entry per feature. The payload offset used to, at 4
 bytes per feature, and it was redundant. Payloads are stored in slot order, and

@@ -16,10 +16,8 @@ How this differs from the other documents here:
   with a line and a number for each decision and a link to the ADR that settled
   it. Start here; the ADRs are the long form.
 - **[`api.md`](../api.md)**, **[`memory.md`](../memory.md)**,
-  **[`read-features.md`](../read-features.md)**, **[`wasm.md`](../wasm.md)**,
-  **[`workers.md`](../workers.md)**,
-  **[`codec-support.md`](../codec-support.md)** — how a part of the library
-  works today, for someone using or changing it.
+  **[`wasm.md`](../wasm.md)**, **[`workers.md`](../workers.md)** — how a part of
+  the library works today, for someone using or changing it.
 
 | #                                                       | decision                                                         | status   |
 | ------------------------------------------------------- | ---------------------------------------------------------------- | -------- |

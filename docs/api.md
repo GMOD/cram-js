@@ -185,7 +185,7 @@ header without an index. Each method takes an optional `{ signal }`.
 | `templateSize`                | `number \| undefined`             | template length as the file stores it, when the mate is elsewhere                   |
 | `qualityScores`               | `Uint8Array \| null \| undefined` | base qualities; `null` for `*`, `undefined` when the file has none                  |
 | `tags`                        | `object`                          | every auxiliary tag; `getTag(name)` is faster for one                               |
-| `readFeatures`                | `ReadFeature[] \| undefined`      | the raw CRAM encoding; see [read-features.md](read-features.md)                     |
+| `readFeatures`                | `ReadFeature[] \| undefined`      | the raw CRAM encoding; see [Read features](#read-features)                          |
 | `slice`, `index`              | `DecodedSlice`, `number`          | the decoded slice the record reads from, and its position in it                     |
 
 `qualityScores` and `readFeatures` build a new array on every access, so read
@@ -289,6 +289,94 @@ arguments, in this order.
 The package exports `RF_SUBST`, `RF_INSERTION` and the other `RF_*` constants to
 compare against `code`.
 
+## Read features
+
+A CRAM record stores a list of _read features_ instead of an aligned sequence.
+The list holds the handful of places where the read departs from the reference,
+plus a few housekeeping entries. `getReadBases()`, `getCigarString()` and
+`getMismatches()` are all reconstructed from that list.
+
+You can read the list directly, as `record.readFeatures`. The rest of this
+section covers what to know before you do.
+
+### What `getMismatches()` covers
+
+`getMismatches()` already reports every feature that represents a difference
+from the reference: substitutions, insertions (under either encoding),
+deletions, reference skips, and soft and hard clips (see
+[`Mismatch`](#mismatch)).
+
+`B` and `b` store bases verbatim rather than as substitutions, and
+`getMismatches()` still reports each of their bases that disagrees with the
+reference as a substitution. That comparison needs a reference, so with no
+`fetchReferenceSequence` it reports nothing at all for them.
+
+The mismatch functions deliberately leave out two kinds of feature, because
+neither is a difference:
+
+| Code     | Contents                                           |
+| -------- | -------------------------------------------------- |
+| `q`, `Q` | quality scores, with no alignment information      |
+| `P`      | padding, which consumes neither read nor reference |
+
+If you want quality scores or padding directly, read the next section before you
+walk the raw list.
+
+### Traps
+
+Every one of these has been a real bug in code that walked the features itself:
+
+- `i` and `I` are both insertions, and they store their payload differently.
+- A run of `i` features is _one_ insertion, not several.
+- `b` holds a run of bases that align as CIGAR matches, but they are not all
+  matches. htslib writes `b` only when encoding with no reference
+  (`samtools view --output-fmt-option no_ref`, and every CRAM `samtools depad`
+  writes), so the writer computed no substitutions and the run covers real ones.
+  Diff it against a reference yourself, as `getMismatches()` does.
+- `q` and `Q` hold only quality. Their `refPos` isn't an alignment position at
+  all, so a positional walk has to skip them. `RF_POSITIONAL[code]` is 0 for
+  exactly those two, which is the cheapest way to test for them.
+- An `X` feature's `data` is an index into the container's substitution matrix,
+  not a base.
+
+### Fields
+
+Each entry in `record.readFeatures` (CRAM spec §10.2) has:
+
+- `code` — feature type, one of `bqBXIDiQNSPH`
+- `pos` — read position (0-based)
+- `refPos` — reference position (0-based), except for `q` and `Q`. Those two
+  derive `refPos` from a read position the reference never reaches, so it can
+  point backwards into an insertion.
+- `data` — the payload, which differs per code (see below)
+- `ref` / `sub` — reference and substituted base, for code `X` only. They only
+  show up once a reference has been applied, which means when
+  `fetchReferenceSequence` is configured.
+
+#### `data` by feature code
+
+| Code(s)            | `data`                                                                                                                            |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `I`, `S`, `b`, `i` | the inserted, clipped or verbatim bases, as a string. That includes `i`, which is a single-base insertion and does store its base |
+| `D`, `N`, `H`, `P` | the deleted, skipped, clipped or padded length, as a number                                                                       |
+| `Q`                | the quality score                                                                                                                 |
+| `q`                | an array of quality scores                                                                                                        |
+| `B`                | `[base, quality]`                                                                                                                 |
+| `X`                | an index into the container's substitution matrix, **not** a base                                                                 |
+
+### Reading features without the allocation
+
+`record.readFeatures` rebuilds the whole array from columnar storage every time
+you touch it, so pull it into a local rather than reading it in a loop
+condition.
+
+If you're processing records in bulk and that still costs too much, the columns
+themselves are public: `readFeatureArena`, `readFeatureStart` and
+`readFeatureCount`, shared across every record in a slice. Reading those instead
+of `readFeatures` measured 3.7x faster on a long-read slice, at a fraction of
+the memory. `forEachMismatch()` is built on them and is a good model to crib
+from.
+
 ## Other exports
 
 Beyond the classes above, which cover reading a file, the package exports the
@@ -300,7 +388,7 @@ constants, storage classes and types that the lower-level APIs use.
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `CIGAR_MATCH`, `CIGAR_INS`, `CIGAR_DEL`, `CIGAR_REF_SKIP`, `CIGAR_SOFT_CLIP`, `CIGAR_HARD_CLIP`, `CIGAR_PAD`, `CIGAR_EQUAL`, `CIGAR_DIFF`                                   | the `op` values `forEachCigarOp` passes, numbered 0 to 8 as in BAM                                               |
 | `CIGAR_OP_CHARS`                                                                                                                                                            | `'MIDNSHP=X'`, so `CIGAR_OP_CHARS[op]` is the op's letter                                                        |
-| `RF_SUBST`, `RF_INSERTION`, `RF_DELETION`, `RF_REF_SKIP`, `RF_SOFT_CLIP`, `RF_HARD_CLIP`, `RF_PADDING`, `RF_INSERT_BASE`, `RF_BASES`, `RF_BASE_QUAL`, `RF_QUAL`, `RF_QUALS` | read-feature codes, as the char code of each CRAM code letter; see [read-features.md](read-features.md)          |
+| `RF_SUBST`, `RF_INSERTION`, `RF_DELETION`, `RF_REF_SKIP`, `RF_SOFT_CLIP`, `RF_HARD_CLIP`, `RF_PADDING`, `RF_INSERT_BASE`, `RF_BASES`, `RF_BASE_QUAL`, `RF_QUAL`, `RF_QUALS` | read-feature codes, as the char code of each CRAM code letter; see [Read features](#read-features)               |
 | `RF_POSITIONAL`                                                                                                                                                             | a table indexed by read-feature code: 1 where the feature's `refPos` is an alignment position, 0 for `q` and `Q` |
 | `TAG_NUMBER`, `TAG_CHAR`, `TAG_STRING`, `TAG_ARRAY`                                                                                                                         | the kinds of value a `TagColumn` stores                                                                          |
 | `NEXT_UNKNOWN`                                                                                                                                                              | the `nextSequenceId` of a record whose file does not locate the next segment                                     |

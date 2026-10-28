@@ -19,7 +19,8 @@ every slice runs in parallel. Each slice:
   the tag and quality columns.
 
 [optimizations.md](optimizations.md) explains why each of those steps works the
-way it does, with the measurements behind it.
+way it does, with the measurements behind it, and the [ADRs](adr/) record the
+decisions in full.
 
 The diagram draws only the main path, and leaves out:
 
@@ -51,8 +52,7 @@ Two later steps depend on the columnar layout:
   structured-cloning an object graph.
 
 [memory.md](memory.md#columns-not-objects) has the per-column costs,
-[read-features.md](read-features.md) how to read them without materializing
-anything.
+[api.md](api.md#read-features) how to read them without materializing anything.
 
 ## Where the slice decode happens
 
@@ -98,4 +98,4 @@ crossing copies its input into the wasm heap and its output back out, and a
 block's two copies amortize over the thousands of records in it. The layers
 above the block, meaning the data-series codecs, the record decode and the
 columns, run in JS on bytes already in the JS heap. [wasm.md](wasm.md) has the
-rest of that argument, and [codec-support.md](codec-support.md) the codec list.
+rest of that argument, and [wasm.md](wasm.md#codecs) the codec list.

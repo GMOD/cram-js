@@ -14,6 +14,38 @@ JS.
 
 [dataflow.md](dataflow.md) shows where both sit in a query.
 
+## Codecs
+
+All CRAM v3 and v3.1 codecs are supported.
+
+### Block-level compression
+
+| ID  | Method   | Supported                                                                  |
+| --- | -------- | -------------------------------------------------------------------------- |
+| 0   | raw      | ✅                                                                         |
+| 1   | gzip     | ✅                                                                         |
+| 2   | bzip2    | ✅                                                                         |
+| 3   | lzma     | ✅                                                                         |
+| 4   | rans     | ✅                                                                         |
+| 5   | rans4x16 | ✅ all sub-variants (order-0/1, Pack, RLE, r32x16, striped, CAT, gzip-min) |
+| 6   | arith    | ✅                                                                         |
+| 7   | fqzcomp  | ✅                                                                         |
+| 8   | tok3     | ✅ all sub-variants (tok3-rans, tok3-arith)                                |
+
+### Data-series codecs
+
+| ID  | Codec           | Supported                                   |
+| --- | --------------- | ------------------------------------------- |
+| 1   | External        | ✅                                          |
+| 2   | Golomb          | ❌ CRAM v2-era, not emitted by modern tools |
+| 3   | Huffman         | ✅                                          |
+| 4   | ByteArrayLength | ✅                                          |
+| 5   | ByteArrayStop   | ✅                                          |
+| 6   | Beta            | ✅                                          |
+| 7   | SubExp          | ✅                                          |
+| 8   | Golomb-Rice     | ❌ CRAM v2-era, not emitted by modern tools |
+| 9   | Gamma           | ✅                                          |
+
 ## Why
 
 CRAM 3.1 was effectively unreadable in JS for years, and the reason was fqzcomp,
@@ -144,5 +176,6 @@ cross-origin isolation.
 
 ## Building
 
-[codec-support.md](codec-support.md) has the update and rebuild scripts, and
-`htscodecs-wasm/build.sh` has the emcc flags the numbers above come from.
+To update htscodecs, run `htscodecs-wasm/update-htscodecs.sh` and then
+`htscodecs-wasm/build.sh`, which has the emcc flags the numbers above come from.
+The build writes the inlined bundle to `src/wasm/htscodecs.js`.
