@@ -137,11 +137,10 @@ Slices are independent, so they decode on a shared worker pool — on by default
 since the worker ships inlined. We measured parallelizing only _decompression_,
 as `@gmod/bgzf-filehandle` does for BAM, and rejected it: at 24–35% of a query,
 Amdahl caps it at ~1.33x, and the heavy blocks within one slice are too few to
-spread. Decoding whole slices covers ~95% of a query, and the pool measures
-**2.0–2.8x** under node and **2.1–3.6x** from four slices up when nested inside
-a browser worker, which is the arrangement consumers ship.
-[workers.md](workers.md) has the tables, including the slice-count threshold we
-measured for and rejected.
+spread. Decoding whole slices covers ~95% of a query, and the pool measures up
+to **2.8x** under node and up to **3.6x** nested inside a browser worker, which
+is the arrangement consumers ship. [workers.md](workers.md) has the tables,
+including the slice-count threshold we measured for and rejected.
 
 ### GPU compute shaders not currently pursued
 

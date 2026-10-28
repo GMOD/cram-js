@@ -32,70 +32,23 @@ The diagram draws only the main path, and leaves out:
   already have;
 - cache eviction, which is LRU plus an idle sweep.
 
-## What the decode writes into
+## Where the parts are documented
 
-The record pass writes typed columns, not `{code, pos, refPos, data}` objects:
-
-- read features go into a per-slice arena of struct-of-arrays typed columns, and
-  each record holds a start and a count into them;
-- tags and quality scores go into separate columns.
-
-Read features dominate decoded-record memory on long reads (a 37-record ONT
-slice decodes 213k of them), and 15 bytes of columns per feature against 64 per
-object determines whether a slice fits in the cache at all.
-
-Two later steps depend on the columnar layout:
-
-- The arena is sized up front from the slice's blocks, because a long-read slice
-  whose arena grows spends its decode time reallocating seven columns.
-- Typed arrays let a worker transfer the result at zero copy instead of
-  structured-cloning an object graph.
-
-[memory.md](memory.md#columns-not-objects) has the per-column costs,
-[api.md](api.md#read-features) how to read them without materializing anything.
-
-## Where the slice decode happens
-
-Everything in the purple box runs on a **worker pool** when the host has one.
-The pool launches each `Worker` from a Blob URL, and the package inlines the
-worker code with the wasm inside it, so there is nothing to configure. One pool
-serves the whole JS context, as in
-[bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md), but the
-unit of work is the **whole slice** rather than just decompression. Block
-decompression accounts for only 24–35% of a cold query, so a decompression-only
-pool caps out around 1.33x, where the whole-slice pool measures 2.0–3.6x. That
-is why the diagram draws a box around several steps here and bam's draws a
-single node. A host that cannot start a pool runs the same code in-process, on
-the thread that called it.
-
-Two things stay on the main thread whatever happens:
-
-- Describing the slice to the worker, in bytes and numbers only. A `CramFile`
-  holds a filehandle and your `fetchReferenceSequence` callback, and neither can
-  be posted to a worker. In the other direction, the worker transfers the
-  columns back at zero copy instead of cloning them.
-- `applyReferenceSequence`, because resolving substitutions means calling that
-  callback.
-
-[workers.md](workers.md) has the measurements and the fallbacks.
-
-## Where wasm sits
-
-Everything orange is wasm:
-
-- `htscodecs.wasm` handles gzip (through libdeflate), bzip2, and every CRAM
-  codec from rANS to fqzcomp and tok3.
-- A second `xz-embedded.wasm` handles lzma, which htscodecs has no codec for at
-  all.
-
-The build inlines both, and each instantiates lazily, once per JS context. The
-`.crai` goes through wasm too, though the diagram does not draw that edge — the
-index is gzipped, so the first wasm call of a session is usually gunzipping it
-rather than decompressing a block.
-
-The code crosses the boundary **once per block, never per record**. Each
-crossing copies its input into the wasm heap and its output back out, and a
-block's two copies amortize over the thousands of records in it. The layers
-above the block, meaning the data-series codecs, the record decode and the
-columns, run in JS on bytes already in the JS heap. [wasm.md](wasm.md) has the
-rest of that argument, and [wasm.md](wasm.md#codecs) the codec list.
+- **The decode output.** The record pass writes per-slice typed columns, not an
+  object per read feature, and each record is a view onto them.
+  [memory.md](memory.md#columns-not-objects) has the costs, and
+  [api.md](api.md#read-features) shows how to read the columns directly.
+- **The purple box.** Everything in it runs on a worker pool when the host has
+  one, and in-process otherwise. The unit of work is the whole slice, where
+  [bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md) pools only
+  decompression, so the diagram boxes several steps where bam's draws one node.
+  [workers.md](workers.md) has the measurements and the fallbacks.
+- **The main thread.** Two steps stay on it whatever happens: describing the
+  slice to the worker, because a `CramFile` holds a filehandle and your
+  `fetchReferenceSequence` callback, and `applyReferenceSequence`, which calls
+  that callback.
+- **The orange nodes.** Everything orange is wasm: htscodecs for gzip, bzip2 and
+  every CRAM codec, and xz-embedded for lzma. The `.crai` goes through wasm too,
+  because it is gzipped, though the diagram leaves out that edge. Code crosses
+  the boundary once per block, never per record. [wasm.md](wasm.md) has the
+  argument and the [codec list](wasm.md#codecs).
