@@ -94,7 +94,8 @@ run put the long-read mismatch walk at 2.66x _faster_, which is not a real
 effect; `docs/memory.md` describes that measurement error under "do not A/B two
 source trees in one process". `benchmarks/reads.bench.ts` answers the timing
 question on a quiet machine instead. It covers the walks that happen after a
-decode, which `benchmarks/cram.bench.ts` never reached.
+decode, which `benchmarks/cram.bench.ts` never reached. Both bench files were
+removed in October 2026, when vitest 5 dropped `bench`.
 
 Two results need no timer: the decode does strictly less work than before (an
 offset write per payload became one indexing pass per slice), and both
