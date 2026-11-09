@@ -173,7 +173,13 @@ header without an index. Each method takes an optional `{ signal }`.
 
 ## `CraiIndex`
 
-`new CraiIndex({ url })`, or `{ path }` or `{ filehandle }`.
+`new CraiIndex({ url })`, or `{ path }` or `{ filehandle }`. Both methods take a
+numeric reference id and an optional `{ signal }`.
+
+| Method                                  | Returns            | Description                            |
+| --------------------------------------- | ------------------ | -------------------------------------- |
+| `getEntriesForRange(seqId, start, end)` | `Promise<Slice[]>` | the `.crai` entries for the range      |
+| `hasDataForReferenceSequence(seqId)`    | `Promise<boolean>` | whether the index has any slice for it |
 
 ## `CramRecord`
 

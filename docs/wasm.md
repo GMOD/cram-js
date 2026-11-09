@@ -16,7 +16,8 @@ JS.
 
 ## Codecs
 
-All CRAM v3 and v3.1 codecs are supported.
+All CRAM v3 and v3.1 codecs are supported. Golomb and Golomb-Rice, which only v2
+files use, are not (see [data-series codecs](#data-series-codecs)).
 
 ### Block-level compression
 
@@ -48,9 +49,8 @@ All CRAM v3 and v3.1 codecs are supported.
 
 ## Why
 
-CRAM 3.1 was effectively unreadable in JS for years, and the reason was fqzcomp,
-tok3 and the adaptive arithmetic coder. Between them that's thousands of lines
-of context-modeling C, and porting it by hand means committing to keep a second
+Between them, fqzcomp, tok3 and the adaptive arithmetic coder are thousands of
+lines of context-modeling C, and porting them by hand means keeping a second
 copy correct indefinitely. Compiling the real thing got all of it in one step,
 including the rANS 4x16 and tok3 sub-variants that tools emit.
 
@@ -60,8 +60,7 @@ pick up an upstream htscodecs fix, rerun the update script.
 
 Speed follows from compiling the real C too. Most of the time spent decoding a
 CRAM read goes to quality scores and read names, and compiled code now decodes
-both in place of an interpreted inner loop. gzip uses libdeflate, which is quick
-even by native standards.
+both in place of an interpreted inner loop. gzip uses libdeflate.
 
 Because the wasm is inlined, it behaves like any other JS dependency in node,
 browsers and workers. It needs no second request, no static asset copied into

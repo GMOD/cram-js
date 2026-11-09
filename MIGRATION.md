@@ -93,7 +93,9 @@ extra indirect call per difference, which made jbrowse's plotting path **17%
 slower** than passing its callback straight to `forEachMismatch`. See
 [ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md).
 
-## v11 → v12: `record.tags` is a column, and `getTag` reads one tag
+## v11 → v12
+
+### `record.tags` is a column, and `getTag` reads one tag
 
 Tags are now stored in a per-slice `TagColumn` rather than a `Record` per
 record, with the layout `readFeatureArena` uses, where `record.tagStart` and
@@ -105,8 +107,8 @@ working. Two things do change:
 
 - **Prefer `record.getTag(name)` for a single tag.** It reads the record's slots
   in the column instead of building an object holding every tag on the read,
-  which measures 3.8–7.8x faster. `@gmod/bam` has had the same method for the
-  same reason.
+  which measures 3.8–7.8x faster than `record.tags[name]`. `@gmod/bam` has had
+  the same method for the same reason.
 - **`tags` is now read-only.** It was a writable field; it is now a getter, and
   assigning to it throws a `TypeError` explaining what to do instead. If you
   were mutating it, build a `TagColumn` and pass it as `tagColumn` with
@@ -117,7 +119,7 @@ working. Two things do change:
 `TagColumn`, `TagValue` and the `TAG_*` kind constants are exported from the
 package root for consumers reading the columns directly.
 
-## v11 → v12: `record.mate` is two numbers named for the next segment
+### `record.mate` is two numbers named for the next segment
 
 `CramRecord.mate` is gone, along with the `MateRecord` type it was declared with
 (that type was never re-exported from the package root, so only a deep import
@@ -176,9 +178,8 @@ has to be updated:
 | `featureCache.get(…)`       | `featureCache.getIfCached(…)` |
 | `featureCache.maxRecords`   | `featureCache.maxSize`        |
 
-Behavior is unchanged by the swap itself; cram was the third of the four gmod
-packages to replace its copy of this cache with the shared one. Code that only
-constructs a `CramFile` and reads records needs no change.
+Behavior is unchanged by the swap itself. Code that only constructs a `CramFile`
+and reads records needs no change.
 
 Two non-breaking changes inside v11 also matter when you arrive from v10:
 

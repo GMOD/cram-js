@@ -276,8 +276,7 @@ alignment is in view, not on how long the reads are.
 A file with no `b` features is unaffected, and the rest of the walk is
 unchanged. The cost is in this library, not in samtools: samtools reads a no_ref
 file just as fast as any other, because it returns the bases the file already
-stores. The comparison runs only when a caller asks for the substitutions, which
-is why these files can be in wide use without anyone noticing the cost.
+stores. The comparison runs only when a caller asks for the substitutions.
 
 A no_ref file also costs space, about **1.7x** on real reads: 200,000 of them
 took 493 KB, against 293 KB written against a reference. Don't read more than
@@ -356,11 +355,8 @@ retains none of them, so one shared literal is safe.
 **Gate the query on the index.** `bytesForRegions` sums `sliceBytes` from the
 `.crai` to decide whether a region is too big to fetch, deduplicating slices
 across regions first — adjacent regions routinely overlap one slice, which then
-downloads once. The gate also limits the gains described above. A pileup capped
-at 5 MB always stays in the 19–40 kb band, the shallow end of the pool's curve,
-and that cap is most of why the end-to-end win there is ~1.1x while the decode
-alone is 2.2x. The pool is worth much more to a whole-contig scan, an export or
-a force-load.
+downloads once. The gate also limits the pool's gains in a consumer: see
+[workers.md](workers.md#the-speedup-grows-with-the-region-up-to-a-point).
 
 ## What we measured and rejected
 
