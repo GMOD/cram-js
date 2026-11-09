@@ -18,8 +18,8 @@ has a quick start.
 const indexedFile = new IndexedCramFile({
   cramUrl: 'https://example.com/file.cram',
   index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
-  fetchReferenceSequence: async (seqId, start, end, refName, opts) =>
-    (await fasta.getSequence(refName, start, end, opts)) ?? '',
+  fetchReferenceSequence: (seqId, start, end, refName, opts) =>
+    fasta.getSequence(refName, start, end, opts),
 })
 ```
 
@@ -76,7 +76,8 @@ read's bases takes the reference sequence. `fetchReferenceSequence` receives
 of that range.
 
 - A longer string throws, and a non-empty shorter one is padded with `N`.
-- Return `''`, never `undefined`, when the reference is unavailable.
+- Return `undefined` or `''` when the reference is unavailable, such as a name
+  the FASTA lacks.
 - `refName` is `undefined` only for a file with no `@SQ` lines.
 
 The range is the slice's span clamped to the `@SQ` length, not the query's, so a

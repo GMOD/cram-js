@@ -30,8 +30,8 @@ const fasta = new IndexedFasta({
 const indexedFile = new IndexedCramFile({
   cramUrl: 'https://example.com/file.cram',
   index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
-  fetchReferenceSequence: async (seqId, start, end, refName, opts) =>
-    (await fasta.getSequence(refName, start, end, opts)) ?? '',
+  fetchReferenceSequence: (seqId, start, end, refName, opts) =>
+    fasta.getSequence(refName, start, end, opts),
 })
 
 const records = await indexedFile.getRecordsForRange('chr1', 10000, 20000)

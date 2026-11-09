@@ -83,7 +83,9 @@ export interface CramFileSource {
  * string should be `end - start` characters. A longer answer throws, which is
  * what turns a callback still written against the pre-v10 1-based closed
  * contract into an error rather than bases shifted by one; a shorter one is
- * padded with N, as the spec treats bases past the reference.
+ * padded with N, as the spec treats bases past the reference. Return undefined
+ * or an empty string when the source cannot resolve the reference, such as a
+ * name the FASTA lacks; the records then decode without reference bases.
  *
  * The decode stops its requests at the `@SQ` length. The md5 check
  * (`checkSequenceMD5`) is the exception: it asks for the slice's declared span
@@ -106,7 +108,7 @@ export type SeqFetch = (
   end: number,
   refName: string | undefined,
   opts?: BaseOpts,
-) => Promise<string>
+) => Promise<string | undefined>
 
 /** One `@SQ` line of the SAM header. */
 export interface ReferenceInfo {

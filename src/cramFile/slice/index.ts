@@ -268,6 +268,11 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
       await this.file.getReferenceName(refSeqId, opts),
       opts,
     )
+    if (seq === undefined) {
+      throw new CramArgumentError(
+        'fetchReferenceSequence callback returned no sequence, which checkSequenceMD5 cannot verify',
+      )
+    }
     if (seq.length !== refSeqSpan) {
       throw new CramArgumentError(
         'fetchReferenceSequence callback returned a reference sequence of the wrong length',
@@ -344,8 +349,8 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
 
   /**
    * `[start, end)` of reference `seqId` from `fetchReferenceSequence`, or
-   * undefined without a callback or when it hands back an empty string, which
-   * is how a callback says it cannot resolve the reference.
+   * undefined without a callback or when it hands back undefined or an empty
+   * string, which is how a callback says it cannot resolve the reference.
    *
    * The request stops at the `@SQ` length, and the answer is padded back out
    * to `end` with N: a read may overhang the end of its contig, and CRAM reads
@@ -373,7 +378,7 @@ export default class CramSlice<T extends CramRecord = CramRecord> {
       return undefined
     }
     const seq = await fetchReferenceSequence(seqId, from, to, info?.name, opts)
-    if (seq.length > to - from) {
+    if (seq !== undefined && seq.length > to - from) {
       throw new CramArgumentError(
         `fetchReferenceSequence returned ${seq.length} bases for ${from}-${to} of reference ${seqId}, which is ${to - from} bases`,
       )
