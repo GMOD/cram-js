@@ -73,19 +73,9 @@ record.forEachMismatch(
 
 [docs/api.md](docs/api.md#mismatch) has the fields and the window options.
 
-### Mismatches need the reference
-
-`fetchReferenceSequence` supplies the bases of substitutions, as in the quick
-start. It receives `(seqId, start, end, refName, { signal })`.
-
-- Return the `end - start` bases from `start` (0-based half-open). A longer
-  string throws, and a shorter one is padded with `N`.
-- `refName` is the name in the CRAM header, so map it if the FASTA spells it
-  differently (`chr1` and `1`). Return `''` for a reference you lack.
-- Without the callback, each substitution reads `N`. A file written with
-  `embed_ref=1` needs no callback.
-
-[docs/api.md](docs/api.md#reference-sequence) has the details.
+Substitutions need the reference bases, which the `fetchReferenceSequence` in
+the quick start supplies. Without it each substitution reads `N`.
+[docs/api.md](docs/api.md#reference-sequence) has the callback's contract.
 
 ## Records
 
