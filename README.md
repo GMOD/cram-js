@@ -110,8 +110,6 @@ The package ships a standalone browser build that puts the same exports on
 - [MIGRATION.md](MIGRATION.md): breaking changes, newest first
 - [docs/dataflow.md](docs/dataflow.md): how a query runs, and the starting point
   for the design docs on workers, memory, wasm and codecs, and the ADRs
-- [CONTRIBUTING.md](CONTRIBUTING.md): development and release, plus
-  [TODO.md](TODO.md) for open work
 
 ## Academic use
 
