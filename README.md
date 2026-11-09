@@ -3,11 +3,13 @@
 [![NPM version](https://img.shields.io/npm/v/@gmod/cram.svg?style=flat-square)](https://npmjs.org/package/@gmod/cram)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/GMOD/cram-js/publish.yml?branch=main)
 
-Read CRAM files in node or the browser. Handles CRAM 2.x and 3.x, `.crai`
-indexes, and every v3 and v3.1 codec, including fqzcomp and tok3. The codecs are
-the htscodecs C library that samtools uses, compiled to WebAssembly and inlined
-in the bundle, so there is no `.wasm` file to serve. Golomb and Golomb-Rice,
-which only v2 files use, are not implemented.
+Read CRAM files in node or the browser.
+
+- Handles CRAM 2.x and 3.x, `.crai` indexes, and every v3 and v3.1 codec,
+  including fqzcomp and tok3.
+- The codecs are the htscodecs C library that samtools uses, compiled to
+  WebAssembly and inlined in the bundle, so there is no `.wasm` file to serve.
+- Golomb and Golomb-Rice, which only v2 files use, are not implemented.
 
 ```bash
 npm install @gmod/cram
@@ -44,26 +46,30 @@ for (const record of records) {
 For local files, pass `cramPath`, `CraiIndex({ path })` and
 `IndexedFasta({ path })`.
 
-Coordinates are 0-based half-open, as in `@gmod/bam`; add 1 for a 1-based format
-such as SAM's `POS`. Query a reference by its name in the file's header, such as
-`chr1`, `1` or `CHROMOSOME_I`. A name the file lacks returns `[]`.
+- Coordinates are 0-based half-open, as in `@gmod/bam`; add 1 for a 1-based
+  format such as SAM's `POS`.
+- Query a reference by its name in the file's header, such as `chr1`, `1` or
+  `CHROMOSOME_I`. A name the file lacks returns `[]`.
 
 ## Mismatches
 
 `record.getMismatches()` lists substitutions, insertions, deletions, reference
 skips and clips. Each has `code`, `refPos`, `length`, `bases`, `qual`,
-`refBaseCode` and `clipLength`. `code` is a CIGAR char code (88 for `X`), and
-`String.fromCharCode(code)` gives the letter without allocating a small string,
-since V8 interns single-character strings. `record.forEachMismatch(callback)`
-passes the same fields as arguments without building an array, and both take a
-`{ start, end, origin }` window; see [docs/api.md](docs/api.md#mismatch).
+`refBaseCode` and `clipLength`.
+
+- `code` is a CIGAR char code (88 for `X`). `String.fromCharCode(code)` gives
+  the letter without allocating a small string, since V8 interns
+  single-character strings.
+- `record.forEachMismatch(callback)` passes the same fields as arguments without
+  building an array.
+- Both take a `{ start, end, origin }` window; see
+  [docs/api.md](docs/api.md#mismatch).
 
 ### Mismatches need the reference
 
 CRAM stores each read as its differences from the reference, so
-`fetchReferenceSequence` is how substitutions get their bases. Its arguments are
-`(seqId, start, end, refName, { signal })`, and it returns the bases of that
-range.
+`fetchReferenceSequence` supplies the bases of substitutions. It receives
+`(seqId, start, end, refName, { signal })` and returns the bases of that range.
 
 - `start` and `end` are 0-based half-open, and the string returned must be
   `end - start` long. A longer string throws, and a non-empty shorter one is
@@ -107,10 +113,10 @@ await indexedFile.getRecordsForRange('chr1', 0, 1_000_000, {
 
 ### Range caching
 
-With `cramUrl`, each byte range a query reads is a separate HTTP request: one
-per slice and two small ones per container.
-[`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
-merges nearby ranges into one request and reuses fetched bytes across queries:
+- With `cramUrl`, each byte range a query reads is a separate HTTP request: one
+  per slice and two small ones per container.
+- [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
+  merges nearby ranges into one request and reuses fetched bytes across queries.
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
@@ -132,9 +138,11 @@ size. See [docs/workers.md](docs/workers.md).
 ## Script tag
 
 The package ships a standalone browser build that puts the same exports on
-`window.gmodCRAM`. It loads its codec worker as a second file from the same
-directory, and decodes in-process without it. The [example directory](./example)
-has a working page.
+`window.gmodCRAM`.
+
+- It loads its codec worker as a second file from the same directory, and
+  decodes in-process without it.
+- The [example directory](./example) has a working page.
 
 ```html
 <script src="https://unpkg.com/@gmod/cram/dist/cram-bundle.js"></script>
