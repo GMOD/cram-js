@@ -1,8 +1,8 @@
 # Migration
 
-Every breaking change back to v9, newest first. If you are coming from several
-majors back, read down. A later entry can supersede an earlier one, and where it
-does the earlier entry says so.
+Every breaking change back to v9, newest first. Find your version and read
+upward. A later entry can supersede an earlier one, and where it does the
+earlier entry says so.
 
 All coordinates are 0-based half-open.
 
@@ -25,15 +25,14 @@ their names and values. What changes:
   `nextSequenceId`, `nextStart`, `templateLength`, `mateRecordNumber`,
   `readName`, `readBases`. The others are read-only; assigning one throws in
   strict mode. `_refRegion` remains assignable for callers that decorate
-  synthesised records.
+  synthesized records.
 - **The constructor is `new CramRecord(slice, index)`.** The options form,
   `new CramRecord({ flags, start, … })`, still works and builds a one-record
   slice; the fields it takes are `CramRecordArgs`, unchanged. Objects built by
   `Object.create(CramRecord.prototype)` and assigned into no longer work.
-- **`readBases` is never `null`.** A `*` record reports `null` from
-  `getReadBases()` and `qualityScores` as before; the stored field is now
-  `string | undefined`. (It was never `null` in practice — the old constructor
-  dropped it — so this only tightens the type.)
+- **`readBases` is never `null`.** `getReadBases()` returns
+  `string | undefined`, and only `qualityScores` is `null`, for a `*` record.
+  Only the type changed: the old constructor already dropped `null`.
 - **`serializeSliceRecords`/`deserializeSliceRecords` are gone.** The worker
   protocol now sends the slice itself. Code that drove the protocol by hand uses
   `serializeSlice(slice)` and `deserializeSlice(payload)` in
@@ -47,12 +46,12 @@ their names and values. What changes:
   should multiply by the size of its records (~400 B for short reads, ~100 KB
   for long ones) or take the default, which exceeds every working set measured
   ([ADR 0013](docs/adr/0013-weigh-the-slice-cache-in-bytes.md)).
-- **A slice is one read.** `CramContainer.getSlice(position, size?)` takes the
-  size from the `.crai` as before, or works it out from the container's
-  landmarks when it is left out — so non-indexed access no longer reads blocks
-  one at a time, and `CramSlice.buildDecodeRequest` always succeeds.
-  `getCoreDataBlock` and `_getBlocksContentIdIndex` are gone; `getBlocks()`
-  remains.
+- **A slice is fetched in one byte-range request.**
+  `CramContainer.getSlice(position, size?)` takes the size from the `.crai` as
+  before, or works it out from the container's landmarks when it is left out —
+  so non-indexed access no longer reads blocks one at a time, and
+  `CramSlice.buildDecodeRequest` always succeeds. `getCoreDataBlock` and
+  `_getBlocksContentIdIndex` are gone; `getBlocks()` remains.
 
 Why: rebuilding a record object per record on the host after a worker decode was
 a serial 0.5 µs a record — a quarter of an in-process decode on a 54,695-record
@@ -90,8 +89,8 @@ The window stays in reference coordinates while the reported positions move, so
 a consumer working in read-relative space can still clip to a genomic viewport
 without converting either one. With `origin`, such a consumer passes its
 callback directly to the walk. Converting the positions afterwards costs an
-extra indirect call per difference, which measured **+17%** on jbrowse's
-plotting path. See
+extra indirect call per difference, which made jbrowse's plotting path **17%
+slower** than passing its callback straight to `forEachMismatch`. See
 [ADR 0008](docs/adr/0008-emit-into-the-consumers-callback.md).
 
 ## v11 → v12: `record.tags` is a column, and `getTag` reads one tag
@@ -177,15 +176,16 @@ has to be updated:
 | `featureCache.get(…)`       | `featureCache.getIfCached(…)` |
 | `featureCache.maxRecords`   | `featureCache.maxSize`        |
 
-Behaviour is unchanged by the swap itself; cram was the third of the four gmod
+Behavior is unchanged by the swap itself; cram was the third of the four gmod
 packages to replace its copy of this cache with the shared one. Code that only
 constructs a `CramFile` and reads records needs no change.
 
 Two non-breaking changes inside v11 also matter when you arrive from v10:
 
-- **`cacheSize` defaults to 1,000,000 records, up from 20,000.** The old default
-  was smaller than the working set of a single query, so the cache retained the
-  memory and still cached nothing (see
+- **`cacheSize` defaults to 1,000,000 records, up from 20,000** (renamed
+  `maxCacheBytes` and counted in bytes in v14). The old default was smaller than
+  the working set of a single query, so the cache retained the memory and still
+  cached nothing (see
   [ADR 0004](docs/adr/0004-size-the-slice-cache-above-one-query.md)). If you set
   `cacheSize` yourself, the cache now enforces it as a bound
   ([ADR 0005](docs/adr/0005-drop-the-batch-eviction-policy.md)).
@@ -222,8 +222,9 @@ Migrating:
 - Rename the `seqFetch` constructor option to `fetchReferenceSequence` **and**
   change it to half-open. We renamed the option deliberately, because a callback
   left on the old 1-based contract would otherwise return bases shifted by one,
-  and no error would report it. After the rename, the library never installs an
-  unmigrated callback, and it throws "callback not provided".
+  and no error would report it. The library ignores an unknown `seqFetch`
+  option, so an unmigrated config decodes with no reference bases and raises no
+  error.
 - Half-open means the returned string must be exactly `end - start` characters —
   one fewer than before for the same region.
 - Unplaced records now report `start` of `-1` rather than `0`, matching what BAM
@@ -237,9 +238,10 @@ user) means adding 1 — that is now the only place the conversion appears.
 ## v8 → v9: read features are columns, and mismatches have an API
 
 Read features decode into a per-slice `ReadFeatureArena` of typed-array columns
-at 19 bytes a feature, rather than an `{code, pos, refPos, data}` object per
-feature at 64 (81 once substitutions were widened). That took a decoded ONT
-slice from 20.41 MB to 7.42 MB.
+at 19 bytes a feature (15 since the later payload-checkpoint change), rather
+than an `{code, pos, refPos, data}` object per feature at 64 (81 once
+substitutions were widened). That took a decoded ONT slice from 20.41 MB to 7.42
+MB.
 
 `record.readFeatures` returns the same structure and values as before, and the
 189 dump snapshots are unchanged. But it is a **getter that rebuilds the array
@@ -254,14 +256,10 @@ Alongside it, `record.getMismatches(opts?)` and
 `record.forEachMismatch(cb, opts?)` report the differences from the reference
 (X/I/D/N/S/H) with an optional reference window. Prefer them: `readFeatures` was
 the documented way to parse CRAM and it is too low level to use correctly.
-Interpreting it means knowing that `i` and `I` are both insertions with
-different payloads, that a run of `i` is one insertion, that `b` aligns as
-matches, that an `X` feature's `data` is a substitution-matrix index rather than
-a base, and that `q`/`Q` hold only quality. Their `refPos` comes from a read
-position the reference never reaches, so it can point backwards into an
-insertion. Every one of those has been a bug in a downstream consumer.
-`RF_POSITIONAL` marks which codes describe alignment geometry, for a consumer
-walking the columns directly.
+Interpreting it correctly takes the rules in
+[Walking the list](docs/api.md#walking-the-list), each of which has been a bug
+in a downstream consumer. `RF_POSITIONAL` marks which codes describe alignment
+geometry, for a consumer walking the columns directly.
 
 Also in v9: `getCigarString()` returns `'*'` rather than `''` for a mapped
 record with no operations, which is what SAM and samtools spell.

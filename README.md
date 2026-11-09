@@ -6,7 +6,8 @@
 Read CRAM files in node or the browser. Handles CRAM 2.x and 3.x, `.crai`
 indexes, and every v3 and v3.1 codec, including fqzcomp and tok3. The codecs are
 the htscodecs C library that samtools uses, compiled to WebAssembly and inlined
-in the bundle, so there is no `.wasm` file to serve.
+in the bundle, so there is no `.wasm` file to serve. Golomb and Golomb-Rice,
+which only v2 files use, are not implemented.
 
 ```bash
 npm install @gmod/cram
@@ -27,31 +28,89 @@ const fasta = new IndexedFasta({
 const indexedFile = new IndexedCramFile({
   cramUrl: 'https://example.com/file.cram',
   index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
-  fetchReferenceSequence: (seqId, start, end, refName) =>
-    fasta.getSequence(refName, start, end),
+  fetchReferenceSequence: async (seqId, start, end, refName, opts) =>
+    (await fasta.getSequence(refName, start, end, opts)) ?? '',
 })
 
 const records = await indexedFile.getRecordsForRange('chr1', 10000, 20000)
 
 for (const record of records) {
-  console.log(record.readName, record.start, record.getCigarString())
+  for (const { code, refPos, bases } of record.getMismatches()) {
+    console.log(record.readName, String.fromCharCode(code), refPos, bases)
+  }
 }
 ```
 
-URLs work in node and the browser. For local files, pass `cramPath` and
-`CraiIndex({ path })`, and `IndexedFasta({ path })`.
+For local files, pass `cramPath`, `CraiIndex({ path })` and
+`IndexedFasta({ path })`.
 
-`fetchReferenceSequence` supplies the reference bases that CRAM stores reads
-against. Without it, records still have positions and CIGAR strings, but not
-read bases. [docs/api.md](docs/api.md#reference-sequence) has the details.
+Coordinates are 0-based half-open, as in `@gmod/bam`; add 1 for a 1-based format
+such as SAM's `POS`. Query a reference by its name in the file's header, such as
+`chr1`, `1` or `CHROMOSOME_I`. A name the file lacks returns `[]`.
+
+## Mismatches
+
+`record.getMismatches()` lists substitutions, insertions, deletions, reference
+skips and clips. Each has `code`, `refPos`, `length`, `bases`, `qual`,
+`refBaseCode` and `clipLength`. `code` is a CIGAR char code (88 for `X`), and
+`String.fromCharCode(code)` gives the letter without allocating a small string,
+since V8 interns single-character strings. `record.forEachMismatch(callback)`
+passes the same fields as arguments without building an array, and both take a
+`{ start, end, origin }` window; see [docs/api.md](docs/api.md#mismatch).
+
+### Mismatches need the reference
+
+CRAM stores each read as its differences from the reference, so
+`fetchReferenceSequence` is how substitutions get their bases. Its arguments are
+`(seqId, start, end, refName, { signal })`, and it returns the bases of that
+range.
+
+- `start` and `end` are 0-based half-open, and the string returned must be
+  `end - start` long. A longer string throws, and a non-empty shorter one is
+  padded with `N`.
+- `refName` is the name in the CRAM header and `seqId` its numeric id, so map
+  the name if the FASTA spells it differently (`chr1` and `1`). A name the FASTA
+  lacks gives `undefined`, which the library cannot read, so return `''` as the
+  example does. `''` means the reference is unavailable.
+- Without the callback, each substitution reads `N` and `getReadBases()` returns
+  `undefined`. A file written with `embed_ref=1` needs no callback, and one
+  written with `no_ref` shows no substitutions without it.
+
+[docs/api.md](docs/api.md#reference-sequence) has the details.
+
+## Records
+
+```js
+record.getReadBases() // 'ACGT…', the read sequence
+record.getCigarString() // '50M2I48M'
+record.getTag('NM') // one auxiliary tag
+record.qualityScoreAt(0) // one base quality
+record.isReverseComplemented() // the usual SAM flags
+```
+
+[docs/api.md](docs/api.md#cramrecord) lists every property and method.
+
+## Header, reference names and cancellation
+
+```js
+await indexedFile.cram.getReferenceInfo() // [{ name, length, md5 }, ...]
+await indexedFile.cram.getSamHeader() // parsed SAM header
+await indexedFile.hasDataForReferenceSequence('chrY') // false if the file has no chrY
+
+const controller = new AbortController()
+await indexedFile.getRecordsForRange('chr1', 0, 1_000_000, {
+  signal: controller.signal,
+})
+```
+
+## Performance
 
 ### Range caching
 
-For each query, the library reads one byte range per slice and two small ones
-per container. With `cramUrl`, it sends a separate HTTP request for each range.
+With `cramUrl`, each byte range a query reads is a separate HTTP request: one
+per slice and two small ones per container.
 [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
-keeps the bytes it fetched and answers each range from them, so it fetches
-neighboring ranges in one request:
+merges nearby ranges into one request and reuses fetched bytes across queries:
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
@@ -64,40 +123,18 @@ const indexedFile = new IndexedCramFile({
 })
 ```
 
-## Reference names
+### Worker pool
 
-Query a reference by its name in the file's header, such as `chr1`, `1` or
-`CHROMOSOME_I`. A query for a name the file lacks returns no records, so the
-same query can run across files that cover different references:
-
-```js
-await indexedFile.getRecordsForRange('chrY', 0, 50000) // [] if the file has no chrY
-await indexedFile.hasDataForReferenceSequence('chrY') // false, likewise
-await indexedFile.cram.getReferenceInfo() // [{ name, length, md5 }, ...]
-```
-
-## Coordinates
-
-Coordinates are 0-based half-open, as in `@gmod/bam`. Add 1 to convert to a
-1-based format such as SAM's `POS`.
-
-## Records
-
-```js
-record.getReadBases() // 'ACGT…', the read sequence
-record.getCigarString() // '50M2I48M'
-record.getMismatches() // every difference from the reference
-record.getTag('NM') // one auxiliary tag
-record.qualityScoreAt(0) // one base quality
-record.isReverseComplemented() // the usual SAM flags
-```
-
-[docs/api.md](docs/api.md#cramrecord) lists every property and method.
+In a browser, slices decode on a worker pool by default. Pass
+`useSliceWorkerPool: false` to turn it off, or `numSliceWorkers` to set its
+size. See [docs/workers.md](docs/workers.md).
 
 ## Script tag
 
 The package ships a standalone browser build that puts the same exports on
-`window.gmodCRAM`. The [example directory](./example) has a working page.
+`window.gmodCRAM`. It loads its codec worker as a second file from the same
+directory, and decodes in-process without it. The [example directory](./example)
+has a working page.
 
 ```html
 <script src="https://unpkg.com/@gmod/cram/dist/cram-bundle.js"></script>
@@ -106,10 +143,10 @@ The package ships a standalone browser build that puts the same exports on
 ## Docs
 
 - [docs/api.md](docs/api.md): every option, property and method, including
-  cancelling a query and walking a record's raw read features
+  walking a record's raw read features
 - [MIGRATION.md](MIGRATION.md): breaking changes, newest first
-- [docs/dataflow.md](docs/dataflow.md): how a query runs, and the starting point
-  for the design docs on workers, memory, wasm and codecs, and the ADRs
+- [docs/dataflow.md](docs/dataflow.md): how a query runs, with links to the
+  design docs and ADRs
 
 ## Academic use
 

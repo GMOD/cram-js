@@ -8,6 +8,8 @@ has a quick start.
 - [`CraiIndex`](#craiindex)
 - [`CramRecord`](#cramrecord): one alignment
 - [`Mismatch`](#mismatch): one difference from the reference
+- [Read features](#read-features): the raw CRAM encoding
+- [Other exports](#other-exports)
 - [Errors](#errors)
 
 ## `IndexedCramFile`
@@ -16,28 +18,29 @@ has a quick start.
 const indexedFile = new IndexedCramFile({
   cramUrl: 'https://example.com/file.cram',
   index: new CraiIndex({ url: 'https://example.com/file.cram.crai' }),
-  fetchReferenceSequence: (seqId, start, end, refName) =>
-    fasta.getSequence(refName, start, end),
+  fetchReferenceSequence: async (seqId, start, end, refName, opts) =>
+    (await fasta.getSequence(refName, start, end, opts)) ?? '',
 })
 ```
 
 ### Options
 
-| Option                   | Default                       | Description                                                                     |
-| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------- |
-| `cramUrl`                |                               | URL of the CRAM file                                                            |
-| `cramPath`               |                               | local path of the CRAM file                                                     |
-| `cramFilehandle`         |                               | a [generic-filehandle2](https://github.com/GMOD/generic-filehandle2) handle     |
-| `index`                  | required                      | a `CraiIndex`, or any object with `getEntriesForRange`                          |
-| `fetchReferenceSequence` |                               | returns reference bases; see [Reference sequence](#reference-sequence)          |
-| `checkSequenceMD5`       | `false`                       | verify each slice's reference MD5 against the bases the callback returns        |
-| `validateChecksums`      | `false`                       | check the CRC32 of every block and container                                    |
-| `maxCacheBytes`          | 1 GB                          | bytes of decoded slices to keep; see [Cache](#cache)                            |
-| `cacheIdleTimeoutMs`     | 3 minutes                     | drop a slice nothing has read for this long; `0` disables                       |
-| `cacheBudget`            |                               | a budget shared with other files, so `maxCacheBytes` bounds their total         |
-| `useSliceWorkerPool`     | `true`                        | decode slices on a worker pool in a browser; see [workers.md](workers.md)       |
-| `numSliceWorkers`        | `min(hardwareConcurrency, 4)` | size of the worker pool                                                         |
-| `recordClass`            | `CramRecord`                  | a `CramRecord` subclass to return from queries; see [recordClass](#recordclass) |
+| Option                   | Default                       | Description                                                                                       |
+| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------- |
+| `cramUrl`                |                               | URL of the CRAM file                                                                              |
+| `cramPath`               |                               | local path of the CRAM file                                                                       |
+| `cramFilehandle`         |                               | a [generic-filehandle2](https://github.com/GMOD/generic-filehandle2) handle                       |
+| `index`                  |                               | required: a `CraiIndex`, or an object with `getEntriesForRange` and `hasDataForReferenceSequence` |
+| `cram`                   |                               | an existing `CramFile`, in place of the three options above                                       |
+| `fetchReferenceSequence` |                               | returns reference bases; see [Reference sequence](#reference-sequence)                            |
+| `checkSequenceMD5`       | `false`                       | verify each slice's reference MD5 against the bases the callback returns                          |
+| `validateChecksums`      | `false`                       | check the CRC32 of every block and container                                                      |
+| `maxCacheBytes`          | 1 GB                          | bytes of decoded slices to keep; see [Cache](#cache)                                              |
+| `cacheIdleTimeoutMs`     | 3 minutes                     | drop a slice nothing has read for this long; `0` disables                                         |
+| `cacheBudget`            |                               | a budget shared with other files, so `maxCacheBytes` bounds their total                           |
+| `useSliceWorkerPool`     | `true`                        | decode slices on a worker pool in a browser; see [workers.md](workers.md)                         |
+| `numSliceWorkers`        | `min(hardwareConcurrency, 4)` | size of the worker pool                                                                           |
+| `recordClass`            | `CramRecord`                  | a `CramRecord` subclass to return from queries; see [recordClass](#recordclass)                   |
 
 Pass one of `cramUrl`, `cramPath` and `cramFilehandle`.
 
@@ -50,8 +53,9 @@ Pass one of `cramUrl`, `cramPath` and `cramFilehandle`.
 | `clearFeatureCache()`                            |                         | drop every decoded slice now, for a consumer done with the file |
 | `cram`                                           | `CramFile`              | the underlying [`CramFile`](#cramfile)                          |
 
-`refName` is the name in the file's header, such as `chr1`. Both methods also
-accept the numeric reference id; see [Reference ids](#reference-ids).
+`refName` is the name in the file's header, such as `chr1`. `getRecordsForRange`
+and `hasDataForReferenceSequence` also accept the numeric reference id; see
+[Reference ids](#reference-ids).
 
 `getRecordsForRange` options:
 
@@ -69,8 +73,13 @@ accept the numeric reference id; see [Reference ids](#reference-ids).
 CRAM stores each read as its differences from the reference, so decoding a
 read's bases takes the reference sequence. `fetchReferenceSequence` receives
 `(seqId, start, end, refName, { signal })` and returns the `end - start` bases
-of that range. A longer string throws, and the library pads a shorter one with
-`N`.
+of that range. A longer string throws, and a non-empty shorter one is padded
+with `N`. Return `''`, never `undefined`, when the reference is unavailable;
+`refName` is `undefined` only for a file with no `@SQ` lines.
+
+The range is the slice's span clamped to the `@SQ` length, not the query's, so a
+remote source sees requests of megabase size. With `checkSequenceMD5`, the
+length must be exact and a shorter or longer string throws `CramArgumentError`.
 
 Without the callback, records have positions, CIGAR strings, and the type and
 length of each difference, but no bases, and the mismatch methods give each
@@ -110,11 +119,10 @@ signals, such as `RemoteFile`, also cancels its request in flight.
 
 Concurrent queries share slice decodes and the header read, and the library
 cancels a shared read only when every query waiting on it has aborted, so
-aborting one query leaves the others running. A query without a signal cannot
-abort, so a decode it shares runs to completion for everyone, which is why every
-query should pass the signal. The library also passes it to
-`fetchReferenceSequence`, and
-[ADR 0003](adr/0003-abortsignal-on-the-read-path.md) explains the design.
+aborting one query leaves the others running, and a query without a signal keeps
+a shared decode running for all of them. Pass the signal on every query; the
+library also passes it to `fetchReferenceSequence`
+([ADR 0003](adr/0003-abortsignal-on-the-read-path.md)).
 
 ### Cache
 
@@ -125,10 +133,8 @@ it to hold several queries, because a cache smaller than one query's slices
 evicts each slice before the next query can reuse it.
 [memory.md](memory.md#the-slice-cache) has the details.
 
-`cacheIdleTimeoutMs` empties the cache of slices that no query has read
-recently. The library checks `maxCacheBytes` only when a decode finishes, so
-while the file sits idle, the library frees memory only when the timeout
-expires.
+The library checks `maxCacheBytes` only when a decode finishes, so while the
+file sits idle it frees memory only when `cacheIdleTimeoutMs` expires.
 
 ### `recordClass`
 
@@ -157,7 +163,7 @@ header without an index. Each method takes an optional `{ signal }`.
 | `getReferenceName(id)` | `Promise<string \| undefined>`               | the name for a numeric reference id         |
 | `getReferenceId(name)` | `Promise<number>`                            | the numeric id for a name; throws if absent |
 | `getSamHeader()`       | `Promise<{ tag, data: { tag, value }[] }[]>` | the parsed SAM header                       |
-| `getHeaderText()`      | `Promise<string>`                            | the SAM header text                         |
+| `getHeaderText()`      | `Promise<string \| undefined>`               | the SAM header text                         |
 
 ## `CraiIndex`
 
@@ -193,22 +199,23 @@ them into a local variable instead of accessing them in a loop.
 
 ### Methods
 
-| Method                             | Returns                       | Description                                                     |
-| ---------------------------------- | ----------------------------- | --------------------------------------------------------------- |
-| `getReadBases()`                   | `string \| null \| undefined` | the read sequence; `null` for a record with no bases            |
-| `getCigarString()`                 | `string`                      | CIGAR, such as `50M2I48M`; `*` for an unmapped read             |
-| `getMismatches(opts?)`             | `Mismatch[]`                  | each difference from the reference; see [`Mismatch`](#mismatch) |
-| `getTag(name)`                     | tag value or `undefined`      | one auxiliary tag                                               |
-| `qualityScoreAt(pos)`              | `number`                      | quality at a 0-based read position; `-1` when the file has none |
-| `getLeadingClipLength()`           | `number`                      | bases clipped by the first CIGAR operation, or 0                |
-| `getTrailingClipLength()`          | `number`                      | bases clipped by the last CIGAR operation, or 0                 |
-| `getPairOrientation()`             | `string \| undefined`         | `F1R2`-style orientation; `undefined` for an unpaired read      |
-| `forEachCigarOp(callback)`         |                               | the CIGAR, one operation at a time                              |
-| `forEachMismatch(callback, opts?)` |                               | the differences, one at a time                                  |
-| `toJSON()`                         | object                        | the record as a plain object                                    |
+| Method                             | Returns                  | Description                                                     |
+| ---------------------------------- | ------------------------ | --------------------------------------------------------------- |
+| `getReadBases()`                   | `string \| undefined`    | the read sequence; `undefined` for a record with no bases       |
+| `getCigarString()`                 | `string`                 | CIGAR, such as `50M2I48M`; `*` for an unmapped read             |
+| `getMismatches(opts?)`             | `Mismatch[]`             | each difference from the reference; see [`Mismatch`](#mismatch) |
+| `getTag(name)`                     | tag value or `undefined` | one auxiliary tag                                               |
+| `qualityScoreAt(pos)`              | `number`                 | quality at a 0-based read position; `-1` when the file has none |
+| `getLeadingClipLength()`           | `number`                 | bases clipped by the first CIGAR operation, or 0                |
+| `getTrailingClipLength()`          | `number`                 | bases clipped by the last CIGAR operation, or 0                 |
+| `getPairOrientation()`             | `string \| undefined`    | `F1R2`-style orientation; `undefined` for an unpaired read      |
+| `forEachCigarOp(callback)`         |                          | the CIGAR, one operation at a time                              |
+| `forEachMismatch(callback, opts?)` |                          | the differences, one at a time                                  |
+| `toJSON()`                         | object                   | the record as a plain object                                    |
 
-`getReadBases()` and the base fields of the mismatch methods need
-`fetchReferenceSequence`, and the CIGAR methods do not.
+`getReadBases()` and the base fields of the mismatch methods need the reference
+bases, from `fetchReferenceSequence` or embedded in the file. The CIGAR methods
+do not.
 
 `getMismatches` and `forEachMismatch` take `{ start, end, origin }`, all
 optional. `start` and `end` are a reference range that limits the result to the
@@ -219,8 +226,8 @@ defaults to 0, so `origin: record.start` gives positions relative to the read;
 ### Without allocating
 
 `forEachCigarOp` and `forEachMismatch` call your function once per operation or
-difference instead of building an array or string, which matters when a consumer
-walks many records.
+difference instead of building an array or string, for consumers that walk many
+records.
 
 ```js
 record.forEachCigarOp((op, length) => {
@@ -242,6 +249,9 @@ these properties read it directly:
 | `qualityColumn`, `qualityStart`                            | every quality in the slice, and this record's offset |
 | `tagColumn`, `tagStart`, `tagCount`                        | every tag in the slice, and this record's slots      |
 | `readFeatureArena`, `readFeatureStart`, `readFeatureCount` | every read feature in the slice, and this record's   |
+
+Reading `readFeatureArena` instead of `readFeatures` measured 3.7x faster on a
+long-read slice.
 
 [memory.md](memory.md) explains the layout, and the ADRs
 [0006](adr/0006-cigar-as-a-callback-walk.md) and
@@ -287,17 +297,15 @@ arguments, in this order.
 | `clipLength`  | read bases consumed by an insertion or clip, else 0                                   |
 
 The package exports `RF_SUBST`, `RF_INSERTION` and the other `RF_*` constants to
-compare against `code`.
+compare against `code`. Without a reference, each `X` reports `bases` of `N` and
+`refBaseCode` of `0`.
 
 ## Read features
 
-A CRAM record stores a list of _read features_ instead of an aligned sequence.
-The list holds the handful of places where the read departs from the reference,
-plus a few housekeeping entries. `getReadBases()`, `getCigarString()` and
-`getMismatches()` are all reconstructed from that list.
-
-You can read the list directly, as `record.readFeatures`. The rest of this
-section covers what to know before you do.
+A CRAM record stores a list of _read features_ instead of an aligned sequence:
+the read's differences from the reference, plus quality (`q`, `Q`) and padding
+(`P`) entries. `record.readFeatures` returns the list, and `getReadBases()`,
+`getCigarString()` and `getMismatches()` are reconstructed from it.
 
 ### What `getMismatches()` covers
 
@@ -319,12 +327,9 @@ neither is a difference:
 | `q`, `Q` | quality scores, with no alignment information      |
 | `P`      | padding, which consumes neither read nor reference |
 
-If you want quality scores or padding directly, read the next section before you
-walk the raw list.
+### Walking the list
 
-### Traps
-
-Every one of these has been a real bug in code that walked the features itself:
+Each of these has caused a bug in a consumer that walked the features:
 
 - `i` and `I` are both insertions, and they store their payload differently.
 - A run of `i` features is _one_ insertion, not several.
@@ -333,9 +338,9 @@ Every one of these has been a real bug in code that walked the features itself:
   (`samtools view --output-fmt-option no_ref`, and every CRAM `samtools depad`
   writes), so the writer computed no substitutions and the run covers real ones.
   Diff it against a reference yourself, as `getMismatches()` does.
-- `q` and `Q` hold only quality. Their `refPos` isn't an alignment position at
-  all, so a positional walk has to skip them. `RF_POSITIONAL[code]` is 0 for
-  exactly those two, which is the cheapest way to test for them.
+- `q` and `Q` hold only quality. Their `refPos` isn't an alignment position, so
+  a positional walk has to skip them. `RF_POSITIONAL[code]` is 0 for exactly
+  those two.
 - An `X` feature's `data` is an index into the container's substitution matrix,
   not a base.
 
@@ -345,13 +350,12 @@ Each entry in `record.readFeatures` (CRAM spec §10.2) has:
 
 - `code` — feature type, one of `bqBXIDiQNSPH`
 - `pos` — read position (0-based)
-- `refPos` — reference position (0-based), except for `q` and `Q`. Those two
-  derive `refPos` from a read position the reference never reaches, so it can
-  point backwards into an insertion.
+- `refPos` — reference position (0-based); for `q` and `Q` it is derived from a
+  read position the reference never reaches, and can point backwards into an
+  insertion
 - `data` — the payload, which differs per code (see below)
-- `ref` / `sub` — reference and substituted base, for code `X` only. They only
-  show up once a reference has been applied, which means when
-  `fetchReferenceSequence` is configured.
+- `ref` / `sub` — reference and substituted base, for code `X` only, set only
+  when `fetchReferenceSequence` is configured
 
 #### `data` by feature code
 
@@ -364,23 +368,7 @@ Each entry in `record.readFeatures` (CRAM spec §10.2) has:
 | `B`                | `[base, quality]`                                                                                                                 |
 | `X`                | an index into the container's substitution matrix, **not** a base                                                                 |
 
-### Reading features without the allocation
-
-`record.readFeatures` rebuilds the whole array from columnar storage every time
-you touch it, so pull it into a local rather than reading it in a loop
-condition.
-
-If you're processing records in bulk and that still costs too much, the columns
-themselves are public: `readFeatureArena`, `readFeatureStart` and
-`readFeatureCount`, shared across every record in a slice. Reading those instead
-of `readFeatures` measured 3.7x faster on a long-read slice, at a fraction of
-the memory. `forEachMismatch()` is built on them and is a good model to crib
-from.
-
 ## Other exports
-
-Beyond the classes above, which cover reading a file, the package exports the
-constants, storage classes and types that the lower-level APIs use.
 
 ### Constants
 
@@ -396,15 +384,15 @@ constants, storage classes and types that the lower-level APIs use.
 
 ### Classes and functions
 
-| Export                            | Description                                                                                |
-| --------------------------------- | ------------------------------------------------------------------------------------------ |
-| `DecodedSlice`                    | the columns of one decoded slice; see [memory.md](memory.md)                               |
-| `ReadFeatureArena`                | the read-feature columns of a slice, which `readFeatureArena` returns                      |
-| `TagColumn`                       | the tag columns of a slice, which `tagColumn` returns                                      |
-| `arenaFromReadFeatures(features)` | builds a one-record `ReadFeatureArena` from `ReadFeature` objects, for synthesized records |
-| `getSharedSliceWorkerPool()`      | the shared worker pool, created on first use; `undefined` where workers are unavailable    |
-| `createSliceWorkerPool(n?, url?)` | a separate pool of `n` workers; throws where workers are unavailable                       |
-| `destroySharedSliceWorkerPool()`  | terminates the shared pool's workers                                                       |
+| Export                            | Description                                                                                         |
+| --------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `DecodedSlice`                    | the columns of one decoded slice; see [memory.md](memory.md)                                        |
+| `ReadFeatureArena`                | the read-feature columns of a slice, which `readFeatureArena` returns                               |
+| `TagColumn`                       | the tag columns of a slice, which `tagColumn` returns                                               |
+| `arenaFromReadFeatures(features)` | builds a one-record `ReadFeatureArena` from `ReadFeature` objects, for synthesized records          |
+| `getSharedSliceWorkerPool(n?)`    | the shared worker pool, created on first use; resolves to `undefined` where workers are unavailable |
+| `createSliceWorkerPool(n?, url?)` | a separate pool of `n` workers; rejects where workers are unavailable                               |
+| `destroySharedSliceWorkerPool()`  | terminates the shared pool's workers                                                                |
 
 ### Types
 
@@ -412,7 +400,7 @@ constants, storage classes and types that the lower-level APIs use.
 | ------------------------------------- | --------------------------------------------------------------------- |
 | `SeqFetch`                            | the type of `fetchReferenceSequence`                                  |
 | `ReferenceInfo`                       | one entry of `getReferenceInfo()`                                     |
-| `BaseOpts`, `ReadOpts`, `IndexOpts`   | the options objects that take `signal` and `onProgress`               |
+| `BaseOpts`, `ReadOpts`, `IndexOpts`   | the options objects that take `signal`; `ReadOpts` takes nothing else |
 | `MismatchCallback`, `MismatchOptions` | the callback and options of `forEachMismatch`                         |
 | `CigarCallback`                       | the callback of `forEachCigarOp`                                      |
 | `TagValue`                            | a tag's value: a string, a number, an array of numbers or `undefined` |

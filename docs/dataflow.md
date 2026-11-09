@@ -27,12 +27,12 @@ The diagram draws only the main path, and leaves out:
 - the file definition and SAM header, memoized per file, so every query after
   the first finds them already resolved;
 - non-indexed access through `CramFile` directly, which walks containers and
-  reads blocks one at a time;
+  reads each slice in one range;
 - the mate pass re-entering the index and the cache for slices it did not
   already have;
 - cache eviction, which is LRU plus an idle sweep.
 
-## Where the parts are documented
+## Diagram notes
 
 - **The decode output.** The record pass writes per-slice typed columns, not an
   object per read feature, and each record is a view onto them.
@@ -41,14 +41,15 @@ The diagram draws only the main path, and leaves out:
 - **The purple box.** Everything in it runs on a worker pool when the host has
   one, and in-process otherwise. The unit of work is the whole slice, where
   [bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md) pools only
-  decompression, so the diagram boxes several steps where bam's draws one node.
-  [workers.md](workers.md) has the measurements and the fallbacks.
-- **The main thread.** Two steps stay on it whatever happens: describing the
-  slice to the worker, because a `CramFile` holds a filehandle and your
+  decompression. [workers.md](workers.md) has the measurements and the
+  fallbacks.
+- **The main thread.** Two steps stay on it even with a worker pool: describing
+  the slice to the worker, because a `CramFile` holds a filehandle and your
   `fetchReferenceSequence` callback, and `applyReferenceSequence`, which calls
   that callback.
-- **The orange nodes.** Everything orange is wasm: htscodecs for gzip, bzip2 and
-  every CRAM codec, and xz-embedded for lzma. The `.crai` goes through wasm too,
-  because it is gzipped, though the diagram leaves out that edge. Code crosses
-  the boundary once per block, never per record. [wasm.md](wasm.md) has the
-  argument and the [codec list](wasm.md#codecs).
+- **The orange nodes.** Everything orange is wasm: htscodecs for the CRAM
+  codecs, libdeflate for gzip, the emscripten port for bzip2, and xz-embedded
+  for lzma. The `.crai` goes through wasm too, because it is gzipped, though the
+  diagram leaves out that edge. Code crosses the boundary once per block, never
+  per record. [wasm.md](wasm.md) has the argument and the
+  [codec list](wasm.md#codecs).
