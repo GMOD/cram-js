@@ -54,33 +54,36 @@ For local files, pass `cramPath`, `CraiIndex({ path })` and
 ## Mismatches
 
 `record.getMismatches()` lists substitutions, insertions, deletions, reference
-skips and clips. Each has `code`, `refPos`, `length`, `bases`, `qual`,
-`refBaseCode` and `clipLength`.
+skips and clips. `forEachMismatch` passes the same fields to a callback instead
+of building an array. `code` is a CIGAR char code, so
+`String.fromCharCode(code)` gives its letter.
 
-- `code` is a CIGAR char code (88 for `X`). `String.fromCharCode(code)` gives
-  the letter without allocating a small string, since V8 interns
-  single-character strings.
-- `record.forEachMismatch(callback)` passes the same fields as arguments without
-  building an array.
-- Both take a `{ start, end, origin }` window; see
-  [docs/api.md](docs/api.md#mismatch).
+```js
+import { RF_SUBST } from '@gmod/cram'
+
+record.forEachMismatch(
+  (code, refPos, length, bases, qual, refBaseCode, clipLength) => {
+    if (code === RF_SUBST) {
+      console.log(refPos, bases)
+    }
+  },
+  { start: 10000, end: 20000 }, // optional window
+)
+```
+
+[docs/api.md](docs/api.md#mismatch) has the fields and the window options.
 
 ### Mismatches need the reference
 
-CRAM stores each read as its differences from the reference, so
-`fetchReferenceSequence` supplies the bases of substitutions. It receives
-`(seqId, start, end, refName, { signal })` and returns the bases of that range.
+`fetchReferenceSequence` supplies the bases of substitutions, as in the quick
+start. It receives `(seqId, start, end, refName, { signal })`.
 
-- `start` and `end` are 0-based half-open, and the string returned must be
-  `end - start` long. A longer string throws, and a non-empty shorter one is
-  padded with `N`.
-- `refName` is the name in the CRAM header and `seqId` its numeric id, so map
-  the name if the FASTA spells it differently (`chr1` and `1`). A name the FASTA
-  lacks gives `undefined`, which the library cannot read, so return `''` as the
-  example does. `''` means the reference is unavailable.
-- Without the callback, each substitution reads `N` and `getReadBases()` returns
-  `undefined`. A file written with `embed_ref=1` needs no callback, and one
-  written with `no_ref` shows no substitutions without it.
+- Return the `end - start` bases from `start` (0-based half-open). A longer
+  string throws, and a shorter one is padded with `N`.
+- `refName` is the name in the CRAM header, so map it if the FASTA spells it
+  differently (`chr1` and `1`). Return `''` for a reference you lack.
+- Without the callback, each substitution reads `N`. A file written with
+  `embed_ref=1` needs no callback.
 
 [docs/api.md](docs/api.md#reference-sequence) has the details.
 
