@@ -114,12 +114,9 @@ await indexedFile.getRecordsForRange('chr1', 0, 1_000_000, {
 
 ## Performance
 
-### Range caching
-
-- With `cramUrl`, each byte range a query reads is a separate HTTP request: one
-  per slice and two small ones per container.
-- [`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
-  merges nearby ranges into one request and reuses fetched bytes across queries.
+[`@gmod/range-cache-filehandle`](https://github.com/GMOD/range-cache-filehandle)
+merges the many small HTTP requests a query makes into fewer, and reuses bytes
+across queries:
 
 ```js
 import { RemoteFileWithRangeCache } from '@gmod/range-cache-filehandle'
@@ -132,20 +129,15 @@ const indexedFile = new IndexedCramFile({
 })
 ```
 
-### Worker pool
-
 In a browser, slices decode on a worker pool by default. Pass
-`useSliceWorkerPool: false` to turn it off, or `numSliceWorkers` to set its
-size. See [docs/workers.md](docs/workers.md).
+`useSliceWorkerPool: false` to turn it off, or `numSliceWorkers` to set its size
+([workers.md](docs/workers.md)).
 
 ## Script tag
 
-The package ships a standalone browser build that puts the same exports on
-`window.gmodCRAM`.
-
-- It loads its codec worker as a second file from the same directory, and
-  decodes in-process without it.
-- The [example directory](./example) has a working page.
+A standalone browser build puts the same exports on `window.gmodCRAM`, loading
+its codec worker from the same directory and decoding in-process without it. The
+[example directory](./example) has a working page.
 
 ```html
 <script src="https://unpkg.com/@gmod/cram/dist/cram-bundle.js"></script>
