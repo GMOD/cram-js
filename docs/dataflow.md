@@ -5,13 +5,13 @@
 [dataflow.dot](img/dataflow.dot) is the source; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to re-render it.
 
-A query turns its range into a list of `.crai` slice entries, and from there
-every slice runs in parallel. Each slice:
+The library turns a query's range into a list of `.crai` slice entries, then
+processes every slice in parallel. For each slice it:
 
 - Resolves its container — the header and compression header block, memoized for
   the query, since a container holds several slices.
 - Asks `featureCache` for the decoded records. A hit returns them already
-  decoded and decorated with their reference, so a repeat query runs only the
+  decoded and decorated with their reference, so a repeat query needs only the
   filter.
 - On a miss, reads the whole block region in one go and decodes it: walk the
   blocks, decompress each by its method byte, build the per-slice decode
@@ -38,8 +38,9 @@ The diagram draws only the main path, and leaves out:
   object per read feature, and each record is a view onto them.
   [memory.md](memory.md#columns-not-objects) has the costs, and
   [api.md](api.md#read-features) shows how to read the columns directly.
-- **The purple box.** Everything in it runs on a worker pool when the host has
-  one, and in-process otherwise. The unit of work is the whole slice, where
+- **The purple box.** The library does everything in it on a worker pool when
+  the host has one, and in-process otherwise. The unit of work is the whole
+  slice, where
   [bam-js](https://github.com/GMOD/bam-js/blob/main/docs/dataflow.md) pools only
   decompression. [workers.md](workers.md) has the measurements and the
   fallbacks.

@@ -145,8 +145,8 @@ has a working page.
 - [docs/api.md](docs/api.md): every option, property and method, including
   walking a record's raw read features
 - [MIGRATION.md](MIGRATION.md): breaking changes, newest first
-- [docs/dataflow.md](docs/dataflow.md): how a query runs, with links to the
-  design docs and ADRs
+- [docs/dataflow.md](docs/dataflow.md): a query from index to records, with
+  links to the design docs and ADRs
 
 ## Academic use
 
