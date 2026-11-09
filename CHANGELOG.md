@@ -1,3 +1,37 @@
+## [14.4.0](https://github.com/GMOD/cram-js/compare/v14.3.2...v14.4.0) (2026-11-09)
+
+### Chores
+
+- Drop the vitest benchmarks ([80054e8](https://github.com/GMOD/cram-js/commit/80054e80dc908b97e7089f7f9b470acf06573339))
+
+### Documentation
+
+- Drop CONTRIBUTING and TODO from the README docs list ([b429968](https://github.com/GMOD/cram-js/commit/b429968e61560047ecbbf8fbb7c80842b8591eaa))
+- Lead the README with mismatches and fix doc inaccuracies ([93b9db0](https://github.com/GMOD/cram-js/commit/93b9db023e9192b7854235d4dc3e90bfd035d333))
+- Name the actor where a query or node 'runs' ([019dac1](https://github.com/GMOD/cram-js/commit/019dac1d0ebd917b045297306b019b244457a422))
+- Use bullets for dense README paragraphs ([5758c49](https://github.com/GMOD/cram-js/commit/5758c490240fc17724eb5cc2d022429541ed40e6))
+- Let the code carry the mismatch section of the README ([51848e7](https://github.com/GMOD/cram-js/commit/51848e778c7d22e59cc0c42b3d1c284366ab2d95))
+- Condense the README's performance and script-tag sections ([3fd630e](https://github.com/GMOD/cram-js/commit/3fd630e46ce92e74e82714c1f3e54fbeb887eed9))
+- Drop the fetchReferenceSequence bullets from the README ([472d0f3](https://github.com/GMOD/cram-js/commit/472d0f3aa27c6a7becc1b77376487b5f796814d8))
+- Tighten the README mismatch section and bullet long api.md paragraphs ([625ed2c](https://github.com/GMOD/cram-js/commit/625ed2c79de302841cacd43706ca6e0a4d5a5768))
+- Fix wasm.md claims, dedupe jbrowse numbers, merge v11→v12, list CraiIndex methods ([cc60e1c](https://github.com/GMOD/cram-js/commit/cc60e1c60bdd325e9fb65ff0a1fab7018c0b9313))
+
+### Features
+
+- Treat an undefined fetchReferenceSequence result as an unavailable reference ([6a33612](https://github.com/GMOD/cram-js/commit/6a33612d5d7e9b6e629e48e87c61bfef8476457c))
+
+### Other Changes
+
+- Bump deps ([60139b1](https://github.com/GMOD/cram-js/commit/60139b1db14743b50b6ad78e336c22e62ee27f18))
+- Describe @gmod/range-cache-filehandle 2.0, which stores fetched extents rather than 256 KiB chunks ([21ceaea](https://github.com/GMOD/cram-js/commit/21ceaea87ff67c9ff5a1505ce1b2b09ef01d5b50))
+- Reflow docs/optimizations.md for prettier ([5a77097](https://github.com/GMOD/cram-js/commit/5a77097dce445351d38f516c0d90680e9f0f1504))
+- Consolidate docs: fold read-features into api.md, codecs into wasm.md ([4677193](https://github.com/GMOD/cram-js/commit/46771938e5332b52b03f9d7788007c9f37566003))
+- Cut dataflow.md to the diagram and pointers; state the pool speedup once ([c8cc6bd](https://github.com/GMOD/cram-js/commit/c8cc6bd301e8b53a5559f01a138fb6d9cf71f2e3))
+
+### Tests
+
+- Compare read bases for an undefined fetchReferenceSequence result ([8def12f](https://github.com/GMOD/cram-js/commit/8def12f88ee5d62ee3fe0d27263e59b765914b73))
+
 ## [14.3.2](https://github.com/GMOD/cram-js/compare/v14.3.1...v14.3.2) (2026-10-14)
 
 ### Chores
