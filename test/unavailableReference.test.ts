@@ -4,8 +4,9 @@ import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
 import { testDataFile } from './lib/util.ts'
 
-const open = (fetchReferenceSequence: () => Promise<string | undefined>) =>
-  new IndexedCramFile({
+const decodeWith = async (answer: string | undefined) => {
+  let calls = 0
+  const cram = new IndexedCramFile({
     cramFilehandle: testDataFile(
       'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram',
     ),
@@ -14,20 +15,22 @@ const open = (fetchReferenceSequence: () => Promise<string | undefined>) =>
         'human_g1k_v37.20.21.10M-10M200k#cramQueryWithCRAI.cram.crai',
       ),
     }),
-    fetchReferenceSequence,
+    fetchReferenceSequence: async () => {
+      calls++
+      return answer
+    },
   })
+  const records = await cram.getRecordsForRange(0, 0, Number.POSITIVE_INFINITY)
+  return { calls, bases: records.map(r => r.getReadBases()) }
+}
 
 test('a callback that returns undefined decodes like one that returns an empty string', async () => {
   const [fromUndefined, fromEmpty] = await Promise.all([
-    open(async () => undefined).getRecordsForRange(
-      0,
-      0,
-      Number.POSITIVE_INFINITY,
-    ),
-    open(async () => '').getRecordsForRange(0, 0, Number.POSITIVE_INFINITY),
+    decodeWith(undefined),
+    decodeWith(''),
   ])
-  expect(fromUndefined.length).toBeGreaterThan(0)
-  expect(fromUndefined.map(r => r.getCigarString())).toEqual(
-    fromEmpty.map(r => r.getCigarString()),
-  )
+  expect(fromUndefined.calls).toBeGreaterThan(0)
+  expect(fromUndefined.bases.length).toBeGreaterThan(0)
+  expect(fromUndefined.bases.some(b => b === undefined)).toBe(true)
+  expect(fromUndefined.bases).toEqual(fromEmpty.bases)
 })

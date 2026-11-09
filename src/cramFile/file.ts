@@ -85,7 +85,8 @@ export interface CramFileSource {
  * contract into an error rather than bases shifted by one; a shorter one is
  * padded with N, as the spec treats bases past the reference. Return undefined
  * or an empty string when the source cannot resolve the reference, such as a
- * name the FASTA lacks; the records then decode without reference bases.
+ * name the FASTA lacks; the records then decode without reference bases, except
+ * with `checkSequenceMD5`, which throws.
  *
  * The decode stops its requests at the `@SQ` length. The md5 check
  * (`checkSequenceMD5`) is the exception: it asks for the slice's declared span

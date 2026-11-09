@@ -81,8 +81,8 @@ of that range.
 - `refName` is `undefined` only for a file with no `@SQ` lines.
 
 The range is the slice's span clamped to the `@SQ` length, not the query's, so a
-remote source sees requests of megabase size. With `checkSequenceMD5`, the
-length must be exact and a shorter or longer string throws `CramArgumentError`.
+remote source sees requests of megabase size. With `checkSequenceMD5`, anything
+but exactly that many bases, `undefined` included, throws `CramArgumentError`.
 
 Without the callback:
 
