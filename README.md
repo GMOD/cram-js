@@ -54,9 +54,8 @@ For local files, pass `cramPath`, `CraiIndex({ path })` and
 ## Mismatches
 
 `record.getMismatches()` lists substitutions, insertions, deletions, reference
-skips and clips. `forEachMismatch` passes the same fields to a callback instead
-of building an array. `code` is a CIGAR char code, so
-`String.fromCharCode(code)` gives its letter.
+skips and clips, and `forEachMismatch` passes them to a callback instead. `code`
+is a CIGAR char code (88 for `X`).
 
 ```js
 import { RF_SUBST } from '@gmod/cram'
@@ -71,11 +70,9 @@ record.forEachMismatch(
 )
 ```
 
-[docs/api.md](docs/api.md#mismatch) has the fields and the window options.
-
-Substitutions need the reference bases, which the `fetchReferenceSequence` in
-the quick start supplies. Without it each substitution reads `N`.
-[docs/api.md](docs/api.md#reference-sequence) has the callback's contract.
+Substitutions need the quick start's `fetchReferenceSequence`, and read `N`
+without it. See [Mismatch](docs/api.md#mismatch) for the fields and window, and
+[Reference sequence](docs/api.md#reference-sequence) for the callback.
 
 ## Records
 

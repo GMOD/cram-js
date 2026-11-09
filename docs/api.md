@@ -73,19 +73,24 @@ and `hasDataForReferenceSequence` also accept the numeric reference id; see
 CRAM stores each read as its differences from the reference, so decoding a
 read's bases takes the reference sequence. `fetchReferenceSequence` receives
 `(seqId, start, end, refName, { signal })` and returns the `end - start` bases
-of that range. A longer string throws, and a non-empty shorter one is padded
-with `N`. Return `''`, never `undefined`, when the reference is unavailable;
-`refName` is `undefined` only for a file with no `@SQ` lines.
+of that range.
+
+- A longer string throws, and a non-empty shorter one is padded with `N`.
+- Return `''`, never `undefined`, when the reference is unavailable.
+- `refName` is `undefined` only for a file with no `@SQ` lines.
 
 The range is the slice's span clamped to the `@SQ` length, not the query's, so a
 remote source sees requests of megabase size. With `checkSequenceMD5`, the
 length must be exact and a shorter or longer string throws `CramArgumentError`.
 
-Without the callback, records have positions, CIGAR strings, and the type and
-length of each difference, but no bases, and the mismatch methods give each
-substitution the base `N`. The library decodes a file written with `embed_ref=1`
-fully without the callback. A file written with `no_ref` stores bases verbatim,
-so without a reference the library finds no substitutions in its reads.
+Without the callback:
+
+- Records have positions, CIGAR strings, and the type and length of each
+  difference, but no bases, and the mismatch methods give each substitution the
+  base `N`.
+- A file written with `embed_ref=1` decodes fully.
+- A file written with `no_ref` stores bases verbatim, so without a reference the
+  library finds no substitutions in its reads.
 
 ### Reference ids
 
@@ -218,10 +223,13 @@ bases, from `fetchReferenceSequence` or embedded in the file. The CIGAR methods
 do not.
 
 `getMismatches` and `forEachMismatch` take `{ start, end, origin }`, all
-optional. `start` and `end` are a reference range that limits the result to the
-differences touching it. Positions are reported relative to `origin`, which
-defaults to 0, so `origin: record.start` gives positions relative to the read;
-`start` and `end` stay reference coordinates either way.
+optional:
+
+- `start` and `end` are a reference range that limits the result to the
+  differences touching it.
+- Positions are reported relative to `origin`, which defaults to 0, so
+  `origin: record.start` gives positions relative to the read. `start` and `end`
+  stay reference coordinates either way.
 
 ### Without allocating
 
