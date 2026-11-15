@@ -66,9 +66,9 @@ import type { TagValue } from './tagColumn.ts'
 // Precomputed pair orientation strings, indexed by
 //   ((flags >> 4) & 0x7) | (selfIsLeft ? 8 : 0)
 // bits 0-2 are flag bits 0x10 (self reverse), 0x20 (mate reverse), 0x40 (read1);
-// bit 3 is whether this record is the leftmost of the pair. The read2 flag (0x80)
-// is deliberately not consulted — "not read1" is what decides the numbering, so
-// a record with neither flag set reads the same as read2.
+// bit 3 is whether this record leads the pair. The read2 flag (0x80) is
+// deliberately not consulted — "not read1" is what decides the numbering, so a
+// record with neither flag set reads the same as read2.
 // SYNC: ~/src/gmod/bam-js src/record.ts PAIR_ORIENTATION_TABLE
 // prettier-ignore
 const PAIR_ORIENTATION_TABLE = [
@@ -1357,33 +1357,57 @@ export default class CramRecord {
     return out
   }
 
+  // The mate whose 5' end is leftmost leads. A fragment shorter than its reads
+  // puts both mates on nearly the same start, the reverse one often a few bases
+  // left (a dovetail), and its 5' end is still the rightmost: so opposite-strand
+  // mates starting closer than a read length are led by the forward one. Leftmost
+  // start decides every other pair on one reference, and read1 a tie or an
+  // unknown mate, an order both mates evaluate the same way.
+  // SYNC: ~/src/gmod/bam-js src/record.ts leadsMate
+  private leadsMate() {
+    const f = this.flags
+    const reverse = (f & Constants.BAM_FREVERSE) !== 0
+    const read1 = (f & Constants.BAM_FREAD1) !== 0
+    const start = this.start
+    const nextStart = this.nextStart
+    return nextStart < 0
+      ? read1
+      : reverse !== ((f & Constants.BAM_FMREVERSE) !== 0) &&
+          Math.abs(start - nextStart) <
+            (this.isUnknownBases() ? 0 : this.readLength)
+        ? !reverse
+        : start !== nextStart
+          ? start < nextStart
+          : read1
+  }
+
   // Must come out identical from either mate, or the two halves of one normal
-  // pair render as different orientations. The leftmost mate is therefore picked
-  // by a total order on (sequenceId, start) that both mates evaluate the
-  // same way, with a read1-first tie-break for equal loci; when the mate is
-  // unknown the read1-first rule alone still keeps the two consistent.
+  // pair render as different orientations: `leadsMate` for mates on one
+  // reference, the lower sequence id leading across two, read1 where the mate
+  // is unknown.
   //
-  // Deriving "leftmost" from template length looks tempting — the spec makes it
+  // Deriving the leader from template length looks tempting — the spec makes it
   // positive for the leftmost segment and negative for the rightmost — but it is
   // left at 0 whenever the insert size is unavailable, which includes every
   // cross-reference pair. Both mates then read as "not leftmost" and disagree.
   // SYNC: ~/src/gmod/bam-js src/record.ts pair_orientation getter
   getPairOrientation() {
     const f = this.flags
-    if (!(f & Constants.BAM_FPAIRED)) {
-      return undefined
-    }
-    const isRead1 = !!(f & Constants.BAM_FREAD1)
     const nextSequenceId = this.nextSequenceId
-    const selfIsLeft =
-      nextSequenceId === NEXT_UNKNOWN
-        ? isRead1
-        : this.sequenceId !== nextSequenceId
-          ? this.sequenceId < nextSequenceId
-          : this.start !== this.nextStart
-            ? this.start < this.nextStart
-            : isRead1
-    return PAIR_ORIENTATION_TABLE[((f >> 4) & 0x7) | (selfIsLeft ? 8 : 0)]
+    return f & Constants.BAM_FPAIRED
+      ? PAIR_ORIENTATION_TABLE[
+          ((f >> 4) & 0x7) |
+            ((
+              nextSequenceId === NEXT_UNKNOWN
+                ? (f & Constants.BAM_FREAD1) !== 0
+                : this.sequenceId !== nextSequenceId
+                  ? this.sequenceId < nextSequenceId
+                  : this.leadsMate()
+            )
+              ? 8
+              : 0)
+        ]
+      : undefined
   }
 
   /**

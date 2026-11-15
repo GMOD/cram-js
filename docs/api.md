@@ -229,6 +229,14 @@ them into a local variable instead of accessing them in a loop.
 bases, from `fetchReferenceSequence` or embedded in the file. The CIGAR methods
 do not.
 
+`getPairOrientation()` names the mate whose 5' end is leftmost first, and both
+mates of a pair give the same string. Opposite-strand mates on one reference
+starting closer than `readLength` are led by the forward one, so the pair of a
+fragment shorter than its reads is `F1R2` or `F2R1`; the leftmost start leads
+every other pair, read1 a tie or an unknown mate, and the lower sequence id a
+pair on two references. `templateLength` is not read. It is the rule
+`@gmod/bam`'s `pair_orientation` follows.
+
 `getMismatches` and `forEachMismatch` take `{ start, end, origin }`, all
 optional:
 

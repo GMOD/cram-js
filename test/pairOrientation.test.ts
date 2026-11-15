@@ -8,6 +8,8 @@ const REVERSE = 0x10
 const MATE_REVERSE = 0x20
 const READ1 = 0x40
 const READ2 = 0x80
+// CRAM_FLAG_NO_SEQ, a compression flag rather than a BAM one
+const UNKNOWN_BASES = 0x8
 
 type RecordArgs = ConstructorParameters<typeof CramRecord>[0]
 
@@ -17,10 +19,14 @@ function makeRecord({
   start,
   mate,
   templateLength,
+  readLength = 100,
+  cramFlags = 0,
 }: {
   flags: number
   sequenceId: number
   start: number
+  readLength?: number
+  cramFlags?: number
   /** the mate's locus, as the two fields the record now stores */
   mate?: { sequenceId: number; start: number }
   templateLength?: number
@@ -30,8 +36,8 @@ function makeRecord({
   // be required because the type was the decoder's return type
   const args: RecordArgs = {
     flags,
-    cramFlags: 0,
-    readLength: 100,
+    cramFlags,
+    readLength,
     mappingQuality: 60,
     lengthOnRef: 100,
     qualityStart: -1,
@@ -117,6 +123,86 @@ test('orientation of a canonical FR pair', () => {
       start: 100,
       mate,
       templateLength: 300,
+    }).getPairOrientation(),
+  ).toBe('R1F2')
+})
+
+// A fragment shorter than its reads: both mates start on nearly the same base,
+// and the forward mate's 5' end is the leftmost whichever mate starts first.
+// SYNC: ~/src/gmod/bam-js test/bai.test.ts SHORT_FRAGMENTS
+const SHORT_FRAGMENTS = [
+  { pos: 1876, matePos: 1876 }, // equal starts
+  { pos: 3000, matePos: 3002 }, // dovetail, self left
+  { pos: 3002, matePos: 3000 }, // dovetail, self right
+]
+
+test('a pair of overlapping opposite-strand mates is led by the forward one', () => {
+  for (const loci of SHORT_FRAGMENTS) {
+    for (const templateLength of [150, -150, 0]) {
+      expect(
+        makeRecord({
+          flags: PAIRED | READ1 | REVERSE,
+          sequenceId: 1,
+          start: loci.pos,
+          mate: { sequenceId: 1, start: loci.matePos },
+          templateLength,
+          readLength: 150,
+        }).getPairOrientation(),
+      ).toBe('F2R1')
+      expect(
+        makeRecord({
+          flags: PAIRED | READ2 | MATE_REVERSE,
+          sequenceId: 1,
+          start: loci.matePos,
+          mate: { sequenceId: 1, start: loci.pos },
+          templateLength,
+          readLength: 150,
+        }).getPairOrientation(),
+      ).toBe('F2R1')
+      expect(
+        makeRecord({
+          flags: PAIRED | READ1 | MATE_REVERSE,
+          sequenceId: 1,
+          start: loci.pos,
+          mate: { sequenceId: 1, start: loci.matePos },
+          templateLength,
+          readLength: 150,
+        }).getPairOrientation(),
+      ).toBe('F1R2')
+    }
+  }
+})
+
+test('mates a read length apart keep the leftmost-start order', () => {
+  expect(
+    makeRecord({
+      flags: PAIRED | READ1 | REVERSE,
+      sequenceId: 1,
+      start: 1000,
+      mate: { sequenceId: 1, start: 1400 },
+      readLength: 150,
+    }).getPairOrientation(),
+  ).toBe('R1F2')
+  expect(
+    makeRecord({
+      flags: PAIRED | READ2 | MATE_REVERSE,
+      sequenceId: 1,
+      start: 1400,
+      mate: { sequenceId: 1, start: 1000 },
+      readLength: 150,
+    }).getPairOrientation(),
+  ).toBe('R1F2')
+})
+
+test('a record with unknown bases keeps the leftmost-start order', () => {
+  expect(
+    makeRecord({
+      flags: PAIRED | READ1 | REVERSE,
+      sequenceId: 1,
+      start: 1876,
+      mate: { sequenceId: 1, start: 1876 },
+      readLength: 150,
+      cramFlags: UNKNOWN_BASES,
     }).getPairOrientation(),
   ).toBe('R1F2')
 })
