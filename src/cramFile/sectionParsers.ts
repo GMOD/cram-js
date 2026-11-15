@@ -1,5 +1,5 @@
-import BufferReader from './bufferReader.ts'
 import { CramMalformedError, CramUnimplementedError } from '../errors.ts'
+import BufferReader from './bufferReader.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from './util.ts'
 
 import type { TupleOf } from '../typescript.ts'

@@ -1,10 +1,10 @@
-import CramCodec from './_base.ts'
 import { CramBufferOverrunError, CramMalformedError } from '../../errors.ts'
 import { decodeUtf8, readNullTerminatedStringFromBuffer } from '../util.ts'
+import CramCodec from './_base.ts'
 
-import type { Cursor, Cursors } from './_base.ts'
 import type { ByteArrayStopCramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
+import type { Cursor, Cursors } from './_base.ts'
 
 /** the scan itself, shared by the per-call `decode` and the per-slice binding */
 function readToStop(content: Uint8Array, cursor: Cursor, stopByte: number) {

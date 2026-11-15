@@ -7,12 +7,12 @@ import {
   CramUnimplementedError,
 } from '../errors.ts'
 import { open } from '../io.ts'
+import { parseHeaderText } from '../sam.ts'
 import { getSharedSliceWorkerPool } from '../sliceWorkerPool.ts'
 import CramContainer from './container/index.ts'
 import { baseRecordClass } from './decodedSlice.ts'
 import { memoizeAsync, memoizeShared } from './memoize.ts'
 import { parseBlockFromBuffer } from './parseBlock.ts'
-import { parseHeaderText } from '../sam.ts'
 import {
   type BlockHeader,
   cramFileDefinition,
@@ -20,10 +20,10 @@ import {
 } from './sectionParsers.ts'
 import { decodeUtf8, parseItem } from './util.ts'
 
+import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type DecodedSlice from './decodedSlice.ts'
 import type { CramRecordClass } from './decodedSlice.ts'
 import type CramRecord from './record.ts'
-import type { BaseOpts, ReadOpts } from '../opts.ts'
 import type { Budget } from '@gmod/shared-read-cache'
 import type { GenericFilehandle } from 'generic-filehandle2'
 

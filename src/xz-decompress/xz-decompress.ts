@@ -8,8 +8,8 @@
  * and walloc (c) 2020 Igalia, S.L. License: MIT - https://github.com/wingo/walloc
  */
 
-import { xzdecompressWasm as wasmBase64 } from './wasm.ts'
 import { memoizeAsync } from '../cramFile/memoize.ts'
+import { xzdecompressWasm as wasmBase64 } from './wasm.ts'
 
 const XZ_OK = 0
 const XZ_STREAM_END = 1

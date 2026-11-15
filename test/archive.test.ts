@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
+import { testDataFile } from './lib/util.ts'
 
 test('archive', async () => {
   const cram = new IndexedCramFile({

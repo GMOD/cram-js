@@ -1,4 +1,3 @@
-import { decodeSliceFromBytes } from './decodeSliceFromBytes.ts'
 import { CramArgumentError, CramMalformedError } from '../../errors.ts'
 import {
   P_LENGTH_ON_REF,
@@ -15,6 +14,7 @@ import { memoizeAsync } from '../memoize.ts'
 import { defaultDecodeOptions, resolveSubstitutions } from '../record.ts'
 import { getSectionParsers, isMappedSliceHeader } from '../sectionParsers.ts'
 import { decodeUtf8, parseItem, sequenceMD5 } from '../util.ts'
+import { decodeSliceFromBytes } from './decodeSliceFromBytes.ts'
 
 import type { BaseOpts, ReadOpts } from '../../opts.ts'
 import type CramContainer from '../container/index.ts'
@@ -22,11 +22,11 @@ import type DecodedSlice from '../decodedSlice.ts'
 import type CramFile from '../file.ts'
 import type CramRecord from '../record.ts'
 import type { DecodeOptions, RefRegion } from '../record.ts'
-import type { SliceDecodeRequest } from './decodeSliceFromBytes.ts'
 import type {
   MappedSliceHeader,
   UnmappedSliceHeader,
 } from '../sectionParsers.ts'
+import type { SliceDecodeRequest } from './decodeSliceFromBytes.ts'
 
 export { associateIntraSliceMates } from './mateAssociation.ts'
 

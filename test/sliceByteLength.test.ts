@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util.ts'
 import DecodedSlice from '../src/cramFile/decodedSlice.ts'
 import TagColumn from '../src/cramFile/tagColumn.ts'
 import { CraiIndex, IndexedCramFile } from '../src/index.ts'
+import { testDataFile } from './lib/util.ts'
 
 test('a decoded slice weighs at least its typed-array columns', async () => {
   const cram = new IndexedCramFile({

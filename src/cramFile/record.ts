@@ -1,3 +1,4 @@
+import { CramMalformedError } from '../errors.ts'
 import {
   CIGAR_DEL,
   CIGAR_HARD_CLIP,
@@ -35,7 +36,6 @@ import DecodedSlice, {
   S_TEMPLATE_LENGTH,
   S_TEMPLATE_SIZE,
 } from './decodedSlice.ts'
-import { CramMalformedError } from '../errors.ts'
 import { forEachMismatch } from './mismatches.ts'
 import {
   RF_BASES,

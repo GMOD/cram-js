@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import GatedFile, { drainMicrotasks } from './lib/gatedFile.ts'
-import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
+import GatedFile, { drainMicrotasks } from './lib/gatedFile.ts'
+import { testDataFile } from './lib/util.ts'
 
 import type { GenericFilehandle } from 'generic-filehandle2'
 

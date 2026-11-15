@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import GatedFile from './lib/gatedFile.ts'
-import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
+import GatedFile from './lib/gatedFile.ts'
+import { testDataFile } from './lib/util.ts'
 
 // ce#1000 packs 5 slices into each of its ~30 containers, which is what makes
 // it the fixture for this: a query over the whole reference touches every

@@ -1,12 +1,12 @@
 import { expect, test } from 'vitest'
 
-import { bareRecord } from './lib/bareRecord.ts'
 import {
   externalQualityColumn,
   growableQualityColumn,
   readQualityScores,
   trimQualityColumn,
 } from '../src/cramFile/qualityColumn.ts'
+import { bareRecord } from './lib/bareRecord.ts'
 
 // a record reading out of a slice-wide column shared with other records
 const recordOver = (

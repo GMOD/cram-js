@@ -1,4 +1,3 @@
-import { buildRFSchema, parseTagData } from './decodeRecord.ts'
 import { CramMalformedError } from '../../errors.ts'
 import ExternalCodec, { batchDecodeItf8 } from '../codecs/external.ts'
 import { dataSeriesTypes } from '../container/compressionScheme.ts'
@@ -10,6 +9,7 @@ import {
 import ReadFeatureArena from '../readFeatureArena.ts'
 import TagColumn, { TAG_CHAR, TAG_NUMBER } from '../tagColumn.ts'
 import { readNullTerminatedStringFromBuffer } from '../util.ts'
+import { buildRFSchema, parseTagData } from './decodeRecord.ts'
 
 import type { Cursor, Cursors, PreDecodedIntBlock } from '../codecs/_base.ts'
 import type { DataSeriesEncodingKey } from '../codecs/dataSeriesTypes.ts'
@@ -17,6 +17,7 @@ import type CramContainerCompressionScheme from '../container/compressionScheme.
 import type DecodedSlice from '../decodedSlice.ts'
 import type { CramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
+import type { TagValue } from '../tagColumn.ts'
 import type {
   BoundDecoders,
   BulkBasesDecoder,
@@ -24,7 +25,6 @@ import type {
   NumericSeries,
   SliceDecodeContext,
 } from './decodeRecord.ts'
-import type { TagValue } from '../tagColumn.ts'
 
 export interface SliceDecodeContextArgs {
   compressionScheme: CramContainerCompressionScheme

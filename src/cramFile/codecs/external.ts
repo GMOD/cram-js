@@ -1,14 +1,14 @@
-import CramCodec, {
-  type Cursor,
-  type Cursors,
-  type PreDecodedIntBlock,
-} from './_base.ts'
 import {
   CramBufferOverrunError,
   CramMalformedError,
   CramUnimplementedError,
 } from '../../errors.ts'
 import { parseItf8 } from '../util.ts'
+import CramCodec, {
+  type Cursor,
+  type Cursors,
+  type PreDecodedIntBlock,
+} from './_base.ts'
 
 import type { ExternalCramEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'

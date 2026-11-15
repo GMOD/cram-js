@@ -14,7 +14,6 @@ export default defineConfig(
       '*.js',
       '*.mjs',
       'src/wasm/*',
-      'crate/*',
       'scripts/*',
       'example/*',
       'htscodecs-wasm/*',

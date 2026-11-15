@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 
-import { dumpWholeFile, sliceRecords } from './lib/dumpFile.ts'
 import { CramFile } from '../src/index.ts'
+import { dumpWholeFile, sliceRecords } from './lib/dumpFile.ts'
 import { FetchableSmallFasta } from './lib/fasta/index.ts'
 import { testDataFile } from './lib/util.ts'
 

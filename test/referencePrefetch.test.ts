@@ -6,10 +6,10 @@
 // span covers its reads fetches exactly once.
 import { expect, test } from 'vitest'
 
-import GatedFile, { drainMicrotasks } from './lib/gatedFile.ts'
-import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
+import GatedFile, { drainMicrotasks } from './lib/gatedFile.ts'
+import { testDataFile } from './lib/util.ts'
 
 const CRAM = 'ce#1000.tmp.cram'
 

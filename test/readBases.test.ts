@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import { bareRecord } from './lib/bareRecord.ts'
 import { arenaFromReadFeatures } from '../src/cramFile/readFeatureArena.ts'
 import CramRecord, { NEXT_UNKNOWN } from '../src/cramFile/record.ts'
 import TagColumn from '../src/cramFile/tagColumn.ts'
+import { bareRecord } from './lib/bareRecord.ts'
 
 import type { ReadFeature, RefRegion } from '../src/cramFile/record.ts'
 

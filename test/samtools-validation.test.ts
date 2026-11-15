@@ -3,10 +3,10 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { references } from './lib/samtools.ts'
-import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
 import { IndexedCramFile } from '../src/index.ts'
+import { references } from './lib/samtools.ts'
+import { testDataFile } from './lib/util.ts'
 
 function dataPath(filename: string) {
   return path.join(process.cwd(), 'test', 'data', filename)

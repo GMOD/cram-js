@@ -1,8 +1,8 @@
 import { BlobFile } from 'generic-filehandle2'
 import { expect, test } from 'vitest'
 
-import { testDataFile } from './lib/util.ts'
 import CraiIndex from '../src/craiIndex.ts'
+import { testDataFile } from './lib/util.ts'
 
 // .crai text is parsed digit-by-digit in a hand-rolled loop for speed, so the
 // cases below pin down the parser's handling of separators, signs and

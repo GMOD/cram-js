@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest'
 
 import CraiIndex from '../src/craiIndex.ts'
-import { testDataFile } from './lib/util.ts'
 import CramFile from '../src/cramFile/file.ts'
 import { isMappedSliceHeader } from '../src/cramFile/sectionParsers.ts'
 import { buildSliceDecodeContext } from '../src/cramFile/slice/decodeContext.ts'
+import { testDataFile } from './lib/util.ts'
 
 // The read-feature arena is sized from the slice's own blocks before a record is
 // decoded — FC is one byte per read feature, so an external FC block's length is

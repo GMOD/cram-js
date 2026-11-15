@@ -12,7 +12,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "lib": ["esnext", "dom"],
-    "types": ["node"],
+    "types": [],
     "rootDir": "src",
     "outDir": "dist",
     "declaration": true,

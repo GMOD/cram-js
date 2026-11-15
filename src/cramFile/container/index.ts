@@ -1,9 +1,9 @@
 import { CramMalformedError } from '../../errors.ts'
 import { memoizeAsync } from '../memoize.ts'
+import { getSectionParsers } from '../sectionParsers.ts'
 import CramSlice from '../slice/index.ts'
 import { itf8Size, parseItem } from '../util.ts'
 import CramContainerCompressionScheme from './compressionScheme.ts'
-import { getSectionParsers } from '../sectionParsers.ts'
 
 import type { ReadOpts } from '../../opts.ts'
 import type CramFile from '../file.ts'

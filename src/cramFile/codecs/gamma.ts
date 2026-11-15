@@ -1,9 +1,9 @@
-import CramCodec from './_base.ts'
 import { CramBufferOverrunError, CramUnimplementedError } from '../../errors.ts'
+import CramCodec from './_base.ts'
 
-import type { Cursor, Cursors } from './_base.ts'
 import type { GammaEncoding } from '../encoding.ts'
 import type { CramFileBlock } from '../file.ts'
+import type { Cursor, Cursors } from './_base.ts'
 
 export default class GammaCodec extends CramCodec<
   'int',

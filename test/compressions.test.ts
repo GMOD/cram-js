@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest'
 
-import { dumpWholeFile, sliceRecords } from './lib/dumpFile.ts'
-import { testDataFile } from './lib/util.ts'
 import { CramFile } from '../src/index.ts'
+import { dumpWholeFile, sliceRecords } from './lib/dumpFile.ts'
 import { FetchableSmallFasta } from './lib/fasta/index.ts'
+import { testDataFile } from './lib/util.ts'
 
 test('lzma', async () => {
   const fasta = new FetchableSmallFasta(testDataFile('ce.fa'))
