@@ -10,6 +10,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - id: emsdk
         run: |
           echo "version=$(cat htscodecs-wasm/emscripten-version)" >> "$GITHUB_OUTPUT"
@@ -51,6 +53,8 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - id: emsdk
         run: |
           echo "version=$(cat htscodecs-wasm/emscripten-version)" >> "$GITHUB_OUTPUT"
@@ -61,7 +65,9 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24.x
-          cache: pnpm
+          # the job that publishes installs from the registry, not from a cache
+          # another run wrote; setup-node caches unless told not to
+          package-manager-cache: false
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
@@ -78,6 +84,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       # Notes come from the CHANGELOG.md section git-cliff wrote during
       # `pnpm version`, which is part of the tagged commit — so this needs
       # neither full history nor a second pass over the git log.
