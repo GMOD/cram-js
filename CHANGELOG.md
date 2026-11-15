@@ -1,3 +1,20 @@
+## [14.5.0](https://github.com/GMOD/cram-js/compare/v14.4.0...v14.5.0) (2026-11-15)
+
+### Bug Fixes
+
+- A pair's overlapping opposite-strand mates are led by the forward one ([54e23ee](https://github.com/GMOD/cram-js/commit/54e23eeb50be0434ce6bdd1f0d84ff03ee2f9d63))
+
+### Chores
+
+- Drop persisted checkout credentials and the publish job's cache ([99695ef](https://github.com/GMOD/cram-js/commit/99695ef8c6b444ad10a6ab216bb8117533740feb))
+
+### Other Changes
+
+- Bump deps, drop unused dev deps and stale ignores ([228430c](https://github.com/GMOD/cram-js/commit/228430c0eba974b9d33b4ea0d53d46598b6ff652))
+- Rebuild the inlined slice worker after the import reorder ([b72d9c2](https://github.com/GMOD/cram-js/commit/b72d9c20a5377ee3156f230d166988425af2749d))
+- Run preversion in CI's order ([460ebad](https://github.com/GMOD/cram-js/commit/460ebade961b71f93f6c5acbda91f49c38ff9425))
+- Rebuild the inlined slice worker after the pair orientation change ([a10fd1f](https://github.com/GMOD/cram-js/commit/a10fd1f0d3a7d209ff812ca27d70dd4bff548a25))
+
 ## [14.4.0](https://github.com/GMOD/cram-js/compare/v14.3.2...v14.4.0) (2026-11-09)
 
 ### Chores
